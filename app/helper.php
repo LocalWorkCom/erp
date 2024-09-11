@@ -96,7 +96,7 @@ function ApiCode($code)
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
-    $APICode = ApiCode($code);
+    $APICode = ApiCode(code: $code);
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
