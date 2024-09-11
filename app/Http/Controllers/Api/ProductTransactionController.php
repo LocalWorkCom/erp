@@ -19,10 +19,23 @@ class ProductTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $products = ProductTransaction::all();
+            $products = ProductTransaction::with(['stores', 'products', 'createdBy', 'deletedBy'])->get();
             return ResponseWithSuccessData($lang, $products, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
+    public function show(Request $request, $id)
+    {
+        try{
+            $lang =  $request->header('lang', 'en');
+            $products = ProductTransaction::with(['stores', 'products', 'createdBy', 'deletedBy'])->firstOrFail($id);
+            return ResponseWithSuccessData($lang, $products, 1);
+        }catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+
 }

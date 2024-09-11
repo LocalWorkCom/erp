@@ -9,6 +9,8 @@ class StoreTransaction extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['creator_by', 'to_id', 'created_by', 'deleted_by', 'created_at', 'updated_at'];
+
     public function creatorBy()
     {
         return $this->belongsTo(User::class, 'creator_by');
