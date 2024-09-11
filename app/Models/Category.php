@@ -24,6 +24,13 @@ class Category extends Model
         'deleted_by',
     ];
 
+    
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     protected $casts = [
         'active' => 'boolean',
         'is_freeze' => 'boolean',

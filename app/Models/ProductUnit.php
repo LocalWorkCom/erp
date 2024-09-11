@@ -18,6 +18,12 @@ class ProductUnit extends Model
         'price',
     ];
 
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     // Define relationships
     public function unit()
     {

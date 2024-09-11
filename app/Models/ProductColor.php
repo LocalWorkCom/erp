@@ -15,7 +15,13 @@ class ProductColor extends Model
         'color_id',
         'product_id',
     ];
-
+    
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     /**
      * Get the color associated with the product color.
      */
