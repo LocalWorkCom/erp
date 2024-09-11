@@ -14,7 +14,13 @@ class ProductSize extends Model
         'product_id',
         'code_size',
     ];
-
+    
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     /**
      * Get the size associated with the product size.
      */

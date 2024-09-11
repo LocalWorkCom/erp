@@ -18,6 +18,13 @@ class ProductImage extends Model
         'deleted_by',
     ];
 
+        
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     /**
      * Get the product that owns the image.
      */
