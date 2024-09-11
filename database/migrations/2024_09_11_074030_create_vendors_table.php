@@ -12,14 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vendors', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name_en'); 
+            $table->id();
+            $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
             $table->text('address_en')->nullable();
             $table->text('address_ar')->nullable(); 
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->text('notes')->nullable(); 
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps(); 
         });
     }

@@ -16,14 +16,15 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id');
             $table->double('amount');
-            $table->string('date');
+            $table->date('date');
             $table->unsignedBigInteger('created_by');
-            $table->timestamps();
-
+            $table->unsignedBigInteger('deleted_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             // Foreign key constraints
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('store_id')->references('id')->on('stores');
-            $table->foreign('created_by')->references('id')->on('users');
+            $table->timestamps();
         });
     }
 

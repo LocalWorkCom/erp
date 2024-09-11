@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lines', function (Blueprint $table) {
-            $table->bigIncrements('id'); 
+            $table->id(); 
             $table->unsignedBigInteger('store_id'); 
-            $table->string('name_en'); 
+            $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
             $table->boolean('is_freeze')->default(1); 
             $table->timestamps(); 
-
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade'); 
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
+            $table->foreign('store_id')->references('id')->on('stores'); 
         });
     }
 

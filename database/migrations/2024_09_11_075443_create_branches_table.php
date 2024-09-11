@@ -12,18 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('branches', function (Blueprint $table) {
-            $table->bigIncrements('id'); 
-            $table->string('name_en'); 
-            $table->string('name_ar'); 
-            $table->text('address_en')->nullable(); 
-            $table->text('address_ar')->nullable(); 
-            $table->string('country');
-            $table->string('phone')->nullable(); 
-            $table->string('email')->nullable(); 
-            $table->string('manager_name_en')->nullable(); 
-            $table->string('manager_name_ar')->nullable(); 
-            $table->string('opening_hours')->nullable(); 
-            $table->timestamps(); 
+            $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar');
+            $table->text('address_en')->nullable();
+            $table->text('address_ar')->nullable();
+            $table->text('latitute')->nullable();
+            $table->text('longitute')->nullable();
+            $table->unsignedBigInteger('country_id');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('manager_name')->nullable();
+            $table->string('opening_hours')->nullable();
+            $table->foreign('country_id')->references('id')->on('countries');
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
+
+            $table->timestamps();
         });
     }
 
