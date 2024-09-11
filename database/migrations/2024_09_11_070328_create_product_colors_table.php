@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vendors', function (Blueprint $table) {
+        Schema::create('product_colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name_en')->nullable(); 
-            $table->string('name_ar'); 
-            $table->text('address_en')->nullable();
-            $table->text('address_ar')->nullable(); 
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->text('notes')->nullable(); 
+            $table->unsignedBigInteger('color_id');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('deleted_by');
+            
+            // Foreign key constraints
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
-            $table->timestamps(); 
+            $table->timestamps();
+            // Foreign key constraints
+            $table->foreign('color_id')->references('id')->on('colors');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vendors');
+        Schema::dropIfExists('product_colors');
     }
 };

@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('shelves', function (Blueprint $table) {
-            $table->id(); 
-            $table->unsignedBigInteger('division_id'); 
-            $table->string('name_ar'); 
-            $table->string('name_en')->nullable(); 
-            
-            $table->foreign('division_id')->references('id')->on('divisions'); 
+        Schema::create('product_images', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->string('image');
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('deleted_by');
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
-            $table->timestamps(); 
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shelves');
+        Schema::dropIfExists('product_images');
     }
 };

@@ -10,16 +10,30 @@ class Store extends Model
     use HasFactory;
 
     protected $fillable = [
-        'branch_id', 'name_en', 'name_ar', 'description_en', 'description_ar'
+        'branch_id',
+        'name_en',
+        'name_ar',
+        'description_en',
+        'description_ar',
+        'created_by',
+        'deleted_by'
     ];
 
-    // A store belongs to a branch
     public function branch()
     {
         return $this->belongsTo(Branch::class);
     }
 
-    // A store can have many lines
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+
     public function lines()
     {
         return $this->hasMany(Line::class);
