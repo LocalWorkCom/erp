@@ -17,8 +17,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('country_id');
+            $table->string('phone');
+            $table->string('code')->nullable();
+            $table->string('age')->nullable();
+            $table->string('birth_date')->nullable();
+            $table->string('rule_id')->nullable();
+            $table->boolean('flag')->comment('0 for admin, 1 for client');
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('country_id')->references('id')->on(table: 'countries');
         });
     }
 
