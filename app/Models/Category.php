@@ -45,7 +45,10 @@ class Category extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
+    public function sizes()
+    {
+        return $this->hasMany(Size::class);
+    }
     /**
      * Get the user who deleted this category.
      */
