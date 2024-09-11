@@ -32,6 +32,13 @@ class Product extends Model
         'limit_quantity',
         'is_remind'
     ];
+        
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
 
     // The attributes that should be cast to native types
     protected $casts = [

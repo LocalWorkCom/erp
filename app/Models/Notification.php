@@ -9,7 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Notification extends Model
 {
     use HasFactory;
-
+    
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     /**
      * The table associated with the model.
      *

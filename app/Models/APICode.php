@@ -9,5 +9,10 @@ class ApICode extends Model
 {
     use HasFactory;
     protected $table = 'apicodes'; // Optional if the table name follows Laravel's convention
-
+    
+    protected $hidden = [
+   
+        'created_at',
+        'updated_at',
+    ];
 }

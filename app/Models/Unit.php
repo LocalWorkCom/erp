@@ -18,5 +18,11 @@ class Unit extends Model
         'name_en',
     ];
 
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+    ];
     // Optionally, you can define other model properties or methods here
 }

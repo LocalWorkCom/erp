@@ -108,3 +108,27 @@ function ResponseWithSuccessData($lang, $data, $code)
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+function translateDataColumns($data, $lang, $translateColumns)
+{
+    $translatedData = $data;
+
+    foreach ($translateColumns as $column) {
+        // Determine the translated column name based on language
+        $translatedColumn = $column . ($lang === 'ar' ? '_ar' : '_en');
+
+        // Check if the translated column exists in the data
+        if (array_key_exists($translatedColumn, $data)) {
+            // Replace the original column with the translated one
+            $translatedData[$column] = $data[$translatedColumn];
+        } else {
+            // Optionally handle missing translated columns (e.g., use a default value)
+            $translatedData[$column] = null;
+        }
+    }
+
+    return $translatedData;
+}
+function removeColumns($data, $columnsToRemove)
+{
+    return array_diff_key($data, array_flip($columnsToRemove));
+}
