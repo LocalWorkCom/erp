@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('store_transaction_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('store_transactions_id');
-            $table->unsignedInteger('products_id');
-            $table->unsignedInteger('units_id');
-            $table->unsignedInteger('countries_id')->comment('to get currency id');
+            $table->unsignedBigInteger('store_transactions_id');
+            $table->unsignedBigInteger('products_id');
+            $table->unsignedBigInteger('units_id');
+            $table->unsignedBigInteger('countries_id')->comment('to get currency id');
             $table->double('count', 15,2)->default(0);
             $table->decimal('price', 8,2)->default(0);
             $table->double('total', 15,2)->default(0);
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreign('store_transactions_id')->references('id')->on('store_transactions')->opUpdate('cascade');
             $table->foreign('products_id')->references('id')->on('products')->onUpdate('cascade');
             $table->foreign('units_id')->references('id')->on('units')->onUpdate('cascade');
-            $table->foreign('countries_id')->references('id')->on('countries')->onUpdate('casecade');
+            $table->foreign('countries_id')->references('id')->on('countries')->onUpdate('cascade');
         });
     }
 
