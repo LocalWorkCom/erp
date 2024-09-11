@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('opening_balance', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_product');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id');
             $table->bigInteger('amount');
             $table->string('year');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign key constraints
-            $table->foreign('id_product')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('store_id')->references('id')->on('stores');
             $table->foreign('created_by')->references('id')->on('users');
         });
