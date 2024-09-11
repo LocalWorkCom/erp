@@ -12,13 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('shelves', function (Blueprint $table) {
-            $table->bigIncrements('id'); 
+            $table->id(); 
             $table->unsignedBigInteger('division_id'); 
-            $table->string('name_en'); 
             $table->string('name_ar'); 
+            $table->string('name_en')->nullable(); 
+            
+            $table->foreign('division_id')->references('id')->on('divisions'); 
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps(); 
-
-            $table->foreign('division_id')->references('id')->on('divisions')->onDelete('cascade'); 
         });
     }
 

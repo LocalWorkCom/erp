@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('is_freeze')->default(0);
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('is_deleted')->default(1);
-            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
 

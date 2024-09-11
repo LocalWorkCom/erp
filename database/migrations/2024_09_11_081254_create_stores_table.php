@@ -12,15 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stores', function (Blueprint $table) {
-            $table->bigIncrements('id'); 
+            $table->id(); 
             $table->unsignedBigInteger('branch_id'); 
-            $table->string('name_en'); 
+            $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
             $table->text('description_en')->nullable(); 
             $table->text('description_ar')->nullable(); 
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by');
+    
+            $table->foreign('branch_id')->references('id')->on('branches'); 
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps(); 
-
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade'); 
         });
     }
 

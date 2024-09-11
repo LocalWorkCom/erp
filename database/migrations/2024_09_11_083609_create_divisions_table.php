@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('divisions', function (Blueprint $table) {
-            $table->bigIncrements('id'); 
+            $table->id(); 
             $table->unsignedBigInteger('line_id'); 
-            $table->string('name_en'); 
+            $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('deleted_by');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
+            $table->foreign('line_id')->references('id')->on('lines'); 
             $table->timestamps(); 
-
-            $table->foreign('line_id')->references('id')->on('lines')->onDelete('cascade'); 
         });
     }
 
