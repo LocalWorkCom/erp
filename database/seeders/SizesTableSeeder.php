@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SizessTableSeeder extends Seeder
+class SizesTableSeeder extends Seeder
 {
     public function run()
     {

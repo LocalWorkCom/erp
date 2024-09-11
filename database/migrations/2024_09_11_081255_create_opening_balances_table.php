@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id');
-            $table->bigInteger('amount');
-            $table->string('year');
+            $table->double('amount');
+            $table->string('date');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
