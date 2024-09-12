@@ -54,6 +54,8 @@ Route::group(['prefix' => 'stores'], function(){
     Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
     Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
     Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
+    Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
+    Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
 
 });
 
