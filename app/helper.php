@@ -30,7 +30,7 @@ function RespondWithSuccessRequest($code)
 
 function RespondWithBadRequest($code)
 {
-    $APICode = APICode::where('code', $code)->first();
+    return $APICode = APICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
         'ApiTitleAr' => $APICode->ApiCodeTitleAr,
@@ -96,7 +96,7 @@ function ApiCode($code)
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
-    $APICode = ApiCode($code);
+    $APICode = ApiCode(code: $code);
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
@@ -108,6 +108,22 @@ function ResponseWithSuccessData($lang, $data, $code)
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+
+function RespondWithBadRequestData($lang, $code)
+{
+    $APICode = ApiCode($code);
+    $response_array = array(
+        'success' => true,
+        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'apiCode' => $APICode->code,
+        'data'   => []
+    );
+    $response_code = 200;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+
 function translateDataColumns($data, $lang, $translateColumns)
 {
     $translatedData = $data;
