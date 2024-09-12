@@ -13,6 +13,10 @@ use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\BranchController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,6 +61,22 @@ Route::group(['prefix' => 'stores'], function(){
     Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
     Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
 
+
+     //stores handling
+     Route::get('storeList', [StoreController::class, 'index']);
+     Route::get('showStore/{id}', [StoreController::class, 'show']);
+     Route::post('addStore', [StoreController::class, 'store']);
+     Route::put('updateStore/{id}', [StoreController::class, 'update']);
+     Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
+ 
 });
 
 
+//  branches 
+Route::group(['prefix' => 'branches'], function () {
+    Route::get('branchList', [BranchController::class, 'index']);
+    Route::get('showBranch/{id}', [BranchController::class, 'show']); 
+    Route::post('addBranch', [BranchController::class, 'store']);
+    Route::put('updateBranch/{id}', [BranchController::class, 'update']);
+    Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+});
