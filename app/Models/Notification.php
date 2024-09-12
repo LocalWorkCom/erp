@@ -50,7 +50,8 @@ class Notification extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
+        'title_ar',
+        'title_en',
         'type',
         'description_ar',
         'description_en',
