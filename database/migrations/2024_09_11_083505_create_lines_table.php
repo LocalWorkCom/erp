@@ -17,12 +17,18 @@ return new class extends Migration
             $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
             $table->boolean('is_freeze')->default(1); 
-            $table->timestamps(); 
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('deleted_by');
+            $table->unsignedBigInteger('created_by');  
             $table->foreign('created_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('modified_by')->nullable();  
+            $table->foreign('modified_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('deleted_by')->nullable();  
             $table->foreign('deleted_by')->references('id')->on('users');
+
             $table->foreign('store_id')->references('id')->on('stores'); 
+            $table->timestamps(); 
+
         });
     }
 
