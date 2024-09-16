@@ -18,6 +18,7 @@ class ProductSize extends Model
     protected $hidden = [
         'created_by',
         'deleted_by',
+        'modify_by',
         'created_at',
         'updated_at',
     ];

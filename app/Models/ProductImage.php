@@ -14,8 +14,7 @@ class ProductImage extends Model
     protected $fillable = [
         'product_id',
         'image',
-        'created_by',
-        'deleted_by',
+
     ];
 
         
@@ -23,6 +22,7 @@ class ProductImage extends Model
         'created_by',
         'deleted_by',
         'created_at',
+        'modify_by',
         'updated_at',
     ];
     /**
