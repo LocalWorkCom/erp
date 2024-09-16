@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
-
+use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
 
 /*
@@ -111,4 +111,15 @@ Route::group(['prefix' => 'branches'], function () {
     Route::post('addBranch', [BranchController::class, 'store']);
     Route::put('updateBranch/{id}', [BranchController::class, 'update']);
     Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+});
+
+
+// vendors
+Route::group(['prefix' => 'vendors'], function () {
+    Route::get('vendorList', [VendorController::class, 'index']); 
+    Route::get('showVendor/{id}', [VendorController::class, 'show']); 
+    Route::post('addVendor', [VendorController::class, 'store']); 
+    Route::put('updateVendor/{id}', [VendorController::class, 'update']); 
+    Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']); 
+    Route::post('restoreVendor/{id}', [VendorController::class, 'restore']); 
 });
