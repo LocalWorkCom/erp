@@ -8,8 +8,6 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ProductColorController;
 use App\Http\Controllers\Api\ProductSizeController;
-use App\Http\Controllers\Api\ProductUnitontroller;
-
 use App\Http\Controllers\Api\ProductTransactionController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\StoreTransactionController;
@@ -17,9 +15,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\StoreController;
-use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BranchController;
 
+use App\Http\Controllers\Api\ProductUnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,10 +74,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('notifications', [NotificationController::class, 'index']);
-Route::get('units', [UnitController::class, 'index']);
-Route::get('productColors', [ProductColorController::class, 'index']);
-Route::get('productSizes', [ProductSizeController::class, 'index']);
-Route::get('productUnits', [ProductUnitontroller::class, 'index']);
+Route::get('notification/store', [NotificationController::class, 'store']);
 
 //Product
 Route::group(['prefix' => 'products'], function () {
@@ -93,14 +89,12 @@ Route::group(['prefix' => 'products'], function () {
 //store
 Route::group(['prefix' => 'stores'], function () {
 
-
     //StoreTransaction
     Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
     Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
     Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
     Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
     Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
-
 
     //stores handling
     Route::get('storeList', [StoreController::class, 'index']);
