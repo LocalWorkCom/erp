@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
 use App\Http\Controllers\Api\ProductSizeController;
 use App\Http\Controllers\Api\ProductTransactionController;
@@ -32,9 +33,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'category'], function () {
     Route::get('/', [CategoryController::class, 'index']);
-    Route::get('store', [CategoryController::class, 'store']);
-    Route::get('update', [CategoryController::class, 'update']);
-    Route::get('delete', [CategoryController::class, 'delete']);
+    Route::post('store', [CategoryController::class, 'store']);
+    Route::post('update/{id}', [CategoryController::class, 'update']);
+    Route::get('delete/{id}', [CategoryController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'api_code'], function () {
+    Route::get('/', [ApiCodeController::class, 'index']);
+    Route::post('store', [ApiCodeController::class, 'store']);
+    Route::post('update/{id}', [ApiCodeController::class, 'update']);
 });
 
 
@@ -70,7 +77,7 @@ Route::group(['prefix' => 'unit'], function () {
 
 
 Route::get('notifications', [NotificationController::class, 'index']);
-Route::get('notification/store', [NotificationController::class, 'store']);
+Route::post('notification/store', [NotificationController::class, 'store']);
 
 //Product
 Route::group(['prefix' => 'products'], function () {
