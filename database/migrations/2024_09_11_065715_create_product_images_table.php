@@ -17,11 +17,14 @@ return new class extends Migration
             $table->string('image');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->unsignedBigInteger('modify_by')->nullable();
+
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modify_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
