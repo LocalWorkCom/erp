@@ -19,13 +19,16 @@ return new class extends Migration
             $table->text('description_en')->nullable();
             $table->boolean('status')->default(0);
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modified_by')->nullable();  
+
             $table->unsignedBigInteger('product_id')->nullable();
             $table->timestamp('date_time')->nullable();
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');
         });

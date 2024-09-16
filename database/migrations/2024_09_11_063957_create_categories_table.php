@@ -23,13 +23,15 @@ return new class extends Migration
             $table->boolean('is_freeze')->default(0);
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('is_deleted')->default(1);
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modify_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
 
             // Foreign key constraints
             $table->foreign('parent_id')->references('id')->on('categories');
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modify_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
