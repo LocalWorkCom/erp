@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
-function RespondWithSuccessRequest($code)
+function RespondWithSuccessRequest($lang, $code)
 {
 
     //bad or invalid request missing some params
@@ -16,28 +16,24 @@ function RespondWithSuccessRequest($code)
     $APICode = APICode::where('code', $code)->first();
     $response_array = array(
         'success' => true,
-        'apiTitleAr' => $APICode->ApiCodeTitleAr,
-        'apiTitleEn' => $APICode->ApiCodeTitleEn,
-        'apiMsgAr' => $APICode->ApiCodeMessageAr,
-        'apiMsgEn' => $APICode->ApiCodeMessageEn,
-        'apiCode' => $APICode->IDApiCode,
-        'data' => $response
+        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'apiCode' => $APICode->IDApiCode
+
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
 
-function RespondWithBadRequest($code)
+function RespondWithBadRequest($lang, $code)
 {
     return $APICode = APICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
-        'ApiTitleAr' => $APICode->ApiCodeTitleAr,
-        'ApiTitleEn' => $APICode->ApiCodeTitleEn,
-        'ApiMsgAr' => $APICode->ApiCodeMessageAr,
-        'ApiMsgEn' => $APICode->ApiCodeMessageEn,
-        'ApiCode' => $APICode->IDApiCode
+        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'apiCode' => $APICode->IDApiCode
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);

@@ -27,7 +27,7 @@ class CategoriesTableSeeder extends Seeder
                 'is_freeze' => 0,
                 'parent_id' => null,
                 'is_deleted' => 1,
-                'created_by' => null, // Assuming user ID 1 exists
+                'created_by' => 1, // Assuming user ID 1 exists
                 'deleted_by' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -43,7 +43,7 @@ class CategoriesTableSeeder extends Seeder
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
-                'created_by' => null, // Assuming user ID 2 exists
+                'created_by' => 1, // Assuming user ID 2 exists
                 'deleted_by' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -59,7 +59,7 @@ class CategoriesTableSeeder extends Seeder
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
-                'created_by' => null, // Assuming user ID 2 exists
+                'created_by' => 1, // Assuming user ID 2 exists
                 'deleted_by' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -75,7 +75,7 @@ class CategoriesTableSeeder extends Seeder
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
-                'created_by' => null, // Assuming user ID 2 exists
+                'created_by' => 1, // Assuming user ID 2 exists
                 'deleted_by' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -91,7 +91,7 @@ class CategoriesTableSeeder extends Seeder
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
-                'created_by' => null, // Assuming user ID 2 exists
+                'created_by' => 1, // Assuming user ID 2 exists
                 'deleted_by' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
