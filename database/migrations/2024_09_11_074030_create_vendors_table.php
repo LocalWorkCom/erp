@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name_en')->nullable(); 
             $table->string('name_ar'); 
-            $table->text('address_en')->nullable();
+            $table->string('contact_person')->nullable(); 
+            $table->string('phone')->nullable(); 
+            $table->string('email')->nullable(); 
+            $table->text('address_en')->nullable(); 
             $table->text('address_ar')->nullable(); 
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->text('notes')->nullable(); 
             
+            $table->unsignedBigInteger('country_id'); 
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade'); 
+        
             $table->unsignedBigInteger('created_by');  
             $table->foreign('created_by')->references('id')->on('users');
             
