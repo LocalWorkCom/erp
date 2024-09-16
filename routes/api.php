@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UnitController;
@@ -8,12 +10,15 @@ use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
 use App\Http\Controllers\Api\ProductSizeController;
 use App\Http\Controllers\Api\ProductTransactionController;
+use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
+use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
 
 /*
@@ -27,8 +32,45 @@ use App\Http\Controllers\Api\ProductUnitController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
+
+Route::group(["middleware" => ["auth:api"]], function () {
+
+    Route::get("profile", [AuthController::class, "profile"]);
+    Route::get("logout", [AuthController::class, "logout"]);
+
+
+    //Color
+    Route::group(['prefix' => 'color'], function () {
+        Route::get('/', [ColorController::class, 'index']);
+        Route::post('/add', [ColorController::class, 'store']);
+        Route::get('/get', [ColorController::class, 'show']);
+        Route::post('/edit', [ColorController::class, 'update']);
+        Route::get('/delete', [ColorController::class, 'destroy']);
+    });
+    //Size
+    Route::group(['prefix' => 'size'], function () {
+        Route::get('/', [SizeController::class, 'index']);
+        Route::post('/add', [SizeController::class, 'store']);
+        Route::get('/get', [SizeController::class, 'show']);
+        Route::post('/edit', [SizeController::class, 'update']);
+        Route::get('/delete', [SizeController::class, 'destroy']);
+    });
+    //Country
+    Route::group(['prefix' => 'country'], function () {
+        Route::get('/', [CountryController::class, 'index']);
+        Route::post('/add', [CountryController::class, 'store']);
+        Route::get('/get', [CountryController::class, 'show']);
+        Route::post('/edit', [CountryController::class, 'update']);
+        Route::get('/delete', [CountryController::class, 'destroy']);
+    });
+
+    //Opening balance
+
 });
 
 Route::group(['prefix' => 'category'], function () {
@@ -107,11 +149,22 @@ Route::group(['prefix' => 'stores'], function () {
     Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
 });
 
-//  branches 
+//  branches
 Route::group(['prefix' => 'branches'], function () {
     Route::get('branchList', [BranchController::class, 'index']);
     Route::get('showBranch/{id}', [BranchController::class, 'show']);
     Route::post('addBranch', [BranchController::class, 'store']);
     Route::put('updateBranch/{id}', [BranchController::class, 'update']);
     Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+});
+
+
+// vendors
+Route::group(['prefix' => 'vendors'], function () {
+    Route::get('vendorList', [VendorController::class, 'index']); 
+    Route::get('showVendor/{id}', [VendorController::class, 'show']); 
+    Route::post('addVendor', [VendorController::class, 'store']); 
+    Route::put('updateVendor/{id}', [VendorController::class, 'update']); 
+    Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']); 
+    Route::post('restoreVendor/{id}', [VendorController::class, 'restore']); 
 });
