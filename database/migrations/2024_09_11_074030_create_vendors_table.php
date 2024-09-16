@@ -20,9 +20,14 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->text('notes')->nullable(); 
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('deleted_by');
+            
+            $table->unsignedBigInteger('created_by');  
             $table->foreign('created_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('modified_by')->nullable();  
+            $table->foreign('modified_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('deleted_by')->nullable();  
             $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps(); 
         });
