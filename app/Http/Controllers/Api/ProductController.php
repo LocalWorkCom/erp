@@ -25,7 +25,7 @@ class ProductController extends Controller
         $translateColumns = ['name', 'description']; // Add other columns as needed
 
         // Define columns to remove (translated columns)
-        $columnsToRemove = array_map(function($col) {
+        $columnsToRemove = array_map(function ($col) {
             return [$col . '_ar', $col . '_en'];
         }, $translateColumns);
         $columnsToRemove = array_merge(...$columnsToRemove);
@@ -40,6 +40,11 @@ class ProductController extends Controller
 
             // Remove translated columns from data
             $data = removeColumns($data, $columnsToRemove);
+
+            // Update main_image key by concatenating with base URL
+            if (isset($data['main_image']) && !empty($data['main_image'])) {
+                $data['main_image'] = BaseUrl() . '/' . $data['main_image'];
+            }
 
             return $data;
         });
