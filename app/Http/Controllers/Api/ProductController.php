@@ -49,6 +49,6 @@ class ProductController extends Controller
             return $data;
         });
 
-        return ResponseWithSuccessData($lang, $products, code: 1);
+        return ResponseWithSuccessData($lang, $products,1);
     }
 }

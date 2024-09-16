@@ -3,6 +3,7 @@
 use App\Models\ApiCode;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +19,7 @@ function RespondWithSuccessRequest($lang, $code)
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->IDApiCode
+        'apiCode' => $APICode->code
 
     );
     $response_code = 200;
@@ -33,7 +34,7 @@ function RespondWithBadRequest($lang, $code)
         'success' => false,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->IDApiCode
+        'apiCode' => $APICode->code
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
@@ -42,6 +43,11 @@ function RespondWithBadRequest($lang, $code)
 function GetNextID($table)
 {
     $nextId  = DB::table($table)->count() + 1;
+    return $nextId;
+}
+function GetLastID($table)
+{
+    $nextId  = DB::table($table)->max('id');
     return $nextId;
 }
 function ActionBackLog($IDUser, $function_name, $controller_name, $action_name, $action_id)
@@ -144,12 +150,11 @@ function removeColumns($data, $columnsToRemove)
 {
     return array_diff_key($data, array_flip($columnsToRemove));
 }
-function UploadFile($path, $image, $realname, $model, $request)
+function UploadFile($path, $image, $model, $request)
 {
 
     $thumbnail = $request;
     $destinationPath = $path;
-    $filerealname = $thumbnail->getClientOriginalName();
     $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
     // $destinationPath = asset($path) . '/' . $filename;
     $thumbnail->move($destinationPath, $filename);
@@ -158,8 +163,26 @@ function UploadFile($path, $image, $realname, $model, $request)
     //Storage::move('public')->put($destinationPath, file_get_contents($thumbnail));
 
     $model->$image = asset($path) . '/' . $filename;
-    $model->$realname = asset($path) . '/' . $filerealname;
+    // $model->$realname = asset($path) . '/' . $filerealname;
 
     $model->save();
+}
+function GenerateCategoryCode($category_id = 0)
+{
 
+    if ($category_id) {
+
+        $category = Category::find($category_id);
+        $category_code = $category->code;
+        $numberString = $category_code;
+
+        $number = (int) $numberString;
+
+        $number++;
+        $code = sprintf('%04d', $number); // '0001'
+        // $code += 1;
+    } else {
+        $code = '0000';
+    }
+    return $code;
 }
