@@ -1,18 +1,23 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ProductColorController;
 use App\Http\Controllers\Api\ProductSizeController;
 use App\Http\Controllers\Api\ProductTransactionController;
+use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
+
 use App\Http\Controllers\Api\ProductUnitController;
 
 /*
@@ -26,49 +31,48 @@ use App\Http\Controllers\Api\ProductUnitController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
+
+Route::group(["middleware" => ["auth:api"]], function () {
+
+    Route::get("profile", [AuthController::class, "profile"]);
+    Route::get("logout", [AuthController::class, "logout"]);
+
+
+    //Color
+    Route::group(['prefix' => 'color'], function () {
+        Route::get('/', [ColorController::class, 'index']);
+        Route::post('/add', [ColorController::class, 'store']);
+        Route::get('/get', [ColorController::class, 'show']);
+        Route::post('/edit', [ColorController::class, 'update']);
+        Route::get('/delete', [ColorController::class, 'destroy']);
+    });
+    //Size
+    Route::group(['prefix' => 'size'], function () {
+        Route::get('/', [SizeController::class, 'index']);
+        Route::post('/add', [SizeController::class, 'store']);
+        Route::get('/get', [SizeController::class, 'show']);
+        Route::post('/edit', [SizeController::class, 'update']);
+        Route::get('/delete', [SizeController::class, 'destroy']);
+    });
+    //Country
+    Route::group(['prefix' => 'country'], function () {
+        Route::get('/', [CountryController::class, 'index']);
+        Route::post('/add', [CountryController::class, 'store']);
+        Route::get('/get', [CountryController::class, 'show']);
+        Route::post('/edit', [CountryController::class, 'update']);
+        Route::get('/delete', [CountryController::class, 'destroy']);
+    });
+
+    //Opening balance
+
 });
-
-Route::group(['prefix' => 'category'], function () {
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::get('store', [CategoryController::class, 'store']);
-    Route::get('update', [CategoryController::class, 'update']);
-    Route::get('delete', [CategoryController::class, 'delete']);
-});
-
-
-Route::group(['prefix' => 'product'], function () {
-    Route::get('/', [ProductController::class, 'index']);
-    Route::post('store', [ProductController::class, 'store']);
-    Route::post('update/{id}', [ProductController::class, 'update']);
-    Route::get('delete/{id}', [ProductController::class, 'delete']);
-
-    Route::get('units', [ProductUnitController::class, 'index']);
-    Route::post('unit/store', [ProductUnitController::class, 'store']);
-    Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
-    Route::get('unit/delete/{id}', [ProductUnitController::class, 'delete']);
-
-    Route::get('sizes', [ProductSizeController::class, 'index']);
-    Route::post('size/store', [ProductSizeController::class, 'store']);
-    Route::post('size/update/{id}', [ProductSizeController::class, 'update']);
-    Route::get('size/delete/{id}', [ProductSizeController::class, 'delete']);
-
-    Route::get('colors', [ProductColorController::class, 'index']);
-    Route::post('color/store', [ProductColorController::class, 'store']);
-    Route::post('color/update/{id}', [ProductColorController::class, 'update']);
-    Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
-});
-
-Route::group(['prefix' => 'unit'], function () {
-    Route::get('/', [UnitController::class, 'index']);
-    Route::post('store', [UnitController::class, 'store']);
-    Route::post('update', [UnitController::class, 'update']);
-    Route::get('delete', [UnitController::class, 'delete']);
-});
-
-
-
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('products', [ProductController::class, 'index']);
 Route::get('notifications', [NotificationController::class, 'index']);
 Route::get('notification/store', [NotificationController::class, 'store']);
 
@@ -100,7 +104,7 @@ Route::group(['prefix' => 'stores'], function () {
     Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
 });
 
-//  branches 
+//  branches
 Route::group(['prefix' => 'branches'], function () {
     Route::get('branchList', [BranchController::class, 'index']);
     Route::get('showBranch/{id}', [BranchController::class, 'show']);
