@@ -16,6 +16,11 @@ use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\BranchController;
+use App\Http\Controllers\Api\AuthController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,10 +32,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
 
+Route::group(["middleware" => ["auth:api"]], function () {
+
+    Route::get("profile", [AuthController::class, "profile"]);
+    Route::get("logout", [AuthController::class, "logout"]);
+
+
+    //Color
+    Route::group(['prefix' => 'color'], function () {
+        Route::get('/', [ColorController::class, 'index']);
+        Route::post('/add', [ColorController::class, 'store']);
+        Route::get('/get', [ColorController::class, 'show']);
+        Route::post('/edit', [ColorController::class, 'update']);
+        Route::get('/delete', [ColorController::class, 'destroy']);
+    });
+    //Size
+    Route::group(['prefix' => 'size'], function () {
+        Route::get('/', [SizeController::class, 'index']);
+        Route::post('/add', [SizeController::class, 'store']);
+        Route::get('/get', [SizeController::class, 'show']);
+        Route::post('/edit', [SizeController::class, 'update']);
+        Route::get('/delete', [SizeController::class, 'destroy']);
+    });
+    //Country
+    Route::group(['prefix' => 'country'], function () {
+        Route::get('/', [CountryController::class, 'index']);
+        Route::post('/add', [CountryController::class, 'store']);
+        Route::get('/get', [CountryController::class, 'show']);
+        Route::post('/edit', [CountryController::class, 'update']);
+        Route::get('/delete', [CountryController::class, 'destroy']);
+    });
+
+    //Opening balance
+
+});
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('notifications', [NotificationController::class, 'index']);
@@ -57,32 +98,23 @@ Route::group(['prefix' => 'stores'], function () {
     Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
     Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
     Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
+    Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
+    Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
+
+
+    //stores handling
+    Route::get('storeList', [StoreController::class, 'index']);
+    Route::get('showStore/{id}', [StoreController::class, 'show']);
+    Route::post('addStore', [StoreController::class, 'store']);
+    Route::put('updateStore/{id}', [StoreController::class, 'update']);
+    Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
 });
 
-//Color
-Route::group(['prefix' => 'color'], function () {
-    Route::get('/', [ColorController::class, 'index']);
-    Route::post('/add', [ColorController::class, 'store']);
-    Route::get('/get', [ColorController::class, 'show']);
-    Route::post('/edit', [ColorController::class, 'update']);
-    Route::get('/delete', [ColorController::class, 'destroy']);
+//  branches
+Route::group(['prefix' => 'branches'], function () {
+    Route::get('branchList', [BranchController::class, 'index']);
+    Route::get('showBranch/{id}', [BranchController::class, 'show']);
+    Route::post('addBranch', [BranchController::class, 'store']);
+    Route::put('updateBranch/{id}', [BranchController::class, 'update']);
+    Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
 });
-//Size
-Route::group(['prefix' => 'size'], function () {
-    Route::get('/', [SizeController::class, 'index']);
-    Route::post('/add', [SizeController::class, 'store']);
-    Route::get('/get', [SizeController::class, 'show']);
-    Route::post('/edit', [SizeController::class, 'update']);
-    Route::get('/delete', [SizeController::class, 'destroy']);
-});
-//Country
-Route::group(['prefix' => 'country'], function () {
-    Route::get('/', [CountryController::class, 'index']);
-    Route::post('/add', [CountryController::class, 'store']);
-    Route::get('/get', [CountryController::class, 'show']);
-    Route::post('/edit', [CountryController::class, 'update']);
-    Route::get('/delete', [CountryController::class, 'destroy']);
-});
-
-//Opening balance
-

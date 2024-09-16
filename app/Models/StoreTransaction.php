@@ -31,9 +31,9 @@ class StoreTransaction extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    public function storeTransactionDetails()
+    public function allStoreTransactionDetails()
     {
-        return $this->hasMany(StoreTransactionDetails::class ,'id');
+        return $this->hasMany(StoreTransactionDetails::class ,'store_transaction_id', 'id');
     }
     
 }
