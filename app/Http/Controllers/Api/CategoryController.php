@@ -40,7 +40,9 @@ class CategoryController extends Controller
 
             // Remove translated columns from data
             $data = removeColumns($data, $columnsToRemove);
-
+            if (isset($data['image']) && !empty($data['image'])) {
+                $data['image'] = BaseUrl() . '/' . $data['image'];
+            }
             return $data;
         });
 

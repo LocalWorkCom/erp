@@ -11,7 +11,7 @@ class ApICode extends Model
     protected $table = 'apicodes'; // Optional if the table name follows Laravel's convention
     
     protected $hidden = [
-   
+        'modify_by',
         'created_at',
         'updated_at',
     ];

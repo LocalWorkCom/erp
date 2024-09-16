@@ -21,15 +21,12 @@ class Product extends Model
         'main_image',
         'type',
         'main_unit_id',
-        'price',
         'currency_id',
         'category_id',
         'is_valid',
-        'expired_date',
         'sku',
         'barcode',
         'code',
-        'limit_quantity',
         'is_remind'
     ];
         
@@ -38,12 +35,12 @@ class Product extends Model
         'deleted_by',
         'created_at',
         'updated_at',
+        'modify_by',
+
     ];
 
     // The attributes that should be cast to native types
     protected $casts = [
-        'expired_date' => 'date',
-        'price' => 'decimal:2',
         'is_valid' => 'boolean',
     ];
 

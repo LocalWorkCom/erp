@@ -18,6 +18,8 @@ class ProductColor extends Model
     
     protected $hidden = [
         'created_by',
+        'modify_by',
+
         'deleted_by',
         'created_at',
         'updated_at',

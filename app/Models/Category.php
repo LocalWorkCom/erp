@@ -20,14 +20,15 @@ class Category extends Model
         'is_freeze',
         'parent_id',
         'is_deleted',
-        'created_by',
-        'deleted_by',
+
     ];
 
     
     protected $hidden = [
         'created_by',
         'deleted_by',
+        'modify_by',
+
         'created_at',
         'updated_at',
     ];

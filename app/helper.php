@@ -144,3 +144,22 @@ function removeColumns($data, $columnsToRemove)
 {
     return array_diff_key($data, array_flip($columnsToRemove));
 }
+function UploadFile($path, $image, $realname, $model, $request)
+{
+
+    $thumbnail = $request;
+    $destinationPath = $path;
+    $filerealname = $thumbnail->getClientOriginalName();
+    $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
+    // $destinationPath = asset($path) . '/' . $filename;
+    $thumbnail->move($destinationPath, $filename);
+    // $thumbnail->resize(1080, 1080);
+    //  $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
+    //Storage::move('public')->put($destinationPath, file_get_contents($thumbnail));
+
+    $model->$image = asset($path) . '/' . $filename;
+    $model->$realname = asset($path) . '/' . $filerealname;
+
+    $model->save();
+
+}
