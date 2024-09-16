@@ -9,7 +9,8 @@ class ProductTransaction extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['product_id', 'store_id', 'created_by', 'deleted_by', 'created_at', 'updated_at'];
+    protected $hidden = ['created_by', 'deleted_by', 'created_at', 'updated_at'];
+
 
     public function stores()
     {
@@ -30,4 +31,5 @@ class ProductTransaction extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+
 }

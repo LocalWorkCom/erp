@@ -5,10 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Models\StoreTransaction;
+use App\Models\StoreTransactionDetails;
+use App\Models\ProductTransaction;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Traits\ProductCheck;
+use DB;
 
 class StoreTransactionController extends Controller
 {
+    use ProductCheck;
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +25,7 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransaction::with('storeTransactionDetails')->get();
+            $stores = StoreTransaction::get();
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -30,7 +36,34 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransaction::with(['storeTransactionDetails'])->firstOrFail($id);
+            $stores = StoreTransaction::with(['allStoreTransactionDetails', 'allStoreTransactionDetails.products'])->findOrFail($id);
+            return ResponseWithSuccessData($lang, $stores, 1);
+        }catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+    public function show_products(Request $request)
+    {
+        try{
+            $lang =  $request->header('lang', 'en');
+            $today = date('Y-m-d');
+            
+            $stores = ProductTransaction::query()->whereDate('expirt_date', '>=', $today);
+            $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
+            $stores = $stores->with('products')->groupBy('product_id')->get();
+            
+            return ResponseWithSuccessData($lang, $stores, 1);
+        }catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+    public function show_one_product(Request $request, $id)
+    {
+        try{
+            $lang =  $request->header('lang', 'en');
+            $stores = StoreTransactionDetails::with(['products'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -39,12 +72,61 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        //try{
             $lang =  $request->header('lang', 'en');
+
+            $price = 0;
+            $total_price = 0;
+            $products = [];
+
+            //in outgoing return products is not expirt date
+            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['to_type']);
+            if(count($transaction_check_expirt) > 0){
+                $products = $transaction_check_expirt;
+            }
+
+            return $products;
+
+            
+            $add_store_bill = new StoreTransaction();
+            $add_store_bill->type = $request['type'];
+            $add_store_bill->to_type = $request['to_type'];
+            $add_store_bill->to_id = $request['to_id'];
+            $add_store_bill->date = $request['date'];
+            $add_store_bill->store_id = $request['store_id'];
+            $add_store_bill->total = count($request['products']);
+            $add_store_bill->store_id = $request['store_id'];
+            $add_store_bill->user_id = $request['user_id'];
+            $add_store_bill->created_by = 2;
+            $add_store_bill->total_price = $total_price;
+            $add_store_bill->save();
+
+            $store_transaction_id = $add_store_bill->id;
+
+            foreach($request['products'] as $product)
+            {
+
+
+
+                $add_store_items = new StoreTransactionDetails();
+                $add_store_items->store_transaction_id = $store_transaction_id;
+                $add_store_items->product_id = $product['product_id'];
+                $add_store_items->product_unit_id = $product['product_unit_id'];
+                $add_store_items->product_size_id = $product['product_size_id'];
+                $add_store_items->product_color_id = $product['product_color_id'];
+                $add_store_items->country_id = $product['country_id'];
+                $add_store_items->count = $product['count'];
+                $add_store_items->price = $price;
+                $add_store_items->total_price = $total_price;
+                $add_store_items->save();
+            }
+
+
+            
             $stores = [];
             return ResponseWithSuccessData($lang, $stores, 1);    
-        }catch (\Exception $e) {
+        /*}catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }
+        }*/
     }
 }

@@ -13,19 +13,23 @@ return new class extends Migration
     {
         Schema::create('store_transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('creator_by')->comment('user id from users');
-            $table->unsignedBigInteger('to_id')->comment('store id from stores');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('store_id');
             $table->enum('type', [1,2])->default(1)->comment('1 for outgoing, 2 for incoming');
-            $table->enum('to', [1,2,3,4])->default(1)->comment('1 for outging from store, 2 for incoming to store, 3 for outgoing bill sale, 4 for incoming bill sale');
+            $table->enum('to_type', [1,2,3,4])->default(1)->comment('1 from store, 2 from client, 3 from vender, 4 from employee');
+            $table->integer('to_id')->comment('id for to_type column from users and vendors and stores');
             $table->date('date');
             $table->integer('total')->default(0);
-            $table->unsignedBigInteger('created_by');
+            $table->decimal('total_price', 8,2)->default(0)->nullable();
+            $table->unsignedBigInteger('created_by')->default(1);
+            $table->unsignedBigInteger('modified_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
 
-            $table->foreign('creator_by')->references('id')->on('users')->onUpdate('cascade');
-            $table->foreign('to_id')->references('id')->on('stores')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('store_id')->references('id')->on('stores')->onUpdate('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('modified_by')->references('id')->on('users')->onUpdate('cascade');
             $table->foreign('deleted_by')->references('id')->on('users')->onUpdate('cascade');
         });
     }
