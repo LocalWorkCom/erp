@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use App\Models\ProductColor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 
 class ColorController extends Controller
 {
@@ -37,11 +40,26 @@ class ColorController extends Controller
 
         try {
             $lang = $request->header('lang', 'en');
+            App::setLocale($lang);
+
+            $validator = Validator::make($request->all(), [
+                "name_ar" => "required",
+                "name_en" => "required",
+                'hexa_code' => 'required',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => $validator->errors()->first()
+                ]);
+            }
             $color = new Color();
             $color->name_ar = $request->name_ar;
             $color->name_en = $request->name_en;
             $color->hexa_code = $request->hexa_code;
-            $color->created_by =1;
+            $color->created_by =auth()->id();
             $color->save();
             return ResponseWithSuccessData($lang, $color, 1);
         } catch (\Exception $e) {
@@ -84,11 +102,26 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
+            App::setLocale($lang);
+
+            $validator = Validator::make($request->all(), [
+                "name_ar" => "required",
+                "name_en" => "required",
+                'hexa_code' => 'required',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => $validator->errors()->first()
+                ]);
+            }
             $color = Color::findOrFail($request->input('id'));
             $color->name_ar = $request->name_ar;
             $color->name_en = $request->name_en;
             $color->hexa_code = $request->hexa_code;
-            $color->modified_by =1;
+            $color->modified_by =auth()->id();
 
             $color->save();
 
@@ -108,10 +141,10 @@ class ColorController extends Controller
             $color = Color::findOrFail($request->input('id'));
             $is_allow = ProductColor::where('color_id',$request->input('id'))->first();
             if($is_allow){
-                return RespondWithBadRequestData($lang, 3);
+                return RespondWithBadRequestData($lang, 5);
             }else{
-                $color->deleted_by =1;
-                $color->deleted_at =time();
+                $color->deleted_by =auth()->id();
+                $color->deleted_at =Carbon::now();
 
                 return ResponseWithSuccessData($lang, $color, 1);
 

@@ -199,12 +199,13 @@ function CheckToken($lang)
     }
 
     return RespondWithSuccessRequest($lang, 1);
-if (!function_exists('DeleteFile')) {
-    function DeleteFile($path, $filename)
-    {
-        $filePath = public_path($path . '/' . $filename);
-        if (File::exists($filePath)) {
-            File::delete($filePath);
+    if (!function_exists('DeleteFile')) {
+        function DeleteFile($path, $filename)
+        {
+            $filePath = public_path($path . '/' . $filename);
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+            }
         }
     }
 }

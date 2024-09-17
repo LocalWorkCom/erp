@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ProductSize;
 use App\Models\Size;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 
 class SizeController extends Controller
 {
@@ -39,11 +42,26 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
+            App::setLocale($lang);
+
+            $validator = Validator::make($request->all(), [
+                "name_ar" => "required",
+                "name_en" => "required",
+                'category_id' => 'required',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => $validator->errors()->first()
+                ]);
+            }
             $size = new Size();
             $size->name_ar = $request->name_ar;
             $size->name_en = $request->name_en;
             $size->category_id = $request->category_id;
-            $size->created_by =1;
+            $size->created_by =auth()->id();
             $size->save();
             return ResponseWithSuccessData($lang, $size, 1);
         } catch (\Exception $e) {
@@ -80,11 +98,26 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
+            App::setLocale($lang);
+
+            $validator = Validator::make($request->all(), [
+                "name_ar" => "required",
+                "name_en" => "required",
+                'category_id' => 'required',
+
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => $validator->errors()->first()
+                ]);
+            }
             $size = Size::findOrFail($request->input('id'));
             $size->name_ar = $request->name_ar;
             $size->name_en = $request->name_en;
             $size->category_id = $request->category_id;
-            $size->modified_by =1;
+            $size->modified_by =auth()->id();
 
             $size->save();
 
@@ -104,10 +137,10 @@ class SizeController extends Controller
             $size = Size::findOrFail($request->input('id'));
             $is_allow = ProductSize::where('size_id',$request->input('id'))->first();
             if($is_allow){
-                return RespondWithBadRequestData($lang, 3);
+                return RespondWithBadRequestData($lang, 5);
             }else{
-                $size->deleted_by =1;
-                $size->deleted_at =time();
+                $size->deleted_by =auth()->id();
+                $size->deleted_at =Carbon::now();
 
                 return ResponseWithSuccessData($lang, $size, 1);
 
