@@ -139,7 +139,7 @@ class CategoryController extends Controller
 
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {
-            return RespondWithErrorRequest($lang, 'Category cannot be deleted as it has associated products.');
+            return RespondWithBadRequest($lang, 2);
         }
 
         // Handle deletion of associated image if it exists
