@@ -64,4 +64,9 @@ class Category extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+     // Define the relationship between Category and Product
+     public function products()
+     {
+         return $this->hasMany(Product::class, 'category_id');
+     }
 }

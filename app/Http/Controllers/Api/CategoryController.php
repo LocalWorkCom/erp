@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
 {
@@ -59,7 +60,7 @@ class CategoryController extends Controller
             'is_freeze' => 'required|boolean',
             'parent_id' => 'nullable|integer',
         ]);
-    
+
         $GetLastID = GetLastID('categories');
         // dd($GetLastID);
 
@@ -74,7 +75,7 @@ class CategoryController extends Controller
         $is_freeze = $validatedData['is_freeze'];
         $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
         $created_by = '1';
-        
+
         $category = new Category();
         $category->name_ar = $name_ar;
         $category->name_en =  $name_en;
@@ -87,6 +88,72 @@ class CategoryController extends Controller
         $category->save();
         UploadFile('images/categories', 'image', $category, $image);
 
+        return RespondWithSuccessRequest($lang, 1);
+    }
+    public function update(Request $request, $id)
+    {
+        // Validate the input
+        $validatedData = $request->validate([
+            'name_ar' => 'required|string',
+            'name_en' => 'string',
+            'description_ar' => 'nullable|string',
+            'description_en' => 'nullable|string',
+            'image' => 'nullable',  // Adjust this rule based on your requirements
+            'is_freeze' => 'required|boolean',
+            'parent_id' => 'nullable|integer',
+        ]);
+
+        // Fetch the language header
+        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+
+        // Retrieve the category by ID, or throw an exception if not found
+        $category = Category::findOrFail($id);
+
+        // Assign the updated values to the category model
+        $category->name_ar = $validatedData['name_ar'];
+        $category->name_en = $validatedData['name_en'];
+        $category->description_ar = $validatedData['description_ar'] ?? null;
+        $category->description_en = $validatedData['description_en'] ?? null;
+        $category->is_freeze = $validatedData['is_freeze'];
+        $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
+
+        // Handle file upload for the image if provided
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            UploadFile('images/categories', 'image', $category, $image);
+        }
+
+        // Update the category in the database
+        $category->save();
+
+        // Return success response
+        return RespondWithSuccessRequest($lang, 1);
+    }
+    public function delete(Request $request, $id)
+    {
+        // Fetch the language header for response
+        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+
+        // Find the category by ID, or throw a 404 if not found
+        $category = Category::findOrFail($id);
+
+        // Check if there are any products associated with this category
+        if ($category->products()->count() > 0) {
+            return RespondWithErrorRequest($lang, 'Category cannot be deleted as it has associated products.');
+        }
+
+        // Handle deletion of associated image if it exists
+        if ($category->image) {
+            $imagePath = public_path('images/categories/' . $category->image);
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+        }
+
+        // Delete the category
+        $category->delete();
+
+        // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
 }
