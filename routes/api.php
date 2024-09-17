@@ -80,11 +80,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [OpeningBalanceController::class, 'update']);
         Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
     });
-});
-Route::get('categories', [CategoryController::class, 'index']);
-Route::get('products', [ProductController::class, 'index']);
-Route::get('notifications', [NotificationController::class, 'index']);
-Route::get('notification/store', [NotificationController::class, 'store']);
 
 //Product
 Route::group(['prefix' => 'products'], function () {
