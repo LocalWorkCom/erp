@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
@@ -35,7 +36,11 @@ use App\Http\Controllers\Api\ProductUnitController;
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
-
+Route::group(['prefix' => 'api_code'], function () {
+    Route::get('/', [ApiCodeController::class, 'index']);
+    Route::post('store', [ApiCodeController::class, 'store']);
+    Route::post('update/{id}', [ApiCodeController::class, 'update']);
+});
 
 Route::group(["middleware" => ["auth:api"]], function () {
 
@@ -74,11 +79,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('update/{id}', [CategoryController::class, 'update']);
         Route::get('delete/{id}', [CategoryController::class, 'delete']);
     });
-    Route::group(['prefix' => 'api_code'], function () {
-        Route::get('/', [ApiCodeController::class, 'index']);
-        Route::post('store', [ApiCodeController::class, 'store']);
-        Route::post('update/{id}', [ApiCodeController::class, 'update']);
-    });
+
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::post('store', [ProductController::class, 'store']);
@@ -127,15 +128,14 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
     });
-
 });
-    Route::group(['prefix' => 'opiningBalance'], function () {
-        Route::any('/', [OpeningBalanceController::class, 'index']);
-        Route::any('/add', [OpeningBalanceController::class, 'store']);
-        Route::any('/get', [OpeningBalanceController::class, 'show']);
-        Route::any('/edit', [OpeningBalanceController::class, 'update']);
-        Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
-    });
+Route::group(['prefix' => 'opiningBalance'], function () {
+    Route::any('/', [OpeningBalanceController::class, 'index']);
+    Route::any('/add', [OpeningBalanceController::class, 'store']);
+    Route::any('/get', [OpeningBalanceController::class, 'show']);
+    Route::any('/edit', [OpeningBalanceController::class, 'update']);
+    Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
+});
 
 
 //Product
@@ -158,7 +158,7 @@ Route::group(['prefix' => 'stores'], function () {
     Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
     Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
 
-//stores handling
+    //stores handling
     Route::get('storeList', [StoreController::class, 'index']);
     Route::get('showStore/{id}', [StoreController::class, 'show']);
     Route::post('addStore', [StoreController::class, 'store']);
@@ -173,7 +173,7 @@ Route::group(['prefix' => 'branches'], function () {
     Route::post('addBranch', [BranchController::class, 'store']);
     Route::put('updateBranch/{id}', [BranchController::class, 'update']);
     Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
-     Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+    Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
 });
 
 // vendors
