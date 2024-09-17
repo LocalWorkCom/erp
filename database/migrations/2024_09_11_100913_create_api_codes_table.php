@@ -15,6 +15,7 @@ class CreateApiCodesTable extends Migration
             $table->string('api_code_title_ar'); // Title in Arabic
             $table->text('api_code_message_en'); // Message in English
             $table->text('api_code_message_ar'); // Message in Arabic
+            $table->softDeletes()->after('updated_at'); // Place this column after the 'updated_at' column
             $table->timestamps(); // Created at and updated at columns
         });
     }

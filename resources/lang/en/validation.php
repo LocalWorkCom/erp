@@ -25,6 +25,11 @@ return [
 
     'required' => 'The :attribute field is required.',
     'email' => 'The :attribute must be a valid email address.',
+    'name'=>'The :attribute field is required.',
+    'phone'=>'The :attribute field is required.',
+    'country_id'=>'The :attribute field is required.',
+    'unauthenticated_title' => 'Unauthenticated title',
+    'unauthenticated_msg' => 'Unauthenticated msg',
     'name' => 'The :attribute field is required.',
     'phone' => 'The :attribute field is required.',
     'country_id' => 'The :attribute field is required.',
