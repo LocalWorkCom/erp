@@ -45,7 +45,9 @@ class AuthController extends Controller
         // Response
         return response()->json([
             "status" => true,
-            "message" => "User created successfully"
+            "message" => $lang == 'ar'
+            ? 'تم التسجيل بنجاح'
+            : "User created successfully"
         ]);
     }
     public function Login(Request $request)
