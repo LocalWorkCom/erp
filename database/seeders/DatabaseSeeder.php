@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CategoriesTableSeeder::class,
             CountriesTableSeeder::class,
             SizesTableSeeder::class,
+            APICodeTableSeeder::class,
             // You can call additional seeders here
             // AnotherSeeder::class,
         ]);

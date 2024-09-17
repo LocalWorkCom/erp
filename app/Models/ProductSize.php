@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductSize extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
 
     protected $fillable = [
         'size_id',
@@ -18,8 +19,11 @@ class ProductSize extends Model
     protected $hidden = [
         'created_by',
         'deleted_by',
+        'modify_by',
         'created_at',
         'updated_at',
+        'deleted_at',
+
     ];
     /**
      * Get the size associated with the product size.
