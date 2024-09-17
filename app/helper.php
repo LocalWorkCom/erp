@@ -195,7 +195,7 @@ function CheckToken($lang)
     $User = auth('user')->user();
 
     if (!$User) {
-        return RespondWithBadRequest($lang, 16);
+        return RespondWithBadRequest($lang, 3);
     }
 
     return RespondWithSuccessRequest($lang, 1);
