@@ -30,7 +30,7 @@ function RespondWithSuccessRequest($lang, $code)
 
 function RespondWithBadRequest($lang, $code)
 {
-    return $APICode = ApICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
@@ -41,6 +41,20 @@ function RespondWithBadRequest($lang, $code)
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+function RespondWithBadRequestWithData($data)
+{
+    $response_array = array(
+        'success' => false,
+        'apiTitle' => trans('validation.validator_title'),
+        'apiMsg' => trans('validation.validator_msg'),
+        'apiCode' => -1,
+        'data' => $data
+    );
+    $response_code = 200;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+
 function GetNextID($table)
 {
     $nextId  = DB::table($table)->count() + 1;
@@ -190,15 +204,14 @@ function GenerateCategoryCode($category_id = 0)
     }
     return $code;
 }
-function CheckToken($lang)
+function CheckToken()
 {
     $User = auth('user')->user();
 
     if (!$User) {
-        return RespondWithBadRequest($lang, 3);
+        return false;
     }
-
-    return RespondWithSuccessRequest($lang, 1);
+    return true;
 }
 if (!function_exists('DeleteFile')) {
     function DeleteFile($path, $filename)

@@ -28,6 +28,7 @@ class Product extends Model
         'sku',
         'barcode',
         'code',
+        'limit_quantity',
         'is_remind'
     ];
         

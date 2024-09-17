@@ -22,15 +22,12 @@ class AuthController extends Controller
             "email" => "required|email|unique:users",
             'country_id' => 'required',
             "password" => "required",
-            'phone'=>'required',
+            'phone' => 'required',
 
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                "status" => false,
-                "message" => $validator->errors()->first()
-            ]);
+            return RespondWithBadRequestWithData($validator->errors());
         }
 
         $user = new User();
@@ -46,8 +43,8 @@ class AuthController extends Controller
         return response()->json([
             "status" => true,
             "message" => $lang == 'ar'
-            ? 'تم التسجيل بنجاح'
-            : "User created successfully"
+                ? 'تم التسجيل بنجاح'
+                : "User created successfully"
         ]);
     }
     public function Login(Request $request)
@@ -63,10 +60,8 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
 
             // Attempt to authenticate the user
@@ -129,10 +124,8 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                "status" => false,
-                "message" => $validator->errors()->first()
-            ]);
+            return RespondWithBadRequestWithData($validator->errors());
+
         }
         $user = User::where('email', $request->email)->first();
 
