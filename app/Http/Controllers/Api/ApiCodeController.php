@@ -22,8 +22,6 @@ class ApiCodeController extends Controller
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
         $api_codes = ApICode::all();
-
-
         return ResponseWithSuccessData($lang, $api_codes, 1);
     }
 

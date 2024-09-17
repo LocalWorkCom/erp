@@ -190,6 +190,15 @@ function GenerateCategoryCode($category_id = 0)
     }
     return $code;
 }
+function CheckToken($lang)
+{
+    $User = auth('user')->user();
+
+    if (!$User) {
+        return RespondWithBadRequest($lang, 16);
+    }
+
+    return RespondWithSuccessRequest($lang, 1);
 if (!function_exists('DeleteFile')) {
     function DeleteFile($path, $filename)
     {
