@@ -185,14 +185,14 @@ function UploadFile($path, $image, $model, $request)
     $model->save();
 }
 
-function GenerateCategoryCode($category_id = 0)
+function GenerateCode($table, $table_id = 0)
 {
 
-    if ($category_id) {
+    if ($table_id) {
 
-        $category = Category::find($category_id);
-        $category_code = $category->code;
-        $numberString = $category_code;
+        $table = DB::table($table)->where('id', $table_id)->first();
+        $table_code = $table->code;
+        $numberString = $table_code;
 
         $number = (int) $numberString;
 
