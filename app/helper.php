@@ -199,6 +199,7 @@ function CheckToken($lang)
     }
 
     return RespondWithSuccessRequest($lang, 1);
+}
 if (!function_exists('DeleteFile')) {
     function DeleteFile($path, $filename)
     {
