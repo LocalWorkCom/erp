@@ -4,18 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Shelf extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'division_id',
-        'name_ar',
         'name_en',
+        'name_ar',
         'created_by',
-        'deleted_by'
+        'modified_by',
+        'deleted_by',
     ];
+
+    protected $dates = ['deleted_at']; 
 
     public function division()
     {
