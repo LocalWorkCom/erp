@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\ApiCode;
+use App\Models\ApICode;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
 use App\Models\Category;
@@ -14,7 +14,7 @@ function RespondWithSuccessRequest($lang, $code)
 
     //bad or invalid request missing some params
     $response = new stdClass();
-    $APICode = APICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
@@ -29,7 +29,7 @@ function RespondWithSuccessRequest($lang, $code)
 
 function RespondWithBadRequest($lang, $code)
 {
-    return $APICode = APICode::where('code', $code)->first();
+    return $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
@@ -92,13 +92,13 @@ function convertToArabicNumerals($number)
 }
 function ApiCode($code)
 {
-    $APICode = APICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     return $APICode;
 }
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
-    $APICode = ApiCode(code: $code);
+    $APICode = ApiCode($code);
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
