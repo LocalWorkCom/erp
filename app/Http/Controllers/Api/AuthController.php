@@ -14,13 +14,24 @@ class AuthController extends Controller
 {
     public function Register(Request $request)
     {
-        // data validation
-        $request->validate([
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
+        $validator = Validator::make($request->all(), [
             "name" => "required",
             "email" => "required|email|unique:users",
             'country_id' => 'required',
-            "password" => "required"
+            "password" => "required",
+            'phone'=>'required',
+
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors()->first()
+            ]);
+        }
 
         $user = new User();
         $user->name = $request->name;
@@ -34,14 +45,16 @@ class AuthController extends Controller
         // Response
         return response()->json([
             "status" => true,
-            "message" => "User created successfully"
+            "message" => $lang == 'ar'
+            ? 'تم التسجيل بنجاح'
+            : "User created successfully"
         ]);
     }
     public function Login(Request $request)
     {
         try {
             $lang = $request->header('lang', 'en');
-            App::setLocale($lang);  // Set the locale based on the header
+            App::setLocale(locale: $lang);  // Set the locale based on the header
 
             // Validate email and password fields
             $validator = Validator::make($request->all(), [
