@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Store;
+use App\Models\Category;
 
 class StoreController extends Controller
 {
@@ -67,7 +68,7 @@ class StoreController extends Controller
                 'name_ar' => $request->name_ar,
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
-                'created_by' => auth()->id(),
+                'created_by' => auth()->id() ?? 2,
             ]);
     
             // Attach categories to the store
@@ -109,12 +110,13 @@ class StoreController extends Controller
                 'name_ar' => $request->name_ar,
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
-                'modified_by' => auth()->id(),
+                'modified_by' => auth()->id()?? 2,
             ]);
     
             // Sync the categories with the store
             $store->categories()->sync($request->category_ids);
-    
+            Log::info('Store creation request:', $request->all());
+
             return ResponseWithSuccessData($lang, $store, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
