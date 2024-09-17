@@ -20,6 +20,11 @@ use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\OpeningBalanceController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
+use App\Http\Controllers\Api\LineController;
+use App\Http\Controllers\Api\DivisionController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -191,4 +196,26 @@ Route::group(['prefix' => 'vendors'], function () {
     Route::put('updateVendor/{id}', [VendorController::class, 'update']);
     Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']);
     Route::post('restoreVendor/{id}', [VendorController::class, 'restore']);
+});
+
+
+//Lines
+Route::group(['prefix' => 'lines'], function () {
+    Route::get('lineList', [LineController::class, 'index']);
+    Route::get('showLine/{id}', [LineController::class, 'show']);
+    Route::post('addLine', [LineController::class, 'store']);
+    Route::put('updateLine/{id}', [LineController::class, 'update']);
+    Route::delete('deleteLine/{id}', [LineController::class, 'destroy']);
+    Route::post('restoreLine/{id}', [LineController::class, 'restore']); // Restore soft-deleted line
+});
+
+
+// Divisions
+Route::group(['prefix' => 'divisions'], function () {
+    Route::get('divisionList', [DivisionController::class, 'index']);
+    Route::get('showDivision/{id}', [DivisionController::class, 'show']);
+    Route::post('addDivision', [DivisionController::class, 'store']);
+    Route::put('updateDivision/{id}', [DivisionController::class, 'update']);
+    Route::delete('deleteDivision/{id}', [DivisionController::class, 'destroy']);
+    Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
 });
