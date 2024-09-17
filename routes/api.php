@@ -36,7 +36,11 @@ use App\Http\Controllers\Api\ProductUnitController;
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
-
+Route::group(['prefix' => 'api_code'], function () {
+    Route::get('/', [ApiCodeController::class, 'index']);
+    Route::post('store', [ApiCodeController::class, 'store']);
+    Route::post('update/{id}', [ApiCodeController::class, 'update']);
+});
 
 Route::group(["middleware" => ["auth:api"]], function () {
 
@@ -75,11 +79,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('update/{id}', [CategoryController::class, 'update']);
         Route::get('delete/{id}', [CategoryController::class, 'delete']);
     });
-    Route::group(['prefix' => 'api_code'], function () {
-        Route::get('/', [ApiCodeController::class, 'index']);
-        Route::post('store', [ApiCodeController::class, 'store']);
-        Route::post('update/{id}', [ApiCodeController::class, 'update']);
-    });
+
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::post('store', [ProductController::class, 'store']);
