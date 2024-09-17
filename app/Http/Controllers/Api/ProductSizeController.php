@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Product;
 use App\Models\ProductSize;
+use App\Models\Size;
 use Illuminate\Http\Request;
 
 class ProductSizeController extends Controller
@@ -19,9 +20,17 @@ class ProductSizeController extends Controller
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
-        $products = ProductSize::all();
+        $productSizes = ProductSize::all();
 
-       
-        return ResponseWithSuccessData($lang, $products, code: 1);
+        foreach ($productSizes as $productSize) {
+            $productSize['size'] = Size::find($productSize->size_id);
+            $productSize['product'] = Product::find($productSize->product_id);
+        }
+        $productSizes->transform(function ($productSize) {
+            $productSize->makeHidden(['product_id', 'size_id']);
+            return $productSize;
+        });
+
+        return ResponseWithSuccessData($lang, $productSizes,  1);
     }
 }

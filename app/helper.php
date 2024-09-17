@@ -1,11 +1,13 @@
 <?php
 
-use App\Models\ApiCode;
+use Carbon\Carbon;
+use App\Models\ApICode;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 
 function RespondWithSuccessRequest($lang, $code)
@@ -13,12 +15,12 @@ function RespondWithSuccessRequest($lang, $code)
 
     //bad or invalid request missing some params
     $response = new stdClass();
-    $APICode = APICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->IDApiCode
+        'apiCode' => $APICode->code
 
     );
     $response_code = 200;
@@ -28,12 +30,12 @@ function RespondWithSuccessRequest($lang, $code)
 
 function RespondWithBadRequest($lang, $code)
 {
-    return $APICode = APICode::where('code', $code)->first();
+    return $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->IDApiCode
+        'apiCode' => $APICode->code
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
@@ -42,6 +44,11 @@ function RespondWithBadRequest($lang, $code)
 function GetNextID($table)
 {
     $nextId  = DB::table($table)->count() + 1;
+    return $nextId;
+}
+function GetLastID($table)
+{
+    $nextId  = DB::table($table)->max('id');
     return $nextId;
 }
 function ActionBackLog($IDUser, $function_name, $controller_name, $action_name, $action_id)
@@ -86,13 +93,13 @@ function convertToArabicNumerals($number)
 }
 function ApiCode($code)
 {
-    $APICode = APICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     return $APICode;
 }
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
-    $APICode = ApiCode(code: $code);
+    $APICode = ApiCode($code);
     $response_array = array(
         'success' => true,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
@@ -144,22 +151,60 @@ function removeColumns($data, $columnsToRemove)
 {
     return array_diff_key($data, array_flip($columnsToRemove));
 }
-function UploadFile($path, $image, $realname, $model, $request)
+function UploadFile($path, $image, $model, $request)
+{
+    $thumbnail = $request;
+    $destinationPath = public_path($path); // Ensure this is the public directory path
+    $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
+
+    // Move the file to the destination directory
+    $thumbnail->move($destinationPath, $filename);
+
+    // Generate the asset path and remove the leading slash if exists
+    $filePath = asset($path) . '/' . $filename;
+    $filePath = ltrim($filePath, '/'); // Remove the first slash if present
+
+    // Save the file path to the model
+    $model->$image = $filePath;
+
+    // Save the model with the updated image path
+    $model->save();
+}
+
+function GenerateCategoryCode($category_id = 0)
 {
 
-    $thumbnail = $request;
-    $destinationPath = $path;
-    $filerealname = $thumbnail->getClientOriginalName();
-    $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
-    // $destinationPath = asset($path) . '/' . $filename;
-    $thumbnail->move($destinationPath, $filename);
-    // $thumbnail->resize(1080, 1080);
-    //  $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
-    //Storage::move('public')->put($destinationPath, file_get_contents($thumbnail));
+    if ($category_id) {
 
-    $model->$image = asset($path) . '/' . $filename;
-    $model->$realname = asset($path) . '/' . $filerealname;
+        $category = Category::find($category_id);
+        $category_code = $category->code;
+        $numberString = $category_code;
 
-    $model->save();
+        $number = (int) $numberString;
 
+        $number++;
+        $code = sprintf('%04d', $number); // '0001'
+        // $code += 1;
+    } else {
+        $code = '0000';
+    }
+    return $code;
+}
+function CheckToken($lang)
+{
+    $User = auth('user')->user();
+
+    if (!$User) {
+        return RespondWithBadRequest($lang, 16);
+    }
+
+    return RespondWithSuccessRequest($lang, 1);
+if (!function_exists('DeleteFile')) {
+    function DeleteFile($path, $filename)
+    {
+        $filePath = public_path($path . '/' . $filename);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+    }
 }

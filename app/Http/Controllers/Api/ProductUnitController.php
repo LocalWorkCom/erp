@@ -29,6 +29,6 @@ class ProductUnitController extends Controller
         });
     
         // removeColumns($productUnits, ['product_id', 'unit_id']);
-        return ResponseWithSuccessData($lang, $productUnits, code: 1);
+        return ResponseWithSuccessData($lang, $productUnits,  1);
     }
 }

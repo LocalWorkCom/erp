@@ -44,6 +44,6 @@ class UnitController extends Controller
             return $data;
         });
 
-        return ResponseWithSuccessData($lang, $units, code: 1);
+        return ResponseWithSuccessData($lang, $units, 1);
     }
 }
