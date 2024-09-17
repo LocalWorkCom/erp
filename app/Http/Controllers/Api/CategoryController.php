@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class CategoryController extends Controller
@@ -80,10 +81,10 @@ class CategoryController extends Controller
         $description_ar = $request->description_ar;
         $description_en = $request->description_en;
         $image = $request->file('image');  // Handle file upload if necessary
-        $code = GenerateCategoryCode(($GetLastID == 1) ? 0 : $GetLastID);
+        $code = GenerateCode('categories',($GetLastID == 1) ? 0 : $GetLastID);
         $is_freeze = $request->is_freeze;
         $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-        $created_by = '1';
+        $created_by = Auth::user()->id;
 
         $category = new Category();
         $category->name_ar = $name_ar;

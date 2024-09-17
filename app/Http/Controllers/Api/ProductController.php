@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -53,7 +56,11 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+        // Validate the input
+        $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
             'description_ar' => 'nullable|string',
@@ -71,30 +78,32 @@ class ProductController extends Controller
             'category_id' => 'required|integer'  // Assuming this should also be required
         ]);
 
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         $GetLastID = GetLastID('products');
 
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
-        $name_ar = $validatedData['name_ar'];
-        $name_en = $validatedData['name_en'];
-        $description_ar = $validatedData['description_ar'] ?? null;
-        $description_en = $validatedData['description_en'] ?? null;
+        $name_ar = $request->name_ar;
+        $name_en = $request->name_en;
+        $description_ar = $request->description_ar;
+        $description_en = $request->description_en;
         $main_image = $request->file('main_image');  // Handle file upload if necessary
-        $is_valid = $validatedData['is_valid'];
-        $type = $validatedData['type'];
-        $is_remind = $validatedData['is_remind'];
-        $limit_quantity = $validatedData['limit_quantity'];
-        $main_unit_id = $validatedData['main_unit_id'];  // Correctly pulling from validated data
-        $currency_code = $validatedData['currency_code'];
-        $category_id = $validatedData['category_id'];
+        $is_valid = $request->is_valid;
+        $type = $request->type;
+        $is_remind = $request->is_remind;
+        $limit_quantity = $request->limit_quantity;
+        $main_unit_id = $request->main_unit_id;  // Correctly pulling from validated data
+        $currency_code = $request->currency_code;
+        $category_id = $request->category_id;
 
-        $code = GenerateCategoryCode(($GetLastID == 1) ? 0 : $GetLastID);
-        $sku = GenerateCategoryCode(($GetLastID == 1) ? 0 : $GetLastID);
-        $barcode = GenerateCategoryCode(($GetLastID == 1) ? 0 : $GetLastID);
+        $code = GenerateCode('products',($GetLastID == 1) ? 0 : $GetLastID);
+        $sku = GenerateCode('products',($GetLastID == 1) ? 0 : $GetLastID);
+        $barcode = GenerateCode('products',($GetLastID == 1) ? 0 : $GetLastID);
 
         // Assuming 'created_by' is hardcoded or based on the authenticated user
-        $created_by = '1';
-
+        $created_by = Auth::user()->id;
         $product = new Product();
         $product->name_ar = $name_ar;
         $product->name_en = $name_en;
@@ -113,8 +122,9 @@ class ProductController extends Controller
         $product->created_by = $created_by;
 
         $product->save();
-
-        UploadFile('images/products', 'main_image', $product, $main_image);  // Handle image upload
+        if ($request->hasFile('main_image')) {
+            UploadFile('images/products', 'main_image', $product, $main_image);  // Handle image upload
+        }
 
         return RespondWithSuccessRequest($lang, 1);
     }
