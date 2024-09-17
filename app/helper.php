@@ -1,12 +1,13 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\ApICode;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
-use App\Models\Category;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 
 function RespondWithSuccessRequest($lang, $code)
@@ -152,21 +153,24 @@ function removeColumns($data, $columnsToRemove)
 }
 function UploadFile($path, $image, $model, $request)
 {
-
     $thumbnail = $request;
-    $destinationPath = $path;
+    $destinationPath = public_path($path); // Ensure this is the public directory path
     $filename = $model->id . time() . '.' . $thumbnail->getClientOriginalExtension();
-    // $destinationPath = asset($path) . '/' . $filename;
+
+    // Move the file to the destination directory
     $thumbnail->move($destinationPath, $filename);
-    // $thumbnail->resize(1080, 1080);
-    //  $thumbnail = Image::make(public_path() . '/'.$path.'/' . $filename);
-    //Storage::move('public')->put($destinationPath, file_get_contents($thumbnail));
 
-    $model->$image = asset($path) . '/' . $filename;
-    // $model->$realname = asset($path) . '/' . $filerealname;
+    // Generate the asset path and remove the leading slash if exists
+    $filePath = asset($path) . '/' . $filename;
+    $filePath = ltrim($filePath, '/'); // Remove the first slash if present
 
+    // Save the file path to the model
+    $model->$image = $filePath;
+
+    // Save the model with the updated image path
     $model->save();
 }
+
 function GenerateCategoryCode($category_id = 0)
 {
 
@@ -195,4 +199,12 @@ function CheckToken($lang)
     }
 
     return RespondWithSuccessRequest($lang, 1);
+if (!function_exists('DeleteFile')) {
+    function DeleteFile($path, $filename)
+    {
+        $filePath = public_path($path . '/' . $filename);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+    }
 }
