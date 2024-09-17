@@ -11,6 +11,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
+use App\Events\ProductTransactionEvent;
 
 class StoreTransactionController extends Controller
 {
@@ -48,11 +49,11 @@ class StoreTransactionController extends Controller
         try{
             $lang =  $request->header('lang', 'en');
             $today = date('Y-m-d');
-            
+
             $stores = ProductTransaction::query()->whereDate('expirt_date', '>=', $today);
             $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
             $stores = $stores->with('products')->groupBy('product_id')->get();
-            
+
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -63,7 +64,7 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransactionDetails::with(['products'])->findOrFail($id);
+            $stores = ProductTransaction::with(['products'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -72,7 +73,7 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        //try{
+        try{
             $lang =  $request->header('lang', 'en');
 
             $price = 0;
@@ -85,9 +86,6 @@ class StoreTransactionController extends Controller
                 $products = $transaction_check_expirt;
             }
 
-            return $products;
-
-            
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
             $add_store_bill->to_type = $request['to_type'];
@@ -97,7 +95,7 @@ class StoreTransactionController extends Controller
             $add_store_bill->total = count($request['products']);
             $add_store_bill->store_id = $request['store_id'];
             $add_store_bill->user_id = $request['user_id'];
-            $add_store_bill->created_by = 2;
+            $add_store_bill->created_by = $request['user_id'];
             $add_store_bill->total_price = $total_price;
             $add_store_bill->save();
 
@@ -105,8 +103,6 @@ class StoreTransactionController extends Controller
 
             foreach($request['products'] as $product)
             {
-
-
 
                 $add_store_items = new StoreTransactionDetails();
                 $add_store_items->store_transaction_id = $store_transaction_id;
@@ -119,14 +115,20 @@ class StoreTransactionController extends Controller
                 $add_store_items->price = $price;
                 $add_store_items->total_price = $total_price;
                 $add_store_items->save();
+                $add_store_items->type = $add_store_bill->type;
+                $add_store_items->to_type = $add_store_bill->to_type;
+                $add_store_items->user_id = $add_store_bill->user_id;
+                $add_store_items->store_id = $request['store_id'];
+
+                event(new ProductTransactionEvent($add_store_items));
             }
 
 
-            
-            $stores = [];
-            return ResponseWithSuccessData($lang, $stores, 1);    
-        /*}catch (\Exception $e) {
+
+            $stores = $add_store_bill;
+            return ResponseWithSuccessData($lang, $stores, 1);
+        }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }*/
+        }
     }
 }
