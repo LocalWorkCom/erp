@@ -104,8 +104,10 @@ class CategoryController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
         // Validate the input
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
             'description_ar' => 'nullable|string',
@@ -115,18 +117,19 @@ class CategoryController extends Controller
             'parent_id' => 'nullable|integer',
         ]);
 
-        // Fetch the language header
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
 
         // Retrieve the category by ID, or throw an exception if not found
         $category = Category::findOrFail($id);
 
         // Assign the updated values to the category model
-        $category->name_ar = $validatedData['name_ar'];
-        $category->name_en = $validatedData['name_en'];
-        $category->description_ar = $validatedData['description_ar'] ?? null;
-        $category->description_en = $validatedData['description_en'] ?? null;
-        $category->is_freeze = $validatedData['is_freeze'];
+        $category->name_ar = $request->name_ar;
+        $category->name_en = $request->name_en;
+        $category->description_ar = $request->description_ar;
+        $category->description_en = $request->description_en;
+        $category->is_freeze = $request->is_freeze;
         $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
 
         // Handle file upload for the image if provided
