@@ -18,26 +18,18 @@ class AuthController extends Controller
         $request->validate([
             "name" => "required",
             "email" => "required|email|unique:users",
+            'country_id' => 'required',
             "password" => "required"
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->flag = 0 ;
+        $user->flag = 0;
         $user->phone = $request->phone;
-        $user->country_id=$request->country_id;
+        $user->country_id = $request->country_id;
         $user->password = Hash::make($request->password);
         $user->save();
-
-        // User::create([
-        //     "name" => $request->name,
-        //     "email" => $request->email,
-        //     'flag' => 0,
-        //     'phone'=>$request->phone,
-        //     'country_id' => $request->country_id,
-        //     "password" => Hash::make($request->password)
-        // ]);
 
         // Response
         return response()->json([
@@ -45,11 +37,13 @@ class AuthController extends Controller
             "message" => "User created successfully"
         ]);
     }
-    public function Login(Request $request) {
+    public function Login(Request $request)
+    {
         try {
             $lang = $request->header('lang', 'en');
             App::setLocale($lang);  // Set the locale based on the header
 
+            // Validate email and password fields
             $validator = Validator::make($request->all(), [
                 "email" => "required|email",
                 "password" => "required"
@@ -62,27 +56,26 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Attempt to authenticate
-            if (Auth::attempt(credentials: [
+            // Attempt to authenticate the user
+            if (Auth::attempt([
                 "email" => $request->email,
                 "password" => $request->password
             ])) {
                 $user = Auth::user();
 
-
-                // Check the user's flag
+                // Check the user's flag (e.g., if account is active)
                 if ($user->flag == 0) {
 
                     $token = $user->createToken("myToken")->accessToken;
-
-                    return response()->json([
-                        "status" => true,
-                        "message" => __("Login successful"),
+                    $data = [
                         "access_token" => $token,
-                        'data'=>$user
-                    ]);
+                        'data' => $user
+                    ];
+
+                    return ResponseWithSuccessData($lang, $data, 1);
                 } else {
                     Auth::logout();
+
                     return response()->json([
                         "status" => false,
                         "message" => $lang == 'ar'
@@ -90,39 +83,77 @@ class AuthController extends Controller
                             : "Sorry, you cannot log in"
                     ]);
                 }
+            } else {
+                // Authentication failed (incorrect credentials)
+                return response()->json([
+                    "status" => false,
+                    "message" => $lang == 'ar'
+                        ? "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+                        : "Email or password is incorrect"
+                ]);
             }
-
-            return response()->json([
-                "status" => false,
-                "message" => __("Invalid credentials")
-            ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 "status" => false,
-                "message" => __("Failed to generate token."),
-                "error" => $e->getMessage()  // Return the error message for debugging
+                "message" => __($lang == 'ar'
+                    ? 'حدث خطأ يرجى المحاولة مرة أخرى'
+                    : "Failed to generate token."),
+                "error" => $e->getMessage()
             ]);
         }
     }
 
+    public function reset_password(Request $request)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
 
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "password" => "required",
+            'password_confirm' => 'required|same:password',
 
-    public function Logout(Request $request) {
-        auth()->user()->token()->revoke();
-
-        return response()->json([
-            "status" => true,
-            "message" => "User logged out"
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "status" => false,
+                "message" => $validator->errors()->first()
+            ]);
+        }
+        $user = User::where('email', $request->email)->first();
+
+        // Check if the user has the correct flag
+        if ($user->flag !== 0) {
+            return RespondWithBadRequestData($lang, 2);
+        }
+
+        if (Hash::check($request->password, $user->password) == true) {
+            return RespondWithBadRequest($lang, 3);
+        }
+        Auth::login($user);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        $success['token'] = $user->createToken('MyApp')->accessToken;
+        $userData = $user->only(['id', 'name', 'email', 'phone']);
+
+        $success['user'] = array_merge($userData);
+        return ResponseWithSuccessData($lang, $success, 1);
     }
-    public function profile() {
-        $userdata = Auth::user();
 
-        return response()->json([
-            "status" => true,
-            "message" => "Profile data",
-            "data" => $userdata
-        ]);
+
+    public function Logout(Request $request)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+        auth()->user()->token()->revoke();
+        return ResponseWithSuccessData($lang, null, 4);
+    }
+    public function profile(Request $request)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+        $userdata = User::with('country')->where('id', Auth::id())->first();
+        return ResponseWithSuccessData($lang, $userdata, 1);
     }
 }
