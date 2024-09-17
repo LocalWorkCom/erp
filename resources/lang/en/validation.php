@@ -25,11 +25,16 @@ return [
 
     'required' => 'The :attribute field is required.',
     'email' => 'The :attribute must be a valid email address.',
+    'name'=>'The :attribute field is required.',
+    'phone'=>'The :attribute field is required.',
+    'country_id'=>'The :attribute field is required.',
+    'unauthenticated_title' => 'Unauthenticated title',
+    'unauthenticated_msg' => 'Unauthenticated msg',
     'name' => 'The :attribute field is required.',
     'phone' => 'The :attribute field is required.',
     'country_id' => 'The :attribute field is required.',
     'exists'=>"The :attribute field doesn't exist",
     'unique'=>'The :attribute field must be unique.',
     'integer' => 'The :attribute field must be integer.',
-    'date'=>'The :attribute field must be in correct date.',
+    'date_format'=>'The :attribute field must be in correct date.',
 ];
