@@ -15,5 +15,6 @@ return [
     'name'=>'The :attribute field is required.',
     'phone'=>'The :attribute field is required.',
     'country_id'=>'The :attribute field is required.',
-
+    'unauthenticated_title' => 'Unauthenticated title',
+    'unauthenticated_msg' => 'Unauthenticated msg',
 ];
