@@ -143,6 +143,7 @@ class CategoryController extends Controller
 
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {
+
             return RespondWithBadRequest($lang, 6);
         }
 
