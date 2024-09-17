@@ -9,7 +9,7 @@ return [
     'same'=>':attribute لا تتطابق ',
     'exists'=>':attribute غير موجود' ,
     'integer' => ':attribute يجب ان يكون أرقام' ,
-    'date'=>':attributeليس بالشكل الصحيح ',
+    'date_format'=>':attribute ليس بالشكل الصحيح ',
     'attributes' => [
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',

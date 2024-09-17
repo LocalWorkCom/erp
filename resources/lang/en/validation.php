@@ -31,5 +31,5 @@ return [
     'exists'=>"The :attribute field doesn't exist",
     'unique'=>'The :attribute field must be unique.',
     'integer' => 'The :attribute field must be integer.',
-    'date'=>'The :attribute field must be in correct date.',
+    'date_format'=>'The :attribute field must be in correct date.',
 ];
