@@ -52,10 +52,8 @@ class SizeController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
             $size = new Size();
             $size->name_ar = $request->name_ar;
@@ -108,10 +106,8 @@ class SizeController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
             $size = Size::findOrFail($request->input('id'));
             $size->name_ar = $request->name_ar;

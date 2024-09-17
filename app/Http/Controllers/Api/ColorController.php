@@ -50,10 +50,8 @@ class ColorController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
             $color = new Color();
             $color->name_ar = $request->name_ar;
@@ -112,10 +110,8 @@ class ColorController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
             $color = Color::findOrFail($request->input('id'));
             $color->name_ar = $request->name_ar;

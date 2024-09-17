@@ -51,10 +51,7 @@ class OpeningBalanceController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
             }
             $balances = new OpeningBalance();
             $balances->product_id  = $request->product;
@@ -104,10 +101,8 @@ class OpeningBalanceController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
             //befor update should check there is not transactions on this product to enable to update
             $balances = OpeningBalance::findOrFail($request->input('id'));

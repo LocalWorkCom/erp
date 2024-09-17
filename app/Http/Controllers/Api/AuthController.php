@@ -27,13 +27,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                "status" => false,
-                'success' => false,
-                'apiTitle' => 'validation',
-                'apiMsg' => $validator->errors()->first(),
-                'apiCode' => -1
-            ]);
+            return RespondWithBadRequestWithData($validator->errors());
         }
 
         $user = new User();
@@ -66,10 +60,8 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => $validator->errors()->first()
-                ]);
+                return RespondWithBadRequestWithData($validator->errors());
+
             }
 
             // Attempt to authenticate the user
@@ -132,10 +124,8 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                "status" => false,
-                "message" => $validator->errors()->first()
-            ]);
+            return RespondWithBadRequestWithData($validator->errors());
+
         }
         $user = User::where('email', $request->email)->first();
 
