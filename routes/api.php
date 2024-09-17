@@ -136,7 +136,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [OpeningBalanceController::class, 'update']);
         Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
     });
-});
+
 
 //Product
 Route::group(['prefix' => 'products'], function () {
