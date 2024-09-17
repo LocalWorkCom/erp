@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
 use App\Http\Controllers\Api\ProductSizeController;
 use App\Http\Controllers\Api\ProductTransactionController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\OpeningBalanceController;
+use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
 
 /*
@@ -71,7 +73,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
 
     //Opening balance
-    Route::group(['prefix' => 'opiningbalance'], function () {
+    Route::group(['prefix' => 'opiningBalance'], function () {
         Route::any('/', [OpeningBalanceController::class, 'index']);
         Route::any('/add', [OpeningBalanceController::class, 'store']);
         Route::any('/get', [OpeningBalanceController::class, 'show']);
@@ -104,7 +106,7 @@ Route::group(['prefix' => 'stores'], function () {
     Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
     Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
 
-    //stores handling
+//stores handling
     Route::get('storeList', [StoreController::class, 'index']);
     Route::get('showStore/{id}', [StoreController::class, 'show']);
     Route::post('addStore', [StoreController::class, 'store']);
@@ -119,4 +121,16 @@ Route::group(['prefix' => 'branches'], function () {
     Route::post('addBranch', [BranchController::class, 'store']);
     Route::put('updateBranch/{id}', [BranchController::class, 'update']);
     Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+     Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+});
+
+
+// vendors
+Route::group(['prefix' => 'vendors'], function () {
+    Route::get('vendorList', [VendorController::class, 'index']);
+    Route::get('showVendor/{id}', [VendorController::class, 'show']);
+    Route::post('addVendor', [VendorController::class, 'store']);
+    Route::put('updateVendor/{id}', [VendorController::class, 'update']);
+    Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']);
+    Route::post('restoreVendor/{id}', [VendorController::class, 'restore']);
 });

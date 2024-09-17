@@ -14,11 +14,16 @@ class BranchController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en'); 
-            $branches = Branch::with(['country', 'creator', 'deleter'])->get();
-            return ResponseWithSuccessData($lang, $branches, 1); 
+            $lang = $request->header('lang', 'en');
+            $withTrashed = $request->query('withTrashed', false); 
+
+            $branches = $withTrashed
+                ? Branch::withTrashed()->with(['country', 'creator', 'deleter'])->get()
+                : Branch::with(['country', 'creator', 'deleter'])->get();
+
+            return ResponseWithSuccessData($lang, $branches, 1);
         } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2); 
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
@@ -58,7 +63,7 @@ class BranchController extends Controller
                  'email' => $request->email,
                  'manager_name' => $request->manager_name,
                  'opening_hours' => $request->opening_hours,
-                 'created_by' => 2, 
+                 'created_by' => auth()->id() ?? 2, 
              ]);
      
             
@@ -79,7 +84,7 @@ class BranchController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $branch = Branch::with(['country', 'creator', 'deleter'])->findOrFail($id); // Fetch the branch by ID
+            $branch = Branch::with(['country', 'creator', 'deleter'])->findOrFail($id); 
             return ResponseWithSuccessData($lang, $branch, 1); 
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2); 
@@ -123,7 +128,7 @@ class BranchController extends Controller
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
                 'opening_hours' => $request->opening_hours,
-                'modified_by' => 2, 
+                'modified_by' => auth()->id() ?? 2, 
             ]);
 
             return ResponseWithSuccessData($lang, $branch, 1); 
@@ -141,10 +146,29 @@ class BranchController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $branch = Branch::findOrFail($id);
-            $branch->delete();
-            return ResponseWithSuccessData($lang, null, 1); 
+            $branch->delete(); // Soft delete the branch
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2); 
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+    /**
+     * Restore a soft-deleted branch.
+     */
+    public function restore(Request $request, $id)
+    {
+        try {
+            $lang = $request->header('lang', 'en');
+
+            $branch = Branch::withTrashed()->findOrFail($id);
+
+            $branch->restore();
+
+            return ResponseWithSuccessData($lang, $branch, 1);
+        } catch (\Exception $e) {
+            Log::error('Error restoring branch: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 }
