@@ -68,6 +68,7 @@ class StoreController extends Controller
                 'name_ar' => $request->name_ar,
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
+                'is_freeze' => $request->is_freeze ?? $store->is_freeze, 
                 'created_by' => auth()->id() ?? 2,
             ]);
     
@@ -96,6 +97,7 @@ class StoreController extends Controller
                 'name_ar' => 'required|string|max:255',
                 'description_en' => 'nullable|string',
                 'description_ar' => 'nullable|string',
+                'is_freeze' => 'nullable|boolean',  
                 'category_ids' => 'required|array', // Validate category IDs
                 'category_ids.*' => 'integer|exists:categories,id', // Ensure each category ID is valid
             ]);
@@ -108,6 +110,7 @@ class StoreController extends Controller
                 'branch_id' => $request->branch_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
+                'is_freeze' => $request->is_freeze ?? 0,  
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
                 'modified_by' => auth()->id()?? 2,
