@@ -168,7 +168,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreVendor/{id}', [VendorController::class, 'restore']);
     });
 });
-<<<<<<< HEAD
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('notifications', [NotificationController::class, 'index']);
@@ -213,14 +212,4 @@ Route::group(['prefix' => 'branches'], function () {
 });
 
 
-// vendors
-Route::group(['prefix' => 'vendors'], function () {
-    Route::get('vendorList', [VendorController::class, 'index']); 
-    Route::get('showVendor/{id}', [VendorController::class, 'show']); 
-    Route::post('addVendor', [VendorController::class, 'store']); 
-    Route::put('updateVendor/{id}', [VendorController::class, 'update']); 
-    Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']); 
-    Route::post('restoreVendor/{id}', [VendorController::class, 'restore']); 
-});
-=======
->>>>>>> 80876def26348fb82024f2a70c19e80c66b0837d
+
