@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CountryController extends Controller
 {
@@ -17,7 +19,7 @@ class CountryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $sizes = Country::where('deleted_at',null)->get();
+            $sizes = Country::whereNotNull('deleted_at')->get();
 
             return ResponseWithSuccessData($lang, $sizes, 1);
         } catch (\Exception $e) {
@@ -45,10 +47,9 @@ class CountryController extends Controller
             $size->name_en = $request->name_en;
             $size->currency_ar = $request->currency_ar;
             $size->currency_en = $request->currency_en;
-            $size->currency_ar = $request->currency_ar;
             $size->code = $request->code;
             $size->currency_code = $request->currency_code;
-            $size->created_by =1;
+            $size->created_by = auth()->id();
             $size->save();
             return ResponseWithSuccessData($lang, $size, 1);
         } catch (\Exception $e) {
@@ -88,7 +89,7 @@ class CountryController extends Controller
             $size->currency_ar = $request->currency_ar;
             $size->code = $request->code;
             $size->currency_code = $request->currency_code;
-            $size->modified_by =1;
+            $size->modified_by =auth()->id();
             $size->save();
 
             return ResponseWithSuccessData($lang, $size, 1);
@@ -111,8 +112,8 @@ class CountryController extends Controller
             if($is_allow || $is_allow2){
                 return RespondWithBadRequestData($lang, 3);
             }else{
-                $size->deleted_by =1;
-                $size->deleted_at =time();
+                $size->deleted_by =auth()->id();
+                $size->deleted_at = Carbon::now() ;
 
                 return ResponseWithSuccessData($lang, $size, 1);
 
