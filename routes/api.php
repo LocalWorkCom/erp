@@ -61,6 +61,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [ColorController::class, 'update']);
         Route::any('/delete', [ColorController::class, 'destroy']);
     });
+     //end color
     //Size
     Route::group(['prefix' => 'size'], function () {
         Route::any('/', [SizeController::class, 'index']);
@@ -69,6 +70,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [SizeController::class, 'update']);
         Route::any('/delete', [SizeController::class, 'destroy']);
     });
+     //end Size
     //Country
     Route::group(['prefix' => 'country'], function () {
         Route::any('/', [CountryController::class, 'index']);
@@ -77,7 +79,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [CountryController::class, 'update']);
         Route::any('/delete', [CountryController::class, 'destroy']);
     });
-    //Opening balance
+    //end Country
+
     Route::group(['prefix' => 'category'], function () {
         Route::get('/', [CategoryController::class, 'index']);
         Route::post('store', [CategoryController::class, 'store']);
@@ -133,14 +136,18 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
     });
+    // start opening balance
+    Route::group(['prefix' => 'opiningBalance'], function () {
+        Route::any('/', [OpeningBalanceController::class, 'index']);
+        Route::any('/add', [OpeningBalanceController::class, 'store']);
+        Route::any('/get', [OpeningBalanceController::class, 'show']);
+        Route::any('/edit', [OpeningBalanceController::class, 'update']);
+        Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
+    });
+    // end opening balance
+
 });
-Route::group(['prefix' => 'opiningBalance'], function () {
-    Route::any('/', [OpeningBalanceController::class, 'index']);
-    Route::any('/add', [OpeningBalanceController::class, 'store']);
-    Route::any('/get', [OpeningBalanceController::class, 'show']);
-    Route::any('/edit', [OpeningBalanceController::class, 'update']);
-    Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
-});
+
 
 
 //Product

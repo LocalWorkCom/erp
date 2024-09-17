@@ -30,12 +30,25 @@ function RespondWithSuccessRequest($lang, $code)
 
 function RespondWithBadRequest($lang, $code)
 {
-     $APICode = ApICode::where('code', $code)->first();
+    $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
         'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
         'apiCode' => $APICode->code
+    );
+    $response_code = 200;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+function RespondWithBadRequestWithData($data)
+{
+    $response_array = array(
+        'success' => false,
+        'apiTitle' => trans('validation.validator_title'),
+        'apiMsg' => trans('validation.validator_msg'),
+        'apiCode' => -1,
+        'data' => $data
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
@@ -172,14 +185,14 @@ function UploadFile($path, $image, $model, $request)
     $model->save();
 }
 
-function GenerateCategoryCode($category_id = 0)
+function GenerateCode($table, $table_id = 0)
 {
 
-    if ($category_id) {
+    if ($table_id) {
 
-        $category = Category::find($category_id);
-        $category_code = $category->code;
-        $numberString = $category_code;
+        $table = DB::table($table)->where('id', $table_id)->first();
+        $table_code = $table->code;
+        $numberString = $table_code;
 
         $number = (int) $numberString;
 
