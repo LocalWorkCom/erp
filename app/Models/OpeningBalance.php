@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Opening_balance extends Model
+class OpeningBalance extends Model
 {
     use HasFactory;
 }
