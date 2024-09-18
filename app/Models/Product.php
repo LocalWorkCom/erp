@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
 
     // Table associated with the model
     protected $table = 'products';
@@ -21,11 +22,9 @@ class Product extends Model
         'main_image',
         'type',
         'main_unit_id',
-        'price',
         'currency_id',
         'category_id',
         'is_valid',
-        'expired_date',
         'sku',
         'barcode',
         'code',
@@ -38,12 +37,14 @@ class Product extends Model
         'deleted_by',
         'created_at',
         'updated_at',
+        'modify_by',
+        'deleted_at',
+
+
     ];
 
     // The attributes that should be cast to native types
     protected $casts = [
-        'expired_date' => 'date',
-        'price' => 'decimal:2',
         'is_valid' => 'boolean',
     ];
 
