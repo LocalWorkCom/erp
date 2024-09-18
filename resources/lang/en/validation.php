@@ -20,6 +20,25 @@ return [
         'amount' => 'amount',
         "price" => 'price',
         "date" => 'date',
+        'latitute' => 'latitude',
+        'longitute' => 'longitude',
+        'manager_name' => 'manager name',
+        'opening_hours' => 'opening hours',
+        'is_freeze' => 'freeze status',
+        'contact_person' => 'contact person',
+        'max' => [
+            'string' => 'The :attribute may not be greater than :max characters.',
+            'numeric' => 'The :attribute may not be greater than :max.',
+        ],
+        'min' => [
+            'string' => 'The :attribute must be at least :min characters.',
+            'numeric' => 'The :attribute must be at least :min.',
+        ],
+        'between' => [
+            'numeric' => 'The :attribute must be between :min and :max.',
+            'string' => 'The :attribute must be between :min and :max characters.',
+        ],
+        'boolean' => 'The :attribute field must be true or false.',
     ],
 
     'required' => 'The :attribute field is required.',
@@ -38,4 +57,5 @@ return [
     'date_format' => 'The :attribute field must be in correct date.',
     'validator_title' => 'validation',
     'validator_msg' => 'validation messages',
+    
 ];

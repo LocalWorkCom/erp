@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Line;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class LineController extends Controller
 {
@@ -13,47 +14,52 @@ class LineController extends Controller
      * Display a listing of the lines.
      */
     public function index(Request $request)
-{
-    try {
-        $lang = $request->header('lang', 'ar');
-        $withTrashed = $request->query('withTrashed', false); 
-      
-        $lines = $withTrashed
-            ? Line::withTrashed()->with(['store', 'creator', 'deleter'])->get()
-            : Line::with(['store', 'creator', 'deleter'])->get();
+    {
+        try {
+            $lang = $request->header('lang', 'ar');
+            $withTrashed = $request->query('withTrashed', false); 
+          
+            $lines = $withTrashed
+                ? Line::withTrashed()->with(['store', 'creator', 'deleter'])->get()
+                : Line::with(['store', 'creator', 'deleter'])->get();
 
-        if ($lines->isEmpty()) {
+            if ($lines->isEmpty()) {
+                return RespondWithBadRequestData($lang, 2); 
+            }
+
+            return ResponseWithSuccessData($lang, $lines, 1); 
+        } catch (\Exception $e) {
+            Log::error('Error fetching lines: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2); 
         }
-
-        return ResponseWithSuccessData($lang, $lines, 1); 
-    } catch (\Exception $e) {
-        Log::error('Error fetching lines: ' . $e->getMessage());
-        return RespondWithBadRequestData($lang, 2); 
     }
-}
 
     /**
      * Store a newly created line in storage.
      */
     public function store(Request $request)
     {
+        $lang = $request->header('lang', 'en');
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required|integer|exists:stores,id',
+            'name_en' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'is_freeze' => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            $request->validate([
-                'store_id' => 'required|integer|exists:stores,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-                'is_freeze' => 'nullable|boolean',
-            ]);
-
             $line = Line::create([
                 'store_id' => $request->store_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'is_freeze' => $request->is_freeze ?? 1,
-                'created_by' => auth()->id()??2,
+                'created_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $line, 1);
@@ -82,16 +88,21 @@ class LineController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required|integer|exists:stores,id',
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'is_freeze' => 'nullable|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            $request->validate([
-                'store_id' => 'required|integer|exists:stores,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-                'is_freeze' => 'nullable|boolean',
-            ]);
-
             $line = Line::findOrFail($id);
 
             $line->update([
@@ -99,7 +110,7 @@ class LineController extends Controller
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'is_freeze' => $request->is_freeze ?? $line->is_freeze,
-                'modified_by' => auth()->id()??2,
+                'modified_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $line, 1);

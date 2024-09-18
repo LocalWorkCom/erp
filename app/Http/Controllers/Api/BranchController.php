@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\App;
 
 class BranchController extends Controller
 {
@@ -23,6 +25,7 @@ class BranchController extends Controller
 
             return ResponseWithSuccessData($lang, $branches, 1);
         } catch (\Exception $e) {
+            Log::error('Error fetching branches: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
@@ -30,52 +33,53 @@ class BranchController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function store(Request $request)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
 
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'address_en' => 'nullable|string',
+            'address_ar' => 'nullable|string',
+            'latitute' => 'nullable|string',
+            'longitute' => 'nullable|string',
+            'country_id' => 'required|integer|exists:countries,id',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|string|email|max:255',
+            'manager_name' => 'nullable|string|max:255',
+            'opening_hours' => 'nullable|string|max:255',
+        ]);
 
-     public function store(Request $request)
-     {
-         try {
-             $lang = $request->header('lang', 'en'); 
-     
-             $request->validate([
-                 'name_en' => 'nullable|string|max:255',
-                 'name_ar' => 'required|string|max:255',
-                 'address_en' => 'nullable|string',
-                 'address_ar' => 'nullable|string',
-                 'latitute' => 'nullable|string',
-                 'longitute' => 'nullable|string',
-                 'country_id' => 'required|integer|exists:countries,id',
-                 'phone' => 'nullable|string|max:20',
-                 'email' => 'nullable|string|email|max:255',
-                 'manager_name' => 'nullable|string|max:255',
-                 'opening_hours' => 'nullable|string|max:255',
-             ]);
-     
-             $branch = Branch::create([
-                 'name_en' => $request->name_en,
-                 'name_ar' => $request->name_ar,
-                 'address_en' => $request->address_en,
-                 'address_ar' => $request->address_ar,
-                 'latitute' => $request->latitute,
-                 'longitute' => $request->longitute,
-                 'country_id' => $request->country_id,
-                 'phone' => $request->phone,
-                 'email' => $request->email,
-                 'manager_name' => $request->manager_name,
-                 'opening_hours' => $request->opening_hours,
-                 'created_by' => auth()->id() ?? 2, 
-             ]);
-     
-            
-             return ResponseWithSuccessData($lang, $branch, 1);
-         } catch (\Exception $e) {
-            
-             Log::error('Error creating branch: ' . $e->getMessage());
-             
-        
-             return RespondWithBadRequestData($lang, 2);
-         }
-     }
+        // Handle validation failure
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
+        try {
+            $branch = Branch::create([
+                'name_en' => $request->name_en,
+                'name_ar' => $request->name_ar,
+                'address_en' => $request->address_en,
+                'address_ar' => $request->address_ar,
+                'latitute' => $request->latitute,
+                'longitute' => $request->longitute,
+                'country_id' => $request->country_id,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'manager_name' => $request->manager_name,
+                'opening_hours' => $request->opening_hours,
+                'created_by' => auth()->id(), 
+            ]);
+
+            return ResponseWithSuccessData($lang, $branch, 1);
+        } catch (\Exception $e) {
+            Log::error('Error creating branch: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -84,10 +88,11 @@ class BranchController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $branch = Branch::with(['country', 'creator', 'deleter'])->findOrFail($id); 
-            return ResponseWithSuccessData($lang, $branch, 1); 
+            $branch = Branch::with(['country', 'creator', 'deleter'])->findOrFail($id);
+            return ResponseWithSuccessData($lang, $branch, 1);
         } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2); 
+            Log::error('Error fetching branch: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
@@ -96,24 +101,29 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'address_en' => 'nullable|string',
+            'address_ar' => 'nullable|string',
+            'latitute' => 'nullable|string',
+            'longitute' => 'nullable|string',
+            'country_id' => 'required|integer|exists:countries,id',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|string|max:255',
+            'manager_name' => 'nullable|string|max:255',
+            'opening_hours' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            // Validate the request
-            $request->validate([
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-                'address_en' => 'nullable|string',
-                'address_ar' => 'nullable|string',
-                'latitute' => 'nullable|string',
-                'longitute' => 'nullable|string',
-                'country_id' => 'required|integer|exists:countries,id',
-                'phone' => 'nullable|string|max:20',
-                'email' => 'nullable|string|max:255',
-                'manager_name' => 'nullable|string|max:255',
-                'opening_hours' => 'nullable|string|max:255',
-            ]);
-
             $branch = Branch::findOrFail($id);
 
             $branch->update([
@@ -128,27 +138,29 @@ class BranchController extends Controller
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
                 'opening_hours' => $request->opening_hours,
-                'modified_by' => auth()->id() ?? 2, 
+                'modified_by' => auth()->id(),
             ]);
 
-            return ResponseWithSuccessData($lang, $branch, 1); 
+            return ResponseWithSuccessData($lang, $branch, 1);
         } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2); 
+            Log::error('Error updating branch: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
-
     /**
-     * Remove the specified resource from storage.
+     * Soft delete the specified resource.
      */
     public function destroy(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'en');
             $branch = Branch::findOrFail($id);
-            $branch->delete(); // Soft delete the branch
+            $branch->update(['deleted_by' => auth()->id()]);
+            $branch->delete(); // Soft delete
             return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
+            Log::error('Error deleting branch: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
@@ -160,11 +172,8 @@ class BranchController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-
             $branch = Branch::withTrashed()->findOrFail($id);
-
             $branch->restore();
-
             return ResponseWithSuccessData($lang, $branch, 1);
         } catch (\Exception $e) {
             Log::error('Error restoring branch: ' . $e->getMessage());
