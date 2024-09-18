@@ -75,7 +75,7 @@ class VendorController extends Controller
                 'address_en' => $request->address_en,
                 'address_ar' => $request->address_ar,
                 'country_id' => $request->country_id,
-                'created_by' => auth()->id() ?? 2, 
+                'created_by' => auth()->id(), 
             ]);
 
             return ResponseWithSuccessData($lang, $vendor, 1);
@@ -143,7 +143,7 @@ class VendorController extends Controller
                 'address_en' => $request->address_en,
                 'address_ar' => $request->address_ar,
                 'country_id' => $request->country_id,
-                'modified_by' => auth()->id() ?? 2, 
+                'modified_by' => auth()->id(), 
             ]);
 
             return ResponseWithSuccessData($lang, $vendor, 1);
@@ -162,7 +162,7 @@ class VendorController extends Controller
             $lang = $request->header('lang', 'en');
 
             $vendor = Vendor::findOrFail($id);
-            $vendor->update(['deleted_by' => auth()->id() ?? 2]); 
+            $vendor->update(['deleted_by' => auth()->id()]); 
             $vendor->delete(); 
 
             return ResponseWithSuccessData($lang, null, 1);
