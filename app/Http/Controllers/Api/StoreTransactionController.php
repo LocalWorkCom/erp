@@ -27,7 +27,7 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransaction::get();
+            $stores = StoreTransaction::with(['allStoreTransactionDetails', 'allStoreTransactionDetails.products', 'allStoreTransactionDetails.products.unites', 'allStoreTransactionDetails.products.colors', 'allStoreTransactionDetails.products.sizes'])->get();
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -45,36 +45,9 @@ class StoreTransactionController extends Controller
         }
     }
 
-    public function show_products(Request $request)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $today = date('Y-m-d');
-
-            $stores = ProductTransaction::query()->whereDate('expired_date', '>=', $today);
-            $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
-            $stores = $stores->with('products')->groupBy('product_id')->get();
-
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
-    public function show_one_product(Request $request, $id)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $stores = ProductTransaction::with(['products'])->findOrFail($id);
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
     public function store(Request $request)
     {
-        //try{
+        try{
             $lang =  $request->header('lang', 'en');
 
             $price = 0;
@@ -82,15 +55,10 @@ class StoreTransactionController extends Controller
             $products = [];
 
             //in outgoing return products is not expirt date
-            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
+            /*$transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
             if(count($transaction_check_expirt) == 0){
                 //return RespondWithBadRequestWithData($validator->product_expired);
-            }
-
-
-
-
-
+            }*/
 
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
@@ -130,12 +98,10 @@ class StoreTransactionController extends Controller
                 event(new ProductTransactionEvent($add_store_items));
             }
 
-
-
             $stores = $add_store_bill;
             return ResponseWithSuccessData($lang, $stores, 1);
-        /*}catch (\Exception $e) {
+        }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }*/
+        }
     }
 }

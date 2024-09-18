@@ -63,4 +63,19 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function unites()
+    {
+        return $this->belongsToMany(Unit::class, 'product_units', 'product_id', 'unit_id');
+    }
+    
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_colors', 'product_id', 'color_id');
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id');
+    }
 }

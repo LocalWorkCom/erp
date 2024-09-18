@@ -52,13 +52,13 @@ return [
         'amount' => 'الكميه',
         "price" => "السعر",
         "date" => "التاريخ",
-        "product_expired" => "تاريخ الانتهاء",
+        'product_expired_date' => 'تاريخ انتهاء منتج',
         'latitute' => 'خط العرض',
-    'longitute' => 'خط الطول',
-    'manager_name' => 'اسم المدير',
-    'opening_hours' => 'ساعات العمل',
-    'is_freeze' => 'حالة التجميد',
-    'contact_person' => 'الشخص المسؤول',
+        'longitute' => 'خط الطول',
+        'manager_name' => 'اسم المدير',
+        'opening_hours' => 'ساعات العمل',
+        'is_freeze' => 'حالة التجميد',
+        'contact_person' => 'الشخص المسؤول',
 
     
  

@@ -10,6 +10,7 @@ class StoreTransactionDetails extends Model
     use HasFactory;
 
     //protected $hidden = ['store_transaction_id', 'product_id', 'product_unit_id', 'product_size_id', 'product_color_id', 'country_id', 'created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function storeTransactions()
     {
