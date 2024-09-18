@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_size_id')->nullable();
             $table->unsignedBigInteger('product_color_id')->nullable();
             $table->integer('count');
-            $table->date('expirt_date')->nullable();
+            $table->date('expired_date')->nullable();
             $table->unsignedBigInteger('created_by')->default(1);
             $table->unsignedBigInteger('modified_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

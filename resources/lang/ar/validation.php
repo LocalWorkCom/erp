@@ -52,6 +52,7 @@ return [
         'amount' => 'الكميه',
         "price" => "السعر",
         "date" => "التاريخ",
+        "product_expired" => "تاريخ الانتهاء",
         'latitute' => 'خط العرض',
     'longitute' => 'خط الطول',
     'manager_name' => 'اسم المدير',
