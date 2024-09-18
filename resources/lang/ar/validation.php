@@ -29,8 +29,7 @@ return [
         'string' => 'يجب أن يكون :attribute بين :min و :max حرفًا.',
     ],
     'boolean' => ':attribute يجب أن يكون صحيح أو خطأ.',
-    'product_expired_date' => 'سارى :attribute لا يوجد ',
-
+    
     'attributes' => [
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
