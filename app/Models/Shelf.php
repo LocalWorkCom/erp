@@ -14,6 +14,7 @@ class Shelf extends Model
         'division_id',
         'name_en',
         'name_ar',
+        'code',  
         'created_by',
         'modified_by',
         'deleted_by',

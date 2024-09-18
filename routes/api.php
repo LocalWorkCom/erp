@@ -22,6 +22,8 @@ use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
 use App\Http\Controllers\Api\LineController;
 use App\Http\Controllers\Api\DivisionController;
+use App\Http\Controllers\Api\ShelfController;
+
 
 
 
@@ -218,4 +220,14 @@ Route::group(['prefix' => 'divisions'], function () {
     Route::put('updateDivision/{id}', [DivisionController::class, 'update']);
     Route::delete('deleteDivision/{id}', [DivisionController::class, 'destroy']);
     Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
+});
+
+// Shelves 
+Route::group(['prefix' => 'shelves'], function () {
+    Route::get('shelfList', [ShelfController::class, 'index']);
+    Route::get('showShelf/{id}', [ShelfController::class, 'show']);
+    Route::post('addShelf', [ShelfController::class, 'store']);
+    Route::put('updateShelf/{id}', [ShelfController::class, 'update']);
+    Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
+    Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
 });
