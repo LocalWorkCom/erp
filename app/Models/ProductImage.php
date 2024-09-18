@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductImage extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
 
     protected $table = 'product_images';
 
     protected $fillable = [
         'product_id',
         'image',
-        'created_by',
-        'deleted_by',
+
     ];
 
         
@@ -23,7 +23,10 @@ class ProductImage extends Model
         'created_by',
         'deleted_by',
         'created_at',
+        'modify_by',
         'updated_at',
+        'deleted_at',
+
     ];
     /**
      * Get the product that owns the image.

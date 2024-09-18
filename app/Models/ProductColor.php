@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductColor extends Model
 {
-    use HasFactory;
+    use HasFactory ,SoftDeletes;
 
     protected $table = 'product_colors'; // Optional if the table name follows Laravel's convention
 
@@ -18,6 +19,9 @@ class ProductColor extends Model
     
     protected $hidden = [
         'created_by',
+        'modify_by',
+        'deleted_at',
+
         'deleted_by',
         'created_at',
         'updated_at',

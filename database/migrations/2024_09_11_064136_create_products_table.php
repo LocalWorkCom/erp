@@ -20,20 +20,21 @@ return new class extends Migration
             $table->string('main_image')->nullable();
             $table->enum('type', ['complete', 'raw']);
             $table->unsignedBigInteger('main_unit_id');
-            $table->decimal('price', 10, 2);//10.00
+            // $table->decimal('price', 10, 2); //10.00
             $table->unsignedBigInteger('currency_code');
             $table->unsignedBigInteger('category_id');
             $table->boolean('is_valid')->default(1);
-            $table->date('expired_date')->nullable();
             $table->string('sku')->unique();
             $table->string('barcode')->unique();
             $table->string('code')->unique();
             $table->boolean('is_remind')->default(1);
-            $table->integer('limit_quantity')->nullable();
+            // $table->integer('limit_quantity')->nullable();
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modify_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             // Foreign key constraints
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modify_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps();
 

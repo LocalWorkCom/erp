@@ -24,13 +24,19 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('manager_name')->nullable();
             $table->string('opening_hours')->nullable();
+            
             $table->foreign('country_id')->references('id')->on('countries');
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('deleted_by')->nullable();
+            
+            $table->unsignedBigInteger('created_by');  
             $table->foreign('created_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('modified_by')->nullable();  
+            $table->foreign('modified_by')->references('id')->on('users');
+            
+            $table->unsignedBigInteger('deleted_by')->nullable();  
             $table->foreign('deleted_by')->references('id')->on('users');
+            $table->timestamps(); 
 
-            $table->timestamps();
         });
     }
 

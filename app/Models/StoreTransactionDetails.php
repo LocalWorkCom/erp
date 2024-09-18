@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StoreTransactionDetail extends Model
+class StoreTransactionDetails extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['store_transaction_id', 'product_id', 'unit_id', 'country_id', 'created_at', 'updated_at'];
+    //protected $hidden = ['store_transaction_id', 'product_id', 'product_unit_id', 'product_size_id', 'product_color_id', 'country_id', 'created_at', 'updated_at'];
 
     public function storeTransactions()
     {
@@ -23,8 +23,8 @@ class StoreTransactionDetail extends Model
 
     public function units()
     {
-        return $this->belongsTo(Unit::class ,'unit_id');
-    } 
+        return $this->belongsTo(Unit::class ,'product_unit_id');
+    }
 
     public function countries()
     {

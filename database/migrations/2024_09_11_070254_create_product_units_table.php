@@ -16,13 +16,15 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('product_id');
             $table->float('factor'); // Adjust precision as needed
-            $table->decimal('price', 10, 2); // Adjust precision as needed
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modify_by')->nullable();
+
             $table->unsignedBigInteger('deleted_by')->nullable();
             
             // Foreign key constraints
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
+            $table->foreign('modify_by')->references('id')->on('users');
             // Foreign key constraints
             $table->foreign('unit_id')->references('id')->on('units');
             $table->foreign('product_id')->references('id')->on('products');

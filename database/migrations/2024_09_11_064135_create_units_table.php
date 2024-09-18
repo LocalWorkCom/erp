@@ -17,9 +17,11 @@ return new class extends Migration
             $table->string('name_en')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('deleted_by')->nullable();
-            
+            $table->unsignedBigInteger('modify_by')->nullable();
+
             // Foreign key constraints
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modify_by')->references('id')->on('users');
             $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps();
         });

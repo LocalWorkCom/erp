@@ -1,13 +1,14 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes; // Import SoftDeletes
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Store extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes; // Use SoftDeletes
 
     protected $fillable = [
         'branch_id',
@@ -15,9 +16,13 @@ class Store extends Model
         'name_ar',
         'description_en',
         'description_ar',
+        'is_freeze',
         'created_by',
+        'modified_by',
         'deleted_by'
     ];
+
+    protected $dates = ['deleted_at']; // To handle soft deletes
 
     public function branch()
     {
@@ -38,4 +43,8 @@ class Store extends Model
     {
         return $this->hasMany(Line::class);
     }
+     public function categories()
+     {
+         return $this->belongsToMany(Category::class, 'stock_category', 'store_id', 'category_id');
+     }
 }
