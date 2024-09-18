@@ -28,7 +28,7 @@ trait ProductCheck
         return $xx;
     }
 
-    public function product_enght($transaction_products, $type, $to_type) {
+    public function product_enough($transaction_products, $type, $to_type) {
         $today = date('Y-m-d');
         foreach($transaction_products as $check_product)
         {
