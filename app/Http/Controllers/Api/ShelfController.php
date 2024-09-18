@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Shelf;
+use Illuminate\Support\Facades\Validator;
 
 class ShelfController extends Controller
 {
@@ -49,15 +50,20 @@ class ShelfController extends Controller
      */
     public function store(Request $request)
     {
+        $lang = $request->header('lang', 'en');
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'division_id' => 'required|integer|exists:divisions,id',
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            $request->validate([
-                'division_id' => 'required|integer|exists:divisions,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-            ]);
-
             $lastId = GetLastID('shelves');
             $code = GenerateCode('shelves', $lastId); 
 
@@ -81,17 +87,20 @@ class ShelfController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'division_id' => 'required|integer|exists:divisions,id',
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-           
-            $request->validate([
-                'division_id' => 'required|integer|exists:divisions,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-            ]);
-
-           
             $shelf = Shelf::findOrFail($id);
 
             $shelf->update([
