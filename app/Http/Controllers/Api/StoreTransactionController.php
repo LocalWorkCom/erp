@@ -45,33 +45,6 @@ class StoreTransactionController extends Controller
         }
     }
 
-    public function show_products(Request $request)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $today = date('Y-m-d');
-
-            $stores = ProductTransaction::query()->whereDate('expired_date', '>=', $today);
-            $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
-            $stores = $stores->with('products')->groupBy('product_id')->get();
-
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
-    public function show_one_product(Request $request, $id)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $stores = ProductTransaction::with(['products'])->findOrFail($id);
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
     public function store(Request $request)
     {
         //try{
