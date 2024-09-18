@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,7 +16,7 @@ class StoreCategory extends Model
         'category_id',
     ];
 
-    public $timestamps = true; 
+    public $timestamps = true;
 
     // Relationships with the Store and Category models
     public function store()
@@ -26,5 +27,10 @@ class StoreCategory extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function productLimits()
+    {
+        return $this->hasMany(ProductLimit::class, 'product_limit_id');
     }
 }

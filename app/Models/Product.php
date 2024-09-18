@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory ,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     // Table associated with the model
     protected $table = 'products';
@@ -31,7 +31,7 @@ class Product extends Model
         'limit_quantity',
         'is_remind'
     ];
-        
+
     protected $hidden = [
         'created_by',
         'deleted_by',
