@@ -14,8 +14,9 @@ class AddDeletedAtToApiCodesTable extends Migration
     public function up()
     {
         Schema::table('apicodes', function (Blueprint $table) {
-            // Add the deleted_at column for soft deletes
-            $table->softDeletes()->after('updated_at'); // Place this column after the 'updated_at' column
+            if (!Schema::hasColumn('apicodes', 'deleted_at')) {
+                $table->softDeletes();  // Adds the 'deleted_at' column
+            }
         });
     }
 
