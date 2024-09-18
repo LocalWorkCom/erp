@@ -39,6 +39,7 @@ return [
             'string' => 'The :attribute must be between :min and :max characters.',
         ],
         'boolean' => 'The :attribute field must be true or false.',
+        
     ],
 
     'required' => 'The :attribute field is required.',
@@ -57,5 +58,9 @@ return [
     'date_format' => 'The :attribute field must be in correct date.',
     'validator_title' => 'validation',
     'validator_msg' => 'validation messages',
+    'product_expired' => 'This product is expired',
+    'product_not_enough' => 'This product is not enough',
+    'product_not_instore' => 'This product is not in store',
+
     
 ];

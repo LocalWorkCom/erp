@@ -52,13 +52,24 @@ class StoreTransactionController extends Controller
 
             $price = 0;
             $total_price = 0;
-            $products = [];
 
-            //in outgoing return products is not expirt date
-            /*$transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
-            if(count($transaction_check_expirt) == 0){
-                //return RespondWithBadRequestWithData($validator->product_expired);
-            }*/
+            //product is not in this store
+            $transaction_check_instore = $this->check_product_instore($request['products'], $request['store_id']);
+            if($transaction_check_instore == 0){
+                return RespondWithBadRequestWithData( __('validation.product_not_instore'));
+            }
+
+            //in outgoing return products is expirt date
+            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
+            if($transaction_check_expirt == 0){
+                return RespondWithBadRequestWithData( __('validation.product_expired'));
+            }
+
+            //in outgoing return products is not enough
+            $transaction_check_one_enough = $this->check_not_enough($request['products'], $request['type'], $request['store_id']);
+            if($transaction_check_one_enough == 0){
+                return RespondWithBadRequestWithData( __('validation.product_not_enough'));
+            }
 
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];

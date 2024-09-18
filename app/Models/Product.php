@@ -78,4 +78,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id');
     }
+
+    public function productUnites()
+    {
+        return $this->hasOne(ProductUnit::class, 'product_id');
+    }
 }
