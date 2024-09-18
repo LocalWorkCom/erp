@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Store;
-use App\Models\Category;
+use App\Models\StoreCategory;
 
 class StoreController extends Controller
 {
@@ -19,8 +19,8 @@ class StoreController extends Controller
             $withTrashed = $request->query('withTrashed', false); 
 
             $stores = $withTrashed
-                ? Store::withTrashed()->with(['branch', 'creator', 'deleter'])->get()
-                : Store::with(['branch', 'creator', 'deleter'])->get();
+                ? Store::withTrashed()->with(['branch', 'creator', 'deleter', 'categories'])->get()
+                : Store::with(['branch', 'creator', 'deleter', 'categories'])->get();
 
             return ResponseWithSuccessData($lang, $stores, 1);
         } catch (\Exception $e) {
@@ -35,7 +35,7 @@ class StoreController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $store = Store::withTrashed()->with(['branch', 'creator', 'deleter'])->findOrFail($id);
+            $store = Store::withTrashed()->with(['branch', 'creator', 'deleter', 'categories'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $store, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -68,12 +68,17 @@ class StoreController extends Controller
                 'name_ar' => $request->name_ar,
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
-                'is_freeze' => $request->is_freeze ?? $store->is_freeze, 
+                'is_freeze' => $request->is_freeze ?? 0,
                 'created_by' => auth()->id(),
             ]);
     
-            // Attach categories to the store
-            $store->categories()->sync($request->category_ids);
+            // Insert categories into store_category table
+            foreach ($request->category_ids as $categoryId) {
+                StoreCategory::create([
+                    'store_id' => $store->id,
+                    'category_id' => $categoryId,
+                ]);
+            }
     
             return ResponseWithSuccessData($lang, $store, 1);
         } catch (\Exception $e) {
@@ -116,15 +121,23 @@ class StoreController extends Controller
                 'modified_by' => auth()->id(),
             ]);
     
-            // Sync the categories with the store
-            $store->categories()->sync($request->category_ids);
-            Log::info('Store creation request:', $request->all());
-
+            // Delete old category relationships
+            StoreCategory::where('store_id', $store->id)->delete();
+    
+            // Insert updated categories into store_category table
+            foreach ($request->category_ids as $categoryId) {
+                StoreCategory::create([
+                    'store_id' => $store->id,
+                    'category_id' => $categoryId,
+                ]);
+            }
+    
             return ResponseWithSuccessData($lang, $store, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
     /**
      * Soft delete the specified resource from storage.
      */

@@ -43,8 +43,13 @@ class Store extends Model
     {
         return $this->hasMany(Line::class);
     }
-     public function categories()
-     {
-         return $this->belongsToMany(Category::class, 'stock_category', 'store_id', 'category_id');
-     }
+    public function storeCategories()
+    {
+        return $this->hasMany(StoreCategory::class);
+    }
+
+    public function categories()
+    {
+        return $this->hasManyThrough(Category::class, StoreCategory::class, 'store_id', 'id', 'id', 'category_id');
+    }
 }
