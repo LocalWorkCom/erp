@@ -9,6 +9,7 @@ use App\Models\ProductLimit;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\ProductTransaction;
+use App\Models\User;
 
 class AddProductTransactionEvent
 {
@@ -31,12 +32,12 @@ class AddProductTransactionEvent
         $product_count = $product->count;
         //$type == 1
         if($product->type == 1){
-            $all_product_transactions = ProductTransaction::where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date','>=',$today)->get();
+            $all_product_transactions = ProductTransaction::with('products.productUnites')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date','>=',$today)->get();
             if($all_product_transactions){
 
                 foreach($all_product_transactions as $all_product_transaction)
                 {
-                    $now_product_count = $all_product_transaction->count - $product_count;
+                    $now_product_count = $all_product_transaction->count - ($product_count * $all_product_transaction->products->productUnites->factor);
 
                     if ($now_product_count <= 0) {
                         $product_transaction_count = 0;
@@ -45,7 +46,8 @@ class AddProductTransactionEvent
                     }
 
                     if($now_product_count < 0){
-                        $product_count = $product_count - $all_product_transaction->count;
+                        $product_count = ($product_count * $all_product_transaction->products->productUnites->factor) - $all_product_transaction->count;
+                        $product_count = $product_count / $all_product_transaction->products->productUnites->factor;
                     }
 
                     $update_product_transaction = ProductTransaction::find($all_product_transaction->id);
@@ -62,13 +64,14 @@ class AddProductTransactionEvent
 
         //end of $type == 1
         }else{//if $type == 2
-            $update_product_transaction = ProductTransaction::where('product_id', $product->product_id)->where('store_id', $product->store_id)->whereDate('expired_date',date($product->expired_date))->first();
+            $update_product_transaction = ProductTransaction::with('products.productUnites')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->whereDate('expired_date',date($product->expired_date))->first();
             if($update_product_transaction){
-                $now_product_count = $update_product_transaction->count + $product_count;
+                $now_product_count = $update_product_transaction->count + ($product_count * $update_product_transaction->products->productUnites->factor);
                 $update_product_transaction->count = $now_product_count;
                 $update_product_transaction->modified_by = $product->user_id;
                 $update_product_transaction->save();
             }else{
+                $show_product = Product::with('productUnites')->where('product_id', $product->product_id)->first();
                 $add_product_transaction = new ProductTransaction();
                 $add_product_transaction->product_id = $product->product_id;
                 $add_product_transaction->store_id = $product->store_id;

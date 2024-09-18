@@ -47,7 +47,7 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        //try{
             $lang =  $request->header('lang', 'en');
 
             $price = 0;
@@ -111,8 +111,8 @@ class StoreTransactionController extends Controller
 
             $stores = $add_store_bill;
             return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
+        /*}catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }
+        }*/
     }
 }
