@@ -26,7 +26,7 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransaction::get();
+            $stores = StoreTransaction::with(['allStoreTransactionDetails', 'allStoreTransactionDetails.products', 'allStoreTransactionDetails.products.unites', 'allStoreTransactionDetails.products.colors', 'allStoreTransactionDetails.products.sizes'])->get();
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -44,21 +44,7 @@ class StoreTransactionController extends Controller
         }
     }
 
-    public function show_products(Request $request)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $today = date('Y-m-d');
-
-            $stores = ProductTransaction::query()->whereDate('expirt_date', '>=', $today);
-            $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
-            $stores = $stores->with('products')->groupBy('product_id')->get();
-
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
+    
 
     public function show_one_product(Request $request, $id)
     {
@@ -119,6 +105,7 @@ class StoreTransactionController extends Controller
                 $add_store_items->to_type = $add_store_bill->to_type;
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
+                $add_store_items->expired_date = $product['expired_date'];
 
                 event(new ProductTransactionEvent($add_store_items));
             }

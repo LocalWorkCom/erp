@@ -29,7 +29,8 @@ return [
         'string' => 'يجب أن يكون :attribute بين :min و :max حرفًا.',
     ],
     'boolean' => ':attribute يجب أن يكون صحيح أو خطأ.',
-    
+    'product_expired_date' => 'سارى :attribute لا يوجد ',
+
     'attributes' => [
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
@@ -52,12 +53,13 @@ return [
         'amount' => 'الكميه',
         "price" => "السعر",
         "date" => "التاريخ",
+        'product_expired_date' => 'تاريخ انتهاء منتج',
         'latitute' => 'خط العرض',
-    'longitute' => 'خط الطول',
-    'manager_name' => 'اسم المدير',
-    'opening_hours' => 'ساعات العمل',
-    'is_freeze' => 'حالة التجميد',
-    'contact_person' => 'الشخص المسؤول',
+        'longitute' => 'خط الطول',
+        'manager_name' => 'اسم المدير',
+        'opening_hours' => 'ساعات العمل',
+        'is_freeze' => 'حالة التجميد',
+        'contact_person' => 'الشخص المسؤول',
 
     
  

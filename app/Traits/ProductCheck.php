@@ -37,7 +37,7 @@ trait ProductCheck
             {
                 if($to_type == 2 || $to_type == 4)
                 {
-                    return $product_details = ProductTransaction::where('product_id', $check_product['product_id'])->whereDate('expirt_date','>=',$today)->get();
+                    return $product_details = ProductTransaction::where('product_id', $check_product['product_id'])->whereDate('expired_date','>=',$today)->get();
                 }
 
             }
