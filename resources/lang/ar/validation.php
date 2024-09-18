@@ -38,5 +38,6 @@ return [
         'amount' => 'الكميه',
         "price" => "السعر",
         "date" => "التاريخ",
+        "product_expired" => "تاريخ الانتهاء",
     ],
 ];

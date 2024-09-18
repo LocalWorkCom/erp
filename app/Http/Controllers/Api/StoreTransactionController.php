@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
 use App\Events\ProductTransactionEvent;
+use Illuminate\Support\Facades\Validator;
 
 class StoreTransactionController extends Controller
 {
@@ -50,7 +51,7 @@ class StoreTransactionController extends Controller
             $lang =  $request->header('lang', 'en');
             $today = date('Y-m-d');
 
-            $stores = ProductTransaction::query()->whereDate('expirt_date', '>=', $today);
+            $stores = ProductTransaction::query()->whereDate('expired_date', '>=', $today);
             $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
             $stores = $stores->with('products')->groupBy('product_id')->get();
 
@@ -73,7 +74,7 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        //try{
             $lang =  $request->header('lang', 'en');
 
             $price = 0;
@@ -81,10 +82,15 @@ class StoreTransactionController extends Controller
             $products = [];
 
             //in outgoing return products is not expirt date
-            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['to_type']);
-            if(count($transaction_check_expirt) > 0){
-                $products = $transaction_check_expirt;
+            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
+            if(count($transaction_check_expirt) == 0){
+                //return RespondWithBadRequestWithData($validator->product_expired);
             }
+
+
+
+
+
 
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
@@ -119,6 +125,7 @@ class StoreTransactionController extends Controller
                 $add_store_items->to_type = $add_store_bill->to_type;
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
+                $add_store_items->expired_date = $product['expired_date'];
 
                 event(new ProductTransactionEvent($add_store_items));
             }
@@ -127,8 +134,8 @@ class StoreTransactionController extends Controller
 
             $stores = $add_store_bill;
             return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
+        /*}catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }
+        }*/
     }
 }
