@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Division;
+use Illuminate\Support\Facades\Validator;
 
 class DivisionController extends Controller
 {
@@ -15,9 +16,8 @@ class DivisionController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $withTrashed = $request->query('withTrashed', false); 
+            $withTrashed = $request->query('withTrashed', false);
 
-            // Retrieve all divisions
             $divisions = $withTrashed
                 ? Division::withTrashed()->with(['line', 'creator', 'deleter'])->get()
                 : Division::with(['line', 'creator', 'deleter'])->get();
@@ -33,20 +33,24 @@ class DivisionController extends Controller
      */
     public function store(Request $request)
     {
+        $lang = $request->header('lang', 'ar'); 
+
+        $validator = Validator::make($request->all(), [
+            'line_id' => 'required|integer|exists:lines,id',
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'ar');
-
-            $request->validate([
-                'line_id' => 'required|integer|exists:lines,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-            ]);
-
             $division = Division::create([
                 'line_id' => $request->line_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
-                'created_by' => auth()->id() ,
+                'created_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $division, 1);
@@ -60,15 +64,19 @@ class DivisionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+
+        $validator = Validator::make($request->all(), [
+            'line_id' => 'required|integer|exists:lines,id',
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            $request->validate([
-                'line_id' => 'required|integer|exists:lines,id',
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-            ]);
-
             $division = Division::findOrFail($id);
 
             $division->update([
