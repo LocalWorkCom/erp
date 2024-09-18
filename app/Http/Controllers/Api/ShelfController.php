@@ -66,7 +66,7 @@ class ShelfController extends Controller
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'code' => $code, 
-                'created_by' => auth()->id() ?? 2, 
+                'created_by' => auth()->id(), 
             ]);
 
             return ResponseWithSuccessData($lang, $shelf, 1);
@@ -98,7 +98,7 @@ class ShelfController extends Controller
                 'division_id' => $request->division_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
-                'modified_by' => auth()->id() ?? 2, 
+                'modified_by' => auth()->id(), 
             ]);
 
             return ResponseWithSuccessData($lang, $shelf, 1);

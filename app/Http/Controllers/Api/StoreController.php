@@ -69,7 +69,7 @@ class StoreController extends Controller
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
                 'is_freeze' => $request->is_freeze ?? $store->is_freeze, 
-                'created_by' => auth()->id() ?? 2,
+                'created_by' => auth()->id(),
             ]);
     
             // Attach categories to the store
@@ -113,7 +113,7 @@ class StoreController extends Controller
                 'is_freeze' => $request->is_freeze ?? 0,  
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
-                'modified_by' => auth()->id()?? 2,
+                'modified_by' => auth()->id(),
             ]);
     
             // Sync the categories with the store

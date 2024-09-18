@@ -63,7 +63,7 @@ class BranchController extends Controller
                  'email' => $request->email,
                  'manager_name' => $request->manager_name,
                  'opening_hours' => $request->opening_hours,
-                 'created_by' => auth()->id() ?? 2, 
+                 'created_by' => auth()->id(), 
              ]);
      
             
@@ -128,7 +128,7 @@ class BranchController extends Controller
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
                 'opening_hours' => $request->opening_hours,
-                'modified_by' => auth()->id() ?? 2, 
+                'modified_by' => auth()->id(), 
             ]);
 
             return ResponseWithSuccessData($lang, $branch, 1); 

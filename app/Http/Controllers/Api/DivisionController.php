@@ -46,7 +46,7 @@ class DivisionController extends Controller
                 'line_id' => $request->line_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
-                'created_by' => auth()->id() ?? 2,
+                'created_by' => auth()->id() ,
             ]);
 
             return ResponseWithSuccessData($lang, $division, 1);
@@ -75,7 +75,7 @@ class DivisionController extends Controller
                 'line_id' => $request->line_id,
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
-                'modified_by' => auth()->id() ?? 2,
+                'modified_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $division, 1);

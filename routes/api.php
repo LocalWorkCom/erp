@@ -148,20 +148,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
     // end opening balance
 
-});
-
-
-
-//Product
-Route::group(['prefix' => 'products'], function () {
-
-    //ProductTransaction
-    Route::get('productTransactions', [ProductTransactionController::class, 'index']);
-    Route::get('showProductTransactions/{id}', [ProductTransactionController::class, 'show']);
-    Route::post('storeProductTransactions', [ProductTransactionController::class, 'store']);
-});
-
-
 //store
 Route::group(['prefix' => 'stores'], function () {
 
@@ -231,3 +217,17 @@ Route::group(['prefix' => 'shelves'], function () {
     Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
     Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
 });
+
+});
+
+
+
+//Product
+Route::group(['prefix' => 'products'], function () {
+
+    //ProductTransaction
+    Route::get('productTransactions', [ProductTransactionController::class, 'index']);
+    Route::get('showProductTransactions/{id}', [ProductTransactionController::class, 'show']);
+    Route::post('storeProductTransactions', [ProductTransactionController::class, 'store']);
+});
+

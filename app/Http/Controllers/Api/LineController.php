@@ -53,7 +53,7 @@ class LineController extends Controller
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'is_freeze' => $request->is_freeze ?? 1,
-                'created_by' => auth()->id()??2,
+                'created_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $line, 1);
@@ -99,7 +99,7 @@ class LineController extends Controller
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'is_freeze' => $request->is_freeze ?? $line->is_freeze,
-                'modified_by' => auth()->id()??2,
+                'modified_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $line, 1);
