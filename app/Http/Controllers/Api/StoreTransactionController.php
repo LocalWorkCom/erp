@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
 use App\Events\ProductTransactionEvent;
+use Illuminate\Support\Facades\Validator;
 
 class StoreTransactionController extends Controller
 {
@@ -26,7 +27,7 @@ class StoreTransactionController extends Controller
     {
         try{
             $lang =  $request->header('lang', 'en');
-            $stores = StoreTransaction::get();
+            $stores = StoreTransaction::with(['allStoreTransactionDetails', 'allStoreTransactionDetails.products', 'allStoreTransactionDetails.products.unites', 'allStoreTransactionDetails.products.colors', 'allStoreTransactionDetails.products.sizes'])->get();
             return ResponseWithSuccessData($lang, $stores, 1);
         }catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -44,46 +45,30 @@ class StoreTransactionController extends Controller
         }
     }
 
-    public function show_products(Request $request)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $today = date('Y-m-d');
-
-            $stores = ProductTransaction::query()->whereDate('expirt_date', '>=', $today);
-            $stores = $stores->select('product_id', DB::raw('sum(count) as total_count'));
-            $stores = $stores->with('products')->groupBy('product_id')->get();
-
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
-    public function show_one_product(Request $request, $id)
-    {
-        try{
-            $lang =  $request->header('lang', 'en');
-            $stores = ProductTransaction::with(['products'])->findOrFail($id);
-            return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
-
     public function store(Request $request)
     {
-        try{
+        //try{
             $lang =  $request->header('lang', 'en');
 
             $price = 0;
             $total_price = 0;
-            $products = [];
 
-            //in outgoing return products is not expirt date
-            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['to_type']);
-            if(count($transaction_check_expirt) > 0){
-                $products = $transaction_check_expirt;
+            //product is not in this store
+            $transaction_check_instore = $this->check_product_instore($request['products'], $request['store_id']);
+            if($transaction_check_instore == 0){
+                return RespondWithBadRequestWithData( __('validation.product_not_instore'));
+            }
+
+            //in outgoing return products is expirt date
+            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
+            if($transaction_check_expirt == 0){
+                return RespondWithBadRequestWithData( __('validation.product_expired'));
+            }
+
+            //in outgoing return products is not enough
+            $transaction_check_one_enough = $this->check_not_enough($request['products'], $request['type'], $request['store_id']);
+            if($transaction_check_one_enough == 0){
+                return RespondWithBadRequestWithData( __('validation.product_not_enough'));
             }
 
             $add_store_bill = new StoreTransaction();
@@ -119,16 +104,15 @@ class StoreTransactionController extends Controller
                 $add_store_items->to_type = $add_store_bill->to_type;
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
+                $add_store_items->expired_date = $product['expired_date'];
 
                 event(new ProductTransactionEvent($add_store_items));
             }
 
-
-
             $stores = $add_store_bill;
             return ResponseWithSuccessData($lang, $stores, 1);
-        }catch (\Exception $e) {
+        /*}catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
-        }
+        }*/
     }
 }
