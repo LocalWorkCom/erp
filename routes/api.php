@@ -137,6 +137,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('addStore', [StoreController::class, 'store']);
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
+        Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
+
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
@@ -148,23 +150,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
     // end opening balance
 
-//store
-Route::group(['prefix' => 'stores'], function () {
 
-    //StoreTransaction
-    Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
-    Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
-    Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
-    Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
-    Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
-
-    //stores handling
-    Route::get('storeList', [StoreController::class, 'index']);
-    Route::get('showStore/{id}', [StoreController::class, 'show']);
-    Route::post('addStore', [StoreController::class, 'store']);
-    Route::put('updateStore/{id}', [StoreController::class, 'update']);
-    Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
-});
 
 //  branches
 Route::group(['prefix' => 'branches'], function () {
