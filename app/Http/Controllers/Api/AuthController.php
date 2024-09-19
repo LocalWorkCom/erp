@@ -70,10 +70,10 @@ class AuthController extends Controller
                 "password" => $request->password
             ])) {
                 $user = Auth::user();
-
+                
                 // Check the user's flag (e.g., if account is active)
                 if ($user->flag == 0) {
-
+                    
                     $token = $user->createToken("myToken")->accessToken;
                     $data = [
                         "access_token" => $token,

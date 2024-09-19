@@ -17,6 +17,7 @@ class CategoriesTableSeeder extends Seeder
     {
         DB::table('categories')->insert([
             [
+                'id' => 1,
                 'name_ar' => 'العهدة',
                 'name_en' => 'First Category',
                 'description_ar' => 'عهدة',
@@ -33,6 +34,7 @@ class CategoriesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 2,
                 'name_ar' => 'هالك',
                 'name_en' => 'Second Category',
                 'description_ar' => 'هالك',
@@ -49,6 +51,7 @@ class CategoriesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 3,
                 'name_ar' => 'منتجات تامة',
                 'name_en' => 'Second Category',
                 'description_ar' => 'منتجات تامة',
@@ -65,13 +68,14 @@ class CategoriesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 4,
                 'name_ar' => 'منتجات',
                 'name_en' => 'Second Category',
                 'description_ar' => 'منتجات',
                 'description_en' => 'Description of the second category',
                 'image' => 'images/categories/3.jpg',
                 'active' => 1,
-                'code' =>'0003',
+                'code' => '0003',
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
@@ -81,13 +85,14 @@ class CategoriesTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 5,
                 'name_ar' => 'خامات',
                 'name_en' => 'Second Category',
                 'description_ar' => 'خامات',
                 'description_en' => 'Description of the second category',
                 'image' => 'images/categories/4.jpg',
                 'active' => 1,
-                'code' =>'0004',
+                'code' => '0004',
                 'is_freeze' => 0,
                 'parent_id' => null, // Assuming this category is a child of the first one
                 'is_deleted' => 1,
@@ -96,8 +101,8 @@ class CategoriesTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-             
-             
+
+
             // Add more sample categories as needed
         ]);
     }

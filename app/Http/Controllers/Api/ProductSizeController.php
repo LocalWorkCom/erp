@@ -19,7 +19,9 @@ class ProductSizeController extends Controller
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         $productSizes = ProductSize::all();
 
         foreach ($productSizes as $productSize) {

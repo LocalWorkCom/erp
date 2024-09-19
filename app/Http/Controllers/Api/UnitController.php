@@ -21,7 +21,9 @@ class UnitController extends Controller
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         $units = Unit::all();
 
         // Define columns that need translation
@@ -52,6 +54,9 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $lang = $request->header('lang', 'en');
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         App::setLocale($lang);
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
@@ -67,7 +72,8 @@ class UnitController extends Controller
         $name_ar = $request->name_ar;
         $name_en = $request->name_en;
         
-        $created_by = Auth::user()->id;
+        $created_by = Auth::guard('api')->user()->id;
+        
 
         $unit = new Unit();
         $unit->name_ar = $name_ar;
@@ -80,6 +86,9 @@ class UnitController extends Controller
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         App::setLocale($lang);
         // Validate the input
         $validator = Validator::make($request->all(), [
@@ -93,10 +102,12 @@ class UnitController extends Controller
 
         // Retrieve the unit by ID, or throw an exception if not found
         $unit = Unit::findOrFail($id);
+        $modify_by = Auth::guard('api')->user()->id;
 
         // Assign the updated values to the unit model
         $unit->name_ar = $request->name_ar;
         $unit->name_en = $request->name_en;
+        $unit->modify_by = $request->modify_by;
 
         // Update the unit in the database
         $unit->save();
@@ -108,7 +119,9 @@ class UnitController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Find the unit by ID, or throw a 404 if not found
         $unit = Unit::findOrFail($id);
 

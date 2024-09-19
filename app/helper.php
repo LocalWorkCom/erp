@@ -206,7 +206,7 @@ function GenerateCode($table, $table_id = 0)
 }
 function CheckToken()
 {
-    $User = auth('user')->user();
+    $User = auth('api')->user();
 
     if (!$User) {
         return false;

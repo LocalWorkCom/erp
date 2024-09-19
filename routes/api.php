@@ -63,7 +63,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [ColorController::class, 'update']);
         Route::any('/delete', [ColorController::class, 'destroy']);
     });
-     //end color
+    //end color
     //Size
     Route::group(['prefix' => 'size'], function () {
         Route::any('/', [SizeController::class, 'index']);
@@ -72,7 +72,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/edit', [SizeController::class, 'update']);
         Route::any('/delete', [SizeController::class, 'destroy']);
     });
-     //end Size
+    //end Size
     //Country
     Route::group(['prefix' => 'country'], function () {
         Route::any('/', [CountryController::class, 'index']);
@@ -107,7 +107,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/store', [ProductColorController::class, 'store']);
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
-
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
@@ -137,7 +136,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
         Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
-
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
@@ -149,58 +147,55 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
     // end opening balance
 
-//  branches
-Route::group(['prefix' => 'branches'], function () {
-    Route::get('branchList', [BranchController::class, 'index']);
-    Route::get('showBranch/{id}', [BranchController::class, 'show']);
-    Route::post('addBranch', [BranchController::class, 'store']);
-    Route::put('updateBranch/{id}', [BranchController::class, 'update']);
-    Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
-    Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+    //  branches
+    Route::group(['prefix' => 'branches'], function () {
+        Route::get('branchList', [BranchController::class, 'index']);
+        Route::get('showBranch/{id}', [BranchController::class, 'show']);
+        Route::post('addBranch', [BranchController::class, 'store']);
+        Route::put('updateBranch/{id}', [BranchController::class, 'update']);
+        Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+        Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+    });
+
+    // vendors
+    Route::group(['prefix' => 'vendors'], function () {
+        Route::get('vendorList', [VendorController::class, 'index']);
+        Route::get('showVendor/{id}', [VendorController::class, 'show']);
+        Route::post('addVendor', [VendorController::class, 'store']);
+        Route::put('updateVendor/{id}', [VendorController::class, 'update']);
+        Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']);
+        Route::post('restoreVendor/{id}', [VendorController::class, 'restore']);
+    });
+
+
+    //Lines
+    Route::group(['prefix' => 'lines'], function () {
+        Route::get('lineList', [LineController::class, 'index']);
+        Route::get('showLine/{id}', [LineController::class, 'show']);
+        Route::post('addLine', [LineController::class, 'store']);
+        Route::put('updateLine/{id}', [LineController::class, 'update']);
+        Route::delete('deleteLine/{id}', [LineController::class, 'destroy']);
+        Route::post('restoreLine/{id}', [LineController::class, 'restore']); // Restore soft-deleted line
+    });
+
+
+    // Divisions
+    Route::group(['prefix' => 'divisions'], function () {
+        Route::get('divisionList', [DivisionController::class, 'index']);
+        Route::get('showDivision/{id}', [DivisionController::class, 'show']);
+        Route::post('addDivision', [DivisionController::class, 'store']);
+        Route::put('updateDivision/{id}', [DivisionController::class, 'update']);
+        Route::delete('deleteDivision/{id}', [DivisionController::class, 'destroy']);
+        Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
+    });
+
+    // Shelves 
+    Route::group(['prefix' => 'shelves'], function () {
+        Route::get('shelfList', [ShelfController::class, 'index']);
+        Route::get('showShelf/{id}', [ShelfController::class, 'show']);
+        Route::post('addShelf', [ShelfController::class, 'store']);
+        Route::put('updateShelf/{id}', [ShelfController::class, 'update']);
+        Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
+        Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
+    });
 });
-
-// vendors
-Route::group(['prefix' => 'vendors'], function () {
-    Route::get('vendorList', [VendorController::class, 'index']);
-    Route::get('showVendor/{id}', [VendorController::class, 'show']);
-    Route::post('addVendor', [VendorController::class, 'store']);
-    Route::put('updateVendor/{id}', [VendorController::class, 'update']);
-    Route::delete('deleteVendor/{id}', [VendorController::class, 'destroy']);
-    Route::post('restoreVendor/{id}', [VendorController::class, 'restore']);
-});
-
-
-//Lines
-Route::group(['prefix' => 'lines'], function () {
-    Route::get('lineList', [LineController::class, 'index']);
-    Route::get('showLine/{id}', [LineController::class, 'show']);
-    Route::post('addLine', [LineController::class, 'store']);
-    Route::put('updateLine/{id}', [LineController::class, 'update']);
-    Route::delete('deleteLine/{id}', [LineController::class, 'destroy']);
-    Route::post('restoreLine/{id}', [LineController::class, 'restore']); // Restore soft-deleted line
-});
-
-
-// Divisions
-Route::group(['prefix' => 'divisions'], function () {
-    Route::get('divisionList', [DivisionController::class, 'index']);
-    Route::get('showDivision/{id}', [DivisionController::class, 'show']);
-    Route::post('addDivision', [DivisionController::class, 'store']);
-    Route::put('updateDivision/{id}', [DivisionController::class, 'update']);
-    Route::delete('deleteDivision/{id}', [DivisionController::class, 'destroy']);
-    Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
-});
-
-// Shelves 
-Route::group(['prefix' => 'shelves'], function () {
-    Route::get('shelfList', [ShelfController::class, 'index']);
-    Route::get('showShelf/{id}', [ShelfController::class, 'show']);
-    Route::post('addShelf', [ShelfController::class, 'store']);
-    Route::put('updateShelf/{id}', [ShelfController::class, 'update']);
-    Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
-    Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
-});
-
-});
-
-

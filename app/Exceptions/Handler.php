@@ -49,7 +49,6 @@ class Handler extends ExceptionHandler
                 $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
                 return RespondWithBadRequest($lang, 5);
-
             }
         });
     }

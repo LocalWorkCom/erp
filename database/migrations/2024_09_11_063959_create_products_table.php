@@ -11,6 +11,9 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
+        Schema::dropIfExists('products'); // Drop the table if it already exists
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name_ar');
@@ -52,6 +55,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
+
         Schema::dropIfExists('products');
+
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
     }
 };

@@ -26,9 +26,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('colors', function (Blueprint $table) {
-            Schema::dropIfExists(table: 'colors');
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
 
-        });
+        Schema::dropIfExists('colors');
+
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
+      
     }
 };
