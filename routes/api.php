@@ -136,6 +136,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('addStore', [StoreController::class, 'store']);
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
+        Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
+
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
