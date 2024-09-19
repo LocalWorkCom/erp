@@ -14,22 +14,21 @@ class StoreTransactionDetails extends Model
 
     public function storeTransactions()
     {
-        return $this->belongsTo(StoreTransactions::class ,'store_transaction_id');
+        return $this->belongsTo(StoreTransaction::class, 'store_transaction_id');
     }
 
     public function products()
     {
-        return $this->belongsTo(Product::class ,'product_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function units()
     {
-        return $this->belongsTo(Unit::class ,'product_unit_id');
+        return $this->belongsTo(Unit::class, 'product_unit_id');
     }
 
     public function countries()
     {
-        return $this->belongsTo(Country::class ,'country_id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
-
 }
