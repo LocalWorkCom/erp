@@ -19,8 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
 
-            $table->unsignedBigInteger('store_category_id');
-            $table->foreign('store_category_id')->references('id')->on('store_category');
+            $table->unsignedBigInteger('store_category_id')->nullable();
+            $table->foreign('store_category_id')->references('id')->on('store_categories');
+
 
             $table->timestamps();
         });

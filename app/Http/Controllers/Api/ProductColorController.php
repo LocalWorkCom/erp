@@ -13,22 +13,13 @@ class ProductColorController extends Controller
      * Display a listing of the resource.
      */
 
-    // YourController.php
-
-    // public function index(Request $request)
-    // {
-    //     $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
-    //     $products = ProductColor::all();
-
-       
-    //     return ResponseWithSuccessData($lang, $products, code: 1);
-    // }
 
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Fetch all ProductColor records with their associated products
         $products = ProductColor::with('product')->get();
 

@@ -26,11 +26,12 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::table('countries', function (Blueprint $table) {
-            Schema::dropIfExists('countries');
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
 
-        });
+        Schema::dropIfExists('countries');
+
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
     }
 };

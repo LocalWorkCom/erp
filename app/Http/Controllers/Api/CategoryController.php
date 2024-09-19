@@ -21,8 +21,11 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        // dd(0);
+
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         $categories = Category::all();
 
         // Define columns that need translation
@@ -56,6 +59,9 @@ class CategoryController extends Controller
     {
         $lang = $request->header('lang', 'en');
         App::setLocale($lang);
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
@@ -81,10 +87,10 @@ class CategoryController extends Controller
         $description_ar = $request->description_ar;
         $description_en = $request->description_en;
         $image = $request->file('image');  // Handle file upload if necessary
-        $code = GenerateCode('categories',($GetLastID == 1) ? 0 : $GetLastID);
+        $code = GenerateCode('categories', ($GetLastID == 1) ? 0 : $GetLastID);
         $is_freeze = $request->is_freeze;
         $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-        $created_by = Auth::user()->id;
+        $created_by =Auth::guard('api')->user()->id;
 
         $category = new Category();
         $category->name_ar = $name_ar;
@@ -107,6 +113,9 @@ class CategoryController extends Controller
     {
         $lang = $request->header('lang', 'en');
         App::setLocale($lang);
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Validate the input
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
@@ -124,6 +133,7 @@ class CategoryController extends Controller
 
         // Retrieve the category by ID, or throw an exception if not found
         $category = Category::findOrFail($id);
+        $modify_by = Auth::guard('api')->user()->id;
 
         // Assign the updated values to the category model
         $category->name_ar = $request->name_ar;
@@ -131,6 +141,7 @@ class CategoryController extends Controller
         $category->description_ar = $request->description_ar;
         $category->description_en = $request->description_en;
         $category->is_freeze = $request->is_freeze;
+        $category->modify_by = $modify_by;
         $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
 
         // Handle file upload for the image if provided
@@ -149,7 +160,9 @@ class CategoryController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Find the category by ID, or throw a 404 if not found
         $category = Category::findOrFail($id);
 

@@ -27,13 +27,14 @@ return new class extends Migration
             $table->unsignedBigInteger('modify_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
-
-            // Foreign key constraints
-            $table->foreign('parent_id')->references('id')->on('categories');
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('modify_by')->references('id')->on('users');
-            $table->foreign('deleted_by')->references('id')->on('users');
+        
+            // Foreign key constraints with cascading deletes
+            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('modify_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
         });
+        
     }
 
     /**
@@ -43,6 +44,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
+    
+        Schema::dropIfExists('categories'); // Drop the table
+    
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
     }
 };

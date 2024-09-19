@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up()
     {
+     
+
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name_ar');
@@ -34,6 +36,10 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints(); // Disable foreign key checks
+
         Schema::dropIfExists('units');
+
+        Schema::enableForeignKeyConstraints(); // Re-enable foreign key checks
     }
 };

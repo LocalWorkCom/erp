@@ -24,7 +24,9 @@ class ProductController extends Controller
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
         $products = Product::all();
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Define columns that need translation
         $translateColumns = ['name', 'description']; // Add other columns as needed
 
@@ -64,7 +66,9 @@ class ProductController extends Controller
         // Set locale based on header
         $lang = $request->header('lang', 'en');
         App::setLocale($lang);
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Validate the input
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
@@ -107,7 +111,7 @@ class ProductController extends Controller
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-        $product->created_by = Auth::user()->id;
+        $product->created_by =Auth::guard('api')->user()->id;
         $product->save();
 
         // Handle main image upload
@@ -124,7 +128,7 @@ class ProductController extends Controller
                 if ($image->isValid()) {
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;
-                    $product_image->created_by = Auth::user()->id;
+                    $product_image->created_by = Auth::guard('api')->user()->id;
                     $product_image->save();
                     UploadFile('images/products/gallery', 'image', $product_image, $image);
                 }
@@ -137,7 +141,9 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Validate the request data
         $validatedData = $request->validate([
             'name_ar' => 'required|string',
@@ -193,7 +199,7 @@ class ProductController extends Controller
                 if ($image->isValid()) {
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;
-                    $product_image->created_by = Auth::user()->id;
+                    $product_image->created_by =Auth::guard('api')->user()->id;
                     $product_image->save();
                     UploadFile('images/products/gallery', 'image', $product_image, $image);
                 }
@@ -210,7 +216,9 @@ class ProductController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
         // Find the category by ID, or throw a 404 if not found
         $product = Product::findOrFail($id);
         // Handle deletion of associated image if it exists

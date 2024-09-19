@@ -15,7 +15,9 @@ class AddDeletedAtToProductImagesTable extends Migration
     {
         Schema::table('product_images', function (Blueprint $table) {
             // Add the deleted_at column for soft deletes
-            $table->softDeletes()->after('updated_at'); // Place this column after the 'updated_at' column
+            if (!Schema::hasColumn('product_images', 'deleted_at')) {
+                $table->softDeletes()->after('updated_at');
+            }
         });
     }
 
@@ -27,8 +29,10 @@ class AddDeletedAtToProductImagesTable extends Migration
     public function down()
     {
         Schema::table('product_images', function (Blueprint $table) {
-            // Remove the deleted_at column
-            $table->dropSoftDeletes();
+            // Check if the column exists before attempting to drop it
+            if (Schema::hasColumn('product_images', 'deleted_at')) {
+                $table->dropSoftDeletes();
+            }
         });
     }
 }

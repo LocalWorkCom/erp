@@ -20,6 +20,9 @@ class NotificationController extends Controller
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
         $notifications = Notification::all();
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
 
         // Define columns that need translation
         $translateColumns = ['title', 'description']; // Add other columns as needed
