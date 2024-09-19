@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class VendorController extends Controller
 {
@@ -19,11 +20,9 @@ class VendorController extends Controller
             $lang = $request->header('lang', 'en'); 
             $withTrashed = $request->query('withTrashed', false); 
 
-            if ($withTrashed) {
-                $vendors = Vendor::withTrashed()->with('country')->get();
-            } else {
-                $vendors = Vendor::with('country')->get(); 
-            }
+            $vendors = $withTrashed
+                ? Vendor::withTrashed()->with('country')->get()
+                : Vendor::with('country')->get(); 
 
             $vendors = $vendors->map(function ($vendor) use ($lang) {
                 return [
@@ -33,7 +32,7 @@ class VendorController extends Controller
                     'phone' => $vendor->phone,
                     'email' => $vendor->email,
                     'address' => $lang === 'ar' ? $vendor->address_ar : $vendor->address_en,
-                    'country' => $vendor->country->name_ar, 
+                    'country' => $vendor->country->name_ar,
                     'deleted_at' => $vendor->deleted_at,
                 ];
             });
@@ -52,8 +51,10 @@ class VendorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en'); 
-
-         
+    
+            // Log incoming request data
+            Log::info('Vendor creation request received:', $request->all());
+    
             $request->validate([
                 'name_en' => 'nullable|string|max:255',
                 'name_ar' => 'required|string|max:255',
@@ -64,8 +65,11 @@ class VendorController extends Controller
                 'address_ar' => 'nullable|string',
                 'country_id' => 'required|integer|exists:countries,id',
             ]);
-
-          
+    
+            // Log validation success
+            Log::info('Vendor creation request validation successful.');
+    
+            // Create the vendor
             $vendor = Vendor::create([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
@@ -77,13 +81,22 @@ class VendorController extends Controller
                 'country_id' => $request->country_id,
                 'created_by' => auth()->id(), 
             ]);
-
+    
+            // Log vendor creation success
+            Log::info('Vendor created successfully:', ['vendor_id' => $vendor->id]);
+    
             return ResponseWithSuccessData($lang, $vendor, 1);
         } catch (\Exception $e) {
-            Log::error('Error creating vendor: ' . $e->getMessage());
+            // Log the exact error message for troubleshooting
+            Log::error('Error creating vendor: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'user_id' => auth()->id(),
+            ]);
+    
             return RespondWithBadRequestData($lang, 2);
         }
     }
+    
 
     /**
      * Display the specified vendor.
@@ -92,9 +105,8 @@ class VendorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $vendor = Vendor::withTrashed()->with('country')->findOrFail($id); 
+            $vendor = Vendor::withTrashed()->with('country')->findOrFail($id);
 
-            // Translate based on language
             $vendorData = [
                 'id' => $vendor->id,
                 'name' => $lang === 'ar' ? $vendor->name_ar : $vendor->name_en,
@@ -102,7 +114,7 @@ class VendorController extends Controller
                 'phone' => $vendor->phone,
                 'email' => $vendor->email,
                 'address' => $lang === 'ar' ? $vendor->address_ar : $vendor->address_en,
-                'country' => $vendor->country->name_ar, 
+                'country' => $vendor->country->name_ar,
                 'deleted_at' => $vendor->deleted_at,
             ];
 
@@ -118,20 +130,25 @@ class VendorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $lang = $request->header('lang', 'en');
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name_en' => 'nullable|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address_en' => 'nullable|string',
+            'address_ar' => 'nullable|string',
+            'country_id' => 'required|integer|exists:countries,id',
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
         try {
-            $lang = $request->header('lang', 'en');
-
-            $request->validate([
-                'name_en' => 'nullable|string|max:255',
-                'name_ar' => 'required|string|max:255',
-                'contact_person' => 'nullable|string|max:255',
-                'phone' => 'nullable|string|max:20',
-                'email' => 'nullable|email|max:255',
-                'address_en' => 'nullable|string',
-                'address_ar' => 'nullable|string',
-                'country_id' => 'required|integer|exists:countries,id',
-            ]);
-
             $vendor = Vendor::withTrashed()->findOrFail($id);
 
             $vendor->update([
@@ -143,7 +160,7 @@ class VendorController extends Controller
                 'address_en' => $request->address_en,
                 'address_ar' => $request->address_ar,
                 'country_id' => $request->country_id,
-                'modified_by' => auth()->id(), 
+                'modified_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $vendor, 1);
@@ -162,8 +179,8 @@ class VendorController extends Controller
             $lang = $request->header('lang', 'en');
 
             $vendor = Vendor::findOrFail($id);
-            $vendor->update(['deleted_by' => auth()->id()]); 
-            $vendor->delete(); 
+            $vendor->update(['deleted_by' => auth()->id()]);
+            $vendor->delete();
 
             return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
@@ -173,7 +190,7 @@ class VendorController extends Controller
     }
 
     /**
-     * Restore a soft deleted vendor.
+     * Restore a soft-deleted vendor.
      */
     public function restore(Request $request, $id)
     {
@@ -181,7 +198,7 @@ class VendorController extends Controller
             $lang = $request->header('lang', 'en');
 
             $vendor = Vendor::withTrashed()->findOrFail($id);
-            $vendor->restore(); 
+            $vendor->restore();
 
             return ResponseWithSuccessData($lang, $vendor, 1);
         } catch (\Exception $e) {

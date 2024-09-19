@@ -9,13 +9,28 @@ class StoreCategory extends Model
 {
     use HasFactory;
 
-    protected $table = 'store_category'; 
+    protected $table = 'store_category';
 
     protected $fillable = [
         'store_id',
         'category_id',
-       
     ];
 
-    public $timestamps = true; 
+    public $timestamps = true;
+
+    // Relationships with the Store and Category models
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function productLimits()
+    {
+        return $this->hasMany(ProductLimit::class, 'product_limit_id');
+    }
 }

@@ -107,6 +107,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/store', [ProductColorController::class, 'store']);
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
+
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
@@ -116,27 +117,27 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notification/store', [NotificationController::class, 'store']);
-    //Product
-    Route::group(['prefix' => 'products'], function () {
-        //ProductTransaction
-        Route::get('productTransactions', [ProductTransactionController::class, 'index']);
-        Route::get('showProductTransactions/{id}', [ProductTransactionController::class, 'show']);
-        Route::post('storeProductTransactions', [ProductTransactionController::class, 'store']);
+
+    //Transactions
+    Route::group(['prefix' => 'transactions'], function () {
+        //StoreTransaction
+        Route::get('store', [StoreTransactionController::class, 'index']);
+        Route::post('add', [StoreTransactionController::class, 'store']);
+        Route::get('showStore/{id}', [StoreTransactionController::class, 'show']);
+        Route::get('products', [ProductTransactionController::class, 'index']);
+        Route::get('showProduct/{id}', [ProductTransactionController::class, 'show']);
     });
+
     //store
     Route::group(['prefix' => 'stores'], function () {
-        //StoreTransaction
-        Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
-        Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
-        Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
-        Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
-        Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
         //stores handling
         Route::get('storeList', [StoreController::class, 'index']);
         Route::get('showStore/{id}', [StoreController::class, 'show']);
         Route::post('addStore', [StoreController::class, 'store']);
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
+        Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
+
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
@@ -147,24 +148,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/delete', [OpeningBalanceController::class, 'destroy']);
     });
     // end opening balance
-
-//store
-Route::group(['prefix' => 'stores'], function () {
-
-    //StoreTransaction
-    Route::get('storeTransactions', [StoreTransactionController::class, 'index']);
-    Route::get('showStoreTransactions/{id}', [StoreTransactionController::class, 'show']);
-    Route::post('addStoreTransactions', [StoreTransactionController::class, 'store']);
-    Route::get('showStoreItems', [StoreTransactionController::class, 'show_products']);
-    Route::get('showStoreOneItem/{id}', [StoreTransactionController::class, 'show_one_product']);
-
-    //stores handling
-    Route::get('storeList', [StoreController::class, 'index']);
-    Route::get('showStore/{id}', [StoreController::class, 'show']);
-    Route::post('addStore', [StoreController::class, 'store']);
-    Route::put('updateStore/{id}', [StoreController::class, 'update']);
-    Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
-});
 
 //  branches
 Route::group(['prefix' => 'branches'], function () {
@@ -220,14 +203,4 @@ Route::group(['prefix' => 'shelves'], function () {
 
 });
 
-
-
-//Product
-Route::group(['prefix' => 'products'], function () {
-
-    //ProductTransaction
-    Route::get('productTransactions', [ProductTransactionController::class, 'index']);
-    Route::get('showProductTransactions/{id}', [ProductTransactionController::class, 'show']);
-    Route::post('storeProductTransactions', [ProductTransactionController::class, 'store']);
-});
 

@@ -70,9 +70,13 @@ class Category extends Model
      {
          return $this->hasMany(Product::class, 'category_id');
      }
-    // Define many-to-many relationship with stores
-    public function stores()
-    {
-        return $this->belongsToMany(Store::class, 'stock_category', 'category_id', 'store_id');
-    }
+     public function storeCategories()
+     {
+         return $this->hasMany(StoreCategory::class);
+     }
+ 
+     public function stores()
+     {
+         return $this->hasManyThrough(Store::class, StoreCategory::class, 'category_id', 'id', 'id', 'store_id');
+     }
 }

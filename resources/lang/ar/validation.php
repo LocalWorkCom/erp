@@ -16,6 +16,23 @@ return [
     'date_format' => ':attribute ليس بالشكل الصحيح ',
     'validator_title' => 'تصحيح',
     'validator_msg' => 'تصحيح الرسايل',
+    'max' => [
+        'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
+        'numeric' => 'يجب ألا يزيد :attribute عن :max.',
+    ],
+    'min' => [
+        'string' => 'يجب ألا يقل :attribute عن :min حرفًا.',
+        'numeric' => 'يجب ألا يقل :attribute عن :min.',
+    ],
+    'between' => [
+        'numeric' => 'يجب أن يكون :attribute بين :min و :max.',
+        'string' => 'يجب أن يكون :attribute بين :min و :max حرفًا.',
+    ],
+    'boolean' => ':attribute يجب أن يكون صحيح أو خطأ.',
+    'product_expired' => 'هذا المنتج منتهى الصلاحية ',
+    'product_not_enough' => 'هذا المنتج غير كافى ',
+    'product_not_instore' => 'هذا المنتج غير موجود فى المخزن',
+
     'attributes' => [
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
@@ -38,5 +55,14 @@ return [
         'amount' => 'الكميه',
         "price" => "السعر",
         "date" => "التاريخ",
+        'latitute' => 'خط العرض',
+        'longitute' => 'خط الطول',
+        'manager_name' => 'اسم المدير',
+        'opening_hours' => 'ساعات العمل',
+        'is_freeze' => 'حالة التجميد',
+        'contact_person' => 'الشخص المسؤول',
+
+    
+ 
     ],
 ];
