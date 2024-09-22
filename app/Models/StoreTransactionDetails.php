@@ -14,7 +14,7 @@ class StoreTransactionDetails extends Model
 
     public function storeTransactions()
     {
-        return $this->belongsTo(StoreTransactions::class ,'store_transaction_id');
+        return $this->belongsTo(StoreTransaction::class ,'store_transaction_id');
     }
 
     public function products()
