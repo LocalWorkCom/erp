@@ -198,4 +198,19 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
         Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
     });
+//Recipes and ingredients
+    Route::prefix('recipes')->group(function () {
+        Route::get('/', [RecipeController::class, 'index']);
+        Route::post('/', [RecipeController::class, 'store']);
+        Route::get('/{id}', [RecipeController::class, 'show']);
+        Route::put('/{id}', [RecipeController::class, 'update']);
+        Route::delete('/{id}', [RecipeController::class, 'destroy']);
+        Route::post('/restore/{id}', [RecipeController::class, 'restore']);
+    
+        Route::get('/{recipeId}/ingredients', [IngredientController::class, 'index']);
+        Route::post('/{recipeId}/ingredients', [IngredientController::class, 'store']);
+        Route::put('/ingredients/{id}', [IngredientController::class, 'update']);
+        Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
+        Route::post('/ingredients/restore/{id}', [IngredientController::class, 'restore']);
+    });
 });
