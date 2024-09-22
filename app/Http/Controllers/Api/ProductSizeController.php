@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductSize;
 use App\Models\Size;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,6 +22,8 @@ class ProductSizeController extends Controller
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -40,6 +43,8 @@ class ProductSizeController extends Controller
     public function store(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Set locale from header
+        App::setLocale($lang);
+
 
         // Check for token validity
         if (!CheckToken()) {
@@ -50,6 +55,8 @@ class ProductSizeController extends Controller
         $validator = Validator::make($request->all(), [
             'product_id' => 'required|integer',
             'size_id' => 'required|integer',
+            'code_size' => 'required'
+
         ]);
 
         if ($validator->fails()) {
@@ -59,18 +66,27 @@ class ProductSizeController extends Controller
         // Retrieve data from the request
         $product_id = $request->product_id;
         $size_id = $request->size_id;
-        $factor = $request->factor;
+        $code_size = $request->code_size;
+        $size = Size::find($size_id);
+        if (!$size) {
+            return  RespondWithBadRequestNotExist();
+        }
+        $product = Product::find($product_id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
+
 
         // Get the ID of the authenticated user
         $created_by = Auth::guard('api')->user()->id;
 
         // Create and save the ProductUnit
-        $productUnit = new ProductSize();
-        $productUnit->product_id = $product_id;
-        $productUnit->size_id = $size_id;
-        $productUnit->factor = $factor;
-        $productUnit->created_by = $created_by;
-        $productUnit->save();
+        $ProductSize = new ProductSize();
+        $ProductSize->product_id = $product_id;
+        $ProductSize->size_id = $size_id;
+        $ProductSize->code_size = $code_size;
+        $ProductSize->created_by = $created_by;
+        $ProductSize->save();
 
         // Return a successful response
         return RespondWithSuccessRequest($lang, 1);
@@ -79,6 +95,8 @@ class ProductSizeController extends Controller
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -86,6 +104,7 @@ class ProductSizeController extends Controller
         $validator = Validator::make($request->all(), [
             'product_id' => 'required|integer',
             'size_id' => 'required|integer',
+            'code_size' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -93,17 +112,33 @@ class ProductSizeController extends Controller
         }
 
         // Retrieve the unit by ID, or throw an exception if not found
-        $productUnit = ProductSize::findOrFail($id);
-        $factor = $request->factor;
+        $ProductSize = ProductSize::find($id);
+        $product_id = $request->product_id;
+        $size_id = $request->size_id;
+        $code_size = $request->code_size;
 
+        $size = Size::find($size_id);
+        if (!$size) {
+            return  RespondWithBadRequestNotExist();
+        }
+        $product = Product::find($product_id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
+        if (
+            $ProductSize->product_id == $request->product_id && $ProductSize->size_id == $request->size_id && $ProductSize->code_size == $request->code_size
+        ) {
+            return  RespondWithBadRequestNoChange();
+        }
         $modify_by = Auth::guard('api')->user()->id;
         // Assign the updated values to the unit model
-        $productUnit->product_id = $request->product_id;
-        $productUnit->size_id = $request->size_id;
-        $productUnit->factor = $factor;
-        $productUnit->modify_by = $modify_by;
+        $ProductSize->product_id = $request->product_id;
+        $ProductSize->size_id = $request->size_id;
+        $ProductSize->modify_by = $modify_by;
         // Update the unit in the database
-        $productUnit->save();
+        $ProductSize->code_size = $code_size;
+
+        $ProductSize->save();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
@@ -112,14 +147,18 @@ class ProductSizeController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the unit by ID, or throw a 404 if not found
-        $productUnit = ProductSize::findOrFail($id);
-
+        $ProductSize = ProductSize::find($id);
+        if (!$ProductSize) {
+            return  RespondWithBadRequestNotExist();
+        }
         // Delete the unit
-        $productUnit->delete();
+        $ProductSize->delete();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);

@@ -21,7 +21,6 @@ class ProductColor extends Model
         'created_by',
         'modify_by',
         'deleted_at',
-
         'deleted_by',
         'created_at',
         'updated_at',

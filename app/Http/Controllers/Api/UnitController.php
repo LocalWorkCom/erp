@@ -21,6 +21,8 @@ class UnitController extends Controller
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -30,7 +32,7 @@ class UnitController extends Controller
         $translateColumns = ['name']; // Add other columns as needed
 
         // Define columns to remove (translated columns)
-        $columnsToRemove = array_map(function($col) {
+        $columnsToRemove = array_map(function ($col) {
             return [$col . '_ar', $col . '_en'];
         }, $translateColumns);
         $columnsToRemove = array_merge(...$columnsToRemove);
@@ -54,10 +56,11 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
-        App::setLocale($lang);
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
@@ -67,25 +70,26 @@ class UnitController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
 
         $name_ar = $request->name_ar;
         $name_en = $request->name_en;
-        
+
         $created_by = Auth::guard('api')->user()->id;
-        
+
 
         $unit = new Unit();
         $unit->name_ar = $name_ar;
         $unit->name_en =  $name_en;
         $unit->created_by =  $created_by;
         $unit->save();
-       
+
         return RespondWithSuccessRequest($lang, 1);
     }
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -101,7 +105,15 @@ class UnitController extends Controller
         }
 
         // Retrieve the unit by ID, or throw an exception if not found
-        $unit = Unit::findOrFail($id);
+        $unit = Unit::find($id);
+        if (!$unit) {
+            return  RespondWithBadRequestNotExist();
+        }
+        if (
+            $unit->name_ar == $request->name_ar && $unit->name_en == $request->name_en
+        ) {
+            return  RespondWithBadRequestNoChange();
+        }
         $modify_by = Auth::guard('api')->user()->id;
 
         // Assign the updated values to the unit model
@@ -119,12 +131,16 @@ class UnitController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the unit by ID, or throw a 404 if not found
-        $unit = Unit::findOrFail($id);
-
+        $unit = Unit::find($id);
+        if (!$unit) {
+            return  RespondWithBadRequestNotExist();
+        }
         // Delete the unit
         $unit->delete();
 
