@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\ProductUnitController;
 use App\Http\Controllers\Api\LineController;
 use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
+use App\Http\Controllers\Api\FloorController;
+use App\Http\Controllers\Api\TableController;
 
 
 
@@ -198,7 +200,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('deleteShelf/{id}', [ShelfController::class, 'destroy']);
         Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
     });
-//Recipes and ingredients
+    //Recipes and ingredients
     Route::prefix('recipes')->group(function () {
         Route::get('/', [RecipeController::class, 'index']);
         Route::post('/', [RecipeController::class, 'store']);
@@ -213,4 +215,25 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/ingredients/{id}', [IngredientController::class, 'destroy']);
         Route::post('/ingredients/restore/{id}', [IngredientController::class, 'restore']);
     });
+
+    //floors
+    Route::group(['prefix' => 'floors'], function () {
+        //StoreTransaction
+        Route::get('index', [FloorController::class, 'index']);
+        Route::post('add', [FloorController::class, 'add']);
+        Route::post('edit', [FloorController::class, 'edit']);
+        Route::get('delete/{id}', [FloorController::class, 'delete']);
+    });
+
+    //tables
+    Route::group(['prefix' => 'tables'], function () {
+        //StoreTransaction
+        Route::get('index', [TableController::class, 'index']);
+        Route::post('add', [TableController::class, 'add']);
+        Route::post('edit', [TableController::class, 'edit']);
+        Route::get('delete/{id}', [TableController::class, 'delete']);
+    });
+
 });
+
+

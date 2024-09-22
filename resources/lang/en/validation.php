@@ -61,6 +61,7 @@ return [
     'product_expired' => 'This product is expired',
     'product_not_enough' => 'This product is not enough',
     'product_not_instore' => 'This product is not in store',
-
+    'DataExist' => 'All ready Added',
+    'DataExistMessage' => 'All ready Added',
     
 ];

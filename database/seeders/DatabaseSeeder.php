@@ -19,8 +19,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            CategoriesTableSeeder::class,
             CountriesTableSeeder::class,
+            UsersTableSeeder::class,
+            CategoriesTableSeeder::class,
             SizesTableSeeder::class,
             APICodeTableSeeder::class,
             // You can call additional seeders here

@@ -235,12 +235,29 @@ function RespondWithBadRequestNoChange()
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+
 function RespondWithBadRequestNotExist()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
         'apiTitle' => trans('validation.NotExist'),
         'apiMsg' => trans('validation.NotExistMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+    
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;  
+    
+    return Response::json($response_array, $response_code);
+}
+
+function RespondWithBadRequestDataExist()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.DataExist'),
+        'apiMsg' => trans('validation.DataExistMessage'),
         'apiCode' => -1,
         'data'   => []
     );

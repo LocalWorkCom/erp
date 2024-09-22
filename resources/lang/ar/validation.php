@@ -53,6 +53,8 @@ return [
     'color_id' => ':attribute مطلوب',
     'unit_id' => ':attribute مطلوب',
     'factor' => ':attribute مطلوب',
+    'DataExist' => 'موجود بالفعل',
+    'DataExistMessage' => 'موجود بالفعل',
     'attributes' => [
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
