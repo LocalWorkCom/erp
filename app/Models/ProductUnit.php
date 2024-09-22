@@ -37,4 +37,9 @@ class ProductUnit extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function ingredients()
+    {
+        return $this->hasMany(Ingredient::class, 'product_unit_id');
+    }
 }

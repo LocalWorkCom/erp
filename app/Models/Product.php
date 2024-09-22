@@ -83,4 +83,10 @@ class Product extends Model
     {
         return $this->hasOne(ProductUnit::class, 'product_id');
     }
+
+    public function ingredients()
+    {
+        return $this->hasManyThrough(Ingredient::class, ProductUnit::class, 'product_id', 'product_unit_id');
+    }
+
 }
