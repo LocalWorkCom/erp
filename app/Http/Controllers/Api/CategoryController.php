@@ -67,7 +67,7 @@ class CategoryController extends Controller
             'name_en' => 'string',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
-            'image' => 'nullable',  // Adjust this rule based on your requirements
+            'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
             'is_freeze' => 'required|boolean',
             'parent_id' => 'nullable|integer',
         ]);
@@ -90,7 +90,14 @@ class CategoryController extends Controller
         $code = GenerateCode('categories', ($GetLastID == 1) ? 0 : $GetLastID);
         $is_freeze = $request->is_freeze;
         $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-        $created_by =Auth::guard('api')->user()->id;
+        if ($parent_id) {
+            $category = Category::find($parent_id);
+            if (!$category) {
+                $category_valid['parent_id'] = ['الفئة غير موجودة'];
+                return  RespondWithBadRequestWithData($category_valid);
+            }
+        }
+        $created_by = Auth::guard('api')->user()->id;
 
         $category = new Category();
         $category->name_ar = $name_ar;
@@ -122,7 +129,7 @@ class CategoryController extends Controller
             'name_en' => 'string',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
-            'image' => 'nullable',  // Adjust this rule based on your requirements
+            'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
             'is_freeze' => 'required|boolean',
             'parent_id' => 'nullable|integer',
         ]);
@@ -132,7 +139,14 @@ class CategoryController extends Controller
         }
 
         // Retrieve the category by ID, or throw an exception if not found
-        $category = Category::findOrFail($id);
+        $category = Category::find($id);
+        if (!$category) {
+            return  RespondWithBadRequestNotExist();
+        }
+        // dd($category, $request);
+        if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
+            return  RespondWithBadRequestNoChange();
+        }
         $modify_by = Auth::guard('api')->user()->id;
 
         // Assign the updated values to the category model
@@ -147,6 +161,7 @@ class CategoryController extends Controller
         // Handle file upload for the image if provided
         if ($request->hasFile('image')) {
             $image = $request->file('image');
+            DeleteFile('images/categories', $category->image);
             UploadFile('images/categories', 'image', $category, $image);
         }
 
@@ -160,15 +175,18 @@ class CategoryController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the category by ID, or throw a 404 if not found
-        $category = Category::findOrFail($id);
-
+        $category = Category::find($id);
+        if (!$category) {
+            return  RespondWithBadRequestNotExist();
+        }
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {
-
             return RespondWithBadRequest($lang, 6);
         }
 

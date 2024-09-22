@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
+use App\Models\ProductColor;
 use App\Models\ProductImage;
+use App\Models\ProductSize;
+use App\Models\ProductTransaction;
+use App\Models\ProductUnit;
+use App\Models\StoreTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use PDO;
 
 class ProductController extends Controller
 {
@@ -75,11 +82,10 @@ class ProductController extends Controller
             'name_en' => 'nullable|string',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
-            'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate main image
+            'main_image' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate main image
             'is_valid' => 'required|boolean',
             'type' => 'required|string|in:complete,raw',
             'is_remind' => 'required|boolean',
-            'code' => 'nullable|string',
             'sku' => 'required|string|unique:products',  // Correct unique rule
             'barcode' => 'required|string|unique:products',  // Correct unique rule
             'limit_quantity' => 'nullable|integer',
@@ -94,7 +100,7 @@ class ProductController extends Controller
 
         // Generate product code
         $GetLastID = GetLastID('products');
-        $code = GenerateCode('products', ($GetLastID == 1) ? 0 : $GetLastID);
+        $code = GenerateCode('products', $GetLastID);
 
         // Create a new product
         $product = new Product();
@@ -111,7 +117,7 @@ class ProductController extends Controller
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-        $product->created_by =Auth::guard('api')->user()->id;
+        $product->created_by = Auth::guard('api')->user()->id;
         $product->save();
 
         // Handle main image upload
@@ -122,6 +128,14 @@ class ProductController extends Controller
 
         // Handle gallery images upload
         if ($request->hasFile('images')) {
+            // Validate image extensions for all files in the 'images' array
+            $validator = Validator::make($request->all(), [
+                'images.*' => 'mimes:jpeg,jpg,png,gif,svg|max:2048'  // Validate each image in the 'images' array
+            ]);
+
+            if ($validator->fails()) {
+                return RespondWithBadRequestWithData($validator->errors());
+            }
             $images = $request->file('images');
 
             foreach ($images as $image) {
@@ -135,48 +149,64 @@ class ProductController extends Controller
             }
         }
 
+
         return RespondWithSuccessRequest($lang, 1);
     }
 
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Validate the request data
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
-            'main_image' => 'nullable|file',  // Ensure it's a file upload
+            'main_image' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate main image
             'is_valid' => 'required|boolean',
             'type' => 'required|string|in:complete,raw',  // Enforce enum-like values
             'is_remind' => 'required|boolean',
             'code' => 'nullable',
-            'sku' => 'nullable',
-            'barcode' => 'nullable',
-            'limit_quantity' => 'nullable|integer',
+            'sku' => 'required',
+            'barcode' => 'required',
             'main_unit_id' => 'required|integer',
             'currency_code' => 'required|string',  // Assuming this should also be required
             'category_id' => 'required|integer'  // Assuming this should also be required
         ]);
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
 
         // Find the product by ID
-        $product = Product::findOrFail($id);
-
+        $product = Product::find($id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
+        // dd($category, $request);
+        if (
+            $product->name_ar == $request->name_ar && $product->name_en == $request->name_en &&  $product->description_ar == $request->description_ar
+            &&  $product->description_en == $request->description_en && $product->is_valid == $request->is_valid  && $product->type == $request->type
+            && $product->is_remind == $request->is_remind  && $product->main_unit_id == $request->main_unit_id  && $product->currency_code == $request->currency_code  && $product->category_id == $request->category_id
+            && $product->sku == $request->sku  && $product->barcode == $request->barcode
+        ) {
+            return  RespondWithBadRequestNoChange();
+        }
         // Update the product attributes
-        $product->name_ar = $validatedData['name_ar'];
-        $product->name_en = $validatedData['name_en'];
-        $product->description_ar = $validatedData['description_ar'] ?? null;
-        $product->description_en = $validatedData['description_en'] ?? null;
-        $product->is_valid = $validatedData['is_valid'];
-        $product->type = $validatedData['type'];
-        $product->is_remind = $validatedData['is_remind'];
-        $product->main_unit_id = $validatedData['main_unit_id'];
-        $product->currency_code = $validatedData['currency_code'];
-        $product->category_id = $validatedData['category_id'];
+        $product->name_ar = $request->name_ar;
+        $product->name_en = $request->name_en;
+        $product->description_ar = $request->description_ar ?? null;
+        $product->description_en = $request->description_en ?? null;
+        $product->is_valid = $request->is_valid;
+        $product->type = $request->type;
+        $product->is_remind = $request->is_remind;
+        $product->main_unit_id = $request->main_unit_id;
+        $product->currency_code = $request->currency_code;
+        $product->category_id = $request->category_id;
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
         // Handle the image upload if a new image is provided
@@ -184,7 +214,6 @@ class ProductController extends Controller
         if ($main_image) {
             // Assuming you have a method to delete the old image if necessary
             DeleteFile('images/products', $product->main_image);
-
             // Upload the new image
             UploadFile('images/products', 'main_image', $product, $main_image);
         }
@@ -194,12 +223,18 @@ class ProductController extends Controller
         // Handle gallery images upload
         if ($request->hasFile('images')) {
             $images = $request->file('images');
+            $validator = Validator::make($request->all(), [
+                'images.*' => 'mimes:jpeg,jpg,png,gif,svg|max:2048'  // Validate each image in the 'images' array
+            ]);
 
+            if ($validator->fails()) {
+                return RespondWithBadRequestWithData($validator->errors());
+            }
             foreach ($images as $image) {
                 if ($image->isValid()) {
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;
-                    $product_image->created_by =Auth::guard('api')->user()->id;
+                    $product_image->created_by = Auth::guard('api')->user()->id;
                     $product_image->save();
                     UploadFile('images/products/gallery', 'image', $product_image, $image);
                 }
@@ -208,26 +243,48 @@ class ProductController extends Controller
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    function DeleteExistProductImage(Request $request) 
-    {
-
-    }
+    function DeleteExistProductImage(Request $request) {}
     public function delete(Request $request, $id)
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the category by ID, or throw a 404 if not found
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
+        $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
+        // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
+        if ($CheckIfExist1->count()) {
+            $response_array = array(
+                'success' => false,  // Set success to false to indicate an error
+                'apiTitle' => trans('validation.NotAllow'),
+                'apiMsg' => trans('validation.NotAllowMessage'),
+                'apiCode' => -1,
+                'data'   => []
+            );
+
+            // Change the response code to 404 for "Not Found"
+            $response_code = 401;
+
+            return Response::json($response_array, $response_code);
+        }
         // Handle deletion of associated image if it exists
         if ($product->image) {
-            $imagePath = public_path('images/categories/' . $product->image);
+            $imagePath = public_path('images/products/' . $product->image);
             if (File::exists($imagePath)) {
                 File::delete($imagePath);
             }
         }
+        $ProductImages = ProductImage::where('product_id', $id)->delete();
+        $ProductSize = ProductSize::where('product_id', $id)->delete();
+        $ProductColor = ProductColor::where('product_id', $id)->delete();
+        $ProductUnit = ProductUnit::where('product_id', $id)->delete();
 
         // Delete the category
         $product->delete();

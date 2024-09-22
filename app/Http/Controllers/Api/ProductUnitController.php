@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductUnit;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,6 +21,8 @@ class ProductUnitController extends Controller
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -108,6 +111,8 @@ class ProductUnitController extends Controller
     public function store(Request $request)
     {
         $lang = $request->header('lang', 'en');  // Set locale from header
+        App::setLocale($lang);
+
 
         // Check for token validity
         if (!CheckToken()) {
@@ -129,7 +134,14 @@ class ProductUnitController extends Controller
         $product_id = $request->product_id;
         $unit_id = $request->unit_id;
         $factor = $request->factor;
-
+        $unit = Unit::find($unit_id);
+        if (!$unit) {
+            return  RespondWithBadRequestNotExist();
+        }
+        $product = Product::find($product_id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
         // Get the ID of the authenticated user
         $created_by = Auth::guard('api')->user()->id;
 
@@ -148,6 +160,8 @@ class ProductUnitController extends Controller
     public function update(Request $request, $id)
     {
         $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -161,9 +175,24 @@ class ProductUnitController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
+        $product_id = $request->product_id;
+        $unit_id = $request->unit_id;
+        $unit = Unit::find($unit_id);
+        if (!$unit) {
+            return  RespondWithBadRequestNotExist();
+        }
+        $product = Product::find($product_id);
+        if (!$product) {
+            return  RespondWithBadRequestNotExist();
+        }
 
         // Retrieve the unit by ID, or throw an exception if not found
-        $productUnit = ProductUnit::findOrFail($id);
+        $productUnit = ProductUnit::find($id);
+        if (
+            $productUnit->product_id == $request->product_id && $productUnit->unit_id == $request->unit_id && $productUnit->factor == $request->factor
+        ) {
+            return  RespondWithBadRequestNoChange();
+        }
         $factor = $request->factor;
 
         $modify_by = Auth::guard('api')->user()->id;
@@ -182,11 +211,16 @@ class ProductUnitController extends Controller
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        App::setLocale($lang);
+
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the unit by ID, or throw a 404 if not found
-        $productUnit = ProductUnit::findOrFail($id);
+        $productUnit = ProductUnit::find($id);
+        if (!$productUnit) {
+            return  RespondWithBadRequestNotExist();
+        }
 
         // Delete the unit
         $productUnit->delete();
