@@ -10,14 +10,15 @@ class RecipeAddon extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'recipe_addons';
-
     protected $fillable = [
         'recipe_id',
         'addon_id',
+        'product_id',
+        'product_unit_id',
+        'quantity',
+        'price',
     ];
 
-    // Relationships
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);
@@ -26,5 +27,15 @@ class RecipeAddon extends Model
     public function addon()
     {
         return $this->belongsTo(Addon::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function productUnit()
+    {
+        return $this->belongsTo(ProductUnit::class, 'product_unit_id');
     }
 }
