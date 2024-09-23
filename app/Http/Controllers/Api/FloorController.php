@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class FloorController extends Controller
 {
@@ -16,28 +16,28 @@ class FloorController extends Controller
 
     public function index(Request $request)
     {
-        try{
+        try {
             $lang =  $request->header('lang', 'en');
             $floors = Floor::with('tables')->get();
             return ResponseWithSuccessData($lang, $floors, 1);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
 
     public function add(Request $request)
     {
-        try{
+        try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
-                'name_ar'=>'required',
-                'name_en'=>'required',
-                'type'=>'required|integer|min:1',
-                'smoking'=>'required|integer|min:1'
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'type' => 'required|integer|min:1',
+                'smoking' => 'required|integer|min:1'
             ]);
 
-            if($validateData->fails()){
-                return RespondWithBadRequestWithData( $validateData->errors());
+            if ($validateData->fails()) {
+                return RespondWithBadRequestWithData($validateData->errors());
             }
 
             $user_id = Auth::guard('api')->user()->id;
@@ -50,25 +50,25 @@ class FloorController extends Controller
             $floor->save();
 
             return ResponseWithSuccessData($lang, $floor, 1);
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
 
     public function edit(Request $request)
     {
-        try{
+        try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'id' => 'required|exists:floors,id',
-                'name_ar'=>'required',
-                'name_en'=>'required',
-                'type'=>'required|integer|min:1',
-                'smoking'=>'required|integer|min:1'
+                'name_ar' => 'required',
+                'name_en' => 'required',
+                'type' => 'required|integer|min:1',
+                'smoking' => 'required|integer|min:1'
             ]);
 
-            if($validateData->fails()){
-                return RespondWithBadRequestWithData( $validateData->errors());
+            if ($validateData->fails()) {
+                return RespondWithBadRequestWithData($validateData->errors());
             }
 
             $user_id = Auth::guard('api')->user()->id;
@@ -81,19 +81,19 @@ class FloorController extends Controller
             $floor->save();
 
             return ResponseWithSuccessData($lang, $floor, 1);
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
 
     public function delete(Request $request, $id)
     {
-        try{
+        try {
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
             $floor = Floor::findOrFail($request->id);
-            if(!$floor){
+            if (!$floor) {
                 return  RespondWithBadRequestNotExist();
             }
 
@@ -101,12 +101,10 @@ class FloorController extends Controller
             $floor->save();
 
             $floor->delete();
-            
+
             return RespondWithSuccessRequest($lang, 1);
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
-
 }
