@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Recipe extends Model
+class RecipeCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -15,22 +14,32 @@ class Recipe extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'category_id',
-        'price',
+        'parent_id',
+        'image_path',
         'is_active',
         'created_by',
         'modified_by',
         'deleted_by',
     ];
 
-    public function ingredients()
+    // Relationships
+
+    // Self-referential relationship for parent category
+    public function parent()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->belongsTo(RecipeCategory::class, 'parent_id');
     }
 
-    public function images()
+    // Self-referential relationship for child categories
+    public function children()
     {
-        return $this->hasMany(RecipeImage::class);
+        return $this->hasMany(RecipeCategory::class, 'parent_id');
+    }
+
+    // Relationship with recipes
+    public function recipes()
+    {
+        return $this->hasMany(Recipe::class, 'category_id');
     }
 
     public function creator()
@@ -46,19 +55,5 @@ class Recipe extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(RecipeCategory::class, 'category_id');
-    }
-        public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    public function addons()
-    {
-        return $this->belongsToMany(Addon::class, 'recipe_addons');
     }
 }
