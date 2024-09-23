@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('order_details', function (Blueprint $table) {
             if (Schema::hasColumn('order_details', 'addon_id')) {
-                $table->dropForeign(['addon_id']);
                 $table->dropColumn('addon_id');
             }
         });
@@ -29,12 +28,5 @@ return new class extends Migration
             $table->dropColumn('addon_id');
         });
 
-        Schema::table('order_details', function (Blueprint $table) {
-            // Restore the `addon_id` column as unsignedBigInteger
-            $table->unsignedBigInteger('addon_id');
-
-            // Re-add the foreign key constraint
-            $table->foreign('addon_id')->references('id')->on('addons');
-        });
     }
 };
