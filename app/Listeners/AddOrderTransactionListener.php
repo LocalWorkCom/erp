@@ -78,8 +78,8 @@ class AddOrderTransactionListener
 
                 event(new ProductTransactionEvent($add_store_items));
 
-                if(count($order_details->addons) > 0){
-                    $addons = implode(',',$order_details->addons);
+                if(count($order_details->addon_id) > 0){
+                    $addons = implode(',',$order_details->addon_id);
                     foreach($addons as $addons_details){
 
                         $store_id = ProductTransaction::where('product_id', $addons_details->product_id)->first()->store_id;
