@@ -78,4 +78,9 @@ class Recipe extends Model
     {
         return $query->where('is_active', true);
     }
+     // Relationship with Addons
+     public function addons()
+     {
+         return $this->belongsToMany(Addon::class, 'recipe_addons');
+     }
 }
