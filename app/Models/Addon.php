@@ -13,14 +13,12 @@ class Addon extends Model
     protected $fillable = [
         'name_en',
         'name_ar',
-        'price',
         'is_active',
         'created_by',
         'modified_by',
         'deleted_by',
     ];
 
-    // Relationships
     public function recipes()
     {
         return $this->belongsToMany(Recipe::class, 'recipe_addons');
