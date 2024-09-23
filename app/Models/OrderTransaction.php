@@ -21,7 +21,9 @@ class OrderTransaction extends Model
         'paid',
         'date',
         'refund',
-        'order_id'
+        'order_id',
+        'coupon_id',
+        'discount_id'
     ];
 
     protected $hidden = [
