@@ -49,14 +49,6 @@ class AuthController extends Controller
         $user->save();
 
 
-        // Create Client Address
-        $clientAddress = new ClientAddress();
-        $clientAddress->address = $request->address;
-        $clientAddress->city = $request->city;
-        $clientAddress->state = $request->state;
-        $clientAddress->postal_code = $request->postal_code ?? null;
-        $clientAddress->save();
-
         // Create Client Details
         $clientDetail = new ClientDetail();
         $clientDetail->user_id = $user->id;
@@ -65,9 +57,18 @@ class AuthController extends Controller
         $clientDetail->email = $request->email;
         $clientDetail->password = $request->password;
         $clientDetail->phone_number = $request->phone;
-        $clientDetail->address_id = $clientAddress->id;
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
+
+        // Create Client Address
+        $clientAddress = new ClientAddress();
+        $clientAddress->client_details_id = $clientDetail->id;
+        $clientAddress->address = $request->address;
+        $clientAddress->city = $request->city;
+        $clientAddress->state = $request->state;
+        $clientAddress->postal_code = $request->postal_code ?? null;
+        $clientAddress->save();
+
 
 
         // Response
@@ -155,9 +156,6 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Check if the user has the correct flag
-        if ($user->flag !== 0) {
-            return RespondWithBadRequestData($lang, 2);
-        }
 
         if (Hash::check($request->password, $user->password) == true) {
             return RespondWithBadRequest($lang, 3);
@@ -184,7 +182,28 @@ class AuthController extends Controller
     {
         $lang = $request->header('lang', 'en');
         App::setLocale($lang);
-        $userdata = User::with('country')->where('id', Auth::id())->first();
-        return ResponseWithSuccessData($lang, $userdata, 1);
+
+        $user = Auth::user();
+
+        $clientDetails = $user->clientDetails()->with('addresses')->first();
+
+        // Check if the client details exist
+        if (!$clientDetails) {
+            return response()->json([
+                "status" => false,
+                "message" => $lang == 'ar'
+                    ? 'لم يتم العثور على تفاصيل العميل'
+                    : "Client details not found"
+            ], 404);
+        }
+
+        // Return the client details along with related addresses
+        return response()->json([
+            "status" => true,
+            "message" => $lang == 'ar'
+                ? 'تم عرض تفاصيل العميل بنجاح'
+                : "Client details retrieved successfully",
+            "data" => $clientDetails
+        ]);
     }
 }
