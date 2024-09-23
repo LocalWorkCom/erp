@@ -10,6 +10,8 @@ class ClientDetail extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'client_details';
+
     protected $fillable = [
         'first_name',
         'last_name',
