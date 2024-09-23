@@ -136,11 +136,11 @@ class ProductUnitController extends Controller
         $factor = $request->factor;
         $unit = Unit::find($unit_id);
         if (!$unit) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // Get the ID of the authenticated user
         $created_by = Auth::guard('api')->user()->id;
@@ -179,19 +179,21 @@ class ProductUnitController extends Controller
         $unit_id = $request->unit_id;
         $unit = Unit::find($unit_id);
         if (!$unit) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
-
+        if (CheckExistColumnValue('product_units', 'product_id', $request->product_id) && CheckExistColumnValue('product_units', 'unit_id', $request->unit_id)) {
+            return RespondWithBadRequest($lang, 9);
+        }
         // Retrieve the unit by ID, or throw an exception if not found
         $productUnit = ProductUnit::find($id);
         if (
             $productUnit->product_id == $request->product_id && $productUnit->unit_id == $request->unit_id && $productUnit->factor == $request->factor
         ) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang,10);
         }
         $factor = $request->factor;
 
@@ -219,7 +221,7 @@ class ProductUnitController extends Controller
         // Find the unit by ID, or throw a 404 if not found
         $productUnit = ProductUnit::find($id);
         if (!$productUnit) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
 
         // Delete the unit

@@ -66,11 +66,14 @@ class ProductColorController extends Controller
         $color_id = $request->color_id;
         $size = Color::find($color_id);
         if (!$size) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
+        }
+        if (CheckExistColumnValue('product_colors', 'product_id', $request->product_id) && CheckExistColumnValue('product_colors', 'color_id', $request->color_id)) {
+            return RespondWithBadRequest($lang, 9);
         }
         // Get the ID of the authenticated user
         $created_by = Auth::guard('api')->user()->id;
@@ -107,17 +110,20 @@ class ProductColorController extends Controller
         $color_id = $request->color_id;
         $color = Color::find($color_id);
         if (!$color) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
+        }
+        if (CheckExistColumnValue('product_colors', 'product_id', $request->product_id) && CheckExistColumnValue('product_colors', 'color_id', $request->color_id)) {
+            return RespondWithBadRequest($lang, 9);
         }
         $productColor = ProductColor::find($id);
         if (
             $productColor->product_id == $request->product_id && $productColor->color_id == $request->color_id
         ) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang, 10);
         }
 
         // Retrieve the unit by ID, or throw an exception if not found
@@ -145,7 +151,7 @@ class ProductColorController extends Controller
         // Find the unit by ID, or throw a 404 if not found
         $productColor = ProductColor::find($id);
         if (!$productColor) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
 
         // Delete the unit

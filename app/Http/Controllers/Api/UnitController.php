@@ -74,6 +74,9 @@ class UnitController extends Controller
         $name_ar = $request->name_ar;
         $name_en = $request->name_en;
 
+        if (CheckExistColumnValue('units', 'name_ar', $name_ar) || CheckExistColumnValue('units', 'name_ar', $name_ar)) {
+            return RespondWithBadRequest($lang, 9);
+        }
         $created_by = Auth::guard('api')->user()->id;
 
 
@@ -107,12 +110,16 @@ class UnitController extends Controller
         // Retrieve the unit by ID, or throw an exception if not found
         $unit = Unit::find($id);
         if (!$unit) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         if (
             $unit->name_ar == $request->name_ar && $unit->name_en == $request->name_en
         ) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang, 10);
+        }
+
+        if (CheckExistColumnValue('units', 'name_ar', $request->name_ar) || CheckExistColumnValue('units', 'name_en', $request->name_en)) {
+            return RespondWithBadRequest($lang, 9);
         }
         $modify_by = Auth::guard('api')->user()->id;
 
@@ -139,7 +146,7 @@ class UnitController extends Controller
         // Find the unit by ID, or throw a 404 if not found
         $unit = Unit::find($id);
         if (!$unit) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // Delete the unit
         $unit->delete();

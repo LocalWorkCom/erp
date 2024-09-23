@@ -101,7 +101,9 @@ class ProductController extends Controller
         // Generate product code
         $GetLastID = GetLastID('products');
         $code = GenerateCode('products', $GetLastID);
-
+        if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
+            return RespondWithBadRequest($lang, 9);
+        }
         // Create a new product
         $product = new Product();
         $product->name_ar = $request->name_ar;
@@ -185,7 +187,7 @@ class ProductController extends Controller
         // Find the product by ID
         $product = Product::find($id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // dd($category, $request);
         if (
@@ -194,7 +196,10 @@ class ProductController extends Controller
             && $product->is_remind == $request->is_remind  && $product->main_unit_id == $request->main_unit_id  && $product->currency_code == $request->currency_code  && $product->category_id == $request->category_id
             && $product->sku == $request->sku  && $product->barcode == $request->barcode
         ) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang,10);
+        }
+        if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
+            return RespondWithBadRequest($lang, 9);
         }
         // Update the product attributes
         $product->name_ar = $request->name_ar;
@@ -256,7 +261,7 @@ class ProductController extends Controller
         // Find the category by ID, or throw a 404 if not found
         $product = Product::find($id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
         // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
