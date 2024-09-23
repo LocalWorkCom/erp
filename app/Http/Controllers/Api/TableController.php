@@ -44,7 +44,7 @@ class TableController extends Controller
 
             $check_tabel_number = Table::where('table_number', $request->table_number)->first();
             if ($check_tabel_number) {
-                return RespondWithBadRequestDataExist();
+                return RespondWithBadRequestData($lang, 9);
             }
 
             $user_id = Auth::guard('api')->user()->id;
@@ -84,7 +84,7 @@ class TableController extends Controller
 
             $check_tabel_number = Table::where('table_number', $request->table_number)->where('id', '!=', $request->id)->first();
             if ($check_tabel_number) {
-                return RespondWithBadRequestDataExist();
+                return RespondWithBadRequestData($lang, 9);
             }
 
             $user_id = Auth::guard('api')->user()->id;

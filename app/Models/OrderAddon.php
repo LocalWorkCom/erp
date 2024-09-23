@@ -15,19 +15,10 @@ class Order extends Model
 
     // The attributes that are mass assignable
     protected $fillable = [
-        'status',
-        'type',
-        'note',
-        'order_number',
-        'tax_value',
-        'fees',
-        'delivery_fees',
-        'total_price_befor_tax',
-        'total_price_after_tax',
-        'client_id',
-        'table_id',
-        'coupon_id',
-        'discount_id'
+        'price',
+        'quantity',
+        'order_id',
+        'recipe_addon_id'
     ];
 
     protected $hidden = [
@@ -42,12 +33,12 @@ class Order extends Model
     ];
 
     // Define relationships
-    public function Client()
+    public function Order()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(Order::class, 'order_id');
     }
-    public function Table()
+    public function Addon()
     {
-        return $this->belongsTo(Table::class, 'table_id');
+        return $this->belongsTo(Addon::class, 'addon_id');
     }
 }

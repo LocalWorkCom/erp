@@ -19,7 +19,7 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $sizes = Size::where('deleted_at',null)->get();
+            $sizes = Size::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $sizes, 1);
         } catch (\Exception $e) {
@@ -53,13 +53,16 @@ class SizeController extends Controller
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
+            }
 
+            if (CheckExistColumnValue('sizes', 'name_ar', $request->name_ar) || CheckExistColumnValue('sizes', 'name_en', $request->name_en)) {
+                return RespondWithBadRequest($lang, 9);
             }
             $size = new Size();
             $size->name_ar = $request->name_ar;
             $size->name_en = $request->name_en;
             $size->category_id = $request->category_id;
-            $size->created_by =auth()->id();
+            $size->created_by = auth()->id();
             $size->save();
             return ResponseWithSuccessData($lang, $size, 1);
         } catch (\Exception $e) {
@@ -107,13 +110,12 @@ class SizeController extends Controller
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
-
             }
             $size = Size::findOrFail($request->input('id'));
             $size->name_ar = $request->name_ar;
             $size->name_en = $request->name_en;
             $size->category_id = $request->category_id;
-            $size->modified_by =auth()->id();
+            $size->modified_by = auth()->id();
 
             $size->save();
 
@@ -131,15 +133,14 @@ class SizeController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $size = Size::findOrFail($request->input('id'));
-            $is_allow = ProductSize::where('size_id',$request->input('id'))->first();
-            if($is_allow){
+            $is_allow = ProductSize::where('size_id', $request->input('id'))->first();
+            if ($is_allow) {
                 return RespondWithBadRequestData($lang, 5);
-            }else{
-                $size->deleted_by =auth()->id();
-                $size->deleted_at =Carbon::now();
+            } else {
+                $size->deleted_by = auth()->id();
+                $size->deleted_at = Carbon::now();
 
                 return ResponseWithSuccessData($lang, $size, 1);
-
             }
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);

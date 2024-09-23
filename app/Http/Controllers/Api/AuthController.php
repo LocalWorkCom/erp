@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientAddress;
+use App\Models\ClientDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +20,17 @@ class AuthController extends Controller
         App::setLocale($lang);
 
         $validator = Validator::make($request->all(), [
-            "name" => "required",
+            "first_name" => "required|string",
+            "last_name" => "required|string",
             "email" => "required|email|unique:users",
             'country_id' => 'required',
             "password" => "required",
             'phone' => 'required',
+            "city" => "nullable|string",
+            "state" => "nullable|string",
+            "postal_code" => "nullable|string",
+            "date_of_birth" => "nullable|date",
+            "address" => "nullable|string",
 
         ]);
 
@@ -30,14 +38,37 @@ class AuthController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
+        //  Create User
         $user = new User();
-        $user->name = $request->name;
+        $user->name = $request->first_name . ' ' . $request->last_name;
         $user->email = $request->email;
-        $user->flag = 0;
+        $user->flag = 1;
         $user->phone = $request->phone;
         $user->country_id = $request->country_id;
         $user->password = Hash::make($request->password);
         $user->save();
+
+
+        // Create Client Address
+        $clientAddress = new ClientAddress();
+        $clientAddress->address = $request->address;
+        $clientAddress->city = $request->city;
+        $clientAddress->state = $request->state;
+        $clientAddress->postal_code = $request->postal_code ?? null;
+        $clientAddress->save();
+
+        // Create Client Details
+        $clientDetail = new ClientDetail();
+        $clientDetail->user_id = $user->id;
+        $clientDetail->first_name = $request->first_name;
+        $clientDetail->last_name = $request->last_name;
+        $clientDetail->email = $request->email;
+        $clientDetail->password = $request->password;
+        $clientDetail->phone_number = $request->phone;
+        $clientDetail->address_id = $clientAddress->id;
+        $clientDetail->date_of_birth = $request->date_of_birth;
+        $clientDetail->save();
+
 
         // Response
         return response()->json([
@@ -61,7 +92,6 @@ class AuthController extends Controller
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
-
             }
 
             // Attempt to authenticate the user
@@ -70,20 +100,17 @@ class AuthController extends Controller
                 "password" => $request->password
             ])) {
                 $user = Auth::user();
-                
-                // Check the user's flag (e.g., if account is active)
-                if ($user->flag == 0) {
-                    
+
+                // Check if the user is a client
+                if ($user->flag == 1) {
                     $token = $user->createToken("myToken")->accessToken;
                     $data = [
                         "access_token" => $token,
                         'data' => $user
                     ];
-
                     return ResponseWithSuccessData($lang, $data, 1);
                 } else {
                     Auth::logout();
-
                     return response()->json([
                         "status" => false,
                         "message" => $lang == 'ar'
@@ -92,7 +119,6 @@ class AuthController extends Controller
                     ]);
                 }
             } else {
-                // Authentication failed (incorrect credentials)
                 return response()->json([
                     "status" => false,
                     "message" => $lang == 'ar'
@@ -125,7 +151,6 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
-
         }
         $user = User::where('email', $request->email)->first();
 

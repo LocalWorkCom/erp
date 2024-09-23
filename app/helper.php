@@ -222,6 +222,7 @@ if (!function_exists('DeleteFile')) {
         }
     }
 }
+//not used
 function RespondWithBadRequestNoChange()
 {
     $response_array = array(
@@ -235,7 +236,7 @@ function RespondWithBadRequestNoChange()
     $response = Response::json($response_array, $response_code);
     return $response;
 }
-
+//not used
 function RespondWithBadRequestNotExist()
 {
     $response_array = array(
@@ -245,13 +246,13 @@ function RespondWithBadRequestNotExist()
         'apiCode' => -1,
         'data'   => []
     );
-    
+
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;  
-    
+    $response_code = 404;
+
     return Response::json($response_array, $response_code);
 }
-
+//not used
 function RespondWithBadRequestDataExist()
 {
     $response_array = array(
@@ -261,9 +262,19 @@ function RespondWithBadRequestDataExist()
         'apiCode' => -1,
         'data'   => []
     );
-    
+
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;  
-    
+    $response_code = 404;
+
     return Response::json($response_array, $response_code);
+}
+
+function CheckExistColumnValue($table, $column, $value)
+{
+
+    $exist = DB::table($table)->where($column, $value)->exist();
+    if ($exist) {
+        return true;
+    }
+    return false;
 }
