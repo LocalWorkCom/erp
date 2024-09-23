@@ -234,6 +234,26 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [TableController::class, 'delete']);
     });
 
+    // Discounts routes
+    Route::prefix('discounts')->group(function () {
+        Route::get('/', [DiscountController::class, 'index']); // Get all active or soft-deleted discounts
+        Route::post('/', [DiscountController::class, 'store']); // Create a new discount
+        Route::get('/{id}', [DiscountController::class, 'show']); // Get details of a specific discount
+        Route::put('/{id}', [DiscountController::class, 'update']); // Update an existing discount
+        Route::delete('/{id}', [DiscountController::class, 'destroy']); // Soft delete a discount
+        Route::post('/restore/{id}', [DiscountController::class, 'restore']); // Restore a soft-deleted discount
+    });
+
+    // Coupons routes
+    Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index']); // Get all active or soft-deleted coupons
+        Route::post('/', [CouponController::class, 'store']); // Create a new coupon
+        Route::get('/{id}', [CouponController::class, 'show']); // Get details of a specific coupon
+        Route::put('/{id}', [CouponController::class, 'update']); // Update an existing coupon
+        Route::delete('/{id}', [CouponController::class, 'destroy']); // Soft delete a coupon
+        Route::post('/restore/{id}', [CouponController::class, 'restore']); // Restore a soft-deleted coupon
+    });
+
 });
 
 
