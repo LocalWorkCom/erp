@@ -13,6 +13,7 @@ use App\Models\RecipeAddon;
 use App\Models\StoreTransaction;
 use App\Models\StoreTransactionDetails;
 use App\Models\ProductTransaction;
+use Auth;
 
 class AddOrderTransactionListener
 {
@@ -76,7 +77,7 @@ class AddOrderTransactionListener
                 $add_store_items->store_id = $store_id;
                 $add_store_items->expired_date = "";
 
-                event(new ProductTransactionEvent($add_store_items));
+                event(new OrderTransactionEvent($add_store_items));
 
                 if(count($order_details->orderAddons) > 0){
                     foreach($order_details->orderAddons as $addons_details){
@@ -100,7 +101,7 @@ class AddOrderTransactionListener
                         $add_store_items->user_id = $order->client_id;
                         $add_store_items->store_id = $store_id;
                         $add_store_items->expired_date = "";
-                        event(new ProductTransactionEvent($add_store_items));
+                        event(new OrderTransactionEvent($add_store_items));
                     }
                 }
             }
