@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->string('password');
-            $table->unsignedBigInteger('address_id')->nullable();
             $table->string('image')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->boolean('is_active')->default(true);
@@ -30,7 +29,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('address_id')->references('id')->on('client_addresses')->onDelete('cascade');
         });
     }
 
