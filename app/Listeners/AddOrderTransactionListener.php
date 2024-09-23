@@ -34,7 +34,7 @@ class AddOrderTransactionListener
         $price = 0;
         $user_id = Auth::guard('api')->user()->id;
 
-        $order = Order::with('orderDetails')->where('id', $tracking_order->order_id)->first();
+        $order = Order::with('orderDetails', 'orderDetails.orderAddons')->where('id', $tracking_order->order_id)->first();
         if($order){
                 $add_store_bill = new StoreTransaction();
                 $add_store_bill->type = 1;
@@ -78,13 +78,11 @@ class AddOrderTransactionListener
 
                 event(new ProductTransactionEvent($add_store_items));
 
-                if(count($order_details->addon_id) > 0){
-                    $addons = implode(',',$order_details->addon_id);
-                    foreach($addons as $addons_details){
-
+                if(count($order_details->orderAddons) > 0){
+                    foreach($order_details->orderAddons as $addons_details){
                         $store_id = ProductTransaction::where('product_id', $addons_details->product_id)->first()->store_id;
                         $store_details = Store::with('branch')->where('id', $store_id)->first();
-                        $recipe_addons_details = RecipeAddon::findOrFail($addons_details);
+                        $recipe_addons_details = RecipeAddon::findOrFail($addons_details->recipe_addon_id);
 
                         $add_store_items = new StoreTransactionDetails();
                         $add_store_items->store_transaction_id = $store_transaction_id;
