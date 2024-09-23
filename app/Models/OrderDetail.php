@@ -22,7 +22,6 @@ class OrderDetail extends Model
         'price_after_tax',
         'tax_value',
         'note',
-        'order_id',
         'addon_id',
         'unit_id',
         'recipe_id',

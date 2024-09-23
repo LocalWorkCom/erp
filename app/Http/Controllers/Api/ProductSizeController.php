@@ -52,28 +52,34 @@ class ProductSizeController extends Controller
         }
 
         // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'product_id' => 'required|integer',
-            'size_id' => 'required|integer',
-            'code_size' => 'required'
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'product_id' => 'required|integer',
+                'size_id' => 'required|integer',
+                'code_size' => 'required'
 
-        ]);
+            ]
+        );
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
 
+        if (CheckExistColumnValue('product_sizes', 'product_id', $request->product_id) && CheckExistColumnValue('product_sizes', 'size_id', $request->size_id)) {
+            return RespondWithBadRequest($lang, 9);
+        }
         // Retrieve data from the request
         $product_id = $request->product_id;
         $size_id = $request->size_id;
         $code_size = $request->code_size;
         $size = Size::find($size_id);
         if (!$size) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
 
 
@@ -110,7 +116,9 @@ class ProductSizeController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
-
+        if (CheckExistColumnValue('product_sizes', 'product_id', $request->product_id) && CheckExistColumnValue('product_sizes', 'size_id', $request->size_id)) {
+            return RespondWithBadRequest($lang, 9);
+        }
         // Retrieve the unit by ID, or throw an exception if not found
         $ProductSize = ProductSize::find($id);
         $product_id = $request->product_id;
@@ -119,16 +127,16 @@ class ProductSizeController extends Controller
 
         $size = Size::find($size_id);
         if (!$size) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         $product = Product::find($product_id);
         if (!$product) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         if (
             $ProductSize->product_id == $request->product_id && $ProductSize->size_id == $request->size_id && $ProductSize->code_size == $request->code_size
         ) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang, 10);
         }
         $modify_by = Auth::guard('api')->user()->id;
         // Assign the updated values to the unit model
@@ -155,7 +163,7 @@ class ProductSizeController extends Controller
         // Find the unit by ID, or throw a 404 if not found
         $ProductSize = ProductSize::find($id);
         if (!$ProductSize) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // Delete the unit
         $ProductSize->delete();

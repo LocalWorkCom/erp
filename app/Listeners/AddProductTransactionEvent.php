@@ -30,6 +30,8 @@ class AddProductTransactionEvent
         $today = date('Y-m-d');
         $now_product_count = 0;
         $product_count = $product->count;
+        $user_id = Auth::guard('api')->user()->id;
+
         //$type == 1
         if ($product->type == 1) {
             $all_product_transactions = ProductTransaction::with('products.productUnites')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date', '>=', $today)->get();
@@ -51,11 +53,11 @@ class AddProductTransactionEvent
 
                     $update_product_transaction = ProductTransaction::find($all_product_transaction->id);
                     $update_product_transaction->count = $product_transaction_count;
-                    $update_product_transaction->modified_by = $product->user_id;
+                    $update_product_transaction->modified_by = $user_id;
                     $update_product_transaction->save();
 
                     if ($now_product_count >= 0) {
-                        $this->checkProductStock($product->product_id, $product->user_id);
+                        $this->checkProductStock($product->product_id, $user_id);
                         break;
                     }
                 }
@@ -67,9 +69,9 @@ class AddProductTransactionEvent
             if ($update_product_transaction) {
                 $now_product_count = $update_product_transaction->count + ($product_count * $update_product_transaction->products->productUnites->factor);
                 $update_product_transaction->count = $now_product_count;
-                $update_product_transaction->modified_by = $product->user_id;
+                $update_product_transaction->modified_by = $user_id;
                 $update_product_transaction->save();
-                $this->checkProductStock($product->product_id, $product->user_id);
+                $this->checkProductStock($product->product_id, $user_id);
             } else {
                 $show_product = Product::with('productUnites')->where('product_id', $product->product_id)->first();
                 $add_product_transaction = new ProductTransaction();
@@ -77,9 +79,9 @@ class AddProductTransactionEvent
                 $add_product_transaction->store_id = $product->store_id;
                 $add_product_transaction->count = ($product_count * $show_product->productUnites->factor);
                 $add_product_transaction->expired_date = $product->expired_date;
-                $add_product_transaction->created_by = $product->user_id;
+                $add_product_transaction->created_by = $user_id;
                 $add_product_transaction->save();
-                $this->checkProductStock($product->product_id, $product->user_id);
+                $this->checkProductStock($product->product_id, $user_id);
             }
         }
         //end of $type == 2

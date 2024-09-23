@@ -75,7 +75,9 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
-
+        if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
+            return RespondWithBadRequest($lang, 9);
+        }
 
         $GetLastID = GetLastID('categories');
         // dd($GetLastID);
@@ -141,11 +143,14 @@ class CategoryController extends Controller
         // Retrieve the category by ID, or throw an exception if not found
         $category = Category::find($id);
         if (!$category) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // dd($category, $request);
         if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
-            return  RespondWithBadRequestNoChange();
+            return  RespondWithBadRequestData($lang,10);
+        }
+        if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
+            return RespondWithBadRequest($lang, 9);
         }
         $modify_by = Auth::guard('api')->user()->id;
 
@@ -183,7 +188,7 @@ class CategoryController extends Controller
         // Find the category by ID, or throw a 404 if not found
         $category = Category::find($id);
         if (!$category) {
-            return  RespondWithBadRequestNotExist();
+            return  RespondWithBadRequestData($lang, 8);
         }
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {

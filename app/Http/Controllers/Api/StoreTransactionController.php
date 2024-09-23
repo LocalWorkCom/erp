@@ -52,6 +52,7 @@ class StoreTransactionController extends Controller
 
             $price = 0;
             $total_price = 0;
+            $user_id = Auth::guard('api')->user()->id;
 
             //product is not in this store
             $transaction_check_instore = $this->check_product_instore($request['products'], $request['store_id']);
@@ -76,11 +77,10 @@ class StoreTransactionController extends Controller
             $add_store_bill->to_type = $request['to_type'];
             $add_store_bill->to_id = $request['to_id'];
             $add_store_bill->date = $request['date'];
-            $add_store_bill->store_id = $request['store_id'];
             $add_store_bill->total = count($request['products']);
             $add_store_bill->store_id = $request['store_id'];
             $add_store_bill->user_id = $request['user_id'];
-            $add_store_bill->created_by = $request['user_id'];
+            $add_store_bill->created_by = $user_id;
             $add_store_bill->total_price = $total_price;
             $add_store_bill->save();
 

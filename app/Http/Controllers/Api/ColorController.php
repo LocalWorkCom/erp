@@ -17,7 +17,7 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $colors = Color::where('deleted_at',null)->get();
+            $colors = Color::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $colors, 1);
         } catch (\Exception $e) {
@@ -51,13 +51,15 @@ class ColorController extends Controller
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
-
+            }
+            if (CheckExistColumnValue('colors', 'name_ar', $request->name_ar) || CheckExistColumnValue('colors', 'name_en', $request->name_en)) {
+                return RespondWithBadRequest($lang, 9);
             }
             $color = new Color();
             $color->name_ar = $request->name_ar;
             $color->name_en = $request->name_en;
             $color->hexa_code = $request->hexa_code;
-            $color->created_by =auth()->id();
+            $color->created_by = auth()->id();
             $color->save();
             return ResponseWithSuccessData($lang, $color, 1);
         } catch (\Exception $e) {
@@ -111,13 +113,12 @@ class ColorController extends Controller
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
-
             }
             $color = Color::findOrFail($request->input('id'));
             $color->name_ar = $request->name_ar;
             $color->name_en = $request->name_en;
             $color->hexa_code = $request->hexa_code;
-            $color->modified_by =auth()->id();
+            $color->modified_by = auth()->id();
 
             $color->save();
 
@@ -135,15 +136,14 @@ class ColorController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $color = Color::findOrFail($request->input('id'));
-            $is_allow = ProductColor::where('color_id',$request->input('id'))->first();
-            if($is_allow){
+            $is_allow = ProductColor::where('color_id', $request->input('id'))->first();
+            if ($is_allow) {
                 return RespondWithBadRequestData($lang, 5);
-            }else{
-                $color->deleted_by =auth()->id();
-                $color->deleted_at =Carbon::now();
+            } else {
+                $color->deleted_by = auth()->id();
+                $color->deleted_at = Carbon::now();
 
                 return ResponseWithSuccessData($lang, $color, 1);
-
             }
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
