@@ -272,7 +272,7 @@ function RespondWithBadRequestDataExist()
 function CheckExistColumnValue($table, $column, $value)
 {
 
-    $exist = DB::table($table)->where($column, $value)->exist();
+    $exist = DB::table($table)->where($column, $value)->exists();
     if ($exist) {
         return true;
     }
