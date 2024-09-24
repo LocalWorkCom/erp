@@ -16,7 +16,7 @@ class ShelfController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false); 
 
             $shelves = $withTrashed
@@ -36,7 +36,7 @@ class ShelfController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $shelf = Shelf::withTrashed()->with(['division', 'creator', 'deleter'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $shelf, 1);
         } catch (\Exception $e) {
@@ -50,7 +50,7 @@ class ShelfController extends Controller
      */
     public function store(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -87,7 +87,7 @@ class ShelfController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -123,7 +123,7 @@ class ShelfController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $shelf = Shelf::findOrFail($id);
             $shelf->update(['deleted_by' => auth()->id()]); 
             $shelf->delete(); 
@@ -141,7 +141,7 @@ class ShelfController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $shelf = Shelf::withTrashed()->findOrFail($id);
             $shelf->restore();
 

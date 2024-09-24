@@ -15,7 +15,7 @@ class RecipeController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
             // Fetch recipes with images
@@ -34,7 +34,7 @@ class RecipeController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $recipe = Recipe::withTrashed()->with(['ingredients', 'images'])->findOrFail($id);
 
@@ -49,7 +49,7 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $request->validate([
                 'name_ar' => 'required|string|max:255',
@@ -95,7 +95,7 @@ class RecipeController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $request->validate([
                 'name_ar' => 'required|string|max:255',
@@ -154,7 +154,7 @@ class RecipeController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             // Find the recipe
             $recipe = Recipe::findOrFail($id);
@@ -176,7 +176,7 @@ class RecipeController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             // Find the soft-deleted recipe
             $recipe = Recipe::withTrashed()->findOrFail($id);

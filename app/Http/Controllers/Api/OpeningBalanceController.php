@@ -22,7 +22,7 @@ class OpeningBalanceController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $balance = OpeningBalance::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $balance, 1);
@@ -45,7 +45,7 @@ class OpeningBalanceController extends Controller
     public function store(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
             $validator = Validator::make($request->all(), [
                 'amount' => 'required|integer',
@@ -137,7 +137,7 @@ class OpeningBalanceController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [

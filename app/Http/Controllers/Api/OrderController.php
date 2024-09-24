@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Models\Order;
+use App\Models\OrderAddon;
 use App\Models\OrderDetail;
+use App\Models\OrderTracking;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -23,188 +25,127 @@ class OrderController extends Controller
     public function index(Request $request)
     {
 
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         $orders = Order::all();
 
-        // Define columns that need translation
-        $translateColumns = ['name', 'description']; // Add other columns as needed
+        foreach ($orders as $order) {
+            $order['details'] = OrderDetail::where('order_id', $order->id)->get();
+            $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
+        }
 
-        // Define columns to remove (translated columns)
-        $columnsToRemove = array_map(function ($col) {
-            return [$col . '_ar', $col . '_en'];
-        }, $translateColumns);
-        $columnsToRemove = array_merge(...$columnsToRemove);
-
-        // Map categories to include translated columns and remove unnecessary columns
-        $orders = $orders->map(function ($order) use ($lang, $translateColumns, $columnsToRemove) {
-            // Convert category model to an array
-            $data = $order->toArray();
-
-            // Get translated data
-            $data = translateDataColumns($data, $lang, $translateColumns);
-
-            // Remove translated columns from data
-            $data = removeColumns($data, $columnsToRemove);
-            return $data;
-        });
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
-    // public function store(Request $request)
-    // {
-    //     $lang = $request->header('lang', 'en');
-    //     App::setLocale($lang);
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     $validator = Validator::make($request->all(), [
-    //         'name_ar' => 'required|string',
-    //         'name_en' => 'string',
-    //         'description_ar' => 'nullable|string',
-    //         'description_en' => 'nullable|string',
-    //         'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-    //         'is_freeze' => 'required|boolean',
-    //         'parent_id' => 'nullable|integer',
-    //     ]);
 
-    //     if ($validator->fails()) {
-    //         return RespondWithBadRequestWithData($validator->errors());
-    //     }
-    //     if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-    //         return RespondWithBadRequest($lang, 9);
-    //     }
+    public function store(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+        if (Auth::guard('api')->user()->flag == 0) {
+            return RespondWithBadRequest($lang, 5);
+        } else {
+            $created_by = Auth::guard('api')->user()->id;
+        }
 
-    //     $GetLastID = GetLastID('categories');
-    //     // dd($GetLastID);
+        $validator = Validator::make($request->all(), [
+            'date' => 'required|date', // Must be a valid date
+            'type' => 'required|string', // Required and must be a string
+            'note' => 'nullable|string', // Optional but must be a string
+            'tax_value' => 'required|numeric', // Must be a number
+            'delivery_fees' => 'required|numeric', // Must be a number
+            'fees' => 'required|numeric', // Must be a number
+            'total_price_befor_tax' => 'required|numeric', // Must be a number
+            'total_price_after_tax' => 'required|numeric', // Must be a number
+            'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
+            'discount_id' => 'nullable|exists:discounts,id', // Optional but must exist in the 'discounts' table
+            'coupon_id' => 'nullable|exists:coupons,id', // Optional but must exist in the 'coupons' table
+            'details' => 'required|array', // Must be an array (contains order details)
+            'details.*.quantity' => 'required|integer', // Every detail must have a quantity
+            'details.*.total' => 'required|numeric', // Every detail must have a total
+            'details.*.price_befor_tax' => 'required|numeric', // Every detail must have a price before tax
+            'details.*.price_after_tax' => 'required|numeric', // Every detail must have a price after tax
+            'details.*.tax_value' => 'required|numeric', // Every detail must have a tax value
+            'details.*.note' => 'nullable|string', // Optional note in details
+            'details.*.discount_id' => 'nullable|exists:discounts,id', // Optional discount in details
+            'details.*.coupon_id' => 'nullable|exists:coupons,id', // Optional coupon in details
+            'details.*.product_id' => 'required|exists:products,id', // Product ID must exist in the 'products' table
+            'details.*.recipe_id' => 'nullable|exists:recipes,id', // Optional recipe ID
+            'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
+            'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
+            'addons.*.quantity' => 'required|integer', // Add-ons must have a quantity
+            'addons.*.recipe_addon_id' => 'required|exists:recipe_addons,id', // Add-on recipe must exist
+            'addons.*.price' => 'required|numeric', // Add-on price must be numeric
+        ]);
 
-    //     $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
 
-    //     $name_ar = $request->name_ar;
-    //     $name_en = $request->name_en;
-    //     $description_ar = $request->description_ar;
-    //     $description_en = $request->description_en;
-    //     $image = $request->file('image');  // Handle file upload if necessary
-    //     $code = GenerateCode('categories', ($GetLastID == 1) ? 0 : $GetLastID);
-    //     $is_freeze = $request->is_freeze;
-    //     $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-    //     if ($parent_id) {
-    //         $category = Category::find($parent_id);
-    //         if (!$category) {
-    //             $category_valid['parent_id'] = ['الفئة غير موجودة'];
-    //             return  RespondWithBadRequestWithData($category_valid);
-    //         }
-    //     }
-    //     $created_by = Auth::guard('api')->user()->id;
 
-    //     $category = new Category();
-    //     $category->name_ar = $name_ar;
-    //     $category->name_en =  $name_en;
-    //     $category->description_ar = $description_ar;
-    //     $category->description_en =  $description_en;
-    //     $category->code = $code;
-    //     $category->is_freeze = $is_freeze;
-    //     $category->parent_id =  $parent_id;
-    //     $category->created_by =  $created_by;
-    //     $category->save();
-    //     if ($request->hasFile('image')) {
+        $Order = new Order();
+        $Order->date = date('Y-m-d');
+        $Order->type = $request->type;
+        $Order->note = $request->note;
+        $Order->tax_value = $request->tax_value;
+        $Order->delivery_fees = $request->delivery_fees;
+        $Order->fees = $request->fees;
+        $Order->total_price_befor_tax = $request->total_price_befor_tax;
+        $Order->total_price_after_tax = $request->total_price_after_tax;
+        $Order->table_id = $request->table_id ?? null;
+        $Order->client_id = $created_by;
+        $Order->discount_id = $request->discount_id;
+        $Order->coupon_id = $request->coupon_id;
+        $Order->created_by = $created_by;
+        // while (Order::where('order_number', $Order->order_number)->exists()) {
+        // dd(0);
+        $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
+        $Order->invoice_number = "INV-" . GetNextID("orders") ."-". rand(1111, 9999); // Generate a new number if it exists
+        // }
+        // dd($Order);
+        $Order->save();
 
-    //         UploadFile('images/categories', 'image', $category, $image);
-    //     }
+        // Handle order details
+        $DataOrderDetails = $request->details;
 
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
-    // public function update(Request $request, $id)
-    // {
-    //     $lang = $request->header('lang', 'en');
-    //     App::setLocale($lang);
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     // Validate the input
-    //     $validator = Validator::make($request->all(), [
-    //         'name_ar' => 'required|string',
-    //         'name_en' => 'string',
-    //         'description_ar' => 'nullable|string',
-    //         'description_en' => 'nullable|string',
-    //         'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-    //         'is_freeze' => 'required|boolean',
-    //         'parent_id' => 'nullable|integer',
-    //     ]);
+        foreach ($DataOrderDetails as $DataOrderDetail) {
+            $OrderDetails = new OrderDetail();
+            $OrderDetails->order_id = $Order->id;
+            $OrderDetails->quantity = $DataOrderDetail['quantity'];
+            $OrderDetails->total = $DataOrderDetail['total'];
+            $OrderDetails->price_befor_tax = $DataOrderDetail['price_befor_tax'];
+            $OrderDetails->price_after_tax = $DataOrderDetail['price_after_tax'];
+            $OrderDetails->tax_value = $DataOrderDetail['tax_value'];
+            $OrderDetails->note = $DataOrderDetail['note'];
+            $OrderDetails->product_id = $DataOrderDetail['product_id'];
+            $OrderDetails->recipe_id = $DataOrderDetail['recipe_id'];
+            $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
+            $OrderDetails->created_by = $created_by;
+            $OrderDetails->save();
+        }
 
-    //     if ($validator->fails()) {
-    //         return RespondWithBadRequestWithData($validator->errors());
-    //     }
+        // Handle order add-ons
+        $DataAddons = $request->addons;
 
-    //     // Retrieve the category by ID, or throw an exception if not found
-    //     $category = Category::find($id);
-    //     if (!$category) {
-    //         return  RespondWithBadRequestData($lang, 8);
-    //     }
-    //     // dd($category, $request);
-    //     if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
-    //         return  RespondWithBadRequestData($lang,10);
-    //     }
-    //     if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-    //         return RespondWithBadRequest($lang, 9);
-    //     }
-    //     $modify_by = Auth::guard('api')->user()->id;
+        foreach ($DataAddons as $DataAddon) {
+            $OrderAddons = new OrderAddon();
+            $OrderAddons->order_id = $Order->id;
+            $OrderAddons->quantity = $DataAddon['quantity'];
+            $OrderAddons->recipe_addon_id = $DataAddon['recipe_addon_id'];
+            $OrderAddons->price = $DataAddon['price'];
+            $OrderAddons->created_by = $created_by;
+            $OrderAddons->save();
+        }
+        // add event order tracking
+        $OrderTracking = new OrderTracking();
+        $OrderTracking->order_id = $Order->id;
+        $OrderTracking->save();
 
-    //     // Assign the updated values to the category model
-    //     $category->name_ar = $request->name_ar;
-    //     $category->name_en = $request->name_en;
-    //     $category->description_ar = $request->description_ar;
-    //     $category->description_en = $request->description_en;
-    //     $category->is_freeze = $request->is_freeze;
-    //     $category->modify_by = $modify_by;
-    //     $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
+        $Order['details'] = $OrderDetails;
+        $Order['addon'] = $OrderAddons;
 
-    //     // Handle file upload for the image if provided
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-    //         DeleteFile('images/categories', $category->image);
-    //         UploadFile('images/categories', 'image', $category, $image);
-    //     }
-
-    //     // Update the category in the database
-    //     $category->save();
-
-    //     // Return success response
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
-    // public function delete(Request $request, $id)
-    // {
-    //     // Fetch the language header for response
-    //     $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
-    //     App::setLocale($lang);
-
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     // Find the category by ID, or throw a 404 if not found
-    //     $category = Category::find($id);
-    //     if (!$category) {
-    //         return  RespondWithBadRequestData($lang, 8);
-    //     }
-    //     // Check if there are any products associated with this category
-    //     if ($category->products()->count() > 0) {
-    //         return RespondWithBadRequest($lang, 6);
-    //     }
-
-    //     // Handle deletion of associated image if it exists
-    //     if ($category->image) {
-    //         $imagePath = public_path('images/categories/' . $category->image);
-    //         if (File::exists($imagePath)) {
-    //             File::delete($imagePath);
-    //         }
-    //     }
-
-    //     // Delete the category
-    //     $category->delete();
-
-    //     // Return success response
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
+        return ResponseWithSuccessData($lang, $Order, 1);
+    }
 }

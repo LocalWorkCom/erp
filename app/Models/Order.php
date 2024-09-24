@@ -19,6 +19,7 @@ class Order extends Model
         'type',
         'note',
         'order_number',
+        'invoice_number',
         'tax_value',
         'fees',
         'delivery_fees',
