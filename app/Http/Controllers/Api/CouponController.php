@@ -40,7 +40,10 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $request->validate([
+            
+            dd($request->all());
+    
+            $validatedData = $request->validate([
                 'code' => 'required|string|unique:coupons,code',
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
@@ -50,25 +53,29 @@ class CouponController extends Controller
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
             ]);
-
+    
+            dd($validatedData);
+    
             $coupon = Coupon::create([
-                'code' => $request->code,
-                'type' => $request->type,
-                'value' => $request->value,
-                'minimum_spend' => $request->minimum_spend,
-                'usage_limit' => $request->usage_limit,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'is_active' => $request->is_active,
+                'code' => $validatedData['code'],
+                'type' => $validatedData['type'],
+                'value' => $validatedData['value'],
+                'minimum_spend' => $validatedData['minimum_spend'],
+                'usage_limit' => $validatedData['usage_limit'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'is_active' => $validatedData['is_active'],
                 'created_by' => auth()->id(),
             ]);
-
+    
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error creating coupon: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
+    
+    
 
     public function update(Request $request, $id)
     {
