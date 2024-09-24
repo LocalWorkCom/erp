@@ -16,7 +16,7 @@ class BranchController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false); 
 
             $branches = $withTrashed
@@ -35,7 +35,7 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         // Validation
@@ -87,7 +87,7 @@ class BranchController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $branch = Branch::with(['country', 'creator', 'deleter'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $branch, 1);
         } catch (\Exception $e) {
@@ -101,7 +101,7 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         // Validation
@@ -154,7 +154,7 @@ class BranchController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $branch = Branch::findOrFail($id);
             $branch->update(['deleted_by' => auth()->id()]);
             $branch->delete(); // Soft delete
@@ -171,7 +171,7 @@ class BranchController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $branch = Branch::withTrashed()->findOrFail($id);
             $branch->restore();
             return ResponseWithSuccessData($lang, $branch, 1);

@@ -18,7 +18,7 @@ class SizeController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $sizes = Size::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $sizes, 1);
@@ -41,7 +41,7 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -76,7 +76,7 @@ class SizeController extends Controller
     public function show(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $size = Size::findOrFail($request->input('id'));
             return ResponseWithSuccessData($lang, $size, 1);
         } catch (\Exception $e) {
@@ -98,7 +98,7 @@ class SizeController extends Controller
     public function update(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -131,7 +131,7 @@ class SizeController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $size = Size::findOrFail($request->input('id'));
             $is_allow = ProductSize::where('size_id', $request->input('id'))->first();
             if ($is_allow) {

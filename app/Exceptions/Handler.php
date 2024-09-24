@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (AuthenticationException $e, $request) {
             if ($request->is('api/*')) {
-                $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+                $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
                 return RespondWithBadRequest($lang, 5);
             }

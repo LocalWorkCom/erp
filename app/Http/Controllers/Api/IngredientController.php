@@ -13,7 +13,7 @@ class IngredientController extends Controller
     public function index(Request $request, $recipeId)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $ingredients = Ingredient::where('recipe_id', $recipeId)->with(['product', 'productUnit'])->get();
 
             return ResponseWithSuccessData($lang, $ingredients, 1);
@@ -27,7 +27,7 @@ class IngredientController extends Controller
     public function store(Request $request, $recipeId)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $request->validate([
                 'product_id' => 'required|integer|exists:products,id',
@@ -53,7 +53,7 @@ class IngredientController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $request->validate([
                 'product_id' => 'required|integer|exists:products,id',
@@ -80,7 +80,7 @@ class IngredientController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $ingredient = Ingredient::findOrFail($id);
             $ingredient->delete(); 
 
@@ -95,7 +95,7 @@ class IngredientController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $ingredient = Ingredient::withTrashed()->findOrFail($id);
             $ingredient->restore();
 

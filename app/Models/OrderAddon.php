@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Order extends Model
+class OrderAddon extends Model
 {
     use HasFactory, SoftDeletes;
 
     // Table associated with the model
-    protected $table = 'orders';
+    protected $table = 'order_addons';
 
     // The attributes that are mass assignable
     protected $fillable = [
