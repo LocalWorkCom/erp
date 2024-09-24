@@ -62,9 +62,9 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::get("profile", [ClientController::class, "viewProfile"]);
     Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
-    // Route::get("orders", [ClientController::class, "listOrders"]);
-    // Route::post("order/reorder/{id}", [ClientController::class, "reorder"]);
-    // Route::get("order/track/{id}", [ClientController::class, "trackOrder"]);
+    Route::get("client/orders", [ClientController::class, "listOrders"]);
+    Route::get('client/order/track', [ClientController::class, 'trackOrder']);
+    Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
 
     Route::any("logout", [AuthController::class, "logout"]);
 
@@ -122,7 +122,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
     });
-    
+
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index']);
         Route::post('store', [OrderController::class, 'store']);
