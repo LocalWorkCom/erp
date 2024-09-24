@@ -184,47 +184,30 @@ class ClientController extends Controller
         ]);
     }
 
-    public function trackOrder(Request $request)
+    public function trackOrder(Request $request, $orderId)
     {
         $lang = $request->header('lang', 'en');
         App::setLocale($lang);
 
-        $request->validate([
-            'order_id' => 'nullable|integer',
-        ]);
+        $user = Auth::user();
 
-        $user = auth()->user();
+        $order = Order::where('id', $orderId)
+            ->where('client_id', $user->id)
+            ->first();
 
-        // Check if order_id is provided to track a specific order
-        if ($request->has('order_id')) {
-            $order = Order::where('id', $request->order_id)
-                ->where('client_id', $user->id)
-                ->first();
-
-            if (!$order) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Order not found',
-                ], 404);
-            }
+        if (!$order) {
             return response()->json([
-                'status' => 'success',
-                'order_id' => $order->id,
-                'order_status' => $order->status,
-            ], 200);
+                'status' => false,
+                'message' => $lang == 'ar' ? 'الطلب غير موجود' : 'Order not found'
+            ]);
         }
 
-        // If no order_id is provided, return all orders for the user
-        $orders = Order::where('client_id', $user->id)->get();
-
         return response()->json([
-            'status' => 'success',
-            'orders' => $orders->map(function ($order) {
-                return [
-                    'order_id' => $order->id,
-                    'order_status' => $order->status,
-                ];
-            }),
-        ], 200);
+            'status' => true,
+            'data' => [
+                'order_id' => $order->id,
+                'status' => $order->status,
+            ]
+        ]);
     }
 }
