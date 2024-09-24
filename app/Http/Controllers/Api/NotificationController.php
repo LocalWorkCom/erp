@@ -17,7 +17,7 @@ class NotificationController extends Controller
 
     public function index(Request $request)
     {
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
         $notifications = Notification::all();
         if (!CheckToken()) {

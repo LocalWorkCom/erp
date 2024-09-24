@@ -17,7 +17,7 @@ class VendorController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en'); 
+            $lang = $request->header('lang', 'ar'); 
             $withTrashed = $request->query('withTrashed', false); 
 
             $vendors = $withTrashed
@@ -50,7 +50,7 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en'); 
+            $lang = $request->header('lang', 'ar'); 
     
             // Log incoming request data
             Log::info('Vendor creation request received:', $request->all());
@@ -104,7 +104,7 @@ class VendorController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $vendor = Vendor::withTrashed()->with('country')->findOrFail($id);
 
             $vendorData = [
@@ -130,7 +130,7 @@ class VendorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -176,7 +176,7 @@ class VendorController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $vendor = Vendor::findOrFail($id);
             $vendor->update(['deleted_by' => auth()->id()]);
@@ -195,7 +195,7 @@ class VendorController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
 
             $vendor = Vendor::withTrashed()->findOrFail($id);
             $vendor->restore();
