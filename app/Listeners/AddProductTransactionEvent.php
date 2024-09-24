@@ -44,12 +44,14 @@ class AddProductTransactionEvent
 
             $check_setting = Setting::where('id', 1)->first();
             if($check_setting){
-                if($check_setting->stock_transfer_method === 'fifo'){
-                    $all_product_transactions = $all_product_transactions->orderBy('id','acs')->get;  
+                //if($check_setting->stock_transfer_method === 'fifo'){
+                if($check_setting->stock_transfer_method === 'First In First Out'){
+                        $all_product_transactions = $all_product_transactions->orderBy('id','asc')->get();  
                 }else{
-                    $all_product_transactions = $all_product_transactions->orderBy('id','desc')->get;  
+                    $all_product_transactions = $all_product_transactions->orderBy('id','desc')->get();  
                 }
             }
+
             if ($all_product_transactions) {
                 foreach ($all_product_transactions as $all_product_transaction) {
                     $now_product_count = $all_product_transaction->count - ($product_count * $all_product_transaction->products->productUnites->factor);
