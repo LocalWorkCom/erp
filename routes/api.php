@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
+use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\DiscountController;
 use App\Http\Controllers\Api\OpeningBalanceController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
@@ -24,6 +27,8 @@ use App\Http\Controllers\Api\LineController;
 use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
 use App\Http\Controllers\Api\FloorController;
+use App\Http\Controllers\Api\IngredientController;
+use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 
 
@@ -53,7 +58,13 @@ Route::group(['prefix' => 'api_code'], function () {
 
 Route::group(["middleware" => ["auth:api"]], function () {
 
-    Route::any("profile", [AuthController::class, "profile"]);
+    Route::get("profile", [ClientController::class, "viewProfile"]);
+    Route::post("profile/update", [ClientController::class, "updateProfile"]);
+
+    // Route::get("orders", [ClientController::class, "listOrders"]);
+    // Route::post("order/reorder/{id}", [ClientController::class, "reorder"]);
+    // Route::get("order/track/{id}", [ClientController::class, "trackOrder"]);
+
     Route::any("logout", [AuthController::class, "logout"]);
 
 
@@ -208,7 +219,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [RecipeController::class, 'update']);
         Route::delete('/{id}', [RecipeController::class, 'destroy']);
         Route::post('/restore/{id}', [RecipeController::class, 'restore']);
-    
+
         Route::get('/{recipeId}/ingredients', [IngredientController::class, 'index']);
         Route::post('/{recipeId}/ingredients', [IngredientController::class, 'store']);
         Route::put('/ingredients/{id}', [IngredientController::class, 'update']);
@@ -253,7 +264,4 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/{id}', [CouponController::class, 'destroy']);
         Route::post('/restore/{id}', [CouponController::class, 'restore']);
     });
-
 });
-
-
