@@ -17,7 +17,7 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $countries = Country::where('deleted_at',null)->get();
 
             return ResponseWithSuccessData($lang, $countries, 1);
@@ -29,7 +29,7 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -64,7 +64,7 @@ class CountryController extends Controller
     public function update(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -100,7 +100,7 @@ class CountryController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $size = Country::findOrFail($request->input('id'));
             $is_allow = Branch::where('country_id', $request->input('id'))->first();
             $is_allow2 = User::where('country_id', $request->input('id'))->first();
