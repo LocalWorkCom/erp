@@ -62,8 +62,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
     Route::get("client/orders", [ClientController::class, "listOrders"]);
-    Route::get('client/order/track', [ClientController::class, 'trackOrder']);
     Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+    Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
 
     Route::any("logout", [AuthController::class, "logout"]);
 
