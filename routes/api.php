@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
 use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\TableController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\DiscountController;
 
 
 
