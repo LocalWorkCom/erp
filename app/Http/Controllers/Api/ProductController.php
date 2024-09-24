@@ -63,7 +63,7 @@ class ProductController extends Controller
             foreach ($product_images as $key => $value) {
                 $value->image = BaseUrl() . '/' . $value->image;
             }
-            $product_limits = [];
+            $product_limits = ProductLimit::where('product_id', $data['id'])->get();
 
             $data['product_images'] = $product_images;
             $data['limits'] = $product_limits;
