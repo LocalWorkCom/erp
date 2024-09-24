@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\LineController;
 use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
 use App\Http\Controllers\Api\FloorController;
+use App\Http\Controllers\Api\IngredientController;
+use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 
 
@@ -191,7 +193,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
     });
 
-    // Shelves 
+    // Shelves
     Route::group(['prefix' => 'shelves'], function () {
         Route::get('shelfList', [ShelfController::class, 'index']);
         Route::get('showShelf/{id}', [ShelfController::class, 'show']);
@@ -208,7 +210,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [RecipeController::class, 'update']);
         Route::delete('/{id}', [RecipeController::class, 'destroy']);
         Route::post('/restore/{id}', [RecipeController::class, 'restore']);
-    
+
         Route::get('/{recipeId}/ingredients', [IngredientController::class, 'index']);
         Route::post('/{recipeId}/ingredients', [IngredientController::class, 'store']);
         Route::put('/ingredients/{id}', [IngredientController::class, 'update']);
