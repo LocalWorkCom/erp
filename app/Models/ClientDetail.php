@@ -32,6 +32,6 @@ class ClientDetail extends Model
 
     public function addresses()
     {
-        return $this->hasMany(ClientAddress::class);
+        return $this->hasMany(ClientAddress::class, 'client_details_id');
     }
 }
