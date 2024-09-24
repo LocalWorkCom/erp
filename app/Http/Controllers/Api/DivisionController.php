@@ -15,7 +15,7 @@ class DivisionController extends Controller
     public function index(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
             $divisions = $withTrashed
@@ -64,7 +64,7 @@ class DivisionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         $validator = Validator::make($request->all(), [
             'line_id' => 'required|integer|exists:lines,id',
@@ -98,7 +98,7 @@ class DivisionController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $division = Division::findOrFail($id);
             $division->update(['deleted_by' => auth()->id()]);
             $division->delete();
@@ -115,7 +115,7 @@ class DivisionController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $division = Division::withTrashed()->findOrFail($id);
             $division->restore();
 

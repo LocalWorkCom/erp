@@ -28,13 +28,12 @@ use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
 use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\IngredientController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderRefundController;
+use App\Http\Controllers\Api\OrderTrackingController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
-
-
-
-
-
+use App\Models\Order;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -122,11 +121,25 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
     });
+    
+    Route::group(['prefix' => 'order'], function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::post('store', [OrderController::class, 'store']);
+    });
+    Route::group(['prefix' => 'order_refund'], function () {
+        Route::get('/', [OrderRefundController::class, 'index']);
+        Route::post('store', [OrderRefundController::class, 'store']);
+        Route::post('change_status', [OrderRefundController::class, 'change_status']);
+    });
+    Route::group(['prefix' => 'order_tracking'], function () {
+        Route::post('/', [OrderTrackingController::class, 'index']);
+        Route::post('store', [OrderTrackingController::class, 'store']);
+    });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
         Route::post('store', [UnitController::class, 'store']);
         Route::post('update', [UnitController::class, 'update']);
-        Route::get('delete', [UnitController::class, 'delete']);
+        Route::get('delete/{id}', [UnitController::class, 'delete']);
     });
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notification/store', [NotificationController::class, 'store']);

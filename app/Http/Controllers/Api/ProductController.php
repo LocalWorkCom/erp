@@ -28,7 +28,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
         $products = Product::all();
         if (!CheckToken()) {
@@ -71,7 +71,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // Set locale based on header
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
@@ -157,7 +157,7 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
         if (!CheckToken()) {
@@ -252,7 +252,7 @@ class ProductController extends Controller
     public function delete(Request $request, $id)
     {
         // Fetch the language header for response
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
         if (!CheckToken()) {

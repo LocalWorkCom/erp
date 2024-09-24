@@ -39,7 +39,7 @@ class LineController extends Controller
      */
     public function store(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -75,7 +75,7 @@ class LineController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $line = Line::withTrashed()->with(['store', 'creator', 'deleter'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $line, 1);
         } catch (\Exception $e) {
@@ -88,7 +88,7 @@ class LineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         // Validate the request
         $validator = Validator::make($request->all(), [
@@ -125,7 +125,7 @@ class LineController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $line = Line::findOrFail($id);
             $line->update(['deleted_by' => auth()->id()]);
             $line->delete();
@@ -142,7 +142,7 @@ class LineController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $line = Line::withTrashed()->findOrFail($id);
             $line->restore();
 

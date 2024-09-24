@@ -19,7 +19,7 @@ class ApiCodeController extends Controller
 
     public function index(Request $request)
     {
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
         $api_codes = ApICode::all();
         return ResponseWithSuccessData($lang, $api_codes, 1);
@@ -27,7 +27,7 @@ class ApiCodeController extends Controller
 
     public function store(Request $request)
     {
-        $lang = $request->header('lang', 'en');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
         $api_code_title_ar = $request->api_code_title_ar;
         $api_code_title_en = $request->api_code_title_en;

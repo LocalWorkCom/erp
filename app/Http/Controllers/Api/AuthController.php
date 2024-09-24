@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function Register(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $validator = Validator::make($request->all(), [
@@ -81,7 +81,7 @@ class AuthController extends Controller
     public function Login(Request $request)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             App::setLocale(locale: $lang);  // Set the locale based on the header
 
             // Validate email and password fields
@@ -139,7 +139,7 @@ class AuthController extends Controller
 
     public function reset_password(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $validator = Validator::make($request->all(), [
@@ -172,9 +172,38 @@ class AuthController extends Controller
 
     public function Logout(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
         auth()->user()->token()->revoke();
         return ResponseWithSuccessData($lang, null, 4);
     }
+    public function profile(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        $user = Auth::user();
+
+        $clientDetails = $user->clientDetails()->with('addresses')->first();
+
+        // Check if the client details exist
+        if (!$clientDetails) {
+            return response()->json([
+                "status" => false,
+                "message" => $lang == 'ar'
+                    ? 'لم يتم العثور على تفاصيل العميل'
+                    : "Client details not found"
+            ], 404);
+        }
+
+        // Return the client details along with related addresses
+        return response()->json([
+            "status" => true,
+            "message" => $lang == 'ar'
+                ? 'تم عرض تفاصيل العميل بنجاح'
+                : "Client details retrieved successfully",
+            "data" => $clientDetails
+        ]);
+    }
+
 }
