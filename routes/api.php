@@ -204,7 +204,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreDivision/{id}', [DivisionController::class, 'restore']); // Restore route
     });
 
-    // Shelves 
+    // Shelves
     Route::group(['prefix' => 'shelves'], function () {
         Route::get('shelfList', [ShelfController::class, 'index']);
         Route::get('showShelf/{id}', [ShelfController::class, 'show']);
