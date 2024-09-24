@@ -25,6 +25,6 @@ class ClientAddress extends Model
 
     public function clientDetail()
     {
-        return $this->belongsTo(ClientDetail::class);
+        return $this->belongsTo(ClientDetail::class, 'client_details_id');
     }
 }
