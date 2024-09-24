@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\OpeningBalance;
 use App\Models\ProductTransaction;
+use App\Models\StoreTransaction;
+use App\Models\StoreTransactionDetails;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
+use App\Events\ProductTransactionEvent;
+use Auth;
 
 class OpeningBalanceController extends Controller
 {
@@ -60,8 +65,50 @@ class OpeningBalanceController extends Controller
             $balances->amount = $request->amount;
             $balances->price = $request->price;
             $balances->date = $request->date;
+            $balances->expired_date = $request->expired_date;
             $balances->created_by = auth()->id();
             $balances->save();
+
+            //add product transaction evevt
+            $total_price = 0;
+            $type = 2;
+            $to_type = 1;
+            $store_id = $request->store;
+            $user_id = Auth::guard('api')->user()->id;
+
+            $add_store_bill = new StoreTransaction();
+            $add_store_bill->type = $type;
+            $add_store_bill->to_type = $to_type;
+            $add_store_bill->to_id = $request->store;
+            $add_store_bill->date = date('Y-m-d');
+            $add_store_bill->total = 1;
+            $add_store_bill->store_id = $store_id;
+            $add_store_bill->user_id = 1;
+            $add_store_bill->created_by = $user_id;
+            $add_store_bill->total_price = $total_price;
+            $add_store_bill->save();
+
+            $store_transaction_id = $add_store_bill->id;
+            $product_details = Product::findOrFail($request->product);
+
+            $add_store_items = new StoreTransactionDetails();
+            $add_store_items->store_transaction_id = $store_transaction_id;
+            $add_store_items->product_id = $request->product;
+            $add_store_items->product_unit_id = $product_details->main_unit_id;
+            $add_store_items->country_id = $product_details->currency_code;
+            $add_store_items->count = $request->amount;
+            $add_store_items->price = $request->price;
+            $add_store_items->total_price = ($request->amount * $request->price);
+            $add_store_items->save();
+            $add_store_items->type = $type;
+            $add_store_items->to_type = $to_type;
+            $add_store_items->user_id = 1;
+            $add_store_items->store_id = $store_id;
+            $add_store_items->expired_date = $request->expired_date;
+
+            event(new ProductTransactionEvent($add_store_items));
+            //end of add product transaction evevt
+
             return ResponseWithSuccessData($lang, $balances, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -128,6 +175,7 @@ class OpeningBalanceController extends Controller
             $balances->amount = $request->amount;
             $balances->price = $request->price;
             $balances->date = $request->date;
+            $balances->expired_date = $request->expired_date;
             $balances->modified_by = auth()->id();
             $balances->save();
 

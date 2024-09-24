@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('opening_balance', function (Blueprint $table) {
+        Schema::create('opening_balances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('store_id');
