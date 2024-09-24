@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('opening_balances', function (Blueprint $table) {
+        Schema::table('opening_balance', function (Blueprint $table) {
             $table->date('expired_date')->nullable();
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('opening_balances', function (Blueprint $table) {
+        Schema::table('opening_balance', function (Blueprint $table) {
             //
         });
     }
