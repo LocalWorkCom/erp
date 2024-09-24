@@ -33,17 +33,8 @@ use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
-<<<<<<< HEAD
-
-
-
-
-
-=======
 use App\Models\Order;
-use App\Http\Controllers\Api\CouponController;
-use App\Http\Controllers\Api\DiscountController;
->>>>>>> b445b391314e4131faac05ac1e6103cee50a8f46
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
