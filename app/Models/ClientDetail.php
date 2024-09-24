@@ -17,7 +17,6 @@ class ClientDetail extends Model
         'last_name',
         'email',
         'phone_number',
-        'password',
         'address_id',
         'image',
         'date_of_birth',
