@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('settings', function (Blueprint $table) {
-            $table->id();
-            $table->enum('stock_transfer_method', ['fifo', 'lifo'])
-                ->default('fifo')->comment('fifo "First In First Out", lifo "Last In First Out"');
-            $table->timestamps();
+        Schema::table('client_details', function (Blueprint $table) {
+            $table->dropColumn('password');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('settings');
+        Schema::table('client_details', function (Blueprint $table) {
+            $table->string('password');
+        });
     }
 };

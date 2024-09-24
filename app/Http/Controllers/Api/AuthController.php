@@ -23,14 +23,14 @@ class AuthController extends Controller
             "first_name" => "required|string",
             "last_name" => "required|string",
             "email" => "required|email|unique:users",
-            'country_id' => 'required',
+            'country_id' => 'required|exists:countries,id',
             "password" => "required",
-            'phone' => 'required',
-            "city" => "nullable|string",
-            "state" => "nullable|string",
+            'phone' => 'required|unique:users,phone',
+            "city" => "required|string",
+            "state" => "required|string",
             "postal_code" => "nullable|string",
             "date_of_birth" => "nullable|date",
-            "address" => "nullable|string",
+            "address" => "required|string",
 
         ]);
 
@@ -55,7 +55,6 @@ class AuthController extends Controller
         $clientDetail->first_name = $request->first_name;
         $clientDetail->last_name = $request->last_name;
         $clientDetail->email = $request->email;
-        $clientDetail->password = $request->password;
         $clientDetail->phone_number = $request->phone;
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
@@ -206,4 +205,5 @@ class AuthController extends Controller
             "data" => $clientDetails
         ]);
     }
+
 }

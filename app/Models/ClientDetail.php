@@ -17,7 +17,6 @@ class ClientDetail extends Model
         'last_name',
         'email',
         'phone_number',
-        'password',
         'address_id',
         'image',
         'date_of_birth',
@@ -32,6 +31,6 @@ class ClientDetail extends Model
 
     public function addresses()
     {
-        return $this->hasMany(ClientAddress::class);
+        return $this->hasMany(ClientAddress::class, 'client_details_id');
     }
 }
