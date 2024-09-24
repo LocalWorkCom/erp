@@ -234,7 +234,25 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [TableController::class, 'delete']);
     });
 
+    // Discount 
+    Route::prefix('discounts')->group(function () {
+        Route::get('/', [DiscountController::class, 'index']);
+        Route::post('/', [DiscountController::class, 'store']);
+        Route::get('/{id}', [DiscountController::class, 'show']);
+        Route::put('/{id}', [DiscountController::class, 'update']);
+        Route::delete('/{id}', [DiscountController::class, 'destroy']);
+        Route::post('/restore/{id}', [DiscountController::class, 'restore']);
+    });
 
+    // Coupon 
+    Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index']);
+        Route::post('/', [CouponController::class, 'store']);
+        Route::get('/{id}', [CouponController::class, 'show']);
+        Route::put('/{id}', [CouponController::class, 'update']);
+        Route::delete('/{id}', [CouponController::class, 'destroy']);
+        Route::post('/restore/{id}', [CouponController::class, 'restore']);
+    });
 
 });
 
