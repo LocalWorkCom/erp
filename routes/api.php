@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\OpeningBalanceController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\Api\ProductUnitController;
@@ -27,6 +28,8 @@ use App\Http\Controllers\Api\FloorController;
 use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
+use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\DiscountController;
 
 
 
@@ -55,7 +58,13 @@ Route::group(['prefix' => 'api_code'], function () {
 
 Route::group(["middleware" => ["auth:api"]], function () {
 
-    Route::any("profile", [AuthController::class, "profile"]);
+    Route::get("profile", [ClientController::class, "viewProfile"]);
+    Route::post("profile/update", [ClientController::class, "updateProfile"]);
+
+    // Route::get("orders", [ClientController::class, "listOrders"]);
+    // Route::post("order/reorder/{id}", [ClientController::class, "reorder"]);
+    // Route::get("order/track/{id}", [ClientController::class, "trackOrder"]);
+
     Route::any("logout", [AuthController::class, "logout"]);
 
 
@@ -236,8 +245,23 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [TableController::class, 'delete']);
     });
 
+    // Discount
+    Route::prefix('discounts')->group(function () {
+        Route::get('/', [DiscountController::class, 'index']);
+        Route::post('/', [DiscountController::class, 'store']);
+        Route::get('/{id}', [DiscountController::class, 'show']);
+        Route::put('/{id}', [DiscountController::class, 'update']);
+        Route::delete('/{id}', [DiscountController::class, 'destroy']);
+        Route::post('/restore/{id}', [DiscountController::class, 'restore']);
+    });
 
-
+    // Coupon
+    Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index']);
+        Route::post('/', [CouponController::class, 'store']);
+        Route::get('/{id}', [CouponController::class, 'show']);
+        Route::put('/{id}', [CouponController::class, 'update']);
+        Route::delete('/{id}', [CouponController::class, 'destroy']);
+        Route::post('/restore/{id}', [CouponController::class, 'restore']);
+    });
 });
-
-
