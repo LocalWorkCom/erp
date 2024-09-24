@@ -278,5 +278,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [CouponController::class, 'update']);
         Route::delete('/{id}', [CouponController::class, 'destroy']);
         Route::post('/restore/{id}', [CouponController::class, 'restore']);
+        // ok
     });
 });
