@@ -33,8 +33,6 @@ use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
-use App\Models\Order;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
