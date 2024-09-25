@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +13,13 @@ class Ingredient extends Model
         'recipe_id',
         'product_id',
         'product_unit_id',  
-        'quantity',
+        'quantity'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     public function recipe()

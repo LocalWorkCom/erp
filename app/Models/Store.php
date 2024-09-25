@@ -10,6 +10,7 @@ class Store extends Model
 {
     use HasFactory, SoftDeletes; // Use SoftDeletes
 
+  
     protected $fillable = [
         'branch_id',
         'name_en',
@@ -17,10 +18,19 @@ class Store extends Model
         'description_en',
         'description_ar',
         'is_freeze',
-        'is_kitchen', 
+        'is_kitchen',
         'created_by',
         'modified_by',
-        'deleted_by'
+        'deleted_by',
+    ];
+
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $dates = ['deleted_at']; // To handle soft deletes
