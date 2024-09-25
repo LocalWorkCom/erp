@@ -39,7 +39,7 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-    
+
             $validatedData = $request->validate([
                 'code' => 'required|string|unique:coupons,code',
                 'type' => 'required|in:percentage,fixed',
@@ -50,7 +50,7 @@ class CouponController extends Controller
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
             ]);
-    
+
             $coupon = Coupon::create([
                 'code' => $validatedData['code'],
                 'type' => $validatedData['type'],
@@ -61,9 +61,9 @@ class CouponController extends Controller
                 'end_date' => $validatedData['end_date'],
                 'is_active' => $validatedData['is_active'],
                 'created_by' => auth()->id(),
-                'count_usage' => 0, // Initialize count_usage
+                'count_usage' => 0, // Initialize count_usage when creating
             ]);
-    
+
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error creating coupon: ' . $e->getMessage());
@@ -132,6 +132,68 @@ class CouponController extends Controller
         } catch (\Exception $e) {
             Log::error('Error restoring coupon: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+    /**
+     * Increment usage of the coupon.
+     */
+    public function incrementUsage($id)
+    {
+        try {
+            $coupon = Coupon::findOrFail($id);
+
+            // Check if coupon has a usage limit and if it's reached
+            if ($coupon->usage_limit && $coupon->count_usage >= $coupon->usage_limit) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Coupon usage limit reached.',
+                ], 400);
+            }
+
+            // Increment the count_usage
+            $coupon->increment('count_usage');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Coupon usage incremented successfully.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error incrementing coupon usage: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error incrementing coupon usage.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Check if the coupon is still valid based on usage and date.
+     */
+    public function isCouponValid(Request $request, $id)
+    {
+        try {
+            $lang = $request->header('lang', 'en');
+            $coupon = Coupon::findOrFail($id);
+
+            // Check if the coupon has expired or is fully used
+            if (!$coupon->is_active || ($coupon->usage_limit && $coupon->count_usage >= $coupon->usage_limit)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Coupon is no longer valid.',
+                ], 400);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Coupon is valid.',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error checking coupon validity: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error checking coupon validity.',
+            ], 500);
         }
     }
 }
