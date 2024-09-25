@@ -17,6 +17,7 @@ class Store extends Model
         'description_en',
         'description_ar',
         'is_freeze',
+        'is_kitchen', 
         'created_by',
         'modified_by',
         'deleted_by'
