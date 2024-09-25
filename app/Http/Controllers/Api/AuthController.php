@@ -71,7 +71,7 @@ class AuthController extends Controller
 
 
         // Response
-        return RespondWithSuccessRequest($lang, 11);
+        return RespondWithSuccessRequest($lang, 23);
     }
     public function Login(Request $request)
     {

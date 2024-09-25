@@ -130,7 +130,7 @@ class ClientController extends Controller
         $oldOrder = Order::where('id', $orderId)->where('client_id', $user->id)->first();
 
         if (!$oldOrder) {
-            return RespondWithBadRequest($lang, 21);
+            return RespondWithBadRequest($lang, 22);
         }
 
         // Create a new order based on the old one
@@ -153,7 +153,7 @@ class ClientController extends Controller
             }
         }
 
-        return ResponseWithSuccessData($lang, $newOrder, 22);
+        return ResponseWithSuccessData($lang, $newOrder, 21);
     }
 
     public function trackOrder(Request $request, $orderId)
@@ -168,7 +168,7 @@ class ClientController extends Controller
             ->first();
 
         if (!$order) {
-            return RespondWithBadRequest($lang, 23);
+            return RespondWithBadRequest($lang, 22);
         }
 
         return response()->json([
