@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
 use App\Models\Coupon;
 use App\Models\Discount;
+use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -319,4 +320,27 @@ function CheckDiscountValid()
 {
     $discount = Discount::where('start_date', '>=', date('Y-m-d'))->where('end_date', '<=', date('Y-m-d'))->first();
     return $discount;
+}
+function getSetting($column)
+{
+    $setting = Setting::first();
+    
+    if ($setting) {
+        return $setting->$column;
+    }
+
+    return null;  // or handle this as needed
+}
+function applyCoupon($total_price, $coupon) {
+    if ($coupon->type == 'fixed') {
+        return $total_price - $coupon->value;
+    } else  {
+        return $total_price - ($total_price * ($coupon->value / 100));
+    }
+    return $total_price;
+}
+
+// Function to apply tax
+function applyTax($total_price, $tax_percentage) {
+    return $total_price + ($total_price * ($tax_percentage / 100));
 }
