@@ -8,11 +8,14 @@ use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
+use App\Models\OrderTransaction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class OrderController extends Controller
 {
@@ -83,6 +86,13 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
+        $coupon_id = GetCouponId($request->coupon_code);
+        if (CheckCouponValid($coupon_id, $request->total_price_befor_tax)) {
+            return RespondWithBadRequest($lang, 11);
+        }
+        if (!CountCouponUsage($coupon_id)) {
+            return RespondWithBadRequest($lang, 11);
+        }
 
 
         $Order = new Order();
@@ -96,15 +106,13 @@ class OrderController extends Controller
         $Order->total_price_after_tax = $request->total_price_after_tax;
         $Order->table_id = $request->table_id ?? null;
         $Order->client_id = $created_by;
-        $Order->discount_id = $request->discount_id;
-        $Order->coupon_id = $request->coupon_id;
+        // $Order->discount_id = $request->discount_id;
+        $Order->coupon_id = $coupon_id;
         $Order->created_by = $created_by;
         // while (Order::where('order_number', $Order->order_number)->exists()) {
-        // dd(0);
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
-        $Order->invoice_number = "INV-" . GetNextID("orders") ."-". rand(1111, 9999); // Generate a new number if it exists
+        $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
         // }
-        // dd($Order);
         $Order->save();
 
         // Handle order details
@@ -142,6 +150,38 @@ class OrderController extends Controller
         $OrderTracking = new OrderTracking();
         $OrderTracking->order_id = $Order->id;
         $OrderTracking->save();
+        $transactionId = Str::uuid()->toString();
+
+        if ($request->payment_method != 'cash') {
+
+            $order_transaction = new OrderTransaction();
+            $order_transaction->order_id = $Order->id;
+            $order_transaction->payment_status = $request->payment_status;
+            $order_transaction->payment_method = $request->payment_method;
+            $order_transaction->transaction_id = $transactionId;
+            $order_transaction->created_by = $created_by;
+            $order_transaction->paid = $request->paid;
+            $order_transaction->date = $request->date;
+            // $order_transaction->refund = $request->refund;
+            // $order_transaction->discount_id = $request->discount_id;
+            $order_transaction->coupon_id = $request->coupon_id;
+            if ($request->paid >= $Order->total_price_after_tax) {
+                $done = true;
+            }
+            $order_transaction->save();
+            if ($order_transaction && $done) {
+                $order_transaction->payment_status = "paid";
+                $order_tracking = new OrderTracking();
+                $order_tracking->order_id = $Order->id;
+                $order_tracking->status = 'in_progress';
+                $order_tracking->save();
+            } else {
+                $order_transaction->payment_status = "unpaid";
+            }
+        }
+
+
+        // Update the payment status based on the paid amount
 
         $Order['details'] = $OrderDetails;
         $Order['addon'] = $OrderAddons;

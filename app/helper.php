@@ -5,6 +5,7 @@ use App\Models\ApICode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -277,4 +278,38 @@ function CheckExistColumnValue($table, $column, $value)
         return true;
     }
     return false;
+}
+
+function CheckCouponValid($id, $amount)
+{
+
+    $coupon = Coupon::find($id);
+    if ($coupon) {
+        if ($coupon->end_date  < date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+            return true;
+        }
+    }
+    return false;
+}
+function GetCouponId($code)
+{
+    $coupon = Coupon::where('code', $code)->first();
+    if ($coupon) {
+        return $coupon;
+    } else {
+        return 0;
+    }
+}
+function CountCouponUsage($id)
+{
+    $coupon = Coupon::find($id);
+
+    if ($coupon) {
+        if ($coupon->usage_limit <= $coupon->count_usage + 1) {
+            return false;
+        }
+        $coupon->count_usage = $coupon->count_usage + 1;
+        $coupon->save();
+    }
+    return true;
 }

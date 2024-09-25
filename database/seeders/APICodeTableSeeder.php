@@ -22,6 +22,9 @@ class APICodeTableSeeder extends Seeder
             ['code' => '8', 'api_code_title_en' => "NotExist", 'api_code_title_ar' => 'لا يوجد', 'api_code_message_en' =>  "Data is not exist.", 'api_code_message_ar' => "البيانات غير موجودة"],
             ['code' => '9', 'api_code_title_en' => "AlreadyExist", 'api_code_title_ar' => 'موجود بالفعل ', 'api_code_message_en' =>  "Data is already exist.", 'api_code_message_ar' => "البيانات موجودة بالفعل"],
             ['code' => '10', 'api_code_title_en' => "NoChange", 'api_code_title_ar' => 'لا يوجد تغير', 'api_code_message_en' =>  "Data is not changed.", 'api_code_message_ar' => "لا يوجد تحديث"],
+            ['code' => '11', 'api_code_title_en' => "CouponNotValid", 'api_code_title_ar' => 'قسيمة شراء غير صالحة', 'api_code_message_en' =>  "Coupon is not valid", 'api_code_message_ar' => "القسمية غير صالحة للاستخدام"]
+
+
             ['code' => '11', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User created successfully.", 'api_code_message_ar' => "تم التسجيل بنجاح"],
             ['code' => '12', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User logged in successfully.", 'api_code_message_ar' => "تم تسجيل الدخول بنجاح"],
             ['code' => '13', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُEmail or password is incorrect.", 'api_code_message_ar' => "البريد الإلكتروني أو كلمة المرور غير صحيحة"],
