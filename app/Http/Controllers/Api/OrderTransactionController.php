@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Models\Order;
+use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class OrderTransactionController extends Controller
 {
@@ -27,184 +29,77 @@ class OrderTransactionController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
-        $orderTransaction = OrderTransaction::all();
-
-        // Define columns that need translation
-        $translateColumns = ['name', 'description']; // Add other columns as needed
-
-        // Define columns to remove (translated columns)
-        $columnsToRemove = array_map(function ($col) {
-            return [$col . '_ar', $col . '_en'];
-        }, $translateColumns);
-        $columnsToRemove = array_merge(...$columnsToRemove);
-
-        // Map categories to include translated columns and remove unnecessary columns
-        $orderTransactions = $orderTransaction->map(function ($orderTransaction) use ($lang, $translateColumns, $columnsToRemove) {
-            // Convert category model to an array
-            $data = $orderTransaction->toArray();
-
-            // Get translated data
-            $data = translateDataColumns($data, $lang, $translateColumns);
-
-            // Remove translated columns from data
-            $data = removeColumns($data, $columnsToRemove);
-            return $data;
-        });
+        $order_id = $request->order_id;
+        $orderTransactions = OrderTransaction::where('order_id', $order_id)->get();
 
         return ResponseWithSuccessData($lang, $orderTransactions, 1);
     }
-    // public function store(Request $request)
-    // {
-    //     $lang = $request->header('lang', 'ar');
-    //     App::setLocale($lang);
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     $validator = Validator::make($request->all(), [
-    //         'name_ar' => 'required|string',
-    //         'name_en' => 'string',
-    //         'description_ar' => 'nullable|string',
-    //         'description_en' => 'nullable|string',
-    //         'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-    //         'is_freeze' => 'required|boolean',
-    //         'parent_id' => 'nullable|integer',
-    //     ]);
+    public function store(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
 
-    //     if ($validator->fails()) {
-    //         return RespondWithBadRequestWithData($validator->errors());
-    //     }
-    //     if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-    //         return RespondWithBadRequest($lang, 9);
-    //     }
+        // Check if token is valid
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
 
-    //     $GetLastID = GetLastID('categories');
-    //     // dd($GetLastID);
+        // Check if the authenticated user is allowed to proceed
+        if (Auth::guard('api')->user()->flag == 0) {
+            return RespondWithBadRequest($lang, 5);
+        } else {
+            $created_by = Auth::guard('api')->user()->id;
+        }
 
-    //     $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required|exists:orders,id', // Ensures order exists
+            'payment_method' => 'required|string', // Payment method is required
+            'paid' => 'required|numeric|min:0', // Paid amount must be numeric and non-negative
+            'date' => 'required|date', // Date must be a valid date format
+        ]);
 
-    //     $name_ar = $request->name_ar;
-    //     $name_en = $request->name_en;
-    //     $description_ar = $request->description_ar;
-    //     $description_en = $request->description_en;
-    //     $image = $request->file('image');  // Handle file upload if necessary
-    //     $code = GenerateCode('categories', ($GetLastID == 1) ? 0 : $GetLastID);
-    //     $is_freeze = $request->is_freeze;
-    //     $parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-    //     if ($parent_id) {
-    //         $category = Category::find($parent_id);
-    //         if (!$category) {
-    //             $category_valid['parent_id'] = ['الفئة غير موجودة'];
-    //             return  RespondWithBadRequestWithData($category_valid);
-    //         }
-    //     }
-    //     $created_by = Auth::guard('api')->user()->id;
+        // Check if validation fails
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
 
-    //     $category = new Category();
-    //     $category->name_ar = $name_ar;
-    //     $category->name_en =  $name_en;
-    //     $category->description_ar = $description_ar;
-    //     $category->description_en =  $description_en;
-    //     $category->code = $code;
-    //     $category->is_freeze = $is_freeze;
-    //     $category->parent_id =  $parent_id;
-    //     $category->created_by =  $created_by;
-    //     $category->save();
-    //     if ($request->hasFile('image')) {
+        // Fetch the order
+        $order_id = $request->order_id;
+        $order = Order::find($order_id);
+      
+        $transactionId = Str::uuid()->toString(); // Generate unique transaction ID
+        $done = false;
 
-    //         UploadFile('images/categories', 'image', $category, $image);
-    //     }
+        // Create a new order transaction
+        $order_transaction = new OrderTransaction();
+        $order_transaction->order_id = $order_id;
+        $order_transaction->payment_method = $request->payment_method;
+        $order_transaction->transaction_id = $transactionId;
+        $order_transaction->created_by = $created_by;
+        $order_transaction->paid = $request->paid;
+        $order_transaction->date = $request->date;
+        $order_transaction->discount_id = $order->discount_id;
+        $order_transaction->coupon_id = $order->coupon_id;
+        $order_transaction->save();
 
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
-    // public function update(Request $request, $id)
-    // {
-    //     $lang = $request->header('lang', 'ar');
-    //     App::setLocale($lang);
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     // Validate the input
-    //     $validator = Validator::make($request->all(), [
-    //         'name_ar' => 'required|string',
-    //         'name_en' => 'string',
-    //         'description_ar' => 'nullable|string',
-    //         'description_en' => 'nullable|string',
-    //         'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-    //         'is_freeze' => 'required|boolean',
-    //         'parent_id' => 'nullable|integer',
-    //     ]);
+        // Check if the paid amount is enough to complete the payment
+        if ($request->paid >= $order->total_price_after_tax) {
+            $done = true;
+        }
 
-    //     if ($validator->fails()) {
-    //         return RespondWithBadRequestWithData($validator->errors());
-    //     }
+        // Update the payment status based on the paid amount
+        if ($order_transaction && $done) {
+            $order_transaction->payment_status = "paid";
+            $order_tracking = new OrderTracking();
+            $order_tracking->order_id = $order_id;
+            $order_tracking->status = 'in_progress';
+            $order_tracking->save();
+        } else {
+            $order_transaction->payment_status = "unpaid";
+        }
 
-    //     // Retrieve the category by ID, or throw an exception if not found
-    //     $category = Category::find($id);
-    //     if (!$category) {
-    //         return  RespondWithBadRequestData($lang, 8);
-    //     }
-    //     // dd($category, $request);
-    //     if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
-    //         return  RespondWithBadRequestData($lang,10);
-    //     }
-    //     if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-    //         return RespondWithBadRequest($lang, 9);
-    //     }
-    //     $modify_by = Auth::guard('api')->user()->id;
+        $order_transaction->save();
 
-    //     // Assign the updated values to the category model
-    //     $category->name_ar = $request->name_ar;
-    //     $category->name_en = $request->name_en;
-    //     $category->description_ar = $request->description_ar;
-    //     $category->description_en = $request->description_en;
-    //     $category->is_freeze = $request->is_freeze;
-    //     $category->modify_by = $modify_by;
-    //     $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-
-    //     // Handle file upload for the image if provided
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-    //         DeleteFile('images/categories', $category->image);
-    //         UploadFile('images/categories', 'image', $category, $image);
-    //     }
-
-    //     // Update the category in the database
-    //     $category->save();
-
-    //     // Return success response
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
-    // public function delete(Request $request, $id)
-    // {
-    //     // Fetch the language header for response
-    //     $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-    //     App::setLocale($lang);
-
-    //     if (!CheckToken()) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     // Find the category by ID, or throw a 404 if not found
-    //     $category = Category::find($id);
-    //     if (!$category) {
-    //         return  RespondWithBadRequestData($lang, 8);
-    //     }
-    //     // Check if there are any products associated with this category
-    //     if ($category->products()->count() > 0) {
-    //         return RespondWithBadRequest($lang, 6);
-    //     }
-
-    //     // Handle deletion of associated image if it exists
-    //     if ($category->image) {
-    //         $imagePath = public_path('images/categories/' . $category->image);
-    //         if (File::exists($imagePath)) {
-    //             File::delete($imagePath);
-    //         }
-    //     }
-
-    //     // Delete the category
-    //     $category->delete();
-
-    //     // Return success response
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
+        return RespondWithSuccessRequest($lang, 1);
+    }
 }

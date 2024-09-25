@@ -21,9 +21,21 @@ class APICodeTableSeeder extends Seeder
             ['code' => '7', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  "You cannot update the opening balance because there are transactions on this product in this store after the creation date.", 'api_code_message_ar' => "لا يمكنك تعديل الرصيد الافتتاحي لأن هناك معاملات على المنتج في هذا المتجر بعد هذا التاريخ."],
             ['code' => '8', 'api_code_title_en' => "NotExist", 'api_code_title_ar' => 'لا يوجد', 'api_code_message_en' =>  "Data is not exist.", 'api_code_message_ar' => "البيانات غير موجودة"],
             ['code' => '9', 'api_code_title_en' => "AlreadyExist", 'api_code_title_ar' => 'موجود بالفعل ', 'api_code_message_en' =>  "Data is already exist.", 'api_code_message_ar' => "البيانات موجودة بالفعل"],
-            ['code' => '10', 'api_code_title_en' => "NoChange", 'api_code_title_ar' => 'لا يوجد تغير', 'api_code_message_en' =>  "Data is not changed.", 'api_code_message_ar' => "لا يوجد تحديث"]
-
-
+            ['code' => '10', 'api_code_title_en' => "NoChange", 'api_code_title_ar' => 'لا يوجد تغير', 'api_code_message_en' =>  "Data is not changed.", 'api_code_message_ar' => "لا يوجد تحديث"],
+            ['code' => '11', 'api_code_title_en' => "CouponNotValid", 'api_code_title_ar' => 'قسيمة شراء غير صالحة', 'api_code_message_en' =>  "Coupon is not valid", 'api_code_message_ar' => "القسمية غير صالحة للاستخدام"],
+            ['code' => '12', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User logged in successfully.", 'api_code_message_ar' => "تم تسجيل الدخول بنجاح"],
+            ['code' => '13', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُEmail or password is incorrect.", 'api_code_message_ar' => "البريد الإلكتروني أو كلمة المرور غير صحيحة"],
+            ['code' => '14', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُFailed to generate token.", 'api_code_message_ar' => "حدث خطأ يرجى المحاولة مرة أخرى"],
+            ['code' => '15', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُPassword changed successfully.", 'api_code_message_ar' => "تم تغيير كلمة المرور بنجاح"],
+            ['code' => '16', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُUser logged out successfully.", 'api_code_message_ar' => "تم تسجيل الخروج بنجاح"],
+            ['code' => '17', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُClient data not found.", 'api_code_message_ar' => "لم يتم العثور على بيانات العميل"],
+            ['code' => '18', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُClient data retrieved successfully.", 'api_code_message_ar' => "تم عرض تفاصيل العميل بنجاح"],
+            ['code' => '19', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُProfile updated successfully.", 'api_code_message_ar' => "تم تحديث البيانات بنجاح"],
+            ['code' => '20', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُNo ordrers found.", 'api_code_message_ar' => "لا توجد طلبات"],
+            ['code' => '21', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُOrder not found.", 'api_code_message_ar' => "الطلب غير موجود"],
+            ['code' => '22', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُOrder is reorded successfully.", 'api_code_message_ar' => "تم اعادة الطلب بنجاح"],
+            ['code' => '23', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' =>  "ُOrder not found.", 'api_code_message_ar' => "الطلب غير موجود"],
+            ['code' => '24', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User created successfully.", 'api_code_message_ar' => "تم التسجيل بنجاح"],
         ];
 
         DB::table('apicodes')->insert($sizes);

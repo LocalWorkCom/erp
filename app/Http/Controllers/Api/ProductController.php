@@ -87,7 +87,7 @@ class ProductController extends Controller
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'main_image' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate main image
-            'is_valid' => 'required|boolean',
+            'is_have_expired' => 'required|boolean',
             'type' => 'required|string|in:complete,raw',
             'is_remind' => 'required|boolean',
             'sku' => 'required|string|unique:products',  // Correct unique rule
@@ -118,7 +118,7 @@ class ProductController extends Controller
         $product->type = $request->type;
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
-        $product->is_valid = $request->is_valid;
+        $product->is_have_expired = $request->is_have_expired;
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
@@ -130,7 +130,7 @@ class ProductController extends Controller
         $product_limit->product_id = $product->id;
         $product_limit->min_limit = $request->min_limit;
         $product_limit->max_limit = $request->max_limit;
-        $product_limit->store_category_id = $request->store_category_id;
+        $product_limit->store_id = $request->store_id;
         $product_limit->save();
 
 
@@ -182,7 +182,7 @@ class ProductController extends Controller
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'main_image' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate main image
-            'is_valid' => 'required|boolean',
+            'is_have_expired' => 'required|boolean',
             'type' => 'required|string|in:complete,raw',  // Enforce enum-like values
             'is_remind' => 'required|boolean',
             'code' => 'nullable',
@@ -204,7 +204,7 @@ class ProductController extends Controller
         // dd($category, $request);
         if (
             $product->name_ar == $request->name_ar && $product->name_en == $request->name_en &&  $product->description_ar == $request->description_ar
-            &&  $product->description_en == $request->description_en && $product->is_valid == $request->is_valid  && $product->type == $request->type
+            &&  $product->description_en == $request->description_en && $product->is_have_expired == $request->is_have_expired  && $product->type == $request->type
             && $product->is_remind == $request->is_remind  && $product->main_unit_id == $request->main_unit_id  && $product->currency_code == $request->currency_code  && $product->category_id == $request->category_id
             && $product->sku == $request->sku  && $product->barcode == $request->barcode
         ) {
@@ -218,7 +218,7 @@ class ProductController extends Controller
         $product->name_en = $request->name_en;
         $product->description_ar = $request->description_ar ?? null;
         $product->description_en = $request->description_en ?? null;
-        $product->is_valid = $request->is_valid;
+        $product->is_have_expired = $request->is_have_expired;
         $product->type = $request->type;
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
