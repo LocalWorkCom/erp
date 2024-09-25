@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductImage;
+use App\Models\ProductLimit;
 use App\Models\ProductSize;
 use App\Models\ProductTransaction;
 use App\Models\ProductUnit;
@@ -62,7 +63,10 @@ class ProductController extends Controller
             foreach ($product_images as $key => $value) {
                 $value->image = BaseUrl() . '/' . $value->image;
             }
+            $product_limits = ProductLimit::where('product_id', $data['id'])->get();
+
             $data['product_images'] = $product_images;
+            $data['limits'] = $product_limits;
             return $data;
         });
 
@@ -121,6 +125,14 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->created_by = Auth::guard('api')->user()->id;
         $product->save();
+
+        $product_limit = new ProductLimit();
+        $product_limit->product_id = $product->id;
+        $product_limit->min_limit = $request->min_limit;
+        $product_limit->max_limit = $request->max_limit;
+        $product_limit->store_category_id = $request->store_category_id;
+        $product_limit->save();
+
 
         // Handle main image upload
         if ($request->hasFile('main_image')) {
@@ -196,7 +208,7 @@ class ProductController extends Controller
             && $product->is_remind == $request->is_remind  && $product->main_unit_id == $request->main_unit_id  && $product->currency_code == $request->currency_code  && $product->category_id == $request->category_id
             && $product->sku == $request->sku  && $product->barcode == $request->barcode
         ) {
-            return  RespondWithBadRequestData($lang,10);
+            return  RespondWithBadRequestData($lang, 10);
         }
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
             return RespondWithBadRequest($lang, 9);

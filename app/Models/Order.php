@@ -51,8 +51,14 @@ class Order extends Model
     {
         return $this->belongsTo(Table::class, 'table_id');
     }
-    public function pointTransaction()
+
+    public function orderDetails()
     {
-        return $this->hasOne(PointTransaction::class);
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+
+    public function tracking()
+    {
+        return $this->hasMany(OrderTracking::class);
     }
 }

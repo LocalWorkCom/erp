@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
+use App\Models\Order;
+use App\Models\OrderTracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
@@ -116,11 +118,96 @@ class ClientController extends Controller
         ]);
     }
 
-    // public function listOrders()
-    // {
-    //     $user = Auth::user();
-    //     $orders = $user->orders()->with('items')->get();
+    public function listOrders(Request $request)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
 
-    //     return response()->json(['status' => true, 'data' => $orders]);
-    // }
+        $user = Auth::user();
+
+        $orders = Order::where('client_id', $user->id)
+            ->with(['orderDetails', 'orderDetails.orderAddons'])
+            ->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => $lang == 'ar' ? 'لا توجد طلبات' : 'No orders found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $orders
+        ]);
+    }
+
+    public function reorder(Request $request, $orderId)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
+        $user = Auth::user();
+        $oldOrder = Order::where('id', $orderId)->where('client_id', $user->id)->first();
+
+        if (!$oldOrder) {
+            return response()->json([
+                'status' => false,
+                'message' => $lang == 'ar' ? 'الطلب غير موجود' : 'Order not found'
+            ]);
+        }
+
+        // Create a new order based on the old one
+        $newOrder = $oldOrder->replicate();
+        $newOrder->order_number = "#" . rand(1111, 9999);
+        $newOrder->status = 'pending';
+        $newOrder->save();
+
+        // Replicate the order details
+        foreach ($oldOrder->orderDetails as $oldDetail) {
+            $newDetail = $oldDetail->replicate();
+            $newDetail->order_id = $newOrder->id;
+            $newDetail->save();
+
+            // Replicate the add-ons
+            foreach ($oldDetail->orderAddons as $oldAddon) {
+                $newAddon = $oldAddon->replicate();
+                $newAddon->order_id = $newOrder->id;
+                $newAddon->save();
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => $lang == 'ar' ? 'تمت إعادة الطلب بنجاح' : 'Order reordered successfully',
+            'data' => $newOrder
+        ]);
+    }
+
+    public function trackOrder(Request $request, $orderId)
+    {
+        $lang = $request->header('lang', 'en');
+        App::setLocale($lang);
+
+        $user = Auth::user();
+
+        $order = Order::where('id', $orderId)
+            ->where('client_id', $user->id)
+            ->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => false,
+                'message' => $lang == 'ar' ? 'الطلب غير موجود' : 'Order not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'order_id' => $order->id,
+                'status' => $order->status,
+            ]
+        ]);
+    }
 }

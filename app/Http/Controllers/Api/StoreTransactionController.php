@@ -8,11 +8,13 @@ use App\Models\StoreTransaction;
 use App\Models\StoreTransactionDetails;
 use App\Models\ProductTransaction;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
 use App\Events\ProductTransactionEvent;
 use Illuminate\Support\Facades\Validator;
+use Auth;
 
 class StoreTransactionController extends Controller
 {
@@ -49,6 +51,21 @@ class StoreTransactionController extends Controller
     {
         //try{
             $lang =  $request->header('lang', 'en');
+
+            $validateData = Validator::make($request->all(), [
+                'products' => 'required|array',
+                'products.*.product_id' => 'required|exists:products,id',
+                'products.*.product_unit_id' => 'required|integer|exists:product_units,id',
+                'products.*.product_size_id' => 'nullable|integer|exists:product_sizes,id',
+                'products.*.product_color_id' => 'nullable|inyeger|exists:product_colors,id',
+                'products.*.country_id' => 'required|integer|exists:countries,id',
+                'products.*.count' => 'required|integer|min:1',
+                'products.*.expired_date' => 'required|date'
+            ]);
+
+            if ($validateData->fails()) {
+                return RespondWithBadRequestWithData($validateData->errors());
+            }
 
             $price = 0;
             $total_price = 0;

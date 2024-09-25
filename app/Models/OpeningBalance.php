@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class OpeningBalance extends Model
 {
     use HasFactory;
+    
+    protected $table = "opening_balance";
 }

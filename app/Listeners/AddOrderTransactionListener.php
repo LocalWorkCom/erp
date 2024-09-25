@@ -63,7 +63,7 @@ class AddOrderTransactionListener
                 $add_store_items = new StoreTransactionDetails();
                 $add_store_items->store_transaction_id = $store_transaction_id;
                 $add_store_items->product_id = $order_details->product_id;
-                $add_store_items->product_unit_id = $order_details->product_unit_id;
+                $add_store_items->product_unit_id = $order_details->unit_id;
                 $add_store_items->product_size_id = "";
                 $add_store_items->product_color_id = "";
                 $add_store_items->country_id = $store_details->branch->country_id;
@@ -88,7 +88,7 @@ class AddOrderTransactionListener
                         $add_store_items = new StoreTransactionDetails();
                         $add_store_items->store_transaction_id = $store_transaction_id;
                         $add_store_items->product_id = $recipe_addons_details->product_id;
-                        $add_store_items->product_unit_id = $recipe_addons_details->product_unit_id;
+                        $add_store_items->product_unit_id = $recipe_addons_details->unit_id;
                         $add_store_items->product_size_id = "";
                         $add_store_items->product_color_id = "";
                         $add_store_items->country_id = $store_details->branch->country_id;

@@ -17,6 +17,17 @@ class ProductLimit extends Model
         'product_id',
         'store_category_id'
     ];
+    
+        
+    protected $hidden = [
+        'created_by',
+        'deleted_by',
+        'created_at',
+        'modify_by',
+        'updated_at',
+        'deleted_at',
+
+    ];
 
     public function product()
     {

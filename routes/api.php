@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\pointsController as ApiPointsController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\pointsController;
+use App\Http\Controllers\Api\RecipeCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,9 +64,9 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::get("profile", [ClientController::class, "viewProfile"]);
     Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
-    // Route::get("orders", [ClientController::class, "listOrders"]);
-    // Route::post("order/reorder/{id}", [ClientController::class, "reorder"]);
-    // Route::get("order/track/{id}", [ClientController::class, "trackOrder"]);
+    Route::get("client/orders", [ClientController::class, "listOrders"]);
+    Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+    Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
 
     Route::any("logout", [AuthController::class, "logout"]);
 
@@ -279,14 +280,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [CouponController::class, 'update']);
         Route::delete('/{id}', [CouponController::class, 'destroy']);
         Route::post('/restore/{id}', [CouponController::class, 'restore']);
+
     });
 
-      // points
-      Route::prefix('points')->group(function () {
-        Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);
-        Route::get( '/{id}', [pointsController::class, 'show']);
-        Route::put('/{id}', [pointsController::class, 'update']);
-        Route::delete('/{id}', [pointsController::class, 'destroy']);
+    // Recipe Categories
+    Route::prefix('recipe-categories')->group(function () {
+        Route::get('/', [RecipeCategoryController::class, 'index']);
+        Route::post('/', [RecipeCategoryController::class, 'store']);
+        Route::get('/{id}', [RecipeCategoryController::class, 'show']);
+        Route::put('/{id}', [RecipeCategoryController::class, 'update']);
+        Route::delete('/{id}', [RecipeCategoryController::class, 'destroy']);
+        Route::post('/restore/{id}', [RecipeCategoryController::class, 'restore']);
     });
+
 });

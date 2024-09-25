@@ -14,7 +14,6 @@ class RecipeCategory extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'parent_id',
         'image_path',
         'is_active',
         'created_by',
@@ -22,21 +21,6 @@ class RecipeCategory extends Model
         'deleted_by',
     ];
 
-    // Relationships
-
-    // Self-referential relationship for parent category
-    public function parent()
-    {
-        return $this->belongsTo(RecipeCategory::class, 'parent_id');
-    }
-
-    // Self-referential relationship for child categories
-    public function children()
-    {
-        return $this->hasMany(RecipeCategory::class, 'parent_id');
-    }
-
-    // Relationship with recipes
     public function recipes()
     {
         return $this->hasMany(Recipe::class, 'category_id');
