@@ -15,7 +15,7 @@ return  new class  extends Migration
     {
         Schema::table('coupons', function (Blueprint $table) {
             // Add the deleted_at column for soft deletes
-            $table->integer('count_usage'); // Place this column after the 'updated_at' column
+            $table->integer('count_usage')->default(0); // Place this column after the 'updated_at' column
 
         });
     }
