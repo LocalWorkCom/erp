@@ -16,7 +16,7 @@ class Coupon extends Model
         'value',
         'minimum_spend',
         'usage_limit',
-        'used_times',
+        'count_usage', // Updated from used_times to count_usage
         'start_date',
         'end_date',
         'is_active',
@@ -58,13 +58,13 @@ class Coupon extends Model
     // Check if the coupon has been fully used
     public function isUsedUp()
     {
-        return $this->usage_limit && $this->used_times >= $this->usage_limit;
+        return $this->usage_limit && $this->count_usage >= $this->usage_limit;
     }
 
-    // Method to increment used times
+    // Method to increment count usage
     public function incrementUsage()
     {
-        $this->used_times++;
+        $this->count_usage++; // Updated from used_times to count_usage
         $this->save();
     }
 
