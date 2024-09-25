@@ -63,5 +63,7 @@ return [
     'product_not_instore' => 'This product is not in store',
     'DataExist' => 'All ready Added',
     'DataExistMessage' => 'All ready Added',
+    'is_active' => 'active',
+    'image_path'=>'image'
     
 ];
