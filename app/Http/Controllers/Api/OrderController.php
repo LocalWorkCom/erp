@@ -88,10 +88,10 @@ class OrderController extends Controller
         }
         $coupon_id = GetCouponId($request->coupon_code);
         if (CheckCouponValid($coupon_id, $request->total_price_befor_tax)) {
-            return RespondWithBadRequest($lang, 11);
+            return RespondWithBadRequest($lang, 24);
         }
         if (!CountCouponUsage($coupon_id)) {
-            return RespondWithBadRequest($lang, 11);
+            return RespondWithBadRequest($lang, 24);
         }
 
 
