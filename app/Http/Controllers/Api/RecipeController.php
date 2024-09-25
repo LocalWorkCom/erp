@@ -20,8 +20,8 @@ class RecipeController extends Controller
 
             // Fetch recipes with images
             $recipes = $withTrashed
-                ? Recipe::withTrashed()->with(['ingredients', 'images'])->get()
-                : Recipe::with(['ingredients', 'images'])->get();
+                ? Recipe::withTrashed()->with(['ingredients', 'images', 'category'])->get()
+                : Recipe::with(['ingredients', 'images', 'category'])->get();
 
             return ResponseWithSuccessData($lang, $recipes, 1);
         } catch (\Exception $e) {
@@ -36,7 +36,7 @@ class RecipeController extends Controller
         try {
             $lang = $request->header('lang', 'ar');
 
-            $recipe = Recipe::withTrashed()->with(['ingredients', 'images'])->findOrFail($id);
+            $recipe = Recipe::withTrashed()->with(['ingredients', 'images', 'category'])->findOrFail($id);
 
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
@@ -50,17 +50,19 @@ class RecipeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-
+            $request->merge([
+                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
+            ]);
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'category_flag' => 'required|integer',
+                'category_id' => 'required|integer|exists:recipe_categories,id',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:2048', 
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000', 
             ]);
 
             $recipe = Recipe::create([
@@ -68,7 +70,7 @@ class RecipeController extends Controller
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'category_flag' => $request->category_flag,
+                'category_id' => $request->category_id,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
@@ -96,17 +98,19 @@ class RecipeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-
+            $request->merge([
+                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
+            ]);
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'category_flag' => 'required|integer',
+                'category_id' => 'required|integer|exists:recipe_categories,id',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:2048', 
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000', 
             ]);
 
             $recipe = Recipe::findOrFail($id);
@@ -116,7 +120,7 @@ class RecipeController extends Controller
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'category_flag' => $request->category_flag,
+                'category_id' => $request->category_id,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'modified_by' => auth()->id(),
