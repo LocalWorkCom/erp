@@ -28,7 +28,8 @@ class Order extends Model
         'client_id',
         'table_id',
         'coupon_id',
-        'discount_id'
+        'discount_id',
+        'branch_id'
     ];
 
     protected $hidden = [
@@ -46,6 +47,10 @@ class Order extends Model
     public function Client()
     {
         return $this->belongsTo(User::class, 'client_id');
+    }
+    public function Branch()
+    {
+        return $this->belongsTo(User::class, 'branch_id');
     }
     public function Table()
     {

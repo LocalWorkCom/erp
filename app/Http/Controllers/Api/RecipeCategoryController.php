@@ -33,13 +33,15 @@ class RecipeCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-
+            $request->merge([
+                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
+            ]);
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', // Image validation
+                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000', // Image validation
                 'is_active' => 'required|boolean',
             ]);
 
@@ -89,13 +91,15 @@ class RecipeCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-
+            $request->merge([
+                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
+            ]);
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
                 'is_active' => 'required|boolean',
             ]);
 

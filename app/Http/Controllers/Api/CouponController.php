@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\App;
 
 class CouponController extends Controller
 {
@@ -40,8 +39,6 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            
-            dd($request->all());
     
             $validatedData = $request->validate([
                 'code' => 'required|string|unique:coupons,code',
@@ -54,8 +51,6 @@ class CouponController extends Controller
                 'is_active' => 'required|boolean',
             ]);
     
-            dd($validatedData);
-    
             $coupon = Coupon::create([
                 'code' => $validatedData['code'],
                 'type' => $validatedData['type'],
@@ -66,6 +61,7 @@ class CouponController extends Controller
                 'end_date' => $validatedData['end_date'],
                 'is_active' => $validatedData['is_active'],
                 'created_by' => auth()->id(),
+                'count_usage' => 0, // Initialize count_usage
             ]);
     
             return ResponseWithSuccessData($lang, $coupon, 1);
@@ -74,14 +70,12 @@ class CouponController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
-    
-    
 
     public function update(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'en');
-            $request->validate([
+            $validatedData = $request->validate([
                 'code' => 'required|string|unique:coupons,code,' . $id,
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
@@ -95,14 +89,14 @@ class CouponController extends Controller
             $coupon = Coupon::findOrFail($id);
 
             $coupon->update([
-                'code' => $request->code,
-                'type' => $request->type,
-                'value' => $request->value,
-                'minimum_spend' => $request->minimum_spend,
-                'usage_limit' => $request->usage_limit,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'is_active' => $request->is_active,
+                'code' => $validatedData['code'],
+                'type' => $validatedData['type'],
+                'value' => $validatedData['value'],
+                'minimum_spend' => $validatedData['minimum_spend'],
+                'usage_limit' => $validatedData['usage_limit'],
+                'start_date' => $validatedData['start_date'],
+                'end_date' => $validatedData['end_date'],
+                'is_active' => $validatedData['is_active'],
                 'modified_by' => auth()->id(),
             ]);
 

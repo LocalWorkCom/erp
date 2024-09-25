@@ -52,7 +52,13 @@ class OrderController extends Controller
         } else {
             $created_by = Auth::guard('api')->user()->id;
         }
-
+        $tax_percentage = 0;
+        $tax_application = getSetting('tax_application');
+        if ($tax_application) {
+            $tax_percentage = getSetting('tax_percentage');
+        }
+        $discount_application = getSetting('discount_application');
+        $discount_id = 0;
         $validator = Validator::make($request->all(), [
             'date' => 'required|date', // Must be a valid date
             'type' => 'required|string', // Required and must be a string
@@ -64,7 +70,8 @@ class OrderController extends Controller
             'total_price_after_tax' => 'required|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
             'discount_id' => 'nullable|exists:discounts,id', // Optional but must exist in the 'discounts' table
-            'coupon_id' => 'nullable|exists:coupons,id', // Optional but must exist in the 'coupons' table
+            'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
+            'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
             'details' => 'required|array', // Must be an array (contains order details)
             'details.*.quantity' => 'required|integer', // Every detail must have a quantity
             'details.*.total' => 'required|numeric', // Every detail must have a total
@@ -73,7 +80,7 @@ class OrderController extends Controller
             'details.*.tax_value' => 'required|numeric', // Every detail must have a tax value
             'details.*.note' => 'nullable|string', // Optional note in details
             'details.*.discount_id' => 'nullable|exists:discounts,id', // Optional discount in details
-            'details.*.coupon_id' => 'nullable|exists:coupons,id', // Optional coupon in details
+            'details.*.coupon_code' => 'nullable|exists:coupons,code', // Optional coupon in details
             'details.*.product_id' => 'required|exists:products,id', // Product ID must exist in the 'products' table
             'details.*.recipe_id' => 'nullable|exists:recipes,id', // Optional recipe ID
             'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
@@ -86,28 +93,38 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
-        $coupon_id = GetCouponId($request->coupon_code);
-        if (CheckCouponValid($coupon_id, $request->total_price_befor_tax)) {
-            return RespondWithBadRequest($lang, 11);
-        }
-        if (!CountCouponUsage($coupon_id)) {
-            return RespondWithBadRequest($lang, 11);
+        if (GetCouponId($request->coupon_code)) {
+
+            $coupon = GetCouponId($request->coupon_code);
+        } else {
+            $coupon = null;
         }
 
+        if (!CountCouponUsage($coupon->id)) {
+            return RespondWithBadRequest($lang, 24);
+        }
+        if (CheckDiscountValid()) {
+            $discount_id = CheckDiscountValid()->id;
+        }
+        $total_price_befor_tax = 0;
+
+        $branch_id = $request->branch_id;
 
         $Order = new Order();
         $Order->date = date('Y-m-d');
         $Order->type = $request->type;
         $Order->note = $request->note;
         $Order->tax_value = $request->tax_value;
-        $Order->delivery_fees = $request->delivery_fees;
-        $Order->fees = $request->fees;
-        $Order->total_price_befor_tax = $request->total_price_befor_tax;
-        $Order->total_price_after_tax = $request->total_price_after_tax;
+        $Order->delivery_fees = 0;
+        // $request->delivery_fees;
+        // $Order->fees = $request->fees;
+        // $Order->total_price_after_tax = $request->total_price_after_tax;
         $Order->table_id = $request->table_id ?? null;
         $Order->client_id = $created_by;
-        // $Order->discount_id = $request->discount_id;
-        $Order->coupon_id = $coupon_id;
+        $Order->discount_id = ($discount_id) ? $discount_id : null;
+        $Order->branch_id = $branch_id;
+
+        $Order->coupon_id = ($coupon) ? $coupon->id : null;
         $Order->created_by = $created_by;
         // while (Order::where('order_number', $Order->order_number)->exists()) {
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
@@ -132,9 +149,28 @@ class OrderController extends Controller
             $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
             $OrderDetails->created_by = $created_by;
             $OrderDetails->save();
+            $total_price_befor_tax += $DataOrderDetail['total'];
+        }
+        if (CheckCouponValid($coupon->id, $total_price_befor_tax)) {
+            return RespondWithBadRequest($lang, 24);
         }
 
-        // Handle order add-ons
+        // Apply coupon before tax (if applicable)
+        if ($coupon && $discount_application == 0) {
+            $total_price_befor_tax = applyCoupon($total_price_befor_tax, $coupon);
+        }
+
+        // Apply tax (if applicable)
+        $total_price_after_tax = $tax_application == 0 ? applyTax($total_price_befor_tax, $tax_percentage) : $total_price_befor_tax;
+
+        // Apply coupon after tax (if applicable)
+        if ($coupon && $discount_application == 1) {
+            $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
+        }
+
+        $Order->total_price_befor_tax = $total_price_befor_tax;
+        $Order->total_price_after_tax = $total_price_after_tax;
+        $Order->save();
         $DataAddons = $request->addons;
 
         foreach ($DataAddons as $DataAddon) {
@@ -156,14 +192,13 @@ class OrderController extends Controller
 
             $order_transaction = new OrderTransaction();
             $order_transaction->order_id = $Order->id;
-            $order_transaction->payment_status = $request->payment_status;
             $order_transaction->payment_method = $request->payment_method;
             $order_transaction->transaction_id = $transactionId;
             $order_transaction->created_by = $created_by;
             $order_transaction->paid = $request->paid;
             $order_transaction->date = $request->date;
             // $order_transaction->refund = $request->refund;
-            // $order_transaction->discount_id = $request->discount_id;
+            $order_transaction->discount_id = ($discount_id) ? $discount_id : null;
             $order_transaction->coupon_id = $request->coupon_id;
             if ($request->paid >= $Order->total_price_after_tax) {
                 $done = true;

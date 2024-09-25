@@ -13,10 +13,11 @@ return  new class  extends Migration
      */
     public function up()
     {
-        Schema::table('coupons', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             // Add the deleted_at column for soft deletes
-            $table->integer('count_usage')->default(0); // Place this column after the 'updated_at' column
 
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches');
         });
     }
 
@@ -27,7 +28,7 @@ return  new class  extends Migration
      */
     public function down()
     {
-        Schema::table('coupons', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             // Remove the deleted_at column
         });
     }
