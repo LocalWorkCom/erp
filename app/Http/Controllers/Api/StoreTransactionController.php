@@ -72,22 +72,22 @@ class StoreTransactionController extends Controller
             $user_id = Auth::guard('api')->user()->id;
 
             //product is not in this store
-            $transaction_check_instore = $this->check_product_instore($request['products'], $request['store_id']);
+            /*$transaction_check_instore = $this->check_product_instore($request['products'], $request['store_id']);
             if($transaction_check_instore == 0){
                 return RespondWithBadRequestWithData( __('validation.product_not_instore'));
-            }
+            }*/
 
             //in outgoing return products is expirt date
-            $transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
+            /*$transaction_check_expirt = $this->check_expirt($request['products'], $request['type'], $request['store_id']);
             if($transaction_check_expirt == 0){
                 return RespondWithBadRequestWithData( __('validation.product_expired'));
-            }
+            }*/
 
             //in outgoing return products is not enough
-            $transaction_check_one_enough = $this->check_not_enough($request['products'], $request['type'], $request['store_id']);
+            /*$transaction_check_one_enough = $this->check_not_enough($request['products'], $request['type'], $request['store_id']);
             if($transaction_check_one_enough == 0){
                 return RespondWithBadRequestWithData( __('validation.product_not_enough'));
-            }
+            }*/
 
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
@@ -96,7 +96,7 @@ class StoreTransactionController extends Controller
             $add_store_bill->date = $request['date'];
             $add_store_bill->total = count($request['products']);
             $add_store_bill->store_id = $request['store_id'];
-            $add_store_bill->user_id = $request['user_id'];
+            $add_store_bill->user_id = $user_id;
             $add_store_bill->created_by = $user_id;
             $add_store_bill->total_price = $total_price;
             $add_store_bill->save();

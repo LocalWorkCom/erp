@@ -8,7 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\ProductTransactionEvent;
 use App\Listeners\AddProductTransactionEvent;
-
+use App\Events\OrderTransactionEvent;
+use App\Listeners\AddOrderTransactionListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ProductTransactionEvent::class => [
             AddProductTransactionEvent::class,
+        ],
+        OrderTransactionEvent::class => [
+            AddOrderTransactionListener::class,
         ],
     ];
 
