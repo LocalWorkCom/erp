@@ -47,7 +47,7 @@ return [
     'main_unit_id' => ':attribute مطلوبة',
     'mimes' => 'نوع الملف يجب ان يكون png ,jpeg, jpg',
     'image' => 'يجب ان يكون الملف المرسل صورة وليس ملف',
-    'is_valid' => ':attribute مطلوب',
+    'is_have_expired' => ':attribute مطلوب',
     'code_size' => ':attribute مطلوب',
     'size_id' => ':attribute مطلوب',
     'color_id' => ':attribute مطلوب',
@@ -92,7 +92,7 @@ return [
         'sku' => 'كود حفظ المخزن',
         'barcode' => 'باركود',
         'main_unit_id' => 'الوحدة الاساسية',
-        'is_valid' => 'المنتج لديه تاريخ صلاحية',
+        'is_have_expired' => 'المنتج لديه تاريخ صلاحية',
         'code_size' => 'كود المقاس',
         'factor' => 'المعامل',
 

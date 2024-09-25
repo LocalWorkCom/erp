@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
+use App\Http\Controllers\Api\OrderTransactionController;
 use App\Http\Controllers\Api\pointsController as ApiPointsController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
@@ -138,6 +139,10 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::group(['prefix' => 'order_tracking'], function () {
         Route::post('/', [OrderTrackingController::class, 'index']);
         Route::post('store', [OrderTrackingController::class, 'store']);
+    });
+    Route::group(['prefix' => 'order_transaction'], function () {
+        Route::post('/', [OrderTransactionController::class, 'index']);
+        Route::post('store', [OrderTransactionController::class, 'store']);
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
