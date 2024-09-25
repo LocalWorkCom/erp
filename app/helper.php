@@ -324,23 +324,30 @@ function CheckDiscountValid()
 function getSetting($column)
 {
     $setting = Setting::first();
-    
+
     if ($setting) {
         return $setting->$column;
     }
 
     return null;  // or handle this as needed
 }
-function applyCoupon($total_price, $coupon) {
+function applyCoupon($total_price, $coupon)
+{
     if ($coupon->type == 'fixed') {
         return $total_price - $coupon->value;
-    } else  {
+    } else {
         return $total_price - ($total_price * ($coupon->value / 100));
     }
     return $total_price;
 }
 
 // Function to apply tax
-function applyTax($total_price, $tax_percentage) {
+function applyTax($total_price, $tax_percentage)
+{
     return $total_price + ($total_price * ($tax_percentage / 100));
+}
+function CalculateTax($tax_percentage, $amount)
+{
+    $tax = $amount * ($tax_percentage / 100);
+    return $tax;
 }
