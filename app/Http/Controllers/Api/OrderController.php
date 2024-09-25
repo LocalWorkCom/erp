@@ -81,7 +81,7 @@ class OrderController extends Controller
             'details.*.note' => 'nullable|string', // Optional note in details
             'details.*.discount_id' => 'nullable|exists:discounts,id', // Optional discount in details
             'details.*.coupon_code' => 'nullable|exists:coupons,code', // Optional coupon in details
-            'details.*.product_id' => 'required|exists:products,id', // Product ID must exist in the 'products' table
+            'details.*.product_id' => 'nullable|exists:products,id', // Product ID must exist in the 'products' table
             'details.*.recipe_id' => 'nullable|exists:recipes,id', // Optional recipe ID
             'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
             'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
