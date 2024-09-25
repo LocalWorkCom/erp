@@ -24,7 +24,7 @@ class Product extends Model
         'main_unit_id',
         'currency_id',
         'category_id',
-        'is_valid',
+        'is_have_expired',
         'sku',
         'barcode',
         'code',
@@ -45,7 +45,7 @@ class Product extends Model
 
     // The attributes that should be cast to native types
     protected $casts = [
-        'is_valid' => 'boolean',
+        'is_have_expired' => 'boolean',
     ];
 
     // Define relationships

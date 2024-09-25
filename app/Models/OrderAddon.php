@@ -39,6 +39,6 @@ class OrderAddon extends Model
     }
     public function Addon()
     {
-        return $this->belongsTo(Addon::class, 'addon_id');
+        return $this->belongsTo(RecipeAddon::class, 'recipe_addon_id');
     }
 }

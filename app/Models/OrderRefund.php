@@ -16,7 +16,8 @@ class OrderRefund extends Model
     // The attributes that are mass assignable
     protected $fillable = [
         'reason',
-        'order_detail_id'
+        'order_detail_id',
+        'invoice_number'
     ];
 
     protected $hidden = [
@@ -25,9 +26,7 @@ class OrderRefund extends Model
         'created_at',
         'updated_at',
         'modify_by',
-        'deleted_at',
-
-
+        'deleted_at'
     ];
 
     // The attributes that should be cast to native types
@@ -36,7 +35,7 @@ class OrderRefund extends Model
     // ];
 
     // Define relationships
-   
+
     public function OrderDetail()
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');

@@ -15,7 +15,7 @@ class ProductLimit extends Model
         'min_limit',
         'max_limit',
         'product_id',
-        'store_category_id'
+        'store_id'
     ];
     
         
@@ -34,8 +34,8 @@ class ProductLimit extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function storeCategory()
+    public function store()
     {
-        return $this->belongsTo(StoreCategory::class, 'store_category_id');
+        return $this->belongsTo(Store::class, 'store_id');
     }
 }
