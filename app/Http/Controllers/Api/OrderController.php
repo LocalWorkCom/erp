@@ -8,14 +8,11 @@ use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
-use App\Models\OrderTransaction;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
-
 
 class OrderController extends Controller
 {
@@ -52,6 +49,7 @@ class OrderController extends Controller
         } else {
             $created_by = Auth::guard('api')->user()->id;
         }
+<<<<<<< .merge_file_kCyhfS
         $discount_id = 0;
         $total_price_befor_tax = 0;
         $total_addon_price_befor_tax = 0;
@@ -71,19 +69,33 @@ class OrderController extends Controller
 
 
         //validation
+=======
+
+>>>>>>> .merge_file_S7TLRL
         $validator = Validator::make($request->all(), [
             'type' => 'required|string', // Required and must be a string
             'note' => 'nullable|string', // Optional but must be a string
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
+<<<<<<< .merge_file_kCyhfS
             'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
             'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
+=======
+            'discount_id' => 'nullable|exists:discounts,id', // Optional but must exist in the 'discounts' table
+            'coupon_id' => 'nullable|exists:coupons,id', // Optional but must exist in the 'coupons' table
+>>>>>>> .merge_file_S7TLRL
             'details' => 'required|array', // Must be an array (contains order details)
             'details.*.quantity' => 'required|integer', // Every detail must have a quantity
             'details.*.total' => 'required|numeric', // Every detail must have a total
             'details.*.note' => 'nullable|string', // Optional note in details
+<<<<<<< .merge_file_kCyhfS
             'details.*.coupon_code' => 'nullable|exists:coupons,code', // Optional coupon in details
             'details.*.product_id' => 'nullable|exists:products,id', // Product ID must exist in the 'products' table
+=======
+            'details.*.discount_id' => 'nullable|exists:discounts,id', // Optional discount in details
+            'details.*.coupon_id' => 'nullable|exists:coupons,id', // Optional coupon in details
+            'details.*.product_id' => 'required|exists:products,id', // Product ID must exist in the 'products' table
+>>>>>>> .merge_file_S7TLRL
             'details.*.recipe_id' => 'nullable|exists:recipes,id', // Optional recipe ID
             'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
             'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
@@ -95,6 +107,7 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
+<<<<<<< .merge_file_kCyhfS
 
         // Handle coupons
         $coupon = null;
@@ -109,12 +122,16 @@ class OrderController extends Controller
             $discount_id = CheckDiscountValid()->id;
         }
 
+=======
+
+>>>>>>> .merge_file_S7TLRL
 
         //order
         $Order = new Order();
         $Order->date = date('Y-m-d');
         $Order->type = $request->type;
         $Order->note = $request->note;
+<<<<<<< .merge_file_kCyhfS
         $Order->delivery_fees = 0;
         // $request->delivery_fees;
         $Order->fees = $service_fees;
@@ -124,11 +141,24 @@ class OrderController extends Controller
         $Order->branch_id = $request->branch_id;
 
         $Order->coupon_id = ($coupon) ? $coupon->id : null;
+=======
+        $Order->tax_value = $request->tax_value;
+        $Order->delivery_fees = $request->delivery_fees;
+        $Order->fees = $request->fees;
+        $Order->total_price_befor_tax = $request->total_price_befor_tax;
+        $Order->total_price_after_tax = $request->total_price_after_tax;
+        $Order->table_id = $request->table_id ?? null;
+        $Order->client_id = $created_by;
+        $Order->discount_id = $request->discount_id;
+        $Order->coupon_id = $request->coupon_id;
+>>>>>>> .merge_file_S7TLRL
         $Order->created_by = $created_by;
         // while (Order::where('order_number', $Order->order_number)->exists()) {
+        // dd(0);
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
-        $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
+        $Order->invoice_number = "INV-" . GetNextID("orders") ."-". rand(1111, 9999); // Generate a new number if it exists
         // }
+        // dd($Order);
         $Order->save();
 
 
@@ -148,6 +178,7 @@ class OrderController extends Controller
             $total_product_price_after_tax *=  $DataOrderDetail['quantity'];
             $OrderDetails->price_after_tax = $total_product_price_after_tax;
             $OrderDetails->save();
+<<<<<<< .merge_file_kCyhfS
         }
 
         foreach ($DataAddons as $DataAddon) {
@@ -191,6 +222,12 @@ class OrderController extends Controller
         $Order->total_price_befor_tax = $total_price_befor_tax;
         $Order->total_price_after_tax = $total_price_after_tax + $service_fees;
         $Order->save();
+=======
+        }
+
+        // Handle order add-ons
+        $DataAddons = $request->addons;
+>>>>>>> .merge_file_S7TLRL
 
 
 
@@ -200,6 +237,7 @@ class OrderController extends Controller
         $OrderTracking->order_id = $Order->id;
         $OrderTracking->created_by = $created_by;
         $OrderTracking->save();
+<<<<<<< .merge_file_kCyhfS
 
         $transactionId = Str::uuid()->toString();
 
@@ -235,6 +273,8 @@ class OrderController extends Controller
 
 
         // Update the payment status based on the paid amount
+=======
+>>>>>>> .merge_file_S7TLRL
 
         $Order['details'] = $OrderDetails;
         $Order['addon'] = $OrderAddons;

@@ -44,7 +44,6 @@ class OrderTrackingController extends Controller
         } else {
             $created_by = Auth::guard('api')->user()->id;
         }
-        //$created_by = Auth::guard('api')->user()->id;
 
         $order_id = $request->order_id;
         $order_status = $request->order_status;
@@ -66,6 +65,7 @@ class OrderTrackingController extends Controller
             $order->status = 'completed';
             $order->save();
         }
+
 
         return RespondWithSuccessRequest($lang, 1);
     }
