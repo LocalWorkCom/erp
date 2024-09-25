@@ -95,6 +95,8 @@ return [
         'is_have_expired' => 'المنتج لديه تاريخ صلاحية',
         'code_size' => 'كود المقاس',
         'factor' => 'المعامل',
+        'is_active' => 'صالح',
+        'image_path'=>'الصورة'
 
 
 
