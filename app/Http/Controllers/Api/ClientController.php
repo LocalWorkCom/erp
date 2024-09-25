@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
 use App\Models\Order;
-use App\Models\OrderTracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
@@ -15,44 +14,31 @@ class ClientController extends Controller
 {
     public function viewProfile(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $user = Auth::user();
 
         $clientDetails = $user->clientDetails()->with('addresses')->first();
 
-        // Check if the client details exist
         if (!$clientDetails) {
-            return response()->json([
-                "status" => false,
-                "message" => $lang == 'ar'
-                    ? 'لم يتم العثور على تفاصيل العميل'
-                    : "Client details not found"
-            ], 404);
+            return RespondWithBadRequest($lang, 17);
         }
 
-        // Return the client details along with related addresses
-        return response()->json([
-            "status" => true,
-            "message" => $lang == 'ar'
-                ? 'تم عرض تفاصيل العميل بنجاح'
-                : "Client details retrieved successfully",
-            "data" => $clientDetails
-        ]);
+        return ResponseWithSuccessData($lang, $clientDetails, 18);
     }
 
     public function updateProfile(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $user = Auth::user();
         $clientDetails = $user->clientDetails;
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'first_name' => 'nullable|string',
+            'last_name' => 'nullable|string',
             "email" => "nullable|email|unique:users,email," . $user->id,
             "phone" => "nullable|string|unique:users,phone," . $user->id,
             'city' => 'nullable|string',
@@ -111,16 +97,12 @@ class ClientController extends Controller
         $clientDetails->save();
         $user->save();
 
-        return response()->json([
-            "status" => true,
-            "message" => $lang == 'ar' ? 'تم تحديث البيانات بنجاح' : "Profile updated successfully",
-            "data" => $clientDetails
-        ]);
+        return ResponseWithSuccessData($lang, $clientDetails, 19);
     }
 
     public function listOrders(Request $request)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $user = Auth::user();
@@ -130,10 +112,7 @@ class ClientController extends Controller
             ->get();
 
         if ($orders->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'message' => $lang == 'ar' ? 'لا توجد طلبات' : 'No orders found'
-            ]);
+            return RespondWithBadRequest($lang, 20);
         }
 
         return response()->json([
@@ -144,17 +123,14 @@ class ClientController extends Controller
 
     public function reorder(Request $request, $orderId)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $user = Auth::user();
         $oldOrder = Order::where('id', $orderId)->where('client_id', $user->id)->first();
 
         if (!$oldOrder) {
-            return response()->json([
-                'status' => false,
-                'message' => $lang == 'ar' ? 'الطلب غير موجود' : 'Order not found'
-            ]);
+            return RespondWithBadRequest($lang, 21);
         }
 
         // Create a new order based on the old one
@@ -177,16 +153,12 @@ class ClientController extends Controller
             }
         }
 
-        return response()->json([
-            'status' => true,
-            'message' => $lang == 'ar' ? 'تمت إعادة الطلب بنجاح' : 'Order reordered successfully',
-            'data' => $newOrder
-        ]);
+        return ResponseWithSuccessData($lang, $newOrder, 22);
     }
 
     public function trackOrder(Request $request, $orderId)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
         $user = Auth::user();
@@ -196,10 +168,7 @@ class ClientController extends Controller
             ->first();
 
         if (!$order) {
-            return response()->json([
-                'status' => false,
-                'message' => $lang == 'ar' ? 'الطلب غير موجود' : 'Order not found'
-            ]);
+            return RespondWithBadRequest($lang, 23);
         }
 
         return response()->json([

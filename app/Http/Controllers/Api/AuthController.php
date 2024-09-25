@@ -71,12 +71,7 @@ class AuthController extends Controller
 
 
         // Response
-        return response()->json([
-            "status" => true,
-            "message" => $lang == 'ar'
-                ? 'تم التسجيل بنجاح'
-                : "User created successfully"
-        ]);
+        return RespondWithSuccessRequest($lang, 11);
     }
     public function Login(Request $request)
     {
@@ -101,39 +96,17 @@ class AuthController extends Controller
             ])) {
                 $user = Auth::user();
 
-                // Check if the user is a client
-                if ($user->flag == 1) {
-                    $token = $user->createToken("myToken")->accessToken;
-                    $data = [
-                        "access_token" => $token,
-                        'data' => $user
-                    ];
-                    return ResponseWithSuccessData($lang, $data, 1);
-                } else {
-                    Auth::logout();
-                    return response()->json([
-                        "status" => false,
-                        "message" => $lang == 'ar'
-                            ? "لا يمكنك دخول الموقع"
-                            : "Sorry, you cannot log in"
-                    ]);
-                }
+                $token = $user->createToken("myToken")->accessToken;
+                $data = [
+                    "access_token" => $token,
+                    'data' => $user
+                ];
+                return ResponseWithSuccessData($lang, $data, 12);
             } else {
-                return response()->json([
-                    "status" => false,
-                    "message" => $lang == 'ar'
-                        ? "البريد الإلكتروني أو كلمة المرور غير صحيحة"
-                        : "Email or password is incorrect"
-                ]);
+                return RespondWithBadRequest($lang, 13);
             }
         } catch (\Exception $e) {
-            return response()->json([
-                "status" => false,
-                "message" => __($lang == 'ar'
-                    ? 'حدث خطأ يرجى المحاولة مرة أخرى'
-                    : "Failed to generate token."),
-                "error" => $e->getMessage()
-            ]);
+            return RespondWithBadRequest($lang, 14);
         }
     }
 
@@ -154,8 +127,6 @@ class AuthController extends Controller
         }
         $user = User::where('email', $request->email)->first();
 
-        // Check if the user has the correct flag
-
         if (Hash::check($request->password, $user->password) == true) {
             return RespondWithBadRequest($lang, 3);
         }
@@ -166,7 +137,7 @@ class AuthController extends Controller
         $userData = $user->only(['id', 'name', 'email', 'phone']);
 
         $success['user'] = array_merge($userData);
-        return ResponseWithSuccessData($lang, $success, 1);
+        return ResponseWithSuccessData($lang, $success, 15);
     }
 
 
@@ -175,35 +146,6 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
         auth()->user()->token()->revoke();
-        return ResponseWithSuccessData($lang, null, 4);
+        return ResponseWithSuccessData($lang, null, 16);
     }
-    public function profile(Request $request)
-    {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
-
-        $user = Auth::user();
-
-        $clientDetails = $user->clientDetails()->with('addresses')->first();
-
-        // Check if the client details exist
-        if (!$clientDetails) {
-            return response()->json([
-                "status" => false,
-                "message" => $lang == 'ar'
-                    ? 'لم يتم العثور على تفاصيل العميل'
-                    : "Client details not found"
-            ], 404);
-        }
-
-        // Return the client details along with related addresses
-        return response()->json([
-            "status" => true,
-            "message" => $lang == 'ar'
-                ? 'تم عرض تفاصيل العميل بنجاح'
-                : "Client details retrieved successfully",
-            "data" => $clientDetails
-        ]);
-    }
-
 }
