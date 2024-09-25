@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->enum('tax_application', ['per_product', 'to_total'])->default('to_total');
+            $table->boolean('tax_application')->default('0')
+                ->comment('0:tax not included, 1:tax included');
             $table->decimal('tax_percentage', 5, 2)->default(0);
 
             $table->enum('pricing_method', ['original_price', 'avg_price', 'new_price'])
