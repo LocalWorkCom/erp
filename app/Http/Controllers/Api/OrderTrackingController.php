@@ -36,15 +36,15 @@ class OrderTrackingController extends Controller
     {
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        /*if (!CheckToken()) {
+        if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         if (Auth::guard('api')->user()->flag == 0) {
             return RespondWithBadRequest($lang, 5);
         } else {
             $created_by = Auth::guard('api')->user()->id;
-        }*/
-        $created_by = Auth::guard('api')->user()->id;
+        }
+        //$created_by = Auth::guard('api')->user()->id;
 
         $order_id = $request->order_id;
         $order_status = $request->order_status;
