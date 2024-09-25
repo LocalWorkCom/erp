@@ -13,22 +13,34 @@ class pointsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //point_systems -- show all point system
+        try {
+            $lang = $request->header('lang', 'ar');
+            App::setLocale($lang);
+
+            $new = pointSystem::get();
+
+            return ResponseWithSuccessData($lang, $new, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request) {}
+    public function create(Request $request) {
+
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //point_systems
+        //point_systems--add new system
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
@@ -47,6 +59,7 @@ class pointsController extends Controller
             $new->name  = $request->name;
             $new->key  = $request->key;
             $new->value = $request->value;
+            $new->active = 0;
             $new->created_by = auth()->id();
             $new->save();
 
@@ -59,17 +72,37 @@ class pointsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, $id)
     {
-        //
+          //point_systems -- show all point system
+        try {
+            $lang = $request->header('lang', 'ar');
+            App::setLocale($lang);
+
+            $new = pointSystem::findOrFail($id);
+
+            return ResponseWithSuccessData($lang, $new, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }//
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, $id)
     {
-        //
+         //point_systems -- show all point system
+         try {
+            $lang = $request->header('lang', 'ar');
+            App::setLocale($lang);
+
+            $new = pointSystem::findOrFail($id);
+
+            return ResponseWithSuccessData($lang, $new, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }// //
     }
 
     /**
@@ -96,6 +129,8 @@ class pointsController extends Controller
             $new->name  = $request->name;
             $new->key  = $request->key;
             $new->value = $request->value;
+            $new->active = $request->active;
+
             $new->modified_by = auth()->id();
             $new->save();
 

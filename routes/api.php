@@ -32,7 +32,6 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
 use App\Http\Controllers\Api\OrderTransactionController;
-use App\Http\Controllers\Api\pointsController as ApiPointsController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\pointsController;
@@ -286,7 +285,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [CouponController::class, 'update']);
         Route::delete('/{id}', [CouponController::class, 'destroy']);
         Route::post('/restore/{id}', [CouponController::class, 'restore']);
-
     });
 
     // Recipe Categories
@@ -298,5 +296,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/{id}', [RecipeCategoryController::class, 'destroy']);
         Route::post('/restore/{id}', [RecipeCategoryController::class, 'restore']);
     });
-
+    // point-system
+    Route::prefix('point-system')->group(function () {
+        Route::get('/', [pointsController::class, 'index']);
+        Route::post('/', [pointsController::class, 'store']);
+        Route::get('/{id}', [pointsController::class, 'show']);
+        Route::put('/{id}', [pointsController::class, 'update']);
+        Route::delete('/{id}', [pointsController::class, 'destroy']);
+    });
 });

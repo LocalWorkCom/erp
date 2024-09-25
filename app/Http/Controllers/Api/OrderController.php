@@ -177,9 +177,11 @@ class OrderController extends Controller
                 $order_tracking->order_id = $Order->id;
                 $order_tracking->status = 'in_progress';
                 $order_tracking->save();
+                
             } else {
                 $order_transaction->payment_status = "unpaid";
             }
+
         }
 
 
