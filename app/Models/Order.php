@@ -19,6 +19,7 @@ class Order extends Model
         'type',
         'note',
         'order_number',
+        'invoice_number',
         'tax_value',
         'fees',
         'delivery_fees',
@@ -49,5 +50,9 @@ class Order extends Model
     public function Table()
     {
         return $this->belongsTo(Table::class, 'table_id');
+    }
+    public function pointTransaction()
+    {
+        return $this->hasOne(PointTransaction::class);
     }
 }

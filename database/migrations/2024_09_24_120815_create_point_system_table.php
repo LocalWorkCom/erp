@@ -17,6 +17,17 @@ return new class extends Migration
             $table->enum('name', ['byOrder', 'byProduct'])->nullable();
             $table->enum('key', ['percentage', 'currency'])->nullable();
             $table->string('value');
+            $table->integer('active')->comment('0 -> not active , 1 -> active')->default(0);
+
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

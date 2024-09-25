@@ -35,7 +35,7 @@ class StoreController extends Controller
     public function show(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $store = Store::withTrashed()->with(['branch', 'creator', 'deleter', 'categories'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $store, 1);
         } catch (\Exception $e) {
@@ -94,7 +94,7 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $lang = $request->header('lang', 'en');
+        $lang = $request->header('lang', 'ar');
 
         $validator = Validator::make($request->all(), [
             'branch_id' => 'required|integer|exists:branches,id',
@@ -145,7 +145,7 @@ class StoreController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $store = Store::findOrFail($id);
             $store->update(['deleted_by' => auth()->id()]);
             $store->delete();
@@ -161,7 +161,7 @@ class StoreController extends Controller
     public function restore(Request $request, $id)
     {
         try {
-            $lang = $request->header('lang', 'en');
+            $lang = $request->header('lang', 'ar');
             $store = Store::withTrashed()->findOrFail($id);
             $store->restore();
 

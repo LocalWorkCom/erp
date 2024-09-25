@@ -11,14 +11,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('point_systems', function (Blueprint $table) {
-            $table->id();  // Unique identifier for the transaction
-            $table->foreignId('customer_id')->constrained('customers')->onDelete('set null');  // Links to the customer
-            $table->foreignId('order_id')->nullable()->constrained('orders')->onDelete('set null');  // Links to the order, if applicable
-            $table->enum('type', ['earn', 'redeem']);  // Type of transaction (earn or redeem)
-            $table->integer('points');  // Number of points earned or redeemed
-            $table->decimal('amount', 10, 2)->nullable();  // Amount associated with the transaction (e.g., discount)
-            $table->timestamp('transaction_date')->useCurrent();  // Date and time of the transaction
+        Schema::create('point_transactions', function (Blueprint $table) {
+            $table->id(); 
+            $table->foreignId('customer_id')->constrained('users');
+            $table->foreignId('order_id')->nullable()->constrained('orders');
+            $table->enum('type', ['earn', 'redeem']);
+            $table->integer('points');
+            $table->decimal('amount', 10, 2)->nullable();
+            $table->timestamp('transaction_date')->useCurrent();
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('modified_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
+
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('modified_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -28,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('point_systems');
+        Schema::dropIfExists('point_transactions');
     }
 };
