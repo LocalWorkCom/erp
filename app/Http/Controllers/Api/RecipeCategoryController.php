@@ -99,7 +99,7 @@ class RecipeCategoryController extends Controller
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
                 'is_active' => 'required|boolean',
             ]);
 
