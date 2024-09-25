@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -56,6 +57,8 @@ class StoreController extends Controller
             'name_ar' => 'required|string|max:255',
             'description_en' => 'nullable|string',
             'description_ar' => 'nullable|string',
+            'is_freeze' => 'required|boolean',
+            'is_kitchen' => 'required|boolean', 
             'category_ids' => 'required|array',
             'category_ids.*' => 'integer|exists:categories,id',
         ]);
@@ -72,6 +75,7 @@ class StoreController extends Controller
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
                 'is_freeze' => $request->is_freeze ?? 0,
+                'is_kitchen' => $request->is_kitchen ?? 0, 
                 'created_by' => auth()->id(),
             ]);
 
@@ -102,7 +106,8 @@ class StoreController extends Controller
             'name_ar' => 'required|string|max:255',
             'description_en' => 'nullable|string',
             'description_ar' => 'nullable|string',
-            'is_freeze' => 'nullable|boolean',
+            'is_freeze' => 'required|boolean',
+            'is_kitchen' => 'required|boolean', 
             'category_ids' => 'required|array',
             'category_ids.*' => 'integer|exists:categories,id',
         ]);
@@ -119,6 +124,7 @@ class StoreController extends Controller
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
                 'is_freeze' => $request->is_freeze ?? 0,
+                'is_kitchen' => $request->is_kitchen ?? 0, 
                 'description_en' => $request->description_en,
                 'description_ar' => $request->description_ar,
                 'modified_by' => auth()->id(),
