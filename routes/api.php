@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\RecipeCategoryController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
