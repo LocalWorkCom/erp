@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(ClientDetail::class);
     }
+
+    public function pointTransactions()
+    {
+        return $this->hasMany(PointTransaction::class, 'id');
+    }
 }
