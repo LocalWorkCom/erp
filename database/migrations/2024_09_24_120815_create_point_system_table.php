@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('point_systems', function (Blueprint $table) {
             //this table to define points and the method of calculating points based on the invoice or product and the method of calculating by percentage or currency and the value of calculating the point
+
             $table->id();
             $table->enum('name', ['byOrder', 'byProduct'])->nullable();
             $table->enum('key', ['percentage', 'currency'])->nullable();
