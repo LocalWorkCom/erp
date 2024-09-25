@@ -47,21 +47,35 @@ class OpeningBalanceController extends Controller
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
+
             $validator = Validator::make($request->all(), [
                 'amount' => 'required|integer',
-                "price" => "required|integer",
-                "date" => "required||date_format:Y-m-d",
-                "product" => "required|exists:products,id",
-                "store" => "required|exists:stores,id",
-
+                'price' => 'required|integer',
+                'date' => 'required|date_format:Y-m-d',
+                'product' => 'required|exists:products,id',
+                'store' => 'required|exists:stores,id',
             ]);
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
             }
+
+            // Check if the combination of product, store, and date already exists
+            $exists = OpeningBalance::where('product_id', $request->product)
+                                    ->where('store_id', $request->store)
+                                    ->where('date', $request->date)
+                                    ->exists();
+
+            if ($exists) {
+                return RespondWithBadRequestWithData([
+                    'message' => __('This product already exists for the same store on the specified date.')
+                ]);
+            }
+
+            // Create new OpeningBalance
             $balances = new OpeningBalance();
-            $balances->product_id  = $request->product;
-            $balances->store_id  = $request->store;
+            $balances->product_id = $request->product;
+            $balances->store_id = $request->store;
             $balances->amount = $request->amount;
             $balances->price = $request->price;
             $balances->date = $request->date;
@@ -114,6 +128,7 @@ class OpeningBalanceController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     /**
      * Display the specified resource.
