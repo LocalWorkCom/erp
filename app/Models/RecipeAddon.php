@@ -19,6 +19,11 @@ class RecipeAddon extends Model
         'price',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);

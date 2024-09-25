@@ -10,6 +10,7 @@ class Recipe extends Model
 {
     use HasFactory, SoftDeletes;
 
+
     protected $fillable = [
         'name_en',
         'name_ar',
@@ -21,6 +22,15 @@ class Recipe extends Model
         'created_by',
         'modified_by',
         'deleted_by',
+    ];
+
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function ingredients()
