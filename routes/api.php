@@ -277,6 +277,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [CouponController::class, 'update']);
         Route::delete('/{id}', [CouponController::class, 'destroy']);
         Route::post('/restore/{id}', [CouponController::class, 'restore']);
-        // ok
+      
     });
+
+    // Recipe Categories 
+    Route::prefix('recipe-categories')->group(function () {
+        Route::get('/', [RecipeCategoryController::class, 'index']);
+        Route::post('/', [RecipeCategoryController::class, 'store']);
+        Route::get('/{id}', [RecipeCategoryController::class, 'show']);
+        Route::put('/{id}', [RecipeCategoryController::class, 'update']);
+        Route::delete('/{id}', [RecipeCategoryController::class, 'destroy']);
+        Route::post('/restore/{id}', [RecipeCategoryController::class, 'restore']);
+    });
+
 });
