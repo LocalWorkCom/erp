@@ -18,7 +18,7 @@ class RecipeController extends Controller
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            // Fetch recipes with images
+            // Fetch recipes with images, ingredients, and category
             $recipes = $withTrashed
                 ? Recipe::withTrashed()->with(['ingredients', 'images', 'category'])->get()
                 : Recipe::with(['ingredients', 'images', 'category'])->get();
@@ -29,7 +29,6 @@ class RecipeController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
 
     public function show(Request $request, $id)
     {
@@ -45,7 +44,6 @@ class RecipeController extends Controller
         }
     }
 
- 
     public function store(Request $request)
     {
         try {
@@ -59,6 +57,7 @@ class RecipeController extends Controller
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'category_id' => 'required|integer|exists:recipe_categories,id',
+                'meal_type' => 'required', 
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
@@ -71,6 +70,7 @@ class RecipeController extends Controller
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
                 'category_id' => $request->category_id,
+                'meal_type' => $request->meal_type,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
@@ -93,7 +93,6 @@ class RecipeController extends Controller
         }
     }
 
-
     public function update(Request $request, $id)
     {
         try {
@@ -107,6 +106,7 @@ class RecipeController extends Controller
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'category_id' => 'required|integer|exists:recipe_categories,id',
+                'meal_type' => 'required', 
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
@@ -121,6 +121,7 @@ class RecipeController extends Controller
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
                 'category_id' => $request->category_id,
+                'meal_type' => $request->meal_type, 
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'modified_by' => auth()->id(),
@@ -152,18 +153,13 @@ class RecipeController extends Controller
         }
     }
 
-    /**
-     * Soft delete the specified recipe.
-     */
     public function destroy(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
 
-            // Find the recipe
             $recipe = Recipe::findOrFail($id);
 
-            // Soft delete the recipe (which cascades to its images)
             $recipe->update(['deleted_by' => auth()->id()]);
             $recipe->delete();
 
@@ -174,15 +170,11 @@ class RecipeController extends Controller
         }
     }
 
-    /**
-     * Restore a soft-deleted recipe.
-     */
     public function restore(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
 
-            // Find the soft-deleted recipe
             $recipe = Recipe::withTrashed()->findOrFail($id);
             $recipe->restore();
 

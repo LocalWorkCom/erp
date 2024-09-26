@@ -53,9 +53,9 @@ class OrderTransactionController extends Controller
         // Validation rules
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|exists:orders,id', // Ensures order exists
-            'payment_method' => 'required|string', // Payment method is required
+            'payment_method' => 'required|string|in:cash,credit_card,online',  // Enforce enum-like values
+
             'paid' => 'required|numeric|min:0', // Paid amount must be numeric and non-negative
-            'date' => 'required|date', // Date must be a valid date format
         ]);
 
         // Check if validation fails
@@ -66,7 +66,7 @@ class OrderTransactionController extends Controller
         // Fetch the order
         $order_id = $request->order_id;
         $order = Order::find($order_id);
-      
+
         $transactionId = Str::uuid()->toString(); // Generate unique transaction ID
         $done = false;
 
@@ -77,7 +77,7 @@ class OrderTransactionController extends Controller
         $order_transaction->transaction_id = $transactionId;
         $order_transaction->created_by = $created_by;
         $order_transaction->paid = $request->paid;
-        $order_transaction->date = $request->date;
+        $order_transaction->date = date('Y-m-d');
         $order_transaction->discount_id = $order->discount_id;
         $order_transaction->coupon_id = $order->coupon_id;
         $order_transaction->save();

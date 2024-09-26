@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Recipe extends Model
+class Cuisine extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -15,9 +15,7 @@ class Recipe extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'category_id',
-        'meal_type',  
-        'price',
+        'image_path',
         'is_active',
         'created_by',
         'modified_by',
@@ -33,14 +31,9 @@ class Recipe extends Model
         'deleted_at',
     ];
 
-    public function ingredients()
+    public function recipes()
     {
-        return $this->hasMany(Ingredient::class);
-    }
-
-    public function images()
-    {
-        return $this->hasMany(RecipeImage::class);
+        return $this->hasMany(Recipe::class);
     }
 
     public function creator()
@@ -57,23 +50,4 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
-
-    public function category()
-    {
-        return $this->belongsTo(RecipeCategory::class, 'category_id');
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    public function addons()
-    {
-        return $this->belongsToMany(Addon::class, 'recipe_addons');
-    }
-    public function cuisine()
-{
-    return $this->belongsTo(Cuisine::class);
-}
 }
