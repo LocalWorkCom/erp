@@ -10,13 +10,13 @@ class Recipe extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     protected $fillable = [
         'name_en',
         'name_ar',
         'description_en',
         'description_ar',
         'category_id',
+        'meal_type',  
         'price',
         'is_active',
         'created_by',
@@ -62,7 +62,8 @@ class Recipe extends Model
     {
         return $this->belongsTo(RecipeCategory::class, 'category_id');
     }
-        public function scopeActive($query)
+
+    public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
