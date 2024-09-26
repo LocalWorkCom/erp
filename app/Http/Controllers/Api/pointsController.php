@@ -197,7 +197,7 @@ class pointsController extends Controller
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
-                
+
                 "key" => "required",
                 'active' => 'required',
                 'value' => 'required',
@@ -208,9 +208,15 @@ class pointsController extends Controller
                 return RespondWithBadRequestWithData($validator->errors());
             }
             if($request->active == 1){
-                $is_active = pointSystem::where('active' , 1)->exists();
+                $is_active = pointSystem::where('active' , 1)->where('id', '!=', $id)->exists();
                 if($is_active){
-                    return RespondWithBadRequestData($lang, code: 2);
+                    return RespondWithBadRequestData($lang, 24);
+                }
+            }else{
+                $is_active = pointSystem::where('active' , 1)->where('id', '!=', $id)->exists();
+
+                if(!($is_active)){
+                    return RespondWithBadRequestData($lang, code: 25);
                 }
             }
             $new = pointSystem::findOrFail($id);
@@ -222,8 +228,24 @@ class pointsController extends Controller
 
             $new->modified_by = auth()->id();
             $new->save();
+            $translateColumns = ['name']; // Add other columns as needed
 
-            return ResponseWithSuccessData($lang, $new, 1);
+            // Define columns to remove (translated columns)
+            $columnsToRemove = array_map(function ($col) {
+                return [$col . '_ar', $col . '_en'];
+            }, $translateColumns);
+            $columnsToRemove = array_merge(...$columnsToRemove);
+
+            // Convert model to an array
+            $data = $new->toArray();
+
+            // Get translated data
+            $data = translateDataColumns($data, $lang, $translateColumns);
+
+            // Remove unnecessary columns
+            $data = removeColumns($data, $columnsToRemove);
+
+            return ResponseWithSuccessData($lang, $data, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang,  2);
         }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\pointSystem;
 use Carbon\Carbon;
 use App\Models\ApICode;
 use App\Models\Category;
@@ -350,4 +351,37 @@ function CalculateTax($tax_percentage, $amount)
 {
     $tax = $amount * ($tax_percentage / 100);
     return $tax;
+}
+
+function calculatePointBycurrency($total,$value){
+    //this functions for earn points
+    $totalPoints = $total * $value;
+    return $totalPoints;
+}
+function calculatePointBypercentage($total,$value){
+    //this functions for earn points
+    $valueofpercentage = $value / 100 ;
+    $totalPoints = $total * $valueofpercentage;
+    return $totalPoints;
+}
+function getCurrentSystemPointType($total) {
+    //this functions for earn points
+    $current = pointSystem::where('active', 1)->first();
+
+    if ($current) {
+        $type = $current->key;
+        $value = $current->value;
+        if($type == 0){
+          $points=  calculatePointBycurrency($total,$value);
+
+        }elseif($type == 1){
+            $points= calculatePointBypercentage($total,$value);
+        }
+        return $points;
+    }
+
+    return null;
+}
+function updateUserPoints($points ,$order,$type,){
+
 }
