@@ -308,4 +308,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
     });
+    
+    //cuisines
+    Route::prefix('cuisines')->group(function () {
+        Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');     
+        Route::post('addCuisine', [CuisineController::class, 'store'])->name('cuisines.add');        
+        Route::get('showCuisine/{id}', [CuisineController::class, 'show'])->name('cuisines.show');    
+        Route::put('updateCuisine/{id}', [CuisineController::class, 'update'])->name('cuisines.update'); 
+        Route::delete('deleteCuisine/{id}', [CuisineController::class, 'destroy'])->name('cuisines.delete'); 
+        Route::post('restoreCuisine/{id}', [CuisineController::class, 'restore'])->name('cuisines.restore'); 
+    });
+    
 });
