@@ -9,6 +9,7 @@ use App\Models\ProductLimit;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\ProductTransaction;
+use App\Models\ProductTransactionLog;
 use App\Models\User;
 use App\Models\Setting;
 use Auth;
@@ -33,6 +34,9 @@ class AddProductTransactionEvent
         $now_product_count = 0;
         $product_count = $product->count;
         $user_id = Auth::guard('api')->user()->id;
+        $order_id = $product->order_id;
+        $order_details_id = $product->order_details_id;
+        $order_addon_id = $product->order_addon_id;
 
         //$type == 1
         if ($product->type == 1) {
@@ -72,6 +76,11 @@ class AddProductTransactionEvent
                     $update_product_transaction->modified_by = $user_id;
                     $update_product_transaction->save();
 
+                    //add product transaction log
+                    $count = ($product_count * $all_product_transaction->products->productUnites->factor);
+                    $this->add_product_transaction_log($all_product_transaction->id, $product->type, 'edit', $count, $user_id, $order_id, $order_details_id, $order_addon_id);            
+                    //end of product transaction log
+
                     if ($now_product_count >= 0) {
                         $this->checkProductStock($product->product_id, $user_id);
                         break;
@@ -87,6 +96,13 @@ class AddProductTransactionEvent
                 $update_product_transaction->count = $now_product_count;
                 $update_product_transaction->modified_by = $user_id;
                 $update_product_transaction->save();
+
+
+                //add product transaction log
+                $count = ($product_count * $update_product_transaction->products->productUnites->factor);
+                $this->add_product_transaction_log($update_product_transaction->id, $product->type, 'edit', $count, $user_id, $order_id, $order_details_id, $order_addon_id);            
+                //end of product transaction log
+                
                 $this->checkProductStock($product->product_id, $user_id);
             } else {
                 $show_product = Product::with('productUnites')->where('id', $product->product_id)->first();
@@ -97,6 +113,12 @@ class AddProductTransactionEvent
                 $add_product_transaction->expired_date = $product->expired_date;
                 $add_product_transaction->created_by = $user_id;
                 $add_product_transaction->save();
+
+                //add product transaction log
+                $count = ($product_count * $show_product->productUnites->factor);
+                $this->add_product_transaction_log($add_product_transaction->id, $product->type, 'add', $count, $user_id, $order_id, $order_details_id, $order_addon_id);            
+                //end of product transaction log
+
                 $this->checkProductStock($product->product_id, $user_id);
             }
         }
@@ -131,5 +153,32 @@ class AddProductTransactionEvent
                 ]);
             }
         }
+    }
+
+    private function add_product_transaction_log($product_transaction_id, $type, $model_action, $count, $created_by, $order_id=null, $order_details_id=null, $order_addon_id=null)
+    {
+        //add product transaction log
+        $get_product_transaction = ProductTransaction::where('id', $product_transaction_id)->first();
+        $add_product_transaction_log = new ProductTransactionLog();
+        $add_product_transaction_log->type = $type;
+        $add_product_transaction_log->product_id = $get_product_transaction->product_id;
+        $add_product_transaction_log->store_id = $get_product_transaction->store_id;
+        $add_product_transaction_log->product_size_id = $get_product_transaction->product_size_id;
+        $add_product_transaction_log->product_color_id = $get_product_transaction->product_color_id;
+        $add_product_transaction_log->count = $count;
+        $add_product_transaction_log->expired_date = $get_product_transaction->expired_date;
+        $add_product_transaction_log->model_name = $model_action;
+        $add_product_transaction_log->created_by = $created_by; 
+        if($order_id != null){
+            $add_product_transaction_log->order_id = $order_id;            
+        }  
+        if($order_details_id != null){
+            $add_product_transaction_log->order_details_id = $order_details_id;            
+        }    
+        if($order_addon_id != null){
+            $add_product_transaction_log->order_addon_id = $order_addon_id;            
+        }           
+        $add_product_transaction_log->save();            
+        //end of product transaction log
     }
 }
