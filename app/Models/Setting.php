@@ -13,6 +13,7 @@ class Setting extends Model
         'stock_transfer_method',
         'tax_application',
         'tax_percentage',
-        'pricing_method'
+        'pricing_method',
+        'coupon_application'
     ];
 }

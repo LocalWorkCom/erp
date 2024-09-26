@@ -65,13 +65,13 @@ class OrderController extends Controller
         $tax_application = getSetting('tax_application');
         $tax_percentage = getSetting('tax_percentage');
 
-        $discount_application = getSetting('discount_application');
+        $coupon_application = getSetting('coupon_application');
         $service_fees = getSetting('service_fees');
 
 
         //validation
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string|in:takeaway, online,in_resturant',  // Enforce enum-like values
+            'type' => 'required|string|in:takeaway,online,in_resturant',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
@@ -171,7 +171,7 @@ class OrderController extends Controller
                 $DataAddons
             )
         );
-        $total_price_befor_tax = array_sum(
+        $total_price_befor_tax = $total_price_befor_tax2 = array_sum(
             array_map(
                 function ($detail) {
                     return $detail['total'] * $detail['quantity'];
@@ -184,28 +184,30 @@ class OrderController extends Controller
             return RespondWithBadRequest($lang, 11);
         }
 
-        // if ($tax_application == 1) {
-
-        //     $total_price_befor_tax = ($total_price_befor_tax - $total_price_befor_tax * $tax_percentage / 100);
-        // }
+        if ($tax_application == 1) {
+            $total_price_befor_tax = applyTax($total_price_befor_tax, $tax_percentage, $tax_application);
+        }
         // Apply coupon before tax (if applicable)
-        if ($coupon && $discount_application == 0) {
+        if ($coupon && $coupon_application == 0) {
             $total_price_befor_tax = applyCoupon($total_price_befor_tax, $coupon);
         }
+
         if ($discount) {
-            $total_price_befor_tax =  applyDiscount($total_price_befor_tax, $discount);
+            $total_price_befor_tax = $total_price_befor_tax2 = applyDiscount($total_price_befor_tax, $discount);
         }
 
 
         // Apply tax (if applicable)
         // Apply coupon after tax (if applicable)
-        $total_price_after_tax = applyTax($total_price_befor_tax, $tax_percentage, $tax_application);
-        dd($total_price_after_tax);
-        if ($coupon && $discount_application == 1) {
+        if ($tax_application == 0) {
+            $total_price_after_tax = applyTax(($coupon && $coupon_application == 0) ? $total_price_befor_tax : $total_price_befor_tax2, $tax_percentage, $tax_application);
+        } else {
+            $total_price_after_tax = $total_price_befor_tax2;
+        }
+        if ($coupon && $coupon_application == 1) {
             $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
         }
 
-        dd($total_price_befor_tax, $total_price_after_tax);
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
         $Order->total_price_after_tax = $total_price_after_tax + $service_fees;
@@ -244,7 +246,6 @@ class OrderController extends Controller
                 $order_tracking->status = 'in_progress';
                 $order_tracking->created_by = $created_by;
                 $order_tracking->save();
-
             } else {
                 $order_transaction->payment_status = "unpaid";
             }
