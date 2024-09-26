@@ -128,7 +128,7 @@ class OrderController extends Controller
         // while (Order::where('order_number', $Order->order_number)->exists()) {
         // dd(0);
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
-        $Order->invoice_number = "INV-" . GetNextID("orders") ."-". rand(1111, 9999); // Generate a new number if it exists
+        $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
         // }
         // dd($Order);
         $Order->save();
