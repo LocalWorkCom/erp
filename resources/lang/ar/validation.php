@@ -19,6 +19,12 @@ return [
     'validator_msg' => 'تصحيح الرسايل',
     'is_remind' => ':attribute مطلوب',
     'sku' => ':attribute مطلوب',
+    'reason' => ':attribute مطلوب',
+    'order_detail_id' => ':attribute مطلوب',
+    'order_id' => ':attribute مطلوب',
+    'order_status' => ':attribute مطلوب',
+    'payment_method' => ':attribute مطلوب',
+    'paid' => ':attribute مطلوب',
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
         'numeric' => 'يجب ألا يزيد :attribute عن :max.',
@@ -53,6 +59,14 @@ return [
     'color_id' => ':attribute مطلوب',
     'unit_id' => ':attribute مطلوب',
     'factor' => ':attribute مطلوب',
+    'type' => ':attribute مطلوب',
+    'branch_id' => ':attribute مطلوب',
+    'details' => ':attribute مطلوب',
+    'quantity' => ':attribute مطلوب',
+    'total' => ':attribute مطلوب',
+    'unit_id' => ':attribute مطلوب',
+    'recipe_addon_id' => ':attribute مطلوب',
+    'price' => ':attribute مطلوب',
     'DataExist' => 'موجود بالفعل',
     'DataExistMessage' => 'موجود بالفعل',
     'attributes' => [
@@ -96,7 +110,26 @@ return [
         'code_size' => 'كود المقاس',
         'factor' => 'المعامل',
         'is_active' => 'صالح',
-        'image_path'=>'الصورة'
+        'image_path' => 'الصورة',
+        'reason' => 'السبب',
+        'order_detail_id' => 'رقم الطلب',
+        'order_id' => 'رقم الطلب',
+        'order_status' => 'حالة الطلب',
+        'payment_method' => 'طريقة الدفع',
+        'paid' => 'المدفوع',
+        'type' => 'النوع',
+        'delivery_fees' => 'رسوم التوصيل',
+        'note' => 'الملاحظة',
+        'table_id' => 'رقم الطاولة',
+        'branch_id' => 'رقم الفرع',
+        'coupon_code' => 'قسيمة الخصم',
+        'details' => 'تفاصيل',
+        'quantity' => 'الكمية',
+        'total' => 'السعر الكلي',
+        'recipe_id' => 'اسم الوصفة',
+        'addons' => 'لاضافات',
+        'recipe_addon_id' => 'اضافات الوصفة'
+
 
 
 

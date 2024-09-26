@@ -52,7 +52,7 @@ class OrderController extends Controller
         } else {
             $created_by = Auth::guard('api')->user()->id;
         }
-        $discount_id = 0;
+        $discount = null;
         $total_price_befor_tax = 0;
         $total_addon_price_befor_tax = 0;
         $DataOrderDetails = $request->details;
@@ -63,16 +63,15 @@ class OrderController extends Controller
         //settings
         $tax_percentage = 0;
         $tax_application = getSetting('tax_application');
-        if ($tax_application) {
-            $tax_percentage = getSetting('tax_percentage');
-        }
+        $tax_percentage = getSetting('tax_percentage');
+
         $discount_application = getSetting('discount_application');
         $service_fees = getSetting('service_fees');
 
 
         //validation
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string', // Required and must be a string
+            'type' => 'required|string|in:takeaway, online,in_resturant',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
@@ -106,9 +105,8 @@ class OrderController extends Controller
         }
 
         if (CheckDiscountValid()) {
-            $discount_id = CheckDiscountValid()->id;
+            $discount = CheckDiscountValid();
         }
-
 
         //order
         $Order = new Order();
@@ -120,7 +118,7 @@ class OrderController extends Controller
         $Order->fees = $service_fees;
         $Order->table_id = $request->table_id ?? null;
         $Order->client_id = $created_by;
-        $Order->discount_id = ($discount_id) ? $discount_id : null;
+        $Order->discount_id = ($discount) ? $discount->id : null;
         $Order->branch_id = $request->branch_id;
 
         $Order->coupon_id = ($coupon) ? $coupon->id : null;
@@ -139,15 +137,15 @@ class OrderController extends Controller
             $OrderDetails->order_id = $Order->id;
             $OrderDetails->quantity = $DataOrderDetail['quantity'];
             $OrderDetails->total = $DataOrderDetail['total'];
-            $OrderDetails->price_befor_tax = $DataOrderDetail['total'];
+            $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($DataOrderDetail['total'], $tax_percentage, $tax_application) : $DataOrderDetail['total'];
             $OrderDetails->tax_value = CalculateTax($tax_percentage, $DataOrderDetail['total']);
             $OrderDetails->note = $DataOrderDetail['note'];
             $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
             $OrderDetails->recipe_id = $DataOrderDetail['recipe_id'] ?? null;
             $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
             $OrderDetails->created_by = $created_by;
-            $total_product_price_after_tax = $tax_application == 0 ? applyTax($DataOrderDetail['total'], $tax_percentage) : $DataOrderDetail['total'];
-            $total_product_price_after_tax *=  $DataOrderDetail['quantity'];
+            $total_product_price_after_tax = $tax_application == 0 ? applyTax($DataOrderDetail['total'], $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $DataOrderDetail['total'] * $DataOrderDetail['quantity'];
+
             $OrderDetails->price_after_tax = $total_product_price_after_tax;
             $OrderDetails->save();
         }
@@ -157,38 +155,57 @@ class OrderController extends Controller
             $OrderAddons->order_id = $Order->id;
             $OrderAddons->quantity = $DataAddon['quantity'];
             $OrderAddons->recipe_addon_id = $DataAddon['recipe_addon_id'];
-            $OrderAddons->price_before_tax = $DataAddon['price'];
+            $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($DataAddon['price'], $tax_percentage, $tax_application) : $DataAddon['price'];
 
-            $price_after_tax = $tax_application == 0 ? applyTax($DataAddon['price'], $tax_percentage) : $DataAddon['price'];
-            $price_after_tax *=  $DataAddon['quantity'];
-
+            $price_after_tax = $tax_application == 0 ? applyTax($DataAddon['price'], $tax_percentage, $tax_application) * $DataAddon['quantity'] : $DataAddon['price'] * $DataAddon['quantity'];
             $OrderAddons->price_after_tax = $price_after_tax;
             $OrderAddons->created_by = $created_by;
             $OrderAddons->save();
         }
 
-        $total_addon_price_befor_tax = array_sum(array_column($DataAddons, 'price'));
-        $total_price_befor_tax = array_sum(array_column($DataOrderDetails, 'total')) + $total_addon_price_befor_tax;
+        $total_addon_price_befor_tax = array_sum(
+            array_map(
+                function ($addon) {
+                    return $addon['price'] * $addon['quantity'];
+                },
+                $DataAddons
+            )
+        );
+        $total_price_befor_tax = array_sum(
+            array_map(
+                function ($detail) {
+                    return $detail['total'] * $detail['quantity'];
+                },
+                $DataOrderDetails
+            )
+        ) + $total_addon_price_befor_tax;
 
         if ($coupon && CheckCouponValid($coupon->id, $total_price_befor_tax)) {
             return RespondWithBadRequest($lang, 11);
         }
 
+        // if ($tax_application == 1) {
+
+        //     $total_price_befor_tax = ($total_price_befor_tax - $total_price_befor_tax * $tax_percentage / 100);
+        // }
         // Apply coupon before tax (if applicable)
         if ($coupon && $discount_application == 0) {
             $total_price_befor_tax = applyCoupon($total_price_befor_tax, $coupon);
         }
+        if ($discount) {
+            $total_price_befor_tax =  applyDiscount($total_price_befor_tax, $discount);
+        }
+
 
         // Apply tax (if applicable)
-        $total_price_after_tax = $tax_application == 0 ? applyTax($total_price_befor_tax, $tax_percentage) : $total_price_befor_tax;
-        // $total_addon_price_after_tax = $tax_application == 0 ? applyTax($total_addon_price_befor_tax, $tax_percentage) : $total_addon_price_befor_tax;
-
-        // $total_price_after_tax += $total_addon_price_after_tax;
         // Apply coupon after tax (if applicable)
+        $total_price_after_tax = applyTax($total_price_befor_tax, $tax_percentage, $tax_application);
+        dd($total_price_after_tax);
         if ($coupon && $discount_application == 1) {
             $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
         }
 
+        dd($total_price_befor_tax, $total_price_after_tax);
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
         $Order->total_price_after_tax = $total_price_after_tax + $service_fees;
@@ -215,7 +232,7 @@ class OrderController extends Controller
             $order_transaction->paid = $total_price_after_tax;
             $order_transaction->date = date('Y-m-d');
             // $order_transaction->refund = $request->refund;
-            $order_transaction->discount_id = ($discount_id) ? $discount_id : null;
+            $order_transaction->discount_id = ($discount) ? $discount->id : null;
             $order_transaction->coupon_id = $request->coupon_id;
             if ($request->paid >= $Order->total_price_after_tax) {
                 $done = true;
@@ -235,13 +252,13 @@ class OrderController extends Controller
 
             $order_transaction->save();
         }
+        $order = Order::find($Order->id);
 
+        $order['details'] = OrderDetail::where('order_id', $order->id)->get();
+        $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
 
         // Update the payment status based on the paid amount
 
-        $Order['details'] = $OrderDetails;
-        $Order['addon'] = $OrderAddons;
-
-        return ResponseWithSuccessData($lang, $Order, 1);
+        return ResponseWithSuccessData($lang, $order, 1);
     }
 }
