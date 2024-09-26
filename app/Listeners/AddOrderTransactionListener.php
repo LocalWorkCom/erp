@@ -4,12 +4,10 @@ namespace App\Listeners;
 
 use App\Events\OrderTransactionEvent;
 use App\Events\ProductTransactionEvent;
-
-
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Order;
-use App\Models\OrderDetails;
+use App\Models\OrderDetail;
 use App\Models\Addon;
 use App\Models\Recipe;
 use App\Models\RecipeAddon;

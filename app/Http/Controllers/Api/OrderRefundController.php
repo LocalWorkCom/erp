@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Events\OrderRefundTransactionEvent;
+
+use App\Models\Store;
 
 class OrderRefundController extends Controller
 {
@@ -66,14 +69,22 @@ class OrderRefundController extends Controller
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
-        if (!CheckToken()) {
+        /*if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         if (Auth::guard('api')->user()->flag == 0) {
             return RespondWithBadRequest($lang, 5);
         } else {
             $created_by = Auth::guard('api')->user()->id;
-        }
+        }*/
+
+        $created_by = Auth::guard('api')->user()->id;
+
+
+        return $details_order = OrderDetail::with('Order', 'Recipe')->where('id', 1)->first();
+        return $details_order->order;
+        return $store = Store::with('branch')->where('branch_id', $details_order->Order->Branch->id)->where('is_kitchen', 1)->first();
+
 
         $order_refund_id = $request->order_refund_id;
         $orderRefund = OrderRefund::find($order_refund_id);
@@ -87,6 +98,7 @@ class OrderRefundController extends Controller
             $order_details = OrderDetail::find($orderRefund->order_detail_id);
             $order_details->status = 'refund';
             $order_details->save();
+            event(new OrderRefundTransactionEvent($order_details));
         }
 
         return RespondWithSuccessRequest($lang, 1);
