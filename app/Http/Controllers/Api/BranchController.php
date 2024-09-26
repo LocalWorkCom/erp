@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ class BranchController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $withTrashed = $request->query('withTrashed', false); 
+            $withTrashed = $request->query('withTrashed', false);
 
             $branches = $withTrashed
                 ? Branch::withTrashed()->with(['country', 'creator', 'deleter'])->get()
@@ -51,6 +52,7 @@ class BranchController extends Controller
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
             'opening_hours' => 'nullable|string|max:255',
+            'has_kids_area' => 'required|boolean', 
         ]);
 
         // Handle validation failure
@@ -71,7 +73,8 @@ class BranchController extends Controller
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
                 'opening_hours' => $request->opening_hours,
-                'created_by' => auth()->id(), 
+                'has_kids_area' => $request->has_kids_area, 
+                'created_by' => auth()->id(),
             ]);
 
             return ResponseWithSuccessData($lang, $branch, 1);
@@ -117,6 +120,7 @@ class BranchController extends Controller
             'email' => 'nullable|string|max:255',
             'manager_name' => 'nullable|string|max:255',
             'opening_hours' => 'nullable|string|max:255',
+            'has_kids_area' => 'required|boolean', 
         ]);
 
         if ($validator->fails()) {
@@ -138,6 +142,7 @@ class BranchController extends Controller
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
                 'opening_hours' => $request->opening_hours,
+                'has_kids_area' => $request->has_kids_area, 
                 'modified_by' => auth()->id(),
             ]);
 
