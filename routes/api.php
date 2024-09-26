@@ -32,7 +32,6 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
 use App\Http\Controllers\Api\OrderTransactionController;
-use App\Http\Controllers\Api\pointsController as ApiPointsController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\pointsController;
@@ -238,19 +237,19 @@ Route::group(["middleware" => ["auth:api"]], function () {
         // Recipes and Ingredients
     Route::group(['prefix' => 'recipes'], function () {
         // Recipes routes
-        Route::get('recipeList', [RecipeController::class, 'index']); 
-        Route::post('addRecipe', [RecipeController::class, 'store']); 
-        Route::get('showRecipe/{id}', [RecipeController::class, 'show']); 
-        Route::put('updateRecipe/{id}', [RecipeController::class, 'update']); 
-        Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy']); 
-        Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore']); 
+        Route::get('recipeList', [RecipeController::class, 'index']);
+        Route::post('addRecipe', [RecipeController::class, 'store']);
+        Route::get('showRecipe/{id}', [RecipeController::class, 'show']);
+        Route::put('updateRecipe/{id}', [RecipeController::class, 'update']);
+        Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy']);
+        Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore']);
 
         // Ingredients routes
         Route::get('{recipeId}/ingredientList', [IngredientController::class, 'index']);
-        Route::post('{recipeId}/addIngredient', [IngredientController::class, 'store']); 
-        Route::put('updateIngredient/{id}', [IngredientController::class, 'update']); 
-        Route::delete('deleteIngredient/{id}', [IngredientController::class, 'destroy']); 
-        Route::post('restoreIngredient/{id}', [IngredientController::class, 'restore']); 
+        Route::post('{recipeId}/addIngredient', [IngredientController::class, 'store']);
+        Route::put('updateIngredient/{id}', [IngredientController::class, 'update']);
+        Route::delete('deleteIngredient/{id}', [IngredientController::class, 'destroy']);
+        Route::post('restoreIngredient/{id}', [IngredientController::class, 'restore']);
     });
 
     //floors
@@ -273,33 +272,40 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
     // Discounts
     Route::group(['prefix' => 'discounts'], function () {
-        Route::get('discountList', [DiscountController::class, 'index']); 
-        Route::get('showDiscount/{id}', [DiscountController::class, 'show']); 
-        Route::post('addDiscount', [DiscountController::class, 'store']); 
-        Route::put('updateDiscount/{id}', [DiscountController::class, 'update']); 
-        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']); 
-        Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']); 
+        Route::get('discountList', [DiscountController::class, 'index']);
+        Route::get('showDiscount/{id}', [DiscountController::class, 'show']);
+        Route::post('addDiscount', [DiscountController::class, 'store']);
+        Route::put('updateDiscount/{id}', [DiscountController::class, 'update']);
+        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']);
+        Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']);
     });
 
     // Coupons
     Route::group(['prefix' => 'coupons'], function () {
         Route::get('couponList', [CouponController::class, 'index']);
         Route::get('showCoupon/{id}', [CouponController::class, 'show']);
-        Route::post('addCoupon', [CouponController::class, 'store']); 
-        Route::put('updateCoupon/{id}', [CouponController::class, 'update']); 
-        Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']); 
-        Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']); 
+        Route::post('addCoupon', [CouponController::class, 'store']);
+        Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
+        Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
+        Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
     });
 
     // Recipe Categories
     Route::group(['prefix' => 'recipe-categories'], function () {
-        Route::get('categoryList', [RecipeCategoryController::class, 'index']); 
-        Route::get('showCategory/{id}', [RecipeCategoryController::class, 'show']); 
-        Route::post('addCategory', [RecipeCategoryController::class, 'store']); 
-        Route::put('updateCategory/{id}', [RecipeCategoryController::class, 'update']); 
-        Route::delete('deleteCategory/{id}', [RecipeCategoryController::class, 'destroy']); 
-        Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']); 
+        Route::get('categoryList', [RecipeCategoryController::class, 'index']);
+        Route::get('showCategory/{id}', [RecipeCategoryController::class, 'show']);
+        Route::post('addCategory', [RecipeCategoryController::class, 'store']);
+        Route::put('updateCategory/{id}', [RecipeCategoryController::class, 'update']);
+        Route::delete('deleteCategory/{id}', [RecipeCategoryController::class, 'destroy']);
+        Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']);
     });
 
-
+    // point-system
+    Route::prefix('point_system')->group(function () {
+        Route::get('/', [pointsController::class, 'index']);
+        Route::post('/', [pointsController::class, 'store']);
+        Route::get('/{id}', [pointsController::class, 'show']);
+        Route::any('/{id}', [pointsController::class, 'update']);
+        Route::delete('/{id}', [pointsController::class, 'destroy']);
+    });
 });

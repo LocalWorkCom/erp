@@ -94,6 +94,7 @@ class AuthController extends Controller
                 "email" => $request->email,
                 "password" => $request->password
             ])) {
+
                 $user = Auth::user();
 
                 $token = $user->createToken("myToken")->accessToken;
@@ -101,6 +102,7 @@ class AuthController extends Controller
                     "access_token" => $token,
                     'data' => $user
                 ];
+
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
                 return RespondWithBadRequest($lang, 13);
