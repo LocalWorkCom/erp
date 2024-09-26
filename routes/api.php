@@ -297,11 +297,11 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [RecipeCategoryController::class, 'restore']);
     });
     // point-system
-    Route::prefix('point-system')->group(function () {
+    Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
         Route::post('/', [pointsController::class, 'store']);
         Route::get('/{id}', [pointsController::class, 'show']);
-        Route::put('/{id}', [pointsController::class, 'update']);
+        Route::any('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
     });
 });
