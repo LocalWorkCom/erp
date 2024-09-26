@@ -13,9 +13,43 @@ class pointsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //point_systems -- show all point system
+        try {
+            $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
+            $pointSystem = pointSystem::all();
+
+            // Define columns that need translation
+            $translateColumns = ['name']; // Add other columns as needed
+
+            // Define columns to remove (translated columns)
+            $columnsToRemove = array_map(function ($col) {
+                return [$col . '_ar', $col . '_en'];
+            }, $translateColumns);
+            $columnsToRemove = array_merge(...$columnsToRemove);
+
+            // Map categories to include translated columns and remove unnecessary columns
+            $point = $pointSystem->map(function ($points) use ($lang, $translateColumns, $columnsToRemove) {
+                // Convert category model to an array
+                $data = $points->toArray();
+
+                // Get translated data
+                $data = translateDataColumns($data, $lang, $translateColumns);
+
+                // Remove translated columns from data
+                $data = removeColumns($data, $columnsToRemove);
+
+                return $data;
+            });
+
+            return ResponseWithSuccessData($lang, $point, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
     }
 
     /**
@@ -28,7 +62,7 @@ class pointsController extends Controller
      */
     public function store(Request $request)
     {
-        //point_systems
+        //point_systems--add new system
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
@@ -44,9 +78,11 @@ class pointsController extends Controller
             }
 
             $new = new pointSystem();
-            $new->name  = $request->name;
+            $new->name_ar  = $request->name_ar;
+            $new->name_en  = $request->name_en;
             $new->key  = $request->key;
             $new->value = $request->value;
+            $new->active = 0;
             $new->created_by = auth()->id();
             $new->save();
 
@@ -59,17 +95,95 @@ class pointsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, $id)
     {
-        //
+        try {
+            // Get language header, defaulting to 'ar' if not provided
+            $lang = $request->header('lang', 'ar');
+
+            // Check token validity
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
+
+            // Find the point system by the provided ID
+            $pointSystem = pointSystem::find($id); // Use $id from method parameter
+
+            // Check if the point system exists
+            if (!$pointSystem) {
+                return RespondWithBadRequestData($lang, 4); // Customize error message for not found
+            }
+
+            // Define columns that need translation
+            $translateColumns = ['name']; // Add other columns as needed
+
+            // Define columns to remove (translated columns)
+            $columnsToRemove = array_map(function ($col) {
+                return [$col . '_ar', $col . '_en'];
+            }, $translateColumns);
+            $columnsToRemove = array_merge(...$columnsToRemove);
+
+            // Convert model to an array
+            $data = $pointSystem->toArray();
+
+            // Get translated data
+            $data = translateDataColumns($data, $lang, $translateColumns);
+
+            // Remove unnecessary columns
+            $data = removeColumns($data, $columnsToRemove);
+
+            return ResponseWithSuccessData($lang, $data, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2); // Customize error message for exceptions
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, $id)
     {
-        //
+        //point_systems -- show all point system
+        try {
+            // Get language header, defaulting to 'ar' if not provided
+            $lang = $request->header('lang', 'ar');
+
+            // Check token validity
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
+
+            // Find the point system by the provided ID
+            $pointSystem = pointSystem::find($id); // Use $id from method parameter
+
+            // Check if the point system exists
+            if (!$pointSystem) {
+                return RespondWithBadRequestData($lang, 4); // Customize error message for not found
+            }
+
+            // Define columns that need translation
+            $translateColumns = ['name']; // Add other columns as needed
+
+            // Define columns to remove (translated columns)
+            $columnsToRemove = array_map(function ($col) {
+                return [$col . '_ar', $col . '_en'];
+            }, $translateColumns);
+            $columnsToRemove = array_merge(...$columnsToRemove);
+
+            // Convert model to an array
+            $data = $pointSystem->toArray();
+
+            // Get translated data
+            $data = translateDataColumns($data, $lang, $translateColumns);
+
+            // Remove unnecessary columns
+            $data = removeColumns($data, $columnsToRemove);
+
+            return ResponseWithSuccessData($lang, $data, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2); // Customize error message for exceptions
+        }
     }
 
     /**
@@ -83,25 +197,35 @@ class pointsController extends Controller
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
-                "name" => "required",
+                
                 "key" => "required",
+                'active' => 'required',
                 'value' => 'required',
+
             ]);
 
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
             }
-
+            if($request->active == 1){
+                $is_active = pointSystem::where('active' , 1)->exists();
+                if($is_active){
+                    return RespondWithBadRequestData($lang, code: 2);
+                }
+            }
             $new = pointSystem::findOrFail($id);
-            $new->name  = $request->name;
+            $new->name_ar  = $request->name_ar;
+            $new->name_en  = $request->name_en;
             $new->key  = $request->key;
             $new->value = $request->value;
+            $new->active = $request->active;
+
             $new->modified_by = auth()->id();
             $new->save();
 
             return ResponseWithSuccessData($lang, $new, 1);
         } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
+            return RespondWithBadRequestData($lang,  2);
         }
     }
 
