@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +19,15 @@ class Line extends Model
         'deleted_by'
     ];
 
-    protected $dates = ['deleted_at']; 
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function store()
     {
         return $this->belongsTo(Store::class);

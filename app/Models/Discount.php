@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,17 +11,25 @@ class Discount extends Model
 
     protected $fillable = [
         'name',
-        'type', // percentage or fixed
+        'type',
         'value',
         'start_date',
         'end_date',
         'is_active',
         'created_by',
         'modified_by',
-        'deleted_by',
+        'deleted_by'
     ];
 
-    // Relationships
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -38,7 +45,6 @@ class Discount extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    // Scope to get only active discounts
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
@@ -52,7 +58,6 @@ class Discount extends Model
                      });
     }
 
-    // Function to get discount type label
     public function getTypeLabelAttribute()
     {
         return $this->type === 'percentage' ? 'Percentage' : 'Fixed Amount';

@@ -10,6 +10,10 @@ use App\Events\ProductTransactionEvent;
 use App\Listeners\AddProductTransactionEvent;
 use App\Events\OrderTransactionEvent;
 use App\Listeners\AddOrderTransactionListener;
+use App\Events\OrderRefundTransactionEvent;
+use App\Listeners\AddOrderRefundTransactionListener;
+use App\Events\ProductTransactionLogEvent;
+use App\Listeners\AddProductTransactionLogListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,6 +31,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderTransactionEvent::class => [
             AddOrderTransactionListener::class,
+        ],
+        OrderRefundTransactionEvent::class => [
+            AddOrderRefundTransactionListener::class,
+        ],
+        ProductTransactionLogEvent::class => [
+            AddProductTransactionLogListener::class,
         ],
     ];
 

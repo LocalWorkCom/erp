@@ -20,7 +20,16 @@ class Vendor extends Model
         'country_id',
         'created_by',
         'modified_by',
-        'deleted_by'
+        'deleted_by',
+    ];
+
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function country()

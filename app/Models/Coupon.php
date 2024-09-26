@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,20 +11,28 @@ class Coupon extends Model
 
     protected $fillable = [
         'code',
-        'type', // percentage or fixed
+        'type',
         'value',
         'minimum_spend',
         'usage_limit',
-        'count_usage', // Updated from used_times to count_usage
+        'count_usage',
         'start_date',
         'end_date',
         'is_active',
         'created_by',
         'modified_by',
-        'deleted_by',
+        'deleted_by'
     ];
 
-    // Relationships
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -41,8 +48,9 @@ class Coupon extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    // Scope to get only active coupons
-    public function scopeActive($query)
+
+ // Scope to get only active coupons
+     public function scopeActive($query)
     {
         return $query->where('is_active', true)
                      ->where(function ($q) {
@@ -61,15 +69,15 @@ class Coupon extends Model
         return $this->usage_limit && $this->count_usage >= $this->usage_limit;
     }
 
-    // Method to increment count usage
-    public function incrementUsage()
+      // Method to increment count usage
+      public function incrementUsage()
     {
-        $this->count_usage++; // Updated from used_times to count_usage
+        $this->count_usage++;
         $this->save();
     }
 
-    // Function to get coupon type label
-    public function getTypeLabelAttribute()
+      // Function to get coupon type label
+      public function getTypeLabelAttribute()
     {
         return $this->type === 'percentage' ? 'Percentage' : 'Fixed Amount';
     }

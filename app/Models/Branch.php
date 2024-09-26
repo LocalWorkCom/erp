@@ -3,11 +3,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes; // Import SoftDeletes
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branch extends Model
 {
-    use HasFactory, SoftDeletes; // Use SoftDeletes
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name_en',
@@ -26,7 +26,14 @@ class Branch extends Model
         'deleted_by'
     ];
 
-    protected $dates = ['deleted_at']; // Add this for soft deletes
+    protected $hidden = [
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     public function country()
     {
