@@ -16,9 +16,10 @@ class Recipe extends Model
         'description_en',
         'description_ar',
         'category_id',
-        'meal_type',  
+        'meal_type',
         'price',
         'is_active',
+        'cuisine_id',  
         'created_by',
         'modified_by',
         'deleted_by',
@@ -72,8 +73,9 @@ class Recipe extends Model
     {
         return $this->belongsToMany(Addon::class, 'recipe_addons');
     }
+
     public function cuisine()
-{
-    return $this->belongsTo(Cuisine::class);
-}
+    {
+        return $this->belongsTo(Cuisine::class);
+    }
 }
