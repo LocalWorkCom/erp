@@ -23,6 +23,9 @@ class OpeningBalanceController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $balance = OpeningBalance::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $balance, 1);
@@ -46,6 +49,9 @@ class OpeningBalanceController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -153,6 +159,9 @@ class OpeningBalanceController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [

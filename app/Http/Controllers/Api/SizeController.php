@@ -19,6 +19,9 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $sizes = Size::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $sizes, 1);
@@ -42,6 +45,9 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -77,6 +83,9 @@ class SizeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $size = Size::findOrFail($request->input('id'));
             return ResponseWithSuccessData($lang, $size, 1);
         } catch (\Exception $e) {

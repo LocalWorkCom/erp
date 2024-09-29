@@ -300,7 +300,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('/', [pointsController::class, 'index']);
         Route::post('/', [pointsController::class, 'store']);
         Route::get('/{id}', [pointsController::class, 'show']);
-        Route::any('/{id}', [pointsController::class, 'update']);
+        Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
     });
     

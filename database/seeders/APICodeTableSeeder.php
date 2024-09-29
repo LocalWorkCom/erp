@@ -35,6 +35,9 @@ class APICodeTableSeeder extends Seeder
             ['code' => '21', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "ُOrder is reorded successfully.", 'api_code_message_ar' => "تم اعادة الطلب بنجاح"],
             ['code' => '22', 'api_code_title_en' => "NotFound", 'api_code_title_ar' => 'لا يوجد', 'api_code_message_en' =>  "ُOrder not found.", 'api_code_message_ar' => "الطلب غير موجود"],
             ['code' => '23', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User created successfully.", 'api_code_message_ar' => "تم التسجيل بنجاح"],
+            ['code' => '24', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  'More than one point calculation system cannot be activated', 'api_code_message_ar' => 'لا يمكن تفعيل اكثر من نظام لحساب النقاط'],
+            ['code' => '25', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' => 'All systems are disabled and the system must be activated', 'api_code_message_ar' => 'كل الانظمه غير مفعله و يحب تفعيل نظام'],
+
         ];
 
         DB::table('apicodes')->insert($sizes);
