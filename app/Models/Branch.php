@@ -21,6 +21,7 @@ class Branch extends Model
         'email',
         'manager_name',
         'opening_hours',
+        'has_kids_area', 
         'created_by',
         'modified_by',
         'deleted_by'

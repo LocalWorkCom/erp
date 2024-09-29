@@ -308,7 +308,7 @@ function CountCouponUsage($id)
     $coupon = Coupon::find($id);
 
     if ($coupon) {
-        if ($coupon->usage_limit <= $coupon->count_usage + 1) {
+        if ($coupon->usage_limit <= $coupon->count_usage) {
             return false;
         }
         $coupon->count_usage = $coupon->count_usage + 1;
@@ -319,7 +319,9 @@ function CountCouponUsage($id)
 
 function CheckDiscountValid()
 {
-    $discount = Discount::where('start_date', '>=', date('Y-m-d'))->where('end_date', '<=', date('Y-m-d'))->first();
+    $discount = Discount::where('start_date', '<=', now())
+        ->where('end_date', '>=', now())
+        ->first();
     return $discount;
 }
 function getSetting($column)
@@ -341,15 +343,30 @@ function applyCoupon($total_price, $coupon)
     }
     return $total_price;
 }
-
-// Function to apply tax
-function applyTax($total_price, $tax_percentage)
+function applyDiscount($total_price, $discount)
 {
-    return $total_price + ($total_price * ($tax_percentage / 100));
+    if ($discount->type == 'fixed') {
+        return $total_price - $discount->value;
+    } else {
+        return $total_price - ($total_price * ($discount->value / 100));
+    }
+    return $total_price;
+}
+// Function to apply tax
+function applyTax($total_price, $tax_percentage, $tax_application)
+{
+    if($tax_application){
+        return $total_price - ($total_price * ($tax_percentage / 100));
+
+    }else{
+
+        return $total_price + ($total_price * ($tax_percentage / 100));
+    }
 }
 function CalculateTax($tax_percentage, $amount)
 {
     $tax = $amount * ($tax_percentage / 100);
+    // dd($tax,($tax_percentage / 100), $tax_percentage);
     return $tax;
 }
 

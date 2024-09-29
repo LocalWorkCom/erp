@@ -7,21 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
+use App\Models\Ingredient;
 use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
 {
-
     public function index(Request $request)
     {
         try {
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            // Fetch recipes with images
+            // Fetch recipes with images, ingredients, category, and cuisine
             $recipes = $withTrashed
-                ? Recipe::withTrashed()->with(['ingredients', 'images', 'category'])->get()
-                : Recipe::with(['ingredients', 'images', 'category'])->get();
+                ? Recipe::withTrashed()->with(['ingredients', 'images', 'category', 'cuisine'])->get()
+                : Recipe::with(['ingredients', 'images', 'category', 'cuisine'])->get();
 
             return ResponseWithSuccessData($lang, $recipes, 1);
         } catch (\Exception $e) {
@@ -30,13 +30,12 @@ class RecipeController extends Controller
         }
     }
 
-
     public function show(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
 
-            $recipe = Recipe::withTrashed()->with(['ingredients', 'images', 'category'])->findOrFail($id);
+            $recipe = Recipe::withTrashed()->with(['ingredients', 'images', 'category', 'cuisine'])->findOrFail($id);
 
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
@@ -45,7 +44,6 @@ class RecipeController extends Controller
         }
     }
 
- 
     public function store(Request $request)
     {
         try {
@@ -53,16 +51,22 @@ class RecipeController extends Controller
             $request->merge([
                 'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
             ]);
+
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'category_id' => 'required|integer|exists:recipe_categories,id',
+                'cuisine_id' => 'required|integer|exists:cuisines,id',
+                'meal_type' => 'required', 
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000', 
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+                'ingredients' => 'required|array',
+                'ingredients.*.product_id' => 'required|integer|exists:products,id',
+                'ingredients.*.quantity' => 'required|numeric',
             ]);
 
             $recipe = Recipe::create([
@@ -71,6 +75,8 @@ class RecipeController extends Controller
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
                 'category_id' => $request->category_id,
+                'cuisine_id' => $request->cuisine_id,
+                'meal_type' => $request->meal_type,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
@@ -86,13 +92,23 @@ class RecipeController extends Controller
                 }
             }
 
+            foreach ($request->ingredients as $ingredientData) {
+                $productUnit = \App\Models\ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'product_id' => $ingredientData['product_id'],
+                    'product_unit_id' => $productUnit->id,
+                    'quantity' => $ingredientData['quantity'],
+                ]);
+            }
+
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
 
     public function update(Request $request, $id)
     {
@@ -101,16 +117,22 @@ class RecipeController extends Controller
             $request->merge([
                 'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
             ]);
+
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'category_id' => 'required|integer|exists:recipe_categories,id',
+                'cuisine_id' => 'required|integer|exists:cuisines,id',
+                'meal_type' => 'required', 
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000', 
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+                'ingredients' => 'required|array',
+                'ingredients.*.product_id' => 'required|integer|exists:products,id',
+                'ingredients.*.quantity' => 'required|numeric',
             ]);
 
             $recipe = Recipe::findOrFail($id);
@@ -121,13 +143,14 @@ class RecipeController extends Controller
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
                 'category_id' => $request->category_id,
+                'cuisine_id' => $request->cuisine_id,
+                'meal_type' => $request->meal_type, 
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'modified_by' => auth()->id(),
             ]);
 
             if ($request->hasFile('images')) {
-                // Delete old images from the storage
                 foreach ($recipe->images as $image) {
                     if (Storage::exists($image->image_path)) {
                         Storage::delete($image->image_path);
@@ -135,7 +158,6 @@ class RecipeController extends Controller
                     $image->delete(); 
                 }
 
-                // Add new images
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('recipes', 'public');
                     RecipeImage::create([
@@ -145,6 +167,19 @@ class RecipeController extends Controller
                 }
             }
 
+            // Update ingredients
+            Ingredient::where('recipe_id', $id)->delete();
+            foreach ($request->ingredients as $ingredientData) {
+                $productUnit = \App\Models\ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'product_id' => $ingredientData['product_id'],
+                    'product_unit_id' => $productUnit->id,
+                    'quantity' => $ingredientData['quantity'],
+                ]);
+            }
+
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error updating recipe: ' . $e->getMessage());
@@ -152,18 +187,11 @@ class RecipeController extends Controller
         }
     }
 
-    /**
-     * Soft delete the specified recipe.
-     */
     public function destroy(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
-
-            // Find the recipe
             $recipe = Recipe::findOrFail($id);
-
-            // Soft delete the recipe (which cascades to its images)
             $recipe->update(['deleted_by' => auth()->id()]);
             $recipe->delete();
 
@@ -174,15 +202,10 @@ class RecipeController extends Controller
         }
     }
 
-    /**
-     * Restore a soft-deleted recipe.
-     */
     public function restore(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
-
-            // Find the soft-deleted recipe
             $recipe = Recipe::withTrashed()->findOrFail($id);
             $recipe->restore();
 

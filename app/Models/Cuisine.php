@@ -1,19 +1,22 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Addon extends Model
+class Cuisine extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name_en',
         'name_ar',
+        'description_en',
+        'description_ar',
+        'image_path',
         'is_active',
-        'image_path', 
         'created_by',
         'modified_by',
         'deleted_by',
@@ -30,6 +33,21 @@ class Addon extends Model
 
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'recipe_addons');
+        return $this->hasMany(Recipe::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function modifier()
+    {
+        return $this->belongsTo(User::class, 'modified_by');
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
     }
 }

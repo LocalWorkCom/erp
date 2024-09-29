@@ -122,6 +122,9 @@ class StoreTransactionController extends Controller
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
                 $add_store_items->expired_date = $product['expired_date'];
+                $add_store_items->order_id = "";
+                $add_store_items->order_details_id = "";
+                $add_store_items->order_addon_id = "";
 
                 event(new ProductTransactionEvent($add_store_items));
             }

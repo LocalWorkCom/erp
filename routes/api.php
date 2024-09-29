@@ -27,7 +27,6 @@ use App\Http\Controllers\Api\LineController;
 use App\Http\Controllers\Api\DivisionController;
 use App\Http\Controllers\Api\ShelfController;
 use App\Http\Controllers\Api\FloorController;
-use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderRefundController;
 use App\Http\Controllers\Api\OrderTrackingController;
@@ -36,6 +35,8 @@ use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\RecipeCategoryController;
+use App\Http\Controllers\Api\CuisineController;
+use App\Http\Controllers\Api\AddonController;
 
 
 /*
@@ -234,23 +235,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
     });
 
-        // Recipes and Ingredients
+   
+   
     Route::group(['prefix' => 'recipes'], function () {
-        // Recipes routes
-        Route::get('recipeList', [RecipeController::class, 'index']);
-        Route::post('addRecipe', [RecipeController::class, 'store']);
-        Route::get('showRecipe/{id}', [RecipeController::class, 'show']);
-        Route::put('updateRecipe/{id}', [RecipeController::class, 'update']);
-        Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy']);
-        Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore']);
-
-        // Ingredients routes
-        Route::get('{recipeId}/ingredientList', [IngredientController::class, 'index']);
-        Route::post('{recipeId}/addIngredient', [IngredientController::class, 'store']);
-        Route::put('updateIngredient/{id}', [IngredientController::class, 'update']);
-        Route::delete('deleteIngredient/{id}', [IngredientController::class, 'destroy']);
-        Route::post('restoreIngredient/{id}', [IngredientController::class, 'restore']);
+        Route::get('recipeList', [RecipeController::class, 'index'])->name('recipes.index'); // Fetch all recipes
+        Route::post('addRecipe', [RecipeController::class, 'store'])->name('recipes.store'); // Create a new recipe (with ingredients)
+        Route::get('showRecipe/{id}', [RecipeController::class, 'show'])->name('recipes.show'); // Fetch a specific recipe by ID
+        Route::put('updateRecipe/{id}', [RecipeController::class, 'update'])->name('recipes.update'); // Update a recipe (with ingredients)
+        Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy'); // Soft delete a recipe
+        Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore'])->name('recipes.restore'); // Restore a soft-deleted recipe
     });
+  
 
     //floors
     Route::group(['prefix' => 'floors'], function () {
@@ -307,5 +302,23 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('/{id}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+    });
+    
+    //cuisines
+    Route::prefix('cuisines')->group(function () {
+        Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');     
+        Route::post('addCuisine', [CuisineController::class, 'store'])->name('cuisines.add');        
+        Route::get('showCuisine/{id}', [CuisineController::class, 'show'])->name('cuisines.show');    
+        Route::put('updateCuisine/{id}', [CuisineController::class, 'update'])->name('cuisines.update'); 
+        Route::delete('deleteCuisine/{id}', [CuisineController::class, 'destroy'])->name('cuisines.delete'); 
+        Route::post('restoreCuisine/{id}', [CuisineController::class, 'restore'])->name('cuisines.restore'); 
+    });
+
+    Route::prefix('addons')->group(function () {
+        Route::get('/addonList', [AddonController::class, 'index'])->name('addons.index'); // Get all addons
+        Route::post('/addAddon', [AddonController::class, 'store'])->name('addons.store'); // Create an addon with products
+        Route::put('/updateAddon/{id}', [AddonController::class, 'update'])->name('addons.update'); // Update an addon
+        Route::delete('/deleteAddon/{id}', [AddonController::class, 'destroy'])->name('addons.destroy'); // Delete an addon
+        Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore'); // Restore an addon
     });
 });
