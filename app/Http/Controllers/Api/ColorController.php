@@ -17,6 +17,9 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $colors = Color::where('deleted_at', null)->get();
 
             return ResponseWithSuccessData($lang, $colors, 1);
@@ -40,6 +43,9 @@ class ColorController extends Controller
 
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -74,6 +80,9 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $color = Color::findOrFail($request->input('id'));
             return ResponseWithSuccessData($lang, $color, 1);
         } catch (\Exception $e) {
@@ -88,6 +97,9 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $color = Color::findOrFail($request->input('id'));
             return ResponseWithSuccessData($lang, $color, 1);
         } catch (\Exception $e) {
@@ -102,6 +114,9 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -135,6 +150,9 @@ class ColorController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $color = Color::findOrFail($request->input('id'));
             $is_allow = ProductColor::where('color_id', $request->input('id'))->first();
             if ($is_allow) {

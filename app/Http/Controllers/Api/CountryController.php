@@ -18,6 +18,9 @@ class CountryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $countries = Country::where('deleted_at',null)->get();
 
             return ResponseWithSuccessData($lang, $countries, 1);
@@ -31,7 +34,9 @@ class CountryController extends Controller
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
-
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $validator = Validator::make($request->all(), [
                 "name_ar" => "required",
                 "name_en" => "required",
@@ -65,6 +70,9 @@ class CountryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
@@ -101,6 +109,9 @@ class CountryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            if (!CheckToken()) {
+                return RespondWithBadRequest($lang, 5);
+            }
             $size = Country::findOrFail($request->input('id'));
             $is_allow = Branch::where('country_id', $request->input('id'))->first();
             $is_allow2 = User::where('country_id', $request->input('id'))->first();
