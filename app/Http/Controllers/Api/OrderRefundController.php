@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderRefund;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -62,6 +62,8 @@ class OrderRefundController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
+        $created_by = Auth::guard('api')->user()->id;
+
         $orderRefund = new OrderRefund();
         $orderRefund->date = date('Y-m-d');
         $orderRefund->reason = $request->reason;
@@ -79,22 +81,14 @@ class OrderRefundController extends Controller
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
-        /*if (!CheckToken()) {
+        if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
         if (Auth::guard('api')->user()->flag == 0) {
             return RespondWithBadRequest($lang, 5);
         } else {
             $created_by = Auth::guard('api')->user()->id;
-        }*/
-
-        $created_by = Auth::guard('api')->user()->id;
-
-
-        return $details_order = OrderDetail::with('Order', 'Recipe')->where('id', 1)->first();
-        return $details_order->order;
-        return $store = Store::with('branch')->where('branch_id', $details_order->Order->Branch->id)->where('is_kitchen', 1)->first();
-
+        }
 
         $order_refund_id = $request->order_refund_id;
         $orderRefund = OrderRefund::find($order_refund_id);

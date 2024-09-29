@@ -75,7 +75,10 @@ class AddOrderTransactionListener
                             $add_store_items->user_id = $order->client_id;
                             $add_store_items->store_id = $store->id;
                             $add_store_items->expired_date = "";
-        
+                            $add_store_items->order_id = $order->id;
+                            $add_store_items->order_details_id = $order_details->id;
+                            $add_store_items->order_addon_id = "";
+
                             event(new ProductTransactionEvent($add_store_items));
                         }
                     }
@@ -97,6 +100,9 @@ class AddOrderTransactionListener
                     $add_store_items->user_id = $order->client_id;
                     $add_store_items->store_id = $store->id;
                     $add_store_items->expired_date = "";
+                    $add_store_items->order_id = $order->id;
+                    $add_store_items->order_details_id = $order_details->id;
+                    $add_store_items->order_addon_id = "";
 
                     event(new ProductTransactionEvent($add_store_items));
                     //end if order is poduct
@@ -122,6 +128,10 @@ class AddOrderTransactionListener
                     $add_store_items->user_id = $order->client_id;
                     $add_store_items->store_id = $store->id;
                     $add_store_items->expired_date = "";
+                    $add_store_items->order_id = $order->id;
+                    $add_store_items->order_details_id = "";
+                    $add_store_items->order_addon_id = $addons_details->id;
+
                     event(new ProductTransactionEvent($add_store_items));
                 }
             }
