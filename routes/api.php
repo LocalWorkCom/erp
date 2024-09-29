@@ -314,11 +314,14 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreCuisine/{id}', [CuisineController::class, 'restore'])->name('cuisines.restore'); 
     });
 
+    //addons
     Route::prefix('addons')->group(function () {
-        Route::get('/addonList', [AddonController::class, 'index'])->name('addons.index'); // Get all addons
-        Route::post('/addAddon', [AddonController::class, 'store'])->name('addons.store'); // Create an addon with products
-        Route::put('/updateAddon/{id}', [AddonController::class, 'update'])->name('addons.update'); // Update an addon
-        Route::delete('/deleteAddon/{id}', [AddonController::class, 'destroy'])->name('addons.destroy'); // Delete an addon
-        Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore'); // Restore an addon
+        Route::get('/addonList', [AddonController::class, 'index'])->name('addons.index'); 
+        Route::get('/showAddon/{id}', [AddonController::class, 'show'])->name('addons.show'); 
+        Route::post('/addAddon', [AddonController::class, 'store'])->name('addons.store');
+        Route::put('/updateAddon/{id}', [AddonController::class, 'update'])->name('addons.update'); 
+        Route::delete('/deleteAddon/{id}', [AddonController::class, 'destroy'])->name('addons.destroy'); 
+        Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore'); 
     });
+    
 });
