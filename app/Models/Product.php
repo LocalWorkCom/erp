@@ -64,11 +64,11 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function unites()
+    public function productUnits()
     {
         return $this->belongsToMany(Unit::class, 'product_units', 'product_id', 'unit_id');
     }
-    
+
     public function colors()
     {
         return $this->belongsToMany(Color::class, 'product_colors', 'product_id', 'color_id');
@@ -88,5 +88,4 @@ class Product extends Model
     {
         return $this->hasManyThrough(Ingredient::class, ProductUnit::class, 'product_id', 'product_unit_id');
     }
-
 }

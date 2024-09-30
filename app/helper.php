@@ -34,6 +34,7 @@ function RespondWithSuccessRequest($lang, $code)
 
 function RespondWithBadRequest($lang, $code)
 {
+
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
@@ -355,10 +356,9 @@ function applyDiscount($total_price, $discount)
 // Function to apply tax
 function applyTax($total_price, $tax_percentage, $tax_application)
 {
-    if($tax_application){
+    if ($tax_application) {
         return $total_price - ($total_price * ($tax_percentage / 100));
-
-    }else{
+    } else {
 
         return $total_price + ($total_price * ($tax_percentage / 100));
     }
@@ -370,35 +370,35 @@ function CalculateTax($tax_percentage, $amount)
     return $tax;
 }
 
-function calculatePointBycurrency($total,$value){
+function calculatePointBycurrency($total, $value)
+{
     //this functions for earn points
     $totalPoints = $total * $value;
     return $totalPoints;
 }
-function calculatePointBypercentage($total,$value){
+function calculatePointBypercentage($total, $value)
+{
     //this functions for earn points
-    $valueofpercentage = $value / 100 ;
+    $valueofpercentage = $value / 100;
     $totalPoints = $total * $valueofpercentage;
     return $totalPoints;
 }
-function getCurrentSystemPointType($total) {
+function getCurrentSystemPointType($total)
+{
     //this functions for earn points
     $current = pointSystem::where('active', 1)->first();
 
     if ($current) {
         $type = $current->key;
         $value = $current->value;
-        if($type == 0){
-          $points=  calculatePointBycurrency($total,$value);
-
-        }elseif($type == 1){
-            $points= calculatePointBypercentage($total,$value);
+        if ($type == 0) {
+            $points =  calculatePointBycurrency($total, $value);
+        } elseif ($type == 1) {
+            $points = calculatePointBypercentage($total, $value);
         }
         return $points;
     }
 
     return null;
 }
-function updateUserPoints($points ,$order,$type,){
-
-}
+function updateUserPoints($points, $order, $type,) {}
