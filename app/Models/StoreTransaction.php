@@ -18,7 +18,7 @@ class StoreTransaction extends Model
 
     public function toId()
     {
-        return $this->belongsTo(Store::class ,'to_id');
+        return $this->belongsTo(Store::class, 'to_id');
     }
 
     public function createdBy()
@@ -33,7 +33,11 @@ class StoreTransaction extends Model
 
     public function allStoreTransactionDetails()
     {
-        return $this->hasMany(StoreTransactionDetails::class ,'store_transaction_id', 'id');
+        return $this->hasMany(StoreTransactionDetails::class, 'store_transaction_id', 'id');
     }
-    
+
+    public function purchaseInvoice()
+    {
+        return $this->belongsTo(PurchaseInvoice::class, 'purchase_invoice_id');
+    }
 }

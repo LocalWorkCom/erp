@@ -37,7 +37,7 @@ use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\RecipeCategoryController;
 use App\Http\Controllers\Api\CuisineController;
 use App\Http\Controllers\Api\AddonController;
-
+use App\Http\Controllers\Api\PurchaseInvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -235,8 +235,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreShelf/{id}', [ShelfController::class, 'restore']);
     });
 
-   
-   
+
+
     Route::group(['prefix' => 'recipes'], function () {
         Route::get('recipeList', [RecipeController::class, 'index'])->name('recipes.index'); // Fetch all recipes
         Route::post('addRecipe', [RecipeController::class, 'store'])->name('recipes.store'); // Create a new recipe (with ingredients)
@@ -245,7 +245,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy'); // Soft delete a recipe
         Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore'])->name('recipes.restore'); // Restore a soft-deleted recipe
     });
-  
+
 
     //floors
     Route::group(['prefix' => 'floors'], function () {
@@ -303,25 +303,32 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
     });
-    
+
     //cuisines
     Route::prefix('cuisines')->group(function () {
-        Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');     
-        Route::post('addCuisine', [CuisineController::class, 'store'])->name('cuisines.add');        
-        Route::get('showCuisine/{id}', [CuisineController::class, 'show'])->name('cuisines.show');    
-        Route::put('updateCuisine/{id}', [CuisineController::class, 'update'])->name('cuisines.update'); 
-        Route::delete('deleteCuisine/{id}', [CuisineController::class, 'destroy'])->name('cuisines.delete'); 
-        Route::post('restoreCuisine/{id}', [CuisineController::class, 'restore'])->name('cuisines.restore'); 
+        Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');
+        Route::post('addCuisine', [CuisineController::class, 'store'])->name('cuisines.add');
+        Route::get('showCuisine/{id}', [CuisineController::class, 'show'])->name('cuisines.show');
+        Route::put('updateCuisine/{id}', [CuisineController::class, 'update'])->name('cuisines.update');
+        Route::delete('deleteCuisine/{id}', [CuisineController::class, 'destroy'])->name('cuisines.delete');
+        Route::post('restoreCuisine/{id}', [CuisineController::class, 'restore'])->name('cuisines.restore');
     });
 
     //addons
     Route::prefix('addons')->group(function () {
-        Route::get('/addonList', [AddonController::class, 'index'])->name('addons.index'); 
-        Route::get('/showAddon/{id}', [AddonController::class, 'show'])->name('addons.show'); 
+        Route::get('/addonList', [AddonController::class, 'index'])->name('addons.index');
+        Route::get('/showAddon/{id}', [AddonController::class, 'show'])->name('addons.show');
         Route::post('/addAddon', [AddonController::class, 'store'])->name('addons.store');
-        Route::put('/updateAddon/{id}', [AddonController::class, 'update'])->name('addons.update'); 
-        Route::delete('/deleteAddon/{id}', [AddonController::class, 'destroy'])->name('addons.destroy'); 
-        Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore'); 
+        Route::put('/updateAddon/{id}', [AddonController::class, 'update'])->name('addons.update');
+        Route::delete('/deleteAddon/{id}', [AddonController::class, 'destroy'])->name('addons.destroy');
+        Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore');
     });
-    
+
+    //purchase_invoice
+    Route::prefix('purchase-invoices')->group(function () {
+        Route::get('/', [PurchaseInvoiceController::class, 'index'])->name('purchase-invoices.index');
+        Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
+        Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
+        Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
+    });
 });
