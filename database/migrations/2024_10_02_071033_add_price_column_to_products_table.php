@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchase_invoices_details', function (Blueprint $table) {
-            $table->date('expiry_date')->nullable();
+        Schema::table('products', function (Blueprint $table) {
+            $table->decimal('price', 10, 2);
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('purchase_invoices_details', function (Blueprint $table) {
-            $table->dropColumn('expiry_date');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('price');
         });
     }
 };

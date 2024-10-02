@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\ProductTransactionEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\PurchaseInvoice;
 use App\Models\PurchaseInvoicesDetails;
 use App\Models\StoreTransaction;
@@ -51,158 +52,110 @@ class PurchaseInvoiceController extends Controller
         App::setLocale($lang);
 
         if (!CheckToken()) {
-            return RespondWithBadRequest($lang, code: 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
         $validator = Validator::make($request->all(), [
             'date' => 'required|date',
-            'invoice_number' => 'required|string|unique:purchase_invoices,invoice_number',
             'vendor_id' => 'required|exists:vendors,id',
-            'type' => 'required|boolean', // 0: Purchase, 1: Refund
             'store_id' => 'required|exists:stores,id',
-            'category_id' => 'required|exists:categories,id',
-            'product_id' => 'required|exists:products,id',
-            'unit_id' => 'required|exists:units,id',
-            'price' => 'required|numeric|min:0',
-            'quantity' => 'required|numeric|min:0',
-            'expiry_date' => 'date',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.unit_id' => 'required|exists:units,id',
+            'products.*.quantity' => 'required|numeric|min:0',
+            'products.*.price' => 'required|numeric|min:0',
+            'products.*.expiry_date' => 'nullable|date',
         ]);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return RespondWithBadRequest($lang, $validator->errors());
         }
 
-        // Create the purchase invoice
-        $purchaseInvoice = PurchaseInvoice::create([
-            'date' => $request->date,
-            'invoice_number' => $request->invoice_number,
-            'vendor_id' => $request->vendor_id,
-            'type' => $request->type,
-            'store_id' => $request->store_id,
-            'created_by' => Auth::id(),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // Create the purchase invoice details
-        PurchaseInvoicesDetails::create([
-            'purchase_invoices_id' => $purchaseInvoice->id,
-            'category_id' => $request->category_id,
-            'product_id' => $request->product_id,
-            'unit_id' => $request->unit_id,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-        ]);
-
-        return ResponseWithSuccessData($lang, $purchaseInvoice->load('purchaseInvoicesDetails'), 27);
-    }
-
-
-    private function checkStoreTransactionExists($purchaseInvoiceId)
-    {
-        return StoreTransaction::where('purchase_invoice_id', $purchaseInvoiceId)->exists();
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
-
-        if (!CheckToken()) {
-            return RespondWithBadRequest($lang, 5);
-        }
-
-        $purchaseInvoice = PurchaseInvoice::findOrFail($id);
-
-
-
-        // Check if a store transaction is linked to the purchase invoice
-        // if ($this->checkStoreTransactionExists($purchaseInvoice->id)) {
-        // If the type is not a refund (0: Purchase), block the update
-        if ($purchaseInvoice->type == 0) {
-            return RespondWithBadRequestData($lang, 28);
-        }
-        // If the type is a refund (1: Refund), allow the update
-        if ($purchaseInvoice->type == 1) {
-            $validator = Validator::make($request->all(), [
-                'date' => 'required|date',
-                'invoice_number' => 'required|string|unique:purchase_invoices,invoice_number,' . $purchaseInvoice->id,
-                'vendor_id' => 'required|exists:vendors,id',
-                'store_id' => 'required|exists:stores,id',
-                'category_id' => 'required|exists:categories,id',
-                'product_id' => 'required|exists:products,id',
-                'unit_id' => 'required|exists:units,id',
-                'price' => 'required|numeric|min:0',
-                'quantity' => 'required|numeric|min:0',
-                'expiry_date' => 'required|date',
-            ]);
-
-            if ($validator->fails()) {
-                return RespondWithBadRequestWithData($validator->errors());
-            }
-            $purchaseInvoice->update([
+            //Create the purchase invoice
+            $purchaseInvoice = PurchaseInvoice::create([
                 'date' => $request->date,
-                'invoice_number' => $request->invoice_number,
+                'invoice_number' => "INV-" . rand(1000, 9999),
                 'vendor_id' => $request->vendor_id,
-                'type' => $request->type,
                 'store_id' => $request->store_id,
-                'modified_by' => Auth::id(),
+                'created_by' => Auth::id(),
             ]);
 
-            // Update purchase invoice details
-            $purchaseInvoiceDetail = PurchaseInvoicesDetails::where('purchase_invoices_id', $purchaseInvoice->id)->first();
-            $purchaseInvoiceDetail->update([
-                'category_id' => $request->category_id,
-                'product_id' => $request->product_id,
-                'unit_id' => $request->unit_id,
-                'price' => $request->price,
-                'quantity' => $request->quantity,
+            $totalQuantity = 0;
+            $totalPrice = 0;
+
+            //Create a new store transaction
+            $storeTransaction = StoreTransaction::create([
+                'user_id' => Auth::id(),
+                'store_id' => $request->store_id,
+                'type' => 2,  // Incoming type for purchasing
+                'to_type' => 3, // From vendor
+                'to_id' => $request->vendor_id,
+                'date' => $request->date,
+                'total' => 0,
+                'total_price' => 0,
+                'created_by' => Auth::id(),
             ]);
 
-            $productTransaction = new StoreTransactionDetails();
-            $productTransaction->product_id = $request->product_id;
-            $productTransaction->store_id = $request->store_id;
-            $productTransaction->count = $request->quantity;
-            $productTransaction->expired_date = $request->expiry_date ?? null;
-            $productTransaction->type = 1; // Type 1 for refund
+            //Loop through the products and create purchase invoice details & store transaction details
+            foreach ($request->products as $productData) {
+                PurchaseInvoicesDetails::create([
+                    'purchase_invoice_id' => $purchaseInvoice->id,
+                    'product_id' => $productData['product_id'],
+                    'unit_id' => $productData['unit_id'],
+                    'price' => $productData['price'],
+                    'quantity' => $productData['quantity'],
+                    'expiry_date' => $productData['expiry_date'] ?? null,
+                ]);
 
-            event(new ProductTransactionEvent($productTransaction));
+                // Create store transaction details
+                StoreTransactionDetails::create([
+                    'store_transaction_id' => $storeTransaction->id,
+                    'product_id' => $productData['product_id'],
+                    'product_unit_id' => $productData['unit_id'],
+                    'price' => $productData['price'],
+                    'count' => $productData['quantity'],
+                    'total_price' => $productData['price'] * $productData['quantity'],  // Total price for this product
+                    'expired_date' => $productData['expiry_date'] ?? null,
+                ]);
 
+                $totalQuantity += $productData['quantity'];
+                $totalPrice += $productData['price'] * $productData['quantity'];
 
-            return ResponseWithSuccessData($lang, $purchaseInvoice->load('purchaseInvoicesDetails'), 29);
+                // Trigger the ProductTransactionEvent for each product added to inventory
+                $storeTransactionDetails = new StoreTransactionDetails([
+                    'product_id' => $productData['product_id'],
+                    'store_id' => $request->store_id,
+                    'count' => $productData['quantity'],
+                    'expired_date' => $productData['expiry_date'] ?? null,
+                    'type' => 2,  // Type 2 for purchasing from the vendor
+                ]);
+
+                // Trigger the event for inventory update
+                event(new ProductTransactionEvent($storeTransactionDetails));
+            }
+
+            //Update the total quantity and price in the purchase invoice and store transaction
+            $purchaseInvoice->update([
+                'total_quantity' => $totalQuantity,
+                'total_price' => $totalPrice,
+            ]);
+
+            $storeTransaction->update([
+                'total' => $totalQuantity,
+                'total_price' => $totalPrice,
+            ]);
+
+            DB::commit();
+            return ResponseWithSuccessData($lang, [
+                'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
+                'store_transaction' => $storeTransaction->load('storeTransactionDetails'),
+            ], 27);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return RespondWithBadRequestData($lang, 2);
         }
     }
-    // }
-    // If no store transaction exists, allow updates
-    // $validator = Validator::make($request->all(), [
-    //     'date' => 'required|date',
-    //     'invoice_number' => 'required|string|unique:purchase_invoices,invoice_number,' . $purchaseInvoice->id,
-    //     'vendor_id' => 'required|exists:vendors,id',
-    //     'store_id' => 'required|exists:stores,id',
-    //     'category_id' => 'required|exists:categories,id',
-    //     'product_id' => 'required|exists:products,id',
-    //     'unit_id' => 'required|exists:units,id',
-    //     'price' => 'required|numeric|min:0',
-    //     'quantity' => 'required|numeric|min:0',
-    //     'expiry_date' => 'required|date',
-    // ]);
-
-    // if ($validator->fails()) {
-    //     return RespondWithBadRequestWithData($validator->errors());
-    // }
-
-    // try {
-    //     DB::beginTransaction();
-
-    //     // Update the purchase invoice and details
-    //     $purchaseInvoice->update($request->all());
-    //     $purchaseInvoiceDetail = PurchaseInvoicesDetails::where('purchase_invoices_id', $purchaseInvoice->id)->first();
-    //     $purchaseInvoiceDetail->update($request->all());
-
-    //     DB::commit();
-
-    //     return ResponseWithSuccessData($lang, $purchaseInvoice->load('purchaseInvoicesDetails'), 27);
-    // } catch (\Exception $e) {
-    //     DB::rollBack();
-    //     return RespondWithBadRequest($lang, 2);
-    // }
 }
