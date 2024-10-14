@@ -16,7 +16,7 @@ class APICodeTableSeeder extends Seeder
             ['code' => '2', 'api_code_title_en' => 'Failed', 'api_code_title_ar' => 'غير صحيح', 'api_code_message_en' => 'Failed Message', 'api_code_message_ar' => 'طلب غير صحيح'],
             ['code' => '3', 'api_code_title_en' => 'Attention', 'api_code_title_ar' => 'انتبه', 'api_code_message_en' => 'The new password cannot be the same as the current password', 'api_code_message_ar' => 'لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية'],
             ['code' => '4', 'api_code_title_en' => 'Success', 'api_code_title_ar' => 'تم بنجاح', 'api_code_message_en' =>  "User logged out", 'api_code_message_ar' => 'يجب تسجيل الدخول أولا'],
-            ['code' => '5', 'api_code_title_en' => 'Failed', 'api_code_title_ar' =>  'غير صحيح', 'api_code_message_en' =>  "Please , Login to access this route", 'api_code_message_ar' => 'التوكين غير صحيح'],
+            ['code' => '5', 'api_code_title_en' => "Failed", 'api_code_title_ar' =>  'غير صحيح', 'api_code_message_en' =>  "Please , Login to access this route", 'api_code_message_ar' => 'التوكين غير صحيح'],
             ['code' => '6', 'api_code_title_en' => "Category can't delete", 'api_code_title_ar' => 'التصنيف لا يمكن حذفه', 'api_code_message_en' =>  "Category cannot be deleted as it has associated product", 'api_code_message_ar' => 'التصنيف لا يمكن حذفه لانه مرتبط بالمنتج'],
             ['code' => '7', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  "You cannot update the opening balance because there are transactions on this product in this store after the creation date.", 'api_code_message_ar' => "لا يمكنك تعديل الرصيد الافتتاحي لأن هناك معاملات على المنتج في هذا المتجر بعد هذا التاريخ."],
             ['code' => '8', 'api_code_title_en' => "NotExist", 'api_code_title_ar' => 'لا يوجد', 'api_code_message_en' =>  "Data is not exist.", 'api_code_message_ar' => "البيانات غير موجودة"],
@@ -37,6 +37,10 @@ class APICodeTableSeeder extends Seeder
             ['code' => '23', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "User created successfully.", 'api_code_message_ar' => "تم التسجيل بنجاح"],
             ['code' => '24', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  'More than one point calculation system cannot be activated', 'api_code_message_ar' => 'لا يمكن تفعيل اكثر من نظام لحساب النقاط'],
             ['code' => '25', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' => 'All systems are disabled and the system must be activated', 'api_code_message_ar' => 'كل الانظمه غير مفعله و يحب تفعيل نظام'],
+            ['code' => '26', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase Invoices retrieved successfully.", 'api_code_message_ar' => "تم عرض تفاصيل فواتير المشتريات بنجاح"],
+            ['code' => '27', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase Invoice created successfully.", 'api_code_message_ar' => "تم تخزين فاتورة المشتريات بنجاح"],
+            ['code' => '28', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' => 'Cannot update purchase invoice linked to a store transaction', 'api_code_message_ar' => 'لا يمكن التعديل على فاتورة مشتريات مربوطة بحركة في المخزن'],
+            ['code' => '29', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase invoice (refund) updated successfully.", 'api_code_message_ar' => "تم تعديل فاتورة المشتريات (مسترجع) بنجاح"]
 
         ];
 
