@@ -13,9 +13,9 @@ class RecipeAddon extends Model
     protected $fillable = [
         'recipe_id',
         'addon_id',
-        'product_id',
-        'product_unit_id',
-        'quantity',
+        'product_id',//
+        'product_unit_id',//
+        'quantity',//
     ];
 
     protected $hidden = [
