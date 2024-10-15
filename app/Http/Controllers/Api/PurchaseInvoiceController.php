@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PurchaseInvoiceController extends Controller
 {
@@ -71,91 +70,82 @@ class PurchaseInvoiceController extends Controller
             return RespondWithBadRequest($lang, $validator->errors());
         }
 
-        try {
-            DB::beginTransaction();
+        //Create the purchase invoice
+        $purchaseInvoice = new PurchaseInvoice();
+        $purchaseInvoice->Date = $request->date;
+        $purchaseInvoice->invoice_number = "INV-" . rand(1000, 9999);
+        $purchaseInvoice->vendor_id = $request->vendor_id;
+        $purchaseInvoice->type = $request->type;
+        $purchaseInvoice->store_id = $request->store_id;
+        $purchaseInvoice->created_by = Auth::id();
 
-            //Create the purchase invoice
-            $purchaseInvoice = PurchaseInvoice::create([
-                'date' => $request->date,
-                'invoice_number' => "INV-" . rand(1000, 9999),
-                'vendor_id' => $request->vendor_id,
-                'store_id' => $request->store_id,
-                'created_by' => Auth::id(),
+        $totalQuantity = 0;
+        $totalPrice = 0;
+
+        //Create a new store transaction
+        // $storeTransaction = StoreTransaction::create([
+        //     'user_id' => Auth::id(),
+        //     'store_id' => $request->store_id,
+        //     'type' => 2,  // Incoming type for purchasing
+        //     'to_type' => 3, // From vendor
+        //     'to_id' => $request->vendor_id,
+        //     'date' => $request->date,
+        //     'total' => 0,
+        //     'total_price' => 0,
+        //     'created_by' => Auth::id(),
+        // ]);
+
+        //Loop through the products and create purchase invoice details & store transaction details
+        foreach ($request->products as $productData) {
+            PurchaseInvoicesDetails::create([
+                'purchase_invoice_id' => $purchaseInvoice->id,
+                'product_id' => $productData['product_id'],
+                'unit_id' => $productData['unit_id'],
+                'price' => $productData['price'],
+                'quantity' => $productData['quantity'],
+                'expiry_date' => $productData['expiry_date'] ?? null,
             ]);
 
-            $totalQuantity = 0;
-            $totalPrice = 0;
+            // Create store transaction details
+            // StoreTransactionDetails::create([
+            //     // 'store_transaction_id' => $storeTransaction->id,
+            //     'product_id' => $productData['product_id'],
+            //     'product_unit_id' => $productData['unit_id'],
+            //     'price' => $productData['price'],
+            //     'count' => $productData['quantity'],
+            //     'total_price' => $productData['price'] * $productData['quantity'],  // Total price for this product
+            //     'expired_date' => $productData['expiry_date'] ?? null,
+            // ]);
 
-            //Create a new store transaction
-            $storeTransaction = StoreTransaction::create([
-                'user_id' => Auth::id(),
-                'store_id' => $request->store_id,
-                'type' => 2,  // Incoming type for purchasing
-                'to_type' => 3, // From vendor
-                'to_id' => $request->vendor_id,
-                'date' => $request->date,
-                'total' => 0,
-                'total_price' => 0,
-                'created_by' => Auth::id(),
-            ]);
+            $totalQuantity += $productData['quantity'];
+            $totalPrice += $productData['price'] * $productData['quantity'];
 
-            //Loop through the products and create purchase invoice details & store transaction details
-            foreach ($request->products as $productData) {
-                PurchaseInvoicesDetails::create([
-                    'purchase_invoice_id' => $purchaseInvoice->id,
-                    'product_id' => $productData['product_id'],
-                    'unit_id' => $productData['unit_id'],
-                    'price' => $productData['price'],
-                    'quantity' => $productData['quantity'],
-                    'expiry_date' => $productData['expiry_date'] ?? null,
-                ]);
+            // Trigger the ProductTransactionEvent for each product added to inventory
+            // $storeTransactionDetails = new StoreTransactionDetails([
+            //     'product_id' => $productData['product_id'],
+            //     'store_id' => $request->store_id,
+            //     'count' => $productData['quantity'],
+            //     'expired_date' => $productData['expiry_date'] ?? null,
+            //     'type' => 2,  // Type 2 for purchasing from the vendor
+            // ]);
 
-                // Create store transaction details
-                StoreTransactionDetails::create([
-                    'store_transaction_id' => $storeTransaction->id,
-                    'product_id' => $productData['product_id'],
-                    'product_unit_id' => $productData['unit_id'],
-                    'price' => $productData['price'],
-                    'count' => $productData['quantity'],
-                    'total_price' => $productData['price'] * $productData['quantity'],  // Total price for this product
-                    'expired_date' => $productData['expiry_date'] ?? null,
-                ]);
-
-                $totalQuantity += $productData['quantity'];
-                $totalPrice += $productData['price'] * $productData['quantity'];
-
-                // Trigger the ProductTransactionEvent for each product added to inventory
-                $storeTransactionDetails = new StoreTransactionDetails([
-                    'product_id' => $productData['product_id'],
-                    'store_id' => $request->store_id,
-                    'count' => $productData['quantity'],
-                    'expired_date' => $productData['expiry_date'] ?? null,
-                    'type' => 2,  // Type 2 for purchasing from the vendor
-                ]);
-
-                // Trigger the event for inventory update
-                event(new ProductTransactionEvent($storeTransactionDetails));
-            }
-
-            //Update the total quantity and price in the purchase invoice and store transaction
-            $purchaseInvoice->update([
-                'total_quantity' => $totalQuantity,
-                'total_price' => $totalPrice,
-            ]);
-
-            $storeTransaction->update([
-                'total' => $totalQuantity,
-                'total_price' => $totalPrice,
-            ]);
-
-            DB::commit();
-            return ResponseWithSuccessData($lang, [
-                'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
-                'store_transaction' => $storeTransaction->load('storeTransactionDetails'),
-            ], 27);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return RespondWithBadRequestData($lang, 2);
+            // Trigger the event for inventory update
+            // event(new ProductTransactionEvent($storeTransactionDetails));
         }
+
+        //Update the total quantity and price in the purchase invoice and store transaction
+        $purchaseInvoice->update([
+            'total_quantity' => $totalQuantity,
+            'total_price' => $totalPrice,
+        ]);
+
+        // $storeTransaction->update([
+        //     'total' => $totalQuantity,
+        //     'total_price' => $totalPrice,
+        // ]);
+        return ResponseWithSuccessData($lang, [
+            'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
+            // 'store_transaction' => $storeTransaction->load('storeTransactionDetails'),
+        ], 27);
     }
 }
