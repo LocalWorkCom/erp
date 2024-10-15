@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class Addon extends Model
         'name_en',
         'name_ar',
         'is_active',
+        'price', 
         'image_path', 
         'created_by',
         'modified_by',
@@ -28,6 +30,7 @@ class Addon extends Model
         'deleted_at',
     ];
 
+    // Relationships
     public function recipes()
     {
         return $this->belongsToMany(Recipe::class, 'recipe_addons');
