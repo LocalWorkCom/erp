@@ -8,6 +8,7 @@ use App\Models\Addon;
 use App\Models\RecipeAddon;
 use App\Models\ProductUnit;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AddonController extends Controller
 {
@@ -28,7 +29,6 @@ class AddonController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-
             $addon = Addon::with(['recipes.addons'])->findOrFail($id);
 
             return ResponseWithSuccessData($lang, $addon, 1);
@@ -51,6 +51,7 @@ class AddonController extends Controller
                 'name_en' => 'nullable|string|max:255',
                 'is_active' => 'required|boolean',
                 'price' => 'required|numeric|min:0', // Addon price
+                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000', // Image validation
                 'products' => 'required|array',
                 'products.*.product_id' => 'required|integer|exists:products,id',
                 'products.*.quantity' => 'required|numeric|min:0',
@@ -58,11 +59,18 @@ class AddonController extends Controller
                 'recipes.*' => 'required|integer|exists:recipes,id', // Validate each recipe
             ]);
 
+            // Handle the image upload
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('addons', 'public');
+            }
+
             $addon = Addon::create([
                 'name_ar' => $request->name_ar,
                 'name_en' => $request->name_en,
                 'is_active' => $request->is_active,
                 'price' => $request->price, // Addon price
+                'image_path' => $imagePath, // Store image path
                 'created_by' => auth()->id(),
             ]);
 
@@ -100,6 +108,7 @@ class AddonController extends Controller
                 'name_en' => 'nullable|string|max:255',
                 'is_active' => 'required|boolean',
                 'price' => 'required|numeric|min:0', // Addon price
+                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000', // Image validation
                 'products' => 'required|array',
                 'products.*.product_id' => 'required|integer|exists:products,id',
                 'products.*.quantity' => 'required|numeric|min:0',
@@ -108,6 +117,18 @@ class AddonController extends Controller
             ]);
 
             $addon = Addon::findOrFail($addonId);
+
+            // Handle the image upload
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($addon->image_path && Storage::exists($addon->image_path)) {
+                    Storage::delete($addon->image_path);
+                }
+
+                // Store the new image
+                $imagePath = $request->file('image')->store('addons', 'public');
+                $addon->update(['image_path' => $imagePath]);
+            }
 
             $addon->update([
                 'name_ar' => $request->name_ar,
