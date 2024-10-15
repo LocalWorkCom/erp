@@ -89,6 +89,7 @@ class StoreTransactionController extends Controller
                 return RespondWithBadRequestWithData( __('validation.product_not_enough'));
             }*/
 
+            
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
             $add_store_bill->to_type = $request['to_type'];
