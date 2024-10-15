@@ -16,7 +16,6 @@ class RecipeAddon extends Model
         'product_id',
         'product_unit_id',
         'quantity',
-        'price',
     ];
 
     protected $hidden = [
@@ -24,6 +23,8 @@ class RecipeAddon extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    // Relationships
     public function recipe()
     {
         return $this->belongsTo(Recipe::class);
