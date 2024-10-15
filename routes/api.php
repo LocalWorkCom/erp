@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\RecipeCategoryController;
 use App\Http\Controllers\Api\CuisineController;
 use App\Http\Controllers\Api\AddonController;
+use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 
 /*
@@ -143,6 +144,10 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::group(['prefix' => 'order_transaction'], function () {
         Route::post('/', [OrderTransactionController::class, 'index']);
         Route::post('store', [OrderTransactionController::class, 'store']);
+    });
+    Route::group(['prefix' => 'order-report'], function () {
+        Route::get('/', [OrderReportController::class, 'index']);
+        Route::get('/details', [OrderReportController::class, 'ReportDetails']);
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
