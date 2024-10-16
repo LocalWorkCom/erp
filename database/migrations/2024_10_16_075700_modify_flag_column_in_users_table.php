@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('flag', ['admin', 'client', 'unknown'])
-                ->default('client')->change();
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->enum('flag', ['admin', 'client', 'unknown'])
+        //         ->default('client')->change();
+        // });
     }
 
     /**
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('flag')->default(1)
-                ->comment('0 for admin, 1 for client')->change();
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->boolean('flag')->default(1)
+        //         ->comment('0 for admin, 1 for client')->change();
+        // });
     }
 };

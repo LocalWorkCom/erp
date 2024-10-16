@@ -339,4 +339,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
             
         });
     });
+
+    //Reports
+    Route::prefix('reports')->group(function () {
+        //purchase-invoices Reports
+        Route::prefix('purchase-invoices')->group(function () {
+            Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
+        });
+    });
 });
