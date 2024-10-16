@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
+use App\Models\OrderProduct;
+use App\Models\OrderRefund;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +27,7 @@ class OrderReportController extends Controller
 
     // YourController.php
 
-    public function index(Request $request)
+    public function OrderReport(Request $request)
     {
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
@@ -46,20 +48,26 @@ class OrderReportController extends Controller
                 'users.name as client_name',
                 'branches.name_ar as branch_name',
                 'order_transactions.payment_status as payment_status',
-                'order_transactions.payment_method  as payment_method'
+                'order_transactions.payment_method  as payment_method',
+                'sum(orders.total_price_after_tax) as total'
             )
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id');
         if ($request->start_date) {
+            $orders->where('date', '>=', $request->start_date);
         }
         if ($request->end_date) {
+            $orders->where('date', '<=', $request->end_date);
         }
         if ($request->client_id) {
+            $orders->where('client_id', $request->client_id);
         }
         if ($request->branch_id) {
+            $orders->where('branch_id', $request->branch_id);
         }
         if ($request->user_id) {
+            $orders->where('created_by', $request->user_id);
         }
 
         $orders = $orders->get();
@@ -67,14 +75,14 @@ class OrderReportController extends Controller
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
-    public function ReportDetails(Request $request)
+    public function OrderReportDetails(Request $request)
     {
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
-        $orders = Order::where('id', $request->order_id)
+        $order = Order::where('id', $request->order_id)
             ->select(
                 'orders.invoice_number as inv_num',
                 'orders.type as order_type',
@@ -92,6 +100,102 @@ class OrderReportController extends Controller
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
+            ->first();
+
+        $order['details'] = OrderDetail::leftJoin('dishes', 'dishes.id', 'order_details.dish_id')->where('order_id', $request->order_id)
+            ->select('order_details.quantity as quantity', 'price_after_tax as total', 'dishes.name_ar', 'order_details.status as status')
+            ->get();
+
+        $order['products'] = OrderProduct::leftJoin('products', 'products.id', 'order_products.product_id')->leftJoin('units', 'units.id', 'order_products.unit_id')->where('order_id', $request->order_id)
+            ->select('order_products.quantity as quantity', 'order_products.price', 'products.name_ar as name')
+            ->get();
+
+
+        $order['tracking'] = OrderTracking::where('order_id', $request->order_id)->pluck('status')->toArray();
+
+        return ResponseWithSuccessData($lang, $order, 1);
+    }
+    public function OrderRefundReport(Request $request)
+    {
+
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
+
+        $orders = OrderRefund::select(
+            // 'orders.invoice_number as inv_num',
+            'orders.type as order_type',
+            'orders.status as order_status',
+            'orders.total_price_befor_tax as price_before_tax',
+            'orders.total_price_after_tax as price_after_tax',
+            'orders.date as order_date',
+            'dishes.name_ar',
+            'orders.tax_value as tax_value',
+            // 'orders.order_number as order_number',
+            'users.name as client_name',
+            'branches.name_ar as branch_name',
+            'order_refunds.invoice_number',
+            'order_refunds.date',
+            'order_transactions.payment_status as payment_status',
+            'order_transactions.payment_method as payment_method',
+            'sum(orders.total_price_after_tax) as total'
+        )
+            ->leftJoin('order_details', 'order_details.id', 'order_refunds.order_detail_id')
+            // ->leftJoin('dishes', 'dishes.id', 'order_details.dish_id')
+            ->leftJoin('orders', 'orders.id', 'order_details.order_id')
+            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
+            ->leftJoin('users', 'orders.client_id', '=', 'users.id')
+            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id');
+
+        if ($request->start_date) {
+            $orders->where('date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $orders->where('date', '<=', $request->end_date);
+        }
+        if ($request->client_id) {
+            $orders->where('client_id', $request->client_id);
+        }
+        if ($request->branch_id) {
+            $orders->where('branch_id', $request->branch_id);
+        }
+        if ($request->user_id) {
+            $orders->where('created_by', $request->user_id);
+        }
+
+        $orders = $orders->get();
+
+
+        return ResponseWithSuccessData($lang, $orders, 1);
+    }
+    public function OrderRefundReportDetails(Request $request)
+    {
+
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
+        $orders = OrderRefund::where('id', $request->order_refund_id)
+            ->select(
+                'orders.invoice_number as inv_num',
+                'orders.type as order_type',
+                'orders.status as order_status',
+                'orders.total_price_befor_tax as price_before_tax',
+                'orders.total_price_after_tax as price_after_tax',
+                'orders.date as order_date',
+                'orders.tax_value as tax_value',
+                'orders.order_number as order_number',
+                'users.name as client_name',
+                'branches.name_ar as branch_name',
+                'order_transactions.payment_status as payment_status',
+                'order_transactions.payment_method  as payment_method'
+            )
+            ->leftJoin('order_details', 'order_details.id', 'order_refunds.order_detail_id')
+            ->leftJoin('orders', 'orders.id', 'order_details.order_id')
+            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
+            ->leftJoin('users', 'orders.client_id', '=', 'users.id')
+            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
             ->first();
 
 

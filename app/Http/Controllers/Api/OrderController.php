@@ -7,6 +7,7 @@ use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
+use App\Models\OrderProduct;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use App\Models\RecipeAddon;
@@ -56,7 +57,7 @@ class OrderController extends Controller
             $client_id = Auth::guard('api')->user()->id;
             if ($UserType != '') {
                 $unknown_user = User::where('flag', $UserType)->first()->id;
-                $client_id = ($UserType == 'user') ? $unknown_user : Auth::guard('api')->user()->id;
+                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
             }
             $created_by = Auth::guard('api')->user()->id;
         }
@@ -65,6 +66,8 @@ class OrderController extends Controller
         $total_addon_price_befor_tax = 0;
         $DataOrderDetails = $request->details;
         $DataAddons = $request->addons;
+        $DataProducts = $request->Products;
+
         $done = false;
 
         //settings
@@ -171,6 +174,16 @@ class OrderController extends Controller
             $OrderAddons->price_after_tax = $price_after_tax;
             $OrderAddons->created_by = $created_by;
             $OrderAddons->save();
+        }
+        foreach ($DataProducts as $DataProduct) {
+
+            $OrderProducts = new OrderProduct();
+            $OrderProducts->order_id = $Order->id;
+            $OrderProducts->product_id = $DataProduct['product_id'];
+            $OrderProducts->quantity = $DataProduct['quantity'];
+            $OrderProducts->unit_id = $DataProduct['unit_id'];
+            $OrderProducts->total = 0;
+            $OrderProducts->save();
         }
 
         $total_addon_price_befor_tax = array_sum(

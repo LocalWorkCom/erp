@@ -62,7 +62,6 @@ class OrderRefundController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        $created_by = Auth::guard('api')->user()->id;
 
         $orderRefund = new OrderRefund();
         $orderRefund->date = date('Y-m-d');
