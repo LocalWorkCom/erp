@@ -300,15 +300,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']);
     });
 
-    // point-system
-    Route::prefix('point_system')->group(function () {
-        Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);
-        Route::get('/{id}', [pointsController::class, 'show']);
-        Route::post('/{id}', [pointsController::class, 'update']);
-        Route::delete('/{id}', [pointsController::class, 'destroy']);
-    });
-
     //cuisines
     Route::prefix('cuisines')->group(function () {
         Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');
@@ -335,5 +326,14 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
         Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
         Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
+    });
+    
+    // point-system
+    Route::prefix('point_system')->group(function () {
+        Route::get('/', [pointsController::class, 'index']);
+        Route::post('/', [pointsController::class, 'store']);
+        Route::get('/{id}', [pointsController::class, 'show']);
+        Route::post('/{id}', [pointsController::class, 'update']);
+        Route::delete('/{id}', [pointsController::class, 'destroy']);
     });
 });
