@@ -331,10 +331,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
     // point-system
     Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);
+        // Route::post('/', [pointsController::class, 'store']);// it not allow to add any system
         Route::get('/{id}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+        Route::prefix('transactions')->group(function () {
+            
+        });
     });
 
     //Reports

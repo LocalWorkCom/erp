@@ -56,7 +56,7 @@ class OrderController extends Controller
             $client_id = Auth::guard('api')->user()->id;
             if ($UserType != '') {
                 $unknown_user = User::where('flag', $UserType)->first()->id;
-                $client_id = ($UserType == 'user') ? $unknown_user : Auth::guard('api')->user()->id;
+                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
             }
             $created_by = Auth::guard('api')->user()->id;
         }
@@ -256,6 +256,11 @@ class OrderController extends Controller
                 $order_tracking->status = 'in_progress';
                 $order_tracking->created_by = $created_by;
                 $order_tracking->save();
+                // call point function   $UserType == client
+                if($UserType == 'client' && isActive()){
+                    calculateEarnPoint($Order->total_price_after_tax , $Order->id , $client_id);
+                }
+
             } else {
                 $order_transaction->payment_status = "unpaid";
             }

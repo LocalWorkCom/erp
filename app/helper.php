@@ -6,9 +6,12 @@ use App\Models\ApICode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\ClientDetail;
 use App\Models\Coupon;
 use App\Models\Discount;
+use App\Models\pointTransaction;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -370,38 +373,6 @@ function CalculateTax($tax_percentage, $amount)
     return $tax;
 }
 
-function calculatePointBycurrency($total, $value)
-{
-    //this functions for earn points
-    $totalPoints = $total * $value;
-    return $totalPoints;
-}
-function calculatePointBypercentage($total, $value)
-{
-    //this functions for earn points
-    $valueofpercentage = $value / 100;
-    $totalPoints = $total * $valueofpercentage;
-    return $totalPoints;
-}
-function getCurrentSystemPointType($total)
-{
-    //this functions for earn points
-    $current = pointSystem::where('active', 1)->first();
-
-    if ($current) {
-        $type = $current->key;
-        $value = $current->value;
-        if ($type == 0) {
-            $points =  calculatePointBycurrency($total, $value);
-        } elseif ($type == 1) {
-            $points = calculatePointBypercentage($total, $value);
-        }
-        return $points;
-    }
-
-    return null;
-}
-function updateUserPoints($points, $order, $type,) {}
 function CheckUserType()
 {
     $User = auth('api')->user();
@@ -410,4 +381,32 @@ function CheckUserType()
         return $User->flag;
     }
     return '';
+}
+
+function isActive()
+{
+    return pointSystem::find(1)->value('active') == 1;
+}
+function calculateEarnPoint($total, $order_id, $user_id)
+{
+    //get system value earn
+    $value_percent = pointSystem::find(1)->value('value_earn');
+    //get num of points of total of order
+    $points_num = $total * ($value_percent / 100);
+
+    $transactions = new pointTransaction();
+    $transactions->customer_id = $user_id;
+    $transactions->order_id  = $order_id;
+    $transactions->type     = 'earn';
+    $transactions->points = $points_num;
+    $transactions->transaction_date = now();
+    $transactions->created_by  = $user_id;
+    $transactions->save();
+
+    $point_user = ClientDetail::where('user_id', $user_id)->value('loyalty_points') + $points_num;
+    $point = ClientDetail::where('user_id', $user_id)->first();
+    $point->loyalty_points = $point_user;
+    $point->save();
+
+    return  $points_num ;
 }
