@@ -40,7 +40,8 @@ class APICodeTableSeeder extends Seeder
             ['code' => '26', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase Invoices retrieved successfully.", 'api_code_message_ar' => "تم عرض تفاصيل فواتير المشتريات بنجاح"],
             ['code' => '27', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase Invoice created successfully.", 'api_code_message_ar' => "تم تخزين فاتورة المشتريات بنجاح"],
             ['code' => '28', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' => 'Cannot update purchase invoice linked to a store transaction', 'api_code_message_ar' => 'لا يمكن التعديل على فاتورة مشتريات مربوطة بحركة في المخزن'],
-            ['code' => '29', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase invoice (refund) updated successfully.", 'api_code_message_ar' => "تم تعديل فاتورة المشتريات (مسترجع) بنجاح"]
+            ['code' => '29', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase invoice (refund) updated successfully.", 'api_code_message_ar' => "تم تعديل فاتورة المشتريات (مسترجع) بنجاح"],
+            ['code' => '30', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Reports fetched successfully.", 'api_code_message_ar' => "تم عرض التقارير بنجاح"]
 
         ];
 

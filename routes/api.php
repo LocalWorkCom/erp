@@ -327,7 +327,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
         Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
     });
-    
+
     // point-system
     Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
@@ -335,5 +335,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('/{id}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+    });
+
+    //Reports
+    Route::prefix('reports')->group(function () {
+        //purchase-invoices Reports
+        Route::prefix('purchase-invoices')->group(function () {
+            Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
+        });
     });
 });

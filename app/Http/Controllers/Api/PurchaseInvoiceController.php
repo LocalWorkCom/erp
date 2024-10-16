@@ -114,4 +114,56 @@ class PurchaseInvoiceController extends Controller
             'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
         ], 27);
     }
+
+    public function getPurchaseInvoiceReport(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        if (!CheckToken()) {
+            return RespondWithBadRequest($lang, 5);
+        }
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
+        $vendorId = $request->get('vendor_id');
+        $branchId = $request->get('branch_id');
+        $isRefund = $request->get('is_refund'); // 1 for refund, 0 for purchase
+
+        // Query for purchase invoices with filters
+        $query = PurchaseInvoice::with('purchaseInvoicesDetails', 'vendor', 'store.branch')
+            ->where(function ($q) use ($isRefund) {
+                if ($isRefund !== null) {
+                    $q->where('type', $isRefund); // 0 for purchase, 1 for refund
+                }
+            });
+
+        //date range filter
+        if ($startDate) {
+            $query->whereDate('date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->whereDate('date', '<=', $endDate);
+        }
+
+        //vendor filter
+        if ($vendorId) {
+            $query->where('vendor_id', $vendorId);
+        }
+
+        //branch filter
+        if ($branchId) {
+            $query->whereHas('store', function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId);
+            });
+        }
+
+        $purchaseInvoices = $query->get();
+
+        return ResponseWithSuccessData($lang, [
+            'purchase_invoice' => $purchaseInvoices->map(function ($purchaseInvoice) {
+                return $purchaseInvoice->load('purchaseInvoicesDetails');
+            }),
+        ], 30);
+    }
 }
