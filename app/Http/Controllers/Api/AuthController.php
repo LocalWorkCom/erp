@@ -42,7 +42,7 @@ class AuthController extends Controller
         $user = new User();
         $user->name = $request->first_name . ' ' . $request->last_name;
         $user->email = $request->email;
-        $user->flag = 1;
+        $user->flag = 'client';
         $user->phone = $request->phone;
         $user->country_id = $request->country_id;
         $user->password = Hash::make($request->password);
