@@ -16,9 +16,12 @@ use App\Events\ProductTransactionEvent;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 
+use App\Traits\StoreTransactionTrait;
+
+
 class StoreTransactionController extends Controller
 {
-    use ProductCheck;
+    use ProductCheck, StoreTransactionTrait;
     /**
      * Display a listing of the resource.
      */
@@ -49,6 +52,12 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
+
+        $xx = $this->handel_order_to_store(1);
+        $data = [];
+        $yy = $this->add_item_to_store($data);
+        return $yy;
+
         //try{
             $lang =  $request->header('lang', 'en');
 

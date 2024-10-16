@@ -24,7 +24,7 @@ class pointsController extends Controller
             $pointSystem = pointSystem::all();
 
             // Define columns that need translation
-            $translateColumns = ['name']; // Add other columns as needed
+            $translateColumns = ['type']; // Add other columns as needed
 
             // Define columns to remove (translated columns)
             $columnsToRemove = array_map(function ($col) {
@@ -117,11 +117,11 @@ class pointsController extends Controller
 
             // Check if the point system exists
             if (!$pointSystem) {
-                return RespondWithBadRequestData($lang, 4); // Customize error message for not found
+                return RespondWithBadRequestData($lang, 8); // Customize error message for not found
             }
 
             // Define columns that need translation
-            $translateColumns = ['name']; // Add other columns as needed
+            $translateColumns = ['type']; // Add other columns as needed
 
             // Define columns to remove (translated columns)
             $columnsToRemove = array_map(function ($col) {
@@ -165,11 +165,11 @@ class pointsController extends Controller
 
             // Check if the point system exists
             if (!$pointSystem) {
-                return RespondWithBadRequestData($lang, 4); // Customize error message for not found
+                return RespondWithBadRequestData($lang, 8); // Customize error message for not found
             }
 
             // Define columns that need translation
-            $translateColumns = ['name']; // Add other columns as needed
+            $translateColumns = ['type']; // Add other columns as needed
 
             // Define columns to remove (translated columns)
             $columnsToRemove = array_map(function ($col) {
@@ -197,44 +197,34 @@ class pointsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         //point_systems
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
-
-                "key" => "required",
-                'active' => 'required',
-                'value' => 'required',
-
+                "type_en" => "required",
+                "type_ar" => "required",
+                "value_earn" => "required",
+                "value_redeem" => "required",
+                "active" => "required",
             ]);
-
             if ($validator->fails()) {
                 return RespondWithBadRequestWithData($validator->errors());
             }
-            if($request->active == 1){
-                $is_active = pointSystem::where('active' , 1)->where('id', '!=', $id)->exists();
-                if($is_active){
-                    return RespondWithBadRequestData($lang, 24);
-                }
-            }else{
-                $is_active = pointSystem::where('active' , 1)->where('id', '!=', $id)->exists();
 
-                if(!($is_active)){
-                    return RespondWithBadRequestData($lang, code: 25);
-                }
-            }
             $new = pointSystem::findOrFail($id);
-            $new->name_ar  = $request->name_ar;
-            $new->name_en  = $request->name_en;
-            $new->key  = $request->key;
-            $new->value = $request->value;
-            $new->active = $request->active;
 
+            $new->type_en  = $request->type_en;
+            $new->type_ar  = $request->type_ar;
+            $new->value_earn = $request->value_earn;
+            $new->value_redeem = $request->value_redeem;
+            $new->active = $request->active;
             $new->modified_by = auth()->id();
             $new->save();
-            $translateColumns = ['name']; // Add other columns as needed
+
+            $translateColumns = ['type']; // Add other columns as needed
 
             // Define columns to remove (translated columns)
             $columnsToRemove = array_map(function ($col) {
@@ -257,9 +247,8 @@ class pointsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+
     public function destroy(string $id)
     {
         //

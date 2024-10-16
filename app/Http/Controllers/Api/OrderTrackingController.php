@@ -43,34 +43,34 @@ class OrderTrackingController extends Controller
         } else {
             $created_by = Auth::guard('api')->user()->id;
         }
-    
+
         // Validation
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|exists:orders,id', // Ensure order_id exists in the 'orders' table
             'order_status' => 'required|string|in:pending,in_progress,completed,canceled', // Order status must be one of the specified values
         ]);
-    
+
         // Check for validation errors
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
-    
+
         // Extract validated fields
         $order_id = $request->order_id;
         $order_status = $request->order_status;
-    
+
         // Create a new OrderTracking entry
         $order_tracking = new OrderTracking();
         $order_tracking->order_id = $order_id;
         $order_tracking->order_status = $order_status;
         $order_tracking->created_by = $created_by;
         $order_tracking->save();
-    
+
         // Trigger event if the order status is in_progress
         if ($order_status === 'in_progress') {
             event(new OrderTransactionEvent($order_tracking));
         }
-    
+
         // Update the order status to 'completed' if applicable
         if ($order_status === 'completed') {
             $order = Order::find($order_id);
@@ -78,9 +78,10 @@ class OrderTrackingController extends Controller
                 $order->status = 'completed';
                 $order->save();
             }
+
         }
-    
+
         return RespondWithSuccessRequest($lang, 1);
     }
-    
+
 }
