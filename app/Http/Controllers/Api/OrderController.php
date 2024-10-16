@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
+use App\Models\RecipeAddon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -64,7 +65,6 @@ class OrderController extends Controller
         $tax_percentage = 0;
         $tax_application = getSetting('tax_application');
         $tax_percentage = getSetting('tax_percentage');
-
         $coupon_application = getSetting('coupon_application');
         $service_fees = getSetting('service_fees');
 
@@ -79,16 +79,16 @@ class OrderController extends Controller
             'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
             'details' => 'required|array', // Must be an array (contains order details)
             'details.*.quantity' => 'required|integer', // Every detail must have a quantity
-            'details.*.total' => 'required|numeric', // Every detail must have a total
+            // 'details.*.total' => 'required|numeric', // Every detail must have a total
             'details.*.note' => 'nullable|string', // Optional note in details
             'details.*.coupon_code' => 'nullable|exists:coupons,code', // Optional coupon in details
             'details.*.product_id' => 'nullable|exists:products,id', // Product ID must exist in the 'products' table
-            'details.*.recipe_id' => 'nullable|exists:recipes,id', // Optional recipe ID
+            'details.*.dish_id' => 'nullable|exists:dishes,id', // Optional recipe ID
             'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
             'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
             'addons.*.quantity' => 'required|integer', // Add-ons must have a quantity
             'addons.*.recipe_addon_id' => 'required|exists:recipe_addons,id', // Add-on recipe must exist
-            'addons.*.price' => 'required|numeric', // Add-on price must be numeric
+            // 'addons.*.price' => 'required|numeric', // Add-on price must be numeric
         ]);
 
         if ($validator->fails()) {
@@ -124,40 +124,44 @@ class OrderController extends Controller
         $Order->coupon_id = ($coupon) ? $coupon->id : null;
         $Order->created_by = $created_by;
         // while (Order::where('order_number', $Order->order_number)->exists()) {
-        // dd(0);
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
         $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
         // }
-        // dd($Order);
         $Order->save();
 
 
         foreach ($DataOrderDetails as $DataOrderDetail) {
+            $Dish = Dish::find($DataOrderDetail['dish_id']);
+            if ($Dish) {
+                $total = $Dish->price;
+            }
             $OrderDetails = new OrderDetail();
             $OrderDetails->order_id = $Order->id;
             $OrderDetails->quantity = $DataOrderDetail['quantity'];
-            $OrderDetails->total = $DataOrderDetail['total'];
-            $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($DataOrderDetail['total'], $tax_percentage, $tax_application) : $DataOrderDetail['total'];
-            $OrderDetails->tax_value = CalculateTax($tax_percentage, $DataOrderDetail['total']);
+            $OrderDetails->total = $total;
+            $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total, $tax_percentage, $tax_application) : $total;
+            $OrderDetails->tax_value = CalculateTax($tax_percentage, $total);
             $OrderDetails->note = $DataOrderDetail['note'];
             $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
-            $OrderDetails->recipe_id = $DataOrderDetail['recipe_id'] ?? null;
+            $OrderDetails->dish_id = $DataOrderDetail['dish_id'] ?? null;
             $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
             $OrderDetails->created_by = $created_by;
-            $total_product_price_after_tax = $tax_application == 0 ? applyTax($DataOrderDetail['total'], $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $DataOrderDetail['total'] * $DataOrderDetail['quantity'];
-
+            $total_product_price_after_tax = $tax_application == 0 ? applyTax($total, $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
             $OrderDetails->price_after_tax = $total_product_price_after_tax;
             $OrderDetails->save();
         }
 
         foreach ($DataAddons as $DataAddon) {
+            $addon = RecipeAddon::with('addon')->where('recipe_addons.id', $DataAddon['recipe_addon_id'])->first();
+            if ($addon) {
+                $price = $addon->price;
+            }
             $OrderAddons = new OrderAddon();
             $OrderAddons->order_id = $Order->id;
             $OrderAddons->quantity = $DataAddon['quantity'];
             $OrderAddons->recipe_addon_id = $DataAddon['recipe_addon_id'];
-            $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($DataAddon['price'], $tax_percentage, $tax_application) : $DataAddon['price'];
-
-            $price_after_tax = $tax_application == 0 ? applyTax($DataAddon['price'], $tax_percentage, $tax_application) * $DataAddon['quantity'] : $DataAddon['price'] * $DataAddon['quantity'];
+            $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price, $tax_percentage, $tax_application) : $price;
+            $price_after_tax = $tax_application == 0 ? applyTax($price, $tax_percentage, $tax_application) * $DataAddon['quantity'] : $price * $DataAddon['quantity'];
             $OrderAddons->price_after_tax = $price_after_tax;
             $OrderAddons->created_by = $created_by;
             $OrderAddons->save();

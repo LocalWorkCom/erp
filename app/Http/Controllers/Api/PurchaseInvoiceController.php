@@ -9,6 +9,7 @@ use App\Models\PurchaseInvoice;
 use App\Models\PurchaseInvoicesDetails;
 use App\Models\StoreTransaction;
 use App\Models\StoreTransactionDetails;
+use App\Traits\StoreTransactionTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 
 class PurchaseInvoiceController extends Controller
 {
+    use StoreTransactionTrait;
+
     public function index(Request $request)
     {
         $lang = $request->header('lang', 'ar');
@@ -64,6 +67,7 @@ class PurchaseInvoiceController extends Controller
             'products.*.quantity' => 'required|numeric|min:0',
             'products.*.price' => 'required|numeric|min:0',
             'products.*.expiry_date' => 'nullable|date',
+            'type' => 'required|in:0,1',  // 0 for purchase, 1 for refund
         ]);
 
         if ($validator->fails()) {
@@ -82,19 +86,6 @@ class PurchaseInvoiceController extends Controller
         $totalQuantity = 0;
         $totalPrice = 0;
 
-        //Create a new store transaction
-        // $storeTransaction = StoreTransaction::create([
-        //     'user_id' => Auth::id(),
-        //     'store_id' => $request->store_id,
-        //     'type' => 2,  // Incoming type for purchasing
-        //     'to_type' => 3, // From vendor
-        //     'to_id' => $request->vendor_id,
-        //     'date' => $request->date,
-        //     'total' => 0,
-        //     'total_price' => 0,
-        //     'created_by' => Auth::id(),
-        // ]);
-
         //Loop through the products and create purchase invoice details & store transaction details
         foreach ($request->products as $productData) {
             PurchaseInvoicesDetails::create([
@@ -106,31 +97,8 @@ class PurchaseInvoiceController extends Controller
                 'expiry_date' => $productData['expiry_date'] ?? null,
             ]);
 
-            // Create store transaction details
-            // StoreTransactionDetails::create([
-            //     // 'store_transaction_id' => $storeTransaction->id,
-            //     'product_id' => $productData['product_id'],
-            //     'product_unit_id' => $productData['unit_id'],
-            //     'price' => $productData['price'],
-            //     'count' => $productData['quantity'],
-            //     'total_price' => $productData['price'] * $productData['quantity'],  // Total price for this product
-            //     'expired_date' => $productData['expiry_date'] ?? null,
-            // ]);
-
             $totalQuantity += $productData['quantity'];
             $totalPrice += $productData['price'] * $productData['quantity'];
-
-            // Trigger the ProductTransactionEvent for each product added to inventory
-            // $storeTransactionDetails = new StoreTransactionDetails([
-            //     'product_id' => $productData['product_id'],
-            //     'store_id' => $request->store_id,
-            //     'count' => $productData['quantity'],
-            //     'expired_date' => $productData['expiry_date'] ?? null,
-            //     'type' => 2,  // Type 2 for purchasing from the vendor
-            // ]);
-
-            // Trigger the event for inventory update
-            // event(new ProductTransactionEvent($storeTransactionDetails));
         }
 
         //Update the total quantity and price in the purchase invoice and store transaction
@@ -139,13 +107,11 @@ class PurchaseInvoiceController extends Controller
             'total_price' => $totalPrice,
         ]);
 
-        // $storeTransaction->update([
-        //     'total' => $totalQuantity,
-        //     'total_price' => $totalPrice,
-        // ]);
+        // Handle store transactions using the trait
+        $this->add_item_tostore($purchaseInvoice->id, $request->type); // 0 = purchase, 1 = refund
+
         return ResponseWithSuccessData($lang, [
             'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
-            // 'store_transaction' => $storeTransaction->load('storeTransactionDetails'),
         ], 27);
     }
 }
