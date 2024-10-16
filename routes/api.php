@@ -146,8 +146,10 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('store', [OrderTransactionController::class, 'store']);
     });
     Route::group(['prefix' => 'order-report'], function () {
-        Route::get('/', [OrderReportController::class, 'index']);
-        Route::get('/details', [OrderReportController::class, 'ReportDetails']);
+        Route::post('/', [OrderReportController::class, 'OrderReport']);
+        Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
+        Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
+        Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
