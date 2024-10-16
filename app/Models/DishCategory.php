@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RecipeCategory extends Model
+class DishCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -14,6 +15,7 @@ class RecipeCategory extends Model
         'name_ar',
         'description_en',
         'description_ar',
+        'parent_id',
         'image_path',
         'is_active',
         'created_by',
@@ -30,9 +32,15 @@ class RecipeCategory extends Model
         'deleted_at',
     ];
 
-    public function recipes()
+    // Relationships
+    public function parent()
     {
-        return $this->hasMany(Recipe::class, 'category_id');
+        return $this->belongsTo(DishCategory::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(DishCategory::class, 'parent_id');
     }
 
     public function creator()
@@ -48,5 +56,11 @@ class RecipeCategory extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+    
+    // Scope to get only active dish categories
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

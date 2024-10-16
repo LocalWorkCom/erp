@@ -15,11 +15,9 @@ class Recipe extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'category_id',
-        'meal_type',//type 1 recip 2 addon
+        'type', // 1 for recipe, 2 for addon
         'price',
         'is_active',
-        'cuisine_id',  //
         'created_by',
         'modified_by',
         'deleted_by',
@@ -34,6 +32,19 @@ class Recipe extends Model
         'deleted_at',
     ];
 
+    // Scope to filter recipes only (type = 1)
+    public function scopeOnlyRecipes($query)
+    {
+        return $query->where('type', 1);
+    }
+
+    // Scope to filter addons only (type = 2)
+    public function scopeOnlyAddons($query)
+    {
+        return $query->where('type', 2);
+    }
+
+    // Relationships
     public function ingredients()
     {
         return $this->hasMany(Ingredient::class);
@@ -59,23 +70,9 @@ class Recipe extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    public function category()
+    // Relationship to link an addon to recipes through recipe_addons table
+    public function recipeAddons()
     {
-        return $this->belongsTo(RecipeCategory::class, 'category_id');
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-    public function addons()
-    {
-        return $this->belongsToMany(Addon::class, 'recipe_addons');
-    }
-
-    public function cuisine()
-    {
-        return $this->belongsTo(Cuisine::class);
+        return $this->hasMany(RecipeAddon::class, 'addon_id');
     }
 }
