@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('admin'),
                 'country_id' => 1,
                 'phone' => '123123123',
-                'flag' => 0,
+                'flag' => 'admin',
             ],
         ];
 
