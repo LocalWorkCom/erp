@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
 use App\Models\Ingredient;
+use App\Models\ProductUnit;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
@@ -18,10 +19,10 @@ class RecipeController extends Controller
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            // Fetch recipes with images, ingredients, category, and cuisine
+            // Fetch recipes with ingredients and images
             $recipes = $withTrashed
-                ? Recipe::withTrashed()->with(['ingredients', 'images', 'category', 'cuisine'])->get()
-                : Recipe::with(['ingredients', 'images', 'category', 'cuisine'])->get();
+                ? Recipe::withTrashed()->onlyRecipes()->with(['ingredients', 'images'])->get()
+                : Recipe::onlyRecipes()->with(['ingredients', 'images'])->get();
 
             return ResponseWithSuccessData($lang, $recipes, 1);
         } catch (\Exception $e) {
@@ -34,9 +35,11 @@ class RecipeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-
-            $recipe = Recipe::withTrashed()->with(['ingredients', 'images', 'category', 'cuisine'])->findOrFail($id);
-
+            
+            $recipe = Recipe::withTrashed()
+                ->with(['ingredients.product', 'ingredients.productUnit', 'images', 'recipeAddons'])
+                ->findOrFail($id);
+    
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching recipe: ' . $e->getMessage());
@@ -48,25 +51,21 @@ class RecipeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge([
-                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
-            ]);
-
+            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'category_id' => 'required|integer|exists:recipe_categories,id',
-                'cuisine_id' => 'required|integer|exists:cuisines,id',
-                'meal_type' => 'required', 
+                'type' => 'required|in:1,2', // Type (1 = recipe, 2 = addon)
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
-                'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
-                'ingredients' => 'required|array',
+                'ingredients' => 'required|array', // Array of ingredients
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
-                'ingredients.*.quantity' => 'required|numeric',
+                'ingredients.*.quantity' => 'required|numeric|min:0',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $recipe = Recipe::create([
@@ -74,14 +73,25 @@ class RecipeController extends Controller
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'category_id' => $request->category_id,
-                'cuisine_id' => $request->cuisine_id,
-                'meal_type' => $request->meal_type,
+                'type' => $request->type,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
             ]);
 
+            // Store Ingredients
+            foreach ($request->ingredients as $ingredientData) {
+                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'product_id' => $ingredientData['product_id'],
+                    'product_unit_id' => $productUnit->id,
+                    'quantity' => $ingredientData['quantity'],
+                ]);
+            }
+
+            // Store Images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('recipes', 'public');
@@ -90,17 +100,6 @@ class RecipeController extends Controller
                         'image_path' => $imagePath,
                     ]);
                 }
-            }
-
-            foreach ($request->ingredients as $ingredientData) {
-                $productUnit = \App\Models\ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
-
-                Ingredient::create([
-                    'recipe_id' => $recipe->id,
-                    'product_id' => $ingredientData['product_id'],
-                    'product_unit_id' => $productUnit->id,
-                    'quantity' => $ingredientData['quantity'],
-                ]);
             }
 
             return ResponseWithSuccessData($lang, $recipe, 1);
@@ -114,25 +113,21 @@ class RecipeController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge([
-                'is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN),
-            ]);
-
+            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'category_id' => 'required|integer|exists:recipe_categories,id',
-                'cuisine_id' => 'required|integer|exists:cuisines,id',
-                'meal_type' => 'required', 
+                'type' => 'required|in:1,2',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
-                'images' => 'nullable|array', 
-                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
                 'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
-                'ingredients.*.quantity' => 'required|numeric',
+                'ingredients.*.quantity' => 'required|numeric|min:0',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $recipe = Recipe::findOrFail($id);
@@ -142,20 +137,32 @@ class RecipeController extends Controller
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'category_id' => $request->category_id,
-                'cuisine_id' => $request->cuisine_id,
-                'meal_type' => $request->meal_type, 
+                'type' => $request->type,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'modified_by' => auth()->id(),
             ]);
 
+            // Update Ingredients
+            Ingredient::where('recipe_id', $recipe->id)->delete();
+            foreach ($request->ingredients as $ingredientData) {
+                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'product_id' => $ingredientData['product_id'],
+                    'product_unit_id' => $productUnit->id,
+                    'quantity' => $ingredientData['quantity'],
+                ]);
+            }
+
+            // Update Images
             if ($request->hasFile('images')) {
                 foreach ($recipe->images as $image) {
                     if (Storage::exists($image->image_path)) {
                         Storage::delete($image->image_path);
                     }
-                    $image->delete(); 
+                    $image->delete();
                 }
 
                 foreach ($request->file('images') as $image) {
@@ -165,19 +172,6 @@ class RecipeController extends Controller
                         'image_path' => $imagePath,
                     ]);
                 }
-            }
-
-            // Update ingredients
-            Ingredient::where('recipe_id', $id)->delete();
-            foreach ($request->ingredients as $ingredientData) {
-                $productUnit = \App\Models\ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
-
-                Ingredient::create([
-                    'recipe_id' => $recipe->id,
-                    'product_id' => $ingredientData['product_id'],
-                    'product_unit_id' => $productUnit->id,
-                    'quantity' => $ingredientData['quantity'],
-                ]);
             }
 
             return ResponseWithSuccessData($lang, $recipe, 1);
