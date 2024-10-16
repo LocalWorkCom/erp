@@ -32,39 +32,18 @@ class Dish extends Model
         'deleted_at',
     ];
 
-  
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
- 
     public function cuisine()
     {
-        return $this->belongsTo(Cuisine::class, 'cuisine_id');
+        return $this->belongsTo(Cuisine::class);
     }
-
 
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'dish_recipes', 'dish_id', 'recipe_id');
-    }
-
-
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-   
-    public function modifier()
-    {
-        return $this->belongsTo(User::class, 'modified_by');
-    }
-
- 
-    public function deleter()
-    {
-        return $this->belongsTo(User::class, 'deleted_by');
+        return $this->hasMany(DishDetail::class, 'dish_id');
     }
 }

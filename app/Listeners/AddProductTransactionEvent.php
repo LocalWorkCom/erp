@@ -41,11 +41,11 @@ class AddProductTransactionEvent
 
         //$type == 1
         if ($product->type == 1) {
-            //$all_product_transactions = ProductTransaction::query()->with('products.productUnits')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date', '>=', $today)->get();
+            //$all_product_transactions = ProductTransaction::query()->with('products.productUnites')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date', '>=', $today)->get();
 
             $all_product_transactions = ProductTransaction::query()->where('product_id', $product->product_id)->where('store_id', $product->store_id)->where('count', '>', 0)->whereDate('expired_date', '>=', $today);
             $all_product_transactions = $all_product_transactions->select('*');
-            $all_product_transactions = $all_product_transactions->with('products.productUnits');
+            $all_product_transactions = $all_product_transactions->with('products.productUnites');
 
             $check_setting = Setting::where('id', 1)->first();
             if ($check_setting) {
@@ -59,7 +59,7 @@ class AddProductTransactionEvent
 
             if ($all_product_transactions) {
                 foreach ($all_product_transactions as $all_product_transaction) {
-                    $now_product_count = $all_product_transaction->count - ($product_count * $all_product_transaction->products->productUnits->factor);
+                    $now_product_count = $all_product_transaction->count - ($product_count * $all_product_transaction->products->productUnites->factor);
 
                     if ($now_product_count <= 0) {
                         $product_transaction_count = 0;
@@ -68,8 +68,8 @@ class AddProductTransactionEvent
                     }
 
                     if ($now_product_count < 0) {
-                        $product_count = ($product_count * $all_product_transaction->products->productUnits->factor) - $all_product_transaction->count;
-                        $product_count = $product_count / $all_product_transaction->products->productUnits->factor;
+                        $product_count = ($product_count * $all_product_transaction->products->productUnites->factor) - $all_product_transaction->count;
+                        $product_count = $product_count / $all_product_transaction->products->productUnites->factor;
                     }
 
                     $update_product_transaction = ProductTransaction::find($all_product_transaction->id);
@@ -78,7 +78,7 @@ class AddProductTransactionEvent
                     $update_product_transaction->save();
 
                     //add product transaction log
-                    $count = ($product_count * $all_product_transaction->products->productUnits->factor);
+                    $count = ($product_count * $all_product_transaction->products->productUnites->factor);
                     $this->add_product_transaction_log($all_product_transaction->id, $product->type, 'edit', $count, $user_id, $order_id, $order_details_id, $order_addon_id);
                     //end of product transaction log
 
@@ -91,32 +91,32 @@ class AddProductTransactionEvent
 
             //end of $type == 1
         } else { //if $type == 2
-            $update_product_transaction = ProductTransaction::with('products.productUnits')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->whereDate('expired_date', date($product->expired_date))->first();
+            $update_product_transaction = ProductTransaction::with('products.productUnites')->where('product_id', $product->product_id)->where('store_id', $product->store_id)->whereDate('expired_date', date($product->expired_date))->first();
             if ($update_product_transaction) {
-                $now_product_count = $update_product_transaction->count + ($product_count * $update_product_transaction->products->productUnits->factor);
+                $now_product_count = $update_product_transaction->count + ($product_count * $update_product_transaction->products->productUnites->factor);
                 $update_product_transaction->count = $now_product_count;
                 $update_product_transaction->modified_by = $user_id;
                 $update_product_transaction->save();
 
 
                 //add product transaction log
-                $count = ($product_count * $update_product_transaction->products->productUnits->factor);
+                $count = ($product_count * $update_product_transaction->products->productUnites->factor);
                 $this->add_product_transaction_log($update_product_transaction->id, $product->type, 'edit', $count, $user_id, $order_id, $order_details_id, $order_addon_id);
                 //end of product transaction log
 
                 $this->checkProductStock($product->product_id, $user_id);
             } else {
-                $show_product = Product::with('productUnits')->where('id', $product->product_id)->first();
+                $show_product = Product::with('productUnites')->where('id', $product->product_id)->first();
                 $add_product_transaction = new ProductTransaction();
                 $add_product_transaction->product_id = $product->product_id;
                 $add_product_transaction->store_id = $product->store_id;
-                $add_product_transaction->count = ($product_count * $show_product->productUnits->factor);
+                $add_product_transaction->count = ($product_count * $show_product->productUnites->factor);
                 $add_product_transaction->expired_date = $product->expired_date;
                 $add_product_transaction->created_by = $user_id;
                 $add_product_transaction->save();
 
                 //add product transaction log
-                $count = ($product_count * $show_product->productUnits->factor);
+                $count = ($product_count * $show_product->productUnites->factor);
                 $this->add_product_transaction_log($add_product_transaction->id, $product->type, 'add', $count, $user_id, $order_id, $order_details_id, $order_addon_id);
                 //end of product transaction log
 

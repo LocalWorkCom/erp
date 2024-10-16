@@ -16,10 +16,10 @@ class Recipe extends Model
         'description_en',
         'description_ar',
         'category_id',
-        'meal_type',
+        'meal_type',//type 1 recip 2 addon
         'price',
         'is_active',
-        'cuisine_id',  
+        'cuisine_id',  //
         'created_by',
         'modified_by',
         'deleted_by',
