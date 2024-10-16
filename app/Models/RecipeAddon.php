@@ -13,9 +13,6 @@ class RecipeAddon extends Model
     protected $fillable = [
         'recipe_id',
         'addon_id',
-        'product_id',//
-        'product_unit_id',//
-        'quantity',//
     ];
 
     protected $hidden = [
@@ -27,21 +24,11 @@ class RecipeAddon extends Model
     // Relationships
     public function recipe()
     {
-        return $this->belongsTo(Recipe::class);
+        return $this->belongsTo(Recipe::class, 'recipe_id');
     }
 
     public function addon()
     {
-        return $this->belongsTo(Addon::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
-    }
-
-    public function productUnit()
-    {
-        return $this->belongsTo(ProductUnit::class, 'product_unit_id');
+        return $this->belongsTo(Recipe::class, 'addon_id');
     }
 }
