@@ -54,7 +54,6 @@ class OrderTransactionController extends Controller
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|exists:orders,id', // Ensures order exists
             'payment_method' => 'required|string|in:cash,credit_card,online',  // Enforce enum-like values
-
             'paid' => 'required|numeric|min:0', // Paid amount must be numeric and non-negative
         ]);
 

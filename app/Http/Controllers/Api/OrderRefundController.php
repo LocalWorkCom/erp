@@ -69,7 +69,7 @@ class OrderRefundController extends Controller
         $orderRefund->reason = $request->reason;
         $orderRefund->order_detail_id = $request->order_detail_id;
         $orderRefund->created_by = $created_by;
-        $orderRefund->invoice_number = "INV-" . GetNextID("order_refunds") . "-" . rand(1111, 9999); // Generate a new number if it exists
+        $orderRefund->invoice_number = "CN-" . GetNextID("order_refunds") . "-" . rand(1111, 9999); // Generate a new number if it exists
 
 
         $orderRefund->save();
