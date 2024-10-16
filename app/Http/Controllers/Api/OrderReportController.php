@@ -32,6 +32,7 @@ class OrderReportController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
+
         $orders = Order:: // Load only necessary fields
             select(
                 'orders.invoice_number as inv_num',
@@ -49,8 +50,19 @@ class OrderReportController extends Controller
             )
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
-            ->get();
+            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id');
+        if ($request->start_date) {
+        }
+        if ($request->end_date) {
+        }
+        if ($request->client_id) {
+        }
+        if ($request->branch_id) {
+        }
+        if ($request->user_id) {
+        }
+
+        $orders = $orders->get();
 
 
         return ResponseWithSuccessData($lang, $orders, 1);
@@ -63,7 +75,7 @@ class OrderReportController extends Controller
             return RespondWithBadRequest($lang, 5);
         }
         $orders = Order::where('id', $request->order_id)
-        ->select(
+            ->select(
                 'orders.invoice_number as inv_num',
                 'orders.type as order_type',
                 'orders.status as order_status',

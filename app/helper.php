@@ -402,3 +402,12 @@ function getCurrentSystemPointType($total)
     return null;
 }
 function updateUserPoints($points, $order, $type,) {}
+function CheckUserType()
+{
+    $User = auth('api')->user();
+
+    if ($User) {
+        return $User->flag;
+    }
+    return '';
+}
