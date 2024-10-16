@@ -68,9 +68,13 @@ class pointsController extends Controller
             App::setLocale($lang);
 
             $validator = Validator::make($request->all(), [
-                "name" => "required",
-                "key" => "required",
-                'value' => 'required',
+                "type_en" => "required",
+                "type_ar" => "required",
+                "num" => "required",
+                "value" => "required",
+                "expire_type" => "required",
+                "time" => "required",
+                "active" => "required",
             ]);
 
             if ($validator->fails()) {
@@ -78,11 +82,13 @@ class pointsController extends Controller
             }
 
             $new = new pointSystem();
-            $new->name_ar  = $request->name_ar;
-            $new->name_en  = $request->name_en;
-            $new->key  = $request->key;
+            $new->type_en  = $request->type_en;
+            $new->type_ar  = $request->type_ar;
+            $new->num  = $request->num;
             $new->value = $request->value;
-            $new->active = 0;
+            $new->expire_type = $request->expire_type;
+            $new->time = $request->time;
+            $new->active = $request->active;
             $new->created_by = auth()->id();
             $new->save();
 

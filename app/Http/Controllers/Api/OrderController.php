@@ -10,6 +10,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use App\Models\RecipeAddon;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -51,6 +52,12 @@ class OrderController extends Controller
         if (Auth::guard('api')->user()->flag == 0) {
             return RespondWithBadRequest($lang, 5);
         } else {
+            $UserType =  CheckUserType();
+            $client_id = Auth::guard('api')->user()->id;
+            if ($UserType != '') {
+                $unknown_user = User::where('flag', $UserType)->first()->id;
+                $client_id = ($UserType == 'user') ? $unknown_user : Auth::guard('api')->user()->id;
+            }
             $created_by = Auth::guard('api')->user()->id;
         }
         $discount = null;
@@ -59,7 +66,6 @@ class OrderController extends Controller
         $DataOrderDetails = $request->details;
         $DataAddons = $request->addons;
         $done = false;
-
 
         //settings
         $tax_percentage = 0;
@@ -117,7 +123,7 @@ class OrderController extends Controller
         // $request->delivery_fees;
         $Order->fees = $service_fees;
         $Order->table_id = $request->table_id ?? null;
-        $Order->client_id = $created_by;
+        $Order->client_id = $client_id;
         $Order->discount_id = ($discount) ? $discount->id : null;
         $Order->branch_id = $request->branch_id;
 
