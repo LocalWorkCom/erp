@@ -381,7 +381,10 @@ function CheckUserType()
     }
     return '';
 }
-
+function isValid($branch_id)
+{
+    return pointSystem::where('branch_id', $branch_id)->exists();
+}
 function isActive($branch_id)
 {
     return pointSystem::where('branch_id', $branch_id)->value('active') == 1;
@@ -435,7 +438,6 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
         $transactions->created_by = $client_id;
         $transactions->save();
 
-      //  $point_user = ClientDetail::where('user_id', $client_id)->value('loyalty_points') - $user_points;
         $point = ClientDetail::where('user_id', $client_id)->first();
         $point->loyalty_points = 0;
         $point->save();
