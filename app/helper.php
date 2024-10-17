@@ -376,28 +376,29 @@ function CalculateTax($tax_percentage, $amount)
 function CheckUserType()
 {
     $User = auth('api')->user();
-
     if ($User) {
         return $User->flag;
     }
     return '';
 }
 
-function isActive()
+function isActive($branch_id )
 {
-    return pointSystem::find(1)->value('active') == 1;
+    return pointSystem::where('branch_id', $branch_id)->value('active') == 1;
 }
-function calculateEarnPoint($total, $order_id, $user_id)
+function calculateEarnPoint($total,$branch, $order_id, $user_id)
 {
+
     //get system value earn
-    $value_percent = pointSystem::find(1)->value('value_earn');
+    $value_percent = pointSystem::where('branch_id',$branch)->value('value_earn');
+
     //get num of points of total of order
     $points_num = $total * ($value_percent / 100);
 
     $transactions = new pointTransaction();
     $transactions->customer_id = $user_id;
-    $transactions->order_id  = $order_id;
-    $transactions->type     = 'earn';
+    $transactions->order_id = $order_id;
+    $transactions->type = 'earn';
     $transactions->points = $points_num;
     $transactions->transaction_date = now();
     $transactions->created_by  = $user_id;
@@ -409,4 +410,8 @@ function calculateEarnPoint($total, $order_id, $user_id)
     $point->save();
 
     return  $points_num ;
+}
+
+function calculateRedeemPoint(){
+
 }

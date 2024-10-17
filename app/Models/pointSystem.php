@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class pointSystem extends Model
 {
     use HasFactory;
+    public function branches()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

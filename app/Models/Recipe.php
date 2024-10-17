@@ -75,4 +75,8 @@ class Recipe extends Model
     {
         return $this->hasMany(RecipeAddon::class, 'addon_id');
     }
+    public function branches()
+{
+    return $this->belongsToMany(Branch::class, 'branch_recipe');
+}
 }

@@ -7,7 +7,6 @@ use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
-use App\Models\OrderProduct;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use App\Models\RecipeAddon;
@@ -66,8 +65,6 @@ class OrderController extends Controller
         $total_addon_price_befor_tax = 0;
         $DataOrderDetails = $request->details;
         $DataAddons = $request->addons;
-        $DataProducts = $request->Products;
-
         $done = false;
 
         //settings
@@ -175,16 +172,6 @@ class OrderController extends Controller
             $OrderAddons->created_by = $created_by;
             $OrderAddons->save();
         }
-        foreach ($DataProducts as $DataProduct) {
-
-            $OrderProducts = new OrderProduct();
-            $OrderProducts->order_id = $Order->id;
-            $OrderProducts->product_id = $DataProduct['product_id'];
-            $OrderProducts->quantity = $DataProduct['quantity'];
-            $OrderProducts->unit_id = $DataProduct['unit_id'];
-            $OrderProducts->total = 0;
-            $OrderProducts->save();
-        }
 
         $total_addon_price_befor_tax = array_sum(
             array_map(
@@ -231,9 +218,11 @@ class OrderController extends Controller
             $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
         }
 
+        // use point call pointredeem function else point redeem=0   return point num and amount of redeem
+        
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
-        $Order->total_price_after_tax = $total_price_after_tax + $service_fees;
+        $Order->total_price_after_tax = $total_price_after_tax + $service_fees;// - point redeem
         $Order->save();
 
 
@@ -270,8 +259,8 @@ class OrderController extends Controller
                 $order_tracking->created_by = $created_by;
                 $order_tracking->save();
                 // call point function   $UserType == client
-                if($UserType == 'client' && isActive()){
-                    calculateEarnPoint($Order->total_price_after_tax , $Order->id , $client_id);
+                if($UserType == 'client' && isActive($Order->branch_id )){
+                    calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
                 }
 
             } else {
