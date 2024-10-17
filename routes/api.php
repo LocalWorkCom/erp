@@ -57,6 +57,17 @@ use App\Http\Controllers\Api\BrandController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+//Admin
+Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
+
+//Client
+Route::group(['middleware' => ['auth:client', 'client']], function () {});
+
+//Api (Client&Admin)
+Route::group(["middleware" => ["auth:api"]], function () {});
+
+
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
@@ -338,13 +349,11 @@ Route::group(["middleware" => ["auth:api"]], function () {
     // point-system
     Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);// it not allow to add any system
+        Route::post('/', [pointsController::class, 'store']); // it not allow to add any system
         Route::get('/{id}/{branch}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
-        Route::prefix('transactions')->group(function () {
-
-        });
+        Route::prefix('transactions')->group(function () {});
     });
 
     //Reports
@@ -366,13 +375,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
 
 
-Route::prefix('brands')->group(function () {
-    Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
-    Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
-    Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
-    Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
-    Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
-    Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
-});
-
+    Route::prefix('brands')->group(function () {
+        Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
+        Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+        Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+        Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+        Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+        Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+    });
 });
