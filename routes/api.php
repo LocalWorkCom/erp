@@ -149,8 +149,10 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('store', [OrderTransactionController::class, 'store']);
     });
     Route::group(['prefix' => 'order-report'], function () {
-        Route::get('/', [OrderReportController::class, 'index']);
-        Route::get('/details', [OrderReportController::class, 'ReportDetails']);
+        Route::post('/', [OrderReportController::class, 'OrderReport']);
+        Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
+        Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
+        Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
@@ -335,10 +337,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
     // point-system
     Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);
+        // Route::post('/', [pointsController::class, 'store']);// it not allow to add any system
         Route::get('/{id}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+        Route::prefix('transactions')->group(function () {
+            
+        });
     });
 
     //Reports

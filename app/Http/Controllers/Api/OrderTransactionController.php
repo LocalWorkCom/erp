@@ -89,10 +89,15 @@ class OrderTransactionController extends Controller
         // Update the payment status based on the paid amount
         if ($order_transaction && $done) {
             $order_transaction->payment_status = "paid";
-            $order_tracking = new OrderTracking();
-            $order_tracking->order_id = $order_id;
-            $order_tracking->status = 'in_progress';
-            $order_tracking->save();
+            // $order_tracking = new OrderTracking();
+            // $order_tracking->order_id = $order_id;
+            // $order_tracking->status = 'in_progress';
+            // $order_tracking->save();
+            
+            // call point function  total = $order->total_price_after_tax   && $request->payment_method == cash && $order->type == online
+            if($request->payment_method == 'cash' && $order->type == 'online' && isActive()){
+                calculateEarnPoint($order->total_price_after_tax , $order_id , $order->client_id);
+            }
         } else {
             $order_transaction->payment_status = "unpaid";
         }
