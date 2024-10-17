@@ -68,6 +68,7 @@ class OrderTransactionController extends Controller
 
         $transactionId = Str::uuid()->toString(); // Generate unique transaction ID
         $done = false;
+        $points_num = 0;
 
         // Create a new order transaction
         $order_transaction = new OrderTransaction();
@@ -97,10 +98,11 @@ class OrderTransactionController extends Controller
             // call point function  total = $order->total_price_after_tax   && $request->payment_method == cash && $order->type == online
             if($request->payment_method == 'cash' && $order->type == 'online' && isValid($order->branch_id )){
                 if(isActive($order->branch_id ) ){
-                calculateEarnPoint($order->total_price_after_tax,$order->branch_id , $order_id , $order->client_id);
+                    $points_num =  calculateEarnPoint($order->total_price_after_tax,$order->branch_id , $order_id , $order->client_id);
                 }
             }
         } else {
+            $order_transaction->points_num = $points_num;
             $order_transaction->payment_status = "unpaid";
         }
 
