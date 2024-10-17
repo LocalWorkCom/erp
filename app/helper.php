@@ -396,8 +396,8 @@ function calculateEarnPoint($total, $order_id, $user_id)
 
     $transactions = new pointTransaction();
     $transactions->customer_id = $user_id;
-    $transactions->order_id  = $order_id;
-    $transactions->type     = 'earn';
+    $transactions->order_id = $order_id;
+    $transactions->type = 'earn';
     $transactions->points = $points_num;
     $transactions->transaction_date = now();
     $transactions->created_by  = $user_id;
@@ -409,4 +409,8 @@ function calculateEarnPoint($total, $order_id, $user_id)
     $point->save();
 
     return  $points_num ;
+}
+
+function calculateRedeemPoint(){
+    
 }
