@@ -382,15 +382,15 @@ function CheckUserType()
     return '';
 }
 
-function isActive($branch_id )
+function isActive($branch_id)
 {
     return pointSystem::where('branch_id', $branch_id)->value('active') == 1;
 }
-function calculateEarnPoint($total,$branch, $order_id, $user_id)
+function calculateEarnPoint($total, $branch, $order_id, $user_id)
 {
 
     //get system value earn
-    $value_percent = pointSystem::where('branch_id',$branch)->value('value_earn');
+    $value_percent = pointSystem::where('branch_id', $branch)->value('value_earn');
 
     //get num of points of total of order
     $points_num = $total * ($value_percent / 100);
@@ -409,9 +409,39 @@ function calculateEarnPoint($total,$branch, $order_id, $user_id)
     $point->loyalty_points = $point_user;
     $point->save();
 
-    return  $points_num ;
+    return  $points_num;
 }
 
-function calculateRedeemPoint(){
+function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
+{
 
+    //get system value redeem
+    $point_redeem = pointSystem::where('branch_id', $branch_id)->value('point_redeem');
+    $limit_redeem = pointSystem::where('branch_id', $branch_id)->value('value_redeem');
+
+    $user_points = ClientDetail::where('user_id', $client_id)->value('loyalty_points');
+
+    $points_percent = $user_points * $point_redeem;
+    $redeem_total = 0;
+    // dd($limit_redeem);
+    if ($limit_redeem > $points_percent) {
+        // dd(0);
+        $redeem_total = $total *  $points_percent;
+        $transactions = new pointTransaction();
+        $transactions->customer_id = $client_id;
+        $transactions->order_id = $Order_id;
+        $transactions->type = 'redeem';
+        $transactions->points = $user_points;
+        $transactions->transaction_date = now();
+        $transactions->created_by = $client_id;
+        $transactions->save();
+
+        //  $point_user = ClientDetail::where('user_id', $client_id)->value('loyalty_points') - $user_points;
+        $client = ClientDetail::where('user_id', $client_id)->first();
+        
+        $client->loyalty_points = 0;
+        $client->save();
+    }
+
+    return $redeem_total;
 }

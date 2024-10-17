@@ -58,13 +58,13 @@ use App\Http\Controllers\Api\BrandController;
 //     return $request->user();
 // });
 
-//Admin
+//admin
 Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
 
-//Client
-Route::group(['middleware' => ['auth:client', 'client']], function () {});
+//client
+Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
 
-//Api (Client&Admin)
+//api(both)
 Route::group(["middleware" => ["auth:api"]], function () {});
 
 
