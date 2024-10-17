@@ -218,9 +218,10 @@ class OrderController extends Controller
             $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
         }
 
+        // use point call pointredeem function else point redeem=0   return point num and amount of redeem 
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
-        $Order->total_price_after_tax = $total_price_after_tax + $service_fees;
+        $Order->total_price_after_tax = $total_price_after_tax + $service_fees;// - point redeem
         $Order->save();
 
 

@@ -410,3 +410,7 @@ function calculateEarnPoint($total, $order_id, $user_id)
 
     return  $points_num ;
 }
+
+function calculateRedeemPoint(){
+    
+}

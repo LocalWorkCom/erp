@@ -115,6 +115,7 @@ class ProductController extends Controller
         $product->description_ar = $request->description_ar;
         $product->description_en = $request->description_en;
         $product->code = $code;
+        $product->brand_id = $request->brand_id;
         $product->type = $request->type;
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
@@ -225,6 +226,8 @@ class ProductController extends Controller
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
         $product->sku = $request->sku;
+        $product->brand_id = $request->brand_id;
+
         $product->barcode = $request->barcode;
         // Handle the image upload if a new image is provided
         $main_image = $request->file('main_image');
