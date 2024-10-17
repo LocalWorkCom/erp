@@ -276,7 +276,7 @@ class OrderController extends Controller
 
                 if($UserType == 'client' && isValid($Order->branch_id)){
                     if(isActive($Order->branch_id ) ){
-                        calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
+                        $points_num =   calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
                     }
                 }
             } else {
