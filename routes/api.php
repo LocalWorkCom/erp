@@ -62,7 +62,14 @@ use App\Http\Controllers\Api\BrandController;
 Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
 
 //client
-Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
+Route::group(['middleware' => ['auth:client', 'client']], function () {
+    Route::get("profile", [ClientController::class, "viewProfile"]);
+    Route::post("profile/update", [ClientController::class, "updateProfile"]);
+
+    Route::get("client/orders", [ClientController::class, "listOrders"]);
+    Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+    Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+});
 
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {});
@@ -79,12 +86,7 @@ Route::group(['prefix' => 'api_code'], function () {
 
 Route::group(["middleware" => ["auth:api"]], function () {
 
-    Route::get("profile", [ClientController::class, "viewProfile"]);
-    Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
-    Route::get("client/orders", [ClientController::class, "listOrders"]);
-    Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
-    Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
 
     Route::any("logout", [AuthController::class, "logout"]);
 
