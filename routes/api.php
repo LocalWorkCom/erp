@@ -149,12 +149,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/', [OrderTransactionController::class, 'index']);
         Route::post('store', [OrderTransactionController::class, 'store']);
     });
-    Route::group(['prefix' => 'order-report'], function () {
-        Route::post('/', [OrderReportController::class, 'OrderReport']);
-        Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
-        Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
-        Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
-    });
+
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
         Route::post('store', [UnitController::class, 'store']);
@@ -342,9 +337,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('/{id}/{branch}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+<<<<<<< HEAD
+        Route::prefix('transactions')->group(function () {});
+=======
         Route::prefix('transactions')->group(function () {
 
         });
+>>>>>>> be07c4c90b556f6652e81cd11e4d701e7c4097dc
     });
 
     //Reports
@@ -352,6 +351,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
         //purchase-invoices Reports
         Route::prefix('purchase-invoices')->group(function () {
             Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
+        });
+        Route::prefix('orders')->group(function () {
+            Route::post('/', [OrderReportController::class, 'OrderReport']);
+            Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
+            Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
+            Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
         });
     });
 
@@ -364,6 +369,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy');
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
+<<<<<<< HEAD
+=======
 
 
 Route::prefix('brands')->group(function () {
@@ -375,4 +382,5 @@ Route::prefix('brands')->group(function () {
     Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 });
 
+>>>>>>> be07c4c90b556f6652e81cd11e4d701e7c4097dc
 });

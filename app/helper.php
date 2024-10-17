@@ -423,8 +423,9 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
 
     $points_percent = $user_points * $point_redeem;
     $redeem_total = 0;
-
+    // dd($limit_redeem);
     if ($limit_redeem > $points_percent) {
+        // dd(0);
         $redeem_total = $total *  $points_percent;
         $transactions = new pointTransaction();
         $transactions->customer_id = $client_id;
@@ -435,10 +436,11 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
         $transactions->created_by = $client_id;
         $transactions->save();
 
-      //  $point_user = ClientDetail::where('user_id', $client_id)->value('loyalty_points') - $user_points;
-        $point = ClientDetail::where('user_id', $client_id)->first();
-        $point->loyalty_points = 0;
-        $point->save();
+        //  $point_user = ClientDetail::where('user_id', $client_id)->value('loyalty_points') - $user_points;
+        $client = ClientDetail::where('user_id', $client_id)->first();
+        
+        $client->loyalty_points = 0;
+        $client->save();
     }
 
     return $redeem_total;
