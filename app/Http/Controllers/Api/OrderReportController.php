@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -34,6 +35,8 @@ class OrderReportController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
+        DB::statement('SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
+
 
         $orders = Order:: // Load only necessary fields
             select(
@@ -49,11 +52,16 @@ class OrderReportController extends Controller
                 'branches.name_ar as branch_name',
                 'order_transactions.payment_status as payment_status',
                 'order_transactions.payment_method  as payment_method',
-                'sum(orders.total_price_after_tax) as total'
+                DB::raw('SUM(orders.total_price_after_tax) as total') // Aggregate with DB::raw
+
             )
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
             ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
-            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id');
+            ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
+            ->groupBy(
+                'orders.id'
+
+            );
         if ($request->start_date) {
             $orders->where('date', '>=', $request->start_date);
         }
@@ -82,7 +90,7 @@ class OrderReportController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
-        $order = Order::where('id', $request->order_id)
+        $order = Order::where('orders.id', $request->order_id)
             ->select(
                 'orders.invoice_number as inv_num',
                 'orders.type as order_type',
@@ -111,7 +119,7 @@ class OrderReportController extends Controller
             ->get();
 
 
-        $order['tracking'] = OrderTracking::where('order_id', $request->order_id)->pluck('status')->toArray();
+        $order['tracking'] = OrderTracking::where('order_id', $request->order_id)->pluck('order_status')->toArray();
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
@@ -122,6 +130,7 @@ class OrderReportController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
+        DB::statement('SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
 
         $orders = OrderRefund::select(
             // 'orders.invoice_number as inv_num',
@@ -139,14 +148,17 @@ class OrderReportController extends Controller
             'order_refunds.date',
             'order_transactions.payment_status as payment_status',
             'order_transactions.payment_method as payment_method',
-            'sum(orders.total_price_after_tax) as total'
+            DB::raw('SUM(orders.total_price_after_tax) as total')
         )
             ->leftJoin('order_details', 'order_details.id', 'order_refunds.order_detail_id')
-            // ->leftJoin('dishes', 'dishes.id', 'order_details.dish_id')
+            ->leftJoin('dishes', 'dishes.id', 'order_details.dish_id')
             ->leftJoin('orders', 'orders.id', 'order_details.order_id')
             ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
-            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id');
+            ->leftJoin('branches', 'orders.branch_id', '=', 'branches.id')
+            ->groupBy(
+                'order_refunds.id'
+            );
 
         if ($request->start_date) {
             $orders->where('date', '>=', $request->start_date);
