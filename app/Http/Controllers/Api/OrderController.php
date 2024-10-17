@@ -273,8 +273,11 @@ class OrderController extends Controller
                 $order_tracking->created_by = $created_by;
                 $order_tracking->save();
                 // call point function   $UserType == client
-                if ($UserType == 'client' && isActive($Order->branch_id)) {
-                    $points_num =  calculateEarnPoint($Order->total_price_after_tax, $Order->branch_id, $Order->id, $client_id);
+
+                if($UserType == 'client' && isValid($Order->branch_id)){
+                    if(isActive($Order->branch_id ) ){
+                        calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
+                    }
                 }
             } else {
                 $order_transaction->payment_status = "unpaid";

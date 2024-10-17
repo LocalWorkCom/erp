@@ -95,8 +95,10 @@ class OrderTransactionController extends Controller
             // $order_tracking->save();
 
             // call point function  total = $order->total_price_after_tax   && $request->payment_method == cash && $order->type == online
-            if($request->payment_method == 'cash' && $order->type == 'online' && isActive($order->branch_id )){
+            if($request->payment_method == 'cash' && $order->type == 'online' && isValid($order->branch_id )){
+                if(isActive($order->branch_id ) ){
                 calculateEarnPoint($order->total_price_after_tax,$order->branch_id , $order_id , $order->client_id);
+                }
             }
         } else {
             $order_transaction->payment_status = "unpaid";
