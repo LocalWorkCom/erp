@@ -239,7 +239,7 @@ class OrderController extends Controller
         $OrderTracking->save();
 
         $transactionId = Str::uuid()->toString();
-
+        $points_num = 0;
         if ($request->payment_method != 'cash') {
             $paid = $Order->total_price_after_tax; // we will get this value after payment get way
 
