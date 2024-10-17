@@ -79,6 +79,8 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|in:takeaway,online,in_resturant',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
+            'use_point' => 'nullable|integer', // Optional but must be a string
+
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
             'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
@@ -219,7 +221,9 @@ class OrderController extends Controller
         }
 
         // use point call pointredeem function else point redeem=0   return point num and amount of redeem
-        
+        if($request->use_points && $UserType == 'client' && isActive($Order->branch_id )){
+            calculateRedeemPoint($total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
+        }
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
         $Order->total_price_after_tax = $total_price_after_tax + $service_fees;// - point redeem

@@ -90,9 +90,6 @@ class pointsController extends Controller
                 return RespondWithBadRequestData($lang,  2);
             }
 
-            // if ($request->branch_id == 'client') {
-            //     return RespondWithBadRequestData($lang,  2);
-            // }
             $validator = Validator::make($request->all(), [
                 "type_en" => "required",
                 "type_ar" => "required",
