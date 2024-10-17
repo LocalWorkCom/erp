@@ -55,4 +55,14 @@ class Branch extends Model
     {
         return $this->hasMany(Store::class);
     }
+    public function recipes()
+{
+    return $this->belongsToMany(Recipe::class, 'branch_recipe');
+}
+
+public function dishes()
+{
+    return $this->belongsToMany(Dish::class, 'branch_dish');
+}
+
 }
