@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\AddonController;
 use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
+use App\Http\Controllers\Api\BrandController;
 
 
 
@@ -332,11 +333,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
     // point-system
     Route::prefix('point_system')->group(function () {
         Route::get('/', [pointsController::class, 'index']);
-        // Route::post('/', [pointsController::class, 'store']);// it not allow to add any system
-        Route::get('/{id}', [pointsController::class, 'show']);
+        Route::post('/', [pointsController::class, 'store']);// it not allow to add any system
+        Route::get('/{id}/{branch}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
+<<<<<<< HEAD
         Route::prefix('transactions')->group(function () {});
+=======
+        Route::prefix('transactions')->group(function () {
+
+        });
+>>>>>>> be07c4c90b556f6652e81cd11e4d701e7c4097dc
     });
 
     //Reports
@@ -362,4 +369,18 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy');
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
+<<<<<<< HEAD
+=======
+
+
+Route::prefix('brands')->group(function () {
+    Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+    Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+});
+
+>>>>>>> be07c4c90b556f6652e81cd11e4d701e7c4097dc
 });

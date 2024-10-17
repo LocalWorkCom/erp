@@ -225,7 +225,8 @@ class OrderController extends Controller
             $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
         }
 
-        // use point call pointredeem function else point redeem=0   return point num and amount of redeem 
+        // use point call pointredeem function else point redeem=0   return point num and amount of redeem
+
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
         $Order->total_price_after_tax = $total_price_after_tax + $service_fees; // - point redeem
@@ -263,8 +264,8 @@ class OrderController extends Controller
                 $order_tracking->created_by = $created_by;
                 $order_tracking->save();
                 // call point function   $UserType == client
-                if ($UserType == 'client' && isActive()) {
-                    $points_num =  calculateEarnPoint($Order->total_price_after_tax, $Order->id, $client_id);
+                if ($UserType == 'client' && isActive($Order->branch_id)) {
+                    $points_num =  calculateEarnPoint($Order->total_price_after_tax, $Order->branch_id, $Order->id, $client_id);
                 }
             } else {
                 $order_transaction->payment_status = "unpaid";
