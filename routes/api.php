@@ -148,12 +148,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/', [OrderTransactionController::class, 'index']);
         Route::post('store', [OrderTransactionController::class, 'store']);
     });
-    Route::group(['prefix' => 'order-report'], function () {
-        Route::post('/', [OrderReportController::class, 'OrderReport']);
-        Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
-        Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
-        Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
-    });
+
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
         Route::post('store', [UnitController::class, 'store']);
@@ -248,14 +243,14 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
 
     Route::prefix('recipes')->group(function () {
-        Route::get('/list', [RecipeController::class, 'index'])->name('recipes.index'); 
-        Route::post('/create', [RecipeController::class, 'store'])->name('recipes.store'); 
-        Route::get('/view/{id}', [RecipeController::class, 'show'])->name('recipes.show'); 
-        Route::put('/update/{id}', [RecipeController::class, 'update'])->name('recipes.update'); 
-        Route::delete('/delete/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy'); 
+        Route::get('/list', [RecipeController::class, 'index'])->name('recipes.index');
+        Route::post('/create', [RecipeController::class, 'store'])->name('recipes.store');
+        Route::get('/view/{id}', [RecipeController::class, 'show'])->name('recipes.show');
+        Route::put('/update/{id}', [RecipeController::class, 'update'])->name('recipes.update');
+        Route::delete('/delete/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('recipes.restore');
     });
-    
+
 
 
     //floors
@@ -341,9 +336,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('/{id}', [pointsController::class, 'show']);
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
-        Route::prefix('transactions')->group(function () {
-            
-        });
+        Route::prefix('transactions')->group(function () {});
     });
 
     //Reports
@@ -352,16 +345,21 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::prefix('purchase-invoices')->group(function () {
             Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
         });
+        Route::prefix('orders')->group(function () {
+            Route::post('/', [OrderReportController::class, 'OrderReport']);
+            Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
+            Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
+            Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
+        });
     });
 
 
     Route::prefix('dishes')->group(function () {
-        Route::get('/list', [DishController::class, 'index'])->name('dishes.index'); 
-        Route::post('/create', [DishController::class, 'store'])->name('dishes.store'); 
-        Route::get('/view/{id}', [DishController::class, 'show'])->name('dishes.show'); 
-        Route::put('/update/{id}', [DishController::class, 'update'])->name('dishes.update'); 
-        Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy'); 
-        Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore'); 
+        Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
+        Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
+        Route::get('/view/{id}', [DishController::class, 'show'])->name('dishes.show');
+        Route::put('/update/{id}', [DishController::class, 'update'])->name('dishes.update');
+        Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy');
+        Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
-    
 });
