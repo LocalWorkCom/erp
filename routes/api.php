@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\AddonController;
 use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
+use App\Http\Controllers\Api\BrandController;
 
 
 
@@ -363,5 +364,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy');
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
+
+
+Route::prefix('brands')->group(function () {
+    Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+    Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+    Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+});
 
 });
