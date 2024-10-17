@@ -19,10 +19,10 @@ class RecipeController extends Controller
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            // Fetch recipes with ingredients and images
+            // Fetch recipes with ingredients, images, and branches
             $recipes = $withTrashed
-                ? Recipe::withTrashed()->onlyRecipes()->with(['ingredients', 'images'])->get()
-                : Recipe::onlyRecipes()->with(['ingredients', 'images'])->get();
+                ? Recipe::withTrashed()->onlyRecipes()->with(['ingredients', 'images', 'branches'])->get()
+                : Recipe::onlyRecipes()->with(['ingredients', 'images', 'branches'])->get();
 
             return ResponseWithSuccessData($lang, $recipes, 1);
         } catch (\Exception $e) {
@@ -37,7 +37,7 @@ class RecipeController extends Controller
             $lang = $request->header('lang', 'ar');
             
             $recipe = Recipe::withTrashed()
-                ->with(['ingredients.product', 'ingredients.productUnit', 'images', 'recipeAddons'])
+                ->with(['ingredients.product', 'ingredients.productUnit', 'images', 'recipeAddons', 'branches'])
                 ->findOrFail($id);
     
             return ResponseWithSuccessData($lang, $recipe, 1);
@@ -61,11 +61,13 @@ class RecipeController extends Controller
                 'type' => 'required|in:1,2', // Type (1 = recipe, 2 = addon)
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
-                'ingredients' => 'required|array', // Array of ingredients
+                'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
                 'ingredients.*.quantity' => 'required|numeric|min:0',
                 'images' => 'nullable|array',
                 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+                'branches' => 'required|array', // Array of branch IDs
+                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $recipe = Recipe::create([
@@ -102,6 +104,9 @@ class RecipeController extends Controller
                 }
             }
 
+            // Attach Branches
+            $recipe->branches()->sync($request->branches);
+
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
@@ -128,6 +133,8 @@ class RecipeController extends Controller
                 'ingredients.*.quantity' => 'required|numeric|min:0',
                 'images' => 'nullable|array',
                 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
+                'branches' => 'required|array',
+                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $recipe = Recipe::findOrFail($id);
@@ -173,6 +180,9 @@ class RecipeController extends Controller
                     ]);
                 }
             }
+
+            // Update Branches
+            $recipe->branches()->sync($request->branches);
 
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
