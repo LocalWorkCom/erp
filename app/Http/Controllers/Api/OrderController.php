@@ -82,6 +82,8 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|in:takeaway,online,in_resturant',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
+            'use_point' => 'nullable|integer', // Optional but must be a string
+
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
             'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
@@ -149,6 +151,7 @@ class OrderController extends Controller
             $OrderDetails->quantity = $DataOrderDetail['quantity'];
             $OrderDetails->total = $total;
             $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total, $tax_percentage, $tax_application) : $total;
+            // dd($OrderDetails->price_befor_tax);
             $OrderDetails->tax_value = CalculateTax($tax_percentage, $total);
             $OrderDetails->note = $DataOrderDetail['note'] ?? null;
             // $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
@@ -157,6 +160,7 @@ class OrderController extends Controller
             $OrderDetails->created_by = $created_by;
             $total_product_price_after_tax = $tax_application == 0 ? applyTax($total, $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
             $OrderDetails->price_after_tax = $total_product_price_after_tax;
+            // dd($total_product_price_after_tax);
             $OrderDetails->save();
         }
 
@@ -174,6 +178,7 @@ class OrderController extends Controller
                 $OrderAddons->price_after_tax = $price_after_tax;
                 $OrderAddons->created_by = $created_by;
                 $OrderAddons->save();
+                // dd($price_after_tax);
             }
         }
 
@@ -186,12 +191,14 @@ class OrderController extends Controller
                 $DataAddons
             )
         );
+        // dd($total_addon_price_befor_tax);
+
         $total_price_befor_tax = $total_price_befor_tax2 = array_sum(
             array_map(
                 function ($detail) {
                     $Dish = Dish::find($detail['dish_id']);
 
-                    return $Dish['total'] * $detail['quantity'];
+                    return $Dish['price'] * $detail['quantity'];
                 },
                 $DataOrderDetails
             )
@@ -226,10 +233,12 @@ class OrderController extends Controller
         }
 
         // use point call pointredeem function else point redeem=0   return point num and amount of redeem
-
+        if ($request->use_points && $UserType == 'client' && isActive($Order->branch_id)) {
+            $redeem_total =   calculateRedeemPoint($total_price_after_tax, $Order->branch_id, $Order->id, $client_id);
+        }
         $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
         $Order->total_price_befor_tax = $total_price_befor_tax;
-        $Order->total_price_after_tax = $total_price_after_tax + $service_fees; // - point redeem
+        $Order->total_price_after_tax = ($total_price_after_tax + $service_fees) - $redeem_total;
         $Order->save();
 
         // add event order tracking

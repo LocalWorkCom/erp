@@ -64,15 +64,17 @@ class PurchaseInvoiceController extends Controller
             'products' => 'required|array',
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.unit_id' => 'required|exists:units,id',
+            'products.*.category_id' => 'required|exists:categories,id',
             'products.*.quantity' => 'required|numeric|min:0',
             'products.*.price' => 'required|numeric|min:0',
             'products.*.expiry_date' => 'nullable|date',
             'type' => 'required|in:0,1',  // 0 for purchase, 1 for refund
         ]);
 
-        if ($validator->fails()) {
-            return RespondWithBadRequest($lang, $validator->errors());
-        }
+        // if ($validator->fails()) {
+        //     return RespondWithBadRequest($lang, $validator->errors());
+        // }
+
 
         //Create the purchase invoice
         $purchaseInvoice = new PurchaseInvoice();
@@ -82,15 +84,18 @@ class PurchaseInvoiceController extends Controller
         $purchaseInvoice->type = $request->type;
         $purchaseInvoice->store_id = $request->store_id;
         $purchaseInvoice->created_by = Auth::id();
+        $purchaseInvoice->save();
 
         $totalQuantity = 0;
         $totalPrice = 0;
 
         //Loop through the products and create purchase invoice details & store transaction details
         foreach ($request->products as $productData) {
+
             PurchaseInvoicesDetails::create([
-                'purchase_invoice_id' => $purchaseInvoice->id,
+                'purchase_invoices_id' => $purchaseInvoice->id,
                 'product_id' => $productData['product_id'],
+                'category_id' => $productData['category_id'],
                 'unit_id' => $productData['unit_id'],
                 'price' => $productData['price'],
                 'quantity' => $productData['quantity'],
@@ -108,10 +113,10 @@ class PurchaseInvoiceController extends Controller
         ]);
 
         // Handle store transactions using the trait
-        $this->add_item_tostore($purchaseInvoice->id, $request->type); // 0 = purchase, 1 = refund
+        // $this->add_item_tostore($purchaseInvoice->id, $request->type); // 0 = purchase, 1 = refund
 
         return ResponseWithSuccessData($lang, [
-            'purchase_invoice' => $purchaseInvoice->load('purchaseInvoiceDetails'),
+            'purchase_invoice' => $purchaseInvoice->load('purchaseInvoicesDetails'),
         ], 27);
     }
 
