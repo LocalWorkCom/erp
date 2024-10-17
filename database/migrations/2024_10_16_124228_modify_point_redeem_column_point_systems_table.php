@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::table('point_systems', function (Blueprint $table) {
 
             $table->decimal('point_redeem', 10, 2)->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
+
+            $table->foreign('branch_id')->references('id')->on('branches');
 
         });
     }
