@@ -41,8 +41,7 @@ use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
-
-
+use App\Http\Controllers\Api\GiftController;
 
 /*
 |--------------------------------------------------------------------------
@@ -391,5 +390,14 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
         Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+    });
+
+    // Gifts
+    Route::group(['prefix' => 'gifts'], function () {
+        Route::get('/', [GiftController::class, 'index'])->name('gifts.index');
+        Route::get('/{id}', [GiftController::class, 'show'])->name('gifts.show');
+        Route::post('/', [GiftController::class, 'store'])->name('gifts.store');
+        Route::put('/{id}', [GiftController::class, 'update'])->name('gifts.update');
+        Route::delete('/{id}', [GiftController::class, 'destroy'])->name('gifts.destroy');
     });
 });
