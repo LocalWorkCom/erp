@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
@@ -11,6 +11,8 @@ use App\Models\OrderProduct;
 use App\Models\OrderRefund;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
+use App\Models\Product;
+use App\Models\Recipe;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -133,13 +135,12 @@ class OrderReportController extends Controller
         DB::statement('SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));');
 
         $orders = OrderRefund::select(
-            // 'orders.invoice_number as inv_num',
             'orders.type as order_type',
             'orders.status as order_status',
             'orders.total_price_befor_tax as price_before_tax',
             'orders.total_price_after_tax as price_after_tax',
             'orders.date as order_date',
-            'dishes.name_ar',
+            // 'dishes.name_ar',
             'orders.tax_value as tax_value',
             // 'orders.order_number as order_number',
             'users.name as client_name',
@@ -148,10 +149,8 @@ class OrderReportController extends Controller
             'order_refunds.date',
             'order_transactions.payment_status as payment_status',
             'order_transactions.payment_method as payment_method',
-            DB::raw('SUM(orders.total_price_after_tax) as total')
+            DB::raw('SUM(order_refunds.price) as total')
         )
-            ->leftJoin('order_details', 'order_details.id', 'order_refunds.order_detail_id')
-            ->leftJoin('dishes', 'dishes.id', 'order_details.dish_id')
             ->leftJoin('orders', 'orders.id', 'order_details.order_id')
             ->leftJoin('order_transactions', 'orders.id', '=', 'order_transactions.order_id')
             ->leftJoin('users', 'orders.client_id', '=', 'users.id')
@@ -159,6 +158,7 @@ class OrderReportController extends Controller
             ->groupBy(
                 'order_refunds.id'
             );
+
 
         if ($request->start_date) {
             $orders->where('date', '>=', $request->start_date);
@@ -178,6 +178,15 @@ class OrderReportController extends Controller
 
         $orders = $orders->get();
 
+        foreach ($orders as $order) {
+            if ($order->item_type == 'product') {
+                $order['item_name'] = Product::find($order->item_id)->name_ar;
+            } else if ($order->item_type == 'dish') {
+                $order['item_name'] = Dish::find($order->item_id)->name_ar;
+            } else {
+                $order['item_name'] = Recipe::find($order->item_id)->name_ar;
+            }
+        }
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
