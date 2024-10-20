@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Events\ProductTransactionEvent;
 
 //use DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 trait StoreTransactionTrait
 {
@@ -49,28 +49,27 @@ trait StoreTransactionTrait
         $store = Store::with('branch')->where('branch_id', $order->branch_id)->where('is_kitchen', 1)->first();
 
         $order_array = [];
+        $products = [];
 
-        if($order){
-                //$add_store_bill = new StoreTransaction();
-                /*$add_store_bill->type = 1;
-                $add_store_bill->to_type = 2;
-                $add_store_bill->to_id = $order->client_id;
-                $add_store_bill->date = $order->date;
-                $add_store_bill->total = $order->orderDetails->count();
-                $add_store_bill->store_id = $store->id;
-                $add_store_bill->user_id = $order->client_id;
-                $add_store_bill->created_by = $order->created_by;
-                $add_store_bill->total_price = $total_price;
-                //$add_store_bill->save();
-                $store_transaction_id = $add_store_bill->id;*/
+        /*
+        {
+            "product_id":1,
+            "product_unit_id":1,
+            "product_size_id":"",
+            "product_color_id":"",
+            "country_id":1,
+            "count":10,
+            "expired_date":"2024-10-24"
+        }*/
 
-                $order_array['type'] = 1;
-                $order_array['to_type'] = 1;
-                $order_array['to_id'] = 1;
-                $order_array['date'] = 1;
-                $order_array['store_id'] = 1;
-                $order_array['user_id'] = 1;
-                $order_array['created_by'] = 1;
+        if ($order) {
+            $order_array['type'] = 1;
+            $order_array['to_type'] = 2;
+            $order_array['to_id'] = $order->client_id;
+            $order_array['date'] = $order->date;
+            $order_array['store_id'] = $store->id;
+            $order_array['user_id'] = $order->created_by;
+            $order_array['created_by'] = $order->created_by;
 
 
             /*foreach($order->orderDetails as $order_details){
@@ -195,21 +194,11 @@ trait StoreTransactionTrait
         }*/
 
         return $order_array;
-
     }
 
-    public function add_item_to_store($data=array())
-    {  
-        
-    }
+    public function add_item_to_store($data = array()) {}
 
-    public function refund_order_to_store($order_id, $order_type)
-    {
+    public function refund_order_to_store($order_id, $order_type) {}
 
-    }
-
-    public function refund_purchase_to_store($order_id, $order_type)
-    {
-
-    }
+    public function refund_purchase_to_store($order_id, $order_type) {}
 }

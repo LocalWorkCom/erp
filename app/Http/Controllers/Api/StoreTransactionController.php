@@ -54,6 +54,8 @@ class StoreTransactionController extends Controller
     {
 
         $xx = $this->handel_order_to_store(1);
+        return $xx;
+        
         $data = [];
         $yy = $this->add_item_to_store($data);
         return $yy;
