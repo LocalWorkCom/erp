@@ -81,7 +81,6 @@ class GiftController extends Controller
 
             return ResponseWithSuccessData($lang, $gift, 1);
         } catch (Exception $e) {
-            Log::error('Gift update error: ' . $e->getMessage());
 
             return RespondWithBadRequestData($lang, 2);
         }
