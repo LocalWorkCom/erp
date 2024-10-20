@@ -54,7 +54,11 @@ class OrderRefundController extends Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'reason' => 'required|string|max:255', // Ensure reason is provided, a string, and not too long
-            'order_detail_id' => 'required|exists:order_details,id', // Ensure the order detail ID exists in the 'order_details' table
+            'order_id' => 'required|exists:orders,id', // Ensure the order detail ID exists in the 'order_details' table
+            'item_id' => 'required', // Ensure the order detail ID exists in the 'order_details' table
+            'item_type' => 'required|in:product,addon,dish', // Ensure the order detail ID exists in the 'order_details' table
+            'quantity' => 'required', // Ensure the order detail ID exists in the 'order_details' table
+            'price' => 'required', // Ensure the order detail ID exists in the 'order_details' table
         ]);
 
         // Check for validation errors
@@ -62,16 +66,17 @@ class OrderRefundController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        $created_by = Auth::guard('api')->user()->id;
 
         $orderRefund = new OrderRefund();
+        $orderRefund->invoice_number = "CN-" . GetNextID("order_refunds") . "-" . rand(1111, 9999); // Generate a new number if it exists
         $orderRefund->date = date('Y-m-d');
         $orderRefund->reason = $request->reason;
-        $orderRefund->order_detail_id = $request->order_detail_id;
+        $orderRefund->order_id = $request->order_id;
+        $orderRefund->item_id = $request->item_id;
+        $orderRefund->item_type = $request->item_type;
+        $orderRefund->quantity = $request->quantity;
+        $orderRefund->price = $request->price;
         $orderRefund->created_by = $created_by;
-        $orderRefund->invoice_number = "INV-" . GetNextID("order_refunds") . "-" . rand(1111, 9999); // Generate a new number if it exists
-
-
         $orderRefund->save();
 
         return RespondWithSuccessRequest($lang, 1);

@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->decimal('price', 10, 2);
+        Schema::table('point_systems', function (Blueprint $table) {
+
+            $table->decimal('point_redeem', 10, 2)->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
+
+            $table->foreign('branch_id')->references('id')->on('branches');
+
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('price');
-        });
+        //
     }
 };

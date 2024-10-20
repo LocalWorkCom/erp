@@ -22,7 +22,16 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('admin'),
                 'country_id' => 1,
                 'phone' => '123123123',
-                'flag' => 0,
+                'flag' => 'admin',
+            ],
+            // add unkwon(cashier) user 2
+            [
+                'name' => 'unkown',
+                'email' => 'unknown@unknown.com',
+                'password' => Hash::make('unknown'),
+                'country_id' => 1,
+                'phone' => '123123125',
+                'flag' => 'unknown',
             ],
         ];
 

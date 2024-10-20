@@ -37,7 +37,12 @@ use App\Http\Controllers\Api\pointsController;
 use App\Http\Controllers\Api\RecipeCategoryController;
 use App\Http\Controllers\Api\CuisineController;
 use App\Http\Controllers\Api\AddonController;
+use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
+use App\Http\Controllers\Api\DishController;
+use App\Http\Controllers\Api\BrandController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,27 +57,61 @@ use App\Http\Controllers\Api\PurchaseInvoiceController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::post("register", [AuthController::class, "register"]);
-Route::post("login", [AuthController::class, "login"])->name('login');
-Route::post("resetpassword", [AuthController::class, "reset_password"]);
-Route::group(['prefix' => 'api_code'], function () {
-    Route::get('/', [ApiCodeController::class, 'index']);
-    Route::post('store', [ApiCodeController::class, 'store']);
-    Route::post('update/{id}', [ApiCodeController::class, 'update']);
+
+
+//admin
+Route::group(['middleware' => ['auth:admin', 'admin']], function () {
+
+    //API_codes
+    Route::group(['prefix' => 'api_code'], function () {
+        Route::get('/', [ApiCodeController::class, 'index']);
+        Route::post('store', [ApiCodeController::class, 'store']);
+        Route::post('update/{id}', [ApiCodeController::class, 'update']);
+    });
+
+    //purchase_invoice
+    Route::prefix('purchase-invoices')->group(function () {
+        Route::get('/', [PurchaseInvoiceController::class, 'index'])->name('purchase-invoices.index');
+        Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
+        Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
+        Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
+    });
+
+    //Reports
+    Route::prefix('reports')->group(function () {
+        //purchase-invoices Reports
+        Route::prefix('purchase-invoices')->group(function () {
+            Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
+        });
+    });
 });
 
-Route::group(["middleware" => ["auth:api"]], function () {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//client
+Route::group(['middleware' => ['auth:client', 'client']], function () {
     Route::get("profile", [ClientController::class, "viewProfile"]);
     Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
     Route::get("client/orders", [ClientController::class, "listOrders"]);
     Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
     Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+});
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//api(both)
+Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
+Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 
+Route::group(["middleware" => ["auth:api"]], function () {
     //Color
     Route::group(['prefix' => 'color'], function () {
         Route::any('/', [ColorController::class, 'index']);
@@ -143,6 +182,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::group(['prefix' => 'order_transaction'], function () {
         Route::post('/', [OrderTransactionController::class, 'index']);
         Route::post('store', [OrderTransactionController::class, 'store']);
+    });
+    Route::group(['prefix' => 'order-report'], function () {
+        Route::post('/', [OrderReportController::class, 'OrderReport']);
+        Route::post('/details', [OrderReportController::class, 'OrderReportDetails']);
+        Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
+        Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
     });
     Route::group(['prefix' => 'unit'], function () {
         Route::get('/', [UnitController::class, 'index']);
@@ -237,14 +282,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
 
 
-    Route::group(['prefix' => 'recipes'], function () {
-        Route::get('recipeList', [RecipeController::class, 'index'])->name('recipes.index'); // Fetch all recipes
-        Route::post('addRecipe', [RecipeController::class, 'store'])->name('recipes.store'); // Create a new recipe (with ingredients)
-        Route::get('showRecipe/{id}', [RecipeController::class, 'show'])->name('recipes.show'); // Fetch a specific recipe by ID
-        Route::put('updateRecipe/{id}', [RecipeController::class, 'update'])->name('recipes.update'); // Update a recipe (with ingredients)
-        Route::delete('deleteRecipe/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy'); // Soft delete a recipe
-        Route::post('restoreRecipe/{id}', [RecipeController::class, 'restore'])->name('recipes.restore'); // Restore a soft-deleted recipe
+    Route::prefix('recipes')->group(function () {
+        Route::get('/list', [RecipeController::class, 'index'])->name('recipes.index');
+        Route::post('/create', [RecipeController::class, 'store'])->name('recipes.store');
+        Route::get('/view/{id}', [RecipeController::class, 'show'])->name('recipes.show');
+        Route::put('/update/{id}', [RecipeController::class, 'update'])->name('recipes.update');
+        Route::delete('/delete/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
+        Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('recipes.restore');
     });
+
 
 
     //floors
@@ -295,15 +341,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']);
     });
 
-    // point-system
-    Route::prefix('point_system')->group(function () {
-        Route::get('/', [pointsController::class, 'index']);
-        Route::post('/', [pointsController::class, 'store']);
-        Route::get('/{id}', [pointsController::class, 'show']);
-        Route::post('/{id}', [pointsController::class, 'update']);
-        Route::delete('/{id}', [pointsController::class, 'destroy']);
-    });
-
     //cuisines
     Route::prefix('cuisines')->group(function () {
         Route::get('cuisineList', [CuisineController::class, 'index'])->name('cuisines.list');
@@ -324,11 +361,35 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore');
     });
 
-    //purchase_invoice
-    Route::prefix('purchase-invoices')->group(function () {
-        Route::get('/', [PurchaseInvoiceController::class, 'index'])->name('purchase-invoices.index');
-        Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
-        Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
-        Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
+
+
+    // point-system
+    Route::prefix('point_system')->group(function () {
+        Route::get('/', [pointsController::class, 'index']);
+        Route::post('/', [pointsController::class, 'store']); // it not allow to add any system
+        Route::get('/{id}/{branch}', [pointsController::class, 'show']);
+        Route::post('/{id}', [pointsController::class, 'update']);
+        Route::delete('/{id}', [pointsController::class, 'destroy']);
+        Route::prefix('transactions')->group(function () {});
+    });
+
+
+    Route::prefix('dishes')->group(function () {
+        Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
+        Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
+        Route::get('/view/{id}', [DishController::class, 'show'])->name('dishes.show');
+        Route::put('/update/{id}', [DishController::class, 'update'])->name('dishes.update');
+        Route::delete('/delete/{id}', [DishController::class, 'destroy'])->name('dishes.destroy');
+        Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
+    });
+
+
+    Route::prefix('brands')->group(function () {
+        Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
+        Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+        Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+        Route::put('/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+        Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+        Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
 });

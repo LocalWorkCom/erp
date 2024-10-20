@@ -31,9 +31,10 @@ class Cuisine extends Model
         'deleted_at',
     ];
 
-    public function recipes()
+    // Relationships
+    public function dishes()
     {
-        return $this->hasMany(Recipe::class);
+        return $this->hasMany(Dish::class);
     }
 
     public function creator()
@@ -49,5 +50,11 @@ class Cuisine extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+    
+    // Scope to get only active cuisines
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

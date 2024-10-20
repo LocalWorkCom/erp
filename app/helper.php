@@ -6,9 +6,12 @@ use App\Models\ApICode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\ClientDetail;
 use App\Models\Coupon;
 use App\Models\Discount;
+use App\Models\pointTransaction;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -370,35 +373,78 @@ function CalculateTax($tax_percentage, $amount)
     return $tax;
 }
 
-function calculatePointBycurrency($total, $value)
+function CheckUserType()
 {
-    //this functions for earn points
-    $totalPoints = $total * $value;
-    return $totalPoints;
+    $User = auth('api')->user();
+    if ($User) {
+        return $User->flag;
+    }
+    return '';
 }
-function calculatePointBypercentage($total, $value)
+function isValid($branch_id)
 {
-    //this functions for earn points
-    $valueofpercentage = $value / 100;
-    $totalPoints = $total * $valueofpercentage;
-    return $totalPoints;
+    return pointSystem::where('branch_id', $branch_id)->exists();
 }
-function getCurrentSystemPointType($total)
+function isActive($branch_id)
 {
-    //this functions for earn points
-    $current = pointSystem::where('active', 1)->first();
+    return pointSystem::where('branch_id', $branch_id)->value('active') == 1;
+}
+function calculateEarnPoint($total, $branch, $order_id, $user_id)
+{
 
-    if ($current) {
-        $type = $current->key;
-        $value = $current->value;
-        if ($type == 0) {
-            $points =  calculatePointBycurrency($total, $value);
-        } elseif ($type == 1) {
-            $points = calculatePointBypercentage($total, $value);
-        }
-        return $points;
+    //get system value earn
+    $value_percent = pointSystem::where('branch_id', $branch)->value('value_earn');
+
+    //get num of points of total of order
+    $points_num = $total * ($value_percent / 100);
+
+    $transactions = new pointTransaction();
+    $transactions->customer_id = $user_id;
+    $transactions->order_id = $order_id;
+    $transactions->type = 'earn';
+    $transactions->points = $points_num;
+    $transactions->transaction_date = now();
+    $transactions->created_by  = $user_id;
+    $transactions->save();
+
+    $point_user = ClientDetail::where('user_id', $user_id)->value('loyalty_points') + $points_num;
+    $point = ClientDetail::where('user_id', $user_id)->first();
+    $point->loyalty_points = $point_user;
+    $point->save();
+
+    return  $points_num;
+}
+
+function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
+{
+
+    //get system value redeem
+    $point_redeem = pointSystem::where('branch_id', $branch_id)->value('point_redeem');
+    $limit_redeem = pointSystem::where('branch_id', $branch_id)->value('value_redeem');
+
+    $user_points = ClientDetail::where('user_id', $client_id)->value('loyalty_points');
+
+    $points_percent = $user_points * $point_redeem;
+    $redeem_total = 0;
+    // dd($limit_redeem);
+    if ($limit_redeem > $points_percent) {
+        // dd(0);
+        $redeem_total = $total *  $points_percent;
+        $transactions = new pointTransaction();
+        $transactions->customer_id = $client_id;
+        $transactions->order_id = $Order_id;
+        $transactions->type = 'redeem';
+        $transactions->points = $user_points;
+        $transactions->transaction_date = now();
+        $transactions->created_by = $client_id;
+        $transactions->save();
+
+        //  $point_user = ClientDetail::where('user_id', $client_id)->value('loyalty_points') - $user_points;
+        $client = ClientDetail::where('user_id', $client_id)->first();
+
+        $client->loyalty_points = 0;
+        $client->save();
     }
 
-    return null;
+    return $redeem_total;
 }
-function updateUserPoints($points, $order, $type,) {}

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Recipe extends Model
+class Brand extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -15,8 +15,7 @@ class Recipe extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'type', // 1 for recipe, 2 for addon
-        'price',
+        'logo_path',  // Path for brand logo
         'is_active',
         'created_by',
         'modified_by',
@@ -32,51 +31,35 @@ class Recipe extends Model
         'deleted_at',
     ];
 
-    // Scope to filter recipes only (type = 1)
-    public function scopeOnlyRecipes($query)
-    {
-        return $query->where('type', 1);
-    }
-
-    // Scope to filter addons only (type = 2)
-    public function scopeOnlyAddons($query)
-    {
-        return $query->where('type', 2);
-    }
-
-    // Relationships
-    public function ingredients()
-    {
-        return $this->hasMany(Ingredient::class);
-    }
-
-    public function images()
-    {
-        return $this->hasMany(RecipeImage::class);
-    }
-
+    /**
+     * Get the creator of the brand.
+     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * Get the modifier of the brand.
+     */
     public function modifier()
     {
         return $this->belongsTo(User::class, 'modified_by');
     }
 
+    /**
+     * Get the deleter of the brand.
+     */
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    // Relationship to link an addon to recipes through recipe_addons table
-    public function recipeAddons()
+    /**
+     * Define a relationship with products (if each product belongs to a brand).
+     */
+    public function products()
     {
-        return $this->hasMany(RecipeAddon::class, 'addon_id');
+        return $this->hasMany(Product::class, 'brand_id');
     }
-    public function branches()
-{
-    return $this->belongsToMany(Branch::class, 'branch_recipe');
-}
 }
