@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Gift;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GiftController extends Controller
 {
@@ -15,7 +16,7 @@ class GiftController extends Controller
             $lang = $request->header('lang', 'en');
             $gift = Gift::all();
             return ResponseWithSuccessData($lang, $gift, 1);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
     }
@@ -57,22 +58,34 @@ class GiftController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
+
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'expiration_date' => 'required|date',
+            ]);
+
             $gift = Gift::find($id);
             if (!$gift) {
                 return RespondWithBadRequestData($lang, 22);
             }
-            $request->validate([
-                'name' => 'required|string',
-                'expiration_date' => 'required|date|after:created_at'
-            ]);
 
-            $gift->update($request->all());
+            // Check if expiration date is after the creation date
+            if (strtotime($validatedData['expiration_date']) <= strtotime($gift->created_at)) {
+                return RespondWithBadRequestData($lang, 'Expiration date must be after the creation date');
+            }
+
+            $gift->update([
+                'name' => $validatedData['name'],
+                'expiration_date' => $validatedData['expiration_date']
+            ]);
 
             return ResponseWithSuccessData($lang, $gift, 1);
         } catch (Exception $e) {
+
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function destroy(Request $request, $id)
     {
