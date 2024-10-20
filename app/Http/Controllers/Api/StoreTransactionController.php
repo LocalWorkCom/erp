@@ -53,7 +53,7 @@ class StoreTransactionController extends Controller
     public function store(Request $request)
     {
 
-        $xx = $this->handel_order_to_store(1);
+        $xx = $this->handel_order_to_store(10);
         return $xx;
         
         $data = [];

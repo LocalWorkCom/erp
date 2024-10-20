@@ -72,36 +72,62 @@ trait StoreTransactionTrait
             $order_array['created_by'] = $order->created_by;
 
 
-            /*foreach($order->orderDetails as $order_details){
-                if($order_details->recipe_id != null){
-                    //iuf order is recipe
-                    $recipe_details_ingredients = Recipe::with('ingredients')->where('id', $order_details->recipe_id)->first();
-                    if($recipe_details_ingredients->ingredients){
-                        foreach($recipe_details_ingredients->ingredients as $recipe_details_ingredient){
-
-                            $add_store_items = new StoreTransactionDetails();
-                            $add_store_items->store_transaction_id = $store_transaction_id;
-                            $add_store_items->product_id = $recipe_details_ingredient->product_id;
-                            $add_store_items->product_unit_id = $recipe_details_ingredient->product_unit_id ;
-                            $add_store_items->country_id = $store->branch->country_id;
-                            $add_store_items->count = ($recipe_details_ingredient->quantity * $order_details->quantity);
-                            $add_store_items->price = $price;
-                            $add_store_items->total_price = $total_price;
-                            $add_store_items->save();
-                            $add_store_items->type = 1;
-                            $add_store_items->to_type = 2;
-                            $add_store_items->user_id = $order->client_id;
-                            $add_store_items->store_id = $store->id;
-                            $add_store_items->expired_date = "";
-                            $add_store_items->order_id = $order->id;
-                            $add_store_items->order_details_id = $order_details->id;
-                            $add_store_items->order_addon_id = "";
-
-                            event(new ProductTransactionEvent($add_store_items));
+            if($order->orderDetails){
+                foreach($order->orderDetails as $order_details){
+                    //return $order_details->dishes->recipes->recipe->ingredients;
+                    if($order_details->dishes){
+                        if($order_details->dishes->recipes){
+                            foreach($order_details->dishes->recipes as $recipe_details)
+                            {
+                                if($recipe_details->recipe->ingredients){
+                                    foreach($recipe_details->recipe->ingredients as $ingredients){
+                                        $products = array(
+                                            "product_id" => $ingredients->product_id,
+                                            "product_unit_id" => $ingredients->product_id,
+                                            "product_size_id" => "",
+                                            "product_color_id" => "",
+                                            "country_id" => 1,
+                                            "count" => $ingredients->product_id,
+                                            "expired_date" => ""
+                                        );
+                                    }
+                                }
+                            }
+                            /*if($order_details->dish_id != null){
+                                //iuf order is recipe
+                                $recipe_details_ingredients = Recipe::with('ingredients')->where('id', $order_details->recipe_id)->first();
+                                if($recipe_details_ingredients->ingredients){
+                                    foreach($recipe_details_ingredients->ingredients as $recipe_details_ingredient){
+            
+                                        $add_store_items = new StoreTransactionDetails();
+                                        $add_store_items->store_transaction_id = $store_transaction_id;
+                                        $add_store_items->product_id = $recipe_details_ingredient->product_id;
+                                        $add_store_items->product_unit_id = $recipe_details_ingredient->product_unit_id ;
+                                        $add_store_items->country_id = $store->branch->country_id;
+                                        $add_store_items->count = ($recipe_details_ingredient->quantity * $order_details->quantity);
+                                        $add_store_items->price = $price;
+                                        $add_store_items->total_price = $total_price;
+                                        $add_store_items->save();
+                                        $add_store_items->type = 1;
+                                        $add_store_items->to_type = 2;
+                                        $add_store_items->user_id = $order->client_id;
+                                        $add_store_items->store_id = $store->id;
+                                        $add_store_items->expired_date = "";
+                                        $add_store_items->order_id = $order->id;
+                                        $add_store_items->order_details_id = $order_details->id;
+                                        $add_store_items->order_addon_id = "";
+            
+                                    }
+                                }
+                                //end of order is recipe
+                            }*/
                         }
                     }
-                    //end of order is recipe
-                }else{
+                    
+                }
+            }
+            
+                /* else{
 
                     //if order is product
                     $add_store_items = new StoreTransactionDetails();
