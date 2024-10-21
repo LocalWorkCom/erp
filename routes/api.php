@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\DishCategoryController;
 
 
 
@@ -385,4 +386,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
+
+
+    Route::prefix('dish-categories')->group(function () {
+        Route::get('/list', [DishCategoryController::class, 'index'])->name('dish_categories.index');
+        Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
+        Route::post('/create', [DishCategoryController::class, 'store'])->name('dish_categories.store');
+        Route::put('/update/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update');
+        Route::delete('/delete/{id}', [DishCategoryController::class, 'destroy'])->name('dish_categories.destroy');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
+    });
+
 });
