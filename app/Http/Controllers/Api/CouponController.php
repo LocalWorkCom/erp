@@ -211,7 +211,7 @@ class CouponController extends Controller
             }
     
             return response()->json([
-                'success' => true,
+                 'success' => true,
                 'message' => 'Coupon is valid.',
             ]);
         } catch (\Exception $e) {
