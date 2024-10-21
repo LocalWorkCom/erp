@@ -137,48 +137,6 @@ trait StoreTransactionTrait
             $order_array['products'] = $products;
             
         }
-<<<<<<< HEAD
-=======
-
-
-        /*{
-            "type":1,
-            "to_type":1,
-            "to_id":2,
-            "date":"2024-09-26",
-            "store_id":2,
-            "products":[
-                {
-                    "product_id":1,
-                    "product_unit_id":1,
-                    "product_size_id":"",
-                    "product_color_id":"",
-                    "country_id":1,
-                    "count":10,
-                    "expired_date":"2024-10-24"
-                },
-                {
-                    "product_id":2,
-                    "product_unit_id":2,
-                    "product_size_id":"",
-                    "product_color_id":"",
-                    "country_id":1,
-                    "count":1,
-                    "expired_date":"2024-10-24"
-                },
-                {
-                    "product_id":3,
-                    "product_unit_id":3,
-                    "product_size_id":"",
-                    "product_color_id":"",
-                    "country_id":1,
-                    "count":1,
-                    "expired_date":"2024-10-24"
-                } 
-            ]
-        }*/
-
->>>>>>> d9a618c90e8da382d54a04205905c42b074671fb
         return $order_array;
     }
 
