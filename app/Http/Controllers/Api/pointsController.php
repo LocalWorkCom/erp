@@ -96,6 +96,8 @@ class pointsController extends Controller
                 "value_earn" => "required",
                 "value_redeem" => "required",
                 "active" => "required",
+                "point_redeem" => "required",
+
                 'branch_id' => [
                     'required',
                     Rule::unique('point_systems', 'branch_id')
@@ -112,6 +114,8 @@ class pointsController extends Controller
             $new->type_ar  = $request->type_ar;
             $new->value_earn = $request->value_earn;
             $new->value_redeem = $request->value_redeem;
+            $new->point_redeem = $request->point_redeem;
+
             $new->active = $request->active;
             $new->branch_id = $request->branch_id;
             $new->created_by = auth()->id();
@@ -246,6 +250,7 @@ class pointsController extends Controller
                 "value_redeem" => "required",
                 "active" => "required",
                 "branch_id" => "required",
+                "point_redeem" => "required",
 
             ]);
             if ($validator->fails()) {
@@ -258,6 +263,7 @@ class pointsController extends Controller
             $new->type_ar  = $request->type_ar;
             $new->value_earn = $request->value_earn;
             $new->value_redeem = $request->value_redeem;
+            $new->point_redeem = $request->point_redeem;
             $new->active = $request->active;
             $new->branch_id = $request->branch_id;
             $new->modified_by = auth()->id();
