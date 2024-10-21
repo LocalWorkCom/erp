@@ -40,4 +40,9 @@ class OrderRefund extends Model
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');
     }
+
+    public function orders()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }
