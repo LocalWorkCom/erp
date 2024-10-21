@@ -412,7 +412,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/', [GiftController::class, 'store'])->name('gifts.store');
         Route::put('/{id}', [GiftController::class, 'update'])->name('gifts.update');
         Route::delete('/{id}', [GiftController::class, 'destroy'])->name('gifts.destroy');
-        Route::post('gifts/apply-to-users', [GiftController::class, 'applyGiftToUsers']);
-        Route::post('gifts/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
+        Route::post('/apply-to-users', [GiftController::class, 'applyGiftToUsers']);
+        Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 });
