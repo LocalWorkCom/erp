@@ -50,8 +50,8 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'required|array',  // Array of branch IDs
-                'branches.*' => 'required|integer|exists:branches,id',
+                'branches' => 'nullable|array',  
+                'branches.*' => 'integer|exists:branches,id', 
             ]);
 
             $coupon = Coupon::create([
@@ -67,8 +67,9 @@ class CouponController extends Controller
                 'count_usage' => 0,
             ]);
 
-            // Attach branches to the coupon
-            $coupon->branches()->attach($validatedData['branches']);
+            if (!empty($validatedData['branches'])) {
+                $coupon->branches()->attach($validatedData['branches']);
+            }
 
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
@@ -90,8 +91,8 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'required|array',  // Array of branch IDs
-                'branches.*' => 'required|integer|exists:branches,id',
+                'branches' => 'nullable|array',  
+                'branches.*' => 'integer|exists:branches,id',
             ]);
 
             $coupon = Coupon::findOrFail($id);
@@ -108,7 +109,11 @@ class CouponController extends Controller
                 'modified_by' => auth()->id(),
             ]);
 
-            $coupon->branches()->sync($validatedData['branches']);
+            if (!empty($validatedData['branches'])) {
+                $coupon->branches()->sync($validatedData['branches']);
+            } else {
+                $coupon->branches()->detach();  
+            }
 
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
@@ -116,7 +121,6 @@ class CouponController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
 
     public function destroy(Request $request, $id)
     {
@@ -185,7 +189,7 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $branchId = $request->input('branch_id');  // Get the branch ID from the request
+            $branchId = $request->input('branch_id');  
     
             $coupon = Coupon::with('branches')->findOrFail($id); // Load the coupon with its branches
     
@@ -197,11 +201,9 @@ class CouponController extends Controller
                 ], 400);
             }
     
-            // If branchId is provided, check if the coupon is valid for the branch
             if ($branchId) {
                 $validBranches = $coupon->branches->pluck('id')->toArray();
     
-                // Check if the branch ID is in the list of valid branches for this coupon
                 if (!in_array($branchId, $validBranches)) {
                     return response()->json([
                         'success' => false,
@@ -211,7 +213,7 @@ class CouponController extends Controller
             }
     
             return response()->json([
-                'success' => true,
+                 'success' => true,
                 'message' => 'Coupon is valid.',
             ]);
         } catch (\Exception $e) {

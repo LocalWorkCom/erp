@@ -32,11 +32,10 @@ class Dish extends Model
         'deleted_at',
     ];
 
-    public function category()
+    public function dishCategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(DishCategory::class, 'category_id');
     }
-
     public function cuisine()
     {
         return $this->belongsTo(Cuisine::class);
