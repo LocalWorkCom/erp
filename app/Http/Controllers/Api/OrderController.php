@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+use App\Models\OrderProduct;
 
 class OrderController extends Controller
 {
@@ -69,6 +70,7 @@ class OrderController extends Controller
         $DataOrderDetails = $request->details;
         $DataAddons = $request->addons;
         $done = false;
+        $DataProducts = $request->Products;
 
         //settings
         $tax_percentage = 0;
@@ -181,6 +183,18 @@ class OrderController extends Controller
                 // dd($price_after_tax);
             }
         }
+        foreach ($DataProducts as $DataProduct) {
+
+            $OrderProducts = new OrderProduct();
+            $OrderProducts->order_id = $Order->id;
+            $OrderProducts->product_id = $DataProduct['product_id'];
+            $OrderProducts->quantity = $DataProduct['quantity'];
+            $OrderProducts->unit_id = $DataProduct['unit_id'];
+            $OrderProducts->price = 0;
+            $OrderProducts->created_by = $created_by;
+
+            $OrderProducts->save();
+        }
 
         $total_addon_price_befor_tax = array_sum(
             array_map(
@@ -276,7 +290,7 @@ class OrderController extends Controller
 
                 if($UserType == 'client' && isValid($Order->branch_id)){
                     if(isActive($Order->branch_id ) ){
-                        calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
+                        $points_num =   calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
                     }
                 }
             } else {
