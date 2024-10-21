@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
 use App\Models\ClientDetail;
@@ -48,6 +49,7 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
+        event(new UserRegistered($user));
 
         // Create Client Details
         $clientDetail = new ClientDetail();
