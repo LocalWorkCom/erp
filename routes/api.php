@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProductInventoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
@@ -163,6 +164,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/store', [ProductColorController::class, 'store']);
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
+        Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
     });
 
     Route::group(['prefix' => 'order'], function () {
