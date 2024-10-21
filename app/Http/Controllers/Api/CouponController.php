@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
+use App\Models\Branch;
 use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
@@ -13,7 +14,7 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $coupons = Coupon::all();
+            $coupons = Coupon::with('branches')->get();
 
             return ResponseWithSuccessData($lang, $coupons, 1);
         } catch (\Exception $e) {
@@ -26,7 +27,7 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $coupon = Coupon::findOrFail($id);
+            $coupon = Coupon::with('branches')->findOrFail($id);
 
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
@@ -49,6 +50,8 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
+                'branches' => 'required|array',  // Array of branch IDs
+                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $coupon = Coupon::create([
@@ -61,8 +64,11 @@ class CouponController extends Controller
                 'end_date' => $validatedData['end_date'],
                 'is_active' => $validatedData['is_active'],
                 'created_by' => auth()->id(),
-                'count_usage' => 0, // Initialize count_usage when creating
+                'count_usage' => 0,
             ]);
+
+            // Attach branches to the coupon
+            $coupon->branches()->attach($validatedData['branches']);
 
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
@@ -84,6 +90,8 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
+                'branches' => 'required|array',  // Array of branch IDs
+                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $coupon = Coupon::findOrFail($id);
@@ -100,12 +108,15 @@ class CouponController extends Controller
                 'modified_by' => auth()->id(),
             ]);
 
+            $coupon->branches()->sync($validatedData['branches']);
+
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error updating coupon: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function destroy(Request $request, $id)
     {
@@ -174,8 +185,10 @@ class CouponController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $coupon = Coupon::findOrFail($id);
-
+            $branchId = $request->input('branch_id');  // Get the branch ID from the request
+    
+            $coupon = Coupon::with('branches')->findOrFail($id); // Load the coupon with its branches
+    
             // Check if the coupon has expired or is fully used
             if (!$coupon->is_active || ($coupon->usage_limit && $coupon->count_usage >= $coupon->usage_limit)) {
                 return response()->json([
@@ -183,7 +196,20 @@ class CouponController extends Controller
                     'message' => 'Coupon is no longer valid.',
                 ], 400);
             }
-
+    
+            // If branchId is provided, check if the coupon is valid for the branch
+            if ($branchId) {
+                $validBranches = $coupon->branches->pluck('id')->toArray();
+    
+                // Check if the branch ID is in the list of valid branches for this coupon
+                if (!in_array($branchId, $validBranches)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Coupon is not valid for this branch.',
+                    ], 400);
+                }
+            }
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Coupon is valid.',
@@ -196,4 +222,5 @@ class CouponController extends Controller
             ], 500);
         }
     }
+    
 }

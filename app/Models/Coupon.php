@@ -81,4 +81,10 @@ class Coupon extends Model
     {
         return $this->type === 'percentage' ? 'Percentage' : 'Fixed Amount';
     }
+
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'branch_coupon');
+    }
 }
