@@ -331,6 +331,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
         Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
         Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
+        Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
+
     });
 
     // Recipe Categories
@@ -395,7 +397,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
 
-
+// dish categories
     Route::prefix('dish-categories')->group(function () {
         Route::get('/list', [DishCategoryController::class, 'index'])->name('dish_categories.index');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
