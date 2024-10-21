@@ -62,4 +62,14 @@ class Discount extends Model
     {
         return $this->type === 'percentage' ? 'Percentage' : 'Fixed Amount';
     }
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'branch_discount');
+    }
+
+    public function dishes()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_discount');
+    }
 }

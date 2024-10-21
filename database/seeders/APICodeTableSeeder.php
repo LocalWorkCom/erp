@@ -41,8 +41,10 @@ class APICodeTableSeeder extends Seeder
             ['code' => '27', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase Invoice created successfully.", 'api_code_message_ar' => "تم تخزين فاتورة المشتريات بنجاح"],
             ['code' => '28', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' => 'Cannot update purchase invoice linked to a store transaction', 'api_code_message_ar' => 'لا يمكن التعديل على فاتورة مشتريات مربوطة بحركة في المخزن'],
             ['code' => '29', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Purchase invoice (refund) updated successfully.", 'api_code_message_ar' => "تم تعديل فاتورة المشتريات (مسترجع) بنجاح"],
-            ['code' => '30', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Reports fetched successfully.", 'api_code_message_ar' => "تم عرض التقارير بنجاح"]
-
+            ['code' => '30', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Reports fetched successfully.", 'api_code_message_ar' => "تم عرض التقارير بنجاح"],
+            ['code' => '31', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  "Expiration date must be after the creation date.", 'api_code_message_ar' => "تاريخ الانتهاء يجب ان يكون بعد تاريخ الانشاء"],
+            ['code' => '32', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Gift applied successfully to specified users.", 'api_code_message_ar' => "تم تعيين الهدية للمستخدمين المحددين"],
+            ['code' => '33', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Gift applied successfully to users in specified branch.", 'api_code_message_ar' => "تم تعيين الهدية للمستخدمين التابعين للفرع المحدد"],
         ];
 
         DB::table('apicodes')->insert($sizes);
