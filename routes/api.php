@@ -44,6 +44,7 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\DishCategoryController;
 
 
+use App\Http\Controllers\Api\GiftController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +60,35 @@ use App\Http\Controllers\Api\DishCategoryController;
 //     return $request->user();
 // });
 
+
 //admin
-Route::group(['middleware' => ['auth:admin', 'admin']], function () {});
+Route::group(['middleware' => ['auth:admin', 'admin']], function () {
+
+    //API_codes
+    Route::group(['prefix' => 'api_code'], function () {
+        Route::get('/', [ApiCodeController::class, 'index']);
+        Route::post('store', [ApiCodeController::class, 'store']);
+        Route::post('update/{id}', [ApiCodeController::class, 'update']);
+    });
+
+    //purchase_invoice
+    Route::prefix('purchase-invoices')->group(function () {
+        Route::get('/', [PurchaseInvoiceController::class, 'index'])->name('purchase-invoices.index');
+        Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
+        Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
+        Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
+    });
+
+    //Reports
+    Route::prefix('reports')->group(function () {
+        //purchase-invoices Reports
+        Route::prefix('purchase-invoices')->group(function () {
+            Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
+        });
+    });
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //client
 Route::group(['middleware' => ['auth:client', 'client']], function () {
@@ -72,26 +100,20 @@ Route::group(['middleware' => ['auth:client', 'client']], function () {
     Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
 });
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //api(both)
-Route::group(["middleware" => ["auth:api"]], function () {});
+Route::group(["middleware" => ["auth:api"]], function () {
+    Route::any("logout", [AuthController::class, "logout"]);
+});
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
-Route::group(['prefix' => 'api_code'], function () {
-    Route::get('/', [ApiCodeController::class, 'index']);
-    Route::post('store', [ApiCodeController::class, 'store']);
-    Route::post('update/{id}', [ApiCodeController::class, 'update']);
-});
+
 
 Route::group(["middleware" => ["auth:api"]], function () {
-
-
-
-    Route::any("logout", [AuthController::class, "logout"]);
-
-
     //Color
     Route::group(['prefix' => 'color'], function () {
         Route::any('/', [ColorController::class, 'index']);
@@ -341,13 +363,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restoreAddon/{id}', [AddonController::class, 'restore'])->name('addons.restore');
     });
 
-    //purchase_invoice
-    Route::prefix('purchase-invoices')->group(function () {
-        Route::get('/', [PurchaseInvoiceController::class, 'index'])->name('purchase-invoices.index');
-        Route::post('/', [PurchaseInvoiceController::class, 'store'])->name('purchase-invoices.store');
-        Route::put('/{id}', [PurchaseInvoiceController::class, 'update'])->name('purchase-invoices.update');
-        Route::get('/{id}', [PurchaseInvoiceController::class, 'show'])->name('purchase-invoices.show');
-    });
+
 
     // point-system
     Route::prefix('point_system')->group(function () {
@@ -357,14 +373,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/{id}', [pointsController::class, 'update']);
         Route::delete('/{id}', [pointsController::class, 'destroy']);
         Route::prefix('transactions')->group(function () {});
-    });
-
-    //Reports
-    Route::prefix('reports')->group(function () {
-        //purchase-invoices Reports
-        Route::prefix('purchase-invoices')->group(function () {
-            Route::get('/', [PurchaseInvoiceController::class, 'getPurchaseInvoiceReport']);
-        });
     });
 
 
@@ -397,4 +405,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
     });
 
+    // Gifts
+    Route::group(['prefix' => 'gifts'], function () {
+        Route::get('/', [GiftController::class, 'index'])->name('gifts.index');
+        Route::get('/{id}', [GiftController::class, 'show'])->name('gifts.show');
+        Route::post('/', [GiftController::class, 'store'])->name('gifts.store');
+        Route::put('/{id}', [GiftController::class, 'update'])->name('gifts.update');
+        Route::delete('/{id}', [GiftController::class, 'destroy'])->name('gifts.destroy');
+    });
 });
