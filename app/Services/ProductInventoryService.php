@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Actions;
+namespace App\Services;
 
-class ProductInventoryAction
+class ProductInventoryService
 {
-    public static function getProductInventory($lang,$transactions,$productId)
+    public static function getProductInventory($lang, $transactions, $productId)
     {
-
         $product = $transactions->first()->products;
         $productName = $lang === 'en' ? $product->name_en : $product->name_ar;
 
+        $beginningBalance = $transactions->first()->count;
         $incomingTotal = 0;
         $outgoingTotal = 0;
         $previousCount = 0;
@@ -43,8 +43,9 @@ class ProductInventoryAction
 
         // data returned
         $inventoryData = [
-            'product_id' => $productId,
-            'product_name' => $productName,
+            'productId' => $productId,
+            'productName' => $productName,
+            'beginningBalance'=> $beginningBalance,
             'incoming' => [
                 'total' => $incomingTotal,
                 'transactions' => $incomingTransactions,
@@ -53,7 +54,7 @@ class ProductInventoryAction
                 'total' => $outgoingTotal,
                 'transactions' => $outgoingTransactions,
             ],
-            'balance' => $balance,
+            'currentBalance' => $balance,
         ];
         return $inventoryData;
     }
