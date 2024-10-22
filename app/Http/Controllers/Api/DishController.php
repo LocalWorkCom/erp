@@ -15,7 +15,6 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            // Remove the reference to `dishAddons` from the recipe relationship
             $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->get();
             return ResponseWithSuccessData($lang, $dishes, 1);
         } catch (\Exception $e) {
@@ -28,7 +27,6 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            // Remove the reference to `dishAddons` from the recipe relationship
             $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
