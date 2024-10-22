@@ -377,7 +377,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::prefix('transactions')->group(function () {});
     });
 
-
+//dishes
     Route::prefix('dishes')->group(function () {
         Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
         Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
@@ -387,7 +387,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
 
-
+//brands
     Route::prefix('brands')->group(function () {
         Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
         Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
