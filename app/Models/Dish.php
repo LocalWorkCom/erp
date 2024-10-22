@@ -36,6 +36,7 @@ class Dish extends Model
     {
         return $this->belongsTo(DishCategory::class, 'category_id');
     }
+
     public function cuisine()
     {
         return $this->belongsTo(Cuisine::class);
@@ -45,8 +46,14 @@ class Dish extends Model
     {
         return $this->hasMany(DishDetail::class, 'dish_id');
     }
+
     public function branches()
-{
-    return $this->belongsToMany(Branch::class, 'branch_dish');
-}
+    {
+        return $this->belongsToMany(Branch::class, 'branch_dish');
+    }
+
+    public function addons()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_addons', 'dish_id', 'addon_id');
+    }
 }

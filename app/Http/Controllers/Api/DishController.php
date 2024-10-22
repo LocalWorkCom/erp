@@ -16,19 +16,19 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dishes = Dish::with(['category', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->get();
+            $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->get();
             return ResponseWithSuccessData($lang, $dishes, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dishes: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
+    
     public function show(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dish = Dish::with(['category', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->findOrFail($id);
+            $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dish: ' . $e->getMessage());
