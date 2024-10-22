@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Dish;
 use App\Models\DishDetail;
 use App\Models\Branch;
-use App\Models\Recipe;
 use Illuminate\Support\Facades\Log;
 
 class DishController extends Controller
@@ -16,25 +15,26 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->get();
+            $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->get();
             return ResponseWithSuccessData($lang, $dishes, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dishes: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-    
+
     public function show(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'recipes.recipe.recipeAddons', 'branches'])->findOrFail($id);
+            $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dish: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function store(Request $request)
     {
@@ -51,6 +51,8 @@ class DishController extends Controller
                 'recipes' => 'required|array',
                 'recipes.*.recipe_id' => 'required|integer|exists:recipes,id',
                 'recipes.*.quantity' => 'required|numeric|min:0',
+                'addons' => 'nullable|array',  // Addons are optional
+                'addons.*.addon_id' => 'required|integer|exists:addons,id',
                 'branches' => 'required|array', // Array of branch IDs
                 'branches.*' => 'required|integer|exists:branches,id',
             ]);
@@ -66,12 +68,23 @@ class DishController extends Controller
                 'created_by' => auth()->id(),
             ]);
 
+            // Store Recipes
             foreach ($request->recipes as $recipeData) {
                 DishDetail::create([
                     'dish_id' => $dish->id,
                     'recipe_id' => $recipeData['recipe_id'],
                     'quantity' => $recipeData['quantity'],
                 ]);
+            }
+
+            // Store Addons if provided
+            if ($request->has('addons')) {
+                foreach ($request->addons as $addonData) {
+                    DishAddon::create([
+                        'dish_id' => $dish->id,
+                        'addon_id' => $addonData['addon_id'],
+                    ]);
+                }
             }
 
             $dish->branches()->sync($request->branches);
@@ -98,6 +111,8 @@ class DishController extends Controller
                 'recipes' => 'required|array',
                 'recipes.*.recipe_id' => 'required|integer|exists:recipes,id',
                 'recipes.*.quantity' => 'required|numeric|min:0',
+                'addons' => 'nullable|array',  // Addons are optional
+                'addons.*.addon_id' => 'required|integer|exists:addons,id',
                 'branches' => 'required|array', // Array of branch IDs
                 'branches.*' => 'required|integer|exists:branches,id',
             ]);
@@ -115,14 +130,25 @@ class DishController extends Controller
                 'modified_by' => auth()->id(),
             ]);
 
+            // Update Recipes
             DishDetail::where('dish_id', $dish->id)->delete();
-
             foreach ($request->recipes as $recipeData) {
                 DishDetail::create([
                     'dish_id' => $dish->id,
                     'recipe_id' => $recipeData['recipe_id'],
                     'quantity' => $recipeData['quantity'],
                 ]);
+            }
+
+            // Update Addons
+            DishAddon::where('dish_id', $dish->id)->delete();
+            if ($request->has('addons')) {
+                foreach ($request->addons as $addonData) {
+                    DishAddon::create([
+                        'dish_id' => $dish->id,
+                        'addon_id' => $addonData['addon_id'],
+                    ]);
+                }
             }
 
             $dish->branches()->sync($request->branches);
