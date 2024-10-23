@@ -40,4 +40,9 @@ class StoreTransaction extends Model
     {
         return $this->belongsTo(PurchaseInvoice::class, 'purchase_invoice_id');
     }
+
+    public function stores()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
 }

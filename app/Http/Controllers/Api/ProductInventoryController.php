@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\ProductInventoryAction;
 use App\Http\Controllers\Controller;
 use App\Models\ProductTransaction;
 use App\Services\ProductInventoryService;

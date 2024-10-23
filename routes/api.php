@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
+use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
@@ -218,6 +219,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
         Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
+        Route::get('{id}/inventory', [StoreInventoryController::class, 'getInventory']);
+
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
