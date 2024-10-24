@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Addon;
 use App\Models\Recipe;
 use App\Models\RecipeAddon;
@@ -15,6 +14,8 @@ use App\Models\Product;
 use App\Models\OrderRefund;
 use App\Models\Dish;
 use App\Models\OrderProduct;
+use App\Models\OrderDetail;
+use App\Models\OrderAddon;
 use Illuminate\Support\Facades\DB;
 use App\Events\ProductTransactionEvent;
 
@@ -70,11 +71,14 @@ trait StoreTransactionTrait
                                         $product = array(
                                             "product_id" => $ingredients->product_id,
                                             "product_unit_id" => $ingredients->product_unit_id,
-                                            "product_size_id" => "",
-                                            "product_color_id" => "",
+                                            "product_size_id" => null,
+                                            "product_color_id" => null,
                                             "country_id" => $ingredients->product->currency_code,
                                             "count" => $ingredients->quantity * $order_quantity,
-                                            "expired_date" => ""
+                                            "expired_date" => null,
+                                            "order_id" => $order_id,
+                                            "order_details_id" => $order_details->id,
+                                            "transaction_type" => 1
                                         );
                                         array_push($products, $product);
                                     }
@@ -91,11 +95,14 @@ trait StoreTransactionTrait
                     $product = array(
                         "product_id" => $order_products->product_id,
                         "product_unit_id" => $order_products->product_unit_id,
-                        "product_size_id" => "",
-                        "product_color_id" => "",
+                        "product_size_id" => null,
+                        "product_color_id" => null,
                         "country_id" => $order_products->products->currency_code,
                         "count" => $order_products->quantity,
-                        "expired_date" => ""
+                        "expired_date" => null,
+                        "order_id" => $order_id,
+                        "order_details_id" => $order_products->id,
+                        "transaction_type" => 1
                     );
                     array_push($products, $product);  
                 }
@@ -112,11 +119,14 @@ trait StoreTransactionTrait
                                     $product = array(
                                         "product_id" => $ingredient->product_id,
                                         "product_unit_id" => $ingredient->product_unit_id,
-                                        "product_size_id" => "",
-                                        "product_color_id" => "",
+                                        "product_size_id" => null,
+                                        "product_color_id" => null,
                                         "country_id" => $ingredient->product->currency_code,
                                         "count" => $ingredient->quantity * $order_quantity,
-                                        "expired_date" => ""
+                                        "expired_date" => null,
+                                        "order_id" => $order_id,
+                                        "order_details_id" => $order_addons->id,
+                                        "transaction_type" => 1
                                     );
                                     array_push($products, $product);
                                 }                                
@@ -149,92 +159,107 @@ trait StoreTransactionTrait
         $order_array = [];
         $products = [];
 
-        if ($order_refunds) {
-            foreach($order_refunds as $order){
-                $store = Store::with('branch')->where('branch_id', $order->orders->branch_id)->where('is_kitchen', 1)->first();
-            
-                //dish
-                if($order->item_type == "dish"){
-                    $order_quantity = $order->quantity;
-                    $order_dish = Dish::with('recipes')->where('id', $order->item_id)->first();
-                    if($order_dish){
-                        if($order_dish->recipes){
-                            foreach($order_dish->recipes as $recipe_details)
-                            {
-                                $recipe_quantity = $recipe_details->quantity * $order_quantity;
-                                if($recipe_details->recipe->ingredients){
-                                    foreach($recipe_details->recipe->ingredients as $ingredients){
-                                        $product = array(
-                                            "product_id" => $ingredients->product_id,
-                                            "product_unit_id" => $ingredients->product_unit_id,
-                                            "product_size_id" => "",
-                                            "product_color_id" => "",
-                                            "country_id" => $ingredients->product->currency_code,
-                                            "count" => $ingredients->quantity * $recipe_quantity,
-                                            "expired_date" => ""
-                                        );
-                                        array_push($products, $product);
+        $order_details = Order::where('id', $order_id)->first();
+        $store = Store::with('branch')->where('branch_id', $order_details->branch_id)->where('is_kitchen', 1)->first();
+
+        if($store){
+
+            if ($order_refunds) {
+                foreach($order_refunds as $order){
+                
+                    //dish
+                    if($order->item_type == "dish"){
+                        $order_quantity = $order->quantity;
+                        $order_details = OrderDetail::with('dishes')->where('id', $order->item_id)->first();
+                        if($order_details->dishes){
+                            if($order_details->dishes->recipes){
+                                foreach($order_details->dishes->recipes as $recipe_details)
+                                {
+                                    $order_quantity = $order_quantity * $recipe_details->quantity;
+                                    if($recipe_details->recipe->ingredients){
+                                        foreach($recipe_details->recipe->ingredients as $ingredients){
+                                        $ingredients->quantity * $order_quantity;
+                                            $product = array(
+                                                "product_id" => $ingredients->product_id,
+                                                "product_unit_id" => $ingredients->product_unit_id,
+                                                "product_size_id" => null,
+                                                "product_color_id" => null,
+                                                "country_id" => $ingredients->product->currency_code,
+                                                "count" => $ingredients->quantity * $order_quantity,
+                                                "expired_date" => null,
+                                                "order_id" => $order_id,
+                                                "order_details_id" => $order_details->id,
+                                                "transaction_type" => 2
+                                            );
+                                            array_push($products, $product);
+                                        }
                                     }
                                 }
                             }
+                        } 
+                    }
+                    
+                    //products
+                    if($order->item_type == "product"){
+                        $order_quantity = $order->quantity;
+                        $order_product = OrderProduct::where('id', $order->item_id)->first();
+                        $product = array(
+                            "product_id" => $order_product->product_id,
+                            "product_unit_id" => $order_product->product_unit_id,
+                            "product_size_id" => null,
+                            "product_color_id" => null,
+                            "country_id" => $order_product->products->currency_code,
+                            "count" => $order_quantity,
+                            "expired_date" => null,
+                            "order_id" => $order_id,
+                            "order_details_id" => $order_product->id,
+                            "transaction_type" => 2
+                        );
+                        array_push($products, $product); 
+                    }         
+
+                    if($order->item_type == "addon"){
+                        $order_quantity = $order->quantity;
+                        $order_addon = OrderAddon::with('Addon')->where('id', $order->item_id)->first();
+                        if($order_addon->Addon){
+                            if($order_addon->Addon->recipe){
+                                if($order_addon->Addon->recipe->ingredients){
+                                    foreach($order_addon->Addon->recipe->ingredients as $ingredient){
+                                        $product = array(
+                                            "product_id" => $ingredient->product_id,
+                                            "product_unit_id" => $ingredient->product_unit_id,
+                                            "product_size_id" => null,
+                                            "product_color_id" => null,
+                                            "country_id" => $ingredient->product->currency_code,
+                                            "count" => $ingredient->quantity * $order_quantity,
+                                            "expired_date" => null,
+                                            "order_id" => $order_id,
+                                            "order_details_id" => $order_addon->id,
+                                            "transaction_type" => 2
+                                        );
+                                        array_push($products, $product);
+                                    }                                
+                                }
+                            }
                         }
+                        
                     }
                 }
                 
-                //products
-                if($order->item_type == "product"){
-                    $order_quantity = $order->quantity;
-                    $order_product = OrderProduct::where('id', $order->item_id)->first();
-                    $product = array(
-                        "product_id" => $order_product->product_id,
-                        //"product_unit_id" => $order_product->product_unit_id,
-                        "product_unit_id" => $order_product->unit_id,
-                        "product_size_id" => "",
-                        "product_color_id" => "",
-                        "country_id" => $order_product->products->currency_code,
-                        "count" => $order_quantity,
-                        "expired_date" => ""
-                    );
-                    array_push($products, $product); 
-                }
 
-                //addons
-                if($order->item_type == "addon"){
-                    $order_quantity = $order->quantity;
-                    $order_addon = Recipe::with('ingredients')->where('id', $order->item_id)->first();
-                    if($order_addon){
-                        if($order_addon->ingredients){
-                            foreach($order_addon->ingredients as $ingredients)
-                            {
-                                $product = array(
-                                    "product_id" => $ingredients->product_id,
-                                    "product_unit_id" => $ingredients->product_unit_id,
-                                    "product_size_id" => "",
-                                    "product_color_id" => "",
-                                    "country_id" => $ingredients->product->currency_code,
-                                    "count" => $ingredients->quantity * $order_quantity,
-                                    "expired_date" => ""
-                                );
-                                array_push($products, $product);                       
-                            }
-                        }
-                    }
-                }
+
+                $order_array['type'] = 2;
+                $order_array['to_type'] = 1;
+                $order_array['to_id'] = $order->client_id;
+                $order_array['date'] = $order->date;
+                $order_array['store_id'] = $store->id;
+                $order_array['user_id'] = $order->created_by;
+                $order_array['created_by'] = $order->created_by;
+                $order_array['products'] = $products;
+                
             }
             
-
-
-            $order_array['type'] = 2;
-            $order_array['to_type'] = 1;
-            $order_array['to_id'] = $order->client_id;
-            $order_array['date'] = $order->date;
-            $order_array['store_id'] = $store->id;
-            $order_array['user_id'] = $order->created_by;
-            $order_array['created_by'] = $order->created_by;
-            $order_array['products'] = $products;
-            
         }
-
         return $order_array;
     }
     
@@ -276,15 +301,14 @@ trait StoreTransactionTrait
             $add_store_items->user_id = $add_store_bill->user_id;
             $add_store_items->store_id = $data['store_id'];
             $add_store_items->expired_date = $product['expired_date'];
-            $add_store_items->order_id = "";
-            $add_store_items->order_details_id = "";
-            $add_store_items->order_addon_id = "";
+            $add_store_items->order_id = $product['order_id'];
+            $add_store_items->order_details_id = $product['order_details_id'];
+            $add_store_items->transaction_type = $product['transaction_type'];
 
             event(new ProductTransactionEvent($add_store_items));
         }
 
-        return $data;
-
+        return $stores = $add_store_bill;
     }
 
 }
