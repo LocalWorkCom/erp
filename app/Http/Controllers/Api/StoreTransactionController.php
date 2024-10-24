@@ -53,10 +53,11 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        /*return $data = $this->handel_order_to_store(1);  
+        //$data = $this->handel_order_to_store(1);  
+        return $data = $this->refund_order_to_store(1);  
         //$data = $this->refund_order_to_store(1);  
         $yy = $this->add_item_to_store($data);
-        return $yy;*/
+        return $yy;
 
         //try{
             $lang =  $request->header('lang', 'en');
@@ -138,6 +139,7 @@ class StoreTransactionController extends Controller
                 $add_store_items->order_id = $store_transaction_id;
                 $add_store_items->order_details_id = $store_items_id;
                 $add_store_items->transaction_type = 5;
+                $add_store_items->order_type = 1;
 
                 event(new ProductTransactionEvent($add_store_items));
             }
