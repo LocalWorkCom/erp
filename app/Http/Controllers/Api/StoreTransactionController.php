@@ -9,6 +9,7 @@ use App\Models\StoreTransactionDetails;
 use App\Models\ProductTransaction;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
@@ -97,7 +98,8 @@ class StoreTransactionController extends Controller
                 return RespondWithBadRequestWithData( __('validation.product_not_enough'));
             }*/
 
-            
+            $store = Store::where('id', $request['store_id'])->first();
+
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
             $add_store_bill->to_type = $request['to_type'];
@@ -108,6 +110,7 @@ class StoreTransactionController extends Controller
             $add_store_bill->user_id = $user_id;
             $add_store_bill->created_by = $user_id;
             $add_store_bill->total_price = $total_price;
+            $add_store_bill->branch_id = $store->branch_id;
             $add_store_bill->save();
 
             $store_transaction_id = $add_store_bill->id;
