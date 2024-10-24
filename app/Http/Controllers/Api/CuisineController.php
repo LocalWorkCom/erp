@@ -129,4 +129,22 @@ class CuisineController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
+    public function restore(Request $request, $id)
+{
+    try {
+        $lang = $request->header('lang', 'ar');
+        $cuisine = Cuisine::withTrashed()->findOrFail($id);
+
+        // Restore the soft-deleted record
+        $cuisine->restore();
+
+        return ResponseWithSuccessData($lang, $cuisine, 1);
+    } catch (\Exception $e) {
+        Log::error('Error restoring cuisine: ' . $e->getMessage());
+        return RespondWithBadRequestData($lang, 2);
+    }
+}
+
+  
 }
