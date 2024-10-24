@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\ProductController;
@@ -146,6 +147,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('store', [CategoryController::class, 'store']);
         Route::post('update/{id}', [CategoryController::class, 'update']);
         Route::get('delete/{id}', [CategoryController::class, 'delete']);
+        Route::get('{id}/inventory', [CategoryInventoryController::class, 'getInventory']);
     });
 
     Route::group(['prefix' => 'product'], function () {

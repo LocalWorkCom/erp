@@ -2,47 +2,39 @@
 
 namespace App\Services;
 
-use App\Models\StoreTransaction;
-
 class StoreInventoryService
 {
     public static function getStoreInventory($lang, $transactions, $storeId)
     {
-        $store= $transactions->first()->stores;
-//        dd($store);
-//        dd($transactions);
+        $store = $transactions->first()->stores;
         $storeName = $lang == 'en' ? $store->name_en : $store->name_ar;
-//        dd($storeName);
+
         $incomingTotal = 0;
         $outgoingTotal = 0;
         $inventoryDetails = [];
 
         foreach ($transactions as $transaction) {
-            foreach ($transaction->allStoreTransactionDetails as $detail) {
+            $transactionDetails = $transaction->allStoreTransactionDetails;
+            foreach ($transactionDetails as $detail) {
                 $product = $detail->products;
-                if($transaction->type == 2) {
-                    $incomingTotal += $detail->count;
-                    $inventoryDetails[] = [
-                        'productId' => $detail->product_id,
-                        'productName' => $lang == 'en' ? $product->name_en : $product->name_ar,
-                        'count' => $detail->count,
-                        'price' => $detail->price,
-                        'totalPrice' => $detail->total_price,
-                        'date' => $transaction->date,
-                    ];
-                } else if ($transaction->type == 1) {
-//                    dd($detail->count);
-                    $outgoingTotal += $detail->count;
-                    $inventoryDetails[] = [
-                        'productId' => $detail->product_id,
-                        'productName' => $lang == 'en' ? $product->name_en : $product->name_ar,
-                        'count' => -$detail->count,
-                        'price' => $detail->price,
-                        'totalPrice' => -$detail->total_price,
-                        'date' => $transaction->date,
-                    ];
-                }
 
+                $transactionData = [
+                    'productId' => $detail->product_id,
+                    'productName' => $lang == 'en' ? $product->name_en : $product->name_ar,
+                    'count' => $detail->count,
+                    'price' => $detail->price,
+                    'totalPrice' => $detail->total_price,
+                    'date' => $transaction->date,
+                ];
+
+            if ($transaction->type == 1) {
+                    $outgoingTotal += $detail->count;
+                    $transactionData['transactionType'] = 'outgoing';
+            }else if ($transaction->type == 2) {
+                $incomingTotal += $detail->count;
+                $transactionData['transactionType'] = 'incoming';
+            }
+                $inventoryDetails[] = $transactionData;
             }
         }
 

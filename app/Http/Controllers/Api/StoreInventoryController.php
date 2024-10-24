@@ -14,13 +14,11 @@ class StoreInventoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+
             $transactions = StoreTransaction::with('stores')
-                ->with('allStoreTransactionDetails')
                 ->with('allStoreTransactionDetails.products')
                 ->where('store_id', $storeId)
-                ->where('type',2)
                 ->get();
-//            dd($lang);
 //            dd($transactions);
             if ($transactions->isEmpty()) {
                 return RespondWithBadRequestData($lang, 2);
@@ -36,4 +34,3 @@ class StoreInventoryController extends Controller
         }
     }
 }
-
