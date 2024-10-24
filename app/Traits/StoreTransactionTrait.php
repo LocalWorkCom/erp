@@ -58,11 +58,13 @@ trait StoreTransactionTrait
             //recipes
             if($order->orderDetails){
                 foreach($order->orderDetails as $order_details){
+                    $order_quantity = $order_details->quantity;
                     //return $order_details->dishes->recipes->recipe->ingredients;
                     if($order_details->dishes){
                         if($order_details->dishes->recipes){
                             foreach($order_details->dishes->recipes as $recipe_details)
                             {
+                                $order_quantity = $order_quantity * $recipe_details->quantity;
                                 if($recipe_details->recipe->ingredients){
                                     foreach($recipe_details->recipe->ingredients as $ingredients){
                                         $product = array(
@@ -71,7 +73,7 @@ trait StoreTransactionTrait
                                             "product_size_id" => "",
                                             "product_color_id" => "",
                                             "country_id" => $ingredients->product->currency_code,
-                                            "count" => $ingredients->quantity,
+                                            "count" => $ingredients->quantity * $order_quantity,
                                             "expired_date" => ""
                                         );
                                         array_push($products, $product);
@@ -79,8 +81,7 @@ trait StoreTransactionTrait
                                 }
                             }
                         }
-                    }
-                    
+                    } 
                 }
             }
             
@@ -89,8 +90,7 @@ trait StoreTransactionTrait
                 foreach($order->orderProducts as $order_products){
                     $product = array(
                         "product_id" => $order_products->product_id,
-                        //"product_unit_id" => $order_products->product_unit_id,
-                        "product_unit_id" => $order_products->unit_id,
+                        "product_unit_id" => $order_products->product_unit_id,
                         "product_size_id" => "",
                         "product_color_id" => "",
                         "country_id" => $order_products->products->currency_code,
@@ -104,18 +104,18 @@ trait StoreTransactionTrait
             //addons
             if($order->orderAddons){
                 foreach($order->orderAddons as $order_addons){
-                    //return $order_details->dishes->recipes->recipe->ingredients;
+                $order_quantity = $order_addons->quantity;
                     if($order_addons->Addon){
-                        if($order_addons->Addon->addon){
-                            if($order_addons->Addon->addon->ingredients){
-                                foreach($order_addons->Addon->addon->ingredients as $ingredients){
+                        if($order_addons->Addon->recipe){
+                            if($order_addons->Addon->recipe->ingredients){
+                                foreach($order_addons->Addon->recipe->ingredients as $ingredient){
                                     $product = array(
-                                        "product_id" => $ingredients->product_id,
-                                        "product_unit_id" => $ingredients->product_unit_id,
+                                        "product_id" => $ingredient->product_id,
+                                        "product_unit_id" => $ingredient->product_unit_id,
                                         "product_size_id" => "",
                                         "product_color_id" => "",
-                                        "country_id" => $ingredients->product->currency_code,
-                                        "count" => $ingredients->quantity,
+                                        "country_id" => $ingredient->product->currency_code,
+                                        "count" => $ingredient->quantity * $order_quantity,
                                         "expired_date" => ""
                                     );
                                     array_push($products, $product);

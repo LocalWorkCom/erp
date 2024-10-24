@@ -52,7 +52,8 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->refund_order_to_store(19);  
+        return $data = $this->handel_order_to_store(1);  
+        $data = $this->refund_order_to_store(1);  
         $yy = $this->add_item_to_store($data);
         return $yy;
 
@@ -111,6 +112,8 @@ class StoreTransactionController extends Controller
 
             $store_transaction_id = $add_store_bill->id;
 
+            if($request['type'] == 2){$transaction_type = 3;}elseif($request['type'] == 1){$transaction_type = 5;}
+
             foreach($request['products'] as $product)
             {
 
@@ -130,9 +133,9 @@ class StoreTransactionController extends Controller
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
                 $add_store_items->expired_date = $product['expired_date'];
-                $add_store_items->order_id = "";
-                $add_store_items->order_details_id = "";
-                $add_store_items->order_addon_id = "";
+                $add_store_items->order_id = $store_transaction_id;
+                $add_store_items->order_type = $request['to_type'];
+                $add_store_items->transaction_type = $transaction_type;
 
                 event(new ProductTransactionEvent($add_store_items));
             }
