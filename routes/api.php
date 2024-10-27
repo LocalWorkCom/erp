@@ -52,6 +52,7 @@ use App\Http\Controllers\Api\OvertimeSettingController;
 use App\Http\Controllers\Api\LeaveTypeController;
 use App\Http\Controllers\Api\LeaveNationalController;
 use App\Http\Controllers\Api\LeaveSettingController;
+use App\Http\Controllers\Api\LeaveRequestController;
 
 use App\Http\Controllers\Api\GiftController;
 
@@ -470,6 +471,16 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('edit', [LeaveSettingController::class, 'edit']);
         Route::get('delete/{id}', [LeaveSettingController::class, 'delete']);
     });
+
+    //LeaveRequest
+    Route::group(['prefix' => 'leave-request'], function () {
+        Route::get('index', [LeaveRequestController::class, 'index']);
+        Route::get('index_by_employee/{id}', [LeaveRequestController::class, 'index_by_employee']);
+        Route::post('add', [LeaveRequestController::class, 'add']);
+        Route::post('edit', [LeaveRequestController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
+    });
+
 });
 
 // Penalty reasons
