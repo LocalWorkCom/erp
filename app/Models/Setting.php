@@ -14,6 +14,7 @@ class Setting extends Model
         'tax_application',
         'tax_percentage',
         'pricing_method',
-        'coupon_application'
+        'coupon_application',
+        'store_use'
     ];
 }
