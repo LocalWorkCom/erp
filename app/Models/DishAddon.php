@@ -30,4 +30,9 @@ class DishAddon extends Model
     {
         return $this->belongsTo(Dish::class, 'addon_id');
     }
+
+    public function recipe()
+    {
+        return $this->hasOne(Recipe::class, 'id', 'addon_id');
+    }
 }
