@@ -10,6 +10,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use App\Models\RecipeAddon;
+use App\Models\DishAddon;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ class OrderController extends Controller
         $tax_percentage = getSetting('tax_percentage');
         $coupon_application = getSetting('coupon_application');
         $service_fees = getSetting('service_fees');
-
+        $redeem_total = 0;
 
         //validation
         $validator = Validator::make($request->all(), [
@@ -100,7 +101,7 @@ class OrderController extends Controller
             // 'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
             'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
             'addons.*.quantity' => 'required|integer', // Add-ons must have a quantity
-            'addons.*.recipe_addon_id' => 'required|exists:recipe_addons,id', // Add-on recipe must exist
+            'addons.*.dish_addon_id' => 'required|exists:dish_addons,id', // Add-on recipe must exist
             // 'addons.*.price' => 'required|numeric', // Add-on price must be numeric
         ]);
 
@@ -166,15 +167,17 @@ class OrderController extends Controller
             $OrderDetails->save();
         }
 
+        if($DataAddons){
+
         foreach ($DataAddons as $DataAddon) {
-            $addon = RecipeAddon::with('addon')->where('recipe_addons.id', $DataAddon['recipe_addon_id'])->first();
+            $addon = DishAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
             if ($addon) {
-                $price = $addon->addon->price;
+                $price = $addon->recipe->price;
 
                 $OrderAddons = new OrderAddon();
                 $OrderAddons->order_id = $Order->id;
                 $OrderAddons->quantity = $DataAddon['quantity'];
-                $OrderAddons->recipe_addon_id = $DataAddon['recipe_addon_id'];
+                $OrderAddons->dish_addon_id = $DataAddon['dish_addon_id'];
                 $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price, $tax_percentage, $tax_application) : $price;
                 $price_after_tax = $tax_application == 0 ? applyTax($price, $tax_percentage, $tax_application) * $DataAddon['quantity'] : $price * $DataAddon['quantity'];
                 $OrderAddons->price_after_tax = $price_after_tax;
@@ -183,13 +186,15 @@ class OrderController extends Controller
                 // dd($price_after_tax);
             }
         }
+    }
+
         foreach ($DataProducts as $DataProduct) {
 
             $OrderProducts = new OrderProduct();
             $OrderProducts->order_id = $Order->id;
             $OrderProducts->product_id = $DataProduct['product_id'];
             $OrderProducts->quantity = $DataProduct['quantity'];
-            $OrderProducts->unit_id = $DataProduct['unit_id'];
+            $OrderProducts->product_unit_id = $DataProduct['product_unit_id'];
             $OrderProducts->price = 0;
             $OrderProducts->created_by = $created_by;
 
@@ -199,8 +204,8 @@ class OrderController extends Controller
         $total_addon_price_befor_tax = array_sum(
             array_map(
                 function ($addon) {
-                    $data = RecipeAddon::with('addon')->where('recipe_addons.id', $addon['recipe_addon_id'])->first();
-                    return $data->addon['price'] * $addon['quantity'];
+                    $data = DishAddon::with('addon')->where('dish_addons.id', $addon['dish_addon_id'])->first();
+                    return $data->recipe['price'] * $addon['quantity'];
                 },
                 $DataAddons
             )

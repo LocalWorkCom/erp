@@ -50,7 +50,7 @@ class Order extends Model
     }
     public function Branch()
     {
-        return $this->belongsTo(User::class, 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
     public function Table()
     {
@@ -62,6 +62,11 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
 
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class, 'order_id');
+    }
+
     public function tracking()
     {
         return $this->hasMany(OrderTracking::class);
@@ -70,5 +75,4 @@ class Order extends Model
     {
         return $this->hasMany(OrderAddon::class, 'order_id', 'id');
     }
-  
 }

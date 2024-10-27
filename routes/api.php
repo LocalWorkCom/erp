@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
@@ -44,6 +45,14 @@ use App\Http\Controllers\Api\OrderReportController;
 use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\DishCategoryController;
+
+use App\Http\Controllers\Api\OvertimeTypeController;
+use App\Http\Controllers\Api\OvertimeSettingController;
+use App\Http\Controllers\Api\LeaveTypeController;
+use App\Http\Controllers\Api\LeaveNationalController;
+use App\Http\Controllers\Api\LeaveSettingController;
+
 use App\Http\Controllers\Api\GiftController;
 
 /*
@@ -335,6 +344,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
         Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
         Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
+        Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
+
     });
 
     // Recipe Categories
@@ -379,7 +390,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::prefix('transactions')->group(function () {});
     });
 
-
+//dishes
     Route::prefix('dishes')->group(function () {
         Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
         Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
@@ -389,7 +400,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
 
-
+//brands
     Route::prefix('brands')->group(function () {
         Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
         Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
@@ -399,6 +410,16 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
 
+// dish categories
+    Route::prefix('dish-categories')->group(function () {
+        Route::get('/list', [DishCategoryController::class, 'index'])->name('dish_categories.index');
+        Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
+        Route::post('/create', [DishCategoryController::class, 'store'])->name('dish_categories.store');
+        Route::put('/update/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update');
+        Route::delete('/delete/{id}', [DishCategoryController::class, 'destroy'])->name('dish_categories.destroy');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
+    });
+
     // Gifts
     Route::group(['prefix' => 'gifts'], function () {
         Route::get('/', [GiftController::class, 'index'])->name('gifts.index');
@@ -406,5 +427,58 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/', [GiftController::class, 'store'])->name('gifts.store');
         Route::put('/{id}', [GiftController::class, 'update'])->name('gifts.update');
         Route::delete('/{id}', [GiftController::class, 'destroy'])->name('gifts.destroy');
+        Route::post('/apply-to-users', [GiftController::class, 'applyGiftToUsers']);
+        Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
+
+    //OvertimeType
+    Route::group(['prefix' => 'overtime-type'], function () {
+        Route::get('index', [OvertimeTypeController::class, 'index']);
+        Route::post('add', [OvertimeTypeController::class, 'add']);
+        Route::post('edit', [OvertimeTypeController::class, 'edit']);
+        Route::get('delete/{id}', [OvertimeTypeController::class, 'delete']);
+    });
+
+    //OvertimeSetting
+    Route::group(['prefix' => 'overtime-setting'], function () {
+        Route::get('index', [OvertimeSettingController::class, 'index']);
+        Route::post('add', [OvertimeSettingController::class, 'add']);
+        Route::post('edit', [OvertimeSettingController::class, 'edit']);
+        Route::get('delete/{id}', [OvertimeSettingController::class, 'delete']);
+    });
+
+    //LeaveType
+    Route::group(['prefix' => 'leave-type'], function () {
+        Route::get('index', [LeaveTypeController::class, 'index']);
+        Route::post('add', [LeaveTypeController::class, 'add']);
+        Route::post('edit', [LeaveTypeController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveTypeController::class, 'delete']);
+    });
+
+    //LeaveNational
+    Route::group(['prefix' => 'leave-national'], function () {
+        Route::get('index', [LeaveNationalController::class, 'index']);
+        Route::post('add', [LeaveNationalController::class, 'add']);
+        Route::post('edit', [LeaveNationalController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveNationalController::class, 'delete']);
+    });
+
+    //LeaveSetting
+    Route::group(['prefix' => 'leave-setting'], function () {
+        Route::get('index', [LeaveSettingController::class, 'index']);
+        Route::post('add', [LeaveSettingController::class, 'add']);
+        Route::post('edit', [LeaveSettingController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveSettingController::class, 'delete']);
+    });
+});
+
+// Penalty reasons
+Route::group(['prefix' => 'penalties'], function () {
+    Route::get('reasons/', [PenaltyReasonController::class, 'index']);
+    Route::post('reasons/store', [PenaltyReasonController::class, 'store']);
+    Route::get('reasons/{id}', [PenaltyReasonController::class, 'show']);
+    Route::post('reasons/update/{id}', [PenaltyReasonController::class, 'update']);
+    Route::delete('reasons/delete/{id}', [PenaltyReasonController::class, 'destroy']);
+    Route::post('reasons/restore/{id}', [PenaltyReasonController::class, 'restore']);
+
 });

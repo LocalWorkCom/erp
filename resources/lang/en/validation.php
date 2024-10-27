@@ -26,6 +26,13 @@ return [
         'opening_hours' => 'opening hours',
         'is_freeze' => 'freeze status',
         'contact_person' => 'contact person',
+        'type_en'=>'Type name en',
+        'type_ar'=>'type name ar',
+        'value_earn'=>'value of earn',
+        'value_redeem'=>'value of redeem',
+        'branch_id'=>'branch',
+        'point_redeem'=>'percent redeem of point ',
+
         'max' => [
             'string' => 'The :attribute may not be greater than :max characters.',
             'numeric' => 'The :attribute may not be greater than :max.',
@@ -39,7 +46,7 @@ return [
             'string' => 'The :attribute must be between :min and :max characters.',
         ],
         'boolean' => 'The :attribute field must be true or false.',
-        
+
     ],
 
     'required' => 'The :attribute field is required.',
@@ -65,5 +72,5 @@ return [
     'DataExistMessage' => 'All ready Added',
     'is_active' => 'active',
     'image_path'=>'image'
-    
+
 ];

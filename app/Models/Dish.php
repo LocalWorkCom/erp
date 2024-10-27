@@ -32,9 +32,9 @@ class Dish extends Model
         'deleted_at',
     ];
 
-    public function category()
+    public function dishCategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(DishCategory::class, 'category_id');
     }
 
     public function cuisine()
@@ -46,8 +46,14 @@ class Dish extends Model
     {
         return $this->hasMany(DishDetail::class, 'dish_id');
     }
+
     public function branches()
-{
-    return $this->belongsToMany(Branch::class, 'branch_dish');
-}
+    {
+        return $this->belongsToMany(Branch::class, 'branch_dish');
+    }
+
+    public function addons()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_addons', 'dish_id', 'addon_id');
+    }
 }
