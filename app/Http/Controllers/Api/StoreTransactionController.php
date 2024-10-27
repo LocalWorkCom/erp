@@ -9,6 +9,7 @@ use App\Models\StoreTransactionDetails;
 use App\Models\ProductTransaction;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Traits\ProductCheck;
 use DB;
@@ -52,7 +53,9 @@ class StoreTransactionController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->refund_order_to_store(19);  
+        //$data = $this->handel_order_to_store(1);  
+        return $data = $this->refund_order_to_store(1);  
+        //$data = $this->refund_order_to_store(1);  
         $yy = $this->add_item_to_store($data);
         return $yy;
 
@@ -67,7 +70,7 @@ class StoreTransactionController extends Controller
                 'products.*.product_color_id' => 'nullable|inyeger|exists:product_colors,id',
                 'products.*.country_id' => 'required|integer|exists:countries,id',
                 'products.*.count' => 'required|integer|min:1',
-                'products.*.expired_date' => 'required|date'
+                //'products.*.expired_date' => 'required|date'
             ]);
 
             if ($validateData->fails()) {
@@ -96,7 +99,8 @@ class StoreTransactionController extends Controller
                 return RespondWithBadRequestWithData( __('validation.product_not_enough'));
             }*/
 
-            
+            $store = Store::where('id', $request['store_id'])->first();
+
             $add_store_bill = new StoreTransaction();
             $add_store_bill->type = $request['type'];
             $add_store_bill->to_type = $request['to_type'];
@@ -107,6 +111,7 @@ class StoreTransactionController extends Controller
             $add_store_bill->user_id = $user_id;
             $add_store_bill->created_by = $user_id;
             $add_store_bill->total_price = $total_price;
+            $add_store_bill->branch_id = $store->branch_id;
             $add_store_bill->save();
 
             $store_transaction_id = $add_store_bill->id;
@@ -125,14 +130,16 @@ class StoreTransactionController extends Controller
                 $add_store_items->price = $price;
                 $add_store_items->total_price = $total_price;
                 $add_store_items->save();
+                $store_items_id = $add_store_items->id;
                 $add_store_items->type = $add_store_bill->type;
                 $add_store_items->to_type = $add_store_bill->to_type;
                 $add_store_items->user_id = $add_store_bill->user_id;
                 $add_store_items->store_id = $request['store_id'];
                 $add_store_items->expired_date = $product['expired_date'];
-                $add_store_items->order_id = "";
-                $add_store_items->order_details_id = "";
-                $add_store_items->order_addon_id = "";
+                $add_store_items->order_id = $store_transaction_id;
+                $add_store_items->order_details_id = $store_items_id;
+                $add_store_items->transaction_type = 5;
+                $add_store_items->order_type = 1;
 
                 event(new ProductTransactionEvent($add_store_items));
             }

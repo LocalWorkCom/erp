@@ -40,6 +40,6 @@ class OrderAddon extends Model
     
     public function Addon()
     {
-        return $this->belongsTo(RecipeAddon::class, 'recipe_addon_id');
+        return $this->belongsTo(DishAddon::class, 'dish_addon_id');
     }
 }
