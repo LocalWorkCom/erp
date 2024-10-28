@@ -474,11 +474,11 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
     //LeaveRequest
     Route::group(['prefix' => 'leave-request'], function () {
-        Route::get('index', [LeaveRequestController::class, 'index']);
-        Route::get('index_by_employee/{id}', [LeaveRequestController::class, 'index_by_employee']);
+        Route::post('index', [LeaveRequestController::class, 'index']);
         Route::post('add', [LeaveRequestController::class, 'add']);
         Route::post('edit', [LeaveRequestController::class, 'edit']);
         Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
+        Route::post('change-status', [LeaveRequestController::class, 'change_status']);
     });
 
 });
