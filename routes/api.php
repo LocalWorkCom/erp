@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
@@ -483,13 +484,20 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
 });
 
-// Penalty reasons
+
 Route::group(['prefix' => 'penalties'], function () {
+    // Penalty reasons
     Route::get('reasons/', [PenaltyReasonController::class, 'index']);
     Route::post('reasons/store', [PenaltyReasonController::class, 'store']);
     Route::get('reasons/{id}', [PenaltyReasonController::class, 'show']);
-    Route::post('reasons/update/{id}', [PenaltyReasonController::class, 'update']);
+    Route::put('reasons/update/{id}', [PenaltyReasonController::class, 'update']);
     Route::delete('reasons/delete/{id}', [PenaltyReasonController::class, 'destroy']);
     Route::post('reasons/restore/{id}', [PenaltyReasonController::class, 'restore']);
-
+    // Penalties
+    Route::get('/', [PenaltyController::class, 'index']);
+    Route::post('/store', [PenaltyController::class, 'store']);
+    Route::get('/{id}', [PenaltyController::class, 'show']);
+    Route::put('/update/{id}', [PenaltyController::class, 'update']);
+    Route::delete('/delete/{id}', [PenaltyController::class, 'destroy']);
+    Route::post('/restore/{id}', [PenaltyController::class, 'restore']);
 });

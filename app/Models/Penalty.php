@@ -6,15 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PenaltyReason extends Model
+class Penalty extends Model
 {
     use HasFactory, softDeletes;
 
     protected $fillable = [
-        'reason_ar',
-        'reason_en',
-        'punishment_ar',
-        'punishment_en',
+        'reason_id',
+        'employee_id',
         'note',
         'created_by',
     ];
@@ -27,8 +25,10 @@ class PenaltyReason extends Model
         'deleted_by',
     ];
 
-    public function penalties()
-    {
-        return $this->hasMany(Penalty::class, 'reason_id');
+    public function reason(){
+        return $this->belongsTo(PenaltyReason::class, 'reason_id');
+    }
+    public function employee(){
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
