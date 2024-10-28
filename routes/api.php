@@ -49,6 +49,8 @@ use App\Http\Controllers\Api\LeaveTypeController;
 use App\Http\Controllers\Api\LeaveNationalController;
 use App\Http\Controllers\Api\LeaveSettingController;
 use App\Http\Controllers\Api\LeaveRequestController;
+use App\Http\Controllers\Api\FloorPartitionController;
+use App\Http\Controllers\Api\TableReservationController;
 
 use App\Http\Controllers\Api\GiftController;
 
@@ -299,26 +301,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('recipes.restore');
     });
 
-
-
-    //floors
-    Route::group(['prefix' => 'floors'], function () {
-        //StoreTransaction
-        Route::get('index', [FloorController::class, 'index']);
-        Route::post('add', [FloorController::class, 'add']);
-        Route::post('edit', [FloorController::class, 'edit']);
-        Route::get('delete/{id}', [FloorController::class, 'delete']);
-    });
-
-    //tables
-    Route::group(['prefix' => 'tables'], function () {
-        //StoreTransaction
-        Route::get('index', [TableController::class, 'index']);
-        Route::post('add', [TableController::class, 'add']);
-        Route::post('edit', [TableController::class, 'edit']);
-        Route::get('delete/{id}', [TableController::class, 'delete']);
-    });
-
     // Discounts
     Route::group(['prefix' => 'discounts'], function () {
         Route::get('discountList', [DiscountController::class, 'index']);
@@ -424,7 +406,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
-    //OvertimeType
+    //overtime-type
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
         Route::post('add', [OvertimeTypeController::class, 'add']);
@@ -432,7 +414,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [OvertimeTypeController::class, 'delete']);
     });
     
-    //OvertimeSetting
+    //overtime-setting
     Route::group(['prefix' => 'overtime-setting'], function () {
         Route::get('index', [OvertimeSettingController::class, 'index']);
         Route::post('add', [OvertimeSettingController::class, 'add']);
@@ -440,7 +422,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [OvertimeSettingController::class, 'delete']);
     });
 
-    //LeaveType
+    //leave-type
     Route::group(['prefix' => 'leave-type'], function () {
         Route::get('index', [LeaveTypeController::class, 'index']);
         Route::post('add', [LeaveTypeController::class, 'add']);
@@ -448,7 +430,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveTypeController::class, 'delete']);
     });
 
-    //LeaveNational
+    //leave-national
     Route::group(['prefix' => 'leave-national'], function () {
         Route::get('index', [LeaveNationalController::class, 'index']);
         Route::post('add', [LeaveNationalController::class, 'add']);
@@ -456,7 +438,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveNationalController::class, 'delete']);
     });
 
-    //LeaveSetting
+    //leave-setting
     Route::group(['prefix' => 'leave-setting'], function () {
         Route::get('index', [LeaveSettingController::class, 'index']);
         Route::post('add', [LeaveSettingController::class, 'add']);
@@ -464,13 +446,46 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveSettingController::class, 'delete']);
     });
 
-    //LeaveRequest
+    //leave-request
     Route::group(['prefix' => 'leave-request'], function () {
         Route::post('index', [LeaveRequestController::class, 'index']);
         Route::post('add', [LeaveRequestController::class, 'add']);
         Route::post('edit', [LeaveRequestController::class, 'edit']);
         Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
         Route::post('change-status', [LeaveRequestController::class, 'change_status']);
+    });
+
+    //floors
+    Route::group(['prefix' => 'floors'], function () {
+        Route::get('index', [FloorController::class, 'index']);
+        Route::post('add', [FloorController::class, 'add']);
+        Route::post('edit', [FloorController::class, 'edit']);
+        Route::get('delete/{id}', [FloorController::class, 'delete']);
+    });
+
+    //floor-partitions
+    Route::group(['prefix' => 'floor-partitions'], function () {
+        Route::get('index', [FloorPartitionController::class, 'index']);
+        Route::post('add', [FloorPartitionController::class, 'add']);
+        Route::post('edit', [FloorPartitionController::class, 'edit']);
+        Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
+    });
+
+    //tables
+    Route::group(['prefix' => 'tables'], function () {
+        Route::get('index', [TableController::class, 'index']);
+        Route::post('add', [TableController::class, 'add']);
+        Route::post('edit', [TableController::class, 'edit']);
+        Route::get('delete/{id}', [TableController::class, 'delete']);
+    });
+
+    //table-reservations
+    Route::group(['prefix' => 'table-reservations'], function () {
+        Route::post('index', [TableReservationController::class, 'index']);
+        Route::post('add', [TableReservationController::class, 'add']);
+        Route::post('edit', [TableReservationController::class, 'edit']);
+        Route::get('delete/{id}', [TableReservationController::class, 'delete']);
+        Route::post('change-status', [TableReservationController::class, 'change_status']);
     });
 
 });

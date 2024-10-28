@@ -76,5 +76,9 @@ return [
     'NotHavePermeationMessage' => 'It cannot be deleted or modified because operations have occurred on it',
     'NotDate' => 'It cannot be deleted or modified',
     'NotDateMessage' => 'It cannot be deleted or modified because the date is after today is date',
+    'NotAddMore' => 'It cannot be add more',
+    'NotAddMoreMessage' => 'It cannot be add more than that',
+    'NotAvailable' => 'It cannot be add',
+    'NotAvailableMessage' => 'It cannot be add is not available',
 
 ];
