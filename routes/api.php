@@ -43,7 +43,7 @@ use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\DishCategoryController;
 use App\Http\Controllers\Api\ExcuseRequestController;
-
+use App\Http\Controllers\Api\ExcuseSettingController;
 use App\Http\Controllers\Api\OvertimeTypeController;
 use App\Http\Controllers\Api\OvertimeSettingController;
 use App\Http\Controllers\Api\LeaveTypeController;
@@ -425,21 +425,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
-    //excussess requests
-
-
-    Route::prefix('excuse-requests')->group(function () {
-        Route::get('list', [ExcuseRequestController::class, 'index'])->name('excuse_requests.index');
-        Route::get('view/{id}', [ExcuseRequestController::class, 'show'])->name('excuse_requests.show');
-        Route::post('create', [ExcuseRequestController::class, 'store'])->name('excuse_requests.store');
-        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending'); 
-        Route::put('approve/{id}', [ExcuseRequestController::class, 'approve'])->name('excuse_requests.approve');
-        Route::put('reject/{id}', [ExcuseRequestController::class, 'reject'])->name('excuse_requests.reject');
-        Route::put('cancel/{id}', [ExcuseRequestController::class, 'cancel'])->name('excuse_requests.cancel');
-        Route::post('restore/{id}', [ExcuseRequestController::class, 'restore'])->name('excuse_requests.restore');
-        Route::put('{id}/update', [ExcuseRequestController::class, 'update'])->name('excuse-requests.update');
-
-    });
+   
     
     //OvertimeType
     Route::group(['prefix' => 'overtime-type'], function () {
@@ -488,6 +474,27 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('edit', [LeaveRequestController::class, 'edit']);
         Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
         Route::post('change-status', [LeaveRequestController::class, 'change_status']);
+    });
+
+    //excussess requests
+
+    Route::prefix('excuse-requests')->group(function () {
+        Route::get('list', [ExcuseRequestController::class, 'index'])->name('excuse_requests.index');
+        Route::get('view/{id}', [ExcuseRequestController::class, 'show'])->name('excuse_requests.show');
+        Route::post('create', [ExcuseRequestController::class, 'store'])->name('excuse_requests.store');
+        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending'); 
+        Route::put('approve/{id}', [ExcuseRequestController::class, 'approve'])->name('excuse_requests.approve');
+        Route::put('reject/{id}', [ExcuseRequestController::class, 'reject'])->name('excuse_requests.reject');
+        Route::put('cancel/{id}', [ExcuseRequestController::class, 'cancel'])->name('excuse_requests.cancel');
+        Route::post('restore/{id}', [ExcuseRequestController::class, 'restore'])->name('excuse_requests.restore');
+        Route::put('{id}/update', [ExcuseRequestController::class, 'update'])->name('excuse-requests.update');
+
+    });
+
+    // Excuse Settings Routes
+    Route::prefix('excuse-settings')->group(function () {
+        Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
     });
 
 });
