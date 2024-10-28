@@ -71,6 +71,10 @@ return [
     'DataExist' => 'All ready Added',
     'DataExistMessage' => 'All ready Added',
     'is_active' => 'active',
-    'image_path'=>'image'
+    'image_path'=>'image',
+    'NotHavePermeation' => 'It cannot be deleted or modified',
+    'NotHavePermeationMessage' => 'It cannot be deleted or modified because operations have occurred on it',
+    'NotDate' => 'It cannot be deleted or modified',
+    'NotDateMessage' => 'It cannot be deleted or modified because the date is after today is date',
 
 ];

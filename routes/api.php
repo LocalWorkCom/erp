@@ -44,6 +44,12 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\DishCategoryController;
 use App\Http\Controllers\Api\ExcuseRequestController;
 
+use App\Http\Controllers\Api\OvertimeTypeController;
+use App\Http\Controllers\Api\OvertimeSettingController;
+use App\Http\Controllers\Api\LeaveTypeController;
+use App\Http\Controllers\Api\LeaveNationalController;
+use App\Http\Controllers\Api\LeaveSettingController;
+use App\Http\Controllers\Api\LeaveRequestController;
 
 use App\Http\Controllers\Api\GiftController;
 
@@ -435,4 +441,53 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
     });
     
+    //OvertimeType
+    Route::group(['prefix' => 'overtime-type'], function () {
+        Route::get('index', [OvertimeTypeController::class, 'index']);
+        Route::post('add', [OvertimeTypeController::class, 'add']);
+        Route::post('edit', [OvertimeTypeController::class, 'edit']);
+        Route::get('delete/{id}', [OvertimeTypeController::class, 'delete']);
+    });
+    
+    //OvertimeSetting
+    Route::group(['prefix' => 'overtime-setting'], function () {
+        Route::get('index', [OvertimeSettingController::class, 'index']);
+        Route::post('add', [OvertimeSettingController::class, 'add']);
+        Route::post('edit', [OvertimeSettingController::class, 'edit']);
+        Route::get('delete/{id}', [OvertimeSettingController::class, 'delete']);
+    });
+
+    //LeaveType
+    Route::group(['prefix' => 'leave-type'], function () {
+        Route::get('index', [LeaveTypeController::class, 'index']);
+        Route::post('add', [LeaveTypeController::class, 'add']);
+        Route::post('edit', [LeaveTypeController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveTypeController::class, 'delete']);
+    });
+
+    //LeaveNational
+    Route::group(['prefix' => 'leave-national'], function () {
+        Route::get('index', [LeaveNationalController::class, 'index']);
+        Route::post('add', [LeaveNationalController::class, 'add']);
+        Route::post('edit', [LeaveNationalController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveNationalController::class, 'delete']);
+    });
+
+    //LeaveSetting
+    Route::group(['prefix' => 'leave-setting'], function () {
+        Route::get('index', [LeaveSettingController::class, 'index']);
+        Route::post('add', [LeaveSettingController::class, 'add']);
+        Route::post('edit', [LeaveSettingController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveSettingController::class, 'delete']);
+    });
+
+    //LeaveRequest
+    Route::group(['prefix' => 'leave-request'], function () {
+        Route::post('index', [LeaveRequestController::class, 'index']);
+        Route::post('add', [LeaveRequestController::class, 'add']);
+        Route::post('edit', [LeaveRequestController::class, 'edit']);
+        Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
+        Route::post('change-status', [LeaveRequestController::class, 'change_status']);
+    });
+
 });
