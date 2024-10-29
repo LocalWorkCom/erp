@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dropForeign('recipe_categories_parent_id_foreign');
             $table->foreign('parent_id')->references('id')->on('dish_categories')->onDelete('cascade');
 
-            $table->dropForeign('recipe_categories_modified_by_foreign');
+            $table->dropForeign('recipe_categories_created_by_foreign');
             $table->foreign('created_by')->references('id')->on('users');
 
             $table->dropForeign('recipe_categories_modified_by_foreign');

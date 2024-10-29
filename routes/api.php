@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth:client', 'client']], function () {
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
-});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::post("register", [AuthController::class, "register"]);
@@ -320,18 +320,8 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
         Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
         Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
-
     });
 
-    // Recipe Categories
-    Route::group(['prefix' => 'recipe-categories'], function () {
-        Route::get('categoryList', [RecipeCategoryController::class, 'index']);
-        Route::get('showCategory/{id}', [RecipeCategoryController::class, 'show']);
-        Route::post('addCategory', [RecipeCategoryController::class, 'store']);
-        Route::put('updateCategory/{id}', [RecipeCategoryController::class, 'update']);
-        Route::delete('deleteCategory/{id}', [RecipeCategoryController::class, 'destroy']);
-        Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']);
-    });
 
     //cuisines
     Route::prefix('cuisines')->group(function () {
@@ -365,7 +355,7 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::prefix('transactions')->group(function () {});
     });
 
-//dishes
+    //dishes
     Route::prefix('dishes')->group(function () {
         Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
         Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
@@ -375,7 +365,7 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
 
-//brands
+    //brands
     Route::prefix('brands')->group(function () {
         Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
         Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
@@ -385,7 +375,7 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
 
-// dish categories
+    // dish categories
     Route::prefix('dish-categories')->group(function () {
         Route::get('/list', [DishCategoryController::class, 'index'])->name('dish_categories.index');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
@@ -406,9 +396,12 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
+<<<<<<< HEAD
    
     
     //OvertimeType
+=======
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1
     //overtime-type
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
@@ -416,7 +409,7 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('edit', [OvertimeTypeController::class, 'edit']);
         Route::get('delete/{id}', [OvertimeTypeController::class, 'delete']);
     });
-    
+
     //overtime-setting
     Route::group(['prefix' => 'overtime-setting'], function () {
         Route::get('index', [OvertimeSettingController::class, 'index']);
@@ -464,19 +457,19 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::get('list', [ExcuseRequestController::class, 'index'])->name('excuse_requests.index');
         Route::get('view/{id}', [ExcuseRequestController::class, 'show'])->name('excuse_requests.show');
         Route::post('create', [ExcuseRequestController::class, 'store'])->name('excuse_requests.store');
-        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending'); 
+        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending');
         Route::put('approve/{id}', [ExcuseRequestController::class, 'approve'])->name('excuse_requests.approve');
         Route::put('reject/{id}', [ExcuseRequestController::class, 'reject'])->name('excuse_requests.reject');
         Route::put('cancel/{id}', [ExcuseRequestController::class, 'cancel'])->name('excuse_requests.cancel');
         Route::post('restore/{id}', [ExcuseRequestController::class, 'restore'])->name('excuse_requests.restore');
         Route::put('{id}/update', [ExcuseRequestController::class, 'update'])->name('excuse-requests.update');
-
     });
 
     // Excuse Settings Routes
     Route::prefix('excuse-settings')->group(function () {
         Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
         Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
+<<<<<<< HEAD
     });
     
     //floors
@@ -486,23 +479,33 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('edit', [FloorController::class, 'edit']);
         Route::get('delete/{id}', [FloorController::class, 'delete']);
     });
+=======
+        //floors
+        Route::group(['prefix' => 'floors'], function () {
+            Route::get('index', [FloorController::class, 'index']);
+            Route::post('add', [FloorController::class, 'add']);
+            Route::post('edit', [FloorController::class, 'edit']);
+            Route::get('delete/{id}', [FloorController::class, 'delete']);
+        });
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1
 
-    //floor-partitions
-    Route::group(['prefix' => 'floor-partitions'], function () {
-        Route::get('index', [FloorPartitionController::class, 'index']);
-        Route::post('add', [FloorPartitionController::class, 'add']);
-        Route::post('edit', [FloorPartitionController::class, 'edit']);
-        Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
-    });
+        //floor-partitions
+        Route::group(['prefix' => 'floor-partitions'], function () {
+            Route::get('index', [FloorPartitionController::class, 'index']);
+            Route::post('add', [FloorPartitionController::class, 'add']);
+            Route::post('edit', [FloorPartitionController::class, 'edit']);
+            Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
+        });
 
-    //tables
-    Route::group(['prefix' => 'tables'], function () {
-        Route::get('index', [TableController::class, 'index']);
-        Route::post('add', [TableController::class, 'add']);
-        Route::post('edit', [TableController::class, 'edit']);
-        Route::get('delete/{id}', [TableController::class, 'delete']);
-    });
+        //tables
+        Route::group(['prefix' => 'tables'], function () {
+            Route::get('index', [TableController::class, 'index']);
+            Route::post('add', [TableController::class, 'add']);
+            Route::post('edit', [TableController::class, 'edit']);
+            Route::get('delete/{id}', [TableController::class, 'delete']);
+        });
 
+<<<<<<< HEAD
     //table-reservations
     Route::group(['prefix' => 'table-reservations'], function () {
         Route::post('index', [TableReservationController::class, 'index']);
@@ -513,3 +516,15 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
     });
 
 
+=======
+        //table-reservations
+        Route::group(['prefix' => 'table-reservations'], function () {
+            Route::post('index', [TableReservationController::class, 'index']);
+            Route::post('add', [TableReservationController::class, 'add']);
+            Route::post('edit', [TableReservationController::class, 'edit']);
+            Route::get('delete/{id}', [TableReservationController::class, 'delete']);
+            Route::post('change-status', [TableReservationController::class, 'change_status']);
+        });
+    });
+});
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1
