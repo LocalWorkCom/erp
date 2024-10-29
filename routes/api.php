@@ -42,7 +42,8 @@ use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\DishCategoryController;
-
+use App\Http\Controllers\Api\ExcuseRequestController;
+use App\Http\Controllers\Api\ExcuseSettingController;
 use App\Http\Controllers\Api\OvertimeTypeController;
 use App\Http\Controllers\Api\OvertimeSettingController;
 use App\Http\Controllers\Api\LeaveTypeController;
@@ -406,7 +407,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
+<<<<<<< HEAD
+   
+    
+    //OvertimeType
+=======
     //overtime-type
+>>>>>>> 4529f0c21f0410933361add5fbf26125d43869e9
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
         Route::post('add', [OvertimeTypeController::class, 'add']);
@@ -455,6 +462,27 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('change-status', [LeaveRequestController::class, 'change_status']);
     });
 
+<<<<<<< HEAD
+    //excussess requests
+
+    Route::prefix('excuse-requests')->group(function () {
+        Route::get('list', [ExcuseRequestController::class, 'index'])->name('excuse_requests.index');
+        Route::get('view/{id}', [ExcuseRequestController::class, 'show'])->name('excuse_requests.show');
+        Route::post('create', [ExcuseRequestController::class, 'store'])->name('excuse_requests.store');
+        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending'); 
+        Route::put('approve/{id}', [ExcuseRequestController::class, 'approve'])->name('excuse_requests.approve');
+        Route::put('reject/{id}', [ExcuseRequestController::class, 'reject'])->name('excuse_requests.reject');
+        Route::put('cancel/{id}', [ExcuseRequestController::class, 'cancel'])->name('excuse_requests.cancel');
+        Route::post('restore/{id}', [ExcuseRequestController::class, 'restore'])->name('excuse_requests.restore');
+        Route::put('{id}/update', [ExcuseRequestController::class, 'update'])->name('excuse-requests.update');
+
+    });
+
+    // Excuse Settings Routes
+    Route::prefix('excuse-settings')->group(function () {
+        Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
+=======
     //floors
     Route::group(['prefix' => 'floors'], function () {
         Route::get('index', [FloorController::class, 'index']);
@@ -486,6 +514,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('edit', [TableReservationController::class, 'edit']);
         Route::get('delete/{id}', [TableReservationController::class, 'delete']);
         Route::post('change-status', [TableReservationController::class, 'change_status']);
+>>>>>>> 4529f0c21f0410933361add5fbf26125d43869e9
     });
 
 });
