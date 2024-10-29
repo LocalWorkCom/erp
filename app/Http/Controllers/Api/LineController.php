@@ -18,16 +18,13 @@ class LineController extends Controller
         try {
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false); 
-          
+    
             $lines = $withTrashed
                 ? Line::withTrashed()->with(['store', 'creator', 'deleter'])->get()
                 : Line::with(['store', 'creator', 'deleter'])->get();
-
-            if ($lines->isEmpty()) {
-                return RespondWithBadRequestData($lang, 2); 
-            }
-
-            return ResponseWithSuccessData($lang, $lines, 1); 
+    
+            // Return a successful response with the data (even if it's empty)
+            return ResponseWithSuccessData($lang, $lines, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching lines: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2); 
