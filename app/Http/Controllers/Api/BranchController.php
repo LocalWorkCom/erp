@@ -51,11 +51,12 @@ class BranchController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
-            'opening_hours' => 'nullable|string|max:255',
-            'has_kids_area' => 'required|boolean', 
+            'opening_hour' => 'nullable|date_format:H:i', 
+            'closing_hour' => 'nullable|date_format:H:i', 
+            'has_kids_area' => 'required|boolean',
+            'is_delivery' => 'required|boolean',
         ]);
 
-        // Handle validation failure
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
@@ -72,8 +73,10 @@ class BranchController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
-                'opening_hours' => $request->opening_hours,
-                'has_kids_area' => $request->has_kids_area, 
+                'opening_hour' => $request->opening_hour,
+                'closing_hour' => $request->closing_hour,
+                'has_kids_area' => $request->has_kids_area,
+                'is_delivery' => $request->is_delivery,
                 'created_by' => auth()->id(),
             ]);
 
@@ -119,8 +122,10 @@ class BranchController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|string|max:255',
             'manager_name' => 'nullable|string|max:255',
-            'opening_hours' => 'nullable|string|max:255',
-            'has_kids_area' => 'required|boolean', 
+            'opening_hour' => 'nullable|date_format:H:i', 
+            'closing_hour' => 'nullable|date_format:H:i', 
+            'has_kids_area' => 'required|boolean',
+            'is_delivery' => 'required|boolean', 
         ]);
 
         if ($validator->fails()) {
@@ -141,8 +146,10 @@ class BranchController extends Controller
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'manager_name' => $request->manager_name,
-                'opening_hours' => $request->opening_hours,
-                'has_kids_area' => $request->has_kids_area, 
+                'opening_hour' => $request->opening_hour,
+                'closing_hour' => $request->closing_hour,
+                'has_kids_area' => $request->has_kids_area,
+                'is_delivery' => $request->is_delivery,
                 'modified_by' => auth()->id(),
             ]);
 
@@ -154,7 +161,7 @@ class BranchController extends Controller
     }
 
     /**
-     * Soft delete the specified resource.
+     * Soft delete the specified resource from storage.
      */
     public function destroy(Request $request, $id)
     {
@@ -162,7 +169,7 @@ class BranchController extends Controller
             $lang = $request->header('lang', 'ar');
             $branch = Branch::findOrFail($id);
             $branch->update(['deleted_by' => auth()->id()]);
-            $branch->delete(); // Soft delete
+            $branch->delete();
             return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting branch: ' . $e->getMessage());
