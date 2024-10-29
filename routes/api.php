@@ -396,6 +396,12 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
+<<<<<<< HEAD
+   
+    
+    //OvertimeType
+=======
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1
     //overtime-type
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
@@ -462,8 +468,31 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
     // Excuse Settings Routes
     Route::prefix('excuse-settings')->group(function () {
         Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
+<<<<<<< HEAD
         Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');  
     });
+=======
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
+<<<<<<< HEAD
+    });
+    
+    //floors
+    Route::group(['prefix' => 'floors'], function () {
+        Route::get('index', [FloorController::class, 'index']);
+        Route::post('add', [FloorController::class, 'add']);
+        Route::post('edit', [FloorController::class, 'edit']);
+        Route::get('delete/{id}', [FloorController::class, 'delete']);
+    });
+=======
+        //floors
+        Route::group(['prefix' => 'floors'], function () {
+            Route::get('index', [FloorController::class, 'index']);
+            Route::post('add', [FloorController::class, 'add']);
+            Route::post('edit', [FloorController::class, 'edit']);
+            Route::get('delete/{id}', [FloorController::class, 'delete']);
+        });
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1
+>>>>>>> dc0ec773ae623495587dc829397402a25bbed55a
 
     //floors
     Route::group(['prefix' => 'floors'], function () {
@@ -481,6 +510,7 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
     });
 
+<<<<<<< HEAD
     //tables
     Route::group(['prefix' => 'tables'], function () {
         Route::get('index', [TableController::class, 'index']);
@@ -489,6 +519,9 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::get('delete/{id}', [TableController::class, 'delete']);
     });
 
+=======
+<<<<<<< HEAD
+>>>>>>> dc0ec773ae623495587dc829397402a25bbed55a
     //table-reservations
     Route::group(['prefix' => 'table-reservations'], function () {
         Route::post('index', [TableReservationController::class, 'index']);
@@ -496,5 +529,21 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('edit', [TableReservationController::class, 'edit']);
         Route::get('delete/{id}', [TableReservationController::class, 'delete']);
         Route::post('change-status', [TableReservationController::class, 'change_status']);
+<<<<<<< HEAD
+=======
+    });
+
+
+=======
+        //table-reservations
+        Route::group(['prefix' => 'table-reservations'], function () {
+            Route::post('index', [TableReservationController::class, 'index']);
+            Route::post('add', [TableReservationController::class, 'add']);
+            Route::post('edit', [TableReservationController::class, 'edit']);
+            Route::get('delete/{id}', [TableReservationController::class, 'delete']);
+            Route::post('change-status', [TableReservationController::class, 'change_status']);
+        });
+>>>>>>> dc0ec773ae623495587dc829397402a25bbed55a
     });
 });
+>>>>>>> 5ff2a0953fb2253786d1546a7693ac239eb046f1

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ExcuseRequest;
 use App\Models\Excuse;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,26 +45,39 @@ class ExcuseRequestController extends Controller
                 'reason' => 'nullable|string',
                 'start_time' => 'required|date_format:H:i',
                 'end_time' => 'required|date_format:H:i|after:start_time',
-                'date' => 'date', 
+                'date' => 'date',
             ]);
-
+    
+            // Fetch the employee and calculate requested hours
+            $employee = Employee::findOrFail($request->employee_id);
+            $start = new \DateTime($request->start_time);
+            $end = new \DateTime($request->end_time);
+            $requestedHours = $start->diff($end)->h;
+    
+            // Check if the requested hours exceed the limits
+            if ($employee->daily_excuse_hours < $requestedHours) {
+                return RespondWithBadRequestData($lang, 'Exceeds daily excuse hour limit.');
+            }
+            if ($employee->monthly_excuse_hours < $requestedHours) {
+                return RespondWithBadRequestData($lang, 'Exceeds monthly excuse hour limit.');
+            }
+    
             $excuseRequest = ExcuseRequest::create([
                 'employee_id' => $request->employee_id,
                 'reason' => $request->reason,
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
                 'status' => 'pending',
-                'date' => $request->input('date', now()->toDateString()), 
-
+                'date' => $request->input('date', now()->toDateString()),
             ]);
-
+    
             return ResponseWithSuccessData($lang, $excuseRequest, 1);
         } catch (\Exception $e) {
             Log::error('Error creating excuse request: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
+    
     public function update(Request $request, $id)
     {
         try {
@@ -71,7 +85,7 @@ class ExcuseRequestController extends Controller
             $excuseRequest = ExcuseRequest::findOrFail($id);
     
             if ($excuseRequest->status !== 'pending') {
-                return RespondWithBadRequestData($lang, 2);
+                return RespondWithBadRequestData($lang, 'Only pending requests can be updated.');
             }
     
             $request->validate([
@@ -81,6 +95,20 @@ class ExcuseRequestController extends Controller
                 'end_time' => 'required|date_format:H:i|after:start_time',
                 'reason' => 'nullable|string',
             ]);
+    
+            // Fetch the employee and calculate requested hours
+            $employee = Employee::findOrFail($request->employee_id);
+            $start = new \DateTime($request->start_time);
+            $end = new \DateTime($request->end_time);
+            $requestedHours = $start->diff($end)->h;
+    
+            // Check if the requested hours exceed the limits
+            if ($employee->daily_excuse_hours < $requestedHours) {
+                return RespondWithBadRequestData($lang, 'Exceeds daily excuse hour limit.');
+            }
+            if ($employee->monthly_excuse_hours < $requestedHours) {
+                return RespondWithBadRequestData($lang, 'Exceeds monthly excuse hour limit.');
+            }
     
             $excuseRequest->update([
                 'employee_id' => $request->employee_id,
@@ -97,6 +125,7 @@ class ExcuseRequestController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+    
      
 
     public function approve(Request $request, $id)
