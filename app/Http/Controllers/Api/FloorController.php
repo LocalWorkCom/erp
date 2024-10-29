@@ -16,13 +16,13 @@ class FloorController extends Controller
 
     public function index(Request $request)
     {
-        try {
+        //try {
             $lang =  $request->header('lang', 'en');
             $floors = Floor::with('floorPartitions.tables')->get();
             return ResponseWithSuccessData($lang, $floors, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($lang, 2);
+        // }
     }
 
     public function add(Request $request)
