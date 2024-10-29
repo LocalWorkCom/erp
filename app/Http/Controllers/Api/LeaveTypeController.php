@@ -66,7 +66,7 @@ class LeaveTypeController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $leave_type = LeaveType::find($request->id);
+            $leave_type = LeaveType::findOrFail($request->id);
             $leave_type->name_ar = $request->name_ar;
             $leave_type->name_en = $request->name_en;
             $leave_type->modified_by = $user_id;

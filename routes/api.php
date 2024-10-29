@@ -52,6 +52,7 @@ use App\Http\Controllers\Api\LeaveSettingController;
 use App\Http\Controllers\Api\LeaveRequestController;
 use App\Http\Controllers\Api\FloorPartitionController;
 use App\Http\Controllers\Api\TableReservationController;
+use App\Http\Controllers\Api\DeliverySettingController;
 
 use App\Http\Controllers\Api\GiftController;
 
@@ -496,5 +497,13 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('edit', [TableReservationController::class, 'edit']);
         Route::get('delete/{id}', [TableReservationController::class, 'delete']);
         Route::post('change-status', [TableReservationController::class, 'change_status']);
+    });
+
+    //delivery-settings
+    Route::group(['prefix' => 'delivery-settings'], function () {
+        Route::get('index', [DeliverySettingController::class, 'index']);
+        Route::post('add', [DeliverySettingController::class, 'add']);
+        Route::post('edit', [DeliverySettingController::class, 'edit']);
+        Route::get('delete/{id}', [DeliverySettingController::class, 'delete']);
     });
 });
