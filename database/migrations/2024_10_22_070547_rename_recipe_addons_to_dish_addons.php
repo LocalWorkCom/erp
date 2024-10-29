@@ -13,11 +13,11 @@ return new class extends Migration {
 
         Schema::table('dish_addons', function (Blueprint $table) {
             $table->dropForeign('recipe_addons_recipe_id_foreign');
-            
+
             $table->dropColumn('recipe_id');
 
             $table->unsignedBigInteger('dish_id')->after('id');
-            $table->foreign('dish_id')->references('id')->on('dishes')->onDelete('cascade');
+            $table->foreign('dish_id')->references('id')->on('dishes');
         });
     }
 
