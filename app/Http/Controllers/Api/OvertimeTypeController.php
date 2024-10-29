@@ -66,7 +66,7 @@ class OvertimeTypeController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $over_time = OvertimeType::findOrFail($request->id);
+            $over_time = OvertimeType::find($request->id);
             $over_time->name_ar = $request->name_ar;
             $over_time->name_en = $request->name_en;
             $over_time->modified_by = $user_id;
@@ -84,7 +84,7 @@ class OvertimeTypeController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $over_time = OvertimeType::findOrFail($request->id);
+            $over_time = OvertimeType::find($request->id);
             if (!$over_time) {
                 return  RespondWithBadRequestNotExist();
             }

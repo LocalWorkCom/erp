@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Floor;
+use App\Models\FloorPartition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class FloorController extends Controller
+class FloorPartitionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +18,8 @@ class FloorController extends Controller
     {
         try {
             $lang =  $request->header('lang', 'en');
-            $floors = Floor::with('floorPartitions.tables')->get();
-            return ResponseWithSuccessData($lang, $floors, 1);
+            $floor_partitions = FloorPartition::with('tables')->get();
+            return ResponseWithSuccessData($lang, $floor_partitions, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
@@ -30,11 +30,12 @@ class FloorController extends Controller
         try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
-                'branch_id' => 'required|integer|exists:branches,id',
+                'floor_id' => 'required|integer|exists:floors,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
-                'smoking' => 'required|integer|min:1'
+                'smoking' => 'required|integer|min:1',
+                'capacity' => 'required|integer|min:1'
             ]);
 
             if ($validateData->fails()) {
@@ -42,16 +43,17 @@ class FloorController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $floor = new Floor();
-            $floor->branch_id = $request->branch_id;
-            $floor->name_ar = $request->name_ar;
-            $floor->name_en = $request->name_en;
-            $floor->type = $request->type;
-            $floor->smoking = $request->smoking;
-            $floor->created_by = $user_id;
-            $floor->save();
+            $floor_partition = new FloorPartition();
+            $floor_partition->floor_id = $request->floor_id;
+            $floor_partition->name_ar = $request->name_ar;
+            $floor_partition->name_en = $request->name_en;
+            $floor_partition->type = $request->type;
+            $floor_partition->smoking = $request->smoking;
+            $floor_partition->capacity = $request->capacity;
+            $floor_partition->created_by = $user_id;
+            $floor_partition->save();
 
-            return ResponseWithSuccessData($lang, $floor, 1);
+            return ResponseWithSuccessData($lang, $floor_partition, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
@@ -63,11 +65,12 @@ class FloorController extends Controller
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'id' => 'required|exists:floors,id',
-                'branch_id' => 'required|integer|exists:branches,id',
+                'floor_id' => 'required|integer|exists:floors,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
-                'smoking' => 'required|integer|min:1'
+                'smoking' => 'required|integer|min:1',
+                'capacity' => 'required|integer|min:1'
             ]);
 
             if ($validateData->fails()) {
@@ -75,16 +78,17 @@ class FloorController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $floor = Floor::find($request->id);
-            $floor->branch_id = $request->branch_id;
-            $floor->name_ar = $request->name_ar;
-            $floor->name_en = $request->name_en;
-            $floor->type = $request->type;
-            $floor->smoking = $request->smoking;
-            $floor->modified_by = $user_id;
-            $floor->save();
+            $floor_partition = FloorPartition::find($request->id);
+            $floor_partition->floor_id = $request->floor_id;
+            $floor_partition->name_ar = $request->name_ar;
+            $floor_partition->name_en = $request->name_en;
+            $floor_partition->type = $request->type;
+            $floor_partition->smoking = $request->smoking;
+            $floor_partition->capacity = $request->capacity;
+            $floor_partition->modified_by = $user_id;
+            $floor_partition->save();
 
-            return ResponseWithSuccessData($lang, $floor, 1);
+            return ResponseWithSuccessData($lang, $floor_partition, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
         }
@@ -96,15 +100,15 @@ class FloorController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $floor = Floor::find($request->id);
-            if (!$floor) {
+            $floor_partition = FloorPartition::find($request->id);
+            if (!$floor_partition) {
                 return  RespondWithBadRequestNotExist();
             }
 
-            $floor->deleted_by = $user_id;
-            $floor->save();
+            $floor_partition->deleted_by = $user_id;
+            $floor_partition->save();
 
-            $floor->delete();
+            $floor_partition->delete();
 
             return RespondWithSuccessRequest($lang, 1);
         } catch (\Exception $e) {

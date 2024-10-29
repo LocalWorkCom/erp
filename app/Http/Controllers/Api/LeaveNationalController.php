@@ -75,7 +75,7 @@ class LeaveNationalController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $leave_national = LeaveNational::findOrFail($request->id);
+            $leave_national = LeaveNational::find($request->id);
             $leave_national->leave_type_id = $request->leave_type_id;
             $leave_national->country_id = $request->country_id;
             $leave_national->name_ar = $request->name_ar;
@@ -96,7 +96,7 @@ class LeaveNationalController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $leave_national = LeaveNational::findOrFail($request->id);
+            $leave_national = LeaveNational::find($request->id);
             if (!$leave_national) {
                 return  RespondWithBadRequestNotExist();
             }

@@ -15,6 +15,9 @@ class Setting extends Model
         'tax_percentage',
         'pricing_method',
         'coupon_application',
-        'store_use'
+        'store_use',
+        'withdrawal_store',
+        'reservation_time',
+        'reservation_time_type',
     ];
 }

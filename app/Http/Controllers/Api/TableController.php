@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Table;
+use App\Models\FloorPartition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -30,12 +31,14 @@ class TableController extends Controller
         try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
+                'floor_id' => 'required|integer|exists:floors,id',
+                'floor_partition_id' => 'required|integer|exists:floor_partitions,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
                 'smoking' => 'required|integer|min:1',
-                'floor_id' => 'required|integer|exists:floors,id',
-                'table_number' => 'required|integer'
+                'table_number' => 'required|integer',
+                'capacity' => 'required|integer|min:1'
             ]);
 
             if ($validateData->fails()) {
@@ -47,16 +50,23 @@ class TableController extends Controller
                 return RespondWithBadRequestData($lang, 9);
             }
 
+            $check_floor_partition = FloorPartition::where('id', $request->floor_partition_id)->first();
+            if ($check_floor_partition->capacity <= $check_floor_partition->exist_table) {
+                return RespondWithBadRequestNotAdd($lang, 9);
+            }
+
             $user_id = Auth::guard('api')->user()->id;
             $table = new Table();
+            $table->floor_id = $request->floor_id;
+            $table->floor_partition_id = $request->floor_partition_id;
             $table->name_ar = $request->name_ar;
             $table->name_ar = $request->name_ar;
             $table->table_number = $request->table_number;
             $table->type = $request->type;
             $table->smoking = $request->smoking;
+            $table->capacity = $request->capacity;
             $table->status = $request->status;
             $table->created_by = $user_id;
-            $table->floor_id = $request->floor_id;
             $table->save();
 
             return ResponseWithSuccessData($lang, $table, 1);
@@ -70,12 +80,15 @@ class TableController extends Controller
         try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
+                'id' => 'required|exists:tables,id',
+                'floor_partition_id' => 'required|integer|exists:floor_partitions,id',
+                'floor_id' => 'required|integer|exists:floors,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
                 'smoking' => 'required|integer|min:1',
-                'floor_id' => 'required|integer|exists:floors,id',
-                'table_number' => 'required|integer|min:1'
+                'table_number' => 'required|integer|min:1',
+                'capacity' => 'required|integer|min:1'
             ]);
 
             if ($validateData->fails()) {
@@ -88,15 +101,17 @@ class TableController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $table = Table::findOrFail($request->id);
+            $table = Table::find($request->id);
+            $table->floor_id = $request->floor_id;
+            $table->floor_partition_id = $request->floor_partition_id;
             $table->name_ar = $request->name_ar;
             $table->name_ar = $request->name_ar;
             $table->table_number = $request->table_number;
             $table->type = $request->type;
             $table->smoking = $request->smoking;
+            $table->capacity = $request->capacity;
             $table->status = $request->status;
-            $table->created_by = $user_id;
-            $table->floor_id = $request->floor_id;
+            $table->modified_by = $user_id;
             $table->save();
 
             return ResponseWithSuccessData($lang, $table, 1);
@@ -111,7 +126,7 @@ class TableController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $table = Table::findOrFail($request->id);
+            $table = Table::find($request->id);
             if (!$table) {
                 return  RespondWithBadRequestNotExist();
             }

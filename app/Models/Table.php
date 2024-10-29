@@ -10,6 +10,8 @@ class Table extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name'];
+
     protected $hidden = ['name_ar', 'name_en', 'created_by', 'modified_by', 'deleted_by', 'deleted_at', 'updated_at', 'created_at'];
 
     public function getNameAttribute($value){
