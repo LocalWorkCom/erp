@@ -10,6 +10,7 @@ class Shelf extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name']; 
     protected $fillable = [
         'division_id',
         'name_en',
@@ -20,8 +21,26 @@ class Shelf extends Model
         'deleted_by',
     ];
 
+    protected $hidden = [
+        'name_en',
+        'name_ar',
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     protected $dates = ['deleted_at']; 
 
+
+    public function getNameAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    // Relationships
     public function division()
     {
         return $this->belongsTo(Division::class);
