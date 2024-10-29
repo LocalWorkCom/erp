@@ -9,8 +9,11 @@ class Discount extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name'];
+
     protected $fillable = [
-        'name',
+        'name_en',
+        'name_ar',
         'type',
         'value',
         'start_date',
@@ -22,6 +25,8 @@ class Discount extends Model
     ];
 
     protected $hidden = [
+        'name_en',
+        'name_ar',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -29,6 +34,11 @@ class Discount extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function getNameAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->name_en : $this->name_ar;
+    }
 
     public function creator()
     {

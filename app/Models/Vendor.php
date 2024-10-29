@@ -9,6 +9,8 @@ class Vendor extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name', 'address']; 
+
     protected $fillable = [
         'name_en',
         'name_ar',
@@ -24,6 +26,10 @@ class Vendor extends Model
     ];
 
     protected $hidden = [
+        'name_en',
+        'name_ar',
+        'address_en',
+        'address_ar',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -32,6 +38,17 @@ class Vendor extends Model
         'deleted_at',
     ];
 
+    public function getNameAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getAddressAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->address_en : $this->address_ar;
+    }
+
+    // Relationships
     public function country()
     {
         return $this->belongsTo(Country::class);
