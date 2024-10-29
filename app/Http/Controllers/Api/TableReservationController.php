@@ -9,6 +9,7 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class TableReservationController extends Controller
 {
@@ -32,7 +33,8 @@ class TableReservationController extends Controller
         try {
             $lang =  $request->header('lang', 'en');
             $new_reservation_date = "";
-            $new_reservation_time = "";
+            $reservation_time_from = "";
+            $reservation_time_to = "";
             $validateData = Validator::make($request->all(), [
                 'table_id' => 'required|integer|exists:tables,id',
                 'client_id' => 'required|integer|exists:users,id',
@@ -50,17 +52,38 @@ class TableReservationController extends Controller
                 return  RespondWithBadRequestNotExist();
             }
 
-            if($setting_details->reservation_time_type == 2){
-                $new_reservation_date = $request->time_date + $setting_details->reservation_time;
-            }else{
-                $new_reservation_time = $request->time_from + $setting_details->reservation_time;
-            }
+            // if($setting_details->reservation_time_type == 2){
+            //     $new_reservation_date = $request->time_date + $setting_details->reservation_time;
+            // }else{
+            //     $reservation_time_from = Carbon::parse($request->time_from)->addMinutes($setting_details->reservation_time)->format('H:i:s');
+            //     $reservation_time_to = Carbon::parse($request->time_to)->addMinutes($setting_details->reservation_time)->format('H:i:s');
+            // }
 
+            // $check_branch = Table::where('id', $request->table_id)->with('floorPartitions.floors.branches')->first();
+            // if($check_branch){
+            //     return RespondWithBadRequestNotAvailable($lang, 9);
+            // }  
 
-            $check_tabel_reservation = TableReservation::where('table_id', $request->table_id)->first();
-            if ($check_tabel_reservation) {
-                if($check_tabel_reservation->date == $request->date && $check_tabel_reservation->status != 3)
-                return RespondWithBadRequestNotAvailable($lang, 9);
+            $check_tabel_reservations = TableReservation::where('table_id', $request->table_id)->where('date', $request->date)->get();
+            if ($check_tabel_reservations) {
+                foreach($check_tabel_reservations as $check_tabel_reservation){
+                    if($check_tabel_reservation->time_from == $request->time_from){
+                        return RespondWithBadRequestNotAvailable($lang, 9);
+                    }
+
+                    if($setting_details->reservation_time_type == 1){
+                        $time_from = Carbon::parse($request->time_from);
+                        $reservation_to = Carbon::parse($check_tabel_reservation->time_to);
+                        $diff_minutes = $reservation_to->diffInMinutes($time_from);
+                        if($diff_minutes < $setting_details->reservation_time){
+                            return RespondWithBadRequestNotAvailable($lang, 9);
+                        }
+                    }
+
+                    // if($check_tabel_reservation->status != 3){
+                    //     return RespondWithBadRequestNotAvailable($lang, 9);
+                    // }            
+                }
             }
 
             $user_id = Auth::guard('api')->user()->id;

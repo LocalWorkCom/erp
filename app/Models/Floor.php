@@ -15,7 +15,7 @@ class Floor extends Model
     protected $hidden = ['name_ar', 'name_en', 'created_by', 'modified_by', 'deleted_by', 'deleted_at', 'updated_at', 'created_at'];
 
     public function getNameAttribute($value){
-        return $this->name = (Request()->server('lang') == "en") ? $this->name_en : $this->name_ar;
+        return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
     }
 
     public function floorPartitions()
@@ -26,6 +26,11 @@ class Floor extends Model
     public function tables()
     {
         return $this->hasMany(Table::class, 'floor_id', 'id');
+    }
+
+    public function branches()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
 }

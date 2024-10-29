@@ -396,9 +396,6 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
-   
-    
-    //OvertimeType
     //overtime-type
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
@@ -465,40 +462,39 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
     // Excuse Settings Routes
     Route::prefix('excuse-settings')->group(function () {
         Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
-        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
-
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');  
     });
-        //floors
-        Route::group(['prefix' => 'floors'], function () {
-            Route::get('index', [FloorController::class, 'index']);
-            Route::post('add', [FloorController::class, 'add']);
-            Route::post('edit', [FloorController::class, 'edit']);
-            Route::get('delete/{id}', [FloorController::class, 'delete']);
-        });
 
-        //floor-partitions
-        Route::group(['prefix' => 'floor-partitions'], function () {
-            Route::get('index', [FloorPartitionController::class, 'index']);
-            Route::post('add', [FloorPartitionController::class, 'add']);
-            Route::post('edit', [FloorPartitionController::class, 'edit']);
-            Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
-        });
+    //floors
+    Route::group(['prefix' => 'floors'], function () {
+        Route::get('index', [FloorController::class, 'index']);
+        Route::post('add', [FloorController::class, 'add']);
+        Route::post('edit', [FloorController::class, 'edit']);
+        Route::get('delete/{id}', [FloorController::class, 'delete']);
+    });
 
-        //tables
-        Route::group(['prefix' => 'tables'], function () {
-            Route::get('index', [TableController::class, 'index']);
-            Route::post('add', [TableController::class, 'add']);
-            Route::post('edit', [TableController::class, 'edit']);
-            Route::get('delete/{id}', [TableController::class, 'delete']);
-        });
+    //floor-partitions
+    Route::group(['prefix' => 'floor-partitions'], function () {
+        Route::get('index', [FloorPartitionController::class, 'index']);
+        Route::post('add', [FloorPartitionController::class, 'add']);
+        Route::post('edit', [FloorPartitionController::class, 'edit']);
+        Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
+    });
 
-        //table-reservations
-        Route::group(['prefix' => 'table-reservations'], function () {
-            Route::post('index', [TableReservationController::class, 'index']);
-            Route::post('add', [TableReservationController::class, 'add']);
-            Route::post('edit', [TableReservationController::class, 'edit']);
-            Route::get('delete/{id}', [TableReservationController::class, 'delete']);
-            Route::post('change-status', [TableReservationController::class, 'change_status']);
-        });
-  
+    //tables
+    Route::group(['prefix' => 'tables'], function () {
+        Route::get('index', [TableController::class, 'index']);
+        Route::post('add', [TableController::class, 'add']);
+        Route::post('edit', [TableController::class, 'edit']);
+        Route::get('delete/{id}', [TableController::class, 'delete']);
+    });
+
+    //table-reservations
+    Route::group(['prefix' => 'table-reservations'], function () {
+        Route::post('index', [TableReservationController::class, 'index']);
+        Route::post('add', [TableReservationController::class, 'add']);
+        Route::post('edit', [TableReservationController::class, 'edit']);
+        Route::get('delete/{id}', [TableReservationController::class, 'delete']);
+        Route::post('change-status', [TableReservationController::class, 'change_status']);
+    });
 });
