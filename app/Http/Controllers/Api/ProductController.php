@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
@@ -118,6 +119,12 @@ class ProductController extends Controller
         if (!$store) {
             return  RespondWithBadRequestData($lang, 8);
         }
+        $brand = Brand::find($request->brand_id);
+
+        if (!$brand) {
+            return  RespondWithBadRequestData($lang, 8);
+        }
+        
         
         // Create a new product
         $product = new Product();
