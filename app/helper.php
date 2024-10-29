@@ -260,6 +260,75 @@ function RespondWithBadRequestNotExist()
 
     return Response::json($response_array, $response_code);
 }
+
+//not have Permeation
+function RespondWithBadRequestNotHavePermeation()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NotHavePermeation'),
+        'apiMsg' => trans('validation.NotHavePermeationMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
+//not date
+function RespondWithBadRequestNotDate()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NotDate'),
+        'apiMsg' => trans('validation.NotDateMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
+//not add
+function RespondWithBadRequestNotAdd()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NotAddMore'),
+        'apiMsg' => trans('validation.NotAddMoreMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
+//not available
+function RespondWithBadRequestNotAvailable()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NotAvailable'),
+        'apiMsg' => trans('validation.NotAvailableMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
 //not used
 function RespondWithBadRequestDataExist()
 {

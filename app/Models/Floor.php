@@ -18,6 +18,11 @@ class Floor extends Model
         return $this->name = (Request()->server('lang') == "en") ? $this->name_en : $this->name_ar;
     }
 
+    public function floorPartitions()
+    {
+        return $this->hasMany(FloorPartition::class, 'floor_id', 'id');
+    }
+
     public function tables()
     {
         return $this->hasMany(Table::class, 'floor_id', 'id');

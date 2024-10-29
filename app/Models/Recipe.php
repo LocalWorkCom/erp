@@ -70,13 +70,9 @@ class Recipe extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    // Relationship to link an addon to recipes through recipe_addons table
-    public function recipeAddons()
-    {
-        return $this->hasMany(RecipeAddon::class, 'addon_id');
-    }
+    // Relationship to connect recipes to branches
     public function branches()
-{
-    return $this->belongsToMany(Branch::class, 'branch_recipe');
-}
+    {
+        return $this->belongsToMany(Branch::class, 'branch_recipe');
+    }
 }

@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             // UsersTableSeeder::class,
             // CategoriesTableSeeder::class,
             // SizesTableSeeder::class,
-            PointSystemsTableSeeder::class,
+            //PointSystemsTableSeeder::class,
+            LeaveTypesTableSeeder::class,
             // APICodeTableSeeder::class,
             // You can call additional seeders here
             // AnotherSeeder::class,

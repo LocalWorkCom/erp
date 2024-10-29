@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RecipeAddon extends Model
+class DishAddon extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'recipe_id',
+        'dish_id',
         'addon_id',
     ];
 
@@ -21,14 +21,18 @@ class RecipeAddon extends Model
         'deleted_at',
     ];
 
-    // Relationships
-    public function recipe()
+    public function dish()
     {
-        return $this->belongsTo(Recipe::class, 'recipe_id');
+        return $this->belongsTo(Dish::class, 'dish_id');
     }
 
     public function addon()
     {
-        return $this->belongsTo(Recipe::class, 'addon_id');
+        return $this->belongsTo(Dish::class, 'addon_id');
+    }
+
+    public function recipe()
+    {
+        return $this->hasOne(Recipe::class, 'id', 'addon_id');
     }
 }
