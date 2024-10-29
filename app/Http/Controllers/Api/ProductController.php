@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\File;
 use App\Models\Product;
 use App\Models\ProductColor;
@@ -11,6 +12,7 @@ use App\Models\ProductLimit;
 use App\Models\ProductSize;
 use App\Models\ProductTransaction;
 use App\Models\ProductUnit;
+use App\Models\Store;
 use App\Models\StoreTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -108,6 +110,15 @@ class ProductController extends Controller
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
             return RespondWithBadRequest($lang, 9);
         }
+        $category = Category::find($request->category_id);
+        if (!$category) {
+            return  RespondWithBadRequestData($lang, 8);
+        }
+        $store = Store::find($request->store_id);
+        if (!$store) {
+            return  RespondWithBadRequestData($lang, 8);
+        }
+        
         // Create a new product
         $product = new Product();
         $product->name_ar = $request->name_ar;
