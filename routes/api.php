@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth:client', 'client']], function () {
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
-});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::post("register", [AuthController::class, "register"]);
@@ -122,7 +122,6 @@ Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 
-Route::group(["middleware" => ["auth:api"]], function () {
     //Color
     Route::group(['prefix' => 'color'], function () {
         Route::any('/', [ColorController::class, 'index']);
