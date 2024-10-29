@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\DelayController;
+use App\Http\Controllers\Api\DelayTimeController;
 use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
@@ -500,4 +502,21 @@ Route::group(['prefix' => 'penalties'], function () {
     Route::put('/update/{id}', [PenaltyController::class, 'update']);
     Route::delete('/delete/{id}', [PenaltyController::class, 'destroy']);
     Route::post('/restore/{id}', [PenaltyController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'delays'], function () {
+    // Delay times
+    Route::get('times/', [DelayTimeController::class, 'index']);
+    Route::post('times/store', [DelayTimeController::class, 'store']);
+    Route::get('times/{id}', [DelayTimeController::class, 'show']);
+    Route::put('times/update/{id}', [DelayTimeController::class, 'update']);
+    Route::delete('times/delete/{id}', [DelayTimeController::class, 'destroy']);
+    Route::post('times/restore/{id}', [DelayTimeController::class, 'restore']);
+    // Delays
+    Route::get('/', [DelayController::class, 'index']);
+    Route::post('/store', [DelayController::class, 'store']);
+    Route::get('/{id}', [DelayController::class, 'show']);
+    Route::put('/update/{id}', [DelayController::class, 'update']);
+    Route::delete('/delete/{id}', [DelayController::class, 'destroy']);
+    Route::post('/restore/{id}', [DelayController::class, 'restore']);
 });
