@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth:client', 'client']], function () {
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
-});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Route::post("register", [AuthController::class, "register"]);
@@ -122,7 +122,6 @@ Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 
-Route::group(["middleware" => ["auth:api"]], function () {
     //Color
     Route::group(['prefix' => 'color'], function () {
         Route::any('/', [ColorController::class, 'index']);
@@ -407,13 +406,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
-<<<<<<< HEAD
-   
-    
-    //OvertimeType
-=======
     //overtime-type
->>>>>>> 4529f0c21f0410933361add5fbf26125d43869e9
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
         Route::post('add', [OvertimeTypeController::class, 'add']);
@@ -462,7 +455,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('change-status', [LeaveRequestController::class, 'change_status']);
     });
 
-<<<<<<< HEAD
     //excussess requests
 
     Route::prefix('excuse-requests')->group(function () {
@@ -482,7 +474,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::prefix('excuse-settings')->group(function () {
         Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
         Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
-=======
+    });
     //floors
     Route::group(['prefix' => 'floors'], function () {
         Route::get('index', [FloorController::class, 'index']);
@@ -514,7 +506,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('edit', [TableReservationController::class, 'edit']);
         Route::get('delete/{id}', [TableReservationController::class, 'delete']);
         Route::post('change-status', [TableReservationController::class, 'change_status']);
->>>>>>> 4529f0c21f0410933361add5fbf26125d43869e9
     });
+
 
 });
