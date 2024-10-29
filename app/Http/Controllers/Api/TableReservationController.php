@@ -52,12 +52,17 @@ class TableReservationController extends Controller
                 return  RespondWithBadRequestNotExist();
             }
 
-            if($setting_details->reservation_time_type == 2){
-                $new_reservation_date = $request->time_date + $setting_details->reservation_time;
-            }else{
-                $reservation_time_from = Carbon::parse($request->time_from)->addMinutes($setting_details->reservation_time)->format('H:i:s');
-                $reservation_time_to = Carbon::parse($request->time_to)->addMinutes($setting_details->reservation_time)->format('H:i:s');
-            }
+            // if($setting_details->reservation_time_type == 2){
+            //     $new_reservation_date = $request->time_date + $setting_details->reservation_time;
+            // }else{
+            //     $reservation_time_from = Carbon::parse($request->time_from)->addMinutes($setting_details->reservation_time)->format('H:i:s');
+            //     $reservation_time_to = Carbon::parse($request->time_to)->addMinutes($setting_details->reservation_time)->format('H:i:s');
+            // }
+
+            // $check_branch = Table::where('id', $request->table_id)->with('floorPartitions.floors.branches')->first();
+            // if($check_branch){
+            //     return RespondWithBadRequestNotAvailable($lang, 9);
+            // }  
 
             $check_tabel_reservations = TableReservation::where('table_id', $request->table_id)->where('date', $request->date)->get();
             if ($check_tabel_reservations) {

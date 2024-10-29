@@ -22,4 +22,9 @@ class Table extends Model
     {
         return $this->belongsTo(Floor::class, 'floor_id');
     }
+
+    public function floorPartitions()
+    {
+        return $this->belongsTo(FloorPartition::class, 'floor_partition_id');
+    }
 }
