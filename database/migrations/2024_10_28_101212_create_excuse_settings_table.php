@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('excuse_settings', function (Blueprint $table) {
             $table->id();
-            $table->integer('max_daily_hours')->nullable()->default(8);
-            $table->integer('max_monthly_hours')->nullable()->default(40);
+            $table->integer('max_daily_hours')->nullable()->default(4);
+            $table->integer('max_monthly_hours')->nullable()->default(12);
             $table->integer('before_request_period')->default(1);
             $table->boolean('is_paid')->default(false);
             
