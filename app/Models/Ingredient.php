@@ -13,7 +13,8 @@ class Ingredient extends Model
         'recipe_id',
         'product_id',
         'product_unit_id',  
-        'quantity'
+        'quantity',
+        'loss_percent'
     ];
 
     protected $hidden = [

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Dish;
 use App\Models\DishDetail;
-use App\Models\Branch;
 use Illuminate\Support\Facades\Log;
 
 class DishController extends Controller
@@ -15,7 +14,7 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->get();
+            $dishes = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe'])->get();
             return ResponseWithSuccessData($lang, $dishes, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dishes: ' . $e->getMessage());
@@ -27,14 +26,13 @@ class DishController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe', 'branches'])->findOrFail($id);
+            $dish = Dish::with(['dishCategory', 'cuisine', 'recipes.recipe'])->findOrFail($id);
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching dish: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
 
     public function store(Request $request)
     {
@@ -51,10 +49,8 @@ class DishController extends Controller
                 'recipes' => 'required|array',
                 'recipes.*.recipe_id' => 'required|integer|exists:recipes,id',
                 'recipes.*.quantity' => 'required|numeric|min:0',
-                'addons' => 'nullable|array',  // Addons are optional
+                'addons' => 'nullable|array',
                 'addons.*.addon_id' => 'required|integer|exists:addons,id',
-                'branches' => 'required|array', // Array of branch IDs
-                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $dish = Dish::create([
@@ -87,8 +83,6 @@ class DishController extends Controller
                 }
             }
 
-            $dish->branches()->sync($request->branches);
-
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
             Log::error('Error creating dish: ' . $e->getMessage());
@@ -111,10 +105,8 @@ class DishController extends Controller
                 'recipes' => 'required|array',
                 'recipes.*.recipe_id' => 'required|integer|exists:recipes,id',
                 'recipes.*.quantity' => 'required|numeric|min:0',
-                'addons' => 'nullable|array',  // Addons are optional
+                'addons' => 'nullable|array',
                 'addons.*.addon_id' => 'required|integer|exists:addons,id',
-                'branches' => 'required|array', // Array of branch IDs
-                'branches.*' => 'required|integer|exists:branches,id',
             ]);
 
             $dish = Dish::findOrFail($id);
@@ -150,8 +142,6 @@ class DishController extends Controller
                     ]);
                 }
             }
-
-            $dish->branches()->sync($request->branches);
 
             return ResponseWithSuccessData($lang, $dish, 1);
         } catch (\Exception $e) {
