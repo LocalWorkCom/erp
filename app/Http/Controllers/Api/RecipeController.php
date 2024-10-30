@@ -21,8 +21,8 @@ class RecipeController extends Controller
 
             // Fetch recipes with ingredients, images, and branches
             $recipes = $withTrashed
-                ? Recipe::withTrashed()->onlyRecipes()->with(['ingredients', 'images', 'branches'])->get()
-                : Recipe::onlyRecipes()->with(['ingredients', 'images', 'branches'])->get();
+                ? Recipe::withTrashed()->onlyRecipes()->with(['ingredients', 'images'])->get()
+                : Recipe::onlyRecipes()->with(['ingredients', 'images'])->get();
 
             return ResponseWithSuccessData($lang, $recipes, 1);
         } catch (\Exception $e) {
@@ -37,7 +37,7 @@ class RecipeController extends Controller
             $lang = $request->header('lang', 'ar');
             
             $recipe = Recipe::withTrashed()
-                ->with(['ingredients.product', 'ingredients.productUnit', 'images', 'recipeAddons', 'branches'])
+                ->with(['ingredients.product', 'ingredients.productUnit', 'images'])
                 ->findOrFail($id);
     
             return ResponseWithSuccessData($lang, $recipe, 1);
@@ -58,42 +58,41 @@ class RecipeController extends Controller
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'type' => 'required|in:1,2', // Type (1 = recipe, 2 = addon)
+                'type' => 'required|in:1,2',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
                 'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
                 'ingredients.*.quantity' => 'required|numeric|min:0',
+                'ingredients.*.loss_percent' => 'nullable|numeric|min:0|max:100', 
                 'images' => 'nullable|array',
                 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
-                'branches' => 'required|array', // Array of branch IDs
-                'branches.*' => 'required|integer|exists:branches,id',
             ]);
-
+    
             $recipe = Recipe::create([
                 'name_ar' => $request->name_ar,
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'type' => $request->type,
+                'type' => 1,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
             ]);
-
-            // Store Ingredients
+    
             foreach ($request->ingredients as $ingredientData) {
                 $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
-
+    
                 Ingredient::create([
                     'recipe_id' => $recipe->id,
                     'product_id' => $ingredientData['product_id'],
                     'product_unit_id' => $productUnit->id,
                     'quantity' => $ingredientData['quantity'],
+                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00, 
                 ]);
             }
-
-            // Store Images
+    
+            // Store Images 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('recipes', 'public');
@@ -103,17 +102,14 @@ class RecipeController extends Controller
                     ]);
                 }
             }
-
-            // Attach Branches
-            $recipe->branches()->sync($request->branches);
-
+    
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
+    
     public function update(Request $request, $id)
     {
         try {
@@ -131,39 +127,38 @@ class RecipeController extends Controller
                 'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
                 'ingredients.*.quantity' => 'required|numeric|min:0',
+                'ingredients.*.loss_percent' => 'nullable|numeric|min:0|max:100', 
                 'images' => 'nullable|array',
                 'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
-                'branches' => 'required|array',
-                'branches.*' => 'required|integer|exists:branches,id',
             ]);
-
+    
             $recipe = Recipe::findOrFail($id);
-
+    
             $recipe->update([
                 'name_ar' => $request->name_ar,
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'type' => $request->type,
+                'type' => 1,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'modified_by' => auth()->id(),
             ]);
-
-            // Update Ingredients
+    
             Ingredient::where('recipe_id', $recipe->id)->delete();
             foreach ($request->ingredients as $ingredientData) {
                 $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
-
+    
                 Ingredient::create([
                     'recipe_id' => $recipe->id,
                     'product_id' => $ingredientData['product_id'],
                     'product_unit_id' => $productUnit->id,
                     'quantity' => $ingredientData['quantity'],
+                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00, 
                 ]);
             }
-
-            // Update Images
+    
+            // Update Images 
             if ($request->hasFile('images')) {
                 foreach ($recipe->images as $image) {
                     if (Storage::exists($image->image_path)) {
@@ -171,7 +166,7 @@ class RecipeController extends Controller
                     }
                     $image->delete();
                 }
-
+    
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('recipes', 'public');
                     RecipeImage::create([
@@ -180,31 +175,39 @@ class RecipeController extends Controller
                     ]);
                 }
             }
-
-            // Update Branches
-            $recipe->branches()->sync($request->branches);
-
+    
             return ResponseWithSuccessData($lang, $recipe, 1);
         } catch (\Exception $e) {
             Log::error('Error updating recipe: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
-
+    
     public function destroy(Request $request, $id)
-    {
-        try {
-            $lang = $request->header('lang', 'ar');
-            $recipe = Recipe::findOrFail($id);
-            $recipe->update(['deleted_by' => auth()->id()]);
-            $recipe->delete();
-
-            return ResponseWithSuccessData($lang, null, 1);
-        } catch (\Exception $e) {
-            Log::error('Error deleting recipe: ' . $e->getMessage());
-            return RespondWithBadRequestData($lang, 2);
+{
+    try {
+        $lang = $request->header('lang', 'ar');
+        $recipe = Recipe::findOrFail($id);
+        $recipe->update(['deleted_by' => auth()->id()]);
+        
+        Ingredient::where('recipe_id', $recipe->id)->delete();
+        
+        foreach ($recipe->images as $image) {
+            if (Storage::exists($image->image_path)) {
+                Storage::delete($image->image_path);
+            }
+            $image->delete();
         }
+
+        $recipe->delete();
+
+        return ResponseWithSuccessData($lang, null, 1);
+    } catch (\Exception $e) {
+        Log::error('Error deleting recipe: ' . $e->getMessage());
+        return RespondWithBadRequestData($lang, 2);
     }
+}
+
 
     public function restore(Request $request, $id)
     {
