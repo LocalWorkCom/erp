@@ -55,6 +55,8 @@ use App\Http\Controllers\Api\TableReservationController;
 use App\Http\Controllers\Api\DeliverySettingController;
 
 use App\Http\Controllers\Api\GiftController;
+use App\Http\Controllers\Api\MenuController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -506,4 +508,16 @@ Route::post("resetpassword", [AuthController::class, "reset_password"]);
         Route::post('edit', [DeliverySettingController::class, 'edit']);
         Route::get('delete/{id}', [DeliverySettingController::class, 'delete']);
     });
+
+
+
+    Route::prefix('menu')->group(function () {
+        Route::get('/list', [MenuController::class, 'index'])->name('menu.index');                    
+        Route::get('/show/{branch_id}', [MenuController::class, 'show'])->name('menu.show');           
+        Route::post('/create', [MenuController::class, 'store'])->name('menu.store');     //clone menu            
+        Route::put('/update/{branch_id}', [MenuController::class, 'update'])->name('menu.update');
+        Route::delete('/delete', [MenuController::class, 'destroy'])->name('menu.destroy');            
+        Route::post('/restore', [MenuController::class, 'restore'])->name('menu.restore');  
+    });
+
 });

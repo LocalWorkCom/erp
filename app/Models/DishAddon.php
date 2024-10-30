@@ -13,6 +13,7 @@ class DishAddon extends Model
     protected $fillable = [
         'dish_id',
         'addon_id',
+        'quantity',
     ];
 
     protected $hidden = [
