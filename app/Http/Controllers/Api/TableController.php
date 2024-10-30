@@ -101,7 +101,7 @@ class TableController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $table = Table::find($request->id);
+            $table = Table::findOrFail($request->id);
             $table->floor_id = $request->floor_id;
             $table->floor_partition_id = $request->floor_partition_id;
             $table->name_ar = $request->name_ar;

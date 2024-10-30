@@ -108,7 +108,7 @@ class LeaveRequestController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
             $date = date('Y-m-d');
-            $overtime_setting = LeaveRequest::find($request->id);
+            $overtime_setting = LeaveRequest::findOrFail($request->id);
 
             if($overtime_setting->agreement != 1){
                 return  RespondWithBadRequestNotHavePermeation();

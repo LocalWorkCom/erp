@@ -78,7 +78,7 @@ class FloorPartitionController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $floor_partition = FloorPartition::find($request->id);
+            $floor_partition = FloorPartition::findOrFail($request->id);
             $floor_partition->floor_id = $request->floor_id;
             $floor_partition->name_ar = $request->name_ar;
             $floor_partition->name_en = $request->name_en;

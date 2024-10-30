@@ -16,13 +16,13 @@ class FloorController extends Controller
 
     public function index(Request $request)
     {
-        //try {
+        try {
             $lang =  $request->header('lang', 'en');
             $floors = Floor::with('floorPartitions.tables')->get();
             return ResponseWithSuccessData($lang, $floors, 1);
-        // } catch (\Exception $e) {
-        //     return RespondWithBadRequestData($lang, 2);
-        // }
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 2);
+        }
     }
 
     public function add(Request $request)
@@ -75,7 +75,7 @@ class FloorController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $floor = Floor::find($request->id);
+            $floor = Floor::findOrFail($request->id);
             $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
             $floor->name_en = $request->name_en;

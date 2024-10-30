@@ -40,7 +40,7 @@ class TableReservationController extends Controller
                 'client_id' => 'required|integer|exists:users,id',
                 'date' => 'required|date|after:yesterday',
                 'time_from' => 'required|date_format:H:i',
-                'time_to' => 'required|date_format:H:i'
+                'time_to' => 'required|date_format:H:i|after:time_from'
             ]);
 
             if ($validateData->fails()) {
@@ -59,20 +59,31 @@ class TableReservationController extends Controller
             //     $reservation_time_to = Carbon::parse($request->time_to)->addMinutes($setting_details->reservation_time)->format('H:i:s');
             // }
 
-            // $check_branch = Table::where('id', $request->table_id)->with('floorPartitions.floors.branches')->first();
-            // if($check_branch){
-            //     return RespondWithBadRequestNotAvailable($lang, 9);
-            // }  
+            $check_branch = Table::where('id', $request->table_id)->with('floorPartitions.floors.branches')->first();
+            $time_from = Carbon::parse($request->time_from);
+            $time_to = Carbon::parse($request->time_to);
+            $opening_hour = Carbon::parse($check_branch->floorPartitions->floors->branches->opening_hour);
+            $closing_hour = Carbon::parse($check_branch->floorPartitions->floors->branches->closing_hour);
+
+
+            if($opening_hour > $time_from){
+                return RespondWithBadRequestNotAvailable($lang, 9);
+            } 
+            
+            if($closing_hour < $time_to){
+                return RespondWithBadRequestNotAvailable($lang, 9);
+            } 
 
             $check_tabel_reservations = TableReservation::where('table_id', $request->table_id)->where('date', $request->date)->get();
             if ($check_tabel_reservations) {
                 foreach($check_tabel_reservations as $check_tabel_reservation){
-                    if($check_tabel_reservation->time_from == $request->time_from){
+                    $reservation_from = Carbon::parse($check_tabel_reservation->time_from);
+
+                    if($reservation_from == $time_from){
                         return RespondWithBadRequestNotAvailable($lang, 9);
                     }
 
                     if($setting_details->reservation_time_type == 1){
-                        $time_from = Carbon::parse($request->time_from);
                         $reservation_to = Carbon::parse($check_tabel_reservation->time_to);
                         $diff_minutes = $reservation_to->diffInMinutes($time_from);
                         if($diff_minutes < $setting_details->reservation_time){

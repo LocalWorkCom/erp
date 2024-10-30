@@ -72,7 +72,7 @@ class LeaveSettingController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $leave_setting = LeaveSetting::find($request->id);
+            $leave_setting = LeaveSetting::findOrFail($request->id);
             $leave_setting->leave_type_id = $request->leave_type_id;
             $leave_setting->country_id = $request->country_id;
             $leave_setting->min_leave = $request->min_leave;
