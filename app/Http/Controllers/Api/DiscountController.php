@@ -15,6 +15,11 @@ class DiscountController extends Controller
             $lang = $request->header('lang', 'en');
             $discounts = Discount::with(['branches', 'dishes'])->get();
 
+            // Adjust for translation fields
+            foreach ($discounts as $discount) {
+                $discount->name = $lang === 'ar' ? $discount->name_ar : $discount->name_en;
+            }
+
             return ResponseWithSuccessData($lang, $discounts, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching discounts: ' . $e->getMessage());
@@ -27,6 +32,7 @@ class DiscountController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $discount = Discount::with(['branches', 'dishes'])->findOrFail($id);
+            $discount->name = $lang === 'ar' ? $discount->name_ar : $discount->name_en;
 
             return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
@@ -40,20 +46,22 @@ class DiscountController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  // Array of branch IDs
+                'branches' => 'nullable|array',  
                 'branches.*' => 'integer|exists:branches,id',
-                'dishes' => 'nullable|array',  // Array of dish IDs
+                'dishes' => 'nullable|array',  
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 
             $discount = Discount::create([
-                'name' => $validatedData['name'],
+                'name_en' => $validatedData['name_en'],
+                'name_ar' => $validatedData['name_ar'],
                 'type' => $validatedData['type'],
                 'value' => $validatedData['value'],
                 'start_date' => $validatedData['start_date'],
@@ -62,7 +70,6 @@ class DiscountController extends Controller
                 'created_by' => auth()->id(),
             ]);
 
-            // Attach branches and dishes if provided
             if (!empty($validatedData['branches'])) {
                 $discount->branches()->attach($validatedData['branches']);
             }
@@ -82,22 +89,24 @@ class DiscountController extends Controller
         try {
             $lang = $request->header('lang', 'en');
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255',
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  // Array of branch IDs
+                'branches' => 'nullable|array',  
                 'branches.*' => 'integer|exists:branches,id',
-                'dishes' => 'nullable|array',  // Array of dish IDs
+                'dishes' => 'nullable|array',  
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 
             $discount = Discount::findOrFail($id);
 
             $discount->update([
-                'name' => $validatedData['name'],
+                'name_en' => $validatedData['name_en'],
+                'name_ar' => $validatedData['name_ar'],
                 'type' => $validatedData['type'],
                 'value' => $validatedData['value'],
                 'start_date' => $validatedData['start_date'],
@@ -106,7 +115,6 @@ class DiscountController extends Controller
                 'modified_by' => auth()->id(),
             ]);
 
-            // Sync branches and dishes if provided
             if (!empty($validatedData['branches'])) {
                 $discount->branches()->sync($validatedData['branches']);
             } else {

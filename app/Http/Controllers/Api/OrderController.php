@@ -144,61 +144,67 @@ class OrderController extends Controller
         $Order->save();
 
 
-        foreach ($DataOrderDetails as $DataOrderDetail) {
-            $Dish = Dish::find($DataOrderDetail['dish_id']);
-            if ($Dish) {
-                $total = $Dish->price;
-            }
-            $OrderDetails = new OrderDetail();
-            $OrderDetails->order_id = $Order->id;
-            $OrderDetails->quantity = $DataOrderDetail['quantity'];
-            $OrderDetails->total = $total;
-            $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total, $tax_percentage, $tax_application) : $total;
-            // dd($OrderDetails->price_befor_tax);
-            $OrderDetails->tax_value = CalculateTax($tax_percentage, $total);
-            $OrderDetails->note = $DataOrderDetail['note'] ?? null;
-            // $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
-            $OrderDetails->dish_id = $DataOrderDetail['dish_id'] ?? null;
-            // $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
-            $OrderDetails->created_by = $created_by;
-            $total_product_price_after_tax = $tax_application == 0 ? applyTax($total, $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
-            $OrderDetails->price_after_tax = $total_product_price_after_tax;
-            // dd($total_product_price_after_tax);
-            $OrderDetails->save();
-        }
+        if ($DataOrderDetails->count()) {
 
-        if($DataAddons){
-
-        foreach ($DataAddons as $DataAddon) {
-            $addon = DishAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
-            if ($addon) {
-                $price = $addon->recipe->price;
-
-                $OrderAddons = new OrderAddon();
-                $OrderAddons->order_id = $Order->id;
-                $OrderAddons->quantity = $DataAddon['quantity'];
-                $OrderAddons->dish_addon_id = $DataAddon['dish_addon_id'];
-                $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price, $tax_percentage, $tax_application) : $price;
-                $price_after_tax = $tax_application == 0 ? applyTax($price, $tax_percentage, $tax_application) * $DataAddon['quantity'] : $price * $DataAddon['quantity'];
-                $OrderAddons->price_after_tax = $price_after_tax;
-                $OrderAddons->created_by = $created_by;
-                $OrderAddons->save();
-                // dd($price_after_tax);
+            foreach ($DataOrderDetails as $DataOrderDetail) {
+                $Dish = Dish::find($DataOrderDetail['dish_id']);
+                if ($Dish) {
+                    $total = $Dish->price;
+                }
+                $OrderDetails = new OrderDetail();
+                $OrderDetails->order_id = $Order->id;
+                $OrderDetails->quantity = $DataOrderDetail['quantity'];
+                $OrderDetails->total = $total;
+                $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total, $tax_percentage, $tax_application) : $total;
+                // dd($OrderDetails->price_befor_tax);
+                $OrderDetails->tax_value = CalculateTax($tax_percentage, $total);
+                $OrderDetails->note = $DataOrderDetail['note'] ?? null;
+                // $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
+                $OrderDetails->dish_id = $DataOrderDetail['dish_id'] ?? null;
+                // $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
+                $OrderDetails->created_by = $created_by;
+                $total_product_price_after_tax = $tax_application == 0 ? applyTax($total, $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
+                $OrderDetails->price_after_tax = $total_product_price_after_tax;
+                // dd($total_product_price_after_tax);
+                $OrderDetails->save();
             }
         }
-    }
 
-        foreach ($DataProducts as $DataProduct) {
+        if ($DataAddons->count()) {
 
-            $OrderProducts = new OrderProduct();
-            $OrderProducts->order_id = $Order->id;
-            $OrderProducts->product_id = $DataProduct['product_id'];
-            $OrderProducts->quantity = $DataProduct['quantity'];
-            $OrderProducts->product_unit_id = $DataProduct['product_unit_id'];
-            $OrderProducts->price = 0;
-            $OrderProducts->created_by = $created_by;
+            foreach ($DataAddons as $DataAddon) {
+                $addon = DishAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
+                if ($addon) {
+                    $price = $addon->recipe->price;
 
-            $OrderProducts->save();
+                    $OrderAddons = new OrderAddon();
+                    $OrderAddons->order_id = $Order->id;
+                    $OrderAddons->quantity = $DataAddon['quantity'];
+                    $OrderAddons->dish_addon_id = $DataAddon['dish_addon_id'];
+                    $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price, $tax_percentage, $tax_application) : $price;
+                    $price_after_tax = $tax_application == 0 ? applyTax($price, $tax_percentage, $tax_application) * $DataAddon['quantity'] : $price * $DataAddon['quantity'];
+                    $OrderAddons->price_after_tax = $price_after_tax;
+                    $OrderAddons->created_by = $created_by;
+                    $OrderAddons->save();
+                    // dd($price_after_tax);
+                }
+            }
+        }
+
+        if ($DataProducts->count()) {
+
+            foreach ($DataProducts as $DataProduct) {
+
+                $OrderProducts = new OrderProduct();
+                $OrderProducts->order_id = $Order->id;
+                $OrderProducts->product_id = $DataProduct['product_id'];
+                $OrderProducts->quantity = $DataProduct['quantity'];
+                $OrderProducts->product_unit_id = $DataProduct['product_unit_id'];
+                $OrderProducts->price = 0;
+                $OrderProducts->created_by = $created_by;
+
+                $OrderProducts->save();
+            }
         }
 
         $total_addon_price_befor_tax = array_sum(
@@ -293,9 +299,9 @@ class OrderController extends Controller
                 $order_tracking->save();
                 // call point function   $UserType == client
 
-                if($UserType == 'client' && isValid($Order->branch_id)){
-                    if(isActive($Order->branch_id ) ){
-                        $points_num =   calculateEarnPoint($Order->total_price_after_tax,$Order->branch_id , $Order->id , $client_id);
+                if ($UserType == 'client' && isValid($Order->branch_id)) {
+                    if (isActive($Order->branch_id)) {
+                        $points_num =   calculateEarnPoint($Order->total_price_after_tax, $Order->branch_id, $Order->id, $client_id);
                     }
                 }
             } else {

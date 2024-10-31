@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('tables', function (Blueprint $table) {
+            $table->unsignedBigInteger('floor_partition_id')->nullable();
+            $table->foreign('floor_partition_id')->references('id')->on('floor_partitions')->onUpdate('cascade');
         });
     }
 
@@ -21,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
+        Schema::table('tables', function (Blueprint $table) {
             //
         });
     }

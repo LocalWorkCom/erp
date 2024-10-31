@@ -92,7 +92,7 @@ class LeaveSettingController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $leave_setting = LeaveSetting::findOrFail($request->id);
+            $leave_setting = LeaveSetting::find($request->id);
             if (!$leave_setting) {
                 return  RespondWithBadRequestNotExist();
             }

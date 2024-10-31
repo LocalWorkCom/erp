@@ -52,8 +52,6 @@ class VendorController extends Controller
         try {
             $lang = $request->header('lang', 'ar'); 
     
-            // Log incoming request data
-            Log::info('Vendor creation request received:', $request->all());
     
             $request->validate([
                 'name_en' => 'nullable|string|max:255',
@@ -66,8 +64,6 @@ class VendorController extends Controller
                 'country_id' => 'required|integer|exists:countries,id',
             ]);
     
-            // Log validation success
-            Log::info('Vendor creation request validation successful.');
     
             // Create the vendor
             $vendor = Vendor::create([
@@ -82,8 +78,6 @@ class VendorController extends Controller
                 'created_by' => auth()->id(), 
             ]);
     
-            // Log vendor creation success
-            Log::info('Vendor created successfully:', ['vendor_id' => $vendor->id]);
     
             return ResponseWithSuccessData($lang, $vendor, 1);
         } catch (\Exception $e) {

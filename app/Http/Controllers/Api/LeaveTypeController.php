@@ -84,7 +84,7 @@ class LeaveTypeController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $leave_type = LeaveType::findOrFail($request->id);
+            $leave_type = LeaveType::find($request->id);
             if (!$leave_type) {
                 return  RespondWithBadRequestNotExist();
             }

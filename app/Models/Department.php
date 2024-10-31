@@ -10,9 +10,13 @@ class Department extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name', 'description'];
+
     protected $fillable = [
-        'name',
-        'description',
+        'name_en',
+        'name_ar',
+        'description_en',
+        'description_ar',
         'parent_id',
         'created_by',
         'modified_by',
@@ -20,6 +24,10 @@ class Department extends Model
     ];
 
     protected $hidden = [
+        'name_en',
+        'name_ar',
+        'description_en',
+        'description_ar',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -27,6 +35,16 @@ class Department extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function getNameAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
+    }
 
     // Relationships
     public function parent()

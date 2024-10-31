@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Recipe;
 use App\Models\Ingredient;
+use App\Models\RecipeImage;
+use App\Models\ProductUnit;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AddonController extends Controller
 {
@@ -14,7 +17,12 @@ class AddonController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $addons = Recipe::onlyAddons()->with('ingredients')->get();
+            $withTrashed = $request->query('withTrashed', false);
+
+            $addons = $withTrashed
+                ? Recipe::withTrashed()->onlyAddons()->with(['ingredients', 'images'])->get()
+                : Recipe::onlyAddons()->with(['ingredients', 'images'])->get();
+
             return ResponseWithSuccessData($lang, $addons, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching addons: ' . $e->getMessage());
@@ -26,7 +34,8 @@ class AddonController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $addon = Recipe::onlyAddons()->with('ingredients')->findOrFail($id);
+            $addon = Recipe::onlyAddons()->with(['ingredients.product', 'ingredients.productUnit', 'images'])->findOrFail($id);
+
             return ResponseWithSuccessData($lang, $addon, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching addon: ' . $e->getMessage());
@@ -38,6 +47,8 @@ class AddonController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
+            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
@@ -45,9 +56,12 @@ class AddonController extends Controller
                 'description_en' => 'nullable|string',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
-                'ingredients' => 'required|array', 
+                'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
                 'ingredients.*.quantity' => 'required|numeric|min:0',
+                'ingredients.*.loss_percent' => 'nullable|numeric|min:0|max:100',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $addon = Recipe::create([
@@ -55,7 +69,7 @@ class AddonController extends Controller
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'type' => 2, 
+                'type' => 2,
                 'price' => $request->price,
                 'is_active' => $request->is_active,
                 'created_by' => auth()->id(),
@@ -63,12 +77,26 @@ class AddonController extends Controller
 
             // Store Ingredients
             foreach ($request->ingredients as $ingredientData) {
+                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
                 Ingredient::create([
                     'recipe_id' => $addon->id,
                     'product_id' => $ingredientData['product_id'],
-                    'product_unit_id' => $ingredientData['product_unit_id'], 
+                    'product_unit_id' => $productUnit->id,
                     'quantity' => $ingredientData['quantity'],
+                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
                 ]);
+            }
+
+            // Store Images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imagePath = $image->store('addons', 'public');
+                    RecipeImage::create([
+                        'recipe_id' => $addon->id,
+                        'image_path' => $imagePath,
+                    ]);
+                }
             }
 
             return ResponseWithSuccessData($lang, $addon, 1);
@@ -78,11 +106,12 @@ class AddonController extends Controller
         }
     }
 
-    // Update an addon with ingredients
     public function update(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
+            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
@@ -90,9 +119,12 @@ class AddonController extends Controller
                 'description_en' => 'nullable|string',
                 'price' => 'required|numeric|min:0',
                 'is_active' => 'required|boolean',
-                'ingredients' => 'required|array', 
+                'ingredients' => 'required|array',
                 'ingredients.*.product_id' => 'required|integer|exists:products,id',
                 'ingredients.*.quantity' => 'required|numeric|min:0',
+                'ingredients.*.loss_percent' => 'nullable|numeric|min:0|max:100',
+                'images' => 'nullable|array',
+                'images.*' => 'image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $addon = Recipe::onlyAddons()->findOrFail($id);
@@ -109,12 +141,33 @@ class AddonController extends Controller
 
             Ingredient::where('recipe_id', $addon->id)->delete();
             foreach ($request->ingredients as $ingredientData) {
+                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+
                 Ingredient::create([
                     'recipe_id' => $addon->id,
                     'product_id' => $ingredientData['product_id'],
-                    'product_unit_id' => $ingredientData['product_unit_id'], 
+                    'product_unit_id' => $productUnit->id,
                     'quantity' => $ingredientData['quantity'],
+                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
                 ]);
+            }
+
+            // Update Images
+            if ($request->hasFile('images')) {
+                foreach ($addon->images as $image) {
+                    if (Storage::exists($image->image_path)) {
+                        Storage::delete($image->image_path);
+                    }
+                    $image->delete();
+                }
+
+                foreach ($request->file('images') as $image) {
+                    $imagePath = $image->store('addons', 'public');
+                    RecipeImage::create([
+                        'recipe_id' => $addon->id,
+                        'image_path' => $imagePath,
+                    ]);
+                }
             }
 
             return ResponseWithSuccessData($lang, $addon, 1);
@@ -130,6 +183,16 @@ class AddonController extends Controller
             $lang = $request->header('lang', 'ar');
             $addon = Recipe::onlyAddons()->findOrFail($id);
             $addon->update(['deleted_by' => auth()->id()]);
+
+            Ingredient::where('recipe_id', $addon->id)->delete();
+
+            foreach ($addon->images as $image) {
+                if (Storage::exists($image->image_path)) {
+                    Storage::delete($image->image_path);
+                }
+                $image->delete();
+            }
+
             $addon->delete();
 
             return ResponseWithSuccessData($lang, null, 1);

@@ -10,14 +10,21 @@ class Table extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name'];
+
     protected $hidden = ['name_ar', 'name_en', 'created_by', 'modified_by', 'deleted_by', 'deleted_at', 'updated_at', 'created_at'];
 
     public function getNameAttribute($value){
-        return $this->name = (Request()->server('lang') == "en") ? $this->name_en : $this->name_ar;
+        return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
     }
 
     public function floors()
     {
         return $this->belongsTo(Floor::class, 'floor_id');
+    }
+
+    public function floorPartitions()
+    {
+        return $this->belongsTo(FloorPartition::class, 'floor_partition_id');
     }
 }

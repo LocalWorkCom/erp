@@ -18,7 +18,7 @@ class FloorController extends Controller
     {
         try {
             $lang =  $request->header('lang', 'en');
-            $floors = Floor::with('tables')->get();
+            $floors = Floor::with('floorPartitions.tables')->get();
             return ResponseWithSuccessData($lang, $floors, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($lang, 2);
@@ -30,6 +30,7 @@ class FloorController extends Controller
         try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
+                'branch_id' => 'required|integer|exists:branches,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
@@ -42,6 +43,7 @@ class FloorController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
             $floor = new Floor();
+            $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
             $floor->name_en = $request->name_en;
             $floor->type = $request->type;
@@ -61,6 +63,7 @@ class FloorController extends Controller
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'id' => 'required|exists:floors,id',
+                'branch_id' => 'required|integer|exists:branches,id',
                 'name_ar' => 'required',
                 'name_en' => 'required',
                 'type' => 'required|integer|min:1',
@@ -73,6 +76,7 @@ class FloorController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
             $floor = Floor::findOrFail($request->id);
+            $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
             $floor->name_en = $request->name_en;
             $floor->type = $request->type;
@@ -92,7 +96,7 @@ class FloorController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $floor = Floor::findOrFail($request->id);
+            $floor = Floor::find($request->id);
             if (!$floor) {
                 return  RespondWithBadRequestNotExist();
             }

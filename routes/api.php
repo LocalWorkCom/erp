@@ -49,15 +49,21 @@ use App\Http\Controllers\Api\PurchaseInvoiceController;
 use App\Http\Controllers\Api\DishController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\DishCategoryController;
-
+use App\Http\Controllers\Api\ExcuseRequestController;
+use App\Http\Controllers\Api\ExcuseSettingController;
 use App\Http\Controllers\Api\OvertimeTypeController;
 use App\Http\Controllers\Api\OvertimeSettingController;
 use App\Http\Controllers\Api\LeaveTypeController;
 use App\Http\Controllers\Api\LeaveNationalController;
 use App\Http\Controllers\Api\LeaveSettingController;
 use App\Http\Controllers\Api\LeaveRequestController;
+use App\Http\Controllers\Api\FloorPartitionController;
+use App\Http\Controllers\Api\TableReservationController;
+use App\Http\Controllers\Api\DeliverySettingController;
 
 use App\Http\Controllers\Api\GiftController;
+use App\Http\Controllers\Api\MenuController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -73,6 +79,9 @@ use App\Http\Controllers\Api\GiftController;
 //     return $request->user();
 // });
 
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
+Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 //admin
 Route::group(['middleware' => ['auth:admin', 'admin']], function () {
@@ -118,15 +127,12 @@ Route::group(['middleware' => ['auth:client', 'client']], function () {
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
-});
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::post("register", [AuthController::class, "register"]);
-Route::post("login", [AuthController::class, "login"])->name('login');
-Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 
-Route::group(["middleware" => ["auth:api"]], function () {
+
     //Color
     Route::group(['prefix' => 'color'], function () {
         Route::any('/', [ColorController::class, 'index']);
@@ -310,26 +316,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('recipes.restore');
     });
 
-
-
-    //floors
-    Route::group(['prefix' => 'floors'], function () {
-        //StoreTransaction
-        Route::get('index', [FloorController::class, 'index']);
-        Route::post('add', [FloorController::class, 'add']);
-        Route::post('edit', [FloorController::class, 'edit']);
-        Route::get('delete/{id}', [FloorController::class, 'delete']);
-    });
-
-    //tables
-    Route::group(['prefix' => 'tables'], function () {
-        //StoreTransaction
-        Route::get('index', [TableController::class, 'index']);
-        Route::post('add', [TableController::class, 'add']);
-        Route::post('edit', [TableController::class, 'edit']);
-        Route::get('delete/{id}', [TableController::class, 'delete']);
-    });
-
     // Discounts
     Route::group(['prefix' => 'discounts'], function () {
         Route::get('discountList', [DiscountController::class, 'index']);
@@ -349,18 +335,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
         Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
         Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
-
     });
 
-    // Recipe Categories
-    Route::group(['prefix' => 'recipe-categories'], function () {
-        Route::get('categoryList', [RecipeCategoryController::class, 'index']);
-        Route::get('showCategory/{id}', [RecipeCategoryController::class, 'show']);
-        Route::post('addCategory', [RecipeCategoryController::class, 'store']);
-        Route::put('updateCategory/{id}', [RecipeCategoryController::class, 'update']);
-        Route::delete('deleteCategory/{id}', [RecipeCategoryController::class, 'destroy']);
-        Route::post('restoreCategory/{id}', [RecipeCategoryController::class, 'restore']);
-    });
 
     //cuisines
     Route::prefix('cuisines')->group(function () {
@@ -394,7 +370,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::prefix('transactions')->group(function () {});
     });
 
-//dishes
+    //dishes
     Route::prefix('dishes')->group(function () {
         Route::get('/list', [DishController::class, 'index'])->name('dishes.index');
         Route::post('/create', [DishController::class, 'store'])->name('dishes.store');
@@ -404,7 +380,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [DishController::class, 'restore'])->name('dishes.restore');
     });
 
-//brands
+    //brands
     Route::prefix('brands')->group(function () {
         Route::get('/list', [BrandController::class, 'index'])->name('brands.index');
         Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
@@ -414,7 +390,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
 
-// dish categories
+    // dish categories
     Route::prefix('dish-categories')->group(function () {
         Route::get('/list', [DishCategoryController::class, 'index'])->name('dish_categories.index');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
@@ -435,7 +411,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/apply-to-branch', [GiftController::class, 'applyGiftByBranch']);
     });
 
-    //OvertimeType
+    //overtime-type
     Route::group(['prefix' => 'overtime-type'], function () {
         Route::get('index', [OvertimeTypeController::class, 'index']);
         Route::post('add', [OvertimeTypeController::class, 'add']);
@@ -451,7 +427,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [OvertimeSettingController::class, 'delete']);
     });
 
-    //LeaveType
+    //leave-type
     Route::group(['prefix' => 'leave-type'], function () {
         Route::get('index', [LeaveTypeController::class, 'index']);
         Route::post('add', [LeaveTypeController::class, 'add']);
@@ -459,7 +435,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveTypeController::class, 'delete']);
     });
 
-    //LeaveNational
+    //leave-national
     Route::group(['prefix' => 'leave-national'], function () {
         Route::get('index', [LeaveNationalController::class, 'index']);
         Route::post('add', [LeaveNationalController::class, 'add']);
@@ -467,7 +443,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveNationalController::class, 'delete']);
     });
 
-    //LeaveSetting
+    //leave-setting
     Route::group(['prefix' => 'leave-setting'], function () {
         Route::get('index', [LeaveSettingController::class, 'index']);
         Route::post('add', [LeaveSettingController::class, 'add']);
@@ -475,13 +451,85 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [LeaveSettingController::class, 'delete']);
     });
 
-    //LeaveRequest
+    //leave-request
     Route::group(['prefix' => 'leave-request'], function () {
         Route::post('index', [LeaveRequestController::class, 'index']);
         Route::post('add', [LeaveRequestController::class, 'add']);
         Route::post('edit', [LeaveRequestController::class, 'edit']);
         Route::get('delete/{id}', [LeaveRequestController::class, 'delete']);
         Route::post('change-status', [LeaveRequestController::class, 'change_status']);
+    });
+
+    //excussess requests
+
+    Route::prefix('excuse-requests')->group(function () {
+        Route::get('list', [ExcuseRequestController::class, 'index'])->name('excuse_requests.index');
+        Route::get('view/{id}', [ExcuseRequestController::class, 'show'])->name('excuse_requests.show');
+        Route::post('create', [ExcuseRequestController::class, 'store'])->name('excuse_requests.store');
+        Route::get('/pending', [ExcuseRequestController::class, 'pendingRequests'])->name('excuse-requests.pending');
+        Route::put('approve/{id}', [ExcuseRequestController::class, 'approve'])->name('excuse_requests.approve');
+        Route::put('reject/{id}', [ExcuseRequestController::class, 'reject'])->name('excuse_requests.reject');
+        Route::put('cancel/{id}', [ExcuseRequestController::class, 'cancel'])->name('excuse_requests.cancel');
+        Route::post('restore/{id}', [ExcuseRequestController::class, 'restore'])->name('excuse_requests.restore');
+        Route::put('{id}/update', [ExcuseRequestController::class, 'update'])->name('excuse-requests.update');
+    });
+
+    // Excuse Settings Routes
+    Route::prefix('excuse-settings')->group(function () {
+        Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
+    });
+
+    //floors
+    Route::group(['prefix' => 'floors'], function () {
+        Route::get('index', [FloorController::class, 'index']);
+        Route::post('add', [FloorController::class, 'add']);
+        Route::post('edit', [FloorController::class, 'edit']);
+        Route::get('delete/{id}', [FloorController::class, 'delete']);
+    });
+
+    //floor-partitions
+    Route::group(['prefix' => 'floor-partitions'], function () {
+        Route::get('index', [FloorPartitionController::class, 'index']);
+        Route::post('add', [FloorPartitionController::class, 'add']);
+        Route::post('edit', [FloorPartitionController::class, 'edit']);
+        Route::get('delete/{id}', [FloorPartitionController::class, 'delete']);
+    });
+
+    //tables
+    Route::group(['prefix' => 'tables'], function () {
+        Route::get('index', [TableController::class, 'index']);
+        Route::post('add', [TableController::class, 'add']);
+        Route::post('edit', [TableController::class, 'edit']);
+        Route::get('delete/{id}', [TableController::class, 'delete']);
+    });
+
+    //table-reservations
+    Route::group(['prefix' => 'table-reservations'], function () {
+        Route::post('index', [TableReservationController::class, 'index']);
+        Route::post('add', [TableReservationController::class, 'add']);
+        Route::post('edit', [TableReservationController::class, 'edit']);
+        Route::get('delete/{id}', [TableReservationController::class, 'delete']);
+        Route::post('change-status', [TableReservationController::class, 'change_status']);
+    });
+
+    //delivery-settings
+    Route::group(['prefix' => 'delivery-settings'], function () {
+        Route::get('index', [DeliverySettingController::class, 'index']);
+        Route::post('add', [DeliverySettingController::class, 'add']);
+        Route::post('edit', [DeliverySettingController::class, 'edit']);
+        Route::get('delete/{id}', [DeliverySettingController::class, 'delete']);
+    });
+
+
+
+    Route::prefix('menu')->group(function () {
+        Route::get('/list', [MenuController::class, 'index'])->name('menu.index');
+        Route::get('/show/{branch_id}', [MenuController::class, 'show'])->name('menu.show');
+        Route::post('/create', [MenuController::class, 'store'])->name('menu.store');     //clone menu
+        Route::put('/update/{branch_id}', [MenuController::class, 'update'])->name('menu.update');
+        Route::delete('/delete', [MenuController::class, 'destroy'])->name('menu.destroy');
+        Route::post('/restore', [MenuController::class, 'restore'])->name('menu.restore');
     });
 
 });

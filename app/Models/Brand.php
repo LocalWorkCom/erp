@@ -10,12 +10,14 @@ class Brand extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name', 'description'];
+
     protected $fillable = [
         'name_en',
         'name_ar',
         'description_en',
         'description_ar',
-        'logo_path',  // Path for brand logo
+        'logo_path',  
         'is_active',
         'created_by',
         'modified_by',
@@ -23,6 +25,10 @@ class Brand extends Model
     ];
 
     protected $hidden = [
+        'name_en',
+        'name_ar',
+        'description_en',
+        'description_ar',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -31,33 +37,32 @@ class Brand extends Model
         'deleted_at',
     ];
 
-    /**
-     * Get the creator of the brand.
-     */
+    public function getNameAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
+    }
+
+    // Relationships
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Get the modifier of the brand.
-     */
     public function modifier()
     {
         return $this->belongsTo(User::class, 'modified_by');
     }
 
-    /**
-     * Get the deleter of the brand.
-     */
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    /**
-     * Define a relationship with products (if each product belongs to a brand).
-     */
     public function products()
     {
         return $this->hasMany(Product::class, 'brand_id');

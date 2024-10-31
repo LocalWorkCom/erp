@@ -69,7 +69,7 @@ class OvertimeSettingController extends Controller
             }
 
             $user_id = Auth::guard('api')->user()->id;
-            $overtime_setting = OvertimeSetting::findOrFail($request->id);
+            $overtime_setting = OvertimeSetting::find($request->id);
             $overtime_setting->overtime_type_id = $request->overtime_type_id;
             $overtime_setting->quentity = $request->quentity;
             $overtime_setting->percent = $request->percent;
@@ -88,7 +88,7 @@ class OvertimeSettingController extends Controller
             $lang =  $request->header('lang', 'en');
             $user_id = Auth::guard('api')->user()->id;
 
-            $overtime_setting = OvertimeSetting::findOrFail($request->id);
+            $overtime_setting = OvertimeSetting::find($request->id);
             if (!$overtime_setting) {
                 return  RespondWithBadRequestNotExist();
             }

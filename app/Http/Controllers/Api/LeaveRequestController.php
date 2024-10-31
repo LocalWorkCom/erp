@@ -108,7 +108,7 @@ class LeaveRequestController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
             $date = date('Y-m-d');
-            $overtime_setting = LeaveRequest::find($request->id);
+            $overtime_setting = LeaveRequest::findOrFail($request->id);
 
             if($overtime_setting->agreement != 1){
                 return  RespondWithBadRequestNotHavePermeation();
@@ -142,15 +142,15 @@ class LeaveRequestController extends Controller
 
             $overtime_setting = LeaveRequest::find($request->id);
             if (!$overtime_setting) {
-                return  RespondWithBadRequestNotExist();
+                return  RespondWithBadRequestNotExist($lang, 9);
             }
 
             if($overtime_setting->agreement != 1){
-                return  RespondWithBadRequestNotHavePermeation();
+                return  RespondWithBadRequestNotHavePermeation($lang, 9);
             }
 
             if($overtime_setting->from <= $date){
-                return  RespondWithBadRequestNotDate();
+                return  RespondWithBadRequestNotDate($lang, 9);
             }
 
             $overtime_setting->deleted_by = $user_id;
@@ -181,15 +181,14 @@ class LeaveRequestController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
             $overtime_setting = LeaveRequest::find($request->id);
-            $date = date('Y-m-d');
 
             if (!$overtime_setting) {
-                return  RespondWithBadRequestNotExist();
+                return  RespondWithBadRequestNotExist($lang, 9);
             }
 
-            if($overtime_setting->from < $date){
-                return  RespondWithBadRequestNotDate();
-            }
+            // if($overtime_setting->from < $request->agreement_date){
+            //     return  RespondWithBadRequestNotDate($lang, 9);
+            // }
 
             $overtime_setting->agreement = $request->agreement;
             $overtime_setting->agreement_date = $request->agreement_date;
