@@ -72,6 +72,9 @@ use App\Http\Controllers\Api\MenuController;
 //     return $request->user();
 // });
 
+Route::post("register", [AuthController::class, "register"]);
+Route::post("login", [AuthController::class, "login"])->name('login');
+Route::post("resetpassword", [AuthController::class, "reset_password"]);
 
 //admin
 Route::group(['middleware' => ['auth:admin', 'admin']], function () {
@@ -120,9 +123,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Route::post("register", [AuthController::class, "register"]);
-Route::post("login", [AuthController::class, "login"])->name('login');
-Route::post("resetpassword", [AuthController::class, "reset_password"]);
+
 
 
     //Color
