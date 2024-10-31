@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdvanceSettingController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
@@ -567,4 +568,14 @@ Route::group(['prefix' => 'delays'], function () {
     Route::put('/update/{id}', [DelayController::class, 'update']);
     Route::delete('/delete/{id}', [DelayController::class, 'destroy']);
     Route::post('/restore/{id}', [DelayController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'advances'], function () {
+    // Advance Settings
+    Route::get('settings/', [AdvanceSettingController::class, 'index']);
+    Route::post('settings/store', [AdvanceSettingController::class, 'store']);
+    Route::get('settings/{id}', [AdvanceSettingController::class, 'show']);
+    Route::put('settings/update/{id}', [AdvanceSettingController::class, 'update']);
+    Route::delete('settings/delete/{id}', [AdvanceSettingController::class, 'destroy']);
+    Route::post('settings/restore/{id}', [AdvanceSettingController::class, 'restore']);
 });
