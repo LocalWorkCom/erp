@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AdvanceController;
+use App\Http\Controllers\Api\AdvanceRequestController;
 use App\Http\Controllers\Api\AdvanceSettingController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryInventoryController;
@@ -578,4 +580,18 @@ Route::group(['prefix' => 'advances'], function () {
     Route::put('settings/update/{id}', [AdvanceSettingController::class, 'update']);
     Route::delete('settings/delete/{id}', [AdvanceSettingController::class, 'destroy']);
     Route::post('settings/restore/{id}', [AdvanceSettingController::class, 'restore']);
+    // Advance Requests
+    Route::get('requests/', [AdvanceRequestController::class, 'index']);
+    Route::post('requests/store', [AdvanceRequestController::class, 'save']);
+    Route::get('requests/{id}', [AdvanceRequestController::class, 'show']);
+    Route::put('requests/update/{id}', [AdvanceRequestController::class, 'save']);
+    Route::delete('requests/delete/{id}', [AdvanceRequestController::class, 'destroy']);
+    Route::post('requests/restore/{id}', [AdvanceRequestController::class, 'restore']);
+    // Advance
+    Route::get('/', [AdvanceController::class, 'index']);
+    Route::post('/store', [AdvanceController::class, 'save']);
+    Route::get('/{id}', [AdvanceController::class, 'show']);
+    Route::put('/update/{id}', [AdvanceController::class, 'save']);
+    Route::delete('/delete/{id}', [AdvanceController::class, 'destroy']);
+    Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
 });
