@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\DelayController;
 use App\Http\Controllers\Api\DelayTimeController;
+use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Api\ProductTransactionController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
@@ -594,4 +596,11 @@ Route::group(['prefix' => 'advances'], function () {
     Route::put('/update/{id}', [AdvanceController::class, 'save']);
     Route::delete('/delete/{id}', [AdvanceController::class, 'destroy']);
     Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
+});
+
+// Google Auth
+
+Route::middleware(['api', StartSession::class])->group(function () {
+    Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/call-back', [GoogleAuthController::class, 'callback'])->name('google.callback');
 });
