@@ -53,6 +53,7 @@ use App\Http\Controllers\Api\LeaveRequestController;
 use App\Http\Controllers\Api\FloorPartitionController;
 use App\Http\Controllers\Api\TableReservationController;
 use App\Http\Controllers\Api\DeliverySettingController;
+use App\Http\Controllers\Api\EmployeeFloorPartitionController;
 use App\Http\Controllers\Api\TimetableController;
 use App\Http\Controllers\Api\ShiftController;
 use App\Http\Controllers\Api\EmployeeScheduleController;
@@ -514,7 +515,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [DeliverySettingController::class, 'delete']);
     });
 
-
+    //employee-floor-partitions
+    Route::group(['prefix' => 'employee-floor-partitions'], function () {
+        Route::get('index', [EmployeeFloorPartitionController::class, 'index']);
+        Route::post('add', [EmployeeFloorPartitionController::class, 'add']);
+        Route::post('edit', [EmployeeFloorPartitionController::class, 'edit']);
+        Route::get('delete/{id}', [EmployeeFloorPartitionController::class, 'delete']);
+    });
 
     Route::prefix('menu')->group(function () {
         Route::get('/list', [MenuController::class, 'index'])->name('menu.index');                    
