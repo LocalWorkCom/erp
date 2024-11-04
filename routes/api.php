@@ -66,6 +66,11 @@ use App\Http\Controllers\Api\LeaveRequestController;
 use App\Http\Controllers\Api\FloorPartitionController;
 use App\Http\Controllers\Api\TableReservationController;
 use App\Http\Controllers\Api\DeliverySettingController;
+use App\Http\Controllers\Api\EmployeeFloorPartitionController;
+use App\Http\Controllers\Api\TimetableController;
+use App\Http\Controllers\Api\ShiftController;
+use App\Http\Controllers\Api\EmployeeScheduleController;
+
 
 use App\Http\Controllers\Api\GiftController;
 use App\Http\Controllers\Api\MenuController;
@@ -527,7 +532,13 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [DeliverySettingController::class, 'delete']);
     });
 
-
+    //employee-floor-partitions
+    Route::group(['prefix' => 'employee-floor-partitions'], function () {
+        Route::get('index', [EmployeeFloorPartitionController::class, 'index']);
+        Route::post('add', [EmployeeFloorPartitionController::class, 'add']);
+        Route::post('edit', [EmployeeFloorPartitionController::class, 'edit']);
+        Route::get('delete/{id}', [EmployeeFloorPartitionController::class, 'delete']);
+    });
 
     Route::prefix('menu')->group(function () {
         Route::get('/list', [MenuController::class, 'index'])->name('menu.index');
@@ -537,6 +548,35 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete', [MenuController::class, 'destroy'])->name('menu.destroy');
         Route::post('/restore', [MenuController::class, 'restore'])->name('menu.restore');
     });
+
+    Route::prefix('timetables')->group(function () {
+        Route::get('/list', [TimetableController::class, 'index'])->name('timetables.index');
+        Route::post('/create', [TimetableController::class, 'store'])->name('timetables.store');
+        Route::get('/show/{id}', [TimetableController::class, 'show'])->name('timetables.show');
+        Route::put('/update/{id}', [TimetableController::class, 'update'])->name('timetables.update');
+        Route::delete('/delete/{id}', [TimetableController::class, 'destroy'])->name('timetables.destroy');
+        Route::post('/restore/{id}', [TimetableController::class, 'restore'])->name('timetables.restore');
+    });
+
+    Route::prefix('shifts')->group(function () {
+        Route::get('/list', [ShiftController::class, 'index'])->name('shifts.index');
+        Route::post('/create', [ShiftController::class, 'store'])->name('shifts.store');
+        Route::get('/show/{id}', [ShiftController::class, 'show'])->name('shifts.show');
+        Route::put('/update/{id}', [ShiftController::class, 'update'])->name('shifts.update');
+        Route::delete('/delete/{id}', [ShiftController::class, 'destroy'])->name('shifts.destroy');
+        Route::post('/restore/{id}', [ShiftController::class, 'restore'])->name('shifts.restore');
+    });
+    
+    Route::prefix('employee-schedules')->group(function () {
+        Route::get('/list', [EmployeeScheduleController::class, 'index'])->name('employee-schedules.index');
+        Route::post('/create', [EmployeeScheduleController::class, 'store'])->name('employee-schedules.store');
+        Route::get('/show/{id}', [EmployeeScheduleController::class, 'show'])->name('employee-schedules.show');
+        Route::put('/update/{id}', [EmployeeScheduleController::class, 'update'])->name('employee-schedules.update');
+        Route::delete('/delete/{id}', [EmployeeScheduleController::class, 'destroy'])->name('employee-schedules.destroy');
+        Route::post('/restore/{id}', [EmployeeScheduleController::class, 'restore'])->name('employee-schedules.restore');
+    });
+    
+    
 
 });
 
