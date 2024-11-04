@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\DelayController;
 use App\Http\Controllers\Api\DelayTimeController;
+use App\Http\Controllers\Api\FacebookAuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
@@ -598,9 +599,13 @@ Route::group(['prefix' => 'advances'], function () {
     Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
 });
 
-// Google Auth
 
-Route::middleware(['api', StartSession::class])->group(function () {
+
+Route::middleware([StartSession::class])->group(function () {
+    // Google Auth
     Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
     Route::get('/auth/google/call-back', [GoogleAuthController::class, 'callback'])->name('google.callback');
+    // Facebook Auth
+    Route::get('/auth/facebook/redirect', [FacebookAuthController::class, 'redirect'])->name('facebook.redirect');
+    Route::get('/auth/facebook/call-back', [FacebookAuthController::class, 'callback'])->name('facebook.callback');
 });
