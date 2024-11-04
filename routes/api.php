@@ -57,7 +57,8 @@ use App\Http\Controllers\Api\EmployeeFloorPartitionController;
 use App\Http\Controllers\Api\TimetableController;
 use App\Http\Controllers\Api\ShiftController;
 use App\Http\Controllers\Api\EmployeeScheduleController;
-
+use App\Http\Controllers\Api\EmployeeOpeningBalanceController;
+use App\Http\Controllers\Api\CashierMachineController;
 
 use App\Http\Controllers\Api\GiftController;
 use App\Http\Controllers\Api\MenuController;
@@ -521,6 +522,23 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('add', [EmployeeFloorPartitionController::class, 'add']);
         Route::post('edit', [EmployeeFloorPartitionController::class, 'edit']);
         Route::get('delete/{id}', [EmployeeFloorPartitionController::class, 'delete']);
+    });
+
+    //cashier-machines
+    Route::group(['prefix' => 'cashier-machines'], function () {
+        Route::get('index', [CashierMachineController::class, 'index']);
+        Route::post('add', [CashierMachineController::class, 'add']);
+        Route::post('edit', [CashierMachineController::class, 'edit']);
+        Route::get('delete/{id}', [CashierMachineController::class, 'delete']);
+    });
+    
+    //employee-opening-balances
+    Route::group(['prefix' => 'employee-opening-balances'], function () {
+        Route::get('index', [EmployeeOpeningBalanceController::class, 'index']);
+        Route::post('open-day-balance', [EmployeeOpeningBalanceController::class, 'open_day_balance']);
+        Route::post('close-day-balance', [EmployeeOpeningBalanceController::class, 'close_day_balance']);
+        Route::post('edit', [EmployeeOpeningBalanceController::class, 'edit']);
+        Route::get('delete/{id}', [EmployeeOpeningBalanceController::class, 'delete']);
     });
 
     Route::prefix('menu')->group(function () {
