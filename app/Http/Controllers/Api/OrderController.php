@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientAddress;
+use App\Models\ClientDetail;
 use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
@@ -22,6 +24,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 use App\Models\OrderProduct;
+use App\Models\ProductUnit;
+use App\Models\Store;
 
 class OrderController extends Controller
 {
@@ -51,8 +55,6 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        Log::info($request);
-        // dd($request);
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
         if (Auth::guard('api')->user()->flag == 0) {
@@ -75,7 +77,6 @@ class OrderController extends Controller
         $DataProducts = $request->Products;
 
         //settings
-        $tax_percentage = 0;
         $tax_application = getSetting('tax_application');
         $tax_percentage = getSetting('tax_percentage');
         $coupon_application = getSetting('coupon_application');
@@ -84,10 +85,9 @@ class OrderController extends Controller
 
         //validation
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string|in:takeaway,online,in_resturant',  // Enforce enum-like values
+            'type' => 'required|string|in:Takeaway,Online,InResturant,Delivery,CallCenter',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
             'use_point' => 'nullable|integer', // Optional but must be a string
-
             'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
             'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
@@ -122,33 +122,50 @@ class OrderController extends Controller
         if (CheckDiscountValid()) {
             $discount = CheckDiscountValid();
         }
+        $IDBranch = 0;
+        $delivery_fees = 0;
+
+        if ($UserType == 'admin') {
+            $IDBranch = 1;
+        } else {
+            $user = Auth::guard('api')->user();
+            $client_address = ClientAddress::where('user_id', $user->id)->where('is_default', 1)->first();
+            if ($client_address) {
+                $IDBranch = getNearestBranch($client_address->latitude, $client_address->longtitude)->id;
+            } else {
+
+                $IDBranch = 1;
+            }
+        }
+
+        if ($request->type == 'Delivery' || $request->type == 'CallCenter' || $request->type == 'Online') {
+
+            $delivery_fees = scopeNearest($IDBranch, $client_address->latitude, $client_address->longtitude)->price;
+        }
 
         //order
         $Order = new Order();
         $Order->date = date('Y-m-d');
+        $Order->time = date('H:i:s');
         $Order->type = $request->type;
         $Order->note = $request->note;
-        $Order->delivery_fees = 0;
-        // $request->delivery_fees;
+        $Order->delivery_fees = $delivery_fees;
         $Order->fees = $service_fees;
         $Order->table_id = $request->table_id ?? null;
         $Order->client_id = $client_id;
         $Order->discount_id = ($discount) ? $discount->id : null;
-        $Order->branch_id = $request->branch_id;
-
+        $Order->branch_id = $IDBranch;
         $Order->coupon_id = ($coupon) ? $coupon->id : null;
         $Order->created_by = $created_by;
-        // while (Order::where('order_number', $Order->order_number)->exists()) {
         $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
         $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
-        // }
         $Order->save();
 
 
         if ($DataOrderDetails->count()) {
 
             foreach ($DataOrderDetails as $DataOrderDetail) {
-                $Dish = Menu::where('dish_id',$DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
+                $Dish = Menu::where('dish_id', $DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
                 if ($Dish) {
                     $total = $Dish->price;
                 }
@@ -157,16 +174,12 @@ class OrderController extends Controller
                 $OrderDetails->quantity = $DataOrderDetail['quantity'];
                 $OrderDetails->total = $total;
                 $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total, $tax_percentage, $tax_application) : $total;
-                // dd($OrderDetails->price_befor_tax);
                 $OrderDetails->tax_value = CalculateTax($tax_percentage, $total);
                 $OrderDetails->note = $DataOrderDetail['note'] ?? null;
-                // $OrderDetails->product_id = $DataOrderDetail['product_id'] ?? null;
                 $OrderDetails->dish_id = $DataOrderDetail['dish_id'] ?? null;
-                // $OrderDetails->unit_id = $DataOrderDetail['unit_id'];
                 $OrderDetails->created_by = $created_by;
                 $total_product_price_after_tax = $tax_application == 0 ? applyTax($total, $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
                 $OrderDetails->price_after_tax = $total_product_price_after_tax;
-                // dd($total_product_price_after_tax);
                 $OrderDetails->save();
             }
         }
@@ -191,17 +204,22 @@ class OrderController extends Controller
                 }
             }
         }
-
+        $store_id = 0;
         if ($DataProducts->count()) {
 
             foreach ($DataProducts as $DataProduct) {
 
+                $store = Store::where('branch_id', $IDBranch)->where('is_kitchen', 1)->first();
+                if ($store) {
+                    $store_id = $store->store_id;
+                }
+                $unit_id = ProductUnit::find($DataProduct['product_unit_id'])->unit_id;
                 $OrderProducts = new OrderProduct();
                 $OrderProducts->order_id = $Order->id;
                 $OrderProducts->product_id = $DataProduct['product_id'];
                 $OrderProducts->quantity = $DataProduct['quantity'];
                 $OrderProducts->product_unit_id = $DataProduct['product_unit_id'];
-                $OrderProducts->price = 0;
+                $OrderProducts->price = getProductPrice($DataProduct['product_id'], $store_id, $unit_id);
                 $OrderProducts->created_by = $created_by;
 
                 $OrderProducts->save();
@@ -280,9 +298,9 @@ class OrderController extends Controller
 
             $order_transaction = new OrderTransaction();
             $order_transaction->order_id = $Order->id;
+            $order_transaction->order_type = 'order';
             $order_transaction->payment_method = $request->payment_method;
             $order_transaction->transaction_id = $transactionId;
-            $order_transaction->created_by = $created_by;
             $order_transaction->paid = $paid;
             $order_transaction->date = date('Y-m-d');
             // $order_transaction->refund = $request->refund;

@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Events\OrderRefundTransactionEvent;
-
+use App\Models\OrderTransaction;
 use App\Models\Store;
+use Illuminate\Support\Str;
+
 
 class OrderRefundController extends Controller
 {
@@ -79,6 +81,7 @@ class OrderRefundController extends Controller
         $orderRefund->created_by = $created_by;
         $orderRefund->save();
 
+       
         return RespondWithSuccessRequest($lang, 1);
     }
     public function change_status(Request $request)
@@ -108,6 +111,26 @@ class OrderRefundController extends Controller
             $order_details->status = 'refund';
             $order_details->save();
             event(new OrderRefundTransactionEvent($order_details));
+
+            $transactionId = Str::uuid()->toString();
+
+
+            $order_transaction = new OrderTransaction();
+            $order_transaction->order_id = $orderRefund->id;
+            $order_transaction->order_type = 'refund';
+            $order_transaction->payment_method = 'credit_card';
+            $order_transaction->transaction_id = $transactionId;
+            $order_transaction->created_by = $created_by;
+            $order_transaction->refund =  $orderRefund->price;
+            $order_transaction->paid =  0;
+            $order_transaction->date = date('Y-m-d');
+            $order_transaction->time = date('H:i:s');
+            $order_transaction->discount_id =  null;
+            $order_transaction->coupon_id = null;
+            $order_transaction->payment_status = "paid";
+            $order_transaction->points_num = 0; //
+            $order_transaction->save();
+    
         }
 
         return RespondWithSuccessRequest($lang, 1);

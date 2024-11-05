@@ -53,7 +53,7 @@ class OrderTransactionController extends Controller
         // Validation rules
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|exists:orders,id', // Ensures order exists
-            'payment_method' => 'required|string|in:cash,credit_card,online',  // Enforce enum-like values
+            'payment_method' => 'required|string|in:cash,credit_card',  // Enforce enum-like values
             'paid' => 'required|numeric|min:0', // Paid amount must be numeric and non-negative
         ]);
 
@@ -89,14 +89,16 @@ class OrderTransactionController extends Controller
 
         // Update the payment status based on the paid amount
         if ($order_transaction && $done) {
+
             $order_transaction->payment_status = "paid";
+          
             // $order_tracking = new OrderTracking();
             // $order_tracking->order_id = $order_id;
             // $order_tracking->status = 'in_progress';
             // $order_tracking->save();
-
+          
             // call point function  total = $order->total_price_after_tax   && $request->payment_method == cash && $order->type == online
-            if($request->payment_method == 'cash' && $order->type == 'online' && isValid($order->branch_id )){
+            if($request->payment_method == 'cash' && isValid($order->branch_id )){
                 if(isActive($order->branch_id ) ){
                     $points_num =  calculateEarnPoint($order->total_price_after_tax,$order->branch_id , $order_id , $order->client_id);
                 }
