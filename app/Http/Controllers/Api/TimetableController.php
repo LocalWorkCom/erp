@@ -39,6 +39,7 @@ class TimetableController extends Controller
                 'end_sign_out' => 'required|date_format:H:i',
                 'lateness_grace_period' => 'required|integer|min:0',
                 'start_late_time_option' => 'required|in:after_duty_time_grace_period,after_duty_time,from_duty_time',
+                'cross_day' => 'required|boolean',  
             ]);
 
             $timetable = Timetable::create(array_merge($request->all(), [
@@ -82,6 +83,7 @@ class TimetableController extends Controller
                 'end_sign_out' => 'required|date_format:H:i',
                 'lateness_grace_period' => 'required|integer|min:0',
                 'start_late_time_option' => 'required|in:after_duty_time_grace_period,after_duty_time,from_duty_time',
+                'cross_day' => 'required|boolean',
             ]);
 
             $timetable = Timetable::findOrFail($id);
@@ -103,13 +105,12 @@ class TimetableController extends Controller
             $lang = $request->header('lang', 'en');
             $timetable = Timetable::findOrFail($id);
     
-            Log::info('Deleting timetable', ['id' => $timetable->id, 'name' => $timetable->name]);
     
             $timetable->update(['deleted_by' => auth()->id()]);
     
             $timetable->delete();
     
-            return ResponseWithSuccessData($lang, null, 'Timetable deleted successfully.');
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting timetable: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -125,9 +126,8 @@ class TimetableController extends Controller
     
             $timetable->restore();
     
-            Log::info('Timetable restored', ['id' => $timetable->id]);
     
-            return ResponseWithSuccessData($lang, $timetable, 'Timetable restored successfully.');
+            return ResponseWithSuccessData($lang, $timetable, 1);
         } catch (\Exception $e) {
             Log::error('Error restoring timetable: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
