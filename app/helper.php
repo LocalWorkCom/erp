@@ -13,6 +13,7 @@ use App\Models\pointTransaction;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\OrderTransaction;
 use App\Models\CashierMachine;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -521,8 +522,9 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
     return $redeem_total;
 }
 
-function CalculateTotalOrders($cashier_machine_id, $employee_id, $date)
+function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
 {
+    $sum_orders = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
     if($cashier_machine_details){
         if($cashier_machine_details->branches){
@@ -530,12 +532,14 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date)
         }
     }
 
-    return $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
-
+    $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
     if($branch_id){
-        $get_orders = Order::where('id', $branch_id)->where('date', $date)->get();
-        if($get_orders){
-
+        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->sum('total_price_after_tax');
+        if($orders_totals)
+        foreach($orders_totals as $orders_total){
+            $orders_total = OrderTransaction::where('order_id', $orders_total->order_id)->where('order_type', 'order')->where('payment_status', $payment_method)->first();
+            $sum_orders += $orders_total->paid;
         }
     }
+    return $sum_orders;
 }
