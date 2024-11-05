@@ -614,6 +614,7 @@ function getProductPrice($product_id, $store_id, $unit_id)
 
     }
     return $price;
+}
 function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
 {
     $sum_orders = 0;
