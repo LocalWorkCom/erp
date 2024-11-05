@@ -15,12 +15,15 @@ use App\Models\pointTransaction;
 use App\Models\PurchaseInvoicesDetails;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderTransaction;
+use App\Models\CashierMachine;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
-
+use App\Services\TimetableService;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -611,4 +614,24 @@ function getProductPrice($product_id, $store_id, $unit_id)
 
     }
     return $price;
+function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
+{
+    $sum_orders = 0;
+    $cashier_machine_details = CashierMachine::find($cashier_machine_id);
+    if($cashier_machine_details){
+        if($cashier_machine_details->branches){
+            $branch_id = $cashier_machine_details->branches->id;
+        }
+    }
+
+    $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
+    if($branch_id){
+        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->sum('total_price_after_tax');
+        if($orders_totals)
+        foreach($orders_totals as $orders_total){
+            $orders_total = OrderTransaction::where('order_id', $orders_total->order_id)->where('order_type', 'order')->where('payment_status', $payment_method)->first();
+            $sum_orders += $orders_total->paid;
+        }
+    }
+    return $sum_orders;
 }

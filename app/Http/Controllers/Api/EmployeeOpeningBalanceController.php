@@ -7,6 +7,7 @@ use App\Models\EmployeeOpeningBalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Services\TimetableService;
 
 class EmployeeOpeningBalanceController extends Controller
 {
@@ -75,14 +76,24 @@ class EmployeeOpeningBalanceController extends Controller
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
+
             $employee_opening_balance = EmployeeOpeningBalance::where('cashier_machine_id', $request->cashier_machine_id)->where('date', $request->date)->where('type', 1)->first();
             if(!$employee_opening_balance){
                 return RespondWithBadRequestData($lang, 2);
             }
 
+            $order_real_total_cash = CalculateTotalOrders($employee_opening_balance->cashier_machine_id, $employee_opening_balance->employee_id, $employee_opening_balance->date, 'cash');
+            $order_real_total_visa = CalculateTotalOrders($employee_opening_balance->cashier_machine_id, $employee_opening_balance->employee_id, $employee_opening_balance->date, 'credit_card');
+            $deficit_cash = $request->close_cash - $order_real_total_cash;
+            $deficit_visa = $request->close_visa - $order_real_total_visa;
+
             $user_id = Auth::guard('api')->user()->id;
             $employee_opening_balance->close_cash = $request->close_cash;
             $employee_opening_balance->close_visa = $request->close_visa;
+            $employee_opening_balance->real_cash = $order_real_total_cash;
+            $employee_opening_balance->real_visa = $order_real_total_visa;
+            $employee_opening_balance->deficit_cash = $deficit_cash;
+            $employee_opening_balance->deficit_visa = $deficit_visa;
             $employee_opening_balance->type = 2;
             $employee_opening_balance->modified_by = $user_id;
             $employee_opening_balance->save();

@@ -128,7 +128,7 @@ class ShiftController extends Controller
             $shift->update(['deleted_by' => Auth::id()]);
             $shift->delete();
 
-            return ResponseWithSuccessData($lang, null, 'Shift deleted successfully.');
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting shift: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -143,7 +143,7 @@ class ShiftController extends Controller
             $shift = Shift::onlyTrashed()->findOrFail($id);
             $shift->restore();
 
-            return ResponseWithSuccessData($lang, $shift->load('details.timetable'), 'Shift restored successfully.');
+            return ResponseWithSuccessData($lang, $shift->load('details.timetable'), 1);
         } catch (\Exception $e) {
             Log::error('Error restoring shift: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
