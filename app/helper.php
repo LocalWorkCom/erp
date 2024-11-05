@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use App\Services\TimetableService;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -528,6 +529,8 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date)
             $branch_id = $cashier_machine_details->branches->id;
         }
     }
+
+    return $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
 
     if($branch_id){
         $get_orders = Order::where('id', $branch_id)->where('date', $date)->get();

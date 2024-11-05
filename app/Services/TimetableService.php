@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class TimetableService
 {
-    public function getTimetableForDate($employeeId, $date)
+    public static function getTimetableForDate($employeeId, $date)
     {
         try {
             $date = Carbon::parse($date);
