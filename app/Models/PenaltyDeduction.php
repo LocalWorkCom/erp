@@ -6,15 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Penalty extends Model
+class PenaltyDeduction extends Model
 {
     use HasFactory, softDeletes;
 
     protected $fillable = [
-        'reason_id',
-        'employee_id',
-        'note',
+        'penalty_id',
+        'deduction_amount',
         'created_by',
+        'modified_by',
+        'deleted_by',
+
     ];
     protected $hidden = [
         'created_at',
@@ -25,10 +27,8 @@ class Penalty extends Model
         'deleted_by',
     ];
 
-    public function reason(){
-        return $this->belongsTo(PenaltyReason::class, 'reason_id')->withTrashed();
-    }
-    public function employee(){
-        return $this->belongsTo(Employee::class, 'employee_id')->withTrashed();
+    public function penalty()
+    {
+        return $this->belongsTo(Penalty::class, 'penalty_id')->withTrashed();
     }
 }
