@@ -26,9 +26,9 @@ class Penalty extends Model
     ];
 
     public function reason(){
-        return $this->belongsTo(PenaltyReason::class, 'reason_id');
+        return $this->belongsTo(PenaltyReason::class, 'reason_id')->withTrashed();
     }
     public function employee(){
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id')->withTrashed();
     }
 }

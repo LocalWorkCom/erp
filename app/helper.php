@@ -8,14 +8,22 @@ use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
 use App\Models\ClientDetail;
 use App\Models\Coupon;
+use App\Models\DeliverySetting;
 use App\Models\Discount;
+use App\Models\OpeningBalance;
 use App\Models\pointTransaction;
+use App\Models\PurchaseInvoicesDetails;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderTransaction;
+use App\Models\CashierMachine;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Database\Eloquent\Builder; // Import the Builder class
+use App\Services\TimetableService;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -425,6 +433,14 @@ function applyDiscount($total_price, $discount)
     }
     return $total_price;
 }
+function calcDiscount($total_price, $discount)
+{
+    if ($discount->type == 'fixed') {
+        return  $discount->value;
+    } else {
+        return ($total_price * ($discount->value / 100));
+    }
+}
 // Function to apply tax
 function applyTax($total_price, $tax_percentage, $tax_application)
 {
@@ -516,4 +532,107 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
     }
 
     return $redeem_total;
+}
+
+function get_by_md5_id($id, $table)
+{
+    // Hash the input ID with MD5
+    $hashedId = md5($id);
+
+    // Query the specified table where the MD5 hash of the ID column matches the hashed ID
+    return DB::table($table)
+        ->where(DB::raw('MD5(id)'), $hashedId)
+        ->first();
+}
+
+function einvoice_settings($key)
+{
+    $setting = DB::table('einvoice_settings')->where('key', $key)->value('value');
+
+    return $setting ?? null;
+}
+
+function helper_update_by_id(array $data, $id, $table)
+{
+    // Update the specified table with the data, where the ID matches
+    return DB::table($table)->where('id', $id)->update($data);
+}
+
+
+function getNearestBranch($userLat, $userLon)
+{
+    $nearestBranch = DB::table('branches')
+        ->select(
+            'id',
+            'name',
+            'address',
+            DB::raw("latitude, longitude, 
+                (6371 * acos(cos(radians($userLat)) 
+                * cos(radians(latitude)) 
+                * cos(radians(longitude) - radians($userLon)) 
+                + sin(radians($userLat)) 
+                * sin(radians(latitude)))) AS distance")
+        )
+        ->orderBy('distance', 'asc')
+        ->first();
+
+    return $nearestBranch;
+}
+
+
+function scopeNearest($IDBranch, $latitude, $longitude)
+{
+    return DeliverySetting::where('branch_id', $IDBranch)
+        ->select('*', DB::raw("
+                (6371 * acos(
+                    cos(radians($latitude)) * 
+                    cos(radians(latitude)) * 
+                    cos(radians(longitude) - radians($longitude)) + 
+                    sin(radians($latitude)) * 
+                    sin(radians(latitude))
+                )) AS distance
+            "))
+        ->havingRaw('distance <= radius')
+        ->orderBy('distance')->first();
+}
+function getProductPrice($product_id, $store_id, $unit_id)
+{
+    $pricing_method = getSetting('pricing_method');
+    if ($pricing_method == 'original_price') {
+        $price = OpeningBalance::where('product_id', $product_id)->where('unit_id', $unit_id)->where('store_id', $store_id)->first()->price;
+    } elseif ($pricing_method == 'avg_price') {
+        $price = PurchaseInvoicesDetails::leftJoin('purchase_invoices', 'purchase_invoices.id', '=', 'purchase_invoices_details.purchase_invoices_id')
+            ->where('product_id', $product_id)
+            ->where('unit_id', $unit_id)
+            ->where('store_id', $store_id)
+            ->avg('price');
+    } else {
+        $price = PurchaseInvoicesDetails::leftJoin('purchase_invoices', 'purchase_invoices.id', '=', 'purchase_invoices_details.purchase_invoices_id')
+            ->where('product_id', $product_id)
+            ->where('unit_id', $unit_id)
+            ->where('store_id', $store_id)->orderby('id', 'desc')->first()->price;
+
+    }
+    return $price;
+}
+function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
+{
+    $sum_orders = 0;
+    $cashier_machine_details = CashierMachine::find($cashier_machine_id);
+    if($cashier_machine_details){
+        if($cashier_machine_details->branches){
+            $branch_id = $cashier_machine_details->branches->id;
+        }
+    }
+
+    $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
+    if($branch_id){
+        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->sum('total_price_after_tax');
+        if($orders_totals)
+        foreach($orders_totals as $orders_total){
+            $orders_total = OrderTransaction::where('order_id', $orders_total->order_id)->where('order_type', 'order')->where('payment_status', $payment_method)->first();
+            $sum_orders += $orders_total->paid;
+        }
+    }
+    return $sum_orders;
 }
