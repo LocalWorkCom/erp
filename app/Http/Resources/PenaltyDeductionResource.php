@@ -14,6 +14,17 @@ class PenaltyDeductionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $lang = $request->header('lang', 'ar');
+        $reason = $lang == 'ar' ? $this->penalty->reason->reason_ar : $this->penalty->reason->reason_en;
+        $punishment = $lang == 'ar' ? $this->penalty->reason->punishment_ar : $this->penalty->reason->punishment_en;
+        return [
+            'id'=>$this->id,
+            'employee_id'=>$this->penalty->employee->id,
+            'employee_name'=>$this->penalty->employee->first_name.' '.$this->penalty->employee->last_name,
+            'penalty_id'=>$this->penalty_id,
+            'penalty_reason'=> $reason,
+            'penalty_punishment'=> $punishment,
+            'deduction_amount' => $this->deduction_amount,
+        ];
     }
 }

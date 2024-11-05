@@ -617,14 +617,6 @@ Route::group(['prefix' => 'penalties'], function () {
     Route::put('/update/{id}', [PenaltyController::class, 'update']);
     Route::delete('/delete/{id}', [PenaltyController::class, 'destroy']);
     Route::post('/restore/{id}', [PenaltyController::class, 'restore']);
-    // Penalties Deductions
-    Route::get('deductions/', [PenaltyDeductionController::class, 'index']);
-    Route::post('deductions/store', [PenaltyDeductionController::class, 'store']);
-    Route::get('deductions/{id}', [PenaltyDeductionController::class, 'show']);
-    Route::put('deductions/update/{id}', [PenaltyDeductionController::class, 'update']);
-    Route::delete('deductions/delete/{id}', [PenaltyDeductionController::class, 'destroy']);
-    Route::post('deductions/restore/{id}', [PenaltyDeductionController::class, 'restore']);
-
 });
 
 Route::group(['prefix' => 'delays'], function () {
@@ -676,4 +668,21 @@ Route::middleware([StartSession::class])->group(function () {
     // Facebook Auth
     Route::get('/auth/facebook/redirect', [FacebookAuthController::class, 'redirect'])->name('facebook.redirect');
     Route::get('/auth/facebook/call-back', [FacebookAuthController::class, 'callback'])->name('facebook.callback');
+});
+
+Route::group(['prefix' => 'deductions'], function () {
+    // Penalties Deductions
+    Route::get('penalties/', [PenaltyDeductionController::class, 'index']);
+    Route::post('penalties/store', [PenaltyDeductionController::class, 'save']);
+    Route::get('penalties/{id}', [PenaltyDeductionController::class, 'show']);
+    Route::put('penalties/update/{id}', [PenaltyDeductionController::class, 'save']);
+    Route::delete('penalties/delete/{id}', [PenaltyDeductionController::class, 'destroy']);
+    Route::post('penalties/restore/{id}', [PenaltyDeductionController::class, 'restore']);
+    // Delays Deductions
+    Route::get('delays/', [DelayDeductionController::class, 'index']);
+    Route::post('delays/store', [DelayDeductionController::class, 'save']);
+    Route::get('delays/{id}', [DelayDeductionController::class, 'show']);
+    Route::put('delays/update/{id}', [DelayDeductionController::class, 'save']);
+    Route::delete('delays/delete/{id}', [DelayDeductionController::class, 'destroy']);
+    Route::post('delays/restore/{id}', [DelayDeductionController::class, 'restore']);
 });

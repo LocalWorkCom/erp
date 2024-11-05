@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PenaltyDeductionResource;
 use App\Models\PenaltyDeduction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PenaltyDeductionController extends Controller
 {
@@ -13,8 +14,10 @@ class PenaltyDeductionController extends Controller
 
     public function __construct(Request $request)
     {
-//        dd('hello');
         $this->lang = $request->header('lang', 'ar');
+        if (!CheckToken()) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
 
     }
 
@@ -23,18 +26,25 @@ class PenaltyDeductionController extends Controller
      */
     public function index()
     {
-        dd('hello');
-        $deductions = PenaltyDeduction::all();
-
-        return ResponseWithSuccessData($this->lang, $deductions, 1);
+        $deductions = PenaltyDeduction::with(['penalty.employee','penalty.reason'])->get();
+        return ResponseWithSuccessData($this->lang, PenaltyDeductionResource::collection($deductions), 1);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function save(Request $request, string $id = null)
     {
-        //
+        $data = $request->validate([
+            'penalty_id' => 'required|numeric|exists:penalties,id',
+            'deduction_amount' => 'required|numeric',
+        ]);
+        $id == null ? $data['created_by'] =Auth::guard('api')->user()->id
+            : $data['modified_by'] =Auth::guard('api')->user()->id;
+
+        $deduction = PenaltyDeduction::updateOrCreate(['id' => $id], $data);
+
+        return ResponseWithSuccessData($this->lang, PenaltyDeductionResource::make($deduction), 1);
     }
 
     /**
@@ -42,15 +52,12 @@ class PenaltyDeductionController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
+        $data = PenaltyDeduction::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        if (!$data) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+        return ResponseWithSuccessData($this->lang, PenaltyDeductionResource::make($data), 1);
     }
 
     /**
@@ -58,6 +65,29 @@ class PenaltyDeductionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = PenaltyDeduction::find($id);
+
+        if (!$data) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+        $data->deleted_by = Auth::guard('api')->user()->id;
+        $data->save();
+        $data->delete();
+
+        return ResponseWithSuccessData($this->lang, PenaltyDeductionResource::make($data), 1);
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     */
+    public function restore(string $id)
+    {
+        $data = PenaltyDeduction::withTrashed()->find($id);
+
+        if (!$data) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+        $data->restore();
+        return ResponseWithSuccessData($this->lang, PenaltyDeductionResource::make($data), 1);
     }
 }
