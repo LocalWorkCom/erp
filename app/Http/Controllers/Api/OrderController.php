@@ -11,6 +11,7 @@ use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
 use App\Models\RecipeAddon;
 use App\Models\DishAddon;
+use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -147,7 +148,7 @@ class OrderController extends Controller
         if ($DataOrderDetails->count()) {
 
             foreach ($DataOrderDetails as $DataOrderDetail) {
-                $Dish = Dish::find($DataOrderDetail['dish_id']);
+                $Dish = Menu::where('dish_id',$DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
                 if ($Dish) {
                     $total = $Dish->price;
                 }

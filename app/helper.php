@@ -425,6 +425,14 @@ function applyDiscount($total_price, $discount)
     }
     return $total_price;
 }
+function calcDiscount($total_price, $discount)
+{
+    if ($discount->type == 'fixed') {
+        return  $discount->value;
+    } else {
+        return ($total_price * ($discount->value / 100));
+    }
+}
 // Function to apply tax
 function applyTax($total_price, $tax_percentage, $tax_application)
 {
@@ -516,4 +524,28 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
     }
 
     return $redeem_total;
+}
+
+function get_by_md5_id($id, $table)
+{
+    // Hash the input ID with MD5
+    $hashedId = md5($id);
+
+    // Query the specified table where the MD5 hash of the ID column matches the hashed ID
+    return DB::table($table)
+        ->where(DB::raw('MD5(id)'), $hashedId)
+        ->first();
+}
+
+function einvoice_settings($key)
+{
+    $setting = DB::table('einvoice_settings')->where('key', $key)->value('value');
+
+    return $setting ?? null;
+}
+
+function helper_update_by_id(array $data, $id, $table)
+{
+    // Update the specified table with the data, where the ID matches
+    return DB::table($table)->where('id', $id)->update($data);
 }
