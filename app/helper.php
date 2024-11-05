@@ -618,6 +618,7 @@ function getProductPrice($product_id, $store_id, $unit_id)
 function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
 {
     $sum_orders = 0;
+    $branch_id = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
     if($cashier_machine_details){
         if($cashier_machine_details->branches){
@@ -626,13 +627,22 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     }
 
     $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
-    if($branch_id){
-        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->sum('total_price_after_tax');
+    if($branch_id != 0){
+        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
         if($orders_totals)
         foreach($orders_totals as $orders_total){
-            $orders_total = OrderTransaction::where('order_id', $orders_total->order_id)->where('order_type', 'order')->where('payment_status', $payment_method)->first();
-            $sum_orders += $orders_total->paid;
+            if($orders_total){
+                $orders_total = OrderTransaction::where('order_id', $orders_total->id)->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
+                if($orders_total){
+                    $sum_orders += $orders_total->paid;
+                }
+            }
         }
     }
     return $sum_orders;
+}
+
+function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
+    $remaining_amount = ($close_amount - $open_amount);
+    return ($remaining_amount - $real_amount);
 }
