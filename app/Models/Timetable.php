@@ -22,6 +22,7 @@ class Timetable extends Model
         'end_sign_out',
         'lateness_grace_period',
         'start_late_time_option',
+        'cross_day',
         'created_by',
         'modified_by',
         'deleted_by',

@@ -102,7 +102,7 @@ class EmployeeScheduleController extends Controller
             $schedule->update(['deleted_by' => Auth::id()]);
             $schedule->delete();
 
-            return ResponseWithSuccessData($lang, null, 'Employee schedule deleted successfully.');
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting employee schedule: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -117,7 +117,7 @@ class EmployeeScheduleController extends Controller
             $schedule = EmployeeSchedule::onlyTrashed()->findOrFail($id);
             $schedule->restore();
 
-            return ResponseWithSuccessData($lang, $schedule->load('employee', 'shift.details.timetable'), 'Employee schedule restored successfully.');
+            return ResponseWithSuccessData($lang, $schedule->load('employee', 'shift.details.timetable'), 1);
         } catch (\Exception $e) {
             Log::error('Error restoring employee schedule: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
