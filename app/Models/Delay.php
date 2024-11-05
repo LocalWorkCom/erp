@@ -26,9 +26,9 @@ class Delay extends Model
     ];
 
     public function time(){
-        return $this->belongsTo(DelayTime::class, 'time_id');
+        return $this->belongsTo(DelayTime::class, 'time_id')->withTrashed();
     }
     public function employee(){
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id')->withTrashed();
     }
 }
