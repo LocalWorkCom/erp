@@ -11,6 +11,7 @@ class Employee extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'employee_code',
         'first_name',
         'last_name',
@@ -49,6 +50,11 @@ class Employee extends Model
     ];
 
     // Relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function department()
     {
         return $this->belongsTo(Department::class);
