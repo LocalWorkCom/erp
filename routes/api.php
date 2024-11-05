@@ -1,10 +1,22 @@
 <?php
 
+use App\Http\Controllers\Api\AdvanceController;
+use App\Http\Controllers\Api\AdvanceRequestController;
+use App\Http\Controllers\Api\AdvanceSettingController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CategoryInventoryController;
 use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\DelayController;
+use App\Http\Controllers\Api\DelayTimeController;
+use App\Http\Controllers\Api\FacebookAuthController;
+use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Api\PenaltyController;
+use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProductInventoryController;
+use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ApiCodeController;
 use App\Http\Controllers\Api\ProductColorController;
@@ -13,6 +25,7 @@ use App\Http\Controllers\Api\ProductTransactionController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\StoreTransactionController;
 use Illuminate\Http\Request;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\AuthController;
@@ -165,6 +178,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('store', [CategoryController::class, 'store']);
         Route::post('update/{id}', [CategoryController::class, 'update']);
         Route::get('delete/{id}', [CategoryController::class, 'delete']);
+        Route::get('{id}/inventory', [CategoryInventoryController::class, 'getInventory']);
     });
 
     Route::group(['prefix' => 'product'], function () {
@@ -184,6 +198,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('color/store', [ProductColorController::class, 'store']);
         Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
+        Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
     });
 
     Route::group(['prefix' => 'order'], function () {
@@ -237,6 +252,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('updateStore/{id}', [StoreController::class, 'update']);
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
         Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
+        Route::get('{id}/inventory', [StoreInventoryController::class, 'getInventory']);
+
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
@@ -414,7 +431,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('delete/{id}', [OvertimeTypeController::class, 'delete']);
     });
 
-    //overtime-setting
+    //OvertimeSetting
     Route::group(['prefix' => 'overtime-setting'], function () {
         Route::get('index', [OvertimeSettingController::class, 'index']);
         Route::post('add', [OvertimeSettingController::class, 'add']);
@@ -472,7 +489,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
     // Excuse Settings Routes
     Route::prefix('excuse-settings')->group(function () {
         Route::get('/show', [ExcuseSettingController::class, 'show'])->name('excuse-settings.show');
-        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');  
+        Route::put('/update', [ExcuseSettingController::class, 'update'])->name('excuse-settings.update');
     });
 
     //floors
@@ -542,12 +559,12 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
 
     Route::prefix('menu')->group(function () {
-        Route::get('/list', [MenuController::class, 'index'])->name('menu.index');                    
-        Route::get('/show/{branch_id}', [MenuController::class, 'show'])->name('menu.show');           
-        Route::post('/create', [MenuController::class, 'store'])->name('menu.store');     //clone menu            
+        Route::get('/list', [MenuController::class, 'index'])->name('menu.index');
+        Route::get('/show/{branch_id}', [MenuController::class, 'show'])->name('menu.show');
+        Route::post('/create', [MenuController::class, 'store'])->name('menu.store');     //clone menu
         Route::put('/update/{branch_id}', [MenuController::class, 'update'])->name('menu.update');
-        Route::delete('/delete', [MenuController::class, 'destroy'])->name('menu.destroy');            
-        Route::post('/restore', [MenuController::class, 'restore'])->name('menu.restore');  
+        Route::delete('/delete', [MenuController::class, 'destroy'])->name('menu.destroy');
+        Route::post('/restore', [MenuController::class, 'restore'])->name('menu.restore');
     });
 
     Route::prefix('timetables')->group(function () {
@@ -579,4 +596,74 @@ Route::group(["middleware" => ["auth:api"]], function () {
     
     
 
+});
+
+
+Route::group(['prefix' => 'penalties'], function () {
+    // Penalty reasons
+    Route::get('reasons/', [PenaltyReasonController::class, 'index']);
+    Route::post('reasons/store', [PenaltyReasonController::class, 'store']);
+    Route::get('reasons/{id}', [PenaltyReasonController::class, 'show']);
+    Route::put('reasons/update/{id}', [PenaltyReasonController::class, 'update']);
+    Route::delete('reasons/delete/{id}', [PenaltyReasonController::class, 'destroy']);
+    Route::post('reasons/restore/{id}', [PenaltyReasonController::class, 'restore']);
+    // Penalties
+    Route::get('/', [PenaltyController::class, 'index']);
+    Route::post('/store', [PenaltyController::class, 'store']);
+    Route::get('/{id}', [PenaltyController::class, 'show']);
+    Route::put('/update/{id}', [PenaltyController::class, 'update']);
+    Route::delete('/delete/{id}', [PenaltyController::class, 'destroy']);
+    Route::post('/restore/{id}', [PenaltyController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'delays'], function () {
+    // Delay times
+    Route::get('times/', [DelayTimeController::class, 'index']);
+    Route::post('times/store', [DelayTimeController::class, 'store']);
+    Route::get('times/{id}', [DelayTimeController::class, 'show']);
+    Route::put('times/update/{id}', [DelayTimeController::class, 'update']);
+    Route::delete('times/delete/{id}', [DelayTimeController::class, 'destroy']);
+    Route::post('times/restore/{id}', [DelayTimeController::class, 'restore']);
+    // Delays
+    Route::get('/', [DelayController::class, 'index']);
+    Route::post('/store', [DelayController::class, 'store']);
+    Route::get('/{id}', [DelayController::class, 'show']);
+    Route::put('/update/{id}', [DelayController::class, 'update']);
+    Route::delete('/delete/{id}', [DelayController::class, 'destroy']);
+    Route::post('/restore/{id}', [DelayController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'advances'], function () {
+    // Advance Settings
+    Route::get('settings/', [AdvanceSettingController::class, 'index']);
+    Route::post('settings/store', [AdvanceSettingController::class, 'store']);
+    Route::get('settings/{id}', [AdvanceSettingController::class, 'show']);
+    Route::put('settings/update/{id}', [AdvanceSettingController::class, 'update']);
+    Route::delete('settings/delete/{id}', [AdvanceSettingController::class, 'destroy']);
+    Route::post('settings/restore/{id}', [AdvanceSettingController::class, 'restore']);
+    // Advance Requests
+    Route::get('requests/', [AdvanceRequestController::class, 'index']);
+    Route::post('requests/store', [AdvanceRequestController::class, 'save']);
+    Route::get('requests/{id}', [AdvanceRequestController::class, 'show']);
+    Route::put('requests/update/{id}', [AdvanceRequestController::class, 'save']);
+    Route::delete('requests/delete/{id}', [AdvanceRequestController::class, 'destroy']);
+    Route::post('requests/restore/{id}', [AdvanceRequestController::class, 'restore']);
+    // Advance
+    Route::get('/', [AdvanceController::class, 'index']);
+    Route::post('/store', [AdvanceController::class, 'save']);
+    Route::get('/{id}', [AdvanceController::class, 'show']);
+    Route::put('/update/{id}', [AdvanceController::class, 'save']);
+    Route::delete('/delete/{id}', [AdvanceController::class, 'destroy']);
+    Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
+});
+
+
+
+Route::middleware([StartSession::class])->group(function () {
+    // Google Auth
+    Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+    Route::get('/auth/google/call-back', [GoogleAuthController::class, 'callback'])->name('google.callback');
+    // Facebook Auth
+    Route::get('/auth/facebook/redirect', [FacebookAuthController::class, 'redirect'])->name('facebook.redirect');
+    Route::get('/auth/facebook/call-back', [FacebookAuthController::class, 'callback'])->name('facebook.callback');
 });
