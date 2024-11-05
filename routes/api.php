@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DelayController;
 use App\Http\Controllers\Api\DelayTimeController;
 use App\Http\Controllers\Api\FacebookAuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
@@ -558,7 +559,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('close-day-balance', [EmployeeOpeningBalanceController::class, 'close_day_balance']);
         Route::post('edit', [EmployeeOpeningBalanceController::class, 'edit']);
         Route::get('delete/{id}', [EmployeeOpeningBalanceController::class, 'delete']);
-        
+
     });
 
     Route::prefix('menu')->group(function () {
@@ -686,3 +687,14 @@ Route::group(['prefix' => 'deductions'], function () {
     Route::delete('delays/delete/{id}', [DelayDeductionController::class, 'destroy']);
     Route::post('delays/restore/{id}', [DelayDeductionController::class, 'restore']);
 });
+
+//Payroll
+Route::group(['prefix' => 'payroll'], function () {
+    Route::get('/', [PayrollController::class, 'index']);
+    Route::post('/store', [PayrollController::class, 'save']);
+    Route::get('/{id}', [PayrollController::class, 'show']);
+    Route::put('/update/{id}', [PayrollController::class, 'save']);
+    Route::delete('/delete/{id}', [PayrollController::class, 'destroy']);
+    Route::post('/restore/{id}', [PayrollController::class, 'restore']);
+});
+
