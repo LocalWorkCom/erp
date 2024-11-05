@@ -12,6 +12,8 @@ use App\Models\Discount;
 use App\Models\pointTransaction;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\CashierMachine;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -516,4 +518,21 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
     }
 
     return $redeem_total;
+}
+
+function CalculateTotalOrders($cashier_machine_id, $employee_id, $date)
+{
+    $cashier_machine_details = CashierMachine::find($cashier_machine_id);
+    if($cashier_machine_details){
+        if($cashier_machine_details->branches){
+            $branch_id = $cashier_machine_details->branches->id;
+        }
+    }
+
+    if($branch_id){
+        $get_orders = Order::where('id', $branch_id)->where('date', $date)->get();
+        if($get_orders){
+
+        }
+    }
 }

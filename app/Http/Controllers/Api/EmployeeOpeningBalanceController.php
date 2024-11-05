@@ -62,7 +62,7 @@ class EmployeeOpeningBalanceController extends Controller
 
     public function close_day_balance(Request $request)
     {
-        try {
+        //try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'cashier_machine_id' => 'required|integer|exists:cashier_machines,id',
@@ -75,23 +75,28 @@ class EmployeeOpeningBalanceController extends Controller
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
+
             $employee_opening_balance = EmployeeOpeningBalance::where('cashier_machine_id', $request->cashier_machine_id)->where('date', $request->date)->where('type', 1)->first();
             if(!$employee_opening_balance){
                 return RespondWithBadRequestData($lang, 2);
             }
+
+            return CalculateTotalOrders($employee_opening_balance->cashier_machine_id, $employee_opening_balance->employee_id, $employee_opening_balance->date);
 
             $user_id = Auth::guard('api')->user()->id;
             $employee_opening_balance->close_cash = $request->close_cash;
             $employee_opening_balance->close_visa = $request->close_visa;
             $employee_opening_balance->type = 2;
             $employee_opening_balance->modified_by = $user_id;
-            $employee_opening_balance->save();
+            //$employee_opening_balance->save();
 
             return ResponseWithSuccessData($lang, $employee_opening_balance, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($lang, 2);
+        // }
     }
+
+    
 
     public function edit(Request $request)
     {
