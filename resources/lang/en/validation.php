@@ -80,5 +80,6 @@ return [
     'NotAddMoreMessage' => 'It cannot be add more than that',
     'NotAvailable' => 'It cannot be add',
     'NotAvailableMessage' => 'It cannot be add is not available',
+    'NotClosingMessage' => 'It cannot be add, You have deficit ... Please fix it',
 
 ];
