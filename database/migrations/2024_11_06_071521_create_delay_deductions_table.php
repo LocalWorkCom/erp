@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penalty_deductions', function (Blueprint $table) {
+        Schema::create('delay_deductions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('penalty_id')->constrained('penalties');
+            $table->foreignId('delay_id')->constrained('delays');
+            $table->foreignId('employee_id')->constrained('employees');
             $table->decimal('deduction_amount', 8, 2)->default(0);
             $table->foreignId('created_by')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('modified_by')->nullable()->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('penalty_deductions');
+        Schema::dropIfExists('delay_deductions');
     }
 };

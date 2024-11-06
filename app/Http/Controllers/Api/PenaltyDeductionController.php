@@ -37,6 +37,7 @@ class PenaltyDeductionController extends Controller
     {
         $data = $request->validate([
             'penalty_id' => 'required|numeric|exists:penalties,id',
+            'employee_id' => 'required|numeric|exists:employees,id',
             'deduction_amount' => 'required|numeric',
         ]);
         $id == null ? $data['created_by'] =Auth::guard('api')->user()->id
