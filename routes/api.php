@@ -75,9 +75,9 @@ use App\Http\Controllers\Api\ShiftController;
 use App\Http\Controllers\Api\EmployeeScheduleController;
 use App\Http\Controllers\Api\EmployeeOpeningBalanceController;
 use App\Http\Controllers\Api\CashierMachineController;
-
 use App\Http\Controllers\Api\GiftController;
 use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\EmployeeController;
 
 
 /*
@@ -597,6 +597,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [EmployeeScheduleController::class, 'destroy'])->name('employee-schedules.destroy');
         Route::post('/restore/{id}', [EmployeeScheduleController::class, 'restore'])->name('employee-schedules.restore');
     });
+    
+    Route::prefix('employees')->group(function () {
+        Route::get('/list', [EmployeeController::class, 'index'])->name('employees.index');
+        Route::get('/show/{id}', [EmployeeController::class, 'show'])->name('employees.show');
+        Route::post('/create', [EmployeeController::class, 'store'])->name('employees.store');
+        Route::put('/update/{id}', [EmployeeController::class, 'update'])->name('employees.update');
+        Route::delete('/delete/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+        Route::post('/restore/{id}', [EmployeeController::class, 'restore'])->name('employees.restore');
+    });
 
 
 
@@ -660,6 +669,10 @@ Route::group(['prefix' => 'advances'], function () {
     Route::delete('/delete/{id}', [AdvanceController::class, 'destroy']);
     Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
 });
+
+
+
+
 
 // Google and Facebook auth
 Route::middleware([StartSession::class])->group(function () {

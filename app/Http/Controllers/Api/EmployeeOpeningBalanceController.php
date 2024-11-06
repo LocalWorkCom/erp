@@ -63,7 +63,7 @@ class EmployeeOpeningBalanceController extends Controller
 
     public function close_day_balance(Request $request)
     {
-        try {
+        //try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'cashier_machine_id' => 'required|integer|exists:cashier_machines,id',
@@ -82,10 +82,29 @@ class EmployeeOpeningBalanceController extends Controller
                 return RespondWithBadRequestData($lang, 2);
             }
 
+            $deficit_cash = 0;
+            $deficit_visa = 0;            
             $order_real_total_cash = CalculateTotalOrders($employee_opening_balance->cashier_machine_id, $employee_opening_balance->employee_id, $employee_opening_balance->date, 'cash');
             $order_real_total_visa = CalculateTotalOrders($employee_opening_balance->cashier_machine_id, $employee_opening_balance->employee_id, $employee_opening_balance->date, 'credit_card');
-            $deficit_cash = $request->close_cash - $order_real_total_cash;
-            $deficit_visa = $request->close_visa - $order_real_total_visa;
+
+            $deficit_cash = CalculateDeficitOrder($employee_opening_balance->open_cash, $request->close_cash, $order_real_total_cash);
+            $deficit_visa = CalculateDeficitOrder($employee_opening_balance->open_visa, $request->close_visa, $order_real_total_visa);
+                        
+            if($deficit_cash > 0){
+                $deficit_cash_type = "plus";
+            }elseif($deficit_cash < 0){
+                $deficit_cash_type = "minus";
+            }else{
+                $deficit_cash_type = "none";
+            }
+            
+            if($deficit_visa > 0){
+                $deficit_visa_type = "plus";
+            }elseif($deficit_visa < 0){
+                $deficit_visa_type = "plus";
+            }else{
+                $deficit_visa_type = "none";
+            }
 
             $user_id = Auth::guard('api')->user()->id;
             $employee_opening_balance->close_cash = $request->close_cash;
@@ -94,14 +113,16 @@ class EmployeeOpeningBalanceController extends Controller
             $employee_opening_balance->real_visa = $order_real_total_visa;
             $employee_opening_balance->deficit_cash = $deficit_cash;
             $employee_opening_balance->deficit_visa = $deficit_visa;
+            $employee_opening_balance->deficit_cash_type = $deficit_cash_type;
+            $employee_opening_balance->deficit_visa_type = $deficit_visa_type;
             $employee_opening_balance->type = 2;
             $employee_opening_balance->modified_by = $user_id;
             $employee_opening_balance->save();
 
             return ResponseWithSuccessData($lang, $employee_opening_balance, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($lang, 2);
+        // }
     }
 
     public function edit(Request $request)
