@@ -45,6 +45,7 @@ class APICodeTableSeeder extends Seeder
             ['code' => '31', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'حدث خطأ', 'api_code_message_en' =>  "Expiration date must be after the creation date.", 'api_code_message_ar' => "تاريخ الانتهاء يجب ان يكون بعد تاريخ الانشاء"],
             ['code' => '32', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Gift applied successfully to specified users.", 'api_code_message_ar' => "تم تعيين الهدية للمستخدمين المحددين"],
             ['code' => '33', 'api_code_title_en' => "Success", 'api_code_title_ar' => 'صحيح', 'api_code_message_en' =>  "Gift applied successfully to users in specified branch.", 'api_code_message_ar' => "تم تعيين الهدية للمستخدمين التابعين للفرع المحدد"],
+            ['code' => '34', 'api_code_title_en' => "Failed", 'api_code_title_ar' => 'عفوا', 'api_code_message_en' =>  "Order Can't cancel after now.", 'api_code_message_ar' => "لا يمكن الغاء الطلب بعد الان"],
         ];
 
         DB::table('apicodes')->insert($sizes);

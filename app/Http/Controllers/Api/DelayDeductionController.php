@@ -36,6 +36,7 @@ class DelayDeductionController extends Controller
     {
         $data = $request->validate([
             'delay_id' => 'required|numeric|exists:delays,id',
+            'employee_id' => 'required|numeric|exists:employees,id',
             'deduction_amount' => 'required|numeric',
         ]);
         $id == null ? $data['created_by'] =Auth::guard('api')->user()->id

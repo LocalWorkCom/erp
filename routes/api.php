@@ -698,10 +698,11 @@ Route::group(['prefix' => 'deductions'], function () {
 });
 
 //Payroll
-Route::group(['prefix' => 'payroll'], function () {
+Route::group(['prefix' => 'payrolls'], function () {
     Route::get('/', [PayrollController::class, 'index']);
     Route::post('/store', [PayrollController::class, 'save']);
     Route::get('/{id}', [PayrollController::class, 'show']);
+    Route::get('employee/{id}', [PayrollController::class, 'showEmployee']);
     Route::put('/update/{id}', [PayrollController::class, 'save']);
     Route::delete('/delete/{id}', [PayrollController::class, 'destroy']);
     Route::post('/restore/{id}', [PayrollController::class, 'restore']);

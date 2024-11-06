@@ -19,5 +19,6 @@ class Setting extends Model
         'withdrawal_store',
         'reservation_time',
         'reservation_time_type',
+        'time_cancellation'
     ];
 }

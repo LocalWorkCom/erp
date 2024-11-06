@@ -84,4 +84,13 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+
+    public function penalties()
+    {
+        $this->hasMany(Penalty::class);
+    }
+    public function delays()
+    {
+        $this->hasMany(Delay::class);
+    }
 }

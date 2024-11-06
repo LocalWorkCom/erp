@@ -628,7 +628,6 @@ function getProductPrice($product_id, $store_id, $unit_id)
             ->where('product_id', $product_id)
             ->where('unit_id', $unit_id)
             ->where('store_id', $store_id)->orderby('id', 'desc')->first()->price;
-
     }
     return $price;
 }
@@ -637,14 +636,15 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     $sum_orders = 0;
     $branch_id = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
-    if($cashier_machine_details){
-        if($cashier_machine_details->branches){
+    if ($cashier_machine_details) {
+        if ($cashier_machine_details->branches) {
             $branch_id = $cashier_machine_details->branches->id;
         }
     }
 
 
     $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
+<<<<<<< HEAD
     if($branch_id != 0){
         if($employee_time['data']['cross_day'] == 0){
             $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
@@ -661,14 +661,35 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
                 $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
                 if($orders_tot){
                     $sum_orders += $orders_tot->paid;
+=======
+    if ($branch_id != 0) {
+        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
+        if ($orders_totals)
+            foreach ($orders_totals as $orders_total) {
+                if ($orders_total) {
+                    $orders_total = OrderTransaction::where('order_id', $orders_total->id)->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
+                    if ($orders_total) {
+                        $sum_orders += $orders_total->paid;
+                    }
+>>>>>>> dd95cab9d51fcc4d84d2d36d1c4700ff610dac5e
                 }
             }
-        }
     }
     return $sum_orders;
 }
 
-function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
+function CalculateDeficitOrder($open_amount = 0, $close_amount = 0, $real_amount = 0)
+{
     $remaining_amount = ($close_amount - $open_amount);
     return ($remaining_amount - $real_amount);
+}
+function CheckExistOrder($client_id)
+{
+    $Order = Order::where('client_id', $client_id)->where('status', 'open')->fisrt();
+    return $Order;
+}
+function CheckOrderPaid($order_id)
+{
+
+    return  OrderTransaction::where('order_id', $order_id)->exists();
 }

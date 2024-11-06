@@ -12,6 +12,7 @@ class PenaltyDeduction extends Model
 
     protected $fillable = [
         'penalty_id',
+        'employee_id',
         'deduction_amount',
         'created_by',
         'modified_by',

@@ -23,7 +23,7 @@ class DelayDeductionResource extends JsonResource
         $punishment = $lang == 'ar' ? $this->delay->time->punishment_ar : $this->delay->time->punishment_en;
         return [
             'id'=>$this->id,
-            'employee_id'=>$this->delay->employee->id,
+            'employee_id'=>$this->employee_id,
             'employee_name'=>$this->delay->employee->first_name.' '.$this->delay->employee->last_name,
             'delay_id'=>$this->delay_id,
             'delay_time'=> $this->delay->time->time.' '.$type,
