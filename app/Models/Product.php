@@ -12,13 +12,10 @@ class Product extends Model
 
     // Table associated with the model
     protected $table = 'products';
+    protected $appends = ['name', 'image','description'];
 
     // The attributes that are mass assignable
     protected $fillable = [
-        'name_ar',
-        'name_en',
-        'description_ar',
-        'description_en',
         'main_image',
         'type',
         'main_unit_id',
@@ -29,20 +26,42 @@ class Product extends Model
         'barcode',
         'code',
         'limit_quantity',
-        'is_remind'
+        'is_remind',
+        'name_ar',
+        'name_en',
+        'description_ar',
+        'description_en',
     ];
 
     protected $hidden = [
+        'name_ar',
+        'name_en',
+        'description_ar',
+        'description_en',
         'created_by',
         'deleted_by',
         'created_at',
         'updated_at',
         'modify_by',
         'deleted_at',
+        'main_image',
+
 
 
     ];
 
+    public function getNameAttribute($value)
+    {
+        return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
+    }
+    public function getDescriptionAttribute($value)
+    {
+        return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
+    }
+    public function getImageAttribute($value)
+    {
+        return BaseUrl() . '/' . $this->main_image;
+    }
     // The attributes that should be cast to native types
     protected $casts = [
         'is_have_expired' => 'boolean',

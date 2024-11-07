@@ -370,17 +370,17 @@ class OrderController extends Controller
 
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
-        // if (Auth::guard('api')->user()->flag == 0) {
-        //     return RespondWithBadRequest($lang, 5);
-        // } else {
-        //     $UserType =  CheckUserType();
-        //     $client_id = Auth::guard('api')->user()->id;
-        //     if ($UserType != '') {
-        //         $unknown_user = User::where('flag', $UserType)->first()->id;
-        //         $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
-        //     }
-        //     $created_by = Auth::guard('api')->user()->id;
-        // }
+        if (Auth::guard('api')->user()->flag == 0) {
+            return RespondWithBadRequest($lang, 5);
+        } else {
+            $UserType =  CheckUserType();
+            $client_id = Auth::guard('api')->user()->id;
+            if ($UserType != '') {
+                $unknown_user = User::where('flag', $UserType)->first()->id;
+                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
+            }
+            $created_by = Auth::guard('api')->user()->id;
+        }
         $cancel_time = getSetting('time_cancellation');
 
         $validator = Validator::make($request->all(), [
@@ -394,7 +394,7 @@ class OrderController extends Controller
         $order = Order::find($request->order_id);
         $minutesDifference = $order->created_at->diffInMinutes(Carbon::now());
 
-        if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id)) {
+        if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id) && $created_by == $order->created_by) {
             $order->status = 'cancelled';
             $order->save();
         } else {

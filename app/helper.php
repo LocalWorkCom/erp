@@ -536,12 +536,8 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
 
 function get_by_md5_id($id, $table)
 {
-    // Hash the input ID with MD5
-    $hashedId = md5($id);
-
-    // Query the specified table where the MD5 hash of the ID column matches the hashed ID
     return DB::table($table)
-        ->where(DB::raw('MD5(id)'), $hashedId)
+        ->where(DB::raw('MD5(id)'), $id)
         ->first();
 }
 
