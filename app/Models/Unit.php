@@ -27,11 +27,19 @@ class Unit extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'name_ar',
+        'name_en',
 
     ];
     public function creatorby()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+    public function getNameAttribute($value)
+    {
+        return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
+    }
+
+  
     // Optionally, you can define other model properties or methods here
 }

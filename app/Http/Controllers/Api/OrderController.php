@@ -26,6 +26,8 @@ use Illuminate\Support\Str;
 use App\Models\OrderProduct;
 use App\Models\ProductUnit;
 use App\Models\Store;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Redis;
 
 class OrderController extends Controller
 {
@@ -143,23 +145,38 @@ class OrderController extends Controller
             $delivery_fees = scopeNearest($IDBranch, $client_address->latitude, $client_address->longtitude)->price;
         }
 
-        //order
-        $Order = new Order();
-        $Order->date = date('Y-m-d');
-        $Order->time = date('H:i:s');
-        $Order->type = $request->type;
-        $Order->note = $request->note;
-        $Order->delivery_fees = $delivery_fees;
-        $Order->fees = $service_fees;
-        $Order->table_id = $request->table_id ?? null;
-        $Order->client_id = $client_id;
-        $Order->discount_id = ($discount) ? $discount->id : null;
-        $Order->branch_id = $IDBranch;
-        $Order->coupon_id = ($coupon) ? $coupon->id : null;
-        $Order->created_by = $created_by;
-        $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
-        $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
-        $Order->save();
+
+        // this based on type of user >> if it not client 
+        if ($request->type == 'Online') {
+            $status = 'cart';
+        } else if ($request->type == 'Delivery' || $request->type == 'CallCenter' || $request->type == 'InResturant') {
+
+            $status = 'open';
+        } else {
+            $status = 'pending'; //takeaway
+        }
+        if (!CheckExistOrder($client_id)) {
+
+            //order
+            $Order = new Order();
+            $Order->date = date('Y-m-d');
+            $Order->time = date('H:i:s');
+            $Order->type = $request->type;
+            $Order->note = $request->note;
+            $Order->delivery_fees = $delivery_fees;
+            $Order->fees = $service_fees;
+            $Order->table_id = $request->table_id ?? null;
+            $Order->client_id = $client_id;
+            $Order->discount_id = ($discount) ? $discount->id : null;
+            $Order->branch_id = $IDBranch;
+            $Order->coupon_id = ($coupon) ? $coupon->id : null;
+            $Order->created_by = $created_by;
+            $Order->order_number = "#" . rand(1111, 9999); // Generate a new number if it exists
+            $Order->invoice_number = "INV-" . GetNextID("orders") . "-" . rand(1111, 9999); // Generate a new number if it exists
+            $Order->save();
+        } else {
+            $Order = CheckExistOrder($client_id);
+        }
 
 
         if ($DataOrderDetails->count()) {
@@ -291,6 +308,15 @@ class OrderController extends Controller
         $OrderTracking->created_by = $created_by;
         $OrderTracking->save();
 
+        if ($status == 'pending' && $request->type == 'Takeaway') {
+            $OrderTracking = new OrderTracking();
+            $OrderTracking->order_id = $Order->id;
+            $OrderTracking->created_by = $created_by;
+            $OrderTracking->order_status = 'in_progress';
+            $OrderTracking->save();
+        }
+
+
         $transactionId = Str::uuid()->toString();
         $points_num = 0;
         if ($request->payment_method != 'cash') {
@@ -309,7 +335,7 @@ class OrderController extends Controller
             if ($paid >= $Order->total_price_after_tax) {
                 $done = true;
             }
-            if ($order_transaction && $done) {
+            if ($order_transaction && $done && $request->type != 'Takeaway') {
                 $order_transaction->payment_status = "paid";
                 $order_tracking = new OrderTracking();
                 $order_tracking->order_id = $Order->id;
@@ -338,5 +364,42 @@ class OrderController extends Controller
         // Update the payment status based on the paid amount
 
         return ResponseWithSuccessData($lang, $order, 1);
+    }
+    public function cancel_order(Request $request)
+    {
+
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+        if (Auth::guard('api')->user()->flag == 0) {
+            return RespondWithBadRequest($lang, 5);
+        } else {
+            $UserType =  CheckUserType();
+            $client_id = Auth::guard('api')->user()->id;
+            if ($UserType != '') {
+                $unknown_user = User::where('flag', $UserType)->first()->id;
+                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
+            }
+            $created_by = Auth::guard('api')->user()->id;
+        }
+        $cancel_time = getSetting('time_cancellation');
+
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required|exists:orders,id', // Optional but must exist in the 'coupons' table
+        ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
+        $order = Order::find($request->order_id);
+        $minutesDifference = $order->created_at->diffInMinutes(Carbon::now());
+
+        if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id) && $created_by == $order->created_by) {
+            $order->status = 'cancelled';
+            $order->save();
+        } else {
+            return RespondWithBadRequest($lang, 34);
+        }
+        return RespondWithSuccessRequest($lang, 1);
     }
 }

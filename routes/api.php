@@ -556,12 +556,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
     //employee-opening-balances
     Route::group(['prefix' => 'employee-opening-balances'], function () {
-        Route::get('index', [EmployeeOpeningBalanceController::class, 'index']);
         Route::post('open-day-balance', [EmployeeOpeningBalanceController::class, 'open_day_balance']);
         Route::post('close-day-balance', [EmployeeOpeningBalanceController::class, 'close_day_balance']);
-        Route::post('edit', [EmployeeOpeningBalanceController::class, 'edit']);
-        Route::get('delete/{id}', [EmployeeOpeningBalanceController::class, 'delete']);
-
     });
 
     Route::prefix('menu')->group(function () {

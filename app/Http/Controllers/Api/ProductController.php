@@ -38,40 +38,11 @@ class ProductController extends Controller
         if (!CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
-        // Define columns that need translation
-        $translateColumns = ['name', 'description']; // Add other columns as needed
 
-        // Define columns to remove (translated columns)
-        $columnsToRemove = array_map(function ($col) {
-            return [$col . '_ar', $col . '_en'];
-        }, $translateColumns);
-        $columnsToRemove = array_merge(...$columnsToRemove);
-
-        // Map categories to include translated columns and remove unnecessary columns
-        $products = $products->map(function ($category) use ($lang, $translateColumns, $columnsToRemove) {
-            // Convert category model to an array
-            $data = $category->toArray();
-
-            // Get translated data
-            $data = translateDataColumns($data, $lang, $translateColumns);
-
-            // Remove translated columns from data
-            $data = removeColumns($data, $columnsToRemove);
-
-            // Update main_image key by concatenating with base URL
-            if (isset($data['main_image']) && !empty($data['main_image'])) {
-                $data['main_image'] = BaseUrl() . '/' . $data['main_image'];
-            }
-            $product_images = ProductImage::where('product_id', $data['id'])->get();
-            foreach ($product_images as $key => $value) {
-                $value->image = BaseUrl() . '/' . $value->image;
-            }
-            $product_limits = ProductLimit::where('product_id', $data['id'])->get();
-
-            $data['product_images'] = $product_images;
-            $data['limits'] = $product_limits;
-            return $data;
-        });
+        foreach ($products as $product) {
+            $product_limits = ProductLimit::where('product_id', $product->id)->get();
+            $product['limits'] = $product_limits;
+        }
 
         return ResponseWithSuccessData($lang, $products, 1);
     }
@@ -124,8 +95,8 @@ class ProductController extends Controller
         if (!$brand) {
             return  RespondWithBadRequestData($lang, 8);
         }
-        
-        
+
+
         // Create a new product
         $product = new Product();
         $product->name_ar = $request->name_ar;
@@ -319,10 +290,10 @@ class ProductController extends Controller
                 File::delete($imagePath);
             }
         }
-        $ProductImages = ProductImage::where('product_id', $id)->delete();
-        $ProductSize = ProductSize::where('product_id', $id)->delete();
-        $ProductColor = ProductColor::where('product_id', $id)->delete();
-        $ProductUnit = ProductUnit::where('product_id', $id)->delete();
+        ProductImage::where('product_id', $id)->delete();
+        ProductSize::where('product_id', $id)->delete();
+        ProductColor::where('product_id', $id)->delete();
+        ProductUnit::where('product_id', $id)->delete();
 
         // Delete the category
         $product->delete();
