@@ -668,10 +668,6 @@ Route::group(['prefix' => 'advances'], function () {
     Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
 });
 
-
-
-
-
 // Google and Facebook auth
 Route::middleware([StartSession::class])->group(function () {
     // Google Auth
@@ -718,12 +714,15 @@ Route::group(['prefix' => 'offers'], function () {
     Route::put('/update/{id}', [OfferController::class, 'save']);
     Route::delete('/delete/{id}', [OfferController::class, 'destroy']);
     Route::post('/restore/{id}', [OfferController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'offer'], function () {
     //Offer details
-    Route::get('details/', [OfferDetailController::class, 'index']);
-    Route::post('details/store', [OfferDetailController::class, 'save']);
-    Route::get('details/{id}', [OfferDetailController::class, 'show']);
-    Route::put('details/update/{id}', [OfferDetailController::class, 'save']);
-    Route::delete('details/delete/{id}', [OfferDetailController::class, 'destroy']);
-    Route::post('details/restore/{id}', [OfferDetailController::class, 'restore']);
+    Route::get('/details/', [OfferDetailController::class, 'index']);
+    Route::post('/details/store', [OfferDetailController::class, 'save']);
+    Route::get('/details/{id}', [OfferDetailController::class, 'show']);
+    Route::put('/details/update/{id}', [OfferDetailController::class, 'save']);
+    Route::delete('/details/delete/{id}', [OfferDetailController::class, 'destroy']);
+    Route::post('/details/restore/{id}', [OfferDetailController::class, 'restore']);
 });
 
