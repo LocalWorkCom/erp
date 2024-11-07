@@ -28,13 +28,14 @@ class OfferResource extends JsonResource
             $is_active= $this->is_active == 0 ? 'غير فعال' : 'فعال';
         }
         return [
+            'id' => $this->id,
             'name' => $name,
             'description' => $description,
             'image' => $image,
             'is_active' => $is_active,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'details' => $this->details,
+            'details' => OfferDetailResource::collection($this->details),
         ];
     }
 }
