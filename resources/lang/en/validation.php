@@ -81,5 +81,6 @@ return [
     'NotAvailable' => 'It cannot be add',
     'NotAvailableMessage' => 'It cannot be add is not available',
     'NotClosingMessage' => 'It cannot be add, You have deficit ... Please fix it',
+    'NoLeaveMessage' => 'It cannot be add, You did not have leaves',
 
 ];
