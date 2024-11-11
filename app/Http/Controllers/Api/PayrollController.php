@@ -79,7 +79,7 @@ class PayrollController extends Controller
     }
     public function showEmployee(string $id)
     {
-        $data = Payroll::where('employee_id', $id)->orderBy('id', 'desc')->first();
+        $data = Payroll::where('employee_id', $id)->orderBy('id', 'desc')->first(); //return the last payroll
         if (!$data) {
             return RespondWithBadRequestData($this->lang, 2);
         }

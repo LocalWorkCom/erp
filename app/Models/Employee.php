@@ -87,10 +87,18 @@ class Employee extends Model
 
     public function penalties()
     {
-        $this->hasMany(Penalty::class);
+        return $this->hasMany(Penalty::class);
     }
     public function delays()
     {
-        $this->hasMany(Delay::class);
+        return $this->hasMany(Delay::class);
+    }
+    public function advances()
+    {
+        return $this->hasMany(Advance::class);
+    }
+    public function payrolls()
+    {
+        return $this->hasMany(Payroll::class);
     }
 }

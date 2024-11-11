@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DelayController;
 use App\Http\Controllers\Api\DelayTimeController;
 use App\Http\Controllers\Api\FacebookAuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Api\HrReportController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\OfferDetailController;
 use App\Http\Controllers\Api\PayrollController;
@@ -726,3 +727,17 @@ Route::group(['prefix' => 'offer'], function () {
     Route::post('/details/restore/{id}', [OfferDetailController::class, 'restore']);
 });
 
+Route::group(['prefix' => 'hr-reports'], function () {
+    Route::get('delays', [HrReportController::class, 'listDelaysReport']);
+    Route::get('delays/{id}', [HrReportController::class, 'employeeDelaysReport']);
+    Route::get('penalties', [HrReportController::class, 'listPenaltiesReport']);
+    Route::get('penalties/{id}', [HrReportController::class, 'employeePenaltiesReport']);
+    Route::get('advances', [HrReportController::class, 'listAdvancesReport']);
+    Route::get('advances/{id}', [HrReportController::class, 'employeeAdvancesReport']);
+    Route::get('payrolls', [HrReportController::class, 'listPayrollsReport']);
+    Route::get('payrolls/{id}', [HrReportController::class, 'employeePayrollsReport']); //return all payrolls
+    Route::get('payroll/{id}', [HrReportController::class, 'employeePayrollReport']); //return the last payroll
+    Route::get('employees/details', [HrReportController::class, 'listEmployeesReport']);
+    Route::get('employees/details/{id}', [HrReportController::class, 'employeeReport']);
+
+});
