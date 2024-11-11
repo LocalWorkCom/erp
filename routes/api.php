@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\DelayController;
 use App\Http\Controllers\Api\DelayTimeController;
 use App\Http\Controllers\Api\FacebookAuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
+use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\OfferDetailController;
 use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\PenaltyController;
 use App\Http\Controllers\Api\PenaltyReasonController;
@@ -554,12 +556,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
 
     //employee-opening-balances
     Route::group(['prefix' => 'employee-opening-balances'], function () {
-        Route::get('index', [EmployeeOpeningBalanceController::class, 'index']);
         Route::post('open-day-balance', [EmployeeOpeningBalanceController::class, 'open_day_balance']);
         Route::post('close-day-balance', [EmployeeOpeningBalanceController::class, 'close_day_balance']);
-        Route::post('edit', [EmployeeOpeningBalanceController::class, 'edit']);
-        Route::get('delete/{id}', [EmployeeOpeningBalanceController::class, 'delete']);
-
     });
 
     Route::prefix('menu')->group(function () {
@@ -597,7 +595,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [EmployeeScheduleController::class, 'destroy'])->name('employee-schedules.destroy');
         Route::post('/restore/{id}', [EmployeeScheduleController::class, 'restore'])->name('employee-schedules.restore');
     });
-    
+
     Route::prefix('employees')->group(function () {
         Route::get('/list', [EmployeeController::class, 'index'])->name('employees.index');
         Route::get('/show/{id}', [EmployeeController::class, 'show'])->name('employees.show');
@@ -670,10 +668,6 @@ Route::group(['prefix' => 'advances'], function () {
     Route::post('/restore/{id}', [AdvanceController::class, 'restore']);
 });
 
-
-
-
-
 // Google and Facebook auth
 Route::middleware([StartSession::class])->group(function () {
     // Google Auth
@@ -702,12 +696,33 @@ Route::group(['prefix' => 'deductions'], function () {
 });
 
 //Payroll
-Route::group(['prefix' => 'payroll'], function () {
+Route::group(['prefix' => 'payrolls'], function () {
     Route::get('/', [PayrollController::class, 'index']);
     Route::post('/store', [PayrollController::class, 'save']);
     Route::get('/{id}', [PayrollController::class, 'show']);
+    Route::get('employee/{id}', [PayrollController::class, 'showEmployee']);
     Route::put('/update/{id}', [PayrollController::class, 'save']);
     Route::delete('/delete/{id}', [PayrollController::class, 'destroy']);
     Route::post('/restore/{id}', [PayrollController::class, 'restore']);
+});
+
+//Offers
+Route::group(['prefix' => 'offers'], function () {
+    Route::get('/', [OfferController::class, 'index']);
+    Route::post('/store', [OfferController::class, 'save']);
+    Route::get('/{id}', [OfferController::class, 'show']);
+    Route::put('/update/{id}', [OfferController::class, 'save']);
+    Route::delete('/delete/{id}', [OfferController::class, 'destroy']);
+    Route::post('/restore/{id}', [OfferController::class, 'restore']);
+});
+
+Route::group(['prefix' => 'offer'], function () {
+    //Offer details
+    Route::get('/details/', [OfferDetailController::class, 'index']);
+    Route::post('/details/store', [OfferDetailController::class, 'save']);
+    Route::get('/details/{id}', [OfferDetailController::class, 'show']);
+    Route::put('/details/update/{id}', [OfferDetailController::class, 'save']);
+    Route::delete('/details/delete/{id}', [OfferDetailController::class, 'destroy']);
+    Route::post('/details/restore/{id}', [OfferDetailController::class, 'restore']);
 });
 

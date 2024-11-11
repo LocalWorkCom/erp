@@ -35,9 +35,7 @@ class OrderRefundController extends Controller
         }
         $orderRefunds = OrderRefund::all();
         foreach ($orderRefunds as $orderRefund) {
-            # code...
             $orderRefund['details'] = OrderDetail::with('Order')->find($orderRefund->order_detail_id);
-            // dd($orderRefund);
         }
         return ResponseWithSuccessData($lang, $orderRefunds, 1);
     }

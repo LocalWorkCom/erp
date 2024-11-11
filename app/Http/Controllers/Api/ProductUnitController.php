@@ -28,81 +28,15 @@ class ProductUnitController extends Controller
         }
         $productUnits = ProductUnit::all();
 
-        $translateColumns = ['name']; // Add other columns as needed
+        $productUnits = $productUnits->map(function ($data) {
 
-        // Define columns to remove (translated columns)
-        $columnsToRemove = array_merge(...array_map(function ($col) {
-            return [$col . '_ar', $col . '_en'];
-        }, $translateColumns));
+            $data['unit'] = Unit::find($data['unit_id']);;
+            $data['product'] = Product::find($data['product_id']);
 
-        $productUnits = $productUnits->map(function ($category) use ($lang, $translateColumns, $columnsToRemove) {
-            // Convert category model to an array
-            $data = $category->toArray();
-
-            // Check and modify image path if it exists
-            if (isset($data['image']) && !empty($data['image'])) {
-                $data['image'] = BaseUrl() . '/' . $data['image'];
-            }
-
-            // Get related unit and translate its columns
-            $unit = Unit::find($data['unit_id']);
-            if ($unit) {
-                // Convert unit to an array
-                $unitArray = $unit->toArray();
-                // Translate data columns
-                $unitArray = translateDataColumns($unitArray, $lang, $translateColumns);
-                // Remove translated columns
-                $unitArray = removeColumns($unitArray, $columnsToRemove);
-                $data['unit'] = $unitArray;
-            }
-
-            // Get related product
-            $product = Product::find($data['product_id']);
-            $translateColumns = ['name', 'description']; // Add other columns as needed
-
-            // Define columns to remove (translated columns)
-            $columnsToRemove = array_merge(...array_map(function ($col) {
-                return [$col . '_ar', $col . '_en'];
-            }, $translateColumns));
-            if ($product) {
-                if (isset($product['main_image']) && !empty($product['main_image'])) {
-                    $product['main_image'] = BaseUrl() . '/' . $product['main_image'];
-                }
-
-                // Convert unit to an array
-                $productArray = $product->toArray();
-
-                // Translate data columns
-                $productArray = translateDataColumns($productArray, $lang, $translateColumns);
-
-                // Remove translated columns
-                $productArray = removeColumns($productArray, $columnsToRemove);
-                $category = Category::find($product['category_id']);
-                if ($category) {
-                    if (isset($category['image']) && !empty($category['image'])) {
-                        $category['image'] = BaseUrl() . '/' . $category['image'];
-                    }
-                    // Convert unit to an array
-                    $categoryArray = $category->toArray();
-
-                    // Translate data columns
-                    $categoryArray = translateDataColumns($categoryArray, $lang, $translateColumns);
-
-                    // Remove translated columns
-                    $categoryArray = removeColumns($categoryArray, $columnsToRemove);
-
-                    $productArray['category'] = $categoryArray;
-                }
-                $data['product'] = $productArray;
-            }
-
-            // Remove 'product_id' and 'unit_id' from the data array
             unset($data['product_id'], $data['unit_id']);
 
             return $data;
         });
-
-
 
         // removeColumns($productUnits, ['product_id', 'unit_id']);
         return ResponseWithSuccessData($lang, $productUnits,  1);
@@ -193,7 +127,7 @@ class ProductUnitController extends Controller
         if (
             $productUnit->product_id == $request->product_id && $productUnit->unit_id == $request->unit_id && $productUnit->factor == $request->factor
         ) {
-            return  RespondWithBadRequestData($lang,10);
+            return  RespondWithBadRequestData($lang, 10);
         }
         $factor = $request->factor;
 

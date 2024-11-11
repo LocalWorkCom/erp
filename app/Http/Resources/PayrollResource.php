@@ -14,6 +14,18 @@ class PayrollResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'=>$this->id,
+            'employee_id'=>$this->employee_id,
+            'employee_name'=>$this->employee->first_name.' '.$this->employee->last_name,
+            'base_salary'=>$this->base_salary,
+            'bonus'=>$this->bonus,
+            'deductions'=>$this->deductions,
+            'advance'=>$this->advance,
+            'taxes'=>$this->taxes,
+            'insurance'=>$this->insurance,
+            'net_salary'=>$this->net_salary,
+            'pay_date'=>$this->pay_date,
+        ];
     }
 }

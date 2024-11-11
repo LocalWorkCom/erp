@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\LeaveSetting;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class LeaveRequestController extends Controller
 {
@@ -56,7 +58,7 @@ class LeaveRequestController extends Controller
 
     public function add(Request $request)
     {
-        try {
+        //try {
             $lang =  $request->header('lang', 'en');
             $validateData = Validator::make($request->all(), [
                 'leave_type_id' => 'required|exists:leave_types,id',
@@ -71,22 +73,51 @@ class LeaveRequestController extends Controller
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = Auth::guard('api')->user()->id;
-            $overtime_setting = new LeaveRequest();
-            $overtime_setting->leave_type_id = $request->leave_type_id;
-            $overtime_setting->employee_id = $request->employee_id;
-            $overtime_setting->date = $request->date;
-            $overtime_setting->from = $request->from;
-            $overtime_setting->leave_count = $request->leave_count;
-            $overtime_setting->resone = $request->resone;
-            $overtime_setting->created_by = $user_id;
-            $overtime_setting->save();
+            $get_employee_request = LeaveRequest::where('employee_id', $request->employee_id)->where('date', $request->from)->first();
+            if($get_employee_request){
+                return RespondWithBadRequestDataExist($lang, 2);
+            }
 
-            return ResponseWithSuccessData($lang, $overtime_setting, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
+            $get_employee = Employee::where('id', $request->employee_id)->first();
+            $get_leave_setting = LeaveSetting::where('leave_type_id', $request->leave_type_id)->where('country_id', $get_employee->user->country_id)->first();
+            if($get_leave_setting){
+                $hire_date = Carbon::parse($get_employee->hire_date); 
+                $current_date = Carbon::now(); 
+                $hire_years = $current_date->diffInYears($hire_date);
+                if($hire_years >= 10){
+                    $leave_year_count = $get_leave_setting->max_leave;
+                }else{
+                    $leave_year_count = $get_leave_setting->min_leave;
+                }
+            }
+
+            if($leave_year_count){                
+                $employee_leaves = CalculateEmployeeLeave($request->employee_id, $request->leave_type_id, $leave_year_count);
+                if($employee_leaves >= $leave_year_count){
+                    return RespondWithBadRequestNoLeave($lang, 2);
+                }
+
+                $user_id = Auth::guard('api')->user()->id;
+                $overtime_setting = new LeaveRequest();
+                $overtime_setting->leave_type_id = $request->leave_type_id;
+                $overtime_setting->employee_id = $request->employee_id;
+                $overtime_setting->date = $request->date;
+                $overtime_setting->from = $request->from;
+                $overtime_setting->leave_count = $request->leave_count;
+                $overtime_setting->resone = $request->resone;
+                $overtime_setting->created_by = $user_id;
+                $overtime_setting->save();
+    
+                return ResponseWithSuccessData($lang, $overtime_setting, 1);
+            }else{
+                return RespondWithBadRequestData($lang, 2);
+            }
+            
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($lang, 2);
+        // }
     }
+
 
     public function edit(Request $request)
     {

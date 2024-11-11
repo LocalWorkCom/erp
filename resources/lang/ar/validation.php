@@ -56,6 +56,8 @@ return [
     'NotAddMoreMessage' => 'ولا يمكن أن نضيف أكثر من ذلك',
     'NotAvailable' => 'ولا يمكن الإضافة ',
     'NotAvailableMessage' => 'ولا يمكن أن نضيف لانه غير متاح',
+    'NotClosingMessage' => 'لا يمكن إضافته، لديك عجز ... الرجاء إصلاحه',
+    'NoLeaveMessage' => 'لا يمكن إضافته، ليس لديك رصيد اجازات',
     'barcode' => ':attribute مطلوب ',
     'main_image' => ':attribute مطلوبة',
     'main_unit_id' => ':attribute مطلوبة',
