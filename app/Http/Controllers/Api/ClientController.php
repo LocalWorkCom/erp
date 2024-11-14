@@ -60,11 +60,9 @@ class ClientController extends Controller
             $clientDetails->last_name = $request->last_name;
         }
         if ($request->filled('email')) {
-            $clientDetails->email = $request->email;
             $user->email = $request->email;
         }
         if ($request->filled('phone')) {
-            $clientDetails->phone_number = $request->phone;
             $user->phone = $request->phone;
         }
         if ($request->filled('date_of_birth')) {
