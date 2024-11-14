@@ -36,7 +36,6 @@ class EmployeeReportResource extends JsonResource
                 'penalties'=>PenaltyResource::collection($this->penalties),
                 'advances'=>AdvanceResource::collection($this->advances),
                 'payrolls'=>PayrollResource::collection($this->payrolls),
-                dd('test')
             ];
     }
 }
