@@ -684,7 +684,6 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     }
     return $sum_orders;
 }
-<<<<<<< HEAD
 function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = null, $lastName = null, $hireDate = null, $gender = null, $mobile = null, $email = null)
     {
         try {
@@ -723,7 +722,6 @@ function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = nul
             return 'Error: ' . $e->getMessage();
         }
     }
-=======
 
 function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
     $remaining_amount = ($close_amount - $open_amount);
@@ -746,4 +744,3 @@ function CheckOrderPaid($order_id)
 
     return  OrderTransaction::where('order_id', $order_id)->exists();
 }
->>>>>>> aab3cf35f2ff8f45fd7b961e10c05231c66551ec
