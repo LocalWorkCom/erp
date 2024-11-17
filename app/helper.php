@@ -18,6 +18,10 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderTransaction;
 use App\Models\CashierMachine;
+
+use App\Models\LeaveRequest;
+use App\Models\Employee;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -338,6 +342,40 @@ function RespondWithBadRequestNotAvailable()
     return Response::json($response_array, $response_code);
 }
 
+//not Closing
+function RespondWithBadRequestNotClosing()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NotAvailable'),
+        'apiMsg' => trans('validation.NotClosingMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
+function RespondWithBadRequestNoLeave()
+{
+    $response_array = array(
+        'success' => false,  // Set success to false to indicate an error
+        'apiTitle' => trans('validation.NoLeave'),
+        'apiMsg' => trans('validation.NoLeaveMessage'),
+        'apiCode' => -1,
+        'data'   => []
+    );
+
+    // Change the response code to 404 for "Not Found"
+    $response_code = 404;
+
+    return Response::json($response_array, $response_code);
+}
+
+
 //not used
 function RespondWithBadRequestDataExist()
 {
@@ -537,12 +575,8 @@ function calculateRedeemPoint($total, $branch_id, $Order_id, $client_id)
 
 function get_by_md5_id($id, $table)
 {
-    // Hash the input ID with MD5
-    $hashedId = md5($id);
-
-    // Query the specified table where the MD5 hash of the ID column matches the hashed ID
     return DB::table($table)
-        ->where(DB::raw('MD5(id)'), $hashedId)
+        ->where(DB::raw('MD5(id)'), $id)
         ->first();
 }
 
@@ -612,13 +646,13 @@ function getProductPrice($product_id, $store_id, $unit_id)
             ->where('product_id', $product_id)
             ->where('unit_id', $unit_id)
             ->where('store_id', $store_id)->orderby('id', 'desc')->first()->price;
-
     }
     return $price;
 }
 function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment_method)
 {
     $sum_orders = 0;
+    $branch_id = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
     if($cashier_machine_details){
         if($cashier_machine_details->branches){
@@ -626,17 +660,31 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
         }
     }
 
+
     $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
-    if($branch_id){
-        $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->sum('total_price_after_tax');
+    if($branch_id != 0){
+        if($employee_time['data']['cross_day'] == 0){
+            $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
+        }else{
+            $next_day = Carbon::parse($date)->addDays(1);
+            $orders_totals_old = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '>=', $employee_time['data']['off_duty_time'])->get()->toArray();
+            $orders_totals_new = Order::where('branch_id', $branch_id)->whereDate('date', $next_day)->whereTime('created_at', '<=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->toArray();
+            $orders_totals = array_merge($orders_totals_old, $orders_totals_new);
+        }
+
         if($orders_totals)
         foreach($orders_totals as $orders_total){
-            $orders_total = OrderTransaction::where('order_id', $orders_total->order_id)->where('order_type', 'order')->where('payment_status', $payment_method)->first();
-            $sum_orders += $orders_total->paid;
+            if($orders_total){
+                $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
+                if($orders_tot){
+                    $sum_orders += $orders_tot->paid;
+                }
+            }
         }
     }
     return $sum_orders;
 }
+<<<<<<< HEAD
 function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = null, $lastName = null, $hireDate = null, $gender = null, $mobile = null, $email = null)
     {
         try {
@@ -675,3 +723,27 @@ function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = nul
             return 'Error: ' . $e->getMessage();
         }
     }
+=======
+
+function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
+    $remaining_amount = ($close_amount - $open_amount);
+    return ($remaining_amount - $real_amount);
+}
+
+function CalculateEmployeeLeave($employee_id, $leave_type, $leave_year_count){
+    $first_day = date('Y-01-01');
+    $last_day = date('Y-12-31');
+    return $employee_leave_count = LeaveRequest::where('employee_id', $employee_id)->where('leave_type_id', $leave_type)->where('agreement', 2)->whereBetween('date', [$first_day,$last_day])->sum('leave_count');
+}
+
+function CheckExistOrder($client_id)
+{
+    $Order = Order::where('client_id', $client_id)->where('status', 'open')->fisrt();
+    return $Order;
+}
+function CheckOrderPaid($order_id)
+{
+
+    return  OrderTransaction::where('order_id', $order_id)->exists();
+}
+>>>>>>> aab3cf35f2ff8f45fd7b961e10c05231c66551ec

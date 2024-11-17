@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PenaltyDeduction extends Model
+class OfferDetail extends Model
 {
     use HasFactory, softDeletes;
 
     protected $fillable = [
-        'penalty_id',
-        'employee_id',
-        'deduction_amount',
+        'offer_id',
+        'offer_type',
+        'type_id',
+        'count',
+        'discount',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -28,8 +30,8 @@ class PenaltyDeduction extends Model
         'deleted_by',
     ];
 
-    public function penalty()
+    public function offer()
     {
-        return $this->belongsTo(Penalty::class, 'penalty_id')->withTrashed();
+        return $this->belongsTo(Offer::class,'offer_id','id');
     }
 }

@@ -56,14 +56,12 @@ class AuthController extends Controller
         $clientDetail->user_id = $user->id;
         $clientDetail->first_name = $request->first_name;
         $clientDetail->last_name = $request->last_name;
-        $clientDetail->email = $request->email;
-        $clientDetail->phone_number = $request->phone;
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
 
         // Create Client Address
         $clientAddress = new ClientAddress();
-        $clientAddress->client_details_id = $clientDetail->id;
+        $clientAddress->user_id = $user->id;
         $clientAddress->address = $request->address;
         $clientAddress->city = $request->city;
         $clientAddress->state = $request->state;

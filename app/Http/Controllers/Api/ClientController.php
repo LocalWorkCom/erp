@@ -19,13 +19,13 @@ class ClientController extends Controller
 
         $user = Auth::user();
 
-        $clientDetails = $user->clientDetails()->with('addresses')->first();
+        $userWithDetails = $user->load(['addresses', 'clientDetails']);
 
-        if (!$clientDetails) {
+        if (!$userWithDetails->clientDetails) {
             return RespondWithBadRequest($lang, 17);
         }
 
-        return ResponseWithSuccessData($lang, $clientDetails, 18);
+        return ResponseWithSuccessData($lang, $userWithDetails, 18);
     }
 
     public function updateProfile(Request $request)
@@ -53,48 +53,49 @@ class ClientController extends Controller
         }
 
         // Update only the fields that were provided
-        if ($request->filled('first_name')) {
-            $clientDetails->first_name = $request->first_name;
-        }
-        if ($request->filled('last_name')) {
-            $clientDetails->last_name = $request->last_name;
-        }
         if ($request->filled('email')) {
-            $clientDetails->email = $request->email;
             $user->email = $request->email;
         }
         if ($request->filled('phone')) {
-            $clientDetails->phone_number = $request->phone;
             $user->phone = $request->phone;
         }
-        if ($request->filled('date_of_birth')) {
-            $clientDetails->date_of_birth = $request->date_of_birth;
+
+        if ($clientDetails) {
+            if ($request->filled('first_name')) {
+                $clientDetails->first_name = $request->first_name;
+            }
+            if ($request->filled('last_name')) {
+                $clientDetails->last_name = $request->last_name;
+            }
+            if ($request->filled('date_of_birth')) {
+                $clientDetails->date_of_birth = $request->date_of_birth;
+            }
+            $clientDetails->save();
         }
 
         // For address fields
-        if ($request->filled('address') || $request->filled('city') || $request->filled('postal_code') || $request->filled('state')) {
-            $clientAddress = $clientDetails->addresses()->first(); // Assuming the first address is the primary one
-            if (!$clientAddress) {
-                $clientAddress = new ClientAddress();
-                $clientAddress->client_details_id = $clientDetails->id;
+        if ($request->filled(['address', 'city', 'postal_code', 'state'])) {
+            $userAddress = $user->addresses()->first();
+            if (!$userAddress) {
+                $userAddress = new ClientAddress();
+                $userAddress->user_id = $user->id;
             }
 
             if ($request->filled('address')) {
-                $clientAddress->address = $request->address;
+                $userAddress->address = $request->address;
             }
             if ($request->filled('city')) {
-                $clientAddress->city = $request->city;
+                $userAddress->city = $request->city;
             }
             if ($request->filled('postal_code')) {
-                $clientAddress->postal_code = $request->postal_code;
+                $userAddress->postal_code = $request->postal_code;
             }
             if ($request->filled('state')) {
-                $clientAddress->state = $request->state;
+                $userAddress->state = $request->state;
             }
-            $clientAddress->save();
+            $userAddress->save();
         }
 
-        $clientDetails->save();
         $user->save();
 
         return ResponseWithSuccessData($lang, $clientDetails, 19);

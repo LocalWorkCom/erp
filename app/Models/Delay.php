@@ -31,4 +31,8 @@ class Delay extends Model
     public function employee(){
         return $this->belongsTo(Employee::class, 'employee_id')->withTrashed();
     }
+
+    public function delayDeductions(){
+        return $this->hasMany(DelayDeduction::class, 'delay_id')->withTrashed();
+    }
 }

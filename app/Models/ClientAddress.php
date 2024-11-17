@@ -29,8 +29,8 @@ class ClientAddress extends Model
         'updated_at',
     ];
 
-    public function clientDetail()
+    public function user()
     {
-        return $this->belongsTo(ClientDetail::class, 'client_details_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

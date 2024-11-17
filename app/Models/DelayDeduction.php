@@ -12,6 +12,7 @@ class DelayDeduction extends Model
 
     protected $fillable = [
         'delay_id',
+        'employee_id',
         'deduction_amount',
         'created_by',
         'modified_by',

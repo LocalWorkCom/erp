@@ -31,6 +31,7 @@ class DelayResource extends JsonResource
             'employee_id' => $this->employee->id ?? null,
             'employee' => trim($this->employee->first_name . ' ' . $this->employee->last_name),
             'note' => $this->note,
+            'deductions'=>DeductionResource::collection($this->delayDeductions),
         ];
     }
 }

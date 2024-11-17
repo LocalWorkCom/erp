@@ -19,7 +19,7 @@ class PenaltyDeductionResource extends JsonResource
         $punishment = $lang == 'ar' ? $this->penalty->reason->punishment_ar : $this->penalty->reason->punishment_en;
         return [
             'id'=>$this->id,
-            'employee_id'=>$this->penalty->employee->id,
+            'employee_id'=>$this->employee_id,
             'employee_name'=>$this->penalty->employee->first_name.' '.$this->penalty->employee->last_name,
             'penalty_id'=>$this->penalty_id,
             'penalty_reason'=> $reason,
