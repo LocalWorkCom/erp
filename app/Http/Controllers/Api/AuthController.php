@@ -61,7 +61,7 @@ class AuthController extends Controller
 
         // Create Client Address
         $clientAddress = new ClientAddress();
-        $clientAddress->client_details_id = $clientDetail->id;
+        $clientAddress->user_id = $user->id;
         $clientAddress->address = $request->address;
         $clientAddress->city = $request->city;
         $clientAddress->state = $request->state;
