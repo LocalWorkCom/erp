@@ -134,14 +134,14 @@ Route::group(['middleware' => ['auth:admin', 'admin']], function () {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //client
-Route::group(['middleware' => ['auth:client', 'client']], function () {
-    Route::get("profile", [ClientController::class, "viewProfile"]);
-    Route::post("profile/update", [ClientController::class, "updateProfile"]);
+// Route::group(['middleware' => ['auth:client', 'client']], function () {
+//     Route::get("profile", [ClientController::class, "viewProfile"]);
+//     Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
-    Route::get("client/orders", [ClientController::class, "listOrders"]);
-    Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
-    Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
-});
+//     Route::get("client/orders", [ClientController::class, "listOrders"]);
+//     Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+//     Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+// });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -150,9 +150,16 @@ Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    Route::group(['prefix' => 'user'], function () {
+        Route::get("profile", [ClientController::class, "viewProfile"]);
+        Route::post("profile/update", [ClientController::class, "updateProfile"]);
 
+        Route::get("client/orders", [ClientController::class, "listOrders"]);
+        Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+        Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+    });
 
     //Color
     Route::group(['prefix' => 'color'], function () {
@@ -262,7 +269,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('deleteStore/{id}', [StoreController::class, 'destroy']);
         Route::post('restoreStore/{id}', [BranchController::class, 'restore']);
         Route::get('{id}/inventory', [StoreInventoryController::class, 'getInventory']);
-
     });
     // start opening balance
     Route::group(['prefix' => 'opiningBalance'], function () {
@@ -608,9 +614,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/delete/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
         Route::post('/restore/{id}', [EmployeeController::class, 'restore'])->name('employees.restore');
     });
-
-
-
 });
 
 
@@ -756,5 +759,4 @@ Route::group(['prefix' => 'hr-reports'], function () {
     Route::get('payroll/{id}', [HrReportController::class, 'employeePayrollReport']); //return the last payroll
     Route::get('employees/details', [HrReportController::class, 'listEmployeesReport']);
     Route::get('employees/details/{id}', [HrReportController::class, 'employeeReport']);
-
 });
