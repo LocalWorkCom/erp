@@ -710,7 +710,6 @@ Route::group(['prefix' => 'payrolls'], function () {
     Route::post('/restore/{id}', [PayrollController::class, 'restore']);
 });
 
-<<<<<<< HEAD
 Route::group(['prefix' => 'biotime'], function () {
     Route::post('/authenticate', [BioTimeController::class, 'authenticate'])->name('biotime.authenticate');
 });
@@ -725,7 +724,6 @@ Route::prefix('devices')->group(function () {
 
 Route::post('/biotime/add-employee', [EmployeeDeviceController::class, 'addEmployeeToDevice'])->name('biotime.add_employee');
 
-=======
 //Offers
 Route::group(['prefix' => 'offers'], function () {
     Route::get('/', [OfferController::class, 'index']);
@@ -760,4 +758,3 @@ Route::group(['prefix' => 'hr-reports'], function () {
     Route::get('employees/details/{id}', [HrReportController::class, 'employeeReport']);
 
 });
->>>>>>> aab3cf35f2ff8f45fd7b961e10c05231c66551ec
