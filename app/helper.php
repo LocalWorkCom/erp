@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
+use GuzzleHttp\Client;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -683,6 +684,44 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     }
     return $sum_orders;
 }
+function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = null, $lastName = null, $hireDate = null, $gender = null, $mobile = null, $email = null)
+    {
+        try {
+            $url = 'http://127.0.0.1:8085/personnel/api/employees/';
+            $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxNTgzODk2LCJpYXQiOjE3MzE0OTc0OTYsImp0aSI6Ijk0YzRlYjQzY2I2MzRhMDdhNWIwMzZjOTZmOWM4NDVkIiwidXNlcl9pZCI6MX0.6uMFiXnFHEB_I5baP8qvgWkG_z7BXjPLWaU5QEfuCMg'; 
+
+            $data = [
+                'emp_code' => $empCode,
+                'department' => $departmentId,
+                'area' => $areaIds,
+                'hire_date' => $hireDate ?? now()->toDateString(),
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'gender' => $gender,
+                'mobile' => $mobile,
+                'email' => $email,
+            ];
+
+            $client = new Client();
+
+            $response = $client->post($url, [
+                'headers' => [
+                    'Authorization' => 'JWT ' . $token,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $data,
+            ]);
+
+            if ($response->getStatusCode() == 201) {
+                return json_decode($response->getBody()->getContents(), true);
+            } else {
+                return 'Failed to add employee. Status code: ' . $response->getStatusCode();
+            }
+        } catch (\Exception $e) {
+            Log::error('Error adding employee to BioTime device: ' . $e->getMessage());
+            return 'Error: ' . $e->getMessage();
+        }
+    }
 
 function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
     $remaining_amount = ($close_amount - $open_amount);

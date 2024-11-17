@@ -42,4 +42,8 @@ return [
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => 'http://127.0.0.1:8000/api/auth/facebook/call-back',
     ],
+
+    'biotime' => [
+    'base_url' => env('BIOTIME_BASE_URL', 'http://127.0.0.1:8085'),
+],
 ];

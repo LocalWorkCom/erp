@@ -81,6 +81,9 @@ use App\Http\Controllers\Api\CashierMachineController;
 use App\Http\Controllers\Api\GiftController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\BioTimeController;
+use App\Http\Controllers\Api\DeviceController;
+use App\Http\Controllers\Api\EmployeeDeviceController;
 
 
 /*
@@ -709,6 +712,20 @@ Route::group(['prefix' => 'payrolls'], function () {
     Route::delete('/delete/{id}', [PayrollController::class, 'destroy']);
     Route::post('/restore/{id}', [PayrollController::class, 'restore']);
 });
+
+Route::group(['prefix' => 'biotime'], function () {
+    Route::post('/authenticate', [BioTimeController::class, 'authenticate'])->name('biotime.authenticate');
+});
+
+Route::prefix('devices')->group(function () {
+    Route::get('/', [DeviceController::class, 'index'])->name('devices.index');
+    Route::get('/{id}', [DeviceController::class, 'show'])->name('devices.show');
+    Route::post('/', [DeviceController::class, 'store'])->name('devices.store');
+    Route::put('/{id}', [DeviceController::class, 'update'])->name('devices.update');
+    Route::delete('/{id}', [DeviceController::class, 'destroy'])->name('devices.destroy');
+});
+
+Route::post('/biotime/add-employee', [EmployeeDeviceController::class, 'addEmployeeToDevice'])->name('biotime.add_employee');
 
 //Offers
 Route::group(['prefix' => 'offers'], function () {
