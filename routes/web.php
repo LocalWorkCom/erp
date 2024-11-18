@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('dashboards.index5');
 });
-Route::get('/products', [ProductController::class, 'index']);
+Route::middleware(['web'])->group(function () {
+
+Route::get('/products', [ProductController::class, 'index'])->name('products');
 Route::group(['prefix' => 'product'], function () {
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
     Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
@@ -35,4 +37,5 @@ Route::group(['prefix' => 'product'], function () {
     // Route::post('color/update/{id}', [ProductColorController::class, 'update']);
     // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
     // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
+});
 });

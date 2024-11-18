@@ -44,14 +44,14 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
-        'admin' => [
-            'driver' => 'passport',
-            'provider' => 'users',
-        ],
-        'client' => [
-            'driver' => 'passport',
-            'provider' => 'users',
-        ],
+        // 'admin' => [
+        //     'driver' => 'passport',
+        //     'provider' => 'users',
+        // ],
+        // 'client' => [
+        //     'driver' => 'passport',
+        //     'provider' => 'users',
+        // ],
     ],
 
     /*

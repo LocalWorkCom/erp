@@ -41,12 +41,12 @@ class ProductService
     }
 
     // Method to get all products with their limits
-    public function index(Request $request)
+    public function index(Request $request, $checkToken)
     {
         $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
         $products = Product::all();
 
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
 
@@ -59,12 +59,12 @@ class ProductService
     }
 
     // Method to store a new product
-    public function store(Request $request)
+    public function store(Request $request, $checkToken)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
 
@@ -176,30 +176,33 @@ class ProductService
     }
 
     // Method to update an existing product
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $checkToken)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
 
-        $validator = Validator::make($request->all(), [
-            'name_ar' => 'required|string',
-            'name_en' => 'nullable|string',
-            'description_ar' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'is_have_expired' => 'required|boolean',
-            'type' => 'required|string|in:complete,raw',
-            'is_remind' => 'required|boolean',
-            'sku' => 'required|string',
-            'barcode' => 'required|string',
-            'main_unit_id' => 'required|integer',
-            'currency_code' => 'required|string',
-            'category_id' => 'required|integer'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name_ar' => 'required|string',
+                'name_en' => 'nullable|string',
+                'description_ar' => 'nullable|string',
+                'description_en' => 'nullable|string',
+                'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'is_have_expired' => 'required|boolean',
+                'type' => 'required|string|in:complete,raw',
+                'is_remind' => 'required|boolean',
+                'sku' => 'required|string',
+                'barcode' => 'required|string',
+                'main_unit_id' => 'required|integer',
+                'currency_code' => 'required|string',
+                'category_id' => 'required|integer'
+            ]
+        );
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
@@ -259,14 +262,14 @@ class ProductService
 
         return RespondWithSuccessRequest($lang, 1);
     }
-    function DeleteExistProductImage(Request $request) {}
-    public function delete(Request $request, $id)
+    function DeleteExistProductImage(Request $request, $checkToken) {}
+    public function delete(Request $request, $checkToken, $id)
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the category by ID, or throw a 404 if not found
