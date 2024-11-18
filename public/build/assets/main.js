@@ -8,7 +8,7 @@
     if (localStorage.velvetrtl) {
       let html = document.querySelector("html");
       html.setAttribute("dir", "rtl");
-      document.querySelector("#style")?.setAttribute("href","http://127.0.0.1:8000/build/assets/libs/bootstrap/css/bootstrap.rtl.min.css");
+      document.querySelector("#style")?.setAttribute("href","http://erp.test/build/assets/libs/bootstrap/css/bootstrap.rtl.min.css");
     }
     if (localStorage.velvetlayout) {
       let html = document.querySelector("html");
