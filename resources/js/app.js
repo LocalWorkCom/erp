@@ -1,1 +1,1 @@
-import '../assets/js/custom';
+import '../../public/assets/js/custom';
