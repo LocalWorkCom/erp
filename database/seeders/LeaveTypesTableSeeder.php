@@ -14,10 +14,10 @@ class LeaveTypesTableSeeder extends Seeder
     public function run(): void
     {
         $leave_types = [
-            ['name_ar' => 'اجازات رسمية', 'name_en' => 'Official leaves', 'created_by' => 10, 'created_at' => now()],
-            ['name_ar' => 'اجازات طارئة', 'name_en' => 'Emergency leaves', 'created_by' => 10, 'created_at' => now()],
-            ['name_ar' => 'اجازات اعتيادية', 'name_en' => 'Ordinary leaves', 'created_by' => 10, 'created_at' => now()],
-            ['name_ar' => 'اجازات سنوية', 'name_en' => 'Annual leaves', 'created_by' => 10, 'created_at' => now()],
+            ['name_ar' => 'اجازات رسمية', 'name_en' => 'Official leaves', 'created_by' =>1, 'created_at' => now()],
+            ['name_ar' => 'اجازات طارئة', 'name_en' => 'Emergency leaves', 'created_by' =>1, 'created_at' => now()],
+            ['name_ar' => 'اجازات اعتيادية', 'name_en' => 'Ordinary leaves', 'created_by' =>1, 'created_at' => now()],
+            ['name_ar' => 'اجازات سنوية', 'name_en' => 'Annual leaves', 'created_by' =>1, 'created_at' => now()],
         ];
 
         DB::table('leave_types')->insert($leave_types);
