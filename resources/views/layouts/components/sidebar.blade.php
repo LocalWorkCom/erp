@@ -60,21 +60,35 @@
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item">
+                            <a href="#" class="side-menu__item">
                                 {{ trans('lang.Branches') }}
-                                <i class="fe fe-chevron-right side-menu__angle"></i></a>
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
                             <ul class="slide-menu child2">
+                                <li class="slide">
+                                    <a href="#" class="side-menu__item">{{ trans('lang.Branches') }}</a>
+                                </li>
                                 <li class="slide has-sub">
-                                    <a href="javascript:void(0);" class="side-menu__item">{{ trans('lang.Floors') }}
-                                        <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                    <ul class="slide-menu child2">
+                                    <a href="#" class="side-menu__item">
+                                        {{ trans('lang.Floors') }}
+                                        <i class="fe fe-chevron-right side-menu__angle"></i>
+                                    </a>
+                                    <ul class="slide-menu child3">
+                                        <li class="slide">
+                                            <a href="#" class="side-menu__item">{{ trans('lang.Floors') }}</a>
+                                        </li>
                                         <li class="slide has-sub">
-                                            <a href="javascript:void(0);"
-                                                class="side-menu__item">{{ trans('lang.Positions') }}
-                                                <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                            <ul class="slide-menu child3">
+                                            <a href="#" class="side-menu__item">
+                                                {{ trans('lang.Positions') }}
+                                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                                            </a>
+                                            <ul class="slide-menu child4">
                                                 <li class="slide">
-                                                    <a href="javascript:void(0);"
+                                                    <a href="#"
+                                                        class="side-menu__item">{{ trans('lang.Positions') }}</a>
+                                                </li>
+                                                <li class="slide">
+                                                    <a href="#"
                                                         class="side-menu__item">{{ trans('lang.Tables') }}</a>
                                                 </li>
                                             </ul>
@@ -84,28 +98,31 @@
                             </ul>
                         </li>
                         <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item">{{ trans('lang.Dishes') }}
-                                <i class="fe fe-chevron-right side-menu__angle"></i></a>
+                            <a href="#" class="side-menu__item">
+                                {{ trans('lang.Dishes') }}
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.Cuisines') }}</a>
-                                </li>
-                                <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
+                                    <a href="{{ url('dishes') }}"
                                         class="side-menu__item">{{ trans('lang.Dishes') }}</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
+                                    <a href="{{ url('cuisines') }}"
+                                        class="side-menu__item">{{ trans('lang.Cuisines') }}</a>
+                                </li>
+                                <li class="slide">
+                                    <a href="{{ url('dishes-category') }}"
                                         class="side-menu__item">{{ trans('lang.DishesCategory') }}</a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
+                                    <a href="{{ url('recipes') }}"
                                         class="side-menu__item">{{ trans('lang.Recipes') }}</a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
+
                 </li>
                 <!-- End::slide -->
 
@@ -289,11 +306,18 @@
                                 {{ trans('lang.Lines') }}
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
+                                <li class="slide">
+                                    <a href="#" class="side-menu__item">{{ trans('lang.Lines') }}</a>
+                                </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);"
                                         class="side-menu__item">{{ trans('lang.Division') }}
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child3">
+                                        <li class="slide">
+                                            <a href="#"
+                                                class="side-menu__item">{{ trans('lang.Division') }}</a>
+                                        </li>
                                         <li class="slide">
                                             <a href="javascript:void(0);"
                                                 class="side-menu__item">{{ trans('lang.Shilves') }}</a>
@@ -400,8 +424,8 @@
                     </ul>
                 </li>
                 <!-- End::Purchase -->
-                <li class="slide__category"><span
-                        class="category-name">{{ trans('lang.Offers/Discounts') }}</span></li>
+                <li class="slide__category"><span class="category-name">{{ trans('lang.Offers/Discounts') }}</span>
+                </li>
 
 
                 <!-- End::slide__category -->
