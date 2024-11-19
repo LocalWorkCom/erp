@@ -58,6 +58,23 @@ class ProductService
         return ResponseWithSuccessData($lang, $products, 1);
     }
 
+    public function create(Request $request, $checkToken)
+    {
+        $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
+        $products = Product::all();
+
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
+        }
+
+        // foreach ($products as $product) {
+        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
+        //     $product['limits'] = $product_limits;
+        // }
+
+        return ResponseWithSuccessData($lang, $products, 1);
+    }
+
     // Method to store a new product
     public function store(Request $request, $checkToken)
     {
