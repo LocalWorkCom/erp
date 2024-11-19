@@ -22,23 +22,28 @@ use Illuminate\Http\Response;
 class CategoryService
 {
     
-    public function index(Request $request)
+    public function index(Request $request, $checkToken)
     {
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         $categories = Category::all();
 
+        // dd($categories);
+        
+        if (!$checkToken) {
+            $categories = $categories->makeVisible(['name_en', 'name_ar', 'image', 'description_ar', 'description_en']);
+        }
     
         return ResponseWithSuccessData($lang, $categories, 1);
     }
-    public function store(Request $request)
+    public function store(Request $request, $checkToken)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         $validator = Validator::make($request->all(), [
@@ -97,11 +102,11 @@ class CategoryService
 
         return RespondWithSuccessRequest($lang, 1);
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $checkToken)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         // Validate the input
@@ -155,13 +160,13 @@ class CategoryService
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id, $checkToken)
     {
         // Fetch the language header for response
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
         App::setLocale($lang);
 
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         // Find the category by ID, or throw a 404 if not found

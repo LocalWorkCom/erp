@@ -1,116 +1,125 @@
-<!DOCTYPE html> 
-<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="gradient" data-menu-styles="dark">
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="gradient"
+    data-menu-styles="dark">
 
-    <head>
+<head>
 
-        <!-- Meta Data -->
-		<meta charset="UTF-8">
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="Description" content="Velvet - Laravel Bootstrap Admin Dashboard Template">
-        <meta name="Author" content="Spruko Technologies Private Limited">
-        <meta name="keywords" content="laravel dashboard, laravel vite, laravel template, template dashboard, admin template, admin, dashboard admin, laravel admin panel, template admin, admin panel for laravel, laravel admin, alaravel, laravel framework, dashboard, laravel template admin">
-        
-        <!-- TITLE -->
-		<title> Velvet - Laravel Bootstrap Admin &amp; Dashboard Template </title>
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Velvet - Laravel Bootstrap Admin Dashboard Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="keywords"
+        content="laravel dashboard, laravel vite, laravel template, template dashboard, admin template, admin, dashboard admin, laravel admin panel, template admin, admin panel for laravel, laravel admin, alaravel, laravel framework, dashboard, laravel template admin">
 
-        <!-- FAVICON -->
-        <link rel="icon" href="{{asset('build/assets/images/brand-logos/fav.ico')}}" type="image/x-icon">
+    <!-- TITLE -->
+    <title> Velvet - Laravel Bootstrap Admin &amp; Dashboard Template </title>
 
-        <!-- BOOTSTRAP CSS -->
-	    <link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- FAVICON -->
+    <link rel="icon" href="{{ asset('build/assets/images/brand-logos/fav.ico') }}" type="image/x-icon">
 
-        <!-- ICONS CSS -->
-        <link href="{{asset('build/assets/icon-fonts/icons.css')}}" rel="stylesheet">
-        
-        <!-- APP SCSS -->
-        @vite(['resources/sass/app.scss'])
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="{{ asset('build/assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- ICONS CSS -->
+    <link href="{{ asset('build/assets/icon-fonts/icons.css') }}" rel="stylesheet">
+
+    <!-- APP SCSS -->
+    @vite(['resources/sass/app.scss'])
 
 
-        @include('layouts.components.styles')
-        
+    @include('layouts.components.styles')
 
-        <!-- MAIN JS -->
-        <script src="{{asset('build/assets/main.js')}}"></script>
 
-        @yield('styles')
+    <!-- MAIN JS -->
+    <script src="{{ asset('build/assets/main.js') }}"></script>
 
-	</head>
+    @yield('styles')
 
-    <body>
+</head>
 
-        <!-- SWITCHER -->
+<body>
 
-        @include('layouts.components.switcher')
+    <!-- SWITCHER -->
 
-        <!-- END SWITCHER -->
+    @include('layouts.components.switcher')
 
-        <!-- LOADER -->
-        <div id="loader">
-            <img src="{{asset('build/assets/images/media/loader.svg')}}" alt="">
-        </div>
-        <!-- END LOADER -->
+    <!-- END SWITCHER -->
 
-        <!-- PAGE -->
-        <div class="page">
+    <!-- LOADER -->
+    <div id="loader">
+        <img src="{{ asset('build/assets/images/media/loader.svg') }}" alt="">
+    </div>
+    <!-- END LOADER -->
 
-            <!-- HEADER -->
+    <!-- PAGE -->
+    <div class="page">
 
-            @include('layouts.components.header')
+        <!-- HEADER -->
 
-            <!-- END HEADER -->
+        @include('layouts.components.header')
 
-            <!-- SIDEBAR -->
+        <!-- END HEADER -->
 
-            @include('layouts.components.sidebar')
+        <!-- BreadCrumb -->
 
-            <!-- END SIDEBAR -->
+        {{-- @include('layouts.components.crumb') --}}
 
-            <!-- MAIN-CONTENT -->
+        <!-- END BreadCrumb -->
 
-                @yield('content')
-                
-            <!-- END MAIN-CONTENT -->
+        <!-- SIDEBAR -->
 
-            <!-- SEARCH-MODAL -->
+        @include('layouts.components.sidebar')
 
-            @include('layouts.components.search-modal')
+        <!-- END SIDEBAR -->
 
-            <!-- END SEARCH-MODAL -->
+        <!-- MAIN-CONTENT -->
+        {{-- @include($view) --}}
+        @yield('content')
 
-            <!-- RIGHT-SIDEBAR -->
+        <!-- END MAIN-CONTENT -->
 
-            @include('layouts.components.right-sidebar')
+        <!-- SEARCH-MODAL -->
 
-            <!-- END RIGHT-SIDEBAR -->
+        @include('layouts.components.search-modal')
 
-            <!-- FOOTER -->
-            
-            @include('layouts.components.footer')
+        <!-- END SEARCH-MODAL -->
 
-            <!-- END FOOTER -->
+        <!-- RIGHT-SIDEBAR -->
 
-        </div>
-        <!-- END PAGE-->
+        @include('layouts.components.right-sidebar')
 
-        <!-- SCRIPTS -->
+        <!-- END RIGHT-SIDEBAR -->
 
-        @include('layouts.components.scripts')
+        <!-- FOOTER -->
 
-        @yield('scripts')
+        @include('layouts.components.footer')
 
-        <!-- STICKY JS -->
-        <script src="{{asset('build/assets/sticky.js')}}"></script>
+        <!-- END FOOTER -->
 
-        <!-- APP JS -->
-        @vite('resources/js/app.js')
+    </div>
+    <!-- END PAGE-->
 
-        
-        <!-- CUSTOM-SWITCHER JS -->
-        @vite('resources/assets/js/custom-switcher.js')
-        
+    <!-- SCRIPTS -->
 
-        <!-- END SCRIPTS -->
+    @include('layouts.components.scripts')
 
-    </body>
+    @yield('scripts')
+
+    <!-- STICKY JS -->
+    <script src="{{ asset('build/assets/sticky.js') }}"></script>
+
+    <!-- APP JS -->
+    @vite('resources/js/app.js')
+
+
+    <!-- CUSTOM-SWITCHER JS -->
+    @vite('resources/assets/js/custom-switcher.js')
+
+
+    <!-- END SCRIPTS -->
+
+</body>
+
 </html>

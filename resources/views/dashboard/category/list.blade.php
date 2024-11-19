@@ -35,14 +35,10 @@
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">Image</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Unit</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Sku</th>
-                                        <th scope="col">barcode</th>
+                                        <th scope="col">Arabic Name</th>
+                                        <th scope="col">English Name</th>
                                         <th scope="col">code</th>
-                                        <th scope="col">is have expired</th>
+                                        <th scope="col">is freeze</th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
@@ -50,15 +46,11 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td>{{ $category->id }}</td>
-                                            <td><img src="{{ $category->main_image }}" alt=""></td>
+                                            <td><img src="{{ BaseUrl() . '/' .$category->image }}" alt=""></td>
                                             <td>{{ $category->name_ar }}</td>
-                                            <td>{{ $category->mainUnit->name_ar }}</td>
-                                            <td>{{ $category->type }}</td>
-                                            <td>{{ $category->Category->name_ar }}</td>
-                                            <td>{{ $category->Sku }}</td>
-                                            <td>{{ $category->barcode }}</td>
+                                            <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_have_expired ? 'yes' : 'no' }}</td>
+                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
                                             <td></td>
                                         </tr>
                                     @endforeach

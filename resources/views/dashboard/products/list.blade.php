@@ -35,7 +35,8 @@
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">Image</th>
-                                        <th scope="col">Name</th>
+                                        <th scope="col">Arabic Name</th>
+                                        <th scope="col">English Name</th>
                                         <th scope="col">Unit</th>
                                         <th scope="col">Type</th>
                                         <th scope="col">Category</th>
@@ -50,8 +51,9 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td><img src="{{ $product->main_image }}" alt=""></td>
+                                            <td><img src="{{ BaseUrl() . '/' .$product->main_image }}" alt=""></td>
                                             <td>{{ $product->name_ar }}</td>
+                                            <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit->name_ar }}</td>
                                             <td>{{ $product->type }}</td>
                                             <td>{{ $product->Category->name_ar }}</td>
