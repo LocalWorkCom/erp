@@ -12,7 +12,7 @@
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">create Product</li>
+                    <li class="breadcrumb-item active" aria-current="page">Create Product</li>
                 </ol>
             </nav>
         </div>
@@ -105,13 +105,13 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <p class="mb-2 text-muted">Type:</p>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="Radio" id="Radio-md">
                                         <label class="form-check-label" for="Radio-md">
                                             Raw
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="Radio" id="Radio-md"
                                             checked>
                                         <label class="form-check-label" for="Radio-md">
@@ -121,14 +121,14 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <p class="mb-2 text-muted">Is valid?</p>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                             id="Radio-md">
                                         <label class="form-check-label" for="Radio-md">
                                             Yes
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                             id="Radio-md" checked>
                                         <label class="form-check-label" for="Radio-md">
@@ -138,14 +138,14 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <p class="mb-2 text-muted">Have Expiration Date?</p>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions-1"
                                             id="Radio-md">
                                         <label class="form-check-label" for="Radio-md">
                                             Yes
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-md form-check-inline">
+                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="inlineRadioOptions-1"
                                             id="Radio-md" checked>
                                         <label class="form-check-label" for="Radio-md">
