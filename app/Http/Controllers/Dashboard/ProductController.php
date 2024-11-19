@@ -36,6 +36,18 @@ class ProductController extends Controller
  
     }
 
+    public function create(Request $request)
+    {
+
+        // Pass it to the service
+        $response  = $this->productService->create($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $products = $responseData['data'];
+
+        return view('dashboard.products.add', compact('products'));
+ 
+    }    
+
     public function store(Request $request)
     {
         return $this->productService->store($request, $this->checkToken);
