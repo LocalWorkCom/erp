@@ -50,10 +50,10 @@ class ProductService
             return RespondWithBadRequest($lang, 5);
         }
 
-        foreach ($products as $product) {
-            $product_limits = ProductLimit::where('product_id', $product->id)->get();
-            $product['limits'] = $product_limits;
-        }
+        // foreach ($products as $product) {
+        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
+        //     $product['limits'] = $product_limits;
+        // }
 
         return ResponseWithSuccessData($lang, $products, 1);
     }
