@@ -18,8 +18,8 @@
         </div>
     </div>
     <!-- APP-CONTENT START -->
-    <div class="main-content app-content">
-        <div class="container-fluid">
+    <div class="main-content app-content ">
+        <div class="container-fluid ">
 
             <!-- Start:: row-1 -->
             <div class="row">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                <div class="col-12">
                                     <p class="mb-2 text-muted">Brand:</p>
                                     <select class="js-example-placeholder-single js-states form-control">
                                         <option value="st-1" selected>Texas</option>
@@ -42,23 +42,23 @@
                                         <option value="st-5">Virginia</option>
                                     </select>
                                 </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label for="input-placeholder" class="form-label">Arabic Name</label>
                                     <input type="text" class="form-control" id="input-placeholder"
                                         placeholder="Arabic Name">
                                 </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label for="input-placeholder" class="form-label">English Name</label>
                                     <input type="text" class="form-control" id="input-placeholder"
                                         placeholder="English Name">
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label for="input-text" class="form-label">Arabic Description</label>
-                                    <input type="text" class="form-control" id="input-text" placeholder="Text">
+                                    <label for="text-area" class="form-label">Arabic Description</label>
+                                    <textarea class="form-control" id="text-area" rows="1"></textarea>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label for="input-text" class="form-label">English Description</label>
-                                    <input type="text" class="form-control" id="input-text" placeholder="Text">
+                                    <label for="text-area" class="form-label">English Description</label>
+                                    <textarea class="form-control" id="text-area" rows="1"></textarea>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <label for="input-file" class="form-label">Product Image</label>
@@ -112,7 +112,8 @@
                                         </label>
                                     </div>
                                     <div class="form-check form-check-md form-check-inline">
-                                        <input class="form-check-input" type="radio" name="Radio" id="Radio-md" checked>
+                                        <input class="form-check-input" type="radio" name="Radio" id="Radio-md"
+                                            checked>
                                         <label class="form-check-label" for="Radio-md">
                                             Complete
                                         </label>
@@ -121,13 +122,15 @@
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <p class="mb-2 text-muted">Is valid?</p>
                                     <div class="form-check form-check-md form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio-md">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                            id="Radio-md">
                                         <label class="form-check-label" for="Radio-md">
                                             Yes
                                         </label>
                                     </div>
                                     <div class="form-check form-check-md form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Radio-md" checked>
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                            id="Radio-md" checked>
                                         <label class="form-check-label" for="Radio-md">
                                             No
                                         </label>
@@ -136,21 +139,27 @@
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                     <p class="mb-2 text-muted">Have Expiration Date?</p>
                                     <div class="form-check form-check-md form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions-1" id="Radio-md">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions-1"
+                                            id="Radio-md">
                                         <label class="form-check-label" for="Radio-md">
                                             Yes
                                         </label>
                                     </div>
                                     <div class="form-check form-check-md form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions-1" id="Radio-md" checked>
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions-1"
+                                            id="Radio-md" checked>
                                         <label class="form-check-label" for="Radio-md">
                                             No
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center">
-                                    <input type="submit" class="form-control btn btn-primary " id="input-submit" value="Submit">
-                                </div>
+                                <center>
+                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                        <input type="submit" class="form-control btn btn-primary " id="input-submit"
+                                            value="Submit">
+                                    </div>
+                                </center>
+
                             </div>
                         </div>
                     </div>
