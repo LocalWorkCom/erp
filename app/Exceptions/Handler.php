@@ -7,7 +7,7 @@ use Throwable;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
-
+use Symfony\Component\HttpKernel\Exception\HttpException;
 class Handler extends ExceptionHandler
 {
     /**
@@ -52,4 +52,33 @@ class Handler extends ExceptionHandler
             }
         });
     }
+  
+    
+    function render($request, Throwable $exception)
+    {
+        // Explicitly check for HttpException and access getStatusCode()
+        if ($exception instanceof HttpException) {
+            $statusCode = $exception->getStatusCode();
+    
+            // Handle different status codes
+            switch ($statusCode) {
+                case 401:
+                    return response()->view('error.401', [], 401);
+                case 404:
+                    return response()->view('error.404', [], 404);
+                case 403:
+                    return response()->view('error.403', [], 403);
+                case 422:
+                    return response()->view('error.422', [], 422);
+                case 500:
+                    return response()->view('error.500', [], 500);
+                default:
+                    return response()->view('error.default', [], $statusCode);
+            }
+        }
+    
+        // For non-HTTP exceptions, use the parent render method
+        return parent::render($request, $exception);
+    }
+    
 }

@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Products</h4>
+        <h4 class="fw-medium mb-0">Category</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Products</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Category</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Category</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Products</div>
+                            <div class="card-title">Categories</div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
@@ -37,30 +37,20 @@
                                         <th scope="col">Image</th>
                                         <th scope="col">Arabic Name</th>
                                         <th scope="col">English Name</th>
-                                        <th scope="col">Unit</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Sku</th>
-                                        <th scope="col">barcode</th>
                                         <th scope="col">code</th>
-                                        <th scope="col">is have expired</th>
+                                        <th scope="col">is freeze</th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($categories as $category)
                                         <tr>
-                                            <td>{{ $product->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' .$product->main_image }}" alt=""></td>
-                                            <td>{{ $product->name_ar }}</td>
-                                            <td>{{ $product->name_en }}</td>
-                                            <td>{{ $product->mainUnit->name_ar }}</td>
-                                            <td>{{ $product->type }}</td>
-                                            <td>{{ $product->Category->name_ar }}</td>
-                                            <td>{{ $product->Sku }}</td>
-                                            <td>{{ $product->barcode }}</td>
-                                            <td>{{ $product->code }}</td>
-                                            <td>{{ $product->is_have_expired ? 'yes' : 'no' }}</td>
+                                            <td>{{ $category->id }}</td>
+                                            <td><img src="{{ BaseUrl() . '/' .$category->image }}" alt=""></td>
+                                            <td>{{ $category->name_ar }}</td>
+                                            <td>{{ $category->name_en }}</td>
+                                            <td>{{ $category->code }}</td>
+                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
                                             <td></td>
                                         </tr>
                                     @endforeach

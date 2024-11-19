@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboards.index5');
-});
-Route::middleware(['web'])->group(function () {
+})->name('home');
+// Route::middleware('auth:web')->group(function () {
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::group(['prefix' => 'product'], function () {
@@ -39,4 +40,10 @@ Route::group(['prefix' => 'product'], function () {
     // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
     // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
 });
+// });
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::group(['prefix' => 'category'], function () {
+    Route::post('store', [CategoryController::class, 'store'])->name('category.store');
+    Route::post('update/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
