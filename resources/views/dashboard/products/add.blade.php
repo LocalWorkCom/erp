@@ -36,8 +36,8 @@
                                 <div class="row gy-4">
                                     <div class="col-12">
                                         <p class="mb-2 text-muted">Brand:</p>
-                                        <select class="form-select" data-trigger required>
-                                            <option value="" disabled selected>Choose Brand</option>
+                                        <select class="form-control" data-trigger required>
+                                            <option value="">Choose Brand</option>
                                             <option value="Choice 1">Choice 1</option>
                                             <option value="Choice 2">Choice 2</option>
                                             <option value="Choice 3">Choice 3</option>
@@ -103,7 +103,8 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Unit:</p>
-                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                        <select class="form-control" data-trigger name="choices-single-default"
+                                            id="choices-single-default" required>
                                             <option value="" disabled selected>Choose Unit</option>
                                             <option value="Choice 1">Choice 1</option>
                                             <option value="Choice 2">Choice 2</option>
@@ -118,7 +119,8 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Currency:</p>
-                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                        <select class="form-control" data-trigger name="choices-single-default"
+                                            id="choices-single-default" required>
                                             <option value="" disabled selected>Choose Currency</option>
                                             <option value="Choice 1">Choice 1</option>
                                             <option value="Choice 2">Choice 2</option>
@@ -133,7 +135,8 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Category:</p>
-                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                        <select class="form-control" data-trigger name="choices-single-default"
+                                            id="choices-single-default" required>
                                             <option value="" disabled selected>Choose Category</option>
                                             <option value="Choice 1">Choice 1</option>
                                             <option value="Choice 2">Choice 2</option>
