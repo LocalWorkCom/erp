@@ -36,12 +36,11 @@
                                 <div class="row gy-4">
                                     <div class="col-12">
                                         <p class="mb-2 text-muted">Brand:</p>
-                                        <select class="js-example-placeholder-single js-states form-control" required>
-                                            <option value="st-1">Texas</option>
-                                            <option value="st-2">Georgia</option>
-                                            <option value="st-3">California</option>
-                                            <option value="st-4">Washington D.C</option>
-                                            <option value="st-5">Virginia</option>
+                                        <select class="form-select" data-trigger required>
+                                            <option value="" disabled selected>Choose Brand</option>
+                                            <option value="Choice 1">Choice 1</option>
+                                            <option value="Choice 2">Choice 2</option>
+                                            <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
                                             Looks good!
@@ -104,12 +103,11 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Unit:</p>
-                                        <select class="js-example-placeholder-single js-states form-control" required>
-                                            <option value="st-1">Texas</option>
-                                            <option value="st-2">Georgia</option>
-                                            <option value="st-3">California</option>
-                                            <option value="st-4">Washington D.C</option>
-                                            <option value="st-5">Virginia</option>
+                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                            <option value="" disabled selected>Choose Unit</option>
+                                            <option value="Choice 1">Choice 1</option>
+                                            <option value="Choice 2">Choice 2</option>
+                                            <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
                                             Looks good!
@@ -120,12 +118,11 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Currency:</p>
-                                        <select class="js-example-placeholder-single js-states form-control" required>
-                                            <option value="st-1">Texas</option>
-                                            <option value="st-2">Georgia</option>
-                                            <option value="st-3">California</option>
-                                            <option value="st-4">Washington D.C</option>
-                                            <option value="st-5">Virginia</option>
+                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                            <option value="" disabled selected>Choose Currency</option>
+                                            <option value="Choice 1">Choice 1</option>
+                                            <option value="Choice 2">Choice 2</option>
+                                            <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
                                             Looks good!
@@ -136,12 +133,11 @@
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">Category:</p>
-                                        <select class="js-example-placeholder-single js-states form-control" required>
-                                            <option value="st-1">Texas</option>
-                                            <option value="st-2">Georgia</option>
-                                            <option value="st-3">California</option>
-                                            <option value="st-4">Washington D.C</option>
-                                            <option value="st-5">Virginia</option>
+                                        <select class="form-control" data-trigger name="choices-single-default" id="choices-single-default" required>
+                                            <option value="" disabled selected>Choose Category</option>
+                                            <option value="Choice 1">Choice 1</option>
+                                            <option value="Choice 2">Choice 2</option>
+                                            <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
                                             Looks good!
@@ -256,4 +252,5 @@
 
     <!-- FORM VALIDATION JS -->
     @vite('resources/assets/js/validation.js')
+    @vite('resources/assets/js/choices.js')
 @endsection
