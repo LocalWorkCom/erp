@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Products</h4>
+        <h4 class="fw-medium mb-0">Category</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Products</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Category</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Category</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">Products</div>
+                            <div class="card-title">Categories</div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
@@ -47,18 +47,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $product)
+                                    @foreach ($categories as $category)
                                         <tr>
-                                            <td>{{ $product->id }}</td>
-                                            <td><img src="{{ $product->main_image }}" alt=""></td>
-                                            <td>{{ $product->name_ar }}</td>
-                                            <td>{{ $product->mainUnit->name_ar }}</td>
-                                            <td>{{ $product->type }}</td>
-                                            <td>{{ $product->Category->name_ar }}</td>
-                                            <td>{{ $product->Sku }}</td>
-                                            <td>{{ $product->barcode }}</td>
-                                            <td>{{ $product->code }}</td>
-                                            <td>{{ $product->is_have_expired ? 'yes' : 'no' }}</td>
+                                            <td>{{ $category->id }}</td>
+                                            <td><img src="{{ $category->main_image }}" alt=""></td>
+                                            <td>{{ $category->name_ar }}</td>
+                                            <td>{{ $category->mainUnit->name_ar }}</td>
+                                            <td>{{ $category->type }}</td>
+                                            <td>{{ $category->Category->name_ar }}</td>
+                                            <td>{{ $category->Sku }}</td>
+                                            <td>{{ $category->barcode }}</td>
+                                            <td>{{ $category->code }}</td>
+                                            <td>{{ $category->is_have_expired ? 'yes' : 'no' }}</td>
                                             <td></td>
                                         </tr>
                                     @endforeach

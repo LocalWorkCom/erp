@@ -53,7 +53,15 @@ class Product extends Model
     public function getNameAttribute($value)
     {
         return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
+        // return $this->name_en;
     }
+    // public function getNameAr()
+    // {
+    //     self::$staticMakeVisible = ['name_ar'];
+
+    //     return  $this->name_ar;
+    //     // return $this->name_en;
+    // }
     public function getDescriptionAttribute($value)
     {
         return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;

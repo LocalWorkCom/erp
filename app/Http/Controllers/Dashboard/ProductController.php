@@ -33,7 +33,7 @@ class ProductController extends Controller
         $responseData = json_decode($response->getContent(), true);
         // $products = collect($responseData['data']);
         $products = Product::hydrate($responseData['data']);
-        dd($products[0]->name);
+
         return view('dashboard.products.list', compact('products'));
     }
 

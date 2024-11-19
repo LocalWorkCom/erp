@@ -55,6 +55,10 @@ class ProductService
         //     $product['limits'] = $product_limits;
         // }
 
+        if (!$checkToken) {
+            $products = $products->makeVisible(['name_en', 'name_ar', 'main_image']);
+        }
+
         return ResponseWithSuccessData($lang, $products, 1);
     }
 
