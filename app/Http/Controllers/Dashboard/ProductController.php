@@ -26,11 +26,14 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-      
+
         // Pass it to the service
-        // $data = $this->productService->index($request, $this->checkToken);
-        // $products = $data['data'];
-        // dd($products);
+        $response  = $this->productService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $products = $responseData['data'];
+
+        return view('dashboard.products.list', compact('products'));
+ 
     }
 
     public function store(Request $request)
