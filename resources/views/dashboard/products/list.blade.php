@@ -51,7 +51,7 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' .$product->main_image }}" alt=""></td>
+                                            <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""></td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit->name_ar }}</td>

@@ -45,8 +45,10 @@
                                 <tbody>
                                     @foreach ($categories as $category)
                                         <tr>
+                                            {{-- @dd( $category) --}}
                                             <td>{{ $category->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' .$category->image }}" alt=""></td>
+                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""></td>
+
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
