@@ -1,14 +1,14 @@
 <?php
-
 return [
-    'category' => 'Category',
-    'categories' => 'Categories',
-    'add' => 'Add Category',
-    'id' => 'ID',
-    'img' => 'Category Image',
-    'name_ar' => 'Arabic Name',
-    'name_en' => 'English Name',
-    'code' => 'Code',
-    'freeze' => 'Is Freeze',
-    'actions' => 'Actions',
+    'Category' => 'Category',
+    'Categories' => 'Categories',
+    'Add' => 'Add',
+    'ID' => 'ID',
+    'Image' => 'Image',
+    'ArabicName' => ' Arabid Name',
+    'EnglishName' => 'English Name',
+    'Code' => 'Code',
+    'IsFreeze' => 'Is Freeze',
+    'Actions' => 'Actions',
+    'AddCategory' => 'Add Category',
 ];

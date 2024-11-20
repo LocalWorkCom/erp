@@ -1,5 +1,7 @@
 <?php
-return[
+return [
+    'Countries' => 'Countries',
+    'Country' => 'Country',
     'dashborad' => 'dashborad',
     'countries' => 'Countries',
     'add' => 'Add new country',

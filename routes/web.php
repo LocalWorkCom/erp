@@ -58,17 +58,23 @@ Route::group(['prefix' => 'category'], function () {
     Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
-Route::group(['prefix' => 'countries'], function () {
-    Route::get('/', [CountryController::class, 'index'])->name('countries');
+Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
+Route::group(['prefix' => 'country'], function () {
+
     Route::post('store', [CountryController::class, 'store'])->name('country.store');
     Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
     Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
 });
 Route::get('/units', [UnitController::class, 'index'])->name('units.list');
-Route::post('/units/store', [UnitController::class, 'store'])->name('unit.store');
-
 Route::group(['prefix' => 'unit'], function () {
-    Route::post('store', [UnitController::class, 'store']);
-    Route::post('update', [UnitController::class, 'update']);
-    Route::get('delete/{id}', [UnitController::class, 'delete']);
+    Route::post('store', [UnitController::class, 'store'])->name('unit.store');
+    Route::post('update', [UnitController::class, 'update'])->name('unit.update');
+    Route::get('delete/{id}', [UnitController::class, 'delete'])->name('unit.delete');
+});
+
+Route::group(['prefix' => 'country'], function () {
+    Route::any('/add', [CountryController::class, 'store']);
+    Route::any('/get', [CountryController::class, 'show']);
+    Route::any('/edit', [CountryController::class, 'update']);
+    Route::any('/delete', [CountryController::class, 'destroy']);
 });

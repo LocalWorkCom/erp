@@ -1,6 +1,6 @@
 <?php
-return[
-    'main' => 'Main',
+return [
+    'Main' => 'Main',
     'Dashboards' => 'Dashboards',
     'Setting' => 'Setting',
 ];
