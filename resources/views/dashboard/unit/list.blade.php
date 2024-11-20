@@ -142,4 +142,6 @@
     @vite('resources/assets/js/datatables.js')
     @vite('resources/assets/js/validation.js')
     @vite('resources/assets/js/choices.js')
+    @vite('resources/assets/js/modal.js')
+
 @endsection
