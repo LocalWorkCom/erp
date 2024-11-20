@@ -37,13 +37,33 @@ class CategoryController extends Controller
         return view('dashboard.category.list', compact('categories'));
     }
 
+    public function create()
+    {
+        $categories = Category::where('active', 1)->get();
+        return view('dashboard.category.add', compact('categories'));
+    }
     public function store(Request $request)
     {
-        return $this->categoryService->store($request, $this->checkToken);
+        $response = $this->categoryService->store($request, $this->checkToken);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        $categories = Category::where('active', 1)->get(); // Fetch only active categories
+        return view('dashboard.category.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
-        return $this->categoryService->update($request, $id, $this->checkToken);
+//        dd($request->all());
+        $response = $this->categoryService->update($request, $id, $this->checkToken);
+//        dd($response);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
     }
 }

@@ -30,6 +30,14 @@
                             <div class="card-title">Categories</div>
                         </div>
                         <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-solid-info alert-dismissible fade show">
+                                    {{ session('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>

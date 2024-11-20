@@ -21,7 +21,7 @@ use Illuminate\Http\Response;
 
 class CategoryService
 {
-    
+
     public function index(Request $request, $checkToken)
     {
 
@@ -31,11 +31,11 @@ class CategoryService
         }
         $categories = Category::all();
 
-        
+
         if (!$checkToken) {
             $categories = $categories->makeVisible(['name_en', 'name_ar', 'image', 'description_ar', 'description_en']);
         }
-    
+
         return ResponseWithSuccessData($lang, $categories, 1);
     }
     public function store(Request $request, $checkToken)
@@ -109,15 +109,27 @@ class CategoryService
             return RespondWithBadRequest($lang, 5);
         }
         // Validate the input
-        $validator = Validator::make($request->all(), [
-            'name_ar' => 'required|string',
-            'name_en' => 'string',
-            'description_ar' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-            'is_freeze' => 'required|boolean',
-            'parent_id' => 'nullable|integer',
-        ]);
+        if($request->hasFile('image')){
+            $validator = Validator::make($request->all(), [
+                'name_ar' => 'required|string',
+                'name_en' => 'nullable|string',
+                'description_ar' => 'nullable|string',
+                'description_en' => 'nullable|string',
+                'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
+                'is_freeze' => 'required|boolean',
+                'parent_id' => 'nullable|exists:categories,id',
+            ]);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'name_ar' => 'required|string',
+                'name_en' => 'nullable|string',
+                'description_ar' => 'nullable|string',
+                'description_en' => 'nullable|string',
+                'image' => 'nullable',
+                'is_freeze' => 'required|boolean',
+                'parent_id' => 'nullable|exists:categories,id',
+            ]);
+        }
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
@@ -129,13 +141,19 @@ class CategoryService
             return  RespondWithBadRequestData($lang, 8);
         }
         // dd($category, $request);
-        if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
+        if ($category->name_ar == $request->name_ar
+            && $category->name_en == $request->name_en
+            &&  $category->description_ar == $request->description_ar
+            &&  $category->description_en == $request->description_en
+            && $category->is_freeze == $request->is_freeze
+            && $category->parent_id == $request->parent_id
+            && $category->image == $request->file('image') ) {
             return  RespondWithBadRequestData($lang,10);
         }
         if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $modify_by = Auth::guard('api')->user()->id;
+        $modify_by = 13;
 
         // Assign the updated values to the category model
         $category->name_ar = $request->name_ar;
