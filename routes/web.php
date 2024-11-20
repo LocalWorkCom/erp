@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/set-locale/{locale}', function ($locale) {
+    if (in_array($locale, config('app.available_locales'))) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('set-locale');
 
 Route::get('/', function () {
     return view('dashboards.index5');
@@ -49,9 +57,16 @@ Route::group(['prefix' => 'category'], function () {
     Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
 Route::get('/units', [UnitController::class, 'index'])->name('units.list');
-
 Route::group(['prefix' => 'unit'], function () {
     Route::post('store', [UnitController::class, 'store']);
     Route::post('update', [UnitController::class, 'update']);
     Route::get('delete/{id}', [UnitController::class, 'delete']);
+});
+Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
+
+Route::group(['prefix' => 'country'], function () {
+    Route::any('/add', [CountryController::class, 'store']);
+    Route::any('/get', [CountryController::class, 'show']);
+    Route::any('/edit', [CountryController::class, 'update']);
+    Route::any('/delete', [CountryController::class, 'destroy']);
 });

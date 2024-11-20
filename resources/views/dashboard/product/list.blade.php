@@ -14,7 +14,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.main')</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('product.Products')</li>
                 </ol>
             </nav>
@@ -31,12 +31,13 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">@lang('product.Products')</div>
-                            <button type="button" class="btn btn-primary label-btn" onclick="window.location.href='{{ route('product.create') }}'">
+                            <button type="button" class="btn btn-primary label-btn"
+                                onclick="window.location.href='{{ route('product.create') }}'">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('product.Add')
+                                @lang('product.AddProduct')
                             </button>
-                            
-                            
+
+
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
@@ -46,14 +47,16 @@
                                         <th scope="col">@lang('product.Image')</th>
                                         <th scope="col">@lang('product.ArabicName')</th>
                                         <th scope="col">@lang('product.EnglishName')</th>
-                                        <th scope="col">@lang('product.Unit')</th>
+                                        <th scope="col">@lang('product.EnglishUnit')</th>
+                                        <th scope="col">@lang('product.ArabicUnit')</th>
                                         <th scope="col">@lang('product.Type')</th>
-                                        <th scope="col">@lang('product.Category')</th>
+                                        <th scope="col">@lang('product.ArabicCategory')</th>
+                                        <th scope="col">@lang('product.EnglishCategory')</th>
                                         <th scope="col">@lang('product.Sku')</th>
-                                        <th scope="col">barcode</th>
-                                        <th scope="col">code</th>
-                                        <th scope="col">is have expired</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">@lang('product.Barcode')</th>
+                                        <th scope="col">@lang('product.Code')</th>
+                                        <th scope="col">@lang('product.IsHaveExpired')</th>
+                                        <th scope="col">@lang('product.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -63,13 +66,21 @@
                                             <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""></td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
+                                            <td>{{ $product->mainUnit->name_en }}</td>
                                             <td>{{ $product->mainUnit->name_ar }}</td>
-                                            <td>{{ $product->type }}</td>
+                                            <td>@lang('product.' . ucfirst($product->type))</td>
+                                            <td>{{ $product->Category->name_en }}</td>
                                             <td>{{ $product->Category->name_ar }}</td>
                                             <td>{{ $product->Sku }}</td>
                                             <td>{{ $product->barcode }}</td>
                                             <td>{{ $product->code }}</td>
-                                            <td>{{ $product->is_have_expired ? 'yes' : 'no' }}</td>
+                                            @php
+                                                $translationKey = $product->is_have_expired
+                                                    ? 'product.Yes'
+                                                    : 'product.No';
+                                            @endphp
+
+                                            <td> @lang($translationKey)</td>
                                             <td></td>
                                         </tr>
                                     @endforeach

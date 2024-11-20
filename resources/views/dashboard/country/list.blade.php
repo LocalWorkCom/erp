@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('category.Category')</h4>
+        <h4 class="fw-medium mb-0">@lang('country.Countries')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.Category')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('country.Countries')</li>
                 </ol>
             </nav>
         </div>
@@ -26,42 +26,27 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header"
-                            style="
-                        display: flex;
-                        justify-content: space-between;">
-                            <div class="card-title">
-                                @lang('category.Categories')</div>
-
-                            <button type="button" class="btn btn-primary label-btn">
-                                <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('category.add')
-                            </button>
+                        <div class="card-header">
+                            <div class="card-title">@lang('country.Countries')</div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('category.ID')</th>
-                                        <th scope="col">@lang('category.Image')</th>
-                                        <th scope="col">@lang('category.ArabicName')</th>
-                                        <th scope="col">@lang('category.EnglishName')</th>
-                                        <th scope="col">@lang('category.Code')</th>
-                                        <th scope="col">@lang('category.IsFreeze')</th>
-                                        <th scope="col">@lang('category.Actions')</th>
+                                        <th scope="col">@lang('country.ID')</th>
+                                        <th scope="col">@lang('country.ArabicName')</th>
+                                        <th scope="col">@lang('country.EnglishName')</th>
+
+                                        <th scope="col">@lang('country.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($countries as $country)
                                         <tr>
-                                            {{-- @dd( $category) --}}
-                                            <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""
-                                                    width="100" height="100"></td>
-                                            <td>{{ $category->name_ar }}</td>
-                                            <td>{{ $category->name_en }}</td>
-                                            <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
+                                            <td>{{ $country->id }}</td>
+                                            <td>{{ $country->name_ar }}</td>
+                                            <td>{{ $country->name_en }}</td>
+
                                             <td></td>
                                         </tr>
                                     @endforeach

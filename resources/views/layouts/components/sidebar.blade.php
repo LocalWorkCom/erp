@@ -26,7 +26,7 @@
             </div>
             <ul class="main-menu">
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.main')</span></li>
+                <li class="slide__category"><span class="category-name">@lang('sidebar.Main')</span></li>
                 <!-- End::slide__category -->
 
                 <li class="slide">
@@ -523,7 +523,7 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('accordions-collapse') }}"
+                            <a href="{{ url('countries') }}"
                                 class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">

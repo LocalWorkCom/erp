@@ -1,6 +1,26 @@
 <?php
 return [
     'Products' => 'Products',
-    'Product' => 'Product'
-
+    'Product' => 'Product',
+    'brand' => 'Brands',
+    'choose_brand' => 'Choose Brand',
+    'ID' => 'ID',
+    'Image' => 'Image',
+    'ArabicName' => 'Arabic Name',
+    'EnglishName' => 'English Name',
+    'ArabicUnit' => 'Arabic Unit',
+    'EnglishUnit' => 'English Unit',
+    'Type' => 'Type',
+    'EnglishCategory' => 'EnglishCategory',
+    'ArabicCategory' => 'ArabicCategory',
+    'Sku' => 'Sku',
+    'Barcode' => 'Barcode',
+    'Code' => 'Code',
+    'IsHaveExpired' => 'IsHaveExpired',
+    'Actions' => 'Actions',
+    'Complete' => 'Complete',
+    'Raw' => 'Raw',
+    'Yes'=>'Yes',
+    'No'=>'No',
+    'AddProduct'=>'Add Product'
 ];
