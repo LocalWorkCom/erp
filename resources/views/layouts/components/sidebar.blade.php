@@ -26,7 +26,7 @@
             </div>
             <ul class="main-menu">
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">{{ trans('lang.main') }}</span></li>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.main')</span></li>
                 <!-- End::slide__category -->
 
                 <li class="slide">
@@ -34,19 +34,19 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-desktop'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Dashboards') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Dashboards')</span>
                     </a>
                 </li>
                 <!-- End::slide -->
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Client_side') }}</span></li>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.client_side')</span></li>
                 <!-- End::slide__category -->
                 <li class="slide">
                     <a href="{{ url('Dashboards') }}" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-desktop'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Clients') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.clients')</span>
                     </a>
                 </li>
                 <!-- Start::slide -->
@@ -55,27 +55,27 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-food-menu'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Resturants') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Resturants') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide has-sub">
                             <a href="javascript:void(0);" class="side-menu__item">
-                                {{ trans('lang.Branches') }}
+                                @lang('dashboard.Branches')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide has-sub">
-                                    <a href="javascript:void(0);" class="side-menu__item">{{ trans('lang.Floors') }}
+                                    <a href="javascript:void(0);" class="side-menu__item">@lang('dashboard.Floors')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child2">
                                         <li class="slide has-sub">
                                             <a href="javascript:void(0);"
-                                                class="side-menu__item">{{ trans('lang.Positions') }}
+                                                class="side-menu__item">@lang('dashboard.Positions')
                                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                             <ul class="slide-menu child3">
                                                 <li class="slide">
                                                     <a href="javascript:void(0);"
-                                                        class="side-menu__item">{{ trans('lang.Tables') }}</a>
+                                                        class="side-menu__item">@lang('dashboard.Tables') </a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -84,24 +84,24 @@
                             </ul>
                         </li>
                         <li class="slide has-sub">
-                            <a href="javascript:void(0);" class="side-menu__item">{{ trans('lang.Dishes') }}
+                            <a href="javascript:void(0);" class="side-menu__item">@lang('dashboard.Dishes')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.Cuisines') }}</a>
+                                        class="side-menu__item">@lang('dashboard.Cuisines') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.Dishes') }}</a>
+                                        class="side-menu__item">@lang('dashboard.Dishes') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.DishesCategory') }}</a>
+                                        class="side-menu__item">@lang('dashboard.DishesCategory') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.Recipes') }}</a>
+                                        class="side-menu__item">@lang('dashboard.Recipes') </a>
                                 </li>
                             </ul>
                         </li>
@@ -117,12 +117,12 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.HR SYSTEM') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.HR SYSTEM')</span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.HR SYSTEM') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.HR SYSTEM') </a>
                         </li>
                         <!-- Start::slide -->
                         <li class="slide">
@@ -130,7 +130,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Employee') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Employee') </span>
                             </a>
                         </li>
 
@@ -139,7 +139,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Positions') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Positions') </span>
                             </a>
                         </li>
 
@@ -148,7 +148,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Departments') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Departments') </span>
                             </a>
                         </li>
 
@@ -157,7 +157,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Shifts') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Shifts') </span>
                             </a>
                         </li>
 
@@ -166,7 +166,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.TimeTables') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.TimeTables') </span>
                             </a>
                         </li>
 
@@ -175,7 +175,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Scheduled') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Scheduled') </span>
                             </a>
                         </li>
 
@@ -184,7 +184,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Attendance') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Attendance') </span>
                             </a>
                         </li>
 
@@ -193,7 +193,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.FingerDevice') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.FingerDevice') </span>
                             </a>
                         </li>
                         <!-- End::slide -->
@@ -204,22 +204,22 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-food-menu'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.excuses') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.excuses') </span>
                                 <i class="fe fe-chevron-right side-menu__angle"></i>
                             </a>
 
                             <ul class="slide-menu child2">
                                 <li class="slide">
                                     <a href="{{ url('blog') }}"
-                                        class="side-menu__item">{{ trans('lang.excuses') }}</a>
+                                        class="side-menu__item">@lang('dashboard.excuses') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-details') }}"
-                                        class="side-menu__item">{{ trans('lang.excusesReport') }}</a>
+                                        class="side-menu__item">@lang('dashboard.excusesReport') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.excuseslogs') }}</a>
+                                        class="side-menu__item">@lang('dashboard.excuseslogs') </a>
                                 </li>
                             </ul>
                         </li>
@@ -232,22 +232,22 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-food-menu'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Vacation') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Vacation') </span>
                                 <i class="fe fe-chevron-right side-menu__angle"></i>
                             </a>
 
                             <ul class="slide-menu child2">
                                 <li class="slide">
                                     <a href="{{ url('blog') }}"
-                                        class="side-menu__item">{{ trans('lang.Vacation') }}</a>
+                                        class="side-menu__item">@lang('dashboard.Vacation') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-details') }}"
-                                        class="side-menu__item">{{ trans('lang.VacationReport') }}</a>
+                                        class="side-menu__item">@lang('dashboard.VacationReport') </a>
                                 </li>
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">{{ trans('lang.VacationTypes') }}</a>
+                                        class="side-menu__item">@lang('dashboard.VacationTypes') </a>
                                 </li>
                             </ul>
                         </li>
@@ -256,19 +256,19 @@
                 </li>
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Store') }}</span></li>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.Store') </span></li>
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Store') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Store') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Store') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Store') </a>
                         </li>
 
                         <!-- Start::slide -->
@@ -277,7 +277,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.OppeningBalance') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.OppeningBalance') </span>
                             </a>
                         </li>
 
@@ -286,17 +286,17 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                {{ trans('lang.Lines') }}
+                                @lang('dashboard.Lines') 
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);"
-                                        class="side-menu__item">{{ trans('lang.Division') }}
+                                        class="side-menu__item">@lang('dashboard.Division')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child3">
                                         <li class="slide">
                                             <a href="javascript:void(0);"
-                                                class="side-menu__item">{{ trans('lang.Shilves') }}</a>
+                                                class="side-menu__item">@lang('dashboard.Shilves') </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -307,7 +307,7 @@
                 </li>
 
 
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Invoices') }}</span>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.Invoices') </span>
                 </li>
 
                 <!-- End::slide__category -->
@@ -316,12 +316,12 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Invoices') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Invoices') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Invoices') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Invoices') </a>
                         </li>
 
 
@@ -331,25 +331,25 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.orders') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.orders') </span>
                             </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Products') }}" class="side-menu__item">
+                            <a href="{{ route('products.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Products') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Products') </span>
                             </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Category') }}" class="side-menu__item">
+                            <a href="{{ route('categories.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Category') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Category') </span>
                             </a>
                         </li>
 
@@ -358,12 +358,12 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Brand') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Brand') </span>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Purchase') }}</span>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.Purchase') </span>
                 </li>
 
                 <li class="slide has-sub">
@@ -371,12 +371,12 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Purchase') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Purchase') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Purchase') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Purchase') </a>
                         </li>
 
                         <!-- Start::slide  Purchase-->
@@ -385,7 +385,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Purchase') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Purchase') </span>
                             </a>
                         </li>
 
@@ -394,14 +394,14 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Vendors') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Vendors') </span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <!-- End::Purchase -->
                 <li class="slide__category"><span
-                        class="category-name">{{ trans('lang.Offers/Discounts') }}</span></li>
+                        class="category-name">@lang('dashboard.Offers/Discounts') </span></li>
 
 
                 <!-- End::slide__category -->
@@ -410,12 +410,12 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Offers/Discounts') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Offers/Discounts') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Offers && Discounts') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Offers && Discounts') </a>
                         </li>
 
 
@@ -426,7 +426,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Coupon') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Coupon') </span>
                             </a>
                         </li>
 
@@ -435,7 +435,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Discount') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Discount') </span>
                             </a>
                         </li>
 
@@ -444,7 +444,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Offers') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Offers') </span>
                             </a>
                         </li>
 
@@ -453,7 +453,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.Gifts') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.Gifts') </span>
                             </a>
                         </li>
 
@@ -462,41 +462,41 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                <span class="side-menu__label">{{ trans('lang.lolaityPoint') }}</span>
+                                <span class="side-menu__label">@lang('dashboard.lolaityPoint') </span>
                             </a>
                         </li>
                         <!-- End::Purchase -->
                     </ul>
                 </li>
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Transactions') }}</span></li>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.Transactions') </span></li>
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Transactions') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Transactions') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Transactions') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Transactions') </a>
                         </li>
 
                         <!-- Start::slide -->
                         <ul>
                             <li class="slide">
                                 <a href="{{ url('accordions-collapse') }}"
-                                    class="side-menu__item">{{ trans('lang.StoreTransactions') }}</a>
+                                    class="side-menu__item">@lang('dashboard.StoreTransactions') </a>
                             </li>
                             <li class="slide">
                                 <a href="{{ url('accordions-collapse') }}"
-                                    class="side-menu__item">{{ trans('lang.ProductTransactions') }}</a>
+                                    class="side-menu__item">@lang('dashboard.ProductTransactions') </a>
                             </li>
                             <li class="slide">
                                 <a href="{{ url('carousel') }}"
-                                    class="side-menu__item">{{ trans('lang.OrderTransactions') }}</a>
+                                    class="side-menu__item">@lang('dashboard.OrderTransactions') </a>
                             </li>
 
                         </ul>
@@ -505,7 +505,7 @@
                 </li>
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">{{ trans('lang.Setting') }}</span>
+                <li class="slide__category"><span class="category-name">@lang('dashboard.Setting') </span>
                 </li>
                 <!-- End::slide__category -->
 
@@ -515,55 +515,55 @@
                         <span class=" side-menu__icon">
                             <i class='bx bx-cube'></i>
                         </span>
-                        <span class="side-menu__label">{{ trans('lang.Setting') }}</span>
+                        <span class="side-menu__label">@lang('dashboard.Setting') </span>
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">{{ trans('lang.Setting') }}</a>
+                            <a href="javascript:void(0)">@lang('dashboard.Setting') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ url('accordions-collapse') }}"
-                                class="side-menu__item">{{ trans('lang.countries') }}</a>
+                                class="side-menu__item">@lang('dashboard.countries') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('carousel') }}" class="side-menu__item">{{ trans('lang.colors') }}</a>
+                            <a href="{{ url('carousel') }}" class="side-menu__item">@lang('dashboard.colors') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ url('draggable-cards') }}"
-                                class="side-menu__item">{{ trans('lang.size') }}</a>
+                                class="side-menu__item">@lang('dashboard.size') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ url('modals-closes') }}"
-                                class="side-menu__item">{{ trans('lang.Units') }}</a>
+                                class="side-menu__item">@lang('dashboard.Units') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ url('Point_system') }}"
-                                class="side-menu__item">{{ trans('lang.Point_system') }}</a>
+                                class="side-menu__item">@lang('dashboard.Point_system') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ url('Notification') }}"
-                                class="side-menu__item">{{ trans('lang.Notification') }}</a>
+                                class="side-menu__item">@lang('dashboard.Notification') </a>
                         </li>
 
                         <li class="slide">
                             <a href="{{ url('ExcusesSetting') }}"
-                                class="side-menu__item">{{ trans('lang.ExcusesSetting') }}</a>
+                                class="side-menu__item">@lang('dashboard.ExcusesSetting') </a>
                         </li>
 
                         <li class="slide">
                             <a href="{{ url('invoiceSetting') }}"
-                                class="side-menu__item">{{ trans('lang.invoiceSetting') }}</a>
+                                class="side-menu__item">@lang('dashboard.invoiceSetting') </a>
                         </li>
 
                         <li class="slide">
                             <a href="{{ url('leaveSetting') }}"
-                                class="side-menu__item">{{ trans('lang.leaveSetting') }}</a>
+                                class="side-menu__item">@lang('dashboard.leaveSetting') </a>
                         </li>
 
                         <li class="slide">
                             <a href="{{ url('leaveNationals') }}"
-                                class="side-menu__item">{{ trans('lang.leaveNationals') }}</a>
+                                class="side-menu__item">@lang('dashboard.leaveNationals') </a>
                         </li>
                     </ul>
                 </li>

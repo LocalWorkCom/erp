@@ -25,32 +25,17 @@ class CategoryController extends Controller
         $this->checkToken = false;
     }
 
-    // public function index(Request $request)
-    // {
-
-    //     // Pass it to the service
-    //     $response  = $this->categoryService->index($request, $this->checkToken);
-    //     // dd($response);
-    //     // $responseData = json_decode($response->getContent(), true);
-    //     $categories = Category::hydrate($response->original);
-    //     dd($categories);
-
-    //     return view('dashboard.category.list', compact('categories'));
-    // }
-
     public function index(Request $request)
-{
-    // Pass it to the service
-    $response = $this->categoryService->index($request, $this->checkToken);
+    {
+        $response = $this->categoryService->index($request, $this->checkToken);
 
-    // Extract the 'data' field from the response's original array (if 'data' exists)
-    $responseData = $response->original;
+        $responseData = $response->original;
 
-    // If 'data' exists and is an array of items, extract it
-    $categories = $responseData['data'];
+        $categories = $responseData['data'];
+        // dd($categories);
 
-    return view('dashboard.category.list', compact('categories'));
-}
+        return view('dashboard.category.list', compact('categories'));
+    }
 
     public function store(Request $request)
     {

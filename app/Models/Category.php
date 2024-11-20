@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $appends = ['name', 'image', 'description'];
+    protected $appends = ['name', 'custom_image', 'description'];
 
     protected $fillable = [
         'active',
@@ -60,7 +60,7 @@ class Category extends Model
     {
         return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
     }
-    public function getImageAttribute($value)
+    public function getCustomImageAttribute($value)
     {
         return BaseUrl() . '/' . $this->main_image;
     }
