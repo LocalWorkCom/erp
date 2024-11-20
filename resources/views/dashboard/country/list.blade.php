@@ -26,18 +26,27 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between">
                             <div class="card-title">@lang('country.Countries')</div>
+                            <div class="card-text">
+                                <button type="button" class="btn btn-primary label-btn">
+                                    <i class="fe fe-plus label-btn-icon me-2"></i>
+                                    @lang('Country.Add')
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('country.ID')</th>
-                                        <th scope="col">@lang('country.ArabicName')</th>
-                                        <th scope="col">@lang('country.EnglishName')</th>
-
-                                        <th scope="col">@lang('country.Actions')</th>
+                                        <th scope="col">@lang('country.id')</th>
+                                        <th scope="col">@lang('country.name_ar')</th>
+                                        <th scope="col">@lang('country.name_en')</th>
+                                        <th scope="col">@lang('country.currency_ar')</th>
+                                        <th scope="col">@lang('country.currency_en')</th>
+                                        <th scope="col">@lang('country.currency_code')</th>
+                                        <th scope="col">@lang('country.code')</th>
+                                        <th scope="col">@lang('country.actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,8 +55,19 @@
                                             <td>{{ $country->id }}</td>
                                             <td>{{ $country->name_ar }}</td>
                                             <td>{{ $country->name_en }}</td>
+                                            <td>{{ $country->currency_ar }}</td>
+                                            <td>{{ $country->currency_en }}</td>
+                                            <td>{{ $country->currency_code }}</td>
+                                            <td>{{ $country->code }}</td>
+                                            <td>
+                                                <button type="button"
+                                                    class="btn btn-info-light btn-wave">@lang('country.show')</button>
+                                                <button type="button"
+                                                    class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
+                                                <button type="button"
+                                                    class="btn btn-danger-light btn-wave">@lang('country.delete')</button>
 
-                                            <td></td>
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -64,20 +84,4 @@
 @endsection
 
 @section('scripts')
-    <!-- JQUERY CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
-
-    <!-- DATA-TABLES CDN -->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- INTERNAL DATADABLES JS -->
-    @vite('resources/assets/js/datatables.js')
 @endsection

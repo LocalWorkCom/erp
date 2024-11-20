@@ -35,7 +35,7 @@
 
                             <button type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('category.add')
+                                @lang('category.AddCategory')
                             </button>
                         </div>
                         <div class="card-body">

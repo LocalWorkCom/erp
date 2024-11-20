@@ -3,18 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
 use App\Services\CountryService;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-    // YourController.php
-
     protected $countryService;
     protected $checkToken;  // Set to true or false based on your need
 

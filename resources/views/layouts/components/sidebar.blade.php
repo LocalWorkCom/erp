@@ -286,7 +286,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                @lang('sidebar.Lines') 
+                                @lang('sidebar.Lines')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide has-sub">
