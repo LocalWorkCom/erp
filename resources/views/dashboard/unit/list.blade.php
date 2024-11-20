@@ -42,7 +42,8 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="{{ route('unit.store') }}" method="POST">
+                                        <form action="{{ route('unit.store') }}" method="POST" class="needs-validation"
+                                            novalidate>
                                             @csrf
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">Add Unit</h6>
@@ -139,4 +140,6 @@
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
+    @vite('resources/assets/js/validation.js')
+    @vite('resources/assets/js/choices.js')
 @endsection
