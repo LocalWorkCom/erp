@@ -83,4 +83,18 @@ return [
     'NotClosingMessage' => 'It cannot be add, You have deficit ... Please fix it',
     'NoLeaveMessage' => 'It cannot be add, You did not have leaves',
 
+    //web
+    'correct' => 'Looks good!',
+    'brand' => 'Please choose a brand',
+    'img' => 'Please choose an image',
+    'unit' => 'Please choose a unit',
+    'currency' => 'Please choose a currency',
+    'category' => 'Please choose a category',
+    'name_ar' => 'Please enter the Arabic name',
+    'name_en' => 'Please enter the English name',
+    'desc_ar' => 'Please enter the Arabic descrription',
+    'desc_en' => 'Please enter the English description',
+    'enter_barcode' => 'Please enter the barcode',
+    'code' => 'Please enter the code',
+
 ];

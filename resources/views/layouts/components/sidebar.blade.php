@@ -286,7 +286,7 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                @lang('sidebar.Lines') 
+                                @lang('sidebar.Lines')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide has-sub">
@@ -523,7 +523,7 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('accordions-collapse') }}"
+                            <a href="{{ url('countries') }}"
                                 class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
@@ -534,7 +534,7 @@
                                 class="side-menu__item">@lang('sidebar.size') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('modals-closes') }}"
+                            <a href="{{ route('units.list') }}"
                                 class="side-menu__item">@lang('sidebar.Units') </a>
                         </li>
                         <li class="slide">

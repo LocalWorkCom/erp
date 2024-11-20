@@ -105,51 +105,19 @@
                             <!-- End::header-link|dropdown-toggle -->
                             <ul class="main-header-dropdown dropdown-menu border-0" data-popper-placement="none">
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('set-locale', 'en')}}">
                                         <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/us_flag.jpg')}}" alt="img">
+                                            <img src="{{asset('build/assets/images/flags/us_flag.png')}}" alt="img">
                                         </span>
                                         English
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ route('set-locale', 'ar')}}">
                                         <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/spain_flag.jpg')}}" alt="img" >
+                                            <img src="{{asset('build/assets/images/flags/ar_flag.png')}}" alt="img" >
                                         </span>
-                                        Spanish
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                        <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/french_flag.jpg')}}" alt="img" >
-                                        </span>
-                                        French
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                        <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/germany_flag.jpg')}}" alt="img" >
-                                        </span>
-                                        German
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                        <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/italy_flag.jpg')}}" alt="img" >
-                                        </span>
-                                        Italian
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                        <span class="avatar avatar-xs lh-1 me-2">
-                                            <img src="{{asset('build/assets/images/flags/russia_flag.jpg')}}" alt="img" >
-                                        </span>
-                                        Russian
+                                        Arabic
                                     </a>
                                 </li>
                             </ul>
