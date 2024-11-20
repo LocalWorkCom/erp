@@ -26,8 +26,17 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
-                            <div class="card-title">Categories</div>
+                        <div class="card-header"
+                            style="
+                        display: flex;
+                        justify-content: space-between;">
+                            <div class="card-title">
+                                Categories</div>
+
+                            <button type="button" class="btn btn-primary label-btn">
+                                <i class="fe fe-plus label-btn-icon me-2"></i>
+                                @lang('category.add')
+                            </button>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
@@ -47,7 +56,8 @@
                                         <tr>
                                             {{-- @dd( $category) --}}
                                             <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt="" width="100" height="100"></td>
+                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""
+                                                    width="100" height="100"></td>
 
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>

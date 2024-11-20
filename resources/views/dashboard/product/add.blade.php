@@ -43,10 +43,10 @@
                                             <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a brand.
+                                            @lang('validation.brand')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -54,10 +54,10 @@
                                         <input type="text" class="form-control" id="input-placeholder"
                                             placeholder="Arabic Name" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter arabic name.
+                                            @lang('validation.name_ar')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -65,40 +65,40 @@
                                         <input type="text" class="form-control" id="input-placeholder"
                                             placeholder="English Name" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter an english name.
+                                            @lang('validation.name_en')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="text-area" class="form-label">Arabic Description</label>
                                         <textarea class="form-control" id="text-area" rows="1" required></textarea>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose an arabic description.
+                                            @lang('validation.desc_ar')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="text-area" class="form-label">English Description</label>
                                         <textarea class="form-control" id="text-area" rows="1" required></textarea>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please an english description.
+                                            @lang('validation.desc_en')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                         <label for="input-file" class="form-label">Product Image</label>
                                         <input class="form-control" type="file" id="input-file" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a product image.
+                                            @lang('validation.img')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -110,10 +110,10 @@
                                             <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a unit.
+                                            @lang('validation.unit')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -125,10 +125,10 @@
                                             <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a currency.
+                                            @lang('validation.currency')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -140,10 +140,10 @@
                                             <option value="Choice 3">Choice 3</option>
                                         </select>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a category.
+                                            @lang('validation.category')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -151,10 +151,10 @@
                                         <input type="text" class="form-control" id="input-placeholder"
                                             placeholder="Barcode" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter a barcode.
+                                            @lang('validation.enter_barcode')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -162,10 +162,10 @@
                                         <input type="text" class="form-control" id="input-placeholder"
                                             placeholder="Product Code" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter a product code.
+                                            @lang('validation.code')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
