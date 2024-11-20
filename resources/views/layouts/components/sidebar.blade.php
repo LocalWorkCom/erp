@@ -64,6 +64,9 @@
                                 @lang('sidebar.Branches')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
+                                <li class="slide">
+                                    <a href="#" class="side-menu__item">{{ trans('lang.Branches') }}</a>
+                                </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
@@ -106,6 +109,7 @@
                             </ul>
                         </li>
                     </ul>
+
                 </li>
                 <!-- End::slide -->
 
@@ -289,11 +293,18 @@
                                 @lang('sidebar.Lines')
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
+                                <li class="slide">
+                                    <a href="#" class="side-menu__item">{{ trans('lang.Lines') }}</a>
+                                </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);"
                                         class="side-menu__item">@lang('sidebar.Division')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child3">
+                                        <li class="slide">
+                                            <a href="#"
+                                                class="side-menu__item">{{ trans('lang.Division') }}</a>
+                                        </li>
                                         <li class="slide">
                                             <a href="javascript:void(0);"
                                                 class="side-menu__item">@lang('sidebar.Shilves') </a>
