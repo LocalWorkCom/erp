@@ -47,7 +47,7 @@
                                         <tr>
                                             {{-- @dd( $category) --}}
                                             <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""></td>
+                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt="" width="100" height="100"></td>
 
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>

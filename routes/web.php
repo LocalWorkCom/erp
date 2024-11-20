@@ -20,9 +20,9 @@ Route::get('/', function () {
 })->name('home');
 // Route::middleware('auth:web')->group(function () {
 
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [ProductController::class, 'index'])->name('products.list');
 Route::group(['prefix' => 'product'], function () {
-    Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+    Route::get('/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
     Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::get('delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
@@ -41,7 +41,7 @@ Route::group(['prefix' => 'product'], function () {
     // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
 });
 // });
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list');
 Route::group(['prefix' => 'category'], function () {
     Route::post('store', [CategoryController::class, 'store'])->name('category.store');
     Route::post('update/{id}', [CategoryController::class, 'update'])->name('category.update');

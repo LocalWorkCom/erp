@@ -286,12 +286,12 @@
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
-                                @lang('dashboard.Lines') }}
+                                @lang('dashboard.Lines') 
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);"
-                                        class="side-menu__item">@lang('dashboard.Division') }}
+                                        class="side-menu__item">@lang('dashboard.Division')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child3">
                                         <li class="slide">
@@ -336,7 +336,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Products') }}" class="side-menu__item">
+                            <a href="{{ route('products.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -345,7 +345,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Category') }}" class="side-menu__item">
+                            <a href="{{ route('categories.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
