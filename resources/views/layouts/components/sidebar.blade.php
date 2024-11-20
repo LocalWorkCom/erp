@@ -65,7 +65,7 @@
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="#" class="side-menu__item">{{ trans('lang.Branches') }}</a>
+                                    <a href="#" class="side-menu__item">@lang('sidebar.Branches')  </a>
                                 </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
@@ -114,7 +114,7 @@
                 <!-- End::slide -->
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">HR SYSTEM</span></li>
+                <li class="slide__category"><span class="category-name">@lang('sidebar.HR SYSTEM')</span></li>
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
@@ -294,7 +294,7 @@
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="#" class="side-menu__item">{{ trans('lang.Lines') }}</a>
+                                    <a href="#" class="side-menu__item">@lang('sidebar.Lines')</a>
                                 </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);"
@@ -303,7 +303,7 @@
                                     <ul class="slide-menu child3">
                                         <li class="slide">
                                             <a href="#"
-                                                class="side-menu__item">{{ trans('lang.Division') }}</a>
+                                                class="side-menu__item">@lang('sidebar.Division')</a>
                                         </li>
                                         <li class="slide">
                                             <a href="javascript:void(0);"
