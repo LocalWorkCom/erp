@@ -1,4 +1,6 @@
 <?php
 return[
-    'main' => 'Main'
+    'main' => 'Main',
+    'Dashboards' => 'Dashboards',
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,4 +47,10 @@ Route::group(['prefix' => 'category'], function () {
     Route::post('store', [CategoryController::class, 'store'])->name('category.store');
     Route::post('update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+});
+Route::group(['prefix' => 'countries'], function () {
+    Route::get('/', [CountryController::class, 'index'])->name('countries');
+    Route::post('store', [CountryController::class, 'store'])->name('category.store');
+    Route::post('update/{id}', [CountryController::class, 'update'])->name('category.update');
+    Route::get('delete/{id}', [CountryController::class, 'delete'])->name('category.delete');
 });
