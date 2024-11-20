@@ -39,14 +39,14 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('country.id')</th>
-                                        <th scope="col">@lang('country.name_ar')</th>
-                                        <th scope="col">@lang('country.name_en')</th>
-                                        <th scope="col">@lang('country.currency_ar')</th>
-                                        <th scope="col">@lang('country.currency_en')</th>
-                                        <th scope="col">@lang('country.currency_code')</th>
-                                        <th scope="col">@lang('country.code')</th>
-                                        <th scope="col">@lang('country.actions')</th>
+                                        <th scope="col">@lang('country.Id')</th>
+                                        <th scope="col">@lang('country.ArabicName')</th>
+                                        <th scope="col">@lang('country.EnglishName')</th>
+                                        <th scope="col">@lang('country.ArabicCurrency')</th>
+                                        <th scope="col">@lang('country.EnglishCurrency')</th>
+                                        <th scope="col">@lang('country.CurrencyCode')</th>
+                                        <th scope="col">@lang('country.Code')</th>
+                                        <th scope="col">@lang('country.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -62,7 +62,15 @@
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
                                             <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
-                                            <td></td>
+                                            <td>
+                                                <button type="button"
+                                                class="btn btn-info-light btn-wave">@lang('country.show')</button>
+                                            <button type="button"
+                                                class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
+                                            <button type="button"
+                                                class="btn btn-danger-light btn-wave">@lang('country.delete')</button>
+
+                                            </td>
                                         </tr>
                                     @endforeach
 

@@ -7,12 +7,12 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Create Product</h4>
+        <h4 class="fw-medium mb-0">@lang('product.CreateProduct')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Create Product</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('product.CreateProduct')</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                Create Product
+                                @lang('product.CreateProduct')
                             </div>
                         </div>
                         <div class="card-body">
@@ -35,12 +35,12 @@
                                 @csrf
                                 <div class="row gy-4">
                                     <div class="col-12">
-                                        <p class="mb-2 text-muted">Brand:</p>
+                                        <p class="mb-2 text-muted">@lang('product.Brand'):</p>
                                         <select class="js-example-basic-single form-control" required>
-                                            <option value="" selected disabled>Choose Brand</option>
-                                            <option value="Choice 1">Choice 1</option>
-                                            <option value="Choice 2">Choice 2</option>
-                                            <option value="Choice 3">Choice 3</option>
+                                            <option value="" selected disabled>@lang('product.ChooseBrand')</option>
+                                            @foreach ($Brands as $Brand)
+                                                <option value="{{ $Brand->IDBrand }}">{{ $Brand->name_ar }}</option>
+                                            @endforeach
                                         </select>
                                         <div class="valid-feedback">
                                             @lang('validation.correct')
