@@ -534,7 +534,7 @@
                                 class="side-menu__item">@lang('sidebar.size') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('modals-closes') }}"
+                            <a href="{{ route('units.list') }}"
                                 class="side-menu__item">@lang('sidebar.Units') </a>
                         </li>
                         <li class="slide">

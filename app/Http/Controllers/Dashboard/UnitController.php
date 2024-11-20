@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Services\ProductService;
+use App\Models\Unit;
+use App\Services\UnitService;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +16,13 @@ class ProductController extends Controller
 
     // YourController.php
 
-    protected $productService;
+    protected $UnitService;
     protected $checkToken;  // Set to true or false based on your need
 
 
-    public function __construct(ProductService $productService)
+    public function __construct(UnitService $UnitService)
     {
-        $this->productService = $productService;
+        $this->UnitService = $UnitService;
         $this->checkToken = false;
     }
 
@@ -29,31 +30,32 @@ class ProductController extends Controller
     {
 
         // Pass it to the service
-        $response  = $this->productService->index($request, $this->checkToken);
+        $response  = $this->UnitService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        $products = Product::hydrate($responseData['data']);
+        $Units = Unit::hydrate($responseData['data']);
 
-        return view('dashboard.product.list', compact('products'));
+        return view('dashboard.unit.list', compact('Units'));
     }
 
     public function create()
     {
 
         // Pass it to the service
-        // $response  = $this->productService->create($request, $this->checkToken);
+        // $response  = $this->UnitService->create($request, $this->checkToken);
         // $responseData = json_decode($response->getContent(), true);
         // $products = $responseData['data'];
-        return view('dashboard.product.add');
+
+        return view('dashboard.unit.add');
  
     }    
 
     public function store(Request $request)
     {
-        return $this->productService->store($request, $this->checkToken);
+        return $this->UnitService->store($request, $this->checkToken);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->productService->update($request, $id, $this->checkToken);
+        return $this->UnitService->update($request, $id, $this->checkToken);
     }
 }
