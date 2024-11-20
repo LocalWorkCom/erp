@@ -82,7 +82,7 @@ class CategoryService
                 return  RespondWithBadRequestWithData($category_valid);
             }
         }
-        $created_by = Auth::guard('api')->user()->id;
+        $created_by = 13;
 
         $category = new Category();
         $category->name_ar = $name_ar;

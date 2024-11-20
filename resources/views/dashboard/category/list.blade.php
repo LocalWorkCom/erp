@@ -33,10 +33,10 @@
                             <div class="card-title">
                                 @lang('category.categories')</div>
 
-                            <button type="button" class="btn btn-primary label-btn">
+                            <a href="{{route('category.create')}}" type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('category.add')
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             @if (session('message'))
@@ -70,13 +70,17 @@
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
+                                            <td>{{ $category->is_freeze ? __('category.yes') :  __('category.no')  }}</td>
                                             <td>
-                                                <form action="{{ route('category.delete', $category->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')  <!-- This overrides the POST method to simulate DELETE -->
-                                                    <button type="submit" class="btn btn-danger">Delete Category</button>
-                                                </form>
+                                                <div class="hstack gap-2 fs-15 m-auto">
+                                                    <a href="{{ route('category.edit', $category->id) }}" class="btn btn-info"> @lang('category.edit') <i class="ri-edit-line"></i></a>
+                                                    <form class="" action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    <button href="javascript:void(0);" class="btn btn-danger"> @lang('category.delete') <i class="ri-delete-bin-line"></i></button>
+                                                    </form>
+
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
