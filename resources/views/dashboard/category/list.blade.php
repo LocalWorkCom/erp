@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Category</h4>
+        <h4 class="fw-medium mb-0">@lang('category.category')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Category</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Category</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('category.category')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('category.category')</li>
                 </ol>
             </nav>
         </div>
@@ -31,7 +31,7 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                Categories</div>
+                                @lang('category.categories')</div>
 
                             <button type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
@@ -42,13 +42,13 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Arabic Name</th>
-                                        <th scope="col">English Name</th>
-                                        <th scope="col">code</th>
-                                        <th scope="col">is freeze</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">@lang('category.id')</th>
+                                        <th scope="col">@lang('category.img')</th>
+                                        <th scope="col">@lang('category.name_ar')</th>
+                                        <th scope="col">@lang('category.name_en')</th>
+                                        <th scope="col">@lang('category.code')</th>
+                                        <th scope="col">@lang('category.freeze')</th>
+                                        <th scope="col">@lang('category.actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
