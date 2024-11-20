@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Products</h4>
+        <h4 class="fw-medium mb-0">@lang('product.Products')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Products</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.main')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('product.Products')</li>
                 </ol>
             </nav>
         </div>
@@ -26,21 +26,30 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
-                            <div class="card-title">Products</div>
+                        <div class="card-header"
+                            style="
+                        display: flex;
+                        justify-content: space-between;">
+                            <div class="card-title">@lang('product.Products')</div>
+                            <button type="button" class="btn btn-primary label-btn" onclick="window.location.href='{{ route('product.create') }}'">
+                                <i class="fe fe-plus label-btn-icon me-2"></i>
+                                @lang('product.Add')
+                            </button>
+                            
+                            
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Arabic Name</th>
-                                        <th scope="col">English Name</th>
-                                        <th scope="col">Unit</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Sku</th>
+                                        <th scope="col">@lang('product.ID')</th>
+                                        <th scope="col">@lang('product.Image')</th>
+                                        <th scope="col">@lang('product.ArabicName')</th>
+                                        <th scope="col">@lang('product.EnglishName')</th>
+                                        <th scope="col">@lang('product.Unit')</th>
+                                        <th scope="col">@lang('product.Type')</th>
+                                        <th scope="col">@lang('product.Category')</th>
+                                        <th scope="col">@lang('product.Sku')</th>
                                         <th scope="col">barcode</th>
                                         <th scope="col">code</th>
                                         <th scope="col">is have expired</th>
