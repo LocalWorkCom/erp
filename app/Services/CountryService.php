@@ -30,7 +30,7 @@ class CountryService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $counties = Country::where('deleted_at',null)->all();
+        $counties = Country::where('deleted_at', null)->get();
 
         // dd($categories);
 
@@ -49,11 +49,11 @@ class CountryService
         }
         $validator = Validator::make($request->all(), [
             "name_ar" => "required",
-                "name_en" => "required",
-                'currency_ar' => 'required',
-                'currency_en' => 'required',
-                'currency_code' => 'required',
-                'code' => 'required',
+            "name_en" => "required",
+            'currency_ar' => 'required',
+            'currency_en' => 'required',
+            'currency_code' => 'required',
+            'code' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -82,13 +82,12 @@ class CountryService
         }
         // Validate the input
         $validator = Validator::make($request->all(), [
-            'name_ar' => 'required|string',
-            'name_en' => 'string',
-            'description_ar' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'image' => 'required|mimes:jpeg,png,jpg,gif,svg',  // Restrict image extensions
-            'is_freeze' => 'required|boolean',
-            'parent_id' => 'nullable|integer',
+           "name_ar" => "required",
+            "name_en" => "required",
+            'currency_ar' => 'required',
+            'currency_en' => 'required',
+            'currency_code' => 'required',
+            'code' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -96,72 +95,57 @@ class CountryService
         }
 
         // Retrieve the category by ID, or throw an exception if not found
-        $category = Category::find($id);
-        if (!$category) {
+        $country = Country::find($id);
+        if (!$country) {
             return  RespondWithBadRequestData($lang, 8);
-        }
-        // dd($category, $request);
-        if ($category->name_ar == $request->name_ar && $category->name_en == $request->name_en &&  $category->description_ar == $request->description_ar &&  $category->description_en == $request->description_en && $category->is_freeze == $request->is_freeze  && $category->parent_id == $request->parent_id) {
-            return  RespondWithBadRequestData($lang,10);
-        }
-        if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-            return RespondWithBadRequest($lang, 9);
         }
         $modify_by = Auth::guard('api')->user()->id;
 
         // Assign the updated values to the category model
-        $category->name_ar = $request->name_ar;
-        $category->name_en = $request->name_en;
-        $category->description_ar = $request->description_ar;
-        $category->description_en = $request->description_en;
-        $category->is_freeze = $request->is_freeze;
-        $category->modify_by = $modify_by;
-        $category->parent_id = isset($request->parent_id) && !empty($request->parent_id) ? $request->parent_id : null;
-
-        // Handle file upload for the image if provided
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            DeleteFile('images/categories', $category->image);
-            UploadFile('images/categories', 'image', $category, $image);
-        }
+        $country->name_ar = $request->name_ar;
+        $country->name_en = $request->name_en;
+        $country->currency_ar = $request->currency_ar;
+        $country->currency_en = $request->currency_en;
+        $country->code = $request->code;
+        $country->currency_code = $request->currency_code;
 
         // Update the category in the database
-        $category->save();
+        $country->save();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    public function delete(Request $request, $id, $checkToken)
-    {
-        // Fetch the language header for response
-        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        App::setLocale($lang);
+    // public function delete(Request $request, $id, $checkToken)
+    // {
+    //     // Fetch the language header for response
+    //     $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+    //     App::setLocale($lang);
 
-        if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
-        }
-        // Find the category by ID, or throw a 404 if not found
-        $category = Category::find($id);
-        if (!$category) {
-            return  RespondWithBadRequestData($lang, 8);
-        }
-        // Check if there are any products associated with this category
-        if ($category->products()->count() > 0) {
-            return RespondWithBadRequest($lang, 6);
-        }
+    //     if (!CheckToken() && $checkToken) {
+    //         return RespondWithBadRequest($lang, 5);
+    //     }
+    //     // Find the category by ID, or throw a 404 if not found
+    //     $category = Category::find($id);
+    //     if (!$category) {
+    //         return  RespondWithBadRequestData($lang, 8);
+    //     }
+    //     // Check if there are any products associated with this category
+    //     if ($category->products()->count() > 0) {
+    //         return RespondWithBadRequest($lang, 6);
+    //     }
 
-        // Handle deletion of associated image if it exists
-        if ($category->image) {
-            $imagePath = public_path('images/categories/' . $category->image);
-            if (File::exists($imagePath)) {
-                File::delete($imagePath);
-            }
-        }
+    //     // Handle deletion of associated image if it exists
+    //     if ($category->image) {
+    //         $imagePath = public_path('images/categories/' . $category->image);
+    //         if (File::exists($imagePath)) {
+    //             File::delete($imagePath);
+    //         }
+    //     }
 
-        // Delete the category
-        $category->delete();
+    //     // Delete the category
+    //     $category->delete();
 
-        // Return success response
-        return RespondWithSuccessRequest($lang, 1);
-    }
+    //     // Return success response
+    //     return RespondWithSuccessRequest($lang, 1);
+    // }
 }

@@ -3,63 +3,39 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Services\CountryService;
 use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $countryService;
+    protected $checkToken;  // Set to true or false based on your need
+
+
+    public function __construct(CountryService $countryService)
     {
-        //
+        $this->countryService = $countryService;
+        $this->checkToken = false;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $response = $this->countryService->index($request, $this->checkToken);
+
+        $responseData = $response->original;
+
+        $countries = $responseData['data'];
+
+        return view('dashboard.country.list', compact('countries'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return $this->countryService->store($request, $this->checkToken);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return $this->countryService->update($request, $id, $this->checkToken);
     }
 }

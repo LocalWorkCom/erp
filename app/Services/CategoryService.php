@@ -31,7 +31,6 @@ class CategoryService
         }
         $categories = Category::all();
 
-        // dd($categories);
         
         if (!$checkToken) {
             $categories = $categories->makeVisible(['name_en', 'name_ar', 'image', 'description_ar', 'description_en']);
