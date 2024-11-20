@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,12 +17,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/set-locale/{locale}', function ($locale) {
+    if (in_array($locale, config('app.available_locales'))) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('set-locale');
+
 Route::get('/', function () {
     return view('dashboards.index5');
 })->name('home');
 // Route::middleware('auth:web')->group(function () {
 
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products', [ProductController::class, 'index'])->name('products.list');
 Route::group(['prefix' => 'product'], function () {
     Route::get('/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
@@ -41,9 +50,25 @@ Route::group(['prefix' => 'product'], function () {
     // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
 });
 // });
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list');
 Route::group(['prefix' => 'category'], function () {
+    Route::get('create', [CategoryController::class, 'create'])->name('category.create');
     Route::post('store', [CategoryController::class, 'store'])->name('category.store');
-    Route::post('update/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+});
+Route::group(['prefix' => 'countries'], function () {
+    Route::get('/', [CountryController::class, 'index'])->name('countries');
+    Route::post('store', [CountryController::class, 'store'])->name('country.store');
+    Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
+    Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
+});
+Route::get('/units', [UnitController::class, 'index'])->name('units.list');
+Route::post('/units/store', [UnitController::class, 'store'])->name('unit.store');
+
+Route::group(['prefix' => 'unit'], function () {
+    Route::post('store', [UnitController::class, 'store']);
+    Route::post('update', [UnitController::class, 'update']);
+    Route::get('delete/{id}', [UnitController::class, 'delete']);
 });

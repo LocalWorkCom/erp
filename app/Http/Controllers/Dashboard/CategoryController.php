@@ -25,40 +25,53 @@ class CategoryController extends Controller
         $this->checkToken = false;
     }
 
-    // public function index(Request $request)
-    // {
-
-    //     // Pass it to the service
-    //     $response  = $this->categoryService->index($request, $this->checkToken);
-    //     // dd($response);
-    //     // $responseData = json_decode($response->getContent(), true);
-    //     $categories = Category::hydrate($response->original);
-    //     dd($categories);
-
-    //     return view('dashboard.category.list', compact('categories'));
-    // }
-
     public function index(Request $request)
-{
-    // Pass it to the service
-    $response = $this->categoryService->index($request, $this->checkToken);
+    {
+        $response = $this->categoryService->index($request, $this->checkToken);
 
-    // Extract the 'data' field from the response's original array (if 'data' exists)
-    $responseData = $response->original;
+        $responseData = $response->original;
 
-    // If 'data' exists and is an array of items, extract it
-    $categories = $responseData['data'];
+        $categories = $responseData['data'];
+        // dd($categories);
 
-    return view('dashboard.category.list', compact('categories'));
-}
+        return view('dashboard.category.list', compact('categories'));
+    }
 
+    public function create()
+    {
+        $categories = Category::where('active', 1)->get();
+        return view('dashboard.category.add', compact('categories'));
+    }
     public function store(Request $request)
     {
-        return $this->categoryService->store($request, $this->checkToken);
+        $response = $this->categoryService->store($request, $this->checkToken);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        $categories = Category::where('active', 1)->get(); // Fetch only active categories
+        return view('dashboard.category.edit', compact('category', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
-        return $this->categoryService->update($request, $id, $this->checkToken);
+//        dd($request->all());
+        $response = $this->categoryService->update($request, $id, $this->checkToken);
+//        dd($response);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
     }
+    public function delete(Request $request, $id)
+    {
+        $response = $this->categoryService->delete($request, $id, $this->checkToken);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
+    }
+
 }
