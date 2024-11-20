@@ -50,10 +50,31 @@ class ProductService
             return RespondWithBadRequest($lang, 5);
         }
 
-        foreach ($products as $product) {
-            $product_limits = ProductLimit::where('product_id', $product->id)->get();
-            $product['limits'] = $product_limits;
+        // foreach ($products as $product) {
+        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
+        //     $product['limits'] = $product_limits;
+        // }
+
+        if (!$checkToken) {
+            $products = $products->makeVisible(['name_en', 'name_ar', 'main_image', 'description_ar', 'description_en']);
         }
+
+        return ResponseWithSuccessData($lang, $products, 1);
+    }
+
+    public function create(Request $request, $checkToken)
+    {
+        $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
+        $products = Product::all();
+
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
+        }
+
+        // foreach ($products as $product) {
+        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
+        //     $product['limits'] = $product_limits;
+        // }
 
         return ResponseWithSuccessData($lang, $products, 1);
     }

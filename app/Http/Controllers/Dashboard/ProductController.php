@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -26,12 +27,27 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-      
+
         // Pass it to the service
-        // $data = $this->productService->index($request, $this->checkToken);
-        // $products = $data['data'];
-        // dd($products);
+        $response  = $this->productService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $products = Product::hydrate($responseData['data']);
+
+        return view('dashboard.products.list', compact('products'));
     }
+
+    public function create(Request $request)
+    {
+
+        // Pass it to the service
+        $response  = $this->productService->create($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $products = $responseData['data'];
+
+
+        return view('dashboard.products.add', compact('products'));
+ 
+    }    
 
     public function store(Request $request)
     {
