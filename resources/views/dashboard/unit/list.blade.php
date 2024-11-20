@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Units</h4>
+        <h4 class="fw-medium mb-0">@lang('unit.units')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Units</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Units</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('unit.units')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('unit.units')</li>
                 </ol>
             </nav>
         </div>
@@ -31,12 +31,12 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                Units</div>
+                                @lang('unit.units')</div>
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                Add Unit
+                                @lang('unit.add')
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -46,17 +46,17 @@
                                             novalidate>
                                             @csrf
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="exampleModalLabel1">Add Unit</h6>
+                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('unit.add')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="input-placeholder" class="form-label">Arabic
-                                                            Name</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Arabic Name" required>
+                                                        <label for="input-placeholder"
+                                                            class="form-label">@lang('unit.name_ar')</label>
+                                                        <input type="text" class="form-control" placeholder="@lang('unit.name_ar')"
+                                                            required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.correct')
                                                         </div>
@@ -65,10 +65,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="input-placeholder" class="form-label">English
-                                                            Name</label>
+                                                        <label for="input-placeholder"
+                                                            class="form-label">@lang('unit.name_en')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="English Name" required>
+                                                            placeholder="@lang('unit.name_en')" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.correct')
                                                         </div>
@@ -80,9 +80,9 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-outline-primary">Save
-                                                    changes</button>
+                                                    data-bs-dismiss="modal">@lang('modal.close')</button>
+                                                <button type="submit"
+                                                    class="btn btn-outline-primary">@lang('modal.save')</button>
                                             </div>
                                         </form>
                                     </div>
@@ -93,11 +93,11 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Arabic Name</th>
-                                        <th scope="col">English Name</th>
+                                        <th scope="col">@lang('unit.id')</th>
+                                        <th scope="col">@lang('unit.name_ar')</th>
+                                        <th scope="col">@lang('unit.name_en')</th>
 
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">@lang('unit.actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,5 +143,4 @@
     @vite('resources/assets/js/validation.js')
     @vite('resources/assets/js/choices.js')
     @vite('resources/assets/js/modal.js')
-
 @endsection
