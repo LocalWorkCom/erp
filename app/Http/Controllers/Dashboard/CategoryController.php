@@ -66,4 +66,12 @@ class CategoryController extends Controller
         $message= $responseData['apiMsg'];
         return redirect('categories')->with('message',$message);
     }
+    public function delete(Request $request, $id)
+    {
+        $response = $this->categoryService->delete($request, $id, $this->checkToken);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('categories')->with('message',$message);
+    }
+
 }

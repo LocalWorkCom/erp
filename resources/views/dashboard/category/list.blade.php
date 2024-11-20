@@ -71,7 +71,13 @@
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
                                             <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
-                                            <td></td>
+                                            <td>
+                                                <form action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')  <!-- This overrides the POST method to simulate DELETE -->
+                                                    <button type="submit" class="btn btn-danger">Delete Category</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
 
