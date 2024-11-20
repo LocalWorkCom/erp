@@ -52,14 +52,14 @@ class Handler extends ExceptionHandler
             }
         });
     }
-  
-    
+
+
     function render($request, Throwable $exception)
     {
         // Explicitly check for HttpException and access getStatusCode()
         if ($exception instanceof HttpException) {
             $statusCode = $exception->getStatusCode();
-    
+
             // Handle different status codes
             switch ($statusCode) {
                 case 401:
@@ -73,12 +73,12 @@ class Handler extends ExceptionHandler
                 case 500:
                     return response()->view('error.500', [], 500);
                 default:
-                    return response()->view('error.default', [], $statusCode);
+                    return response()->view('error.404', [], $statusCode);
             }
         }
-    
+
         // For non-HTTP exceptions, use the parent render method
         return parent::render($request, $exception);
     }
-    
+
 }
