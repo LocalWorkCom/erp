@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">Category</h4>
+        <h4 class="fw-medium mb-0">Units</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">Category</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Category</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Units</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Units</li>
                 </ol>
             </nav>
         </div>
@@ -26,43 +26,27 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header"
-                            style="
-                        display: flex;
-                        justify-content: space-between;">
-                            <div class="card-title">
-                                Categories</div>
-
-                            <button type="button" class="btn btn-primary label-btn">
-                                <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('category.add')
-                            </button>
+                        <div class="card-header">
+                            <div class="card-title">Units</div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">ID</th>
-                                        <th scope="col">Image</th>
                                         <th scope="col">Arabic Name</th>
                                         <th scope="col">English Name</th>
-                                        <th scope="col">code</th>
-                                        <th scope="col">is freeze</th>
+                 
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($Units as $units)
                                         <tr>
-                                            {{-- @dd( $category) --}}
-                                            <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""
-                                                    width="100" height="100"></td>
-
-                                            <td>{{ $category->name_ar }}</td>
-                                            <td>{{ $category->name_en }}</td>
-                                            <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
+                                            <td>{{ $units->id }}</td>
+                                            <td>{{ $units->name_ar }}</td>
+                                            <td>{{ $units->name_en }}</td>
+                                     
                                             <td></td>
                                         </tr>
                                     @endforeach
