@@ -39,6 +39,14 @@
                             </button>
                         </div>
                         <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-solid-info alert-dismissible fade show">
+                                    {{ session('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
@@ -64,12 +72,16 @@
                                             <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
                                             <td>
                                                 <button type="button"
-                                                class="btn btn-info-light btn-wave">@lang('country.show')</button>
-                                            <button type="button"
-                                                class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
-                                            <button type="button"
-                                                class="btn btn-danger-light btn-wave">@lang('country.delete')</button>
-
+                                                    class="btn btn-info-light btn-wave">@lang('country.show')</button>
+                                                <button type="button"
+                                                    class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
+                                                <form action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <!-- This overrides the POST method to simulate DELETE -->
+                                                    <button type="submit"
+                                                        class="btn btn-danger">@lang('country.delete')</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
