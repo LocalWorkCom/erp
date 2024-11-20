@@ -33,10 +33,10 @@
                             <div class="card-title">
                                 @lang('category.Categories')</div>
 
-                            <button type="button" class="btn btn-primary label-btn">
+                            <a href="{{route('category.create')}}" type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('category.AddCategory')
-                            </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             @if (session('message'))
@@ -69,18 +69,15 @@
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
+                                            <td>{{ $category->is_freeze ? __('category.yes') :  __('category.no')  }}</td>
                                             <td>
-                                                <button type="button"
-                                                    class="btn btn-info-light btn-wave">@lang('country.show')</button>
-                                                <button type="button"
-                                                    class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
-                                                <form action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-info"> @lang('country.show') <i class="ri-eye-line"></i></a>
+                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-orange"> @lang('country.edit') <i class="ri-edit-line"></i></a>
+                                                <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <!-- This overrides the POST method to simulate DELETE -->
                                                     <button type="submit"
-                                                        class="btn btn-danger">@lang('country.delete')</button>
+                                                        class="btn btn-danger">@lang('country.delete') <i class="ri-delete-bin-line"></i></button>
                                                 </form>
                                             </td>
                                         </tr>

@@ -11,4 +11,15 @@ return [
     'IsFreeze' => 'Is Freeze',
     'Actions' => 'Actions',
     'AddCategory' => 'Add Category',
+
+    'edit' => 'Edit Category',
+    'show' => 'Show Category',
+    'delete' => 'Delete Category',
+    'description_ar' => 'Arabic Description',
+    'description_en' => 'English Description',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'none' => 'None',
+    'parent' => 'Parent Category',
+    'save' => 'Save',
 ];
