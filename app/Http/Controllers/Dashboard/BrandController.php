@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Services\ProductService;
+use App\Services\BrandService ;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,14 +15,14 @@ class ProductController extends Controller
 
     // YourController.php
 
-    protected $productService;
+    protected $BrandService ;
     protected $checkToken;  // Set to true or false based on your need
     protected $lang;  // Set to true or false based on your need
 
     
-    public function __construct(ProductService $productService)
+    public function __construct(BrandService  $BrandService )
     {
-        $this->productService = $productService;
+        $this->BrandService  = $BrandService ;
         $this->checkToken = false;
         $this->lang =  app()->getLocale();
     }
@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
 
         // Pass it to the service
-        $response  = $this->productService->index($request, $this->checkToken);
+        $response  = $this->BrandService ->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $products = Product::hydrate($responseData['data']);
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
     {
 
         // Pass it to the service
-        // $response  = $this->productService->create($request, $this->checkToken);
+        // $response  = $this->BrandService ->create($request, $this->checkToken);
         // $responseData = json_decode($response->getContent(), true);
         // $products = $responseData['data'];
         return view('dashboard.product.add');
@@ -51,11 +51,11 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        return $this->productService->store($request, $this->checkToken);
+        return $this->BrandService ->store($request, $this->checkToken);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->productService->update($request, $id, $this->checkToken);
+        return $this->BrandService ->update($request, $id, $this->checkToken);
     }
 }

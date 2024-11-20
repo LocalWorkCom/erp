@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('unit.units')</h4>
+        <h4 class="fw-medium mb-0">@lang('unit.Units')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('unit.units')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('unit.units')</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('unit.Units')</li>
                 </ol>
             </nav>
         </div>
@@ -31,12 +31,12 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                @lang('unit.units')</div>
+                                @lang('unit.Units')</div>
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('unit.add')
+                                @lang('unit.AddUnit')
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -46,7 +46,7 @@
                                             novalidate>
                                             @csrf
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('unit.add')</h6>
+                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('unit.AddUnit')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -54,26 +54,26 @@
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('unit.name_ar')</label>
-                                                        <input type="text" class="form-control" placeholder="@lang('unit.name_ar')"
-                                                            required>
+                                                            class="form-label">@lang('unit.ArabicName')</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="@lang('unit.ArabicName')" required>
                                                         <div class="valid-feedback">
-                                                            @lang('validation.correct')
+                                                            @lang('validation.Correct')
                                                         </div>
                                                         <div class="invalid-feedback">
-                                                            @lang('validation.name_ar')
+                                                            @lang('validation.EnterArabicName')
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('unit.name_en')</label>
+                                                            class="form-label">@lang('unit.EnglishName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('unit.name_en')" required>
+                                                            placeholder="@lang('unit.EnglishName')" required>
                                                         <div class="valid-feedback">
-                                                            @lang('validation.correct')
+                                                            @lang('validation.Correct')
                                                         </div>
                                                         <div class="invalid-feedback">
-                                                            @lang('validation.name_en')
+                                                            @lang('validation.EnterEnglishName')
                                                         </div>
                                                     </div>
                                                 </div>
@@ -93,11 +93,10 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('unit.id')</th>
-                                        <th scope="col">@lang('unit.name_ar')</th>
-                                        <th scope="col">@lang('unit.name_en')</th>
-
-                                        <th scope="col">@lang('unit.actions')</th>
+                                        <th scope="col">@lang('unit.ID')</th>
+                                        <th scope="col">@lang('unit.ArabicName')</th>
+                                        <th scope="col">@lang('unit.EnglishName')</th>
+                                        <th scope="col">@lang('unit.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,7 +106,13 @@
                                             <td>{{ $units->name_ar }}</td>
                                             <td>{{ $units->name_en }}</td>
 
-                                            <td></td>
+                                            <td> <button type="button"
+                                                    class="btn btn-info-light btn-wave">@lang('country.Show')</button>
+                                                <button type="button"
+                                                    class="btn btn-orange-light btn-wave">@lang('country.Edit')</button>
+                                                <button type="button"
+                                                    class="btn btn-danger-light btn-wave">@lang('country.Delete')</button>
+                                            </td>
                                         </tr>
                                     @endforeach
 

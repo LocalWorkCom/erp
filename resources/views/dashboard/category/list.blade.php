@@ -71,10 +71,16 @@
                                             <td>{{ $category->code }}</td>
                                             <td>{{ $category->is_freeze ? 'yes' : 'no' }}</td>
                                             <td>
+                                                <button type="button"
+                                                    class="btn btn-info-light btn-wave">@lang('country.show')</button>
+                                                <button type="button"
+                                                    class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
                                                 <form action="{{ route('category.delete', $category->id) }}" method="POST">
                                                     @csrf
-                                                    @method('DELETE')  <!-- This overrides the POST method to simulate DELETE -->
-                                                    <button type="submit" class="btn btn-danger">Delete Category</button>
+                                                    @method('DELETE')
+                                                    <!-- This overrides the POST method to simulate DELETE -->
+                                                    <button type="submit"
+                                                        class="btn btn-danger">@lang('country.delete')</button>
                                                 </form>
                                             </td>
                                         </tr>

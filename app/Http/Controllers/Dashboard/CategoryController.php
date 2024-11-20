@@ -32,7 +32,6 @@ class CategoryController extends Controller
         $responseData = $response->original;
 
         $categories = $responseData['data'];
-        // dd($categories);
 
         return view('dashboard.category.list', compact('categories'));
     }

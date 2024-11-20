@@ -18,12 +18,13 @@ class UnitController extends Controller
 
     protected $UnitService;
     protected $checkToken;  // Set to true or false based on your need
-
+    protected $lang;
 
     public function __construct(UnitService $UnitService)
     {
         $this->UnitService = $UnitService;
         $this->checkToken = false;
+        $this->lang =  app()->getLocale();
     }
 
     public function index(Request $request)
@@ -45,9 +46,8 @@ class UnitController extends Controller
         // $responseData = json_decode($response->getContent(), true);
         // $products = $responseData['data'];
 
-        return view('dashboard.unit.add');
- 
-    }    
+        return view('dashboard.unit.add', compact('lang'));
+    }
 
     public function store(Request $request)
     {
