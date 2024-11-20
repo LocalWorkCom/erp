@@ -26,8 +26,67 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
-                            <div class="card-title">Units</div>
+                        <div class="card-header"
+                            style="
+                        display: flex;
+                        justify-content: space-between;">
+                            <div class="card-title">
+                                Units</div>
+
+                            <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                                <i class="fe fe-plus label-btn-icon me-2"></i>
+                                Add Unit
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="{{ route('unit.store') }}" method="POST">
+                                            @csrf
+                                            <div class="modal-header">
+                                                <h6 class="modal-title" id="exampleModalLabel1">Add Unit</h6>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row gy-4">
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="input-placeholder" class="form-label">Arabic
+                                                            Name</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Arabic Name" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.name_ar')
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="input-placeholder" class="form-label">English
+                                                            Name</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="English Name" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.name_en')
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-outline-primary">Save
+                                                    changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
@@ -36,7 +95,7 @@
                                         <th scope="col">ID</th>
                                         <th scope="col">Arabic Name</th>
                                         <th scope="col">English Name</th>
-                 
+
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
@@ -46,7 +105,7 @@
                                             <td>{{ $units->id }}</td>
                                             <td>{{ $units->name_ar }}</td>
                                             <td>{{ $units->name_en }}</td>
-                                     
+
                                             <td></td>
                                         </tr>
                                     @endforeach

@@ -56,6 +56,7 @@ Route::group(['prefix' => 'category'], function () {
     Route::get('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
 Route::get('/units', [UnitController::class, 'index'])->name('units.list');
+Route::post('/units/store', [UnitController::class, 'store'])->name('unit.store');
 
 Route::group(['prefix' => 'unit'], function () {
     Route::post('store', [UnitController::class, 'store']);
