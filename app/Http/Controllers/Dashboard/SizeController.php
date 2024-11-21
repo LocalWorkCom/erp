@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\Unit;
-use App\Services\UnitService;
+use App\Models\Category;
+use App\Models\Size;
+use App\Services\SizeService;
 use Illuminate\Http\Request;
 
-class UnitController extends Controller
+class SizeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +16,13 @@ class UnitController extends Controller
 
     // YourController.php
 
-    protected $UnitService;
+    protected $SizeService;
     protected $checkToken;
     protected $lang;
 
-    public function __construct(UnitService $UnitService)
+    public function __construct(SizeService $SizeService)
     {
-        $this->UnitService = $UnitService;
+        $this->SizeService = $SizeService;
         $this->checkToken = false;
         $this->lang =  app()->getLocale();
     }
@@ -31,34 +31,35 @@ class UnitController extends Controller
     {
 
         // Pass it to the service
-        $response  = $this->UnitService->index($request, $this->checkToken);
+        $response  = $this->SizeService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        $Units = Unit::hydrate($responseData['data']);
+        $Sizes = Size::hydrate($responseData['data']);
+        $categories = Category::all();
 
-        return view('dashboard.unit.list', compact('Units'));
+        return view('dashboard.size.list', compact('Sizes','categories'));
     }
 
     public function store(Request $request)
     {
-        $response = $this->UnitService->store($request, $this->checkToken);
+        $response = $this->SizeService->store($request, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('sizes')->with('message',$message);
     }
 
     public function update(Request $request, $id)
     {
-        $response = $this->UnitService->update($request, $id, $this->checkToken);
+        $response = $this->SizeService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('sizes')->with('message',$message);
     }
 
     public function delete(Request $request, $id)
     {
-        $response = $this->UnitService->delete($request, $id, $this->checkToken);
+        $response = $this->SizeService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('sizes')->with('message',$message);
     }
 }

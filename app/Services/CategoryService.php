@@ -2,22 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Models\ProductLimit;
-use App\Models\ProductImage;
-use App\Models\ProductTransaction;
 use App\Models\Category;
-use App\Models\Brand;
-use App\Models\ProductColor;
-use App\Models\ProductSize;
-use App\Models\ProductUnit;
-use App\Models\Store;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CategoryService
 {
@@ -25,7 +13,7 @@ class CategoryService
     public function index(Request $request, $checkToken)
     {
 
-        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        $lang = app()->getLocale();
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -40,8 +28,7 @@ class CategoryService
     }
     public function store(Request $request, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        $lang = app()->getLocale();
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -103,8 +90,9 @@ class CategoryService
     }
     public function update(Request $request, $id, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+//        dd($request->all());
+        $lang = app()->getLocale();
+
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -150,9 +138,6 @@ class CategoryService
             && $category->image == $request->file('image') ) {
             return  RespondWithBadRequestData($lang,10);
         }
-        if (CheckExistColumnValue('categories', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-            return RespondWithBadRequest($lang, 9);
-        }
         $modify_by = 13;
 
         // Assign the updated values to the category model
@@ -179,9 +164,7 @@ class CategoryService
     }
     public function delete(Request $request, $id, $checkToken)
     {
-        // Fetch the language header for response
-        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        App::setLocale($lang);
+        $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);

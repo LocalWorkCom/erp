@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\Unit;
-use App\Services\UnitService;
+use App\Models\Color;
+use App\Services\ColorService;
 use Illuminate\Http\Request;
 
-class UnitController extends Controller
+class ColorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +15,13 @@ class UnitController extends Controller
 
     // YourController.php
 
-    protected $UnitService;
+    protected $ColorService;
     protected $checkToken;
     protected $lang;
 
-    public function __construct(UnitService $UnitService)
+    public function __construct(ColorService $ColorService)
     {
-        $this->UnitService = $UnitService;
+        $this->ColorService = $ColorService;
         $this->checkToken = false;
         $this->lang =  app()->getLocale();
     }
@@ -31,34 +30,34 @@ class UnitController extends Controller
     {
 
         // Pass it to the service
-        $response  = $this->UnitService->index($request, $this->checkToken);
+        $response  = $this->ColorService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        $Units = Unit::hydrate($responseData['data']);
+        $Colors = Color::hydrate($responseData['data']);
 
-        return view('dashboard.unit.list', compact('Units'));
+        return view('dashboard.color.list', compact('Colors'));
     }
 
     public function store(Request $request)
     {
-        $response = $this->UnitService->store($request, $this->checkToken);
+        $response = $this->ColorService->store($request, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('colors')->with('message',$message);
     }
 
     public function update(Request $request, $id)
     {
-        $response = $this->UnitService->update($request, $id, $this->checkToken);
+        $response = $this->ColorService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('colors')->with('message',$message);
     }
 
     public function delete(Request $request, $id)
     {
-        $response = $this->UnitService->delete($request, $id, $this->checkToken);
+        $response = $this->ColorService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
-        return redirect('units')->with('message',$message);
+        return redirect('colors')->with('message',$message);
     }
 }

@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('unit.Units')</h4>
+        <h4 class="fw-medium mb-0">@lang('size.Sizes')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('unit.Units')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('size.Sizes')</li>
                 </ol>
             </nav>
         </div>
@@ -31,22 +31,22 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                @lang('unit.Units')</div>
+                                @lang('size.Sizes')</div>
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('unit.AddUnit')
+                                @lang('size.AddSize')
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="{{ route('unit.store') }}" method="POST" class="needs-validation"
+                                        <form action="{{ route('size.store') }}" method="POST" class="needs-validation"
                                             novalidate>
                                             @csrf
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('unit.AddUnit')</h6>
+                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('size.AddSize')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -54,9 +54,9 @@
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('unit.ArabicName')</label>
+                                                            class="form-label">@lang('size.ArabicName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('unit.ArabicName')" name="name_ar" required>
+                                                            placeholder="@lang('size.ArabicName')" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -66,14 +66,26 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('unit.EnglishName')</label>
+                                                            class="form-label">@lang('size.EnglishName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('unit.EnglishName')" name="name_en" required>
+                                                            placeholder="@lang('size.EnglishName')" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
                                                         <div class="invalid-feedback">
                                                             @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="category_id" class="form-label">@lang('size.Category')</label>
+                                                        <select name="category_id" class="form-control" required>
+                                                            <option value="">@lang('size.SelectCategory')</option>
+                                                            @foreach ($categories as $category)
+                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterCategory')
                                                         </div>
                                                     </div>
                                                 </div>
@@ -91,17 +103,17 @@
                             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form id="edit-unit-form" action="" method="POST" class="needs-validation" novalidate>
+                                        <form id="edit-size-form" action="" method="POST" class="needs-validation" novalidate>
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="editModalLabel">@lang('unit.EditUnit')</h6>
+                                                <h6 class="modal-title" id="editModalLabel">@lang('size.EditSize')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-ar" class="form-label">@lang('unit.ArabicName')</label>
+                                                        <label for="edit-name-ar" class="form-label">@lang('size.ArabicName')</label>
                                                         <input type="text" id="edit-name-ar" class="form-control" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
@@ -111,13 +123,25 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-en" class="form-label">@lang('unit.EnglishName')</label>
+                                                        <label for="edit-name-en" class="form-label">@lang('size.EnglishName')</label>
                                                         <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
                                                         <div class="invalid-feedback">
                                                             @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-category-id" class="form-label">@lang('size.Category')</label>
+                                                        <select id="edit-category-id" name="category_id" class="form-control" required>
+                                                            <option value="">@lang('size.SelectCategory')</option>
+                                                            @foreach ($categories as $category)
+                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterCategory')
                                                         </div>
                                                     </div>
                                                 </div>
@@ -134,19 +158,24 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h6 class="modal-title" id="showModalLabel">@lang('unit.ShowUnit')</h6>
+                                            <h6 class="modal-title" id="showModalLabel">@lang('size.ShowSize')</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row gy-4">
                                                 <div class="col-xl-12">
-                                                    <label class="form-label">@lang('unit.ArabicName')</label>
+                                                    <label class="form-label">@lang('size.ArabicName')</label>
                                                     <p id="show-name-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-xl-12">
-                                                    <label class="form-label">@lang('unit.EnglishName')</label>
+                                                    <label class="form-label">@lang('size.EnglishName')</label>
                                                     <p id="show-name-en" class="form-control-static"></p>
                                                 </div>
+                                                <div class="col-xl-12">
+                                                    <label class="form-label">@lang('size.Category')</label>
+                                                    <p id="show-category" class="form-control-static"></p>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -169,45 +198,49 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('unit.ID')</th>
-                                        <th scope="col">@lang('unit.ArabicName')</th>
-                                        <th scope="col">@lang('unit.EnglishName')</th>
-                                        <th scope="col">@lang('unit.Actions')</th>
+                                        <th scope="col">@lang('size.ID')</th>
+                                        <th scope="col">@lang('size.ArabicName')</th>
+                                        <th scope="col">@lang('size.EnglishName')</th>
+                                        <th scope="col">@lang('size.Category')</th>
+                                        <th scope="col">@lang('size.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($Units as $units)
+                                    @foreach ($Sizes as $sizes)
                                         <tr>
-                                            <td>{{ $units->id }}</td>
-                                            <td>{{ $units->name_ar }}</td>
-                                            <td>{{ $units->name_en }}</td>
+                                            <td>{{ $sizes->id }}</td>
+                                            <td>{{ $sizes->name_ar }}</td>
+                                            <td>{{ $sizes->name_en }}</td>
+                                            <td>{{ $sizes->category->name_ar.' | '.$sizes->category->name_en }}</td>
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="javascript:void(0);"
-                                                   class="btn btn-info-light btn-wave show-unit-btn"
-                                                   data-id="{{ $units->id }}"
-                                                   data-name-ar="{{ $units->name_ar }}"
-                                                   data-name-en="{{ $units->name_en }}"
+                                                   class="btn btn-info-light btn-wave show-size-btn"
+                                                   data-id="{{ $sizes->id }}"
+                                                   data-name-ar="{{ $sizes->name_ar }}"
+                                                   data-name-en="{{ $sizes->name_en }}"
+                                                   data-category-name="{{ $sizes->category->name_ar.' | '.$sizes->category->name_en?? '' }}"
                                                    data-bs-toggle="modal"
                                                    data-bs-target="#showModal">
                                                     @lang('category.show') <i class="ri-eye-line"></i>
                                                 </a>
 
-
                                                 <!-- Edit Button -->
                                                 <button type="button"
-                                                        class="btn btn-orange-light btn-wave edit-unit-btn"
-                                                        data-id="{{ $units->id }}"
-                                                        data-name-ar="{{ $units->name_ar }}"
-                                                        data-name-en="{{ $units->name_en }}"
-                                                        data-route="{{ route('unit.update', ':id') }}"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editModal">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
+                                                        class="btn btn-orange-light btn-wave edit-size-btn"
+                                                        data-id="{{ $sizes->id }}"
+                                                        data-name-ar="{{ $sizes->name_ar }}"
+                                                        data-name-en="{{ $sizes->name_en }}"
+                                                        data-category-id="{{ $sizes->category->id }}"
+                                                data-route="{{ route('size.update', ':id') }}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editModal">
+                                                @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </button>
 
+
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('unit.delete', $units->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
@@ -253,49 +286,50 @@
     @vite('resources/assets/js/modal.js')
 @endsection
 <script>
-
     document.addEventListener('DOMContentLoaded', function () {
-        const editButtons = document.querySelectorAll('.edit-unit-btn');
-        const editForm = document.getElementById('edit-unit-form');
+        const editButtons = document.querySelectorAll('.edit-size-btn');
+        const editForm = document.getElementById('edit-size-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
+        const categorySelect = document.getElementById('edit-category-id');
 
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Get unit details from data attributes
-                const unitId = this.getAttribute('data-id');
+                const sizeId = this.getAttribute('data-id');
                 const nameAr = this.getAttribute('data-name-ar');
                 const nameEn = this.getAttribute('data-name-en');
+                const categoryId = this.getAttribute('data-category-id'); // This will now be the actual category ID
                 const routeTemplate = this.getAttribute('data-route');
 
-                // Set form action URL dynamically
-                const updateRoute = routeTemplate.replace(':id', unitId);
+                const updateRoute = routeTemplate.replace(':id', sizeId);
                 editForm.action = updateRoute;
 
-                // Populate the modal fields
                 nameArInput.value = nameAr;
                 nameEnInput.value = nameEn;
+                categorySelect.value = categoryId; // Set the selected category's id
             });
         });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        const showButtons = document.querySelectorAll('.show-unit-btn');
+        const showButtons = document.querySelectorAll('.show-size-btn');
         const nameArElement = document.getElementById('show-name-ar');
         const nameEnElement = document.getElementById('show-name-en');
+        const categoryElement = document.getElementById('show-category'); // Added line for category
 
         showButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Get unit details from data attributes
                 const nameAr = this.getAttribute('data-name-ar');
                 const nameEn = this.getAttribute('data-name-en');
+                const categoryName = this.getAttribute('data-category-name'); // Added line for category name
 
-                // Populate the modal fields
                 nameArElement.textContent = nameAr;
                 nameEnElement.textContent = nameEn;
+                categoryElement.textContent = categoryName; // Display category in show modal
             });
         });
     });
+
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");

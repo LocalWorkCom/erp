@@ -71,13 +71,24 @@
                                             <td>{{ $category->code }}</td>
                                             <td>{{ $category->is_freeze ? __('category.yes') :  __('category.no')  }}</td>
                                             <td>
-                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-info"> @lang('country.show') <i class="ri-eye-line"></i></a>
-                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-orange"> @lang('country.edit') <i class="ri-edit-line"></i></a>
-                                                <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                <!-- Show Button -->
+                                                <a href="{{route('category.show',$category->id)}}"
+                                                   class="btn btn-info-light btn-wave show-category">
+                                                    @lang('category.show') <i class="ri-eye-line"></i>
+                                                </a>
+
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-orange-light btn-wave">
+                                                    @lang('category.edit') <i class="ri-edit-line"></i>
+                                                </a>
+
+                                                <!-- Delete Button -->
+                                                <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger">@lang('country.delete') <i class="ri-delete-bin-line"></i></button>
+                                                    <button type="submit" class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -113,3 +124,10 @@
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
+
+<script>
+    function confirmDelete() {
+        return confirm("@lang('validation.DeleteConfirm')");
+    }
+</script>
+

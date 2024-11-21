@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +56,7 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::group(['prefix' => 'category'], function () {
     Route::get('create', [CategoryController::class, 'create'])->name('category.create');
     Route::post('store', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('show/{id}', [CategoryController::class, 'show'])->name('category.show');
     Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
     Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
@@ -65,11 +68,26 @@ Route::group(['prefix' => 'country'], function () {
     Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
     Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
 });
+
 Route::get('/units', [UnitController::class, 'index'])->name('units.list');
 Route::group(['prefix' => 'unit'], function () {
     Route::post('store', [UnitController::class, 'store'])->name('unit.store');
-    Route::post('update', [UnitController::class, 'update'])->name('unit.update');
-    Route::get('delete/{id}', [UnitController::class, 'delete'])->name('unit.delete');
+    Route::put('update/{id}', [UnitController::class, 'update'])->name('unit.update');
+    Route::delete('delete/{id}', [UnitController::class, 'delete'])->name('unit.delete');
+});
+
+Route::get('/colors', [ColorController::class, 'index'])->name('colors.list');
+Route::group(['prefix' => 'color'], function () {
+    Route::post('store', [ColorController::class, 'store'])->name('color.store');
+    Route::put('update/{id}', [ColorController::class, 'update'])->name('color.update');
+    Route::delete('delete/{id}', [ColorController::class, 'delete'])->name('color.delete');
+});
+
+Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.list');
+Route::group(['prefix' => 'size'], function () {
+    Route::post('store', [SizeController::class, 'store'])->name('size.store');
+    Route::put('update/{id}', [SizeController::class, 'update'])->name('size.update');
+    Route::delete('delete/{id}', [SizeController::class, 'delete'])->name('size.delete');
 });
 
 Route::group(['prefix' => 'country'], function () {

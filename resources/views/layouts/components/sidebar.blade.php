@@ -538,10 +538,10 @@
                                 class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('carousel') }}" class="side-menu__item">@lang('sidebar.colors') </a>
+                            <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('draggable-cards') }}"
+                            <a href="{{ route('sizes.list') }}"
                                 class="side-menu__item">@lang('sidebar.size') </a>
                         </li>
                         <li class="slide">

@@ -2,12 +2,12 @@
 
 
 namespace App\Services;
-use App\Models\Unit;
+use App\Models\Size;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class UnitService
+class SizeService
 {
     /**
      * Display a listing of the resource.
@@ -22,12 +22,12 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $units = Unit::all();
+        $sizes = Size::all();
 
         if (!$checkToken) {
-            $units = $units->makeVisible(['name_en', 'name_ar']);
+            $sizes = $sizes->makeVisible(['name_en', 'name_ar']);
         }
-        return ResponseWithSuccessData($lang, $units, 1);
+        return ResponseWithSuccessData($lang, $sizes, 1);
     }
     public function store(Request $request, $checkToken)
     {
@@ -36,9 +36,11 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
+
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
+            'category_id' => 'required|exists:categories,id', // Validate the category_id
         ]);
 
         if ($validator->fails()) {
@@ -47,18 +49,19 @@ class UnitService
 
         $name_ar = $request->name_ar;
         $name_en = $request->name_en;
+        $category_id = $request->category_id; // Get the category_id from the request
 
-        if (CheckExistColumnValue('units', 'name_ar', $name_ar) || CheckExistColumnValue('units', 'name_ar', $name_ar)) {
+        if (CheckExistColumnValue('sizes', 'name_ar', $name_ar) || CheckExistColumnValue('sizes', 'name_ar', $name_ar)) {
             return RespondWithBadRequest($lang, 9);
         }
         $created_by = 13;
 
-
-        $unit = new Unit();
-        $unit->name_ar = $name_ar;
-        $unit->name_en =  $name_en;
-        $unit->created_by =  $created_by;
-        $unit->save();
+        $size = new Size();
+        $size->name_ar = $name_ar;
+        $size->name_en =  $name_en;
+        $size->category_id = $category_id; // Store the category_id
+        $size->created_by =  $created_by;
+        $size->save();
 
         return RespondWithSuccessRequest($lang, 1);
     }
@@ -69,41 +72,43 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
+
         // Validate the input
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
+            'category_id' => 'required|exists:categories,id', // Validate the category_id
         ]);
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        // Retrieve the unit by ID, or throw an exception if not found
-        $unit = Unit::find($id);
-        if (!$unit) {
-            return  RespondWithBadRequestData($lang, 8);
-        }
-        if (
-            $unit->name_ar == $request->name_ar && $unit->name_en == $request->name_en
-        ) {
-            return  RespondWithBadRequestData($lang, 10);
+        // Retrieve the size by ID
+        $size = Size::find($id);
+        if (!$size) {
+            return RespondWithBadRequestData($lang, 8);
         }
 
-        if (CheckExistColumnValue('units', 'name_ar', $request->name_ar) && CheckExistColumnValue('units', 'name_en', $request->name_en)) {
+        // Check if the data has changed
+        if ($size->name_ar == $request->name_ar && $size->name_en == $request->name_en && $size->category_id == $request->category_id) {
+            return RespondWithBadRequestData($lang, 10);
+        }
+
+        if (CheckExistColumnValue('sizes', 'name_ar', $request->name_ar) && CheckExistColumnValue('sizes', 'name_en', $request->name_en) && CheckExistColumnValue('sizes', 'category_id', $request->category_id)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $modify_by = 13;
+        $modified_by  = 13;
 
-        // Assign the updated values to the unit model
-        $unit->name_ar = $request->name_ar;
-        $unit->name_en = $request->name_en;
-        $unit->modify_by = $modify_by;
+        // Assign the updated values to the size model
+        $size->name_ar = $request->name_ar;
+        $size->name_en = $request->name_en;
+        $size->category_id = $request->category_id; // Update the category_id
+        $size->modified_by  = $modified_by ;
 
-        // Update the unit in the database
-        $unit->save();
+        // Update the size in the database
+        $size->save();
 
-        // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
     public function delete(Request $request, $id,$checkToken)
@@ -113,13 +118,13 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        // Find the unit by ID, or throw a 404 if not found
-        $unit = Unit::find($id);
-        if (!$unit) {
+        // Find the size by ID, or throw a 404 if not found
+        $size = Size::find($id);
+        if (!$size) {
             return  RespondWithBadRequestData($lang, 8);
         }
-        // Delete the unit
-        $unit->delete();
+        // Delete the size
+        $size->delete();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);

@@ -96,5 +96,6 @@ return [
     'EnterEnglishDesc' =>  'Please enter the English description',
     'EnterBarcode' =>  'Please enter the barcode',
     'Entercode' => 'Please enter the code',
+    'DeleteConfirm'=> 'Are you sure you want to delete this item?',
 
 ];
