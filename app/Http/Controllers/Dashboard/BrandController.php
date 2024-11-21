@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Product;
 use App\Services\BrandService ;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class BrandController extends Controller
     protected $lang;  // Set to true or false based on your need
 
     
-    public function __construct(BrandService  $BrandService )
+    public function __construct(BrandService  $BrandService)
     {
         $this->BrandService  = $BrandService ;
         $this->checkToken = false;
@@ -33,9 +34,9 @@ class BrandController extends Controller
         // Pass it to the service
         $response  = $this->BrandService ->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        $products = Product::hydrate($responseData['data']);
+        $brands = Brand::hydrate($responseData['data']);
 
-        return view('dashboard.product.list', compact('products'));
+        return view('dashboard.brand.list', compact('brands'));
     }
 
     public function create()
@@ -45,7 +46,7 @@ class BrandController extends Controller
         // $response  = $this->BrandService ->create($request, $this->checkToken);
         // $responseData = json_decode($response->getContent(), true);
         // $products = $responseData['data'];
-        return view('dashboard.product.add');
+        return view('dashboard.brand.add');
  
     }    
 
