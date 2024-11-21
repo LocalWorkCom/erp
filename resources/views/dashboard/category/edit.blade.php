@@ -27,7 +27,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                Edit Category
+                                @lang('category.edit')
                             </div>
                         </div>
                         <div class="card-body">
@@ -40,10 +40,10 @@
                                         <input type="text" class="form-control" id="name_ar" name="name_ar" value="{{ old('name_ar', $category->name_ar) }}"
                                             placeholder="@lang('category.ArabicName')" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter arabic name.
+                                            @lang('validation.EnterArabicName')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -51,30 +51,30 @@
                                         <input type="text" class="form-control" id="name_en" name="name_en" value="{{ old('name_en', $category->name_en) }}"
                                             placeholder="@lang('category.EnglishName')" required>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please enter an english name.
+                                            @lang('validation.EnterEnglishName')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="text-area" class="form-label">@lang('category.description_ar')</label>
                                         <textarea class="form-control" id="description_ar" name="description_ar" rows="4">{{ old('description_ar', $category->description_ar) }}</textarea>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose an arabic description.
+                                            @lang('validation.EnterArabicDesc')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="text-area" class="form-label">@lang('category.description_en')</label>
                                         <textarea class="form-control" id="description_en" name="description_en" rows="4">{{ old('description_en', $category->description_en) }}</textarea>
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please an english description.
+                                            @lang('validation.EnterEnglishDesc')
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -91,26 +91,28 @@
 
                                         <input class="form-control" type="file" id="image" name="image">
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a category image.
+                                            @lang('validation.EnterImage')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('category.parent')</p>
-                                        <select class="form-control" data-trigger name="parent_id"
-                                            id="choices-single-default">
-                                            <option value="{{null}}">@lang('category.none')</option>
+                                        <select class="form-control" data-trigger name="parent_id" id="choices-single-default">
+                                            <option value="">{{ __('category.none') }}</option>
                                             @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" {{ $category->parent_id == $category->id ? 'selected' : '' }}>
+                                                <option value="{{ $category->id }}" {{ old('parent_id') == $category->id ? 'selected' : '' }}>
+                                                    {{ $category->name_ar ." | ".$category->name_en}}
+                                                </option>
                                             @endforeach
                                         </select>
+
                                         <div class="valid-feedback">
-                                            Looks good!
+                                            @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            Please choose a unit.
+                                            @lang('validation.EnterCategory')
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">

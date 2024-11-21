@@ -27,6 +27,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
+//        dd(app()->getLocale());
         $response = $this->categoryService->index($request, $this->checkToken);
 
         $responseData = $response->original;
@@ -47,6 +48,13 @@ class CategoryController extends Controller
         $responseData = $response->original;
         $message= $responseData['apiMsg'];
         return redirect('categories')->with('message',$message);
+    }
+
+    public function show($id)
+    {
+        $category = Category::with('parent')->findOrFail($id);
+//        dd($category);
+        return view('dashboard.category.show', compact('category'));
     }
 
     public function edit($id)

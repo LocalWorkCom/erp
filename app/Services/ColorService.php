@@ -1,20 +1,15 @@
 <?php
 
-
 namespace App\Services;
-use App\Models\Unit;
-
+use App\Models\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class UnitService
+class ColorService
 {
     /**
      * Display a listing of the resource.
      */
-
-    // YourController.php
-
     public function index(Request $request, $checkToken)
     {
         $lang = app()->getLocale();
@@ -22,13 +17,17 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $units = Unit::all();
+
+        $colors = Color::all();
 
         if (!$checkToken) {
-            $units = $units->makeVisible(['name_en', 'name_ar']);
+            // Include 'hexa_code' in the visible fields
+            $colors = $colors->makeVisible(['name_en', 'name_ar', 'hexa_code']);
         }
-        return ResponseWithSuccessData($lang, $units, 1);
+
+        return ResponseWithSuccessData($lang, $colors, 1);
     }
+
     public function store(Request $request, $checkToken)
     {
         $lang = app()->getLocale();
@@ -36,9 +35,12 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
+
+        // Validate the input including 'hexa_code'
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
+            'hexa_code' => 'required|string', // Validate hex color code
         ]);
 
         if ($validator->fails()) {
@@ -47,21 +49,25 @@ class UnitService
 
         $name_ar = $request->name_ar;
         $name_en = $request->name_en;
+        $hexa_code = $request->hexa_code;
 
-        if (CheckExistColumnValue('units', 'name_ar', $name_ar) || CheckExistColumnValue('units', 'name_ar', $name_ar)) {
+        if (CheckExistColumnValue('colors', 'name_ar', $name_ar) || CheckExistColumnValue('colors', 'name_en', $name_en)) {
             return RespondWithBadRequest($lang, 9);
         }
+
         $created_by = 13;
 
-
-        $unit = new Unit();
-        $unit->name_ar = $name_ar;
-        $unit->name_en =  $name_en;
-        $unit->created_by =  $created_by;
-        $unit->save();
+        // Create the new color
+        $color = new Color();
+        $color->name_ar = $name_ar;
+        $color->name_en = $name_en;
+        $color->hexa_code = $hexa_code; // Store the hex code
+        $color->created_by = $created_by;
+        $color->save();
 
         return RespondWithSuccessRequest($lang, 1);
     }
+
     public function update(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
@@ -69,57 +75,65 @@ class UnitService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        // Validate the input
+
+        // Validate the input including 'hexa_code'
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
+            'hexa_code' => 'required|string', // Validate hex color code
         ]);
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        // Retrieve the unit by ID, or throw an exception if not found
-        $unit = Unit::find($id);
-        if (!$unit) {
+        // Retrieve the color by ID, or throw an exception if not found
+        $color = Color::find($id);
+        if (!$color) {
             return  RespondWithBadRequestData($lang, 8);
         }
+
         if (
-            $unit->name_ar == $request->name_ar && $unit->name_en == $request->name_en
+            $color->name_ar == $request->name_ar && $color->name_en == $request->name_en && $color->hexa_code == $request->hexa_code
         ) {
             return  RespondWithBadRequestData($lang, 10);
         }
 
-        if (CheckExistColumnValue('units', 'name_ar', $request->name_ar) && CheckExistColumnValue('units', 'name_en', $request->name_en)) {
+        if (CheckExistColumnValue('colors', 'name_ar', $request->name_ar) && CheckExistColumnValue('colors', 'name_en', $request->name_en) && CheckExistColumnValue('colors', 'hexa_code', $request->hexa_code)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $modify_by = 13;
 
-        // Assign the updated values to the unit model
-        $unit->name_ar = $request->name_ar;
-        $unit->name_en = $request->name_en;
-        $unit->modify_by = $modify_by;
+        $modified_by = 13;
 
-        // Update the unit in the database
-        $unit->save();
+        // Assign the updated values to the color model
+        $color->name_ar = $request->name_ar;
+        $color->name_en = $request->name_en;
+        $color->hexa_code = $request->hexa_code; // Update hex code
+        $color->modified_by = $modified_by;
+
+        // Update the color in the database
+        $color->save();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    public function delete(Request $request, $id,$checkToken)
+
+    public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        // Find the unit by ID, or throw a 404 if not found
-        $unit = Unit::find($id);
-        if (!$unit) {
+
+        // Find the color by ID, or throw a 404 if not found
+        $color = Color::find($id);
+        if (!$color) {
             return  RespondWithBadRequestData($lang, 8);
         }
-        // Delete the unit
-        $unit->delete();
+
+        // Delete the color
+        $color->delete();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);

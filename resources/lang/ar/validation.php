@@ -161,4 +161,5 @@ return [
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterBarcode' => 'يجب ادخال الباركود',
     'Entercode' => 'يجب ادخال الكود',
+    'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟'
 ];

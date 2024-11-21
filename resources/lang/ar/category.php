@@ -12,9 +12,9 @@ return [
     'Actions' => 'العمليات',
     'AddCategory' => 'اضافة تصنيف',
 
-    'edit' => 'تعديل صنف',
-    'show' => 'عرض صنف',
-    'delete' => 'مسح صنف',
+    'edit' => 'تعديل',
+    'show' => 'عرض',
+    'delete' => 'حذف',
     'description_ar' => 'الوصف بالعربي',
     'description_en' => 'الوصف بالانجليزي',
     'yes' => 'نعم',
