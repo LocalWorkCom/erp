@@ -155,6 +155,7 @@ return [
     'EnterUnit' => 'يجب اختيار وحدة',
     'EnterCurrency' => 'يجب اختيار عملة',
     'EnterCategory' => 'يجب اختيار الفئة',
+    'EnterCountry' => 'يجب اختيار الدولة',
     'EnterArabicName' => 'يجب ادخال الاسم بالعربي',
     'EnterEnglishName' => 'يجب ادخال الاسم بالانجليزي',
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',

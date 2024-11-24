@@ -65,7 +65,7 @@
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="#" class="side-menu__item">@lang('sidebar.Branches')  </a>
+                                    <a href="{{route('branches.list')}}" class="side-menu__item">@lang('sidebar.Branches')  </a>
                                 </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
