@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
         session(['locale' => $locale]);
+        Session::put('direction', $locale === 'ar' ? 'rtl' : 'ltr');
+
     }
     return redirect()->back();
 })->name('set-locale');

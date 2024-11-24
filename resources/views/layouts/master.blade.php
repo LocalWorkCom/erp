@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="gradient"
-    data-menu-styles="dark">
+<html lang="{{ app()->getLocale() }}" dir="{{ session('direction', 'ltr') }}" data-nav-layout="vertical"
+    data-theme-mode="light" data-header-styles="gradient" data-menu-styles="dark">
 
 <head>
 
