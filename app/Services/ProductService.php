@@ -21,6 +21,12 @@ use Illuminate\Http\Response;
 
 class ProductService
 {
+    private $lang;
+    public function __construct()
+    {
+        $this->lang = app()->getLocale();
+    }
+
     // In ProductService.php
 
     // Helper method to check if the product data hasn't changed
@@ -43,11 +49,10 @@ class ProductService
     // Method to get all products with their limits
     public function index(Request $request, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
         $products = Product::all();
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
+            return RespondWithBadRequest($this->lang, 5);
         }
 
         // foreach ($products as $product) {
@@ -59,16 +64,15 @@ class ProductService
             $products = $products->makeVisible(['name_en', 'name_ar', 'main_image', 'description_ar', 'description_en']);
         }
 
-        return ResponseWithSuccessData($lang, $products, 1);
+        return ResponseWithSuccessData($this->lang, $products, 1);
     }
 
     public function create(Request $request, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');  // Default to 'ar' if not provided
         $products = Product::all();
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
+            return RespondWithBadRequest($this->lang, 5);
         }
 
         // foreach ($products as $product) {
@@ -76,17 +80,15 @@ class ProductService
         //     $product['limits'] = $product_limits;
         // }
 
-        return ResponseWithSuccessData($lang, $products, 1);
+        return ResponseWithSuccessData($this->lang, $products, 1);
     }
 
     // Method to store a new product
     public function store(Request $request, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
+            return RespondWithBadRequest($this->lang, 5);
         }
 
         // Validation
@@ -113,25 +115,25 @@ class ProductService
 
         // Check if product or category name already exists
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-            return RespondWithBadRequest($lang, 9);
+            return RespondWithBadRequest($this->lang, 9);
         }
 
         // Check if category exists
         $category = Category::find($request->category_id);
         if (!$category) {
-            return RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($this->lang, 8);
         }
 
         // Check if store exists
         $store = Store::find($request->store_id);
         if (!$store) {
-            return RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($this->lang, 8);
         }
 
         // Check if brand exists
         $brand = Brand::find($request->brand_id);
         if (!$brand) {
-            return RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($this->lang, 8);
         }
 
         // Generate product code
@@ -154,14 +156,15 @@ class ProductService
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-        $product->created_by = Auth::guard('api')->user()->id;
+        $product->price =$request->price;
+        $product->created_by =13;
         $product->save();
 
         // Save product limits
         $product_limit = new ProductLimit();
         $product_limit->product_id = $product->id;
         $product_limit->min_limit = $request->min_limit;
-        $product_limit->max_limit = $request->max_limit;
+        $product_limit->max_limit =$request->max_limit;
         $product_limit->store_id = $request->store_id;
         $product_limit->save();
 
@@ -193,17 +196,15 @@ class ProductService
             }
         }
 
-        return RespondWithSuccessRequest($lang, 1);
+        return RespondWithSuccessRequest($this->lang, 1);
     }
 
     // Method to update an existing product
     public function update(Request $request, $id, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
+            return RespondWithBadRequest($this->lang, 5);
         }
 
         $validator = Validator::make(
@@ -231,17 +232,17 @@ class ProductService
 
         $product = Product::find($id);
         if (!$product) {
-            return RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($this->lang, 8);
         }
 
         // Check if data hasn't changed
         if ($this->isProductUnchanged($product, $request)) {
-            return RespondWithBadRequestData($lang, 10);
+            return RespondWithBadRequestData($this->lang, 10);
         }
 
         // Validate product name
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar)) {
-            return RespondWithBadRequest($lang, 9);
+            return RespondWithBadRequest($this->lang, 9);
         }
 
         // Update product attributes
@@ -281,22 +282,18 @@ class ProductService
             }
         }
 
-        return RespondWithSuccessRequest($lang, 1);
+        return RespondWithSuccessRequest($this->lang, 1);
     }
     function DeleteExistProductImage(Request $request, $checkToken) {}
     public function delete(Request $request, $checkToken, $id)
     {
-        // Fetch the language header for response
-        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        App::setLocale($lang);
-
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
+            return RespondWithBadRequest($this->lang, 5);
         }
         // Find the category by ID, or throw a 404 if not found
         $product = Product::find($id);
         if (!$product) {
-            return  RespondWithBadRequestData($lang, 8);
+            return  RespondWithBadRequestData($this->lang, 8);
         }
         $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
         // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
@@ -330,6 +327,6 @@ class ProductService
         $product->delete();
 
         // Return success response
-        return RespondWithSuccessRequest($lang, 1);
+        return RespondWithSuccessRequest($this->lang, 1);
     }
 }

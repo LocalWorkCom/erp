@@ -36,8 +36,10 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.lis
 Route::group(['prefix' => 'product'], function () {
     Route::get('/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
-    Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
-    Route::get('delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    Route::get('show/{id}', [ProductController::class, 'show'])->name('product.show');
+    Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
     // Route::get('units', [ProductUnitController::class, 'index']);
     // Route::post('unit/store', [ProductUnitController::class, 'store']);
     // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
