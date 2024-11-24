@@ -73,7 +73,7 @@
                                         <select class="form-control select2" name="country_id" required>
                                             <option value="" disabled selected>@lang('branch.SelectCountry')</option>
                                             @foreach($countries as $country)
-                                                <option value="{{ $country->id }}">{{ $country->name_ar." ". $country->name_en }}</option>
+                                                <option value="{{ $country->id }}">{{ $country->name_ar." | ". $country->name_en }}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">

@@ -73,7 +73,7 @@
                                             <option value="" disabled>@lang('branch.SelectCountry')</option>
                                             @foreach($countries as $country)
                                                 <option value="{{ $country->id }}" {{ $country->id == old('country_id', $branch->country_id) ? 'selected' : '' }}>
-                                                    {{ $country->name }}
+                                                    {{ $country->name_ar ." | ". $country->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
