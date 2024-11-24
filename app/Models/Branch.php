@@ -10,20 +10,22 @@ class Branch extends Model
     use HasFactory, SoftDeletes;
 
     protected $appends = ['name', 'address'];
-    
+
     protected $fillable = [
         'name_en',
         'name_ar',
         'address_en',
         'address_ar',
-        'latitude',
-        'longitude',
+        'latitute',
+        'longitute',
         'country_id',
         'phone',
         'email',
         'manager_name',
-        'opening_hours',
-        'has_kids_area', 
+        'opening_hour',
+        'closing_hour',
+        'has_kids_area',
+        'is_delivery',
         'created_by',
         'modified_by',
         'deleted_by'

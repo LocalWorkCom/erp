@@ -90,6 +90,7 @@ return [
     'EnterUnit' => 'Please choose a unit',
     'EnterCurrency' => 'Please choose a currency',
     'EnterCategory' => 'Please choose a category',
+    'EnterCountry' => 'Please choose a country',
     'EnterArabicName' => 'Please enter the Arabic name',
     'EnterEnglishName' => 'Please enter the English name',
     'EnterArabicDesc' => 'Please enter the Arabic descrription',

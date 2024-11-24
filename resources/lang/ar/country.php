@@ -15,6 +15,5 @@ return[
     'Show' => 'عرض',
     'Edit' => 'تعديل',
     'Delete' => 'حذف',
-    'Countries' => 'دول',
     'Country' => 'دولة'
 ];

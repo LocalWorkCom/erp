@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
@@ -95,4 +96,14 @@ Route::group(['prefix' => 'country'], function () {
     Route::any('/get', [CountryController::class, 'show']);
     Route::any('/edit', [CountryController::class, 'update']);
     Route::any('/delete', [CountryController::class, 'destroy']);
+});
+
+Route::get('/branches', [BranchController::class, 'index'])->name('branches.list');
+Route::group(['prefix' => 'branch'], function () {
+    Route::get('create', [BranchController::class, 'create'])->name('branch.create');
+    Route::post('store', [BranchController::class, 'store'])->name('branch.store');
+    Route::get('show/{id}', [BranchController::class, 'show'])->name('branch.show');
+    Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
+    Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update');
+    Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
 });
