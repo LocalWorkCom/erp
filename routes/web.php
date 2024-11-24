@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
@@ -109,4 +110,14 @@ Route::group(['prefix' => 'branch'], function () {
     Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
     Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update');
     Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+});
+
+Route::get('/clients', [ClientController::class, 'index'])->name('client.list');
+Route::group(['prefix' => 'client'], function () {
+    Route::get('create', [ClientController::class, 'create'])->name('client.create');
+    Route::post('store', [ClientController::class, 'store'])->name('client.store');
+    Route::get('show/{id}', [ClientController::class, 'show'])->name('client.show');
+    Route::get('edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
+    Route::put('update/{id}', [ClientController::class, 'update'])->name('client.update');
+    Route::delete('delete/{id}', [ClientController::class, 'delete'])->name('client.delete');
 });
