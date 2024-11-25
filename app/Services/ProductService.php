@@ -152,6 +152,7 @@ class ProductService
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
         $product->is_have_expired = $request->is_have_expired;
+        $product->expiry_date = $request->expiry_date ?? null;
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
@@ -285,48 +286,60 @@ class ProductService
         return RespondWithSuccessRequest($this->lang, 1);
     }
     function DeleteExistProductImage(Request $request, $checkToken) {}
-    public function delete(Request $request, $checkToken, $id)
+    public function delete(Request $request,$id, $checkToken,$oneProductDelete)
     {
-        if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
-        }
-        // Find the category by ID, or throw a 404 if not found
+//        if (!CheckToken() && $checkToken) {
+//            return RespondWithBadRequest($this->lang, 5);
+//        }
+//        dd($id);
+
         $product = Product::find($id);
         if (!$product) {
             return  RespondWithBadRequestData($this->lang, 8);
         }
-        $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
-        // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
-        if ($CheckIfExist1->count()) {
-            $response_array = array(
-                'success' => false,  // Set success to false to indicate an error
-                'apiTitle' => trans('validation.NotAllow'),
-                'apiMsg' => trans('validation.NotAllowMessage'),
-                'apiCode' => -1,
-                'data'   => []
-            );
+        else
+        {
+            if ($oneProductDelete){
+                $product->delete();
+                return RespondWithSuccessRequest($this->lang, 1);
+            }
+            else{
+                $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
+                // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
+                if ($CheckIfExist1->count()) {
+                    $response_array = array(
+                        'success' => false,  // Set success to false to indicate an error
+                        'apiTitle' => trans('validation.NotAllow'),
+                        'apiMsg' => trans('validation.NotAllowMessage'),
+                        'apiCode' => -1,
+                        'data'   => []
+                    );
 
-            // Change the response code to 404 for "Not Found"
-            $response_code = 401;
+                    // Change the response code to 404 for "Not Found"
+                    $response_code = 401;
 
-            return Response::json($response_array, $response_code);
-        }
-        // Handle deletion of associated image if it exists
-        if ($product->image) {
-            $imagePath = public_path('images/products/' . $product->image);
-            if (File::exists($imagePath)) {
-                File::delete($imagePath);
+                    return Response::json($response_array, $response_code);
+                }
+                // Handle deletion of associated image if it exists
+                if ($product->image) {
+                    $imagePath = public_path('images/products/' . $product->image);
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+                ProductImage::where('product_id', $id)->delete();
+                ProductSize::where('product_id', $id)->delete();
+                ProductColor::where('product_id', $id)->delete();
+                ProductUnit::where('product_id', $id)->delete();
+
+                // Delete the category
+                $product->delete();
+
+                // Return success response
+                return RespondWithSuccessRequest($this->lang, 1);
             }
         }
-        ProductImage::where('product_id', $id)->delete();
-        ProductSize::where('product_id', $id)->delete();
-        ProductColor::where('product_id', $id)->delete();
-        ProductUnit::where('product_id', $id)->delete();
 
-        // Delete the category
-        $product->delete();
 
-        // Return success response
-        return RespondWithSuccessRequest($this->lang, 1);
     }
 }

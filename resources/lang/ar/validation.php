@@ -161,6 +161,9 @@ return [
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterBarcode' => 'يجب ادخال الباركود',
+    'EnterPrice' =>  'يجب ادخال السعر',
+    'EnterMaxLimit' =>  'يجب ادخال الحد الاقصى',
+    'EnterMinLimit' =>  'يجب ادخال الحد الادني',
     'Entercode' => 'يجب ادخال الكود',
     'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟'
 ];

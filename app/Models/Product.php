@@ -31,6 +31,7 @@ class Product extends Model
         'name_en',
         'description_ar',
         'description_en',
+        'expiry_date'
     ];
 
     protected $hidden = [
@@ -45,9 +46,6 @@ class Product extends Model
         'modify_by',
         'deleted_at',
         'main_image',
-
-
-
     ];
 
     public function getNameAttribute($value)
@@ -114,5 +112,15 @@ class Product extends Model
     public function ingredients()
     {
         return $this->hasManyThrough(Ingredient::class, ProductUnit::class, 'product_id', 'product_unit_id');
+    }
+
+    public function productLimit()
+    {
+        return $this->hasMany(ProductLimit::class,'product_id','id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id','id');
     }
 }

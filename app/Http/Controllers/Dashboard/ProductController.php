@@ -73,8 +73,51 @@ class ProductController extends Controller
         return redirect('products')->with('message',$message);
     }
 
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+//        dd($product);
+        $Brands = Brand::all();
+        $Categories = Category::all();
+        $Stores = Store::all();
+        $Units = Unit::all();
+        $Currencies = [
+            "EGP", "USD", "EUR", "EUR", "EUR", "EUR", "CAD", "AUD", "JPY", "CNY", "BRL", "MXN",
+            "RUB", "INR", "ZAR", "SEK", "CHF", "ARS", "NOK", "EUR", "PLN", "IDR", "MYR", "VND",
+            "CLP", "COP", "PEN", "UYU", "SGD", "TRY", "LKR", "LBP", "JOD", "IQD", "SAR", "AED",
+            "QAR", "KWD", "OMR", "BHD", "EUR", "EUR", "EUR", "EUR", "ILS", "SYP", "YER", "IRR",
+            "TMT", "UZS", "KGS", "BYN", "UAH", "MDL", "AMD", "GEL", "EUR", "EUR", "EUR", "MKD",
+            "EUR", "EUR", "ALL", "BAM", "HRK", "EUR", "EUR", "HUF", "KMF", "MUR", "MGA", "TZS",
+            "KES", "UGX", "RWF", "BIF", "SBD", "PGK", "TOP", "FJD", "NZD", "WST", "CKD", "NZD",
+            "NZD", "DKK", "DKK", "ISK"
+        ];
+        return view('dashboard.product.edit', compact('product',  'Categories','Units','Currencies','Stores','Brands'));
+    }
+
+    public function show($id)
+    {
+        $product = Product::with(['brand','productLimit'])->findOrFail($id);
+//        dd($product);
+        return view('dashboard.product.show', compact('product'));
+    }
+
     public function update(Request $request, $id)
     {
-        return $this->productService->update($request, $id, $this->checkToken);
+//        dd($request->all());
+        $response = $this->productService->update($request, $id, $this->checkToken);
+//        dd($response);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('products')->with('message',$message);
+    }
+
+    public function delete(Request $request, $id)
+    {
+//        dd($request->all());
+        $response = $this->productService->delete($request, $id, $this->checkToken,true);
+//        dd($response);
+        $responseData = $response->original;
+        $message= $responseData['apiMsg'];
+        return redirect('products')->with('message',$message);
     }
 }

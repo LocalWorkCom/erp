@@ -7,12 +7,12 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('product.CreateProduct')</h4>
+        <h4 class="fw-medium mb-0">@lang('product.AddProduct')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('product.CreateProduct')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('product.AddProduct')</li>
                 </ol>
             </nav>
         </div>
@@ -25,164 +25,170 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('product.CreateProduct')</div>
+                            <div class="card-title">@lang('product.AddProduct')</div>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('product.store') }}" class="needs-validation" novalidate enctype="multipart/form-data">
                                 @csrf
                                 <div class="row gy-4">
                                     <div class="col-12">
-                                        <p class="mb-2 text-muted">@lang('product.Brand'):</p>
+                                        <p class="mb-2 text-muted">@lang('product.Brand')</p>
                                         <select name="brand_id" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseBrand')</option>
                                             @foreach ($Brands as $Brand)
-                                                <option value="{{ $Brand->id }}">{{ $Brand->name_ar }}</option>
+                                                <option value="{{ $Brand->id }}">{{ $Brand->name_ar . " | ".$Brand->name_en }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.brand')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <label for="name_ar" class="form-label">Arabic Name</label>
-                                        <input type="text" name="name_ar" id="name_ar" class="form-control" placeholder="Arabic Name" required>
-                                        <div class="invalid-feedback">@lang('validation.name_ar')</div>
+                                        <label for="name_ar" class="form-label">@lang('product.ArabicName')</label>
+                                        <input type="text" name="name_ar" id="name_ar" class="form-control" placeholder="@lang('product.ArabicName')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <label for="name_en" class="form-label">English Name</label>
-                                        <input type="text" name="name_en" id="name_en" class="form-control" placeholder="English Name">
-                                        <div class="invalid-feedback">@lang('validation.name_en')</div>
+                                        <label for="name_en" class="form-label">@lang('product.EnglishName')</label>
+                                        <input type="text" name="name_en" id="name_en" class="form-control" placeholder="@lang('product.EnglishName')">
+                                        <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <label for="description_ar" class="form-label">Arabic Description</label>
+                                        <label for="description_ar" class="form-label">@lang('product.ArabicDesc')</label>
                                         <textarea name="description_ar" id="description_ar" class="form-control" rows="2"></textarea>
-                                        <div class="invalid-feedback">@lang('validation.desc_ar')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterArabicDesc')</div>
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <label for="description_en" class="form-label">English Description</label>
+                                        <label for="description_en" class="form-label">@lang('product.EnglishDesc')</label>
                                         <textarea name="description_en" id="description_en" class="form-control" rows="2"></textarea>
-                                        <div class="invalid-feedback">@lang('validation.desc_en')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterEnglishDesc')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="main_image" class="form-label">Product Image</label>
+                                        <label for="main_image" class="form-label">@lang('product.Image')</label>
                                         <input type="file" name="main_image" id="main_image" class="form-control" required>
-                                        <div class="invalid-feedback">@lang('validation.img')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="main_unit_id" class="form-label">Unit</label>
+                                        <label for="main_unit_id" class="form-label">@lang('product.Unit')</label>
                                         <select name="main_unit_id" id="main_unit_id" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseUnit')</option>
                                             @foreach ($Units as $Unit)
-                                                <option value="{{ $Unit->id }}">{{ $Unit->name }}</option>
+                                                <option value="{{ $Unit->id }}">{{ $Unit->name_ar . " | ".$Unit->name_en }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.unit')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterUnit')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="currency_code" class="form-label">Currency</label>
+                                        <label for="currency_code" class="form-label">@lang('product.Currency')</label>
                                         <select name="currency_code" id="currency_code" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCurrency')</option>
                                             @foreach ($Currencies as $index => $Currency)
                                                 <option value="{{ $index }}">{{ $Currency }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.currency')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterCurrency')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="category_id" class="form-label">Category</label>
+                                        <label for="category_id" class="form-label">@lang('product.Category')</label>
                                         <select name="category_id" id="category_id" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCategory')</option>
                                             @foreach ($Categories as $Category)
-                                                <option value="{{ $Category->id }}">{{ $Category->name }}</option>
+                                                <option value="{{ $Category->id }}">{{ $Category->name_ar. " | ".$Category->name_en }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.category')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterCategory')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="store_id" class="form-label">Store</label>
+                                        <label for="store_id" class="form-label">@lang('product.Store')</label>
                                         <select name="store_id" id="store_id" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseStore')</option>
                                             @foreach ($Stores as $Store)
-                                                <option value="{{ $Store->id }}">{{ $Store->name_ar }}</option>
+                                                <option value="{{ $Store->id }}">{{ $Store->name_ar . " | ".$Store->name_en}}</option>
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.category')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterStore')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="barcode" class="form-label">Barcode</label>
-                                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode" required>
-                                        <div class="invalid-feedback">@lang('validation.enter_barcode')</div>
-                                    </div>
-
-                                    <div class="col-xl-6">
-                                        <label for="sku" class="form-label">Product Code (SKU)</label>
-                                        <input type="text" name="sku" id="sku" class="form-control" placeholder="Product Code" required>
-                                        <div class="invalid-feedback">@lang('validation.code')</div>
-                                    </div>
-
-                                    <div class="col-xl-6">
-                                        <label for="price" class="form-label">Price</label>
-                                        <input type="number" name="price" id="price" class="form-control" placeholder="Arabic Name" required>
-                                        <div class="invalid-feedback">@lang('validation.price')</div>
-                                    </div>
-                                    <div class="col-xl-6">
-                                        <label for="min_limit" class="form-label">min_limit</label>
-                                        <input type="number" name="min_limit" id="min_limit" class="form-control" placeholder="Arabic Name" required>
-                                        <div class="invalid-feedback">@lang('validation.min_limit')</div>
-                                    </div>
-                                    <div class="col-xl-6">
-                                        <label for="max_limit" class="form-label">max_limit</label>
-                                        <input type="number" name="max_limit" id="max_limit" class="form-control" placeholder="Arabic Name" required>
-                                        <div class="invalid-feedback">@lang('validation.max_limit')</div>
+                                        <label for="barcode" class="form-label">@lang('product.Barcode')</label>
+                                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="@lang('product.Barcode')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterBarcode')</div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <p class="mb-2 text-muted">Type:</p>
+                                        <label for="price" class="form-label">@lang('product.Price')</label>
+                                        <input type="number" name="price" id="price" class="form-control" placeholder="@lang('product.Price')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterPrice')</div>
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <label for="min_limit" class="form-label">@lang('product.MinLimit')</label>
+                                        <input type="number" name="min_limit" id="min_limit" class="form-control" placeholder="@lang('product.MinLimit')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterMinLimit')</div>
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <label for="max_limit" class="form-label">@lang('product.MaxLimit')</label>
+                                        <input type="number" name="max_limit" id="max_limit" class="form-control" placeholder="@lang('product.MaxLimit')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterMaxLimit')</div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <label for="sku" class="form-label">@lang('product.Sku')</label>
+                                        <input type="text" name="sku" id="sku" class="form-control" placeholder="@lang('product.Sku')" required>
+                                        <div class="invalid-feedback">@lang('validation.Entercode')</div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <p class="mb-2 text-muted">@lang('product.Type')</p>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="type" value="raw" class="form-check-input" checked required>
-                                            <label class="form-check-label">Raw</label>
+                                            <label class="form-check-label">@lang('product.Raw')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="type" value="complete" class="form-check-input" required>
-                                            <label class="form-check-label">Complete</label>
+                                            <label class="form-check-label">@lang('product.Complete')</label>
                                         </div>
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <p class="mb-2 text-muted">Have Expiration Date?</p>
-                                        <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_have_expired" value="1" class="form-check-input" checked required>
-                                            <label class="form-check-label">Yes</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_have_expired" value="0" class="form-check-input" required>
-                                            <label class="form-check-label">No</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4">
-                                        <p class="mb-2 text-muted">Remind about product?</p>
+                                        <p class="mb-2 text-muted">@lang('product.Remind')</p>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="is_remind" value="1" class="form-check-input" checked required>
-                                            <label class="form-check-label">Yes</label>
+                                            <label class="form-check-label">@lang('category.yes')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="is_remind" value="0" class="form-check-input" required>
-                                            <label class="form-check-label">No</label>
+                                            <label class="form-check-label">@lang('category.no')</label>
                                         </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <p class="mb-2 text-muted">@lang('product.IsHaveExpired')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_have_expired" value="1" class="form-check-input" checked required>
+                                            <label class="form-check-label">@lang('category.yes')</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_have_expired" value="0" class="form-check-input" required>
+                                            <label class="form-check-label">@lang('category.no')</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <label for="expiry_date" class="form-label">@lang('product.ExpiryDate')</label>
+                                        <input type="date" name="expiry_date" id="expiry_date" class="form-control">
+                                        <div class="invalid-feedback">@lang('validation.expiry_date')</div>
                                     </div>
 
                                     <center>
                                         <div class="col-xl-4">
-                                            <button type="submit" class="btn btn-primary form-control">@lang('Submit')</button>
+                                            <button type="submit" class="btn btn-primary form-control">@lang('category.save')</button>
                                         </div>
                                     </center>
                                 </div>

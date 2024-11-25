@@ -64,7 +64,7 @@
                                         <th scope="col">@lang('product.Barcode')</th>
                                         <th scope="col">@lang('product.Code')</th>
                                         <th scope="col">@lang('product.IsHaveExpired')</th>
-                                        <th scope="col">@lang('product.Actions')</th>
+                                        <th scope="col">@lang('category.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,8 +85,8 @@
                                             <td>{{ $product->code }}</td>
                                             @php
                                                 $translationKey = $product->is_have_expired
-                                                    ? 'product.Yes'
-                                                    : 'product.No';
+                                                    ? 'category.yes'
+                                                    : 'category.no';
                                             @endphp
 
                                             <td> @lang($translationKey)</td>
@@ -145,3 +145,8 @@
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
+<script>
+    function confirmDelete() {
+        return confirm("@lang('validation.DeleteConfirm')");
+    }
+</script>
