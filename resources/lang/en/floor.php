@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'Floors' => 'Floors',
+    'Partitions' => 'Partitions',
+    'Floor' => 'Floor',
+    'ShowFloor' => 'Show Floor',
+    'EditFloor' => 'Edit Floor',
+    'AddFloor' => 'Add Floor',
+    'ShowPartition' => 'Show Partition',
+    'EditPartition' => 'Edit Partition',
+    'AddPartition' => 'Add Partition',
+    'ID' => 'ID',
+    'ArabicName' => 'Arabic Name',
+    'EnglishName' => 'English Name',
+    'Actions' => 'Actions',
+    'Type' => 'Type',
+    'Smoking' => 'Smoking',
+    'Branch' => 'Branch',
+    'Indoor' => 'Indoor',
+    'Outdoor' => 'Outdoor',
+    'Smokin' => 'Smokin',
+    'NoSmokin' => 'NoSmokin',
+    'Capacity' => 'Capacity',
+    'Both' => 'Both',
+    'ChooseBranch' => 'Choose Branch',
+    'ChooseFloor' => 'Choose Floor',
+];

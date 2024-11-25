@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'Floors' => 'الادوار',
+    'Partitions' => 'مناطق الادوار',
+    'Floor' => 'الدور',
+    'ShowFloor' => 'عرض الدور',
+    'EditFloor' => 'تعديل الدور',
+    'AddFloor' => 'اضافة دور',
+    'ShowPartition' => 'عرض المنطقة',
+    'EditPartition' => 'تعديل المنطقة',
+    'AddPartition' => 'اضافة منطقة',
+    'ID' => 'التسلسل',
+    'ArabicName' => 'الاسم بالعربي',
+    'EnglishName' => 'الاسم بالانجليزي',
+    'Actions' => 'العمليات',
+    'Type' => 'النوع',
+    'Smoking' => 'التدخين',
+    'Branch' => 'الفرع',
+    'Indoor' => 'داخلي',
+    'Outdoor' => 'خارجي',
+    'Smokin' => 'تدخين',
+    'NoSmokin' => 'ممنوع تدخين',
+    'Capacity' => 'السعة',
+    'Both' => 'يوجد النوعين',
+    'ChooseBranch' => 'اختر الفرع',
+    'ChooseFloor' => 'اختر الدور',
+];

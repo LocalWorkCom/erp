@@ -4,6 +4,8 @@ use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
+use App\Http\Controllers\Dashboard\FloorController;
+use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\UnitController;
@@ -111,4 +113,18 @@ Route::group(['prefix' => 'branch'], function () {
     Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
     Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update');
     Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+});
+
+Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');
+Route::group(['prefix' => 'floor'], function () {
+    Route::post('store', [FloorController::class, 'store'])->name('floor.store');
+    Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update');
+    Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete');
+});
+
+Route::get('/floor-partitions', [FloorPartitionController::class, 'index'])->name('floorPartitions.list');
+Route::group(['prefix' => 'floor-partition'], function () {
+    Route::post('store', [FloorPartitionController::class, 'store'])->name('floorPartition.store');
+    Route::put('update/{id}', [FloorPartitionController::class, 'update'])->name('floorPartition.update');
+    Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
 });

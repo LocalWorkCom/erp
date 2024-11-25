@@ -151,6 +151,9 @@ return [
     //web
     'Correct' => 'صحيح',
     'EnterBrand' => 'يجب اختيار براند',
+    'EnterBranch' => 'يجب اختيار فرع',
+    'EnterFloor' => 'يجب اختيار دور',
+    'EnterCapacity' => 'يجب اختيار سعة',
     'EnterImage' => 'يجب اختيار صورة',
     'EnterUnit' => 'يجب اختيار وحدة',
     'EnterCurrency' => 'يجب اختيار عملة',

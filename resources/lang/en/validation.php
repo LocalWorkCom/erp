@@ -86,6 +86,9 @@ return [
     //web
     'Correct' =>  'Looks good!',
     'EnterBrand' => 'Please choose a brand',
+    'EnterBranch' => 'Please choose a branch',
+    'EnterFloor' => 'Please choose a floor',
+    'EnterCapacity' => 'Please choose a capacity',
     'EnterImage' => 'Please choose an image',
     'EnterUnit' => 'Please choose a unit',
     'EnterCurrency' => 'Please choose a currency',

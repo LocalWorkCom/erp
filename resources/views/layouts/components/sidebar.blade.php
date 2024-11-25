@@ -71,6 +71,12 @@
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child2">
+                                        <li class="slide">
+                                            <a href="{{route('floors.list')}}" class="side-menu__item">@lang('sidebar.Floors')  </a>
+                                        </li>
+                                        <li class="slide">
+                                            <a href="{{route('floorPartitions.list')}}" class="side-menu__item">@lang('sidebar.FloorPartition')</a>
+                                        </li>
                                         <li class="slide has-sub">
                                             <a href="javascript:void(0);"
                                                 class="side-menu__item">@lang('sidebar.Positions')
