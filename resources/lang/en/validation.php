@@ -88,6 +88,7 @@ return [
     'EnterBrand' => 'Please choose a brand',
     'EnterBranch' => 'Please choose a branch',
     'EnterFloor' => 'Please choose a floor',
+    'EnterDepartment' => 'Please choose a department',
     'EnterCapacity' => 'Please choose a capacity',
     'EnterImage' => 'Please choose an image',
     'EnterUnit' => 'Please choose a unit',

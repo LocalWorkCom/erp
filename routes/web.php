@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
+use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\UnitController;
@@ -127,4 +128,11 @@ Route::group(['prefix' => 'floor-partition'], function () {
     Route::post('store', [FloorPartitionController::class, 'store'])->name('floorPartition.store');
     Route::put('update/{id}', [FloorPartitionController::class, 'update'])->name('floorPartition.update');
     Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
+});
+
+Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
+Route::group(['prefix' => 'position'], function () {
+    Route::post('store', [PositionController::class, 'store'])->name('position.store');
+    Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+    Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
 });

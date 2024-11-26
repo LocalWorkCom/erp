@@ -83,6 +83,9 @@
                                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                             <ul class="slide-menu child3">
                                                 <li class="slide">
+                                                    <a href="{{route('positions.list')}}" class="side-menu__item">@lang('sidebar.Positions')  </a>
+                                                </li>
+                                                <li class="slide">
                                                     <a href="javascript:void(0);"
                                                         class="side-menu__item">@lang('sidebar.Tables') </a>
                                                 </li>
