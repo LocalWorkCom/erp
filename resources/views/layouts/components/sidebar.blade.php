@@ -86,8 +86,8 @@
                                                     <a href="{{route('positions.list')}}" class="side-menu__item">@lang('sidebar.Positions')  </a>
                                                 </li>
                                                 <li class="slide">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">@lang('sidebar.Tables') </a>
+                                                    <a href="{{route('tables.list')}}"
+                                                       class="side-menu__item">@lang('sidebar.Tables') </a>
                                                 </li>
                                             </ul>
                                         </li>

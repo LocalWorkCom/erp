@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
+use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -135,4 +136,11 @@ Route::group(['prefix' => 'position'], function () {
     Route::post('store', [PositionController::class, 'store'])->name('position.store');
     Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
     Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
+});
+
+Route::get('/tables', [TableController::class, 'index'])->name('tables.list');
+Route::group(['prefix' => 'table'], function () {
+    Route::post('store', [TableController::class, 'store'])->name('table.store');
+    Route::put('update/{id}', [TableController::class, 'update'])->name('table.update');
+    Route::delete('delete/{id}', [TableController::class, 'delete'])->name('table.delete');
 });

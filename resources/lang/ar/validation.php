@@ -153,6 +153,8 @@ return [
     'EnterBrand' => 'يجب اختيار براند',
     'EnterBranch' => 'يجب اختيار فرع',
     'EnterFloor' => 'يجب اختيار دور',
+    'EnterPartition' => 'يجب اختيار منطقة دور',
+    'EnterTableNumber' => 'يجب اختيار رقم طاولة',
     'EnterDepartment' => 'يجب اختيار قسم',
     'EnterCapacity' => 'يجب اختيار سعة',
     'EnterImage' => 'يجب اختيار صورة',
