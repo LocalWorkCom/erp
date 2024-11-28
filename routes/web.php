@@ -4,6 +4,7 @@ use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
+use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\PositionController;
@@ -143,4 +144,14 @@ Route::group(['prefix' => 'table'], function () {
     Route::post('store', [TableController::class, 'store'])->name('table.store');
     Route::put('update/{id}', [TableController::class, 'update'])->name('table.update');
     Route::delete('delete/{id}', [TableController::class, 'delete'])->name('table.delete');
+});
+
+Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.list');
+Route::group(['prefix' => 'coupon'], function () {
+    Route::get('create', [CouponController::class, 'create'])->name('coupon.create');
+    Route::post('store', [CouponController::class, 'store'])->name('coupon.store');
+    Route::get('show/{id}', [CouponController::class, 'show'])->name('coupon.show');
+    Route::get('edit/{id}', [CouponController::class, 'edit'])->name('coupon.edit');
+    Route::put('update/{id}', [CouponController::class, 'update'])->name('coupon.update');
+    Route::delete('delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
 });

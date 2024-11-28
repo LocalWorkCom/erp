@@ -107,6 +107,11 @@ return [
     'EnterMaxLimit' =>  'Please enter the max limit',
     'EnterMinLimit' =>  'Please enter the min limit',
     'Entercode' => 'Please enter the code',
+    'EnterDiscountValue' => 'Please enter the discount value',
+    'EnterMinimumSpend' => 'Please enter the minimum spend',
+    'EnterUsageLimit' => 'Please enter the usage limit',
+    'EnterStartDate' => 'Please enter the start date',
+    'EnterEndDate' => 'Please enter the end date',
     'DeleteConfirm'=> 'Are you sure you want to delete this item?',
 
 ];

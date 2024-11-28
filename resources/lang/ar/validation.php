@@ -171,5 +171,10 @@ return [
     'EnterMaxLimit' =>  'يجب ادخال الحد الاقصى',
     'EnterMinLimit' =>  'يجب ادخال الحد الادني',
     'Entercode' => 'يجب ادخال الكود',
+    'EnterDiscountValue' => 'يجب ادخال قيمة الخصم',
+    'EnterMinimumSpend' => 'يجب ادخال الحد الادني لقيمة الشراء',
+    'EnterUsageLimit' => 'يجب ادخال حد الاستخدام',
+    'EnterStartDate' => 'يجب ادخال تاريخ البدء',
+    'EnterEndDate' => 'يجب ادخال تاريخ الانتهاء',
     'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟'
 ];

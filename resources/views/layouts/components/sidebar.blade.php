@@ -442,7 +442,7 @@
 
                         <!-- Start::slide  Purchase-->
                         <li class="slide">
-                            <a href="{{ url('Coupon') }}" class="side-menu__item">
+                            <a href="{{ route('coupons.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
