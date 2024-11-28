@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
+use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
@@ -154,4 +155,11 @@ Route::group(['prefix' => 'coupon'], function () {
     Route::get('edit/{id}', [CouponController::class, 'edit'])->name('coupon.edit');
     Route::put('update/{id}', [CouponController::class, 'update'])->name('coupon.update');
     Route::delete('delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
+});
+
+Route::get('/gifts', [GiftController::class, 'index'])->name('gifts.list');
+Route::group(['prefix' => 'gift'], function () {
+    Route::post('store', [GiftController::class, 'store'])->name('gift.store');
+    Route::put('update/{id}', [GiftController::class, 'update'])->name('gift.update');
+    Route::delete('delete/{id}', [GiftController::class, 'delete'])->name('gift.delete');
 });

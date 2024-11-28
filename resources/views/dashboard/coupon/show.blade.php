@@ -77,9 +77,8 @@
                                 <!-- Is Active -->
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('coupon.IsActive')</label>
-                                    <p class="form-text">{{ $coupon->is_active ? __('category.yes') : __('category.no') }}</p>
+                                    <p class="form-text">{{ $coupon->is_active ? __('coupon.Active') : __('coupon.Inactive') }}</p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
