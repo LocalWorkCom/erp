@@ -318,6 +318,21 @@
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form>
+
+                                            <select class="form-select d-inline" style="width: 25%;">
+                                                <option value="">{{ __('floor.Partitions') }}</option>
+                                                @foreach($floors->floorPartitions as $floor)
+                                                    <option value="{{ $floor->id }}">{{ $floor->name_ar }} | {{ $floor->name_en }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <select class="form-select d-inline" style="width: 25%;">
+                                                <option value="">{{ __('floor.Tables') }}</option>
+                                                @foreach($floors->tables as $floor)
+                                                    <option value="{{ $floor->id }}">{{ $floor->name_ar }} | {{ $floor->name_en }}</option>
+                                                @endforeach
+                                            </select>
+
                                         </td>
 
                                     </tr>

@@ -21,7 +21,7 @@ class FloorService
     {
 //        dd(app()->getLocale());
         try {
-            $floors = Floor::with('floorPartitions.tables')->get();
+            $floors = Floor::with(['floorPartitions', 'tables', 'floorPartitions.tables'])->get();
             return ResponseWithSuccessData($this->lang, $floors, 1);
         } catch (\Exception $e) {
             return RespondWithBadRequestData($this->lang, 2);

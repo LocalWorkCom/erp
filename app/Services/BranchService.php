@@ -22,7 +22,7 @@ class BranchService
 
             $branches = $withTrashed
                 ? Branch::withTrashed()->with(['country', 'creator', 'deleter'])->get()
-                : Branch::with(['country', 'creator', 'deleter'])->get();
+                : Branch::with(['country', 'creator', 'deleter','floors'])->get();
 
             return ResponseWithSuccessData($this->lang, $branches, 1);
         } catch (\Exception $e) {
