@@ -4,8 +4,14 @@ use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
+use App\Http\Controllers\Dashboard\CouponController;
+use App\Http\Controllers\Dashboard\FloorController;
+use App\Http\Controllers\Dashboard\FloorPartitionController;
+use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
+use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -39,8 +45,10 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.lis
 Route::group(['prefix' => 'product'], function () {
     Route::get('/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('store', [ProductController::class, 'store'])->name('product.store');
-    Route::post('update/{id}', [ProductController::class, 'update'])->name('product.update');
-    Route::get('delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    Route::get('show/{id}', [ProductController::class, 'show'])->name('product.show');
+    Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
     // Route::get('units', [ProductUnitController::class, 'index']);
     // Route::post('unit/store', [ProductUnitController::class, 'store']);
     // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -109,4 +117,49 @@ Route::group(['prefix' => 'branch'], function () {
     Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
     Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update');
     Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+});
+
+Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');
+Route::group(['prefix' => 'floor'], function () {
+    Route::post('store', [FloorController::class, 'store'])->name('floor.store');
+    Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update');
+    Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete');
+});
+
+Route::get('/floor-partitions', [FloorPartitionController::class, 'index'])->name('floorPartitions.list');
+Route::group(['prefix' => 'floor-partition'], function () {
+    Route::post('store', [FloorPartitionController::class, 'store'])->name('floorPartition.store');
+    Route::put('update/{id}', [FloorPartitionController::class, 'update'])->name('floorPartition.update');
+    Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
+});
+
+Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
+Route::group(['prefix' => 'position'], function () {
+    Route::post('store', [PositionController::class, 'store'])->name('position.store');
+    Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+    Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
+});
+
+Route::get('/tables', [TableController::class, 'index'])->name('tables.list');
+Route::group(['prefix' => 'table'], function () {
+    Route::post('store', [TableController::class, 'store'])->name('table.store');
+    Route::put('update/{id}', [TableController::class, 'update'])->name('table.update');
+    Route::delete('delete/{id}', [TableController::class, 'delete'])->name('table.delete');
+});
+
+Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.list');
+Route::group(['prefix' => 'coupon'], function () {
+    Route::get('create', [CouponController::class, 'create'])->name('coupon.create');
+    Route::post('store', [CouponController::class, 'store'])->name('coupon.store');
+    Route::get('show/{id}', [CouponController::class, 'show'])->name('coupon.show');
+    Route::get('edit/{id}', [CouponController::class, 'edit'])->name('coupon.edit');
+    Route::put('update/{id}', [CouponController::class, 'update'])->name('coupon.update');
+    Route::delete('delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
+});
+
+Route::get('/gifts', [GiftController::class, 'index'])->name('gifts.list');
+Route::group(['prefix' => 'gift'], function () {
+    Route::post('store', [GiftController::class, 'store'])->name('gift.store');
+    Route::put('update/{id}', [GiftController::class, 'update'])->name('gift.update');
+    Route::delete('delete/{id}', [GiftController::class, 'delete'])->name('gift.delete');
 });

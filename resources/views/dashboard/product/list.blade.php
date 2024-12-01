@@ -40,6 +40,14 @@
 
                         </div>
                         <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-solid-info alert-dismissible fade show">
+                                    {{ session('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
@@ -56,14 +64,15 @@
                                         <th scope="col">@lang('product.Barcode')</th>
                                         <th scope="col">@lang('product.Code')</th>
                                         <th scope="col">@lang('product.IsHaveExpired')</th>
-                                        <th scope="col">@lang('product.Actions')</th>
+                                        <th scope="col">@lang('category.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""></td>
+                                            <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""
+                                                     width="100" height="100"></td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit->name_en }}</td>
@@ -76,18 +85,33 @@
                                             <td>{{ $product->code }}</td>
                                             @php
                                                 $translationKey = $product->is_have_expired
-                                                    ? 'product.Yes'
-                                                    : 'product.No';
+                                                    ? 'category.yes'
+                                                    : 'category.no';
                                             @endphp
 
                                             <td> @lang($translationKey)</td>
-                                            <td> <button type="button"
-                                                    class="btn btn-info-light btn-wave">@lang('country.show')</button>
-                                                <button type="button"
-                                                    class="btn btn-orange-light btn-wave">@lang('country.edit')</button>
-                                                <button type="button"
-                                                    class="btn btn-danger-light btn-wave">@lang('country.delete')</button>
+                                            <td>
+                                                <!-- Show Button -->
+                                                <a href="{{route('product.show',$product->id)}}"
+                                                   class="btn btn-info-light btn-wave show-category">
+                                                    @lang('category.show') <i class="ri-eye-line"></i>
+                                                </a>
+
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-orange-light btn-wave">
+                                                    @lang('category.edit') <i class="ri-edit-line"></i>
+                                                </a>
+
+                                                <!-- Delete Button -->
+                                                <form class="d-inline" action="{{ route('product.delete', $product->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
                                             </td>
+
                                         </tr>
                                     @endforeach
 
@@ -121,3 +145,8 @@
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
+<script>
+    function confirmDelete() {
+        return confirm("@lang('validation.DeleteConfirm')");
+    }
+</script>

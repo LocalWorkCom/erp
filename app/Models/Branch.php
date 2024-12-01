@@ -84,4 +84,9 @@ class Branch extends Model
     {
         return $this->belongsToMany(Dish::class, 'branch_dish');
     }
+
+    public function floors()
+    {
+        return $this->hasMany(Floor::class, 'branch_id');
+    }
 }

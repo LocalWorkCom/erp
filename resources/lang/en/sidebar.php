@@ -8,6 +8,7 @@ return [
     'Resturants' => 'Resturants',
     'Branches' => 'Branches',
     'Floors' => 'Floors',
+    'FloorPartition' => 'Floor Partitions',
     'Positions' => 'Positions',
     'Tables' => 'Tables',
     'Dishes' => 'Dishes',

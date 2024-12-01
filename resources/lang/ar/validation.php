@@ -151,6 +151,12 @@ return [
     //web
     'Correct' => 'صحيح',
     'EnterBrand' => 'يجب اختيار براند',
+    'EnterBranch' => 'يجب اختيار فرع',
+    'EnterFloor' => 'يجب اختيار دور',
+    'EnterPartition' => 'يجب اختيار منطقة دور',
+    'EnterTableNumber' => 'يجب اختيار رقم طاولة',
+    'EnterDepartment' => 'يجب اختيار قسم',
+    'EnterCapacity' => 'يجب اختيار سعة',
     'EnterImage' => 'يجب اختيار صورة',
     'EnterUnit' => 'يجب اختيار وحدة',
     'EnterCurrency' => 'يجب اختيار عملة',
@@ -161,6 +167,14 @@ return [
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterBarcode' => 'يجب ادخال الباركود',
+    'EnterPrice' =>  'يجب ادخال السعر',
+    'EnterMaxLimit' =>  'يجب ادخال الحد الاقصى',
+    'EnterMinLimit' =>  'يجب ادخال الحد الادني',
     'Entercode' => 'يجب ادخال الكود',
+    'EnterDiscountValue' => 'يجب ادخال قيمة الخصم',
+    'EnterMinimumSpend' => 'يجب ادخال الحد الادني لقيمة الشراء',
+    'EnterUsageLimit' => 'يجب ادخال حد الاستخدام',
+    'EnterStartDate' => 'يجب ادخال تاريخ البدء',
+    'EnterEndDate' => 'يجب ادخال تاريخ الانتهاء',
     'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟'
 ];
