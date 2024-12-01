@@ -35,7 +35,6 @@ class Country extends Model
         'code',
         'currency_ar',
         'currency_en',
-        'currency_code',
         'job_years'
 
     ];
