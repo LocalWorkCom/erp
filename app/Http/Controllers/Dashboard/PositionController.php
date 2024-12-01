@@ -31,7 +31,7 @@ class PositionController extends Controller
     {
         $response = $this->positionService->add($request);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('positions')->with('message',$message);
     }
 
@@ -39,14 +39,14 @@ class PositionController extends Controller
     {
         $response = $this->positionService->edit($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('positions')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->positionService->delete($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('positions')->with('message',$message);
     }
 }

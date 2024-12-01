@@ -36,7 +36,7 @@ class FloorController extends Controller
         $response = $this->floorService->add($request);
         $responseData = $response->original;
 //        dd($responseData);
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('floors')->with('message',$message);
     }
 
@@ -46,14 +46,14 @@ class FloorController extends Controller
         $response = $this->floorService->edit($request, $id);
 //        dd($response);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('floors')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->floorService->delete($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('floors')->with('message',$message);
     }
 }

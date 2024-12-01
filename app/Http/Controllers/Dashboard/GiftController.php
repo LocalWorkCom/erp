@@ -41,7 +41,7 @@ class GiftController extends Controller
     {
         $response = $this->giftService->store($request);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('gifts')->with('message',$message);
     }
 
@@ -49,7 +49,7 @@ class GiftController extends Controller
     {
         $response = $this->giftService->update($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('gifts')->with('message',$message);
     }
 
@@ -57,7 +57,7 @@ class GiftController extends Controller
     {
         $response = $this->giftService->destroy($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('gifts')->with('message',$message);
     }
 }

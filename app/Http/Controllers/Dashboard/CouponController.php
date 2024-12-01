@@ -49,7 +49,7 @@ class CouponController extends Controller
     {
         $response = $this->couponService->store($request, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('coupons')->with('message',$message);
     }
 
@@ -69,7 +69,7 @@ class CouponController extends Controller
     {
         $response = $this->couponService->update($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('coupons')->with('message',$message);
     }
 
@@ -77,7 +77,7 @@ class CouponController extends Controller
     {
         $response = $this->couponService->destroy($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('coupons')->with('message',$message);
     }
 }

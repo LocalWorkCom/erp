@@ -40,7 +40,7 @@ class BranchController extends Controller
         $response = $this->branchService->store($request);
         $responseData = $response->original;
 //        dd($responseData);
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('branches')->with('message',$message);
     }
 
@@ -69,14 +69,14 @@ class BranchController extends Controller
         $response = $this->branchService->update($request, $id);
 //        dd($response);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('branches')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->branchService->destroy($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('branches')->with('message',$message);
     }
 }

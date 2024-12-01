@@ -84,9 +84,8 @@ class ProductController extends Controller
             }
         }
 
-        $lang = $this->lang;
         $Stores = Store::all();
-      
+
         return view('dashboard.product.add', compact('Brands', 'Categories', 'Units', 'Currencies', 'Stores'));
     }
 
@@ -96,108 +95,39 @@ class ProductController extends Controller
         $response = $this->productService->store($request, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['apiMsg'];
+        $message = $responseData['Msg'];
         return redirect('products')->with('message', $message);
     }
 
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $product = Product::findOrFail($id);
-        //        dd($product);
-        $Brands = Brand::all();
-        $Categories = Category::all();
+
+        $response  = $this->brandService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Brands = Brand::hydrate($responseData['data']);
+
+        $response  = $this->unitService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Units = Unit::hydrate($responseData['data']);
+
+        $response  = $this->categoryService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Categories = Category::hydrate($responseData['data']);
+
+        $response  = $this->countryService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Countries = Country::hydrate($responseData['data']);
+        $Currencies = [];
+
+        foreach ($Countries as $country) {
+            // Check if currency_code exists and add it to the array
+            if (isset($country->currency_code)) {
+                $Currencies[] = $country->currency_code;
+            }
+        }
         $Stores = Store::all();
-        $Units = Unit::all();
-        $Currencies = [
-            "EGP",
-            "USD",
-            "EUR",
-            "EUR",
-            "EUR",
-            "EUR",
-            "CAD",
-            "AUD",
-            "JPY",
-            "CNY",
-            "BRL",
-            "MXN",
-            "RUB",
-            "INR",
-            "ZAR",
-            "SEK",
-            "CHF",
-            "ARS",
-            "NOK",
-            "EUR",
-            "PLN",
-            "IDR",
-            "MYR",
-            "VND",
-            "CLP",
-            "COP",
-            "PEN",
-            "UYU",
-            "SGD",
-            "TRY",
-            "LKR",
-            "LBP",
-            "JOD",
-            "IQD",
-            "SAR",
-            "AED",
-            "QAR",
-            "KWD",
-            "OMR",
-            "BHD",
-            "EUR",
-            "EUR",
-            "EUR",
-            "EUR",
-            "ILS",
-            "SYP",
-            "YER",
-            "IRR",
-            "TMT",
-            "UZS",
-            "KGS",
-            "BYN",
-            "UAH",
-            "MDL",
-            "AMD",
-            "GEL",
-            "EUR",
-            "EUR",
-            "EUR",
-            "MKD",
-            "EUR",
-            "EUR",
-            "ALL",
-            "BAM",
-            "HRK",
-            "EUR",
-            "EUR",
-            "HUF",
-            "KMF",
-            "MUR",
-            "MGA",
-            "TZS",
-            "KES",
-            "UGX",
-            "RWF",
-            "BIF",
-            "SBD",
-            "PGK",
-            "TOP",
-            "FJD",
-            "NZD",
-            "WST",
-            "CKD",
-            "NZD",
-            "NZD",
-            "DKK",
-            "DKK",
-            "ISK"
-        ];
+
         return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Stores', 'Brands'));
     }
 
@@ -214,7 +144,7 @@ class ProductController extends Controller
         $response = $this->productService->update($request, $id, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['apiMsg'];
+        $message = $responseData['Msg'];
         return redirect('products')->with('message', $message);
     }
 
@@ -224,7 +154,7 @@ class ProductController extends Controller
         $response = $this->productService->delete($request, $id, $this->checkToken, true);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['apiMsg'];
+        $message = $responseData['Msg'];
         return redirect('products')->with('message', $message);
     }
 }

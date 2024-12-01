@@ -38,7 +38,7 @@ class TableController extends Controller
         $response = $this->tableService->add($request);
         $responseData = $response->original;
 //        dd($responseData);
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('tables')->with('message',$message);
     }
 
@@ -48,14 +48,14 @@ class TableController extends Controller
         $response = $this->tableService->edit($request, $id);
 //        dd($response);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('tables')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->tableService->delete($request, $id);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('tables')->with('message',$message);
     }
 }

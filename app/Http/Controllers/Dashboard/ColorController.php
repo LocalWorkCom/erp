@@ -41,7 +41,7 @@ class ColorController extends Controller
     {
         $response = $this->ColorService->store($request, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('colors')->with('message',$message);
     }
 
@@ -49,7 +49,7 @@ class ColorController extends Controller
     {
         $response = $this->ColorService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('colors')->with('message',$message);
     }
 
@@ -57,7 +57,7 @@ class ColorController extends Controller
     {
         $response = $this->ColorService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['Msg'];
         return redirect('colors')->with('message',$message);
     }
 }
