@@ -95,7 +95,7 @@ class ProductController extends Controller
         $response = $this->productService->store($request, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['Msg'];
+        $message = $responseData['message'];
         return redirect('products')->with('message', $message);
     }
 
@@ -144,7 +144,7 @@ class ProductController extends Controller
         $response = $this->productService->update($request, $id, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['Msg'];
+        $message = $responseData['message'];
         return redirect('products')->with('message', $message);
     }
 
@@ -154,7 +154,7 @@ class ProductController extends Controller
         $response = $this->productService->delete($request, $id, $this->checkToken, true);
         //        dd($response);
         $responseData = $response->original;
-        $message = $responseData['Msg'];
+        $message = $responseData['message'];
         return redirect('products')->with('message', $message);
     }
 }

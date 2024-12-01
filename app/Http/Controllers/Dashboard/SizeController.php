@@ -43,7 +43,7 @@ class SizeController extends Controller
     {
         $response = $this->SizeService->store($request, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('sizes')->with('message',$message);
     }
 
@@ -51,7 +51,7 @@ class SizeController extends Controller
     {
         $response = $this->SizeService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('sizes')->with('message',$message);
     }
 
@@ -59,7 +59,7 @@ class SizeController extends Controller
     {
         $response = $this->SizeService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('sizes')->with('message',$message);
     }
 }

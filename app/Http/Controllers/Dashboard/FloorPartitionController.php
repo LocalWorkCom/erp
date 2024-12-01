@@ -30,7 +30,7 @@ class FloorPartitionController extends Controller
     {
         $response = $this->floorPartitionService->add($request);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('floor-partitions')->with('message',$message);
     }
 
@@ -38,14 +38,14 @@ class FloorPartitionController extends Controller
     {
         $response = $this->floorPartitionService->edit($request, $id);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('floor-partitions')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->floorPartitionService->delete($request, $id);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('floor-partitions')->with('message',$message);
     }
 }

@@ -42,7 +42,7 @@ class UnitController extends Controller
     {
         $response = $this->UnitService->store($request, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('units')->with('message',$message);
     }
 
@@ -50,7 +50,7 @@ class UnitController extends Controller
     {
         $response = $this->UnitService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('units')->with('message',$message);
     }
 
@@ -58,7 +58,7 @@ class UnitController extends Controller
     {
         $response = $this->UnitService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['Msg'];
+        $message= $responseData['message'];
         return redirect('units')->with('message',$message);
     }
 }
