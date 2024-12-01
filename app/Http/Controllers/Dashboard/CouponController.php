@@ -49,6 +49,10 @@ class CouponController extends Controller
     {
         $response = $this->couponService->store($request, $this->checkToken);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('coupons')->with('message',$message);
     }
@@ -69,6 +73,10 @@ class CouponController extends Controller
     {
         $response = $this->couponService->update($request, $id);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('coupons')->with('message',$message);
     }

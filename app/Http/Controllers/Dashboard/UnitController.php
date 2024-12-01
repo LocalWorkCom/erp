@@ -42,6 +42,10 @@ class UnitController extends Controller
     {
         $response = $this->UnitService->store($request, $this->checkToken);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('units')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('units')->with('message',$message);
     }
@@ -50,6 +54,10 @@ class UnitController extends Controller
     {
         $response = $this->UnitService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('units')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('units')->with('message',$message);
     }

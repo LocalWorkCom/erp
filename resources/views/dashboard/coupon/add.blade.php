@@ -27,6 +27,16 @@
                             <div class="card-title">@lang('coupon.AddCoupon')</div>
                         </div>
                         <div class="card-body">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
                             <form method="POST" action="{{ route('coupon.store') }}" class="needs-validation" novalidate>
                                 @csrf
                                 <div class="row gy-4">

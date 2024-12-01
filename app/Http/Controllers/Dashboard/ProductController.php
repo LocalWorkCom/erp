@@ -95,6 +95,10 @@ class ProductController extends Controller
         $response = $this->productService->store($request, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message = $responseData['message'];
         return redirect('products')->with('message', $message);
     }
@@ -144,6 +148,10 @@ class ProductController extends Controller
         $response = $this->productService->update($request, $id, $this->checkToken);
         //        dd($response);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message = $responseData['message'];
         return redirect('products')->with('message', $message);
     }

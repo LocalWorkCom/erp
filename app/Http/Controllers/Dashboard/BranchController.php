@@ -40,6 +40,10 @@ class BranchController extends Controller
         $response = $this->branchService->store($request);
         $responseData = $response->original;
 //        dd($responseData);
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('branches')->with('message',$message);
     }
@@ -69,6 +73,10 @@ class BranchController extends Controller
         $response = $this->branchService->update($request, $id);
 //        dd($response);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('branches')->with('message',$message);
     }

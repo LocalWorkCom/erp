@@ -41,6 +41,10 @@ class ColorController extends Controller
     {
         $response = $this->ColorService->store($request, $this->checkToken);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('colors')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('colors')->with('message',$message);
     }
@@ -49,6 +53,10 @@ class ColorController extends Controller
     {
         $response = $this->ColorService->update($request, $id, $this->checkToken);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('colors')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('colors')->with('message',$message);
     }

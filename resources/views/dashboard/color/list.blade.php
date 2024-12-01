@@ -175,7 +175,17 @@
                                     </button>
                                 </div>
                             @endif
-                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        <div class="alert alert-solid-danger alert-dismissible fade show">
+                                            {{ $error }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @endif
+                                <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('color.ID')</th>

@@ -31,6 +31,10 @@ class PositionController extends Controller
     {
         $response = $this->positionService->add($request);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('positions')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('positions')->with('message',$message);
     }
@@ -39,6 +43,10 @@ class PositionController extends Controller
     {
         $response = $this->positionService->edit($request, $id);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('positions')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('positions')->with('message',$message);
     }

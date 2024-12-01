@@ -30,6 +30,10 @@ class FloorPartitionController extends Controller
     {
         $response = $this->floorPartitionService->add($request);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('floor-partitions')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('floor-partitions')->with('message',$message);
     }
@@ -38,6 +42,10 @@ class FloorPartitionController extends Controller
     {
         $response = $this->floorPartitionService->edit($request, $id);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('floor-partitions')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('floor-partitions')->with('message',$message);
     }

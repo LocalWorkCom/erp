@@ -38,6 +38,10 @@ class TableController extends Controller
         $response = $this->tableService->add($request);
         $responseData = $response->original;
 //        dd($responseData);
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('tables')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('tables')->with('message',$message);
     }
@@ -48,6 +52,10 @@ class TableController extends Controller
         $response = $this->tableService->edit($request, $id);
 //        dd($response);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('tables')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('tables')->with('message',$message);
     }

@@ -36,6 +36,10 @@ class FloorController extends Controller
         $response = $this->floorService->add($request);
         $responseData = $response->original;
 //        dd($responseData);
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('floors')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('floors')->with('message',$message);
     }
@@ -46,6 +50,10 @@ class FloorController extends Controller
         $response = $this->floorService->edit($request, $id);
 //        dd($response);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('floors')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('floors')->with('message',$message);
     }

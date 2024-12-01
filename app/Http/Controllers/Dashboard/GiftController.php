@@ -41,6 +41,10 @@ class GiftController extends Controller
     {
         $response = $this->giftService->store($request);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('gifts')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('gifts')->with('message',$message);
     }
@@ -49,6 +53,10 @@ class GiftController extends Controller
     {
         $response = $this->giftService->update($request, $id);
         $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('gifts')->withErrors($validationErrors)->withInput();
+        }
         $message= $responseData['message'];
         return redirect('gifts')->with('message',$message);
     }

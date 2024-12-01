@@ -31,6 +31,16 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
                             <form method="POST" action="{{ route('category.update', $category->id) }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 @method('PUT')
