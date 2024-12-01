@@ -75,7 +75,7 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
-                'created_by' =>13,
+                'created_by' =>1,
             ]);
 
             return ResponseWithSuccessData($this->lang, $branch, 1);

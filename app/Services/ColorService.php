@@ -55,7 +55,7 @@ class ColorService
             return RespondWithBadRequest($lang, 9);
         }
 
-        $created_by = 13;
+        $created_by = 1;
 
         // Create the new color
         $color = new Color();

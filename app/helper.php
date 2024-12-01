@@ -38,9 +38,9 @@ function RespondWithSuccessRequest($lang, $code)
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'Msg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'Code' => $APICode->code
 
     );
     $response_code = 200;
@@ -54,9 +54,9 @@ function RespondWithBadRequest($lang, $code)
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
         'success' => false,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'Msg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'Code' => $APICode->code
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
@@ -66,9 +66,9 @@ function RespondWithBadRequestWithData($data)
 {
     $response_array = array(
         'success' => false,
-        'apiTitle' => trans('validation.validator_title'),
-        'apiMsg' => trans('validation.validator_msg'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.validator_title'),
+        'Msg' => trans('validation.validator_msg'),
+        'Code' => -1,
         'data' => $data
     );
     $response_code = 200;
@@ -137,9 +137,9 @@ function ResponseWithSuccessData($lang, $data, $code)
     $APICode = ApiCode($code);
     $response_array = array(
         'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'Msg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'Code' => $APICode->code,
         'data'   => $data
     );
     $response_code = 200;
@@ -152,9 +152,9 @@ function RespondWithBadRequestData($lang, $code)
     $APICode = ApiCode($code);
     $response_array = array(
         'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'Msg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'Code' => $APICode->code,
         'data'   => []
     );
     $response_code = 200;
@@ -248,9 +248,9 @@ function RespondWithBadRequestNoChange()
 {
     $response_array = array(
         'success' => true,
-        'apiTitle' => trans('validation.NoChange'),
-        'apiMsg' => trans('validation.NoChangeMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NoChange'),
+        'Msg' => trans('validation.NoChangeMessage'),
+        'Code' => -1,
         'data'   => []
     );
     $response_code = 200;
@@ -262,9 +262,9 @@ function RespondWithBadRequestNotExist()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotExist'),
-        'apiMsg' => trans('validation.NotExistMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotExist'),
+        'Msg' => trans('validation.NotExistMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -279,9 +279,9 @@ function RespondWithBadRequestNotHavePermeation()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotHavePermeation'),
-        'apiMsg' => trans('validation.NotHavePermeationMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotHavePermeation'),
+        'Msg' => trans('validation.NotHavePermeationMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -296,9 +296,9 @@ function RespondWithBadRequestNotDate()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotDate'),
-        'apiMsg' => trans('validation.NotDateMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotDate'),
+        'Msg' => trans('validation.NotDateMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -313,9 +313,9 @@ function RespondWithBadRequestNotAdd()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAddMore'),
-        'apiMsg' => trans('validation.NotAddMoreMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotAddMore'),
+        'Msg' => trans('validation.NotAddMoreMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -330,9 +330,9 @@ function RespondWithBadRequestNotAvailable()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotAvailableMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'Msg' => trans('validation.NotAvailableMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -347,9 +347,9 @@ function RespondWithBadRequestNotClosing()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotClosingMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'Msg' => trans('validation.NotClosingMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -363,9 +363,9 @@ function RespondWithBadRequestNoLeave()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NoLeave'),
-        'apiMsg' => trans('validation.NoLeaveMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.NoLeave'),
+        'Msg' => trans('validation.NoLeaveMessage'),
+        'Code' => -1,
         'data'   => []
     );
 
@@ -381,9 +381,9 @@ function RespondWithBadRequestDataExist()
 {
     $response_array = array(
         'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.DataExist'),
-        'apiMsg' => trans('validation.DataExistMessage'),
-        'apiCode' => -1,
+        // 'apiTitle' => trans('validation.DataExist'),
+        'Msg' => trans('validation.DataExistMessage'),
+        'Code' => -1,
         'data'   => []
     );
 

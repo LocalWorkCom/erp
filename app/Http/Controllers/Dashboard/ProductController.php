@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+
 use App\Models\Store;
 use App\Models\Unit;
 use App\Services\BrandService;
 use App\Services\ProductService;
+use App\Services\UnitService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -21,14 +23,18 @@ class ProductController extends Controller
     // YourController.php
 
     protected $productService;
-    protected $checkToken;
-    protected $lang;
+    protected $checkToken;  // Set to true or false based on your need
+    protected $lang;  // Set to true or false based on your need
+    protected $brandService;
+    protected $unitService;
 
 
-    public function __construct(ProductService $productService, BrandService $brandService)
+
+    public function __construct(ProductService $productService, BrandService $brandService, UnitService $unitService)
     {
         $this->productService = $productService;
         $this->brandService = $brandService;
+        $this->unitService = $unitService;
         $this->checkToken = false;
         $this->lang =  app()->getLocale();
     }
@@ -46,10 +52,17 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        $Brands = Brand::all();
+        $response  = $this->brandService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Brands = Brand::hydrate($responseData['data']);
+
+        $response  = $this->unitService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Units = Unit::hydrate($responseData['data']);
+
+        $lang = $this->lang;
         $Categories = Category::all();
         $Stores = Store::all();
-        $Units = Unit::all();
         $Currencies = [
             "EGP", "USD", "EUR", "EUR", "EUR", "EUR", "CAD", "AUD", "JPY", "CNY", "BRL", "MXN",
             "RUB", "INR", "ZAR", "SEK", "CHF", "ARS", "NOK", "EUR", "PLN", "IDR", "MYR", "VND",
