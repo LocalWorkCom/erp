@@ -71,14 +71,23 @@
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child2">
+                                        <li class="slide">
+                                            <a href="{{route('floors.list')}}" class="side-menu__item">@lang('sidebar.Floors')  </a>
+                                        </li>
+                                        <li class="slide">
+                                            <a href="{{route('floorPartitions.list')}}" class="side-menu__item">@lang('sidebar.FloorPartition')</a>
+                                        </li>
                                         <li class="slide has-sub">
                                             <a href="javascript:void(0);"
                                                 class="side-menu__item">@lang('sidebar.Positions')
                                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                             <ul class="slide-menu child3">
                                                 <li class="slide">
-                                                    <a href="javascript:void(0);"
-                                                        class="side-menu__item">@lang('sidebar.Tables') </a>
+                                                    <a href="{{route('positions.list')}}" class="side-menu__item">@lang('sidebar.Positions')  </a>
+                                                </li>
+                                                <li class="slide">
+                                                    <a href="{{route('tables.list')}}"
+                                                       class="side-menu__item">@lang('sidebar.Tables') </a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -433,7 +442,7 @@
 
                         <!-- Start::slide  Purchase-->
                         <li class="slide">
-                            <a href="{{ url('Coupon') }}" class="side-menu__item">
+                            <a href="{{ route('coupons.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -460,7 +469,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Gifts') }}" class="side-menu__item">
+                            <a href="{{ route('gifts.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>

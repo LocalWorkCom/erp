@@ -46,7 +46,11 @@ class CategoryController extends Controller
     {
         $response = $this->categoryService->store($request, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message= $responseData['message'];
         return redirect('categories')->with('message',$message);
     }
 
@@ -70,14 +74,18 @@ class CategoryController extends Controller
         $response = $this->categoryService->update($request, $id, $this->checkToken);
 //        dd($response);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message= $responseData['message'];
         return redirect('categories')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->categoryService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
-        $message= $responseData['apiMsg'];
+        $message= $responseData['message'];
         return redirect('categories')->with('message',$message);
     }
 

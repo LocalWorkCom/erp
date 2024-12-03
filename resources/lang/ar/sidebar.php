@@ -8,6 +8,7 @@ return[
     'Resturants' => 'المطعم',
     'Branches' => 'الفروع',
     'Floors' => 'الادوار',
+    'FloorPartitions' => 'مناطق الادوار',
     'Positions' => 'الاماكن',
     'Tables' => 'الطاولات',
     'Dishes' => 'الاطباق',

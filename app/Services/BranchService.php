@@ -22,7 +22,7 @@ class BranchService
 
             $branches = $withTrashed
                 ? Branch::withTrashed()->with(['country', 'creator', 'deleter'])->get()
-                : Branch::with(['country', 'creator', 'deleter'])->get();
+                : Branch::with(['country', 'creator', 'deleter','floors'])->get();
 
             return ResponseWithSuccessData($this->lang, $branches, 1);
         } catch (\Exception $e) {
@@ -75,7 +75,7 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
-                'created_by' =>13,
+                'created_by' =>1,
             ]);
 
             return ResponseWithSuccessData($this->lang, $branch, 1);

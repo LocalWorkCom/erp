@@ -33,14 +33,15 @@ use GuzzleHttp\Client;
 function RespondWithSuccessRequest($lang, $code)
 {
 
+
     //bad or invalid request missing some params
     $response = new stdClass();
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 200
 
     );
     $response_code = 200;
@@ -51,27 +52,29 @@ function RespondWithSuccessRequest($lang, $code)
 function RespondWithBadRequest($lang, $code)
 {
 
+
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
-        'success' => false,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        'status' => false,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 400
     );
-    $response_code = 200;
+    $response_code = 400;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
 function RespondWithBadRequestWithData($data)
 {
+ 
     $response_array = array(
-        'success' => false,
-        'apiTitle' => trans('validation.validator_title'),
-        'apiMsg' => trans('validation.validator_msg'),
-        'apiCode' => -1,
+        'status' => false,
+        // 'apiTitle' => trans('validation.validator_title'),
+        'message' => trans('validation.validator_msg'),
+        'code' => 401,
         'data' => $data
     );
-    $response_code = 200;
+    $response_code = 401;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -134,12 +137,13 @@ function ApiCode($code)
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
+   
     $APICode = ApiCode($code);
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 200,
         'data'   => $data
     );
     $response_code = 200;
@@ -149,15 +153,16 @@ function ResponseWithSuccessData($lang, $data, $code)
 
 function RespondWithBadRequestData($lang, $code)
 {
+
     $APICode = ApiCode($code);
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 400,
         'data'   => []
     );
-    $response_code = 200;
+    $response_code = 400;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -246,30 +251,32 @@ if (!function_exists('DeleteFile')) {
 //not used
 function RespondWithBadRequestNoChange()
 {
+ 
     $response_array = array(
-        'success' => true,
-        'apiTitle' => trans('validation.NoChange'),
-        'apiMsg' => trans('validation.NoChangeMessage'),
-        'apiCode' => -1,
+        'status' => true,
+        // 'apiTitle' => trans('validation.NoChange'),
+        'message' => trans('validation.NoChangeMessage'),
+        'code' => 401,
         'data'   => []
     );
-    $response_code = 200;
+    $response_code = 401;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
 //not used
 function RespondWithBadRequestNotExist()
 {
+ 
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotExist'),
-        'apiMsg' => trans('validation.NotExistMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotExist'),
+        'message' => trans('validation.NotExistMessage'),
+        'code' => 401,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 401;
 
     return Response::json($response_array, $response_code);
 }
@@ -277,16 +284,17 @@ function RespondWithBadRequestNotExist()
 //not have Permeation
 function RespondWithBadRequestNotHavePermeation()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotHavePermeation'),
-        'apiMsg' => trans('validation.NotHavePermeationMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotHavePermeation'),
+        'message' => trans('validation.NotHavePermeationMessage'),
+        'code' => 403,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 403;
 
     return Response::json($response_array, $response_code);
 }
@@ -294,16 +302,17 @@ function RespondWithBadRequestNotHavePermeation()
 //not date
 function RespondWithBadRequestNotDate()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotDate'),
-        'apiMsg' => trans('validation.NotDateMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotDate'),
+        'message' => trans('validation.NotDateMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -311,16 +320,17 @@ function RespondWithBadRequestNotDate()
 //not add
 function RespondWithBadRequestNotAdd()
 {
+ 
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAddMore'),
-        'apiMsg' => trans('validation.NotAddMoreMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAddMore'),
+        'message' => trans('validation.NotAddMoreMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -328,11 +338,12 @@ function RespondWithBadRequestNotAdd()
 //not available
 function RespondWithBadRequestNotAvailable()
 {
+  
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotAvailableMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'message' => trans('validation.NotAvailableMessage'),
+        'code' => 404,
         'data'   => []
     );
 
@@ -345,32 +356,34 @@ function RespondWithBadRequestNotAvailable()
 //not Closing
 function RespondWithBadRequestNotClosing()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotClosingMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'message' => trans('validation.NotClosingMessage'),
+        'code' => 403,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 403;
 
     return Response::json($response_array, $response_code);
 }
 
 function RespondWithBadRequestNoLeave()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NoLeave'),
-        'apiMsg' => trans('validation.NoLeaveMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NoLeave'),
+        'message' => trans('validation.NoLeaveMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -379,16 +392,17 @@ function RespondWithBadRequestNoLeave()
 //not used
 function RespondWithBadRequestDataExist()
 {
+   
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.DataExist'),
-        'apiMsg' => trans('validation.DataExistMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.DataExist'),
+        'message' => trans('validation.DataExistMessage'),
+        'code' => 401,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 401;
 
     return Response::json($response_array, $response_code);
 }

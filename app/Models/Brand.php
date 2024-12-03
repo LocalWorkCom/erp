@@ -17,7 +17,7 @@ class Brand extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'logo_path',  
+        'logo_path',
         'is_active',
         'created_by',
         'modified_by',
@@ -25,8 +25,6 @@ class Brand extends Model
     ];
 
     protected $hidden = [
-        'name_en',
-        'name_ar',
         'description_en',
         'description_ar',
         'created_by',
