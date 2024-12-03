@@ -7,12 +7,12 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('category.show')</h4>
+        <h4 class="fw-medium mb-0">@lang('client.show')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('category.Categories')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.show')</li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('client.clients')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('client.show')</li>
                 </ol>
             </nav>
         </div>
@@ -26,46 +26,47 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('category.show')</div>
+                            <div class="card-title">@lang('client.show')</div>
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('category.ArabicName')</label>
-                                    <p class="form-text">{{ $category->name_ar }}</p>
+                                    <label class="form-label">@lang('client.name')</label>
+                                    <p class="form-text">{{ $client->name }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('category.EnglishName')</label>
-                                    <p class="form-text">{{ $category->name_en }}</p>
+                                    <label class="form-label">@lang('client.email')</label>
+                                    <p class="form-text">{{ $client->email }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('category.description_ar')</label>
-                                    <p class="form-text">{{ $category->description_ar == null ? __('category.none') :  $category->description_ar}}</p>
+                                    <label class="form-label">@lang('client.country')</label>
+                                    <p class="form-text">{{ $client->country->name_ar }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('category.description_en')</label>
-                                    <p class="form-text">{{ $category->description_en == null ? __('category.none') :  $category->description_en}}</p>
+                                    <label class="form-label">@lang('client.phone')</label>
+                                    <p class="form-text">{{ $client->phone }}</p>
                                 </div>
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                    <label class="form-label">@lang('category.Image')</label>
-                                    @if ($category->image)
+                                    <label class="form-label">@lang('client.Image')</label>
+                                    @if ($client->clientDetails && $client->clientDetails->image)
                                         <div class="mb-3">
-                                            <img src="{{ asset($category->image) }}" alt="Category Image" width="150" height="150">
+                                            <img src="{{ asset($client->clientDetails->image) }}" alt="Client Image" width="150"
+                                                height="150">
                                         </div>
                                     @else
-                                        <p class="form-text">@lang('category.none')</p>
+                                        <p class="form-text">@lang('client.none')</p>
                                     @endif
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('category.parent')</label>
+                                    <label class="form-label">@lang('client.dob')</label>
                                     <p class="form-text">
-                                        {{ $category->parent ? $category->parent->name_ar. " | ". $category->parent->name_en: __('category.none') }}
+                                        {{ $client->clientDetails && $client->clientDetails->date_of_birth ? $client->clientDetails->date_of_birth : __('category.none') }}
                                     </p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('category.IsFreeze')</label>
+                                    <label class="form-label">@lang('client.is_active')</label>
                                     <p class="form-text">
-                                        {{ $category->is_freeze ? __('category.yes') : __('category.no') }}
+                                        {{ $client->clientDetails && $client->is_active ? __('client.yes') : __('client.no') }}
                                     </p>
                                 </div>
                             </div>

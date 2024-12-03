@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function clientDetails()
     {
-        return $this->hasOne(ClientDetail::class);
+        return $this->hasOne(ClientDetail::class, 'user_id');
     }
 
     public function pointTransactions()

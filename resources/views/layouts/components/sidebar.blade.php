@@ -42,7 +42,7 @@
                 <li class="slide__category"><span class="category-name">@lang('sidebar.client_side')</span></li>
                 <!-- End::slide__category -->
                 <li class="slide">
-                    <a href="{{ url('Dashboards') }}" class="side-menu__item">
+                    <a href="{{ route('client.index') }}" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-desktop'></i>
                         </span>

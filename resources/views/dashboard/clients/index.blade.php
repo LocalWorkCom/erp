@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('category.Category')</h4>
+        <h4 class="fw-medium mb-0">@lang('client.client')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.Category')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('client.client')</li>
                 </ol>
             </nav>
         </div>
@@ -31,11 +31,11 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                @lang('category.Categories')</div>
+                                @lang('client.clients')</div>
 
-                            <a href="{{route('category.create')}}" type="button" class="btn btn-primary label-btn">
+                            <a href="{{ route('client.create') }}" type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('category.AddCategory')
+                                @lang('client.addClient')
                             </a>
                         </div>
                         <div class="card-body">
@@ -50,44 +50,68 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('category.ID')</th>
-                                        <th scope="col">@lang('category.Image')</th>
-                                        <th scope="col">@lang('category.ArabicName')</th>
-                                        <th scope="col">@lang('category.EnglishName')</th>
-                                        <th scope="col">@lang('category.Code')</th>
-                                        <th scope="col">@lang('category.IsFreeze')</th>
-                                        <th scope="col">@lang('category.Actions')</th>
+                                        <th scope="col">@lang('client.ID')</th>
+                                        <th scope="col">@lang('client.name')</th>
+                                        <th scope="col">@lang('client.email')</th>
+                                        <th scope="col">@lang('client.country')</th>
+                                        <th scope="col">@lang('client.phone')</th>
+                                        <th scope="col">@lang('client.img')</th>
+                                        <th scope="col">@lang('client.dob')</th>
+                                        <th scope="col">@lang('client.is_active')</th>
+                                        <th scope="col">@lang('client.actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($users as $user)
                                         <tr>
-                                            {{-- @dd( $category) --}}
-                                            <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url(BaseUrl() . '/' . $category->image) }}" alt=""
-                                                    width="100" height="100"></td>
-                                            <td>{{ $category->name_ar }}</td>
-                                            <td>{{ $category->name_en }}</td>
-                                            <td>{{ $category->code }}</td>
-                                            <td>{{ $category->is_freeze ? __('category.yes') :  __('category.no')  }}</td>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->country->name_ar }}</td>
+                                            <td>{{ $user->phone }}</td>
+                                            <td>
+                                                @if ($user->clientDetails && $user->clientDetails->image)
+                                                    <img src="{{ url(BaseUrl() . '/' . $user->clientDetails->image) }}"
+                                                        alt="img" width="100" height="100">
+                                                @else
+                                                    ---
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($user->clientDetails && $user->clientDetails->date_of_birth)
+                                                    {{ $user->clientDetails->date_of_birth }}
+                                                @else
+                                                    ---
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($user->clientDetails && $user->clientDetails->is_active)
+                                                    {{ $user->clientDetails->is_active ? __('client.yes') : __('client.no') }}
+                                                @else
+                                                    ---
+                                                @endif
+                                            </td>
+
                                             <td>
                                                 <!-- Show Button -->
-                                                <a href="{{route('category.show',$category->id)}}"
-                                                   class="btn btn-info-light btn-wave show-category">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
+                                                <a href="{{ route('client.show', $user->id) }}"
+                                                    class="btn btn-info-light btn-wave show-client">
+                                                    @lang('client.show') <i class="ri-eye-line"></i>
                                                 </a>
 
                                                 <!-- Edit Button -->
-                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-orange-light btn-wave">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
+                                                <a href="{{ route('client.edit', $user->id) }}"
+                                                    class="btn btn-orange-light btn-wave">
+                                                    @lang('client.edit') <i class="ri-edit-line"></i>
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" action="{{ route('client.delete', $user->id) }}"
+                                                    method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                        @lang('client.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
                                             </td>
@@ -130,4 +154,3 @@
         return confirm("@lang('validation.DeleteConfirm')");
     }
 </script>
-
