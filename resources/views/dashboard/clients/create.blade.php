@@ -97,7 +97,7 @@
                                             @lang('validation.EnterValidPhone')
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-file" class="form-label">@lang('client.Image')</label>
                                         <input class="form-control" type="file" id="image" name="image">
                                         <div class="valid-feedback">
@@ -107,13 +107,24 @@
                                             @lang('validation.EnterImage')
                                         </div>
                                     </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="date_of_birth" class="form-label">@lang('client.dateOfBirth')</label>
+                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                            value="{{ old('date_of_birth') }}" placeholder="@lang('client.dateOfBirth')">
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterDateOfBirth')
+                                        </div>
+                                    </div>
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
                                         <select name="country_id" class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}">
-                                                    {{ $country->name_ar . " | ".$country->name_en  }}
+                                                    {{ $country->name_ar . ' | ' . $country->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -122,7 +133,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="address" class="form-label">@lang('client.address')</label>
                                         <input type="text" class="form-control" id="address"
-                                            name="addresses[0][address]" value="{{ old('addresses.0.address') }}"
+                                            name="address" value="{{ old('address') }}"
                                             placeholder="@lang('client.address')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -134,7 +145,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="city" class="form-label">@lang('client.city')</label>
                                         <input type="text" class="form-control" id="city"
-                                            name="addresses[0][city]" value="{{ old('addresses.0.city') }}"
+                                            name="city" value="{{ old('city') }}"
                                             placeholder="@lang('client.city')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -146,7 +157,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="state" class="form-label">@lang('client.state')</label>
                                         <input type="text" class="form-control" id="state"
-                                            name="addresses[0][state]" value="{{ old('addresses.0.state') }}"
+                                            name="state" value="{{ old('state') }}"
                                             placeholder="@lang('client.state')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -158,7 +169,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="postal_code" class="form-label">@lang('client.postalCode')</label>
                                         <input type="text" class="form-control" id="postal_code"
-                                            name="addresses[0][postal_code]" value="{{ old('addresses.0.postal_code') }}"
+                                            name="[postal_code" value="{{ old('postal_code') }}"
                                             placeholder="@lang('client.postalCode')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -178,6 +189,23 @@
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
+                                                id="Radio-md" value="0">
+                                            <label class="form-check-label" for="Radio-md">
+                                                @lang('client.no')
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                        <p class="mb-2 text-muted">@lang('client.isDefault')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_defult"
+                                                id="Radio-md" value="1" checked>
+                                            <label class="form-check-label" for="Radio-md">
+                                                @lang('client.yes')
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_defult"
                                                 id="Radio-md" value="0">
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.no')
