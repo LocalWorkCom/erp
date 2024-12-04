@@ -56,7 +56,7 @@ class ClientController extends Controller
 
         try {
             $this->clientService->createClient($validatedData, $this->checkToken);
-            return redirect()->route('clients.index')->with('success', 'Client created successfully!');
+            return redirect()->route('client.index')->with('success', 'Client created successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error creating client: ' . $e->getMessage());
         }
@@ -64,9 +64,9 @@ class ClientController extends Controller
 
     public function edit($id)
     {
-        $clients = User::where('flag', 'client')->with('clientDetails', 'addresses')->get();
+        $client = User::where('flag', 'client')->with('clientDetails', 'addresses')->findOrFail($id);
         $countries = Country::all();
-        return view('dashboard.clients.edit', compact('countries', 'clients'));
+        return view('dashboard.clients.edit', compact('countries', 'client'));
     }
 
     public function update(Request $request, $id)

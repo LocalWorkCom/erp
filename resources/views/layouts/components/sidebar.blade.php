@@ -65,29 +65,32 @@
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="{{route('branches.list')}}" class="side-menu__item">@lang('sidebar.Branches')  </a>
+                                    <a href="{{ route('branches.list') }}" class="side-menu__item">@lang('sidebar.Branches')
+                                    </a>
                                 </li>
                                 <li class="slide has-sub">
                                     <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Floors')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child2">
                                         <li class="slide">
-                                            <a href="{{route('floors.list')}}" class="side-menu__item">@lang('sidebar.Floors')  </a>
+                                            <a href="{{ route('floors.list') }}"
+                                                class="side-menu__item">@lang('sidebar.Floors') </a>
                                         </li>
                                         <li class="slide">
-                                            <a href="{{route('floorPartitions.list')}}" class="side-menu__item">@lang('sidebar.FloorPartition')</a>
+                                            <a href="{{ route('floorPartitions.list') }}"
+                                                class="side-menu__item">@lang('sidebar.FloorPartition')</a>
                                         </li>
                                         <li class="slide has-sub">
-                                            <a href="javascript:void(0);"
-                                                class="side-menu__item">@lang('sidebar.Positions')
+                                            <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Positions')
                                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                             <ul class="slide-menu child3">
                                                 <li class="slide">
-                                                    <a href="{{route('positions.list')}}" class="side-menu__item">@lang('sidebar.Positions')  </a>
+                                                    <a href="{{ route('positions.list') }}"
+                                                        class="side-menu__item">@lang('sidebar.Positions') </a>
                                                 </li>
                                                 <li class="slide">
-                                                    <a href="{{route('tables.list')}}"
-                                                       class="side-menu__item">@lang('sidebar.Tables') </a>
+                                                    <a href="{{ route('tables.list') }}"
+                                                        class="side-menu__item">@lang('sidebar.Tables') </a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -100,20 +103,16 @@
                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.Cuisines') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Cuisines') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.Dishes') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Dishes') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.DishesCategory') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.DishesCategory') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.Recipes') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Recipes') </a>
                                 </li>
                             </ul>
                         </li>
@@ -223,16 +222,15 @@
 
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="{{ url('blog') }}"
-                                        class="side-menu__item">@lang('sidebar.excuses') </a>
+                                    <a href="{{ url('blog') }}" class="side-menu__item">@lang('sidebar.excuses') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-details') }}"
-                                        class="side-menu__item">@lang('sidebar.excusesReport') </a>
+                                    <a href="{{ url('blog-details') }}" class="side-menu__item">@lang('sidebar.excusesReport')
+                                    </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.excuseslogs') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.excuseslogs')
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -251,16 +249,15 @@
 
                             <ul class="slide-menu child2">
                                 <li class="slide">
-                                    <a href="{{ url('blog') }}"
-                                        class="side-menu__item">@lang('sidebar.Vacation') </a>
+                                    <a href="{{ url('blog') }}" class="side-menu__item">@lang('sidebar.Vacation') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-details') }}"
-                                        class="side-menu__item">@lang('sidebar.VacationReport') </a>
+                                    <a href="{{ url('blog-details') }}" class="side-menu__item">@lang('sidebar.VacationReport')
+                                    </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}"
-                                        class="side-menu__item">@lang('sidebar.VacationTypes') </a>
+                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.VacationTypes')
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -306,17 +303,15 @@
                                     <a href="#" class="side-menu__item">@lang('sidebar.Lines')</a>
                                 </li>
                                 <li class="slide has-sub">
-                                    <a href="javascript:void(0);"
-                                        class="side-menu__item">@lang('sidebar.Division')
+                                    <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Division')
                                         <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                     <ul class="slide-menu child3">
                                         <li class="slide">
-                                            <a href="#"
-                                                class="side-menu__item">@lang('sidebar.Division')</a>
+                                            <a href="#" class="side-menu__item">@lang('sidebar.Division')</a>
                                         </li>
                                         <li class="slide">
-                                            <a href="javascript:void(0);"
-                                                class="side-menu__item">@lang('sidebar.Shilves') </a>
+                                            <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Shilves')
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
@@ -420,8 +415,7 @@
                     </ul>
                 </li>
                 <!-- End::Purchase -->
-                <li class="slide__category"><span
-                        class="category-name">@lang('sidebar.Offers/Discounts') </span></li>
+                <li class="slide__category"><span class="category-name">@lang('sidebar.Offers/Discounts') </span></li>
 
 
                 <!-- End::slide__category -->
@@ -507,16 +501,15 @@
                         <!-- Start::slide -->
                         <ul>
                             <li class="slide">
-                                <a href="{{ url('accordions-collapse') }}"
-                                    class="side-menu__item">@lang('sidebar.StoreTransactions') </a>
+                                <a href="{{ url('accordions-collapse') }}" class="side-menu__item">@lang('sidebar.StoreTransactions')
+                                </a>
                             </li>
                             <li class="slide">
-                                <a href="{{ url('accordions-collapse') }}"
-                                    class="side-menu__item">@lang('sidebar.ProductTransactions') </a>
+                                <a href="{{ url('accordions-collapse') }}" class="side-menu__item">@lang('sidebar.ProductTransactions')
+                                </a>
                             </li>
                             <li class="slide">
-                                <a href="{{ url('carousel') }}"
-                                    class="side-menu__item">@lang('sidebar.OrderTransactions') </a>
+                                <a href="{{ url('carousel') }}" class="side-menu__item">@lang('sidebar.OrderTransactions') </a>
                             </li>
 
                         </ul>
@@ -543,47 +536,38 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('countries') }}"
-                                class="side-menu__item">@lang('sidebar.countries') </a>
+                            <a href="{{ url('countries') }}" class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('sizes.list') }}"
-                                class="side-menu__item">@lang('sidebar.size') </a>
+                            <a href="{{ route('sizes.list') }}" class="side-menu__item">@lang('sidebar.size') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('units.list') }}"
-                                class="side-menu__item">@lang('sidebar.Units') </a>
+                            <a href="{{ route('units.list') }}" class="side-menu__item">@lang('sidebar.Units') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('Point_system') }}"
-                                class="side-menu__item">@lang('sidebar.Point_system') </a>
+                            <a href="{{ url('Point_system') }}" class="side-menu__item">@lang('sidebar.Point_system') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('Notification') }}"
-                                class="side-menu__item">@lang('sidebar.Notification') </a>
+                            <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('ExcusesSetting') }}"
-                                class="side-menu__item">@lang('sidebar.ExcusesSetting') </a>
+                            <a href="{{ url('ExcusesSetting') }}" class="side-menu__item">@lang('sidebar.ExcusesSetting') </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('invoiceSetting') }}"
-                                class="side-menu__item">@lang('sidebar.invoiceSetting') </a>
+                            <a href="{{ url('invoiceSetting') }}" class="side-menu__item">@lang('sidebar.invoiceSetting') </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('leaveSetting') }}"
-                                class="side-menu__item">@lang('sidebar.leaveSetting') </a>
+                            <a href="{{ url('leaveSetting') }}" class="side-menu__item">@lang('sidebar.leaveSetting') </a>
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('leaveNationals') }}"
-                                class="side-menu__item">@lang('sidebar.leaveNationals') </a>
+                            <a href="{{ url('leaveNationals') }}" class="side-menu__item">@lang('sidebar.leaveNationals') </a>
                         </li>
                     </ul>
                 </li>
