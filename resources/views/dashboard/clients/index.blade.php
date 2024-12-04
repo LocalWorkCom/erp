@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('client.client')</h4>
+        <h4 class="fw-medium mb-0">@lang('client.clients')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('client.client')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('client.clients')</li>
                 </ol>
             </nav>
         </div>
@@ -67,12 +67,12 @@
                                             <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->country->name_ar }}</td>
+                                            <td>{{ $user->country->name_ar . ' | ' . $user->country->name_en }}</td>
                                             <td>{{ $user->phone }}</td>
                                             <td>
                                                 @if ($user->clientDetails && $user->clientDetails->image)
-                                                    <img src="{{ url(BaseUrl() . '/' . $user->clientDetails->image) }}"
-                                                        alt="img" width="100" height="100">
+                                                    <img src="{{ asset($user->clientDetails->image) }}" alt="img"
+                                                        width="100" height="100">
                                                 @else
                                                     ---
                                                 @endif

@@ -47,11 +47,11 @@
                                     <p class="form-text">{{ $client->phone }}</p>
                                 </div>
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                    <label class="form-label">@lang('client.Image')</label>
+                                    <label class="form-label">@lang('client.img')</label>
                                     @if ($client->clientDetails && $client->clientDetails->image)
                                         <div class="mb-3">
-                                            <img src="{{ asset($client->clientDetails->image) }}" alt="Client Image" width="150"
-                                                height="150">
+                                            <img src="{{ asset($client->clientDetails->image) }}" alt="Client Image"
+                                                width="150" height="150">
                                         </div>
                                     @else
                                         <p class="form-text">@lang('client.none')</p>
@@ -66,7 +66,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('client.is_active')</label>
                                     <p class="form-text">
-                                        {{ $client->clientDetails && $client->is_active ? __('client.yes') : __('client.no') }}
+                                        {{ $client->clientDetails && $client->clientDetails->is_active == 1 ? __('client.yes') : __('client.no') }}
                                     </p>
                                 </div>
                             </div>

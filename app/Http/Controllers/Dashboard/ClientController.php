@@ -41,25 +41,21 @@ class ClientController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'password' => 'nullable|string',
+            // 'password' => 'nullable|string',
             'country_id' => 'required|exists:countries,id',
             'phone' => 'required|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
             'is_active' => 'required|boolean',
-            'addresses' => 'nullable|array',
-            'addresses.*.address' => 'required|string',
-            'addresses.*.city' => 'required|string',
-            'addresses.*.state' => 'required|string',
-            'addresses.*.postal_code' => 'nullable|string',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'postal_code' => 'nullable|string',
+            'is_default' => 'nullable|boolean'
         ]);
 
-        try {
-            $this->clientService->createClient($validatedData, $this->checkToken);
-            return redirect()->route('client.index')->with('success', 'Client created successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error creating client: ' . $e->getMessage());
-        }
+        $this->clientService->createClient($validatedData, $this->checkToken);
+        return redirect()->route('client.index')->with('success', 'Client created successfully!');
     }
 
     public function edit($id)
@@ -75,28 +71,25 @@ class ClientController extends Controller
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
             'email' => 'nullable|email|unique:users,email,' . $id,
-            'password' => 'nullable|string',
+            // 'password' => 'nullable|string',
             'country_id' => 'nullable|exists:countries,id',
             'phone' => 'nullable|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
             'is_active' => 'nullable|boolean',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'is_default' => 'nullable|boolean'
         ]);
 
-        try {
-            $this->clientService->updateClient($id, $validatedData, $this->checkToken);
-            return redirect()->route('dashboard.clients.index')->with('success', 'Client updated successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error updating client: ' . $e->getMessage());
-        }
+        $this->clientService->updateClient($validatedData, $id, $this->checkToken);
+        return redirect()->route('client.index')->with('success', 'Client updated successfully!');
     }
     public function destroy($id)
     {
-        try {
-            $this->clientService->deleteClient($id, $this->checkToken);
-            return redirect()->route('dashboard.clients.index')->with('success', 'Client deleted successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error deleting client: ' . $e->getMessage());
-        }
+        $this->clientService->deleteClient($id, $this->checkToken);
+        return redirect()->route('client.index')->with('success', 'Client deleted successfully!');
     }
 }
