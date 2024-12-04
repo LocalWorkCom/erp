@@ -30,44 +30,61 @@
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.name')</label>
                                     <p class="form-text">{{ $client->name }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.email')</label>
                                     <p class="form-text">{{ $client->email }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.country')</label>
                                     <p class="form-text">{{ $client->country->name_ar }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.phone')</label>
                                     <p class="form-text">{{ $client->phone }}</p>
                                 </div>
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                    <label class="form-label">@lang('client.img')</label>
-                                    @if ($client->clientDetails && $client->clientDetails->image)
-                                        <div class="mb-3">
-                                            <img src="{{ asset($client->clientDetails->image) }}" alt="Client Image"
-                                                width="150" height="150">
-                                        </div>
-                                    @else
-                                        <p class="form-text">@lang('client.none')</p>
-                                    @endif
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.dob')</label>
                                     <p class="form-text">
                                         {{ $client->clientDetails && $client->clientDetails->date_of_birth ? $client->clientDetails->date_of_birth : __('category.none') }}
                                     </p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.address')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->address }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.city')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->city }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.state')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->state }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.postalCode')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->postal_code }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.is_active')</label>
                                     <p class="form-text">
                                         {{ $client->clientDetails && $client->clientDetails->is_active == 1 ? __('client.yes') : __('client.no') }}
                                     </p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.img')</label>
+                                    @if ($client->clientDetails && $client->clientDetails->image)
+                                        <div class="mb-3">
+                                            <img src="{{ asset($client->clientDetails->image) }}" alt="Client Image"
+                                                width="100" height="100">
+                                        </div>
+                                    @else
+                                        <p class="form-text">@lang('client.none')</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
