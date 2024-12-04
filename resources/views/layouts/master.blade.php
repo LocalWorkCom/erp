@@ -17,7 +17,7 @@
     <title> Erp </title>
 
     <!-- FAVICON -->
-    <link rel="icon" href="{{ asset('build/assets/images/brand-logos/fav.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('build/assets/images/brand-logos/favicon.ico') }}" type="image/x-icon">
 
     <!-- BOOTSTRAP CSS -->
     <link id="style" href="{{ asset('build/assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
