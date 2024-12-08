@@ -7,12 +7,12 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('client.Add')</h4>
+        <h4 class="fw-medium mb-0">@lang('client.addClient')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('client.clients')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('client.Add')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('client.addClient')</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                @lang('client.Add')
+                                @lang('client.addClient')
                             </div>
                         </div>
                         <div class="card-body">
@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-file" class="form-label">@lang('client.Image')</label>
+                                        <label for="input-file" class="form-label">@lang('client.img')</label>
                                         <input class="form-control" type="file" id="image" name="image">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -118,7 +118,7 @@
                                             @lang('validation.EnterDateOfBirth')
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
                                         <select name="country_id" class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
@@ -130,11 +130,10 @@
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="address" class="form-label">@lang('client.address')</label>
-                                        <input type="text" class="form-control" id="address"
-                                            name="address" value="{{ old('address') }}"
-                                            placeholder="@lang('client.address')" required>
+                                        <input type="text" class="form-control" id="address" name="address"
+                                            value="{{ old('address') }}" placeholder="@lang('client.address')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -142,11 +141,10 @@
                                             @lang('validation.EnterAddress')
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="city" class="form-label">@lang('client.city')</label>
-                                        <input type="text" class="form-control" id="city"
-                                            name="city" value="{{ old('city') }}"
-                                            placeholder="@lang('client.city')" required>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                            value="{{ old('city') }}" placeholder="@lang('client.city')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -154,11 +152,10 @@
                                             @lang('validation.EnterCity')
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="state" class="form-label">@lang('client.state')</label>
-                                        <input type="text" class="form-control" id="state"
-                                            name="state" value="{{ old('state') }}"
-                                            placeholder="@lang('client.state')" required>
+                                        <input type="text" class="form-control" id="state" name="state"
+                                            value="{{ old('state') }}" placeholder="@lang('client.state')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -166,11 +163,10 @@
                                             @lang('validation.EnterState')
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="postal_code" class="form-label">@lang('client.postalCode')</label>
-                                        <input type="text" class="form-control" id="postal_code"
-                                            name="[postal_code" value="{{ old('postal_code') }}"
-                                            placeholder="@lang('client.postalCode')">
+                                        <input type="text" class="form-control" id="postal_code" name="[postal_code"
+                                            value="{{ old('postal_code') }}" placeholder="@lang('client.postalCode')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -178,8 +174,8 @@
                                             @lang('validation.EnterPostalCode')
                                         </div>
                                     </div>
-                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                        <p class="mb-2 text-muted">@lang('client.isActive')</p>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <p class="mb-2 text-muted">@lang('client.is_active')</p>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md" value="1" checked>
@@ -195,7 +191,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.isDefault')</p>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_defult"
