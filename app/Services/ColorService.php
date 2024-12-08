@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Models\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,7 +41,7 @@ class ColorService
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
-            'hexa_code' => 'required|string', // Validate hex color code
+            'hexa_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
 
         if ($validator->fails()) {
