@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
+use App\Http\Controllers\Dashboard\BrandController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
@@ -38,8 +39,13 @@ Route::get('/set-locale/{locale}', function ($locale) {
 })->name('set-locale');
 
 Route::get('/', function () {
-    return view('dashboards.index5');
+    return view('index');
 })->name('home');
+
+Route::get('dashboard', function () {
+    return view('dashboard.index');
+})->name('home');
+
 Route::prefix('dashboard')->group(function () {
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list');
@@ -117,6 +123,16 @@ Route::prefix('dashboard')->group(function () {
         Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit');
         Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update');
         Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
+    });
+
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.list');
+    Route::group(['prefix' => 'brand'], function () {
+        Route::get('create', [BrandController::class, 'create'])->name('brand.create');
+        Route::post('store', [BrandController::class, 'store'])->name('brand.store');
+        Route::get('show/{id}', [BrandController::class, 'show'])->name('brand.show');
+        Route::get('edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
+        Route::put('update/{id}', [BrandController::class, 'update'])->name('brand.update');
+        Route::delete('delete/{id}', [BrandController::class, 'delete'])->name('brand.delete');
     });
 
     Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');

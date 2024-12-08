@@ -18,7 +18,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderTransaction;
 use App\Models\CashierMachine;
-
+use App\Models\Country;
 use App\Models\LeaveRequest;
 use App\Models\Employee;
 
@@ -66,7 +66,7 @@ function RespondWithBadRequest($lang, $code)
 }
 function RespondWithBadRequestWithData($data)
 {
- 
+
     $response_array = array(
         'status' => false,
         // 'apiTitle' => trans('validation.validator_title'),
@@ -137,7 +137,7 @@ function ApiCode($code)
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
-   
+
     $APICode = ApiCode($code);
     $response_array = array(
         'status' => true,
@@ -251,7 +251,7 @@ if (!function_exists('DeleteFile')) {
 //not used
 function RespondWithBadRequestNoChange()
 {
- 
+
     $response_array = array(
         'status' => true,
         // 'apiTitle' => trans('validation.NoChange'),
@@ -266,7 +266,7 @@ function RespondWithBadRequestNoChange()
 //not used
 function RespondWithBadRequestNotExist()
 {
- 
+
     $response_array = array(
         'status' => false,  // Set success to false to indicate an error
         // 'apiTitle' => trans('validation.NotExist'),
@@ -320,7 +320,7 @@ function RespondWithBadRequestNotDate()
 //not add
 function RespondWithBadRequestNotAdd()
 {
- 
+
     $response_array = array(
         'status' => false,  // Set success to false to indicate an error
         // 'apiTitle' => trans('validation.NotAddMore'),
@@ -338,7 +338,7 @@ function RespondWithBadRequestNotAdd()
 //not available
 function RespondWithBadRequestNotAvailable()
 {
-  
+
     $response_array = array(
         'status' => false,  // Set success to false to indicate an error
         // 'apiTitle' => trans('validation.NotAvailable'),
@@ -392,7 +392,7 @@ function RespondWithBadRequestNoLeave()
 //not used
 function RespondWithBadRequestDataExist()
 {
-   
+
     $response_array = array(
         'status' => false,  // Set success to false to indicate an error
         // 'apiTitle' => trans('validation.DataExist'),
@@ -668,84 +668,86 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     $sum_orders = 0;
     $branch_id = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
-    if($cashier_machine_details){
-        if($cashier_machine_details->branches){
+    if ($cashier_machine_details) {
+        if ($cashier_machine_details->branches) {
             $branch_id = $cashier_machine_details->branches->id;
         }
     }
 
 
     $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
-    if($branch_id != 0){
-        if($employee_time['data']['cross_day'] == 0){
+    if ($branch_id != 0) {
+        if ($employee_time['data']['cross_day'] == 0) {
             $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
-        }else{
+        } else {
             $next_day = Carbon::parse($date)->addDays(1);
             $orders_totals_old = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '>=', $employee_time['data']['off_duty_time'])->get()->toArray();
             $orders_totals_new = Order::where('branch_id', $branch_id)->whereDate('date', $next_day)->whereTime('created_at', '<=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->toArray();
             $orders_totals = array_merge($orders_totals_old, $orders_totals_new);
         }
 
-        if($orders_totals)
-        foreach($orders_totals as $orders_total){
-            if($orders_total){
-                $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
-                if($orders_tot){
-                    $sum_orders += $orders_tot->paid;
+        if ($orders_totals)
+            foreach ($orders_totals as $orders_total) {
+                if ($orders_total) {
+                    $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
+                    if ($orders_tot) {
+                        $sum_orders += $orders_tot->paid;
+                    }
                 }
             }
-        }
     }
     return $sum_orders;
 }
 function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = null, $lastName = null, $hireDate = null, $gender = null, $mobile = null, $email = null)
-    {
-        try {
-            $url = 'http://127.0.0.1:8085/personnel/api/employees/';
-            $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxNTgzODk2LCJpYXQiOjE3MzE0OTc0OTYsImp0aSI6Ijk0YzRlYjQzY2I2MzRhMDdhNWIwMzZjOTZmOWM4NDVkIiwidXNlcl9pZCI6MX0.6uMFiXnFHEB_I5baP8qvgWkG_z7BXjPLWaU5QEfuCMg'; 
+{
+    try {
+        $url = 'http://127.0.0.1:8085/personnel/api/employees/';
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxNTgzODk2LCJpYXQiOjE3MzE0OTc0OTYsImp0aSI6Ijk0YzRlYjQzY2I2MzRhMDdhNWIwMzZjOTZmOWM4NDVkIiwidXNlcl9pZCI6MX0.6uMFiXnFHEB_I5baP8qvgWkG_z7BXjPLWaU5QEfuCMg';
 
-            $data = [
-                'emp_code' => $empCode,
-                'department' => $departmentId,
-                'area' => $areaIds,
-                'hire_date' => $hireDate ?? now()->toDateString(),
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'gender' => $gender,
-                'mobile' => $mobile,
-                'email' => $email,
-            ];
+        $data = [
+            'emp_code' => $empCode,
+            'department' => $departmentId,
+            'area' => $areaIds,
+            'hire_date' => $hireDate ?? now()->toDateString(),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'gender' => $gender,
+            'mobile' => $mobile,
+            'email' => $email,
+        ];
 
-            $client = new Client();
+        $client = new Client();
 
-            $response = $client->post($url, [
-                'headers' => [
-                    'Authorization' => 'JWT ' . $token,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $data,
-            ]);
+        $response = $client->post($url, [
+            'headers' => [
+                'Authorization' => 'JWT ' . $token,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $data,
+        ]);
 
-            if ($response->getStatusCode() == 201) {
-                return json_decode($response->getBody()->getContents(), true);
-            } else {
-                return 'Failed to add employee. Status code: ' . $response->getStatusCode();
-            }
-        } catch (\Exception $e) {
-            Log::error('Error adding employee to BioTime device: ' . $e->getMessage());
-            return 'Error: ' . $e->getMessage();
+        if ($response->getStatusCode() == 201) {
+            return json_decode($response->getBody()->getContents(), true);
+        } else {
+            return 'Failed to add employee. Status code: ' . $response->getStatusCode();
         }
+    } catch (\Exception $e) {
+        Log::error('Error adding employee to BioTime device: ' . $e->getMessage());
+        return 'Error: ' . $e->getMessage();
     }
+}
 
-function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
+function CalculateDeficitOrder($open_amount = 0, $close_amount = 0, $real_amount = 0)
+{
     $remaining_amount = ($close_amount - $open_amount);
     return ($remaining_amount - $real_amount);
 }
 
-function CalculateEmployeeLeave($employee_id, $leave_type, $leave_year_count){
+function CalculateEmployeeLeave($employee_id, $leave_type, $leave_year_count)
+{
     $first_day = date('Y-01-01');
     $last_day = date('Y-12-31');
-    return $employee_leave_count = LeaveRequest::where('employee_id', $employee_id)->where('leave_type_id', $leave_type)->where('agreement', 2)->whereBetween('date', [$first_day,$last_day])->sum('leave_count');
+    return $employee_leave_count = LeaveRequest::where('employee_id', $employee_id)->where('leave_type_id', $leave_type)->where('agreement', 2)->whereBetween('date', [$first_day, $last_day])->sum('leave_count');
 }
 
 function CheckExistOrder($client_id)
@@ -757,4 +759,9 @@ function CheckOrderPaid($order_id)
 {
 
     return  OrderTransaction::where('order_id', $order_id)->exists();
+}
+function GetCurrencyCodes()
+{
+    $Currencies = Country::select('currency_code', 'id')->get();
+    return $Currencies;
 }

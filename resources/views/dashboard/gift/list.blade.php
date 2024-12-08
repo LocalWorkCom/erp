@@ -44,6 +44,16 @@
                                     <div class="modal-content">
                                         <form action="{{ route('gift.store') }}" method="POST" class="needs-validation" novalidate>
                                             @csrf
+                                            @if ($errors->any())
+                                                @foreach ($errors->all() as $error)
+                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                        {{ $error }}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                @endforeach
+                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">@lang('gift.AddGift')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -86,6 +96,16 @@
                                         <form id="edit-gift-form" action="" method="POST" class="needs-validation" novalidate>
                                             @csrf
                                             @method('PUT')
+                                            @if ($errors->any())
+                                                @foreach ($errors->all() as $error)
+                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                        {{ $error }}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                @endforeach
+                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('gift.EditGift')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
