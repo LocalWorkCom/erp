@@ -32,13 +32,12 @@ Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
         session(['locale' => $locale]);
         Session::put('direction', $locale === 'ar' ? 'rtl' : 'ltr');
-
     }
     return redirect()->back();
 })->name('set-locale');
 
 Route::get('/', function () {
-    return view('dashboards.index5');
+    return view('dashboard.index');
 })->name('home');
 // Route::middleware('auth:web')->group(function () {
 
