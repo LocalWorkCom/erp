@@ -36,7 +36,7 @@ Route::get('/set-locale/{locale}', function ($locale) {
     return redirect()->back();
 })->name('set-locale');
 
-Route::get('/', function () {
+Route::get('dashboard', function () {
     return view('dashboard.index');
 })->name('home');
 // Route::middleware('auth:web')->group(function () {
