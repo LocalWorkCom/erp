@@ -11,7 +11,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('client.clients')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('client.index') }}">@lang('client.clients')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('client.addClient')</li>
                 </ol>
             </nav>
@@ -174,7 +174,7 @@
                                             @lang('validation.EnterPostalCode')
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.is_active')</p>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
@@ -191,7 +191,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.isDefault')</p>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_defult"
