@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Product;
-use App\Services\BrandService ;
+use App\Services\BrandService;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -16,14 +16,14 @@ class BrandController extends Controller
 
     // YourController.php
 
-    protected $BrandService ;
+    protected $BrandService;
     protected $checkToken;  // Set to true or false based on your need
     protected $lang;  // Set to true or false based on your need
 
-    
+
     public function __construct(BrandService  $BrandService)
     {
-        $this->BrandService  = $BrandService ;
+        $this->BrandService  = $BrandService;
         $this->checkToken = false;
         $this->lang =  app()->getLocale();
     }
@@ -31,8 +31,9 @@ class BrandController extends Controller
     public function index(Request $request)
     {
 
+
         // Pass it to the service
-        $response  = $this->BrandService ->index($request, $this->checkToken);
+        $response  = $this->BrandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $brands = Brand::hydrate($responseData['data']);
 
@@ -47,16 +48,48 @@ class BrandController extends Controller
         // $responseData = json_decode($response->getContent(), true);
         // $products = $responseData['data'];
         return view('dashboard.brand.add');
- 
-    }    
+    }
 
     public function store(Request $request)
     {
-        return $this->BrandService ->store($request, $this->checkToken);
+        $response = $this->BrandService->store($request, $this->checkToken);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect()->route('brands.list')->with('message', $message);
     }
 
+    public function edit($id)
+    {
+        $brand = Brand::findOrFail($id);
+        $brands = Brand::all(); // Fetch only active categories
+        return view('dashboard.brand.edit', compact('brand', 'brands'));
+    }
     public function update(Request $request, $id)
     {
-        return $this->BrandService ->update($request, $id, $this->checkToken);
+        $response =  $this->BrandService->update($request, $id, $this->checkToken);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect()->route('brands.list')->with('message', $message);
+    }
+    public function show($id)
+    {
+        $brand = Brand::findOrFail($id);
+        //        dd($category);
+        return view('dashboard.brand.show', compact('brand'));
+    }
+    public function delete(Request $request, $id)
+    {
+        $response = $this->BrandService->destroy($request, $id, $this->checkToken);
+        $responseData = $response->original;
+        $message= $responseData['message'];
+        return redirect()->route('brands.list')->with('message', $message);
     }
 }

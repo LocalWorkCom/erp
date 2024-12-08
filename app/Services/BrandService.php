@@ -18,6 +18,9 @@ class BrandService
 
             $brands = $withTrashed ? Brand::withTrashed()->get() : Brand::all();
 
+            if (!$checkToken) {
+                $brands = $brands->makeVisible(['name_en', 'name_ar', 'description_ar', 'description_en']);
+            }
             return ResponseWithSuccessData($lang, $brands, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching brands: ' . $e->getMessage());
@@ -42,15 +45,15 @@ class BrandService
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            // $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
 
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+                // 'is_active' => 'required|boolean',
+                // 'logo_path' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $brandData = [
@@ -58,16 +61,15 @@ class BrandService
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'is_active' => $request->is_active,
-                'created_by' => auth()->id(),
+                // 'is_active' => $request->is_active,
+                'created_by' => 2,
             ];
-
-            if ($request->hasFile('logo')) {
-                $logoPath = $request->file('logo')->store('brands', 'public');
-                $brandData['logo_path'] = $logoPath;
+            $brand = Brand::create($brandData);
+            if ($request->hasFile('logo_path')) {
+                $logo_path = $request->file('logo_path');
+                UploadFile('images/brands', 'logo_path', $brand, $logo_path);
             }
 
-            $brand = Brand::create($brandData);
 
             return ResponseWithSuccessData($lang, $brand, 1);
         } catch (\Exception $e) {
@@ -80,15 +82,15 @@ class BrandService
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            // $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
 
             $request->validate([
                 'name_ar' => 'required|string|max:255',
                 'name_en' => 'nullable|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+                // 'is_active' => 'required|boolean',
+                // 'logo_path' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
             $brand = Brand::findOrFail($id);
@@ -98,20 +100,16 @@ class BrandService
                 'name_en' => $request->name_en,
                 'description_ar' => $request->description_ar,
                 'description_en' => $request->description_en,
-                'is_active' => $request->is_active,
-                'modified_by' => auth()->id(),
+                // 'is_active' => $request->is_active,
+                // 'modified_by' => 2,
             ];
-
-            if ($request->hasFile('logo')) {
-                if ($brand->logo_path && Storage::exists($brand->logo_path)) {
-                    Storage::delete($brand->logo_path);
-                }
-                $logoPath = $request->file('logo')->store('brands', 'public');
-                $brandData['logo_path'] = $logoPath;
-            }
-
             $brand->update($brandData);
 
+            // dd($request);
+            if ($request->hasFile('logo_path')) {
+                $logo_path = $request->file('logo_path');
+                UploadFile('images/brands', 'logo_path', $brand, $logo_path);
+            }
             return ResponseWithSuccessData($lang, $brand, 1);
         } catch (\Exception $e) {
             Log::error('Error updating brand: ' . $e->getMessage());

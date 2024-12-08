@@ -369,7 +369,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Brand') }}" class="side-menu__item">
+                            <a href="{{ route('brands.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
