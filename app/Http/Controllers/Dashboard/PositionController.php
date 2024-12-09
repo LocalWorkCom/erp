@@ -12,19 +12,24 @@ use Illuminate\Http\Request;
 class PositionController extends Controller
 {
     protected $positionService;
+    protected $checkToken;
+
 
     public function __construct(PositionService $positionService)
     {
         $this->positionService = $positionService;
+        $this->checkToken = false;
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $response = $this->positionService->index($request);
-        $responseData = $response->original;
-        $Positions = $responseData['data'];
-        $departments = Department::all();
-        return view('dashboard.position.list', compact('Positions', 'departments'));
+        $positions = $this->positionService->getAllPositions($this->checkToken);
+        return view('dashboard.position.list', compact('positions'));
+    }
+    public function show($id)
+    {
+        $client = $this->positionService->getPosition($id);
+        return view('dashboard.clients.show', compact('client'));
     }
 
     public function store(Request $request)
@@ -35,8 +40,8 @@ class PositionController extends Controller
             $validationErrors = $responseData['data'];
             return redirect('positions')->withErrors($validationErrors)->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('positions')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
     }
 
     public function update(Request $request, $id)
@@ -47,14 +52,14 @@ class PositionController extends Controller
             $validationErrors = $responseData['data'];
             return redirect('positions')->withErrors($validationErrors)->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('positions')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->positionService->delete($request, $id);
         $responseData = $response->original;
-        $message= $responseData['message'];
-        return redirect('positions')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
     }
 }
