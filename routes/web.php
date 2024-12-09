@@ -44,7 +44,7 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     return view('dashboard.index');
-})->name('home');
+})->name('dashboard.home');
 
 Route::prefix('dashboard')->group(function () {
 
