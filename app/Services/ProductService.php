@@ -152,12 +152,12 @@ class ProductService
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
         $product->is_have_expired = $request->is_have_expired;
-        // $product->expiry_date = $request->expiry_date ?? null;
+        $product->expiry_date = $request->expiry_date ?? null;
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-        // $product->price =$request->price;
+        $product->price =$request->price;
         $product->created_by =13;
         $product->save();
 
