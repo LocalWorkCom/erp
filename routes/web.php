@@ -192,7 +192,7 @@ Route::prefix('dashboard')->group(function () {
         Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
     });
 
-    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
     Route::group(['prefix' => 'employee'], function () {
         Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
         Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');

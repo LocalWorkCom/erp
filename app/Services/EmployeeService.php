@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Employee;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -17,12 +18,12 @@ class EmployeeService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        return User::where('flag', 'employee')->with('employees', 'country')->get();
+        return Employee::with('user', 'country', 'department', 'supervisor', 'nationality', 'position')->get();
     }
 
     public function getEmployee($id)
     {
-        return User::with('clientDetails', 'addresses')->findOrFail($id);
+        return Employee::with('user', 'country', 'department', 'supervisor', 'nationality', 'position')->findOrFail($id);
     }
 
     public function createEmployee($data, $checkToken)
@@ -39,7 +40,6 @@ class EmployeeService
         $user->phone = $data['phone'];
         $user->flag = 'client';
         $user->save();
-
     }
 
     public function updateEmployee($data, $id, $checkToken)

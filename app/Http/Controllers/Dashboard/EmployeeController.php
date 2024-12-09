@@ -26,8 +26,8 @@ class EmployeeController extends Controller
     }
     public function show($id)
     {
-        $client = $this->employeeService->getClient($id);
-        return view('dashboard.clients.show', compact('client'));
+        $employee = $this->employeeService->getEmployee($id);
+        return view('dashboard.employee.show', compact('employee'));
     }
 
     public function create()
