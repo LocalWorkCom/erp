@@ -66,7 +66,6 @@ class ProductController extends Controller
             'is_remind' => 'required|boolean',
             'sku' => 'required|string|unique:products',  // Correct unique rule
             'barcode' => 'required|string|unique:products',  // Correct unique rule
-            'limit_quantity' => 'nullable|integer',
             'main_unit_id' => 'required|integer',
             'currency_code' => 'required|string',
             'category_id' => 'required|integer'

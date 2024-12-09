@@ -105,9 +105,29 @@ function BaseUrl()
     $myUrl = "";
     if (isset($_SERVER['HTTPS'])) $myUrl .= "https://";
     else $myUrl .= "http://";
-    if ($_SERVER['SERVER_NAME'] == "127.0.0.1") return "http://127.0.0.1:8000";
+    if ($_SERVER['SERVER_NAME'] == "erp.test/") return "http://erp.test/";
     return $myUrl . $_SERVER['SERVER_NAME'];
 }
+// function BaseUrl()
+// {
+//     $myUrl = "";
+
+//     // Check if the connection is secure (HTTPS)
+//     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+//         $myUrl .= "https://";
+//     } else {
+//         $myUrl .= "http://";
+//     }
+
+//     // Return specific base URL for 'erp.test/'
+//     if ($_SERVER['SERVER_NAME'] === "erp.test/") {
+//         return "http://erp.test/";
+//     }
+
+//     // Default behavior for other server names
+//     return $myUrl . $_SERVER['SERVER_NAME'];
+// }
+
 function AddDays($date, $daysNumber)
 {
     $startDate = Carbon::parse($date);
@@ -191,6 +211,7 @@ function removeColumns($data, $columnsToRemove)
 {
     return array_diff_key($data, array_flip($columnsToRemove));
 }
+
 function UploadFile($path, $image, $model, $request)
 {
     $thumbnail = $request;
