@@ -66,8 +66,8 @@
                                                         <label for="department" class="form-label">@lang('position.Department')</label>
                                                         <select class="form-select" id="department" name="department_id" required>
                                                             <option value="" disabled selected>@lang('position.ChooseDepartment')</option>
-                                                            @foreach ($departments as $department)
-                                                                <option value="{{ $department->id }}">{{ $department->name_ar . " | " . $department->name_en}}</option>
+                                                            @foreach ($positions as $position)
+                                                                <option value="{{ $position->id }}">{{ $position->name_ar . " | " . $position->name_en}}</option>
                                                             @endforeach
                                                         </select>
                                                         <div class="valid-feedback">
@@ -160,8 +160,8 @@
                                                     <div class="col-12">
                                                         <label for="edit-department" class="form-label">@lang('position.Department')</label>
                                                         <select id="edit-department" class="form-select" name="department_id" required>
-                                                            @foreach($departments as $department)
-                                                                <option value="{{ $department->id }}">{{ $department->name_ar }} | {{ $department->name_en }}</option>
+                                                            @foreach($positions as $position)
+                                                                <option value="{{ $position->id }}">{{ $position->name_ar }} | {{ $position->name_en }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -260,7 +260,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($Positions as $position)
+                                @foreach ($positions as $position)
                                     <tr>
                                         <td>{{ $position->id }}</td>
                                         <td>{{ $position->name_ar }}</td>

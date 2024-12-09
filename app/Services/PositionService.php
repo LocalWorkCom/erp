@@ -2,6 +2,7 @@
 
 
 namespace App\Services;
+
 use App\Models\Position;
 
 use Illuminate\Http\Request;
@@ -16,15 +17,20 @@ class PositionService
         app()->setLocale($this->lang);
     }
 
-    public function index(Request $request)
+    public function getAllPositions($checkToken)
     {
-        try {
-            $positions = Position::with('department')->get();
-//            dd($positions);
-            return ResponseWithSuccessData($this->lang, $positions, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($this->lang, 2);
+
+        $lang = app()->getLocale();
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
         }
+
+        return Position::all();
+    }
+
+    public function getPosition($id)
+    {
+        return Position::findOrFail($id);
     }
 
     public function add(Request $request)
@@ -58,7 +64,7 @@ class PositionService
         }
     }
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
         try {
             $validateData = Validator::make($request->all(), [
