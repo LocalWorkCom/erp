@@ -25,7 +25,7 @@ class PositionController extends Controller
     {
         $positions = $this->positionService->getAllPositions($this->checkToken);
         $departments = Department::get();
-        return view('dashboard.position.list', compact('positions', 'departments'));
+        return view('dashboard.position.index', compact('positions', 'departments'));
     }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class PositionController extends Controller
         ]);
 
         $this->positionService->createPosition($validatedData, $this->checkToken);
-        return redirect()->route('positions.list')->with('success', 'Position created successfully!');
+        return redirect()->route('positions.index')->with('success', 'Position created successfully!');
     }
 
     public function update(Request $request, $id)
@@ -53,11 +53,11 @@ class PositionController extends Controller
         ]);
 
         $this->positionService->updatePosition($validatedData, $id, $this->checkToken);
-        return redirect()->route('positions.list')->with('success', 'Position updated successfully!');
+        return redirect()->route('positions.index')->with('success', 'Position updated successfully!');
     }
     public function destroy($id)
     {
         $this->positionService->deletePosition($id, $this->checkToken);
-        return redirect()->route('positions.list')->with('success', 'Position deleted successfully!');
+        return redirect()->route('positions.index')->with('success', 'Position deleted successfully!');
     }
 }

@@ -185,14 +185,14 @@ Route::prefix('dashboard')->group(function () {
     });
 
     //HR
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
     Route::group(['prefix' => 'position'], function () {
         Route::post('store', [PositionController::class, 'store'])->name('position.store');
         Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
         Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
     });
 
-    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
     Route::group(['prefix' => 'employee'], function () {
         Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
         Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
