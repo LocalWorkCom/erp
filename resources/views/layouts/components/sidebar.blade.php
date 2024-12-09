@@ -152,7 +152,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Departments') }}" class="side-menu__item">
+                            <a href="{{ route('departments.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -161,7 +161,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Shifts') }}" class="side-menu__item">
+                            <a href="{{ route('shifts.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -170,7 +170,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('TimeTables') }}" class="side-menu__item">
+                            <a href="{{ route('timeTables.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -179,7 +179,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Scheduled') }}" class="side-menu__item">
+                            <a href="{{ route('schedule.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -188,7 +188,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Attendance') }}" class="side-menu__item">
+                            <a href="{{ route('attendance.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -197,7 +197,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('FingerDevice') }}" class="side-menu__item">
+                            <a href="{{ route('fingerDevice.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
