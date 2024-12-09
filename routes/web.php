@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BrandController;
@@ -149,13 +150,6 @@ Route::prefix('dashboard')->group(function () {
         Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
     });
 
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
-    Route::group(['prefix' => 'position'], function () {
-        Route::post('store', [PositionController::class, 'store'])->name('position.store');
-        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
-        Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
-    });
-
     Route::get('/tables', [TableController::class, 'index'])->name('tables.list');
     Route::group(['prefix' => 'table'], function () {
         Route::post('store', [TableController::class, 'store'])->name('table.store');
@@ -188,5 +182,23 @@ Route::prefix('dashboard')->group(function () {
         Route::get('edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
         Route::put('update/{id}', [ClientController::class, 'update'])->name('client.update');
         Route::delete('delete/{id}', [ClientController::class, 'destroy'])->name('client.delete');
+    });
+
+    //HR
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
+    Route::group(['prefix' => 'position'], function () {
+        Route::post('store', [PositionController::class, 'store'])->name('position.store');
+        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+        Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
+    });
+
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+    Route::group(['prefix' => 'employee'], function () {
+        Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+        Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
     });
 });
