@@ -17,6 +17,7 @@ use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,17 @@ use Illuminate\Support\Facades\Session;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+Route::get('/dashboard/login', [LoginController::class, 'showLoginForm'])->name('dashboard.login');
+Route::post('/dashboard/login', [LoginController::class, 'login'])->name('dashboard.submitlogin');
+Route::post('/dashboard/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('dashboard', function () {
+        return view('dashboard.index');
+    })->name('dashboard.home');
+});
 
 
 Route::get('/set-locale/{locale}', function ($locale) {
@@ -42,11 +54,9 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return view('dashboard.index');
-})->name('dashboard.home');
 
-Route::prefix('dashboard')->group(function () {
+
+Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list');
     Route::group(['prefix' => 'product'], function () {
