@@ -532,7 +532,7 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('countries') }}" class="side-menu__item">@lang('sidebar.countries') </a>
+                            <a href="{{ route('countries.list') }}" class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
