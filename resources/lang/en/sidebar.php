@@ -63,4 +63,6 @@ return [
     'invoiceSetting' => 'Invoice Setting',
     'leaveNationals' => 'Leave Nationals',
     'leaveSetting' => 'Leave Setting',
+    'website' => 'Website',
+
 ];
