@@ -14,7 +14,7 @@ class PointSystemsTableSeeder extends Seeder
     public function run(): void
     {  $system = [
         // Clothes Sizes (category_id = 1)
-        ['type_ar' => 'بأجمالى الفاتوره', 'type_en' => 'total of order value', 'value_earn' => '1', 'value_redeem' =>'1', 'active' => 1,
+        ['type_ar' => 'بأجمالى الفاتوره', 'type_en' => 'total of order value', 'value_earn' => '1', 'point_redeem' =>'1', 'active' => 1,
         'created_at' => now(),
         'updated_at' => now()],
          ];

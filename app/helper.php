@@ -18,7 +18,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderTransaction;
 use App\Models\CashierMachine;
-
+use App\Models\Country;
 use App\Models\LeaveRequest;
 use App\Models\Employee;
 
@@ -33,14 +33,15 @@ use GuzzleHttp\Client;
 function RespondWithSuccessRequest($lang, $code)
 {
 
+
     //bad or invalid request missing some params
     $response = new stdClass();
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 200
 
     );
     $response_code = 200;
@@ -51,27 +52,29 @@ function RespondWithSuccessRequest($lang, $code)
 function RespondWithBadRequest($lang, $code)
 {
 
+
     $APICode = ApICode::where('code', $code)->first();
     $response_array = array(
-        'success' => false,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code
+        'status' => false,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 400
     );
-    $response_code = 200;
+    $response_code = 400;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
 function RespondWithBadRequestWithData($data)
 {
+
     $response_array = array(
-        'success' => false,
-        'apiTitle' => trans('validation.validator_title'),
-        'apiMsg' => trans('validation.validator_msg'),
-        'apiCode' => -1,
+        'status' => false,
+        // 'apiTitle' => trans('validation.validator_title'),
+        'message' => trans('validation.validator_msg'),
+        'code' => 401,
         'data' => $data
     );
-    $response_code = 200;
+    $response_code = 401;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -134,12 +137,13 @@ function ApiCode($code)
 
 function ResponseWithSuccessData($lang, $data, $code)
 {
+
     $APICode = ApiCode($code);
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 200,
         'data'   => $data
     );
     $response_code = 200;
@@ -149,15 +153,16 @@ function ResponseWithSuccessData($lang, $data, $code)
 
 function RespondWithBadRequestData($lang, $code)
 {
+
     $APICode = ApiCode($code);
     $response_array = array(
-        'success' => true,
-        'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
-        'apiMsg' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
-        'apiCode' => $APICode->code,
+        'status' => true,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 400,
         'data'   => []
     );
-    $response_code = 200;
+    $response_code = 400;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -246,30 +251,32 @@ if (!function_exists('DeleteFile')) {
 //not used
 function RespondWithBadRequestNoChange()
 {
+
     $response_array = array(
-        'success' => true,
-        'apiTitle' => trans('validation.NoChange'),
-        'apiMsg' => trans('validation.NoChangeMessage'),
-        'apiCode' => -1,
+        'status' => true,
+        // 'apiTitle' => trans('validation.NoChange'),
+        'message' => trans('validation.NoChangeMessage'),
+        'code' => 401,
         'data'   => []
     );
-    $response_code = 200;
+    $response_code = 401;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
 //not used
 function RespondWithBadRequestNotExist()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotExist'),
-        'apiMsg' => trans('validation.NotExistMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotExist'),
+        'message' => trans('validation.NotExistMessage'),
+        'code' => 401,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 401;
 
     return Response::json($response_array, $response_code);
 }
@@ -277,16 +284,17 @@ function RespondWithBadRequestNotExist()
 //not have Permeation
 function RespondWithBadRequestNotHavePermeation()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotHavePermeation'),
-        'apiMsg' => trans('validation.NotHavePermeationMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotHavePermeation'),
+        'message' => trans('validation.NotHavePermeationMessage'),
+        'code' => 403,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 403;
 
     return Response::json($response_array, $response_code);
 }
@@ -294,16 +302,17 @@ function RespondWithBadRequestNotHavePermeation()
 //not date
 function RespondWithBadRequestNotDate()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotDate'),
-        'apiMsg' => trans('validation.NotDateMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotDate'),
+        'message' => trans('validation.NotDateMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -311,16 +320,17 @@ function RespondWithBadRequestNotDate()
 //not add
 function RespondWithBadRequestNotAdd()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAddMore'),
-        'apiMsg' => trans('validation.NotAddMoreMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAddMore'),
+        'message' => trans('validation.NotAddMoreMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -328,11 +338,12 @@ function RespondWithBadRequestNotAdd()
 //not available
 function RespondWithBadRequestNotAvailable()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotAvailableMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'message' => trans('validation.NotAvailableMessage'),
+        'code' => 404,
         'data'   => []
     );
 
@@ -345,32 +356,34 @@ function RespondWithBadRequestNotAvailable()
 //not Closing
 function RespondWithBadRequestNotClosing()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NotAvailable'),
-        'apiMsg' => trans('validation.NotClosingMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NotAvailable'),
+        'message' => trans('validation.NotClosingMessage'),
+        'code' => 403,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 403;
 
     return Response::json($response_array, $response_code);
 }
 
 function RespondWithBadRequestNoLeave()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.NoLeave'),
-        'apiMsg' => trans('validation.NoLeaveMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.NoLeave'),
+        'message' => trans('validation.NoLeaveMessage'),
+        'code' => 400,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 400;
 
     return Response::json($response_array, $response_code);
 }
@@ -379,16 +392,17 @@ function RespondWithBadRequestNoLeave()
 //not used
 function RespondWithBadRequestDataExist()
 {
+
     $response_array = array(
-        'success' => false,  // Set success to false to indicate an error
-        'apiTitle' => trans('validation.DataExist'),
-        'apiMsg' => trans('validation.DataExistMessage'),
-        'apiCode' => -1,
+        'status' => false,  // Set success to false to indicate an error
+        // 'apiTitle' => trans('validation.DataExist'),
+        'message' => trans('validation.DataExistMessage'),
+        'code' => 401,
         'data'   => []
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 401;
 
     return Response::json($response_array, $response_code);
 }
@@ -654,84 +668,86 @@ function CalculateTotalOrders($cashier_machine_id, $employee_id, $date, $payment
     $sum_orders = 0;
     $branch_id = 0;
     $cashier_machine_details = CashierMachine::find($cashier_machine_id);
-    if($cashier_machine_details){
-        if($cashier_machine_details->branches){
+    if ($cashier_machine_details) {
+        if ($cashier_machine_details->branches) {
             $branch_id = $cashier_machine_details->branches->id;
         }
     }
 
 
     $employee_time =  TimetableService::getTimetableForDate($employee_id, $date);
-    if($branch_id != 0){
-        if($employee_time['data']['cross_day'] == 0){
+    if ($branch_id != 0) {
+        if ($employee_time['data']['cross_day'] == 0) {
             $orders_totals = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get();
-        }else{
+        } else {
             $next_day = Carbon::parse($date)->addDays(1);
             $orders_totals_old = Order::where('branch_id', $branch_id)->whereDate('date', $date)->whereTime('created_at', '>=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '>=', $employee_time['data']['off_duty_time'])->get()->toArray();
             $orders_totals_new = Order::where('branch_id', $branch_id)->whereDate('date', $next_day)->whereTime('created_at', '<=', $employee_time['data']['on_duty_time'])->whereTime('created_at', '<=', $employee_time['data']['off_duty_time'])->get()->toArray();
             $orders_totals = array_merge($orders_totals_old, $orders_totals_new);
         }
 
-        if($orders_totals)
-        foreach($orders_totals as $orders_total){
-            if($orders_total){
-                $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
-                if($orders_tot){
-                    $sum_orders += $orders_tot->paid;
+        if ($orders_totals)
+            foreach ($orders_totals as $orders_total) {
+                if ($orders_total) {
+                    $orders_tot = OrderTransaction::where('order_id', $orders_total['id'])->where('order_type', 'order')->where('payment_status', 'paid')->where('payment_method', $payment_method)->first();
+                    if ($orders_tot) {
+                        $sum_orders += $orders_tot->paid;
+                    }
                 }
             }
-        }
     }
     return $sum_orders;
 }
 function addEmployeeToDevice($empCode, $departmentId, $areaIds, $firstName = null, $lastName = null, $hireDate = null, $gender = null, $mobile = null, $email = null)
-    {
-        try {
-            $url = 'http://127.0.0.1:8085/personnel/api/employees/';
-            $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxNTgzODk2LCJpYXQiOjE3MzE0OTc0OTYsImp0aSI6Ijk0YzRlYjQzY2I2MzRhMDdhNWIwMzZjOTZmOWM4NDVkIiwidXNlcl9pZCI6MX0.6uMFiXnFHEB_I5baP8qvgWkG_z7BXjPLWaU5QEfuCMg'; 
+{
+    try {
+        $url = 'http://127.0.0.1:8085/personnel/api/employees/';
+        $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxNTgzODk2LCJpYXQiOjE3MzE0OTc0OTYsImp0aSI6Ijk0YzRlYjQzY2I2MzRhMDdhNWIwMzZjOTZmOWM4NDVkIiwidXNlcl9pZCI6MX0.6uMFiXnFHEB_I5baP8qvgWkG_z7BXjPLWaU5QEfuCMg';
 
-            $data = [
-                'emp_code' => $empCode,
-                'department' => $departmentId,
-                'area' => $areaIds,
-                'hire_date' => $hireDate ?? now()->toDateString(),
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'gender' => $gender,
-                'mobile' => $mobile,
-                'email' => $email,
-            ];
+        $data = [
+            'emp_code' => $empCode,
+            'department' => $departmentId,
+            'area' => $areaIds,
+            'hire_date' => $hireDate ?? now()->toDateString(),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'gender' => $gender,
+            'mobile' => $mobile,
+            'email' => $email,
+        ];
 
-            $client = new Client();
+        $client = new Client();
 
-            $response = $client->post($url, [
-                'headers' => [
-                    'Authorization' => 'JWT ' . $token,
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => $data,
-            ]);
+        $response = $client->post($url, [
+            'headers' => [
+                'Authorization' => 'JWT ' . $token,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => $data,
+        ]);
 
-            if ($response->getStatusCode() == 201) {
-                return json_decode($response->getBody()->getContents(), true);
-            } else {
-                return 'Failed to add employee. Status code: ' . $response->getStatusCode();
-            }
-        } catch (\Exception $e) {
-            Log::error('Error adding employee to BioTime device: ' . $e->getMessage());
-            return 'Error: ' . $e->getMessage();
+        if ($response->getStatusCode() == 201) {
+            return json_decode($response->getBody()->getContents(), true);
+        } else {
+            return 'Failed to add employee. Status code: ' . $response->getStatusCode();
         }
+    } catch (\Exception $e) {
+        Log::error('Error adding employee to BioTime device: ' . $e->getMessage());
+        return 'Error: ' . $e->getMessage();
     }
+}
 
-function CalculateDeficitOrder($open_amount=0, $close_amount=0, $real_amount=0){
+function CalculateDeficitOrder($open_amount = 0, $close_amount = 0, $real_amount = 0)
+{
     $remaining_amount = ($close_amount - $open_amount);
     return ($remaining_amount - $real_amount);
 }
 
-function CalculateEmployeeLeave($employee_id, $leave_type, $leave_year_count){
+function CalculateEmployeeLeave($employee_id, $leave_type, $leave_year_count)
+{
     $first_day = date('Y-01-01');
     $last_day = date('Y-12-31');
-    return $employee_leave_count = LeaveRequest::where('employee_id', $employee_id)->where('leave_type_id', $leave_type)->where('agreement', 2)->whereBetween('date', [$first_day,$last_day])->sum('leave_count');
+    return $employee_leave_count = LeaveRequest::where('employee_id', $employee_id)->where('leave_type_id', $leave_type)->where('agreement', 2)->whereBetween('date', [$first_day, $last_day])->sum('leave_count');
 }
 
 function CheckExistOrder($client_id)
@@ -743,4 +759,9 @@ function CheckOrderPaid($order_id)
 {
 
     return  OrderTransaction::where('order_id', $order_id)->exists();
+}
+function GetCurrencyCodes()
+{
+    $Currencies = Country::select('currency_code', 'id')->get();
+    return $Currencies;
 }

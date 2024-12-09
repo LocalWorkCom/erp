@@ -1,0 +1,25 @@
+<?php
+return [
+    'Category' => 'Category',
+    'Categories' => 'Categories',
+    'Add' => 'Add',
+    'ID' => 'ID',
+    'Image' => 'Image',
+    'ArabicName' => ' Arabic Name',
+    'EnglishName' => 'English Name',
+    'Code' => 'Code',
+    'IsFreeze' => 'Is Freeze',
+    'Actions' => 'Actions',
+    'AddCategory' => 'Add Category',
+
+    'edit' => 'Edit',
+    'show' => 'Show',
+    'delete' => 'Delete',
+    'description_ar' => 'Arabic Description',
+    'description_en' => 'English Description',
+    'yes' => 'Yes',
+    'no' => 'No',
+    'none' => 'None',
+    'parent' => 'Parent Category',
+    'save' => 'Save',
+];
