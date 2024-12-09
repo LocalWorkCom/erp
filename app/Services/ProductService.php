@@ -103,7 +103,6 @@ class ProductService
             'is_remind' => 'required|boolean',
             'sku' => 'required|string|unique:products',
             'barcode' => 'required|string|unique:products',
-            'limit_quantity' => 'nullable|integer',
             'main_unit_id' => 'required|integer',
             'currency_code' => 'required|string',
             'category_id' => 'required|integer'
@@ -152,20 +151,18 @@ class ProductService
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
         $product->is_have_expired = $request->is_have_expired;
-        $product->expiry_date = $request->expiry_date ?? null;
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-        $product->price =$request->price;
-        $product->created_by =13;
+        $product->created_by = 13;
         $product->save();
 
         // Save product limits
         $product_limit = new ProductLimit();
         $product_limit->product_id = $product->id;
         $product_limit->min_limit = $request->min_limit;
-        $product_limit->max_limit =$request->max_limit;
+        $product_limit->max_limit = $request->max_limit;
         $product_limit->store_id = $request->store_id;
         $product_limit->save();
 
@@ -190,7 +187,9 @@ class ProductService
                 if ($image->isValid()) {
                     $product_image = new ProductImage();
                     $product_image->product_id = $product->id;
-                    $product_image->created_by = Auth::guard('api')->user()->id;
+                    // $product_image->created_by = Auth::guard('api')->user()->id;
+                    $product_image->created_by = 13;
+
                     $product_image->save();
                     UploadFile('images/products/gallery', 'image', $product_image, $image);
                 }
@@ -203,11 +202,11 @@ class ProductService
     // Method to update an existing product
     public function update(Request $request, $id, $checkToken)
     {
-
+        // Check for token validity
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($this->lang, 5);
         }
-
+        // Validate the incoming request data
         $validator = Validator::make(
             $request->all(),
             [
@@ -224,86 +223,139 @@ class ProductService
                 'main_unit_id' => 'required|integer',
                 'currency_code' => 'required|string',
                 'category_id' => 'required|integer'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
-        }
-
-        $product = Product::find($id);
-        if (!$product) {
-            return RespondWithBadRequestData($this->lang, 8);
-        }
-
-        // Check if data hasn't changed
-        if ($this->isProductUnchanged($product, $request)) {
-            return RespondWithBadRequestData($this->lang, 10);
-        }
-
-        // Validate product name
-        if (CheckExistColumnValue('products', 'name_ar', $request->name_ar)) {
-            return RespondWithBadRequest($this->lang, 9);
-        }
-
-        // Update product attributes
-        $product->update($request->only([
-            'name_ar',
-            'name_en',
-            'description_ar',
-            'description_en',
-            'type',
-            'is_have_expired',
-            'is_remind',
-            'sku',
-            'barcode',
-            'main_unit_id',
-            'currency_code',
-            'category_id'
-        ]));
-
-        // Handle image upload (main image)
-        if ($request->hasFile('main_image')) {
-            $main_image = $request->file('main_image');
-            DeleteFile('images/products', $product->main_image);
-            UploadFile('images/products', 'main_image', $product, $main_image);
-        }
-
-        // Handle gallery images
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                if ($image->isValid()) {
-                    $product_image = new ProductImage();
-                    $product_image->product_id = $product->id;
-                    $product_image->created_by = Auth::guard('api')->user()->id;
-                    $product_image->save();
-                    UploadFile('images/products/gallery', 'image', $product_image, $image);
-                }
+                ]
+            );
+            
+            // Handle validation failure
+            if ($validator->fails()) {
+                return RespondWithBadRequestWithData($validator->errors());
             }
-        }
+            
+            // Retrieve the product by its ID
+            $product = Product::find($id);
+            if (!$product) {
+                return RespondWithBadRequestData($this->lang, 8);
+            }
+            
+            
+            // Retrieve the ProductLimit
+            $product_limit = ProductLimit::where('product_id', $product->id)->first();
+            if (!$product_limit) {
+                // If ProductLimit doesn't exist, create a new one
+                $product_limit = new ProductLimit();
+                $product_limit->product_id = $product->id;
+            }
+            
+            
+            // Update product attributes
+            $product->update($request->only([
+                'name_ar',
+                'name_en',
+                'description_ar',
+                'description_en',
+                'type',
+                'is_have_expired',
+                'is_remind',
+                'sku',
+                'barcode',
+                'main_unit_id',
+                'currency_code',
+                'category_id'
+            ]));
+            // dd($product);
+            
+            // Debug ProductLimit update
+            // dd($product_limit);
+            
+            // Update ProductLimit data
+            $product_limit->min_limit = $request->min_limit;
+            $product_limit->max_limit = $request->max_limit;
+            $product_limit->store_id = $request->store_id;
+            
+            $product_limit->save();
+            
+            // Handle image upload (main image)
+            if ($request->hasFile('main_image')) {
+                $main_image = $request->file('main_image');
+                DeleteFile('images/products', $product->main_image);
+                UploadFile('images/products', 'main_image', $product, $main_image);
+            }
+            
 
-        return RespondWithSuccessRequest($this->lang, 1);
+            if ($request->hasFile('images')) {
+                $images = $request->file('images');
+                $validator = Validator::make($request->all(), [
+                    'images.*' => 'mimes:jpeg,jpg,png,gif,svg|max:2048'
+                ]);
+    
+                if ($validator->fails()) {
+                    return RespondWithBadRequestWithData($validator->errors());
+                }
+    
+
+                foreach ($images as $image) {
+                    if ($image->isValid()) {
+                        $product_image = new ProductImage();
+                        $product_image->product_id = $product->id;
+                        $product_image->created_by = 13;
+                
+                        // Save the file name in the 'image' column
+                        $fileName = UploadFile('images/products/gallery', 'image', $product_image, $image);
+                        $product_image->image = $fileName;
+                        $product_image->save();
+                    }
+                }
+
+                
+                // foreach ($images as $image) {
+                //     if ($image->isValid()) {
+                //         $product_image = new ProductImage();
+                //         $product_image->product_id = $product->id;
+                //         // $product_image->created_by = Auth::guard('api')->user()->id;
+                //         $product_image->created_by = 13;
+    
+                //         $product_image->save();
+                //         DeleteFile('images/products/gallery', 'image', $product_image->image);
+                //         UploadFile('images/products/gallery', 'image', $product_image, $image);
+                //     }
+                // }
+            }
+
+            // Check if the data was successfully updated
+            if ($product->wasChanged() || $product_limit->wasChanged()) {
+                return RespondWithSuccessRequest($this->lang, 1);
+            } else {
+                return RespondWithBadRequest($this->lang, 11);
+            }
+            // Check if the data hasn't changed
+            if ($this->isProductUnchanged($product, $request)) {
+                return RespondWithBadRequestData($this->lang, 10);
+            }
+            
+            // Validate product name uniqueness
+            if (CheckExistColumnValue('products', 'name_ar', $request->name_ar)) {
+                return RespondWithBadRequest($this->lang, 9);
+            }
     }
+        
+        
     function DeleteExistProductImage(Request $request, $checkToken) {}
-    public function delete(Request $request,$id, $checkToken,$oneProductDelete)
+    
+    public function delete(Request $request, $id, $checkToken, $oneProductDelete)
     {
-//        if (!CheckToken() && $checkToken) {
-//            return RespondWithBadRequest($this->lang, 5);
-//        }
-//        dd($id);
+        //        if (!CheckToken() && $checkToken) {
+        //            return RespondWithBadRequest($this->lang, 5);
+        //        }
+        //        dd($id);
 
         $product = Product::find($id);
         if (!$product) {
             return  RespondWithBadRequestData($this->lang, 8);
-        }
-        else
-        {
-            if ($oneProductDelete){
+        } else {
+            if ($oneProductDelete) {
                 $product->delete();
                 return RespondWithSuccessRequest($this->lang, 1);
-            }
-            else{
+            } else {
                 $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
                 // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
                 if ($CheckIfExist1->count()) {
@@ -339,7 +391,5 @@ class ProductService
                 return RespondWithSuccessRequest($this->lang, 1);
             }
         }
-
-
     }
 }
