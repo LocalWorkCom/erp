@@ -241,6 +241,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
+        Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dashboard.dish-categories.show');
+
     });
 
 });
