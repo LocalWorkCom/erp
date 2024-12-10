@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\LogoController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
@@ -94,7 +95,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
     Route::group(['prefix' => 'country'], function () {
-
         Route::post('store', [CountryController::class, 'store'])->name('country.store');
         Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
         Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
@@ -196,12 +196,29 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [ClientController::class, 'destroy'])->name('client.delete');
     });
 
-    //HR
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
-    Route::group(['prefix' => 'position'], function () {
-        Route::post('store', [PositionController::class, 'store'])->name('position.store');
-        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
-        Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
+    Route::get('/logos', [LogoController::class, 'index'])->name('logos.list');
+    Route::group(['prefix' => 'logo'], function () {
+        Route::post('store', [LogoController::class, 'store'])->name('logo.store');
+        Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update');
+        Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete');
+
+        //HR
+        Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+        Route::group(['prefix' => 'position'], function () {
+            Route::post('store', [PositionController::class, 'store'])->name('position.store');
+            Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+            Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
+        });
+
+        Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+        Route::group(['prefix' => 'employee'], function () {
+            Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
+            Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
+            Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+            Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+            Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+            Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
+        });
     });
 
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
