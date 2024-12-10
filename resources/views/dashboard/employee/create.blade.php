@@ -186,50 +186,6 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="address" class="form-label">@lang('employee.address')</label>
-                                        <input type="text" class="form-control" id="address" name="address"
-                                            value="{{ old('address') }}" placeholder="@lang('employee.address')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterAddress')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="city" class="form-label">@lang('employee.city')</label>
-                                        <input type="text" class="form-control" id="city" name="city"
-                                            value="{{ old('city') }}" placeholder="@lang('employee.city')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterCity')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="state" class="form-label">@lang('employee.state')</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ old('state') }}" placeholder="@lang('employee.state')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterState')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="postal_code" class="form-label">@lang('employee.postalCode')</label>
-                                        <input type="text" class="form-control" id="postal_code" name="postal_code"
-                                            value="{{ old('postal_code') }}" placeholder="@lang('employee.postalCode')">
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterPostalCode')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="blood_group" class="form-label">@lang('employee.bloodGroup')</label>
                                         <select class="js-example-basic-single form-control" id="blood_group"
                                             name="blood_group">

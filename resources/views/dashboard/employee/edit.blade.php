@@ -7,12 +7,12 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('employee.addEmployee')</h4>
+        <h4 class="fw-medium mb-0">@lang('employee.editEmployee')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('employees.list') }}">@lang('employee.employees')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('employee.addEmployee')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('employee.editEmployee')</li>
                 </ol>
             </nav>
         </div>
@@ -27,7 +27,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                @lang('employee.addEmployee')
+                                @lang('employee.editEmployee')
                             </div>
                         </div>
                         <div class="card-body">
@@ -49,14 +49,15 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form method="POST" action="{{ route('employee.store') }}" class="needs-validation"
-                                enctype="multipart/form-data" novalidate>
+                            <form method="POST" action="{{ route('employee.update', $employee->id) }}"
+                                class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
+                                @method('PUT')
                                 <div class="row gy-4">
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.code')</label>
                                         <input type="text" class="form-control" id="employee_code" name="employee_code"
-                                            value="{{ old('employee_code') }}" placeholder="@lang('employee.code')" required>
+                                            value="{{ $employee->employee_code }}" placeholder="@lang('employee.code')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -67,7 +68,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.firstName')</label>
                                         <input type="text" class="form-control" id="first_name" name="first_name"
-                                            value="{{ old('first_name') }}" placeholder="@lang('employee.firstName')" required>
+                                            value="{{ $employee->first_name }}" placeholder="@lang('employee.firstName')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -78,7 +79,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.lastName')</label>
                                         <input type="text" class="form-control" id="last_name" name="last_name"
-                                            value="{{ old('last_name') }}" placeholder="@lang('employee.lastName')" required>
+                                            value="{{ $employee->last_name }}" placeholder="@lang('employee.lastName')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -89,7 +90,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.email')</label>
                                         <input type="email" class="form-control" id="email" name="email"
-                                            value="{{ old('email') }}" placeholder="@lang('employee.email')" required>
+                                            value="{{ $employee->email }}" placeholder="@lang('employee.email')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -100,7 +101,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.phone')</label>
                                         <input type="text" class="form-control" id="phone" name="phone"
-                                            value="{{ old('phone') }}" placeholder="@lang('employee.phone')" required>
+                                            value="{{ $employee->phone }}" placeholder="@lang('employee.phone')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -125,7 +126,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="birth_date" class="form-label">@lang('employee.dob')</label>
                                         <input type="date" class="form-control" id="birth_date" name="birth_date"
-                                            value="{{ old('birth_date') }}" placeholder="@lang('employee.dob')">
+                                            value="{{ $employee->birth_date }}" placeholder="@lang('employee.dob')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -135,7 +136,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control" required>
+                                        <select name="country_id" class="js-example-basic-single form-control">
                                             <option value="" disabled>@lang('employee.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}">
@@ -148,7 +149,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.nationalId')</label>
                                         <input type="text" class="form-control" id="national_id" name="national_id"
-                                            value="{{ old('national_id') }}" placeholder="@lang('employee.nationalId')" required>
+                                            value="{{ $employee->national_id }}" placeholder="@lang('employee.nationalId')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -159,8 +160,8 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.PassportNumber')</label>
                                         <input type="text" class="form-control" id="passport_number"
-                                            name="passport_number" value="{{ old('passport_number') }}"
-                                            placeholder="@lang('employee.PassportNumber')" required>
+                                            name="passport_number" value="{{ $employee->pasport_number }}"
+                                            placeholder="@lang('employee.PassportNumber')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -183,50 +184,6 @@
                                         </div>
                                         <div class="invalid-feedback">
                                             @lang('validation.SelectMaritalStatus')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="address" class="form-label">@lang('employee.address')</label>
-                                        <input type="text" class="form-control" id="address" name="address"
-                                            value="{{ old('address') }}" placeholder="@lang('employee.address')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterAddress')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="city" class="form-label">@lang('employee.city')</label>
-                                        <input type="text" class="form-control" id="city" name="city"
-                                            value="{{ old('city') }}" placeholder="@lang('employee.city')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterCity')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="state" class="form-label">@lang('employee.state')</label>
-                                        <input type="text" class="form-control" id="state" name="state"
-                                            value="{{ old('state') }}" placeholder="@lang('employee.state')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterState')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="postal_code" class="form-label">@lang('employee.postalCode')</label>
-                                        <input type="text" class="form-control" id="postal_code" name="postal_code"
-                                            value="{{ old('postal_code') }}" placeholder="@lang('employee.postalCode')">
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterPostalCode')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -253,7 +210,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="emergency_contact_name" class="form-label">@lang('employee.emergencyContactName')</label>
                                         <input type="text" class="form-control" id="emergency_contact_name"
-                                            name="emergency_contact_name" value="{{ old('emergency_contact_name') }}"
+                                            name="emergency_contact_name" value="{{ $employee->emergency_contact_name }}"
                                             placeholder="@lang('employee.emergencyContactName')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -267,7 +224,7 @@
                                             class="form-label">@lang('employee.emergencyContactRelationship')</label>
                                         <input type="text" class="form-control" id="emergency_contact_relationship"
                                             name="emergency_contact_relationship"
-                                            value="{{ old('emergency_contact_relationship') }}"
+                                            value="{{ $employee->emergency_contact_realtionship }}"
                                             placeholder="@lang('employee.emergencyContactName')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -279,7 +236,8 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="emergency_contact_phone" class="form-label">@lang('employee.emergencyContactPhone')</label>
                                         <input type="text" class="form-control" id="emergency_contact_phone"
-                                            name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}"
+                                            name="emergency_contact_phone"
+                                            value="{{ $employee->emergency_contact_phone }}"
                                             placeholder="@lang('employee.emergencyContactPhone')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -339,7 +297,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="hire_date" class="form-label">@lang('employee.hireDate')</label>
                                         <input type="date" class="form-control" id="hire_date" name="hire_date"
-                                            value="{{ old('hire_date') }}" placeholder="@lang('employee.hireDate')">
+                                            value="{{ $employee->hire_date }}" placeholder="@lang('employee.hireDate')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -350,7 +308,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="salary" class="form-label">@lang('employee.salary')</label>
                                         <input type="text" class="form-control" id="salary" name="salary"
-                                            value="{{ old('salary') }}" placeholder="@lang('employee.salary')">
+                                            value="{{ $employee->salary }}" placeholder="@lang('employee.salary')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -361,7 +319,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="assurance_salary" class="form-label">@lang('employee.assuranceSalary')</label>
                                         <input type="text" class="form-control" id="assurance_salary"
-                                            name="assurance_salary" value="{{ old('assurance_salary') }}"
+                                            name="assurance_salary" value="{{ $employee->assurance_salary }}"
                                             placeholder="@lang('employee.assuranceSalary')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -373,7 +331,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="assurance_number" class="form-label">@lang('employee.assuranceNumber')</label>
                                         <input type="text" class="form-control" id="assurance_number"
-                                            name="assurance_number" value="{{ old('assurance_number') }}"
+                                            name="assurance_number" value="{{ $employee->assurance_number }}"
                                             placeholder="@lang('employee.assuranceNumber')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -385,7 +343,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="bank_account" class="form-label">@lang('employee.bannkAccount')</label>
                                         <input type="text" class="form-control" id="bank_account" name="bank_account"
-                                            value="{{ old('bank_account') }}" placeholder="@lang('employee.bankAccounnt')">
+                                            value="{{ $employee->bank_account }}" placeholder="@lang('employee.bankAccounnt')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -444,7 +402,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="notes" class="form-label">@lang('employee.notes')</label>
-                                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ old('notes') }}</textarea>
+                                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ $employee->notes }}</textarea>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -455,7 +413,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="biometric_id" class="form-label">@lang('employee.bannkAccount')</label>
                                         <input type="text" class="form-control" id="biometric_id" name="biometric_id"
-                                            value="{{ old('biometric_id') }}" placeholder="@lang('employee.biometricId')">
+                                            value="{{ $employee->biometric_id }}" placeholder="@lang('employee.biometricId')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
