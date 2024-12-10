@@ -27,6 +27,14 @@ class PositionService
         }
 
         return Position::all();
+<<<<<<< HEAD
+    }
+
+    public function getPosition($id)
+    {
+        return Position::findOrFail($id);
+=======
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 
     public function createPosition($data, $checkToken)
@@ -46,7 +54,11 @@ class PositionService
         $position->save();
     }
 
+<<<<<<< HEAD
+    public function edit(Request $request, $id)
+=======
     public function updatePosition($data, $id, $checkToken)
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     {
         $lang = app()->getLocale();
         if (!CheckToken() && $checkToken) {

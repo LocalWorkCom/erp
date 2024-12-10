@@ -65,6 +65,12 @@
                                                 <div class="row gy-4">
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                                         <label for="department" class="form-label">@lang('position.Department')</label>
+<<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
+                                                        <select class="form-select" id="department" name="department_id" required>
+                                                            <option value="" disabled selected>@lang('position.ChooseDepartment')</option>
+                                                            @foreach ($positions as $position)
+                                                                <option value="{{ $position->id }}">{{ $position->name_ar . " | " . $position->name_en}}</option>
+=======
                                                         <select class="form-select" id="department" name="department_id"
                                                             required>
                                                             <option value="" disabled selected>@lang('position.ChooseDepartment')
@@ -73,6 +79,7 @@
                                                                 <option value="{{ $position->id }}">
                                                                     {{ $position->name_ar . ' | ' . $position->name_en }}
                                                                 </option>
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
                                                             @endforeach
                                                         </select>
                                                         <div class="valid-feedback">
@@ -167,6 +174,12 @@
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-12">
+<<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
+                                                        <label for="edit-department" class="form-label">@lang('position.Department')</label>
+                                                        <select id="edit-department" class="form-select" name="department_id" required>
+                                                            @foreach($positions as $position)
+                                                                <option value="{{ $position->id }}">{{ $position->name_ar }} | {{ $position->name_en }}</option>
+=======
                                                         <label for="edit-department"
                                                             class="form-label">@lang('position.Department')</label>
                                                         <select id="edit-department" class="form-select"
@@ -175,6 +188,7 @@
                                                                 <option value="{{ $department->id }}">
                                                                     {{ $department->name_ar }} | {{ $department->name_en }}
                                                                 </option>
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -283,6 +297,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+<<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
+                                @foreach ($positions as $position)
+                                    <tr>
+                                        <td>{{ $position->id }}</td>
+                                        <td>{{ $position->name_ar }}</td>
+                                        <td>{{ $position->name_en }}</td>
+                                        <td>{{ $position->department->name_ar . ' | ' . $position->department->name_en }}</td>
+                                        <td>
+                                            <!-- Show Button -->
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-info-light btn-wave show-department-btn"
+                                               data-id="{{ $position->id }}"
+                                               data-name-ar="{{ $position->name_ar }}"
+                                               data-name-en="{{ $position->name_en }}"
+                                               data-description-ar="{{ $position->description_ar ?? __('category.none') }}"
+                                               data-description-en="{{ $position->description_en ?? __('category.none')  }}"
+                                               data-department-name="{{ $position->department->name_ar . ' | ' . $position->department->name_en  }}"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#showModal">
+                                                @lang('category.show') <i class="ri-eye-line"></i>
+                                            </a>
+=======
                                     @foreach ($positions as $position)
                                         <tr>
                                             <td>{{ $position->id }}</td>
@@ -305,6 +341,7 @@
                                                     data-bs-toggle="modal" data-bs-target="#showModal">
                                                     @lang('position.show') <i class="ri-eye-line"></i>
                                                 </a>
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
 
                                                 <!-- Edit Button -->
                                                 <button type="button"

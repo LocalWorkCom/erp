@@ -17,6 +17,8 @@ use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
+use App\Http\Controllers\Dashboard\DishCategoryController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
@@ -217,6 +219,25 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
             Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
             Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
         });
+    });
+
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+    Route::group(['prefix' => 'employee'], function () {
+        Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+        Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
+    });
+    Route::prefix('dish-categories')->group(function () {
+        Route::get('/', [DishCategoryController::class, 'index'])->name('dashboard.dish-categories.index');
+        Route::get('/create', [DishCategoryController::class, 'create'])->name('dashboard.dish-categories.create');
+        Route::post('/', [DishCategoryController::class, 'store'])->name('dashboard.dish-categories.store');
+        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dashboard.dish-categories.edit');
+        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update');
+        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
     });
 
 });

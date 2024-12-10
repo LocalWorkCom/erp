@@ -24,12 +24,31 @@ class PositionController extends Controller
     public function index()
     {
         $positions = $this->positionService->getAllPositions($this->checkToken);
+<<<<<<< HEAD
+        return view('dashboard.position.list', compact('positions'));
+    }
+    public function show($id)
+    {
+        $client = $this->positionService->getPosition($id);
+        return view('dashboard.clients.show', compact('client'));
+=======
         $departments = Department::get();
         return view('dashboard.position.index', compact('positions', 'departments'));
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
+        $response = $this->positionService->add($request);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('positions')->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
+=======
         $validatedData = $request->validate([
             'department_id' => 'required|integer|exists:departments,id',
             'name_ar' => 'required|string',
@@ -40,10 +59,21 @@ class PositionController extends Controller
 
         $this->positionService->createPosition($validatedData, $this->checkToken);
         return redirect()->route('positions.index')->with('success', 'Position created successfully!');
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
+        $response = $this->positionService->edit($request, $id);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect('positions')->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
+=======
         $validatedData = $request->validate([
             'department_id' => 'nullable|integer|exists:departments,id',
             'name_ar' => 'nullable|string',
@@ -54,10 +84,18 @@ class PositionController extends Controller
 
         $this->positionService->updatePosition($validatedData, $id, $this->checkToken);
         return redirect()->route('positions.index')->with('success', 'Position updated successfully!');
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
     public function destroy($id)
     {
+<<<<<<< HEAD
+        $response = $this->positionService->delete($request, $id);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        return redirect('positions')->with('message', $message);
+=======
         $this->positionService->deletePosition($id, $this->checkToken);
         return redirect()->route('positions.index')->with('success', 'Position deleted successfully!');
+>>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 }

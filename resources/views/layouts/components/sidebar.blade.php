@@ -105,8 +105,11 @@
                                     <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Dishes') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.DishesCategory') </a>
+                                    <a href="{{ route('dashboard.dish-categories.index') }}" class="side-menu__item">
+                                        @lang('sidebar.DishesCategory')
+                                    </a>
                                 </li>
+
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Recipes') </a>
                                 </li>
