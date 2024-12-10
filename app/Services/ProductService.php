@@ -151,20 +151,11 @@ class ProductService
         $product->sku = $request->sku;
         $product->barcode = $request->barcode;
         $product->is_have_expired = $request->is_have_expired;
-<<<<<<< HEAD
-        $product->expiry_date = $request->expiry_date ?? null;
-=======
->>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
         $product->is_remind = $request->is_remind;
         $product->main_unit_id = $request->main_unit_id;
         $product->currency_code = $request->currency_code;
         $product->category_id = $request->category_id;
-<<<<<<< HEAD
-        $product->price =$request->price;
-        $product->created_by =13;
-=======
         $product->created_by = Auth::guard('admin')->user()->id;
->>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
         $product->save();
 
         // Save product limits
