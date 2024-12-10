@@ -86,7 +86,7 @@ class EmployeeService
         }
         $user = User::findOrFail($id);
         $user->name = isset($data['first_name']) && isset($data['last_name']) ? $data['first_name'] . ' ' . $data['last_name'] : $user->name;
-        $user->email = $data['email'] ?? $user->email;
+        $user->email = isset($data['email']) ? $data['email'] : $user->email;
         $user->phone = $data['phone'] ?? $user->phone;
         $user->flag = 'employee';
         $user->save();
@@ -96,17 +96,17 @@ class EmployeeService
         $employee->user_id = $user->id;
         $employee->first_name = $data['first_name'];
         $employee->last_name = $data['last_name'];
-        $employee->email = $data['email'] ?? $employee->email;
-        $employee->phone_number = $data['phone'];
-        $employee->gender = $data['gender'];
-        $employee->birth_date = $data['birth_date'];
-        $employee->national_id = $data['national_id'];
-        $employee->passport_number = $data['passport_number'];
-        $employee->marital_status = $data['marital_status'];
-        $employee->blood_group = $data['blood_group'];
-        $employee->emergency_contact_name = $data['emergency_contact_name'];
-        $employee->emergency_contact_relationship = $data['emergency_contact_relationship'];
-        $employee->emergency_contact_phone = $data['emergency_contact_phone'];
+        $employee->email = $data['email'];
+        $employee->phone_number = $data['phone'] ?? $employee->phone_number;
+        $employee->gender = $data['gender'] ?? $employee->gender;
+        $employee->birth_date = $data['birth_date'] ?? $employee->birth_date;
+        $employee->national_id = $data['national_id'] ?? $employee->national_id;
+        $employee->passport_number = $data['passport_number'] ?? $employee->passport_number;
+        $employee->marital_status = $data['marital_status'] ?? $employee->marital_status;
+        $employee->blood_group = $data['blood_group'] ?? $employee->blood_goup;
+        $employee->emergency_contact_name = $data['emergency_contact_name'] ?? $employee->emergency_contact_name;
+        $employee->emergency_contact_relationship = $data['emergency_contact_relationship'] ?? $employee->emergency_contact_relationship;
+        $employee->emergency_contact_phone = $data['emergency_contact_phone'] ?? $employee->emergency_contact_phone;
         $employee->address_en = $data['address_en'];
         $employee->address_ar = $data['address_ar'];
         $employee->nationality_id = $data['nationality_id'];

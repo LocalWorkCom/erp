@@ -104,7 +104,7 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        $user = $employee->user_id;
+        $user = User::find($employee->user_id);
 
         $validatedData = $request->validate([
             'employee_code' => 'nullable|string',
@@ -113,12 +113,11 @@ class EmployeeController extends Controller
             'email' => [
                 'nullable',
                 'email',
-                Rule::unique('employees')->ignore($employee->id),
-                $user ? Rule::unique('users')->ignore($user) : null,
+                $user ? Rule::unique('users')->ignore($user->id) : null,
             ],
             // 'password' => 'nullable|string',
             'phone' => 'nullable|string',
-            'gender' => 'nullable|string',
+            'gender' => 'nullable',
             'birth_date' => 'nullable|date',
             'national_id' => 'nullable|string',
             'passport_number' => 'nullable|string',
@@ -144,10 +143,6 @@ class EmployeeController extends Controller
             'is_biometric' => 'nullable|boolean',
             'biometric_id' => 'nullable|string',
         ]);
-
-        if (isset($validatedData['email'])) {
-            User::where('id', $user)->update(['email' => $validatedData['email']]);
-        }
 
         $this->employeeService->updateEmployee($validatedData, $id, $this->checkToken);
         return redirect()->route('employees.list')->with('success', 'Employee updated successfully!');
