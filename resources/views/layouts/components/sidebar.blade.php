@@ -338,7 +338,7 @@
 
                         <!-- Start::slide  Invoices-->
                         <li class="slide">
-                            <a href="{{ url('orders') }}" class="side-menu__item">
+                            <a href="{{ url('dashboard/orders') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>

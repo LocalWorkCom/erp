@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,12 +120,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [SizeController::class, 'delete'])->name('size.delete');
     });
 
-    Route::group(['prefix' => 'country'], function () {
-        Route::any('/add', [CountryController::class, 'store']);
-        Route::any('/get', [CountryController::class, 'show']);
-        Route::any('/edit', [CountryController::class, 'update']);
-        Route::any('/delete', [CountryController::class, 'destroy']);
-    });
+
 
     Route::get('/branches', [BranchController::class, 'index'])->name('branches.list');
     Route::group(['prefix' => 'branch'], function () {
@@ -211,4 +207,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
     });
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
+    Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
+
 });
