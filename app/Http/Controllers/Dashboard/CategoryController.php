@@ -31,7 +31,7 @@ class CategoryController extends Controller
         $response = $this->categoryService->index($request, $this->checkToken);
 
         $responseData = $response->original;
-
+ 
         $categories = $responseData['data'];
 
         return view('dashboard.category.list', compact('categories'));

@@ -101,7 +101,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 
     public function edit(Request $request, $id)
@@ -192,7 +192,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 
     public function delete(Request $request, $id)
@@ -202,6 +202,6 @@ class ProductController extends Controller
         //        dd($response);
         $responseData = $response->original;
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 }
