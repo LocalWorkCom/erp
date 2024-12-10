@@ -212,7 +212,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [SliderController::class, 'show'])->name('slider.show');
         Route::get('edit/{id}', [SliderController::class, 'edit'])->name('slider.edit');
         Route::put('update/{id}', [SliderController::class, 'update'])->name('slider.update');
-        Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete');
+        Route::delete('delete/{id}', [SliderController::class, 'destroy'])->name('slider.delete');
     });
 
     //HR

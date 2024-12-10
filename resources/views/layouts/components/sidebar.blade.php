@@ -584,6 +584,14 @@
                         <span class="side-menu__label">@lang('sidebar.Logo')</span>
                     </a>
                 </li>
+                <li class="slide">
+                    <a href="{{ route('sliders.list') }}" class="side-menu__item">
+                        <span class=" side-menu__icon">
+                            <i class='bx bx-desktop'></i>
+                        </span>
+                        <span class="side-menu__label">@lang('sidebar.Slider')</span>
+                    </a>
+                </li>
 {{--                <!-- Start::slide -->--}}
 {{--                <li class="slide has-sub">--}}
 {{--                    <a href="javascript:void(0);" class="side-menu__item">--}}
