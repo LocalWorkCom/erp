@@ -60,20 +60,20 @@
                                 </div>
 
                                 
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                     <label class="form-label">@lang('product.Images')</label>
                                     @if ($product->images->count())
                                         <div class="gallery">
                                             @foreach ($product->images as $image)
                                                 <div class="mb-3">
-                                                    <img src="{{ asset('images/products/gallery/' . $image->image) }}" alt="Product Image" width="150" height="150">
+                                                    <img src="{{ asset( $image->image) }}" alt="Product Image" width="150" height="150">
                                                 </div>
                                             @endforeach
                                         </div>
                                     @else
                                         <p class="form-text">@lang('category.none')</p>
                                     @endif
-                                </div> --}}
+                                </div>
                                 
                                 {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Price')</label>

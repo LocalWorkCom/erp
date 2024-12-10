@@ -218,7 +218,7 @@
                                     </div>
 
 
-                                    {{-- <div class="col-xl-4 mx-auto">
+                                  <div class="col-xl-4 mx-auto">
                                         <!-- Show current gallery images -->
                                         <div class="mb-3">
                                             @foreach ($product->images as $image)
@@ -235,7 +235,7 @@
                                         <label for="images" class="form-label">@lang('product.Images')</label>
                                         <input type="file" name="images[]" id="images" class="form-control" multiple>
                                         <div class="invalid-feedback">@lang('validation.EnterImage')</div>
-                                    </div> --}}
+                                    </div> 
 
                                     {{-- <div class="col-xl-4">
                                         <label for="expiry_date" class="form-label">@lang('product.ExpiryDate')</label>
