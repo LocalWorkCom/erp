@@ -21,7 +21,17 @@ class DishCategoryController extends Controller
 
         return view('dashboard.dish_categories.index', compact('categories'));
     }
-
+    public function show($id)
+    {
+        try {
+            $category = $this->dishCategoryService->show($id);
+    
+            return view('dashboard.dish_categories.show', compact('category'));
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.dish-categories.index')->with('error', 'Failed to load the category details.');
+        }
+    }
+    
     public function create()
     {
         $categories = $this->dishCategoryService->index(); // Fetch parent categories
