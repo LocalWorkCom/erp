@@ -30,7 +30,7 @@
                 <!-- End::slide__category -->
 
                 <li class="slide">
-                    <a href="{{ route('home') }}" class="side-menu__item">
+                    <a href="{{ route('dashboard.home') }}" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-desktop'></i>
                         </span>
@@ -137,7 +137,7 @@
                         </li>
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a href="{{ url('Employee') }}" class="side-menu__item">
+                            <a href="{{ route('employees.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -146,7 +146,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ route('positions.list') }}" class="side-menu__item">
+                            <a href="{{ route('positions.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -535,7 +535,7 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('countries') }}" class="side-menu__item">@lang('sidebar.countries') </a>
+                            <a href="{{ route('countries.list') }}" class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>

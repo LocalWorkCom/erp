@@ -58,10 +58,27 @@
                                         <p class="form-text">@lang('category.none')</p>
                                     @endif
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+
+                                
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                    <label class="form-label">@lang('product.Images')</label>
+                                    @if ($product->images->count())
+                                        <div class="gallery">
+                                            @foreach ($product->images as $image)
+                                                <div class="mb-3">
+                                                    <img src="{{ asset( $image->image) }}" alt="Product Image" width="150" height="150">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="form-text">@lang('category.none')</p>
+                                    @endif
+                                </div>
+                                
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Price')</label>
                                     <p class="form-text">{{ $product->price }}</p>
-                                </div>
+                                </div> --}}
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Currency')</label>
                                     <p class="form-text">{{ $Currencies[$product->currency_code] ?? __('category.none') }}</p>
@@ -99,10 +116,10 @@
                                     <label class="form-label">@lang('product.Type')</label>
                                     <p class="form-text">{{ $product->type == 'raw' ? __('product.Raw') : __('product.Complete') }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.ExpiryDate')</label>
                                     <p class="form-text">{{ $product->expiry_date ?? __('category.none') }}</p>
-                                </div>
+                                </div> --}}
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.IsHaveExpired')</label>
                                     <p class="form-text">{{ $product->is_have_expired ? __('category.yes') : __('category.no') }}</p>

@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('client.clients')</h4>
+        <h4 class="fw-medium mb-0">@lang('employee.employees')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('client.clients')</li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('employee.employees')</li>
                 </ol>
             </nav>
         </div>
@@ -31,11 +31,11 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                @lang('client.clients')</div>
+                                @lang('employee.employees')</div>
 
-                            <a href="{{ route('client.create') }}" type="button" class="btn btn-primary label-btn">
+                            <a href="{{ route('employee.create') }}" type="button" class="btn btn-primary label-btn">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('client.addClient')
+                                @lang('employee.addEmployee')
                             </a>
                         </div>
                         <div class="card-body">
@@ -56,68 +56,77 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('client.ID')</th>
-                                        <th scope="col">@lang('client.name')</th>
-                                        <th scope="col">@lang('client.email')</th>
-                                        <th scope="col">@lang('client.country')</th>
-                                        <th scope="col">@lang('client.phone')</th>
-                                        <th scope="col">@lang('client.img')</th>
-                                        <th scope="col">@lang('client.dob')</th>
-                                        <th scope="col">@lang('client.is_active')</th>
-                                        <th scope="col">@lang('client.actions')</th>
+                                        <th scope="col">@lang('employee.ID')</th>
+                                        <th scope="col">@lang('employee.name')</th>
+                                        <th scope="col">@lang('employee.code')</th>
+                                        <th scope="col">@lang('employee.email')</th>
+                                        <th scope="col">@lang('employee.phone')</th>
+                                        <th scope="col">@lang('employee.country')</th>
+                                        <th scope="col">@lang('employee.gender')</th>
+                                        <th scope="col">@lang('employee.dob')</th>
+                                        <th scope="col">@lang('employee.national_id')</th>
+                                        <th scope="col">@lang('employee.nationality')</th>
+                                        <th scope="col">@lang('employee.department')</th>
+                                        <th scope="col">@lang('employee.position')</th>
+                                        <th scope="col">@lang('employee.supervisor')</th>
+                                        <th scope="col">@lang('employee.salary')</th>
+                                        <th scope="col">@lang('employee.actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @foreach ($employees as $employee)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->country->name_ar . ' | ' . $user->country->name_en }}</td>
-                                            <td>{{ $user->phone }}</td>
+                                            <td>{{ $employee->first_name . $employee->last_name }}</td>
+                                            <td>{{ $employee->employee_code }}</td>
+                                            <td>{{ $employee->email }}</td>
+                                            <td>{{ $employee->phone_number ?? '-----' }}</td>
                                             <td>
-                                                @if ($user->clientDetails && $user->clientDetails->image)
-                                                    <img src="{{ asset($user->clientDetails->image) }}" alt="img"
-                                                        width="100" height="100">
+                                                @if ($employee->country_id)
+                                                    {{ $employee->country->name_ar . ' | ' . $employee->country->name_en }}
                                                 @else
-                                                    ---
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($user->clientDetails && $user->clientDetails->date_of_birth)
-                                                    {{ $user->clientDetails->date_of_birth }}
-                                                @else
-                                                    ---
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($user->clientDetails && $user->clientDetails->is_active)
-                                                    {{ $user->clientDetails->is_active ? __('client.yes') : __('client.no') }}
-                                                @else
-                                                    ---
+                                                    {{ '-----' }}
                                                 @endif
                                             </td>
 
+                                            <td>{{ $employee->gender }}</td>
+                                            <td>{{ $employee->birth_date }}</td>
+                                            <td>{{ $employee->national_id }}</td>
+                                            <td>{{ $employee->nationality->name_ar . ' | ' . $employee->nationality->name_en }}
+                                            </td>
+                                            <td>{{ $employee->department->name_ar . ' | ' . $employee->department->name_en }}
+                                            </td>
+                                            <td>{{ $employee->position->name_ar . ' | ' . $employee->position->name_en }}
+                                            </td>
+                                            <td>
+                                                @if ($employee->supervisor_id)
+                                                    {{ $employee->supervisor->employee_code }}
+                                                @else
+                                                    {{ '-----' }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $employee->salary }}</td>
                                             <td>
                                                 <!-- Show Button -->
-                                                <a href="{{ route('client.show', $user->id) }}"
-                                                    class="btn btn-info-light btn-wave show-client">
-                                                    @lang('client.show') <i class="ri-eye-line"></i>
+                                                <a href="{{ route('employee.show', $employee->id) }}"
+                                                    class="btn btn-info-light btn-wave">
+                                                    @lang('employee.show') <i class="ri-eye-line"></i>
                                                 </a>
 
                                                 <!-- Edit Button -->
-                                                <a href="{{ route('client.edit', $user->id) }}"
+                                                <a href="{{ route('employee.edit', $employee->id) }}"
                                                     class="btn btn-orange-light btn-wave">
-                                                    @lang('client.edit') <i class="ri-edit-line"></i>
+                                                    @lang('employee.edit') <i class="ri-edit-line"></i>
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('client.delete', $user->id) }}"
-                                                    method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline"
+                                                    action="{{ route('employee.delete', $employee->id) }}" method="POST"
+                                                    onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
-                                                        @lang('client.delete') <i class="ri-delete-bin-line"></i>
+                                                        @lang('employee.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
                                             </td>
