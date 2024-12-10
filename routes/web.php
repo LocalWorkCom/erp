@@ -94,6 +94,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
     });
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.list');
+    Route::group(['prefix' => 'brand'], function () {
+        Route::get('create', [BrandController::class, 'create'])->name('brand.create');
+        Route::post('store', [BrandController::class, 'store'])->name('brand.store');
+        Route::get('show/{id}', [BrandController::class, 'show'])->name('brand.show');
+        Route::get('edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
+        Route::put('update/{id}', [BrandController::class, 'update'])->name('brand.update');
+        Route::delete('delete/{id}', [BrandController::class, 'delete'])->name('brand.delete');
+    });
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
     Route::group(['prefix' => 'country'], function () {
         Route::post('store', [CountryController::class, 'store'])->name('country.store');
@@ -139,15 +148,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete');
     });
 
-    Route::get('/brands', [BrandController::class, 'index'])->name('brands.list');
-    Route::group(['prefix' => 'brand'], function () {
-        Route::get('create', [BrandController::class, 'create'])->name('brand.create');
-        Route::post('store', [BrandController::class, 'store'])->name('brand.store');
-        Route::get('show/{id}', [BrandController::class, 'show'])->name('brand.show');
-        Route::get('edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
-        Route::put('update/{id}', [BrandController::class, 'update'])->name('brand.update');
-        Route::delete('delete/{id}', [BrandController::class, 'delete'])->name('brand.delete');
-    });
 
     Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');
     Route::group(['prefix' => 'floor'], function () {
