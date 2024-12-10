@@ -335,7 +335,6 @@
                             </div>
 
                         </div>
-
                         <div class="card-body">
                             @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
@@ -444,7 +443,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -489,8 +487,12 @@
             button.addEventListener('click', function () {
                 // Get floor details from data attributes
                 const floorId = this.getAttribute('data-id');
-
-
+                const nameAr = this.getAttribute('data-name-ar');
+                const nameEn = this.getAttribute('data-name-en');
+                const type = this.getAttribute('data-type');
+                const smoking = this.getAttribute('data-smoking');
+                const branchId = this.getAttribute('data-branch-id');
+                const routeTemplate = this.getAttribute('data-route');
 
                 // Set form action URL dynamically
                 const updateRoute = routeTemplate.replace(':id', floorId);
