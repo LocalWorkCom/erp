@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\LogoController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
+use App\Http\Controllers\Dashboard\SliderController;
 use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\DishCategoryController;
@@ -196,29 +197,30 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [ClientController::class, 'destroy'])->name('client.delete');
     });
 
+    //website setting
     Route::get('/logos', [LogoController::class, 'index'])->name('logos.list');
     Route::group(['prefix' => 'logo'], function () {
         Route::post('store', [LogoController::class, 'store'])->name('logo.store');
         Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update');
         Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete');
+    });
 
-        //HR
-        Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
-        Route::group(['prefix' => 'position'], function () {
-            Route::post('store', [PositionController::class, 'store'])->name('position.store');
-            Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
-            Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
-        });
+    Route::get('/sliders', [SliderController::class, 'index'])->name('sliders.list');
+    Route::group(['prefix' => 'slider'], function () {
+        Route::get('create', [SliderController::class, 'create'])->name('slider.create');
+        Route::post('store', [SliderController::class, 'store'])->name('slider.store');
+        Route::get('show/{id}', [SliderController::class, 'show'])->name('slider.show');
+        Route::get('edit/{id}', [SliderController::class, 'edit'])->name('slider.edit');
+        Route::put('update/{id}', [SliderController::class, 'update'])->name('slider.update');
+        Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete');
+    });
 
-        Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
-        Route::group(['prefix' => 'employee'], function () {
-            Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
-            Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
-            Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
-            Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
-            Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
-            Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
-        });
+    //HR
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+    Route::group(['prefix' => 'position'], function () {
+        Route::post('store', [PositionController::class, 'store'])->name('position.store');
+        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+        Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
     });
 
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
@@ -230,6 +232,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
     });
+
     Route::prefix('dish-categories')->group(function () {
         Route::get('/', [DishCategoryController::class, 'index'])->name('dashboard.dish-categories.index');
         Route::get('/create', [DishCategoryController::class, 'create'])->name('dashboard.dish-categories.create');

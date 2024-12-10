@@ -11,9 +11,16 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('product.show')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">
+                            @lang('product.Products')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('product.show', ['id' => $id]) }}">@lang('product.show')</a>
+                    </li>
                 </ol>
+                
             </nav>
         </div>
     </div>
@@ -46,6 +53,62 @@
                                     <label class="form-label">@lang('product.EnglishDesc')</label>
                                     <p class="form-text">{{ $product->description_en == null ? __('category.none') :  $product->description_en }}</p>
                                 </div>
+                               
+                                
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Price')</label>
+                                    <p class="form-text">{{ $product->price }}</p>
+                                </div> --}}
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Currency')</label>
+                                    <p class="form-text">{{ $Currencies[$product->currency_code] ?? __('category.none') }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Barcode')</label>
+                                    <p class="form-text">{{ $product->barcode }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Unit')</label>
+                                    <p class="form-text">{{ $product->mainUnit->name_ar ?? __('category.none') }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Brand')</label>
+                                    <p class="form-text">{{ $product->brand->name_ar . ' | ' . $product->brand->name_en ?? __('category.none') }}</p>
+                                </div>
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Store')</label>
+                                    @if ($product->productLimit->isNotEmpty())
+                                        <ul>
+                                            @foreach ($product->productLimit as $limit)
+                                                <li>{{ $limit->store->name_ar." | ".$limit->store->name_en }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="form-text">@lang('category.none')</p>
+                                    @endif
+                                </div> --}}
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Category')</label>
+                                    <p class="form-text">{{ $product->category->name_ar . ' | ' . $product->category->name_en ?? __('category.none') }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Type')</label>
+                                    <p class="form-text">{{ $product->type == 'raw' ? __('product.Raw') : __('product.Complete') }}</p>
+                                </div>
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.ExpiryDate')</label>
+                                    <p class="form-text">{{ $product->expiry_date ?? __('category.none') }}</p>
+                                </div> --}}
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.IsHaveExpired')</label>
+                                    <p class="form-text">{{ $product->is_have_expired ? __('category.yes') : __('category.no') }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('product.Remind')</label>
+                                    <p class="form-text">{{ $product->is_remind ? __('category.yes') : __('category.no') }}</p>
+                                </div>
+
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                     <label class="form-label">@lang('product.Image')</label>
                                     @if ($product->image)
@@ -73,60 +136,6 @@
                                     @else
                                         <p class="form-text">@lang('category.none')</p>
                                     @endif
-                                </div>
-                                
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Price')</label>
-                                    <p class="form-text">{{ $product->price }}</p>
-                                </div> --}}
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Currency')</label>
-                                    <p class="form-text">{{ $Currencies[$product->currency_code] ?? __('category.none') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Barcode')</label>
-                                    <p class="form-text">{{ $product->barcode }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Unit')</label>
-                                    <p class="form-text">{{ $product->mainUnit->name_ar ?? __('category.none') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Brand')</label>
-                                    <p class="form-text">{{ $product->brand->name_ar . ' | ' . $product->brand->name_en ?? __('category.none') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Store')</label>
-                                    @if ($product->productLimit->isNotEmpty())
-                                        <ul>
-                                            @foreach ($product->productLimit as $limit)
-                                                <li>{{ $limit->store->name_ar." | ".$limit->store->name_en }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="form-text">@lang('category.none')</p>
-                                    @endif
-                                </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Category')</label>
-                                    <p class="form-text">{{ $product->category->name_ar . ' | ' . $product->category->name_en ?? __('category.none') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Type')</label>
-                                    <p class="form-text">{{ $product->type == 'raw' ? __('product.Raw') : __('product.Complete') }}</p>
-                                </div>
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.ExpiryDate')</label>
-                                    <p class="form-text">{{ $product->expiry_date ?? __('category.none') }}</p>
-                                </div> --}}
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.IsHaveExpired')</label>
-                                    <p class="form-text">{{ $product->is_have_expired ? __('category.yes') : __('category.no') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('product.Remind')</label>
-                                    <p class="form-text">{{ $product->is_remind ? __('category.yes') : __('category.no') }}</p>
                                 </div>
                             </div>
                         </div>

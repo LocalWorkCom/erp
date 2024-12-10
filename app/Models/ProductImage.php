@@ -12,6 +12,7 @@ class ProductImage extends Model
 
     protected $table = 'product_images';
     protected $appends = ['main'];
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'product_id',
