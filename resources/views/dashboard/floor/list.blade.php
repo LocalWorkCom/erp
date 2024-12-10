@@ -20,6 +20,7 @@
             </nav>
         </div>
     </div>
+
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Start:: row-4 -->
@@ -38,6 +39,7 @@
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('floor.AddFloor')
                             </button>
+
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
@@ -167,6 +169,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -189,7 +192,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <div class="col-xl-12 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-branch" class="form-label">@lang('floor.Branch')</label>
                                                         <select id="edit-branch" class="form-select" name="branch_id" required>
                                                             @foreach($branches as $branch)
@@ -231,6 +234,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

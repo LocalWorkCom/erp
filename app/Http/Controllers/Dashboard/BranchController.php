@@ -81,13 +81,14 @@ class BranchController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('branches')->with('message',$message);
+        return redirect()->route('branches.list')->with('message',$message);
     }
+    
     public function delete(Request $request, $id)
     {
         $response = $this->branchService->destroy($request, $id);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('branches')->with('message',$message);
+        return redirect()->route('branches.list')->with('message',$message);
     }
 }

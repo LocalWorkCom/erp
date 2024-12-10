@@ -57,11 +57,14 @@
                                         <tr>
                                             <td>{{ $category->id }}</td>
                                             <td>
-                                                <img src="{{ asset($category->image_path) }}" alt="Category Image" width="100" height="100">
-                                            </td>
+                                            <img src="{{ asset($category->image_path) }}" alt="Category Image" width="100" height="100">                                            </td>
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>
+                                                  <!-- Show -->
+                                                <a href="{{ route('dashboard.dish-categories.show', $category->id) }}" class="btn btn-info-light">
+                                                    @lang('dishes.View') <i class="ri-eye-line"></i>
+                                                </a>
                                                 <!-- Edit -->
                                                 <a href="{{ route('dashboard.dish-categories.edit', $category->id) }}" class="btn btn-orange-light">
                                                     @lang('dishes.Edit') <i class="ri-edit-line"></i>

@@ -424,6 +424,8 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update'); 
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete'); 
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore'); 
+        Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
+
     });
     
 
