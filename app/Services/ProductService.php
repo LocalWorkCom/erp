@@ -55,11 +55,6 @@ class ProductService
             return RespondWithBadRequest($this->lang, 5);
         }
 
-        // foreach ($products as $product) {
-        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
-        //     $product['limits'] = $product_limits;
-        // }
-
         if (!$checkToken) {
             $products = $products->makeVisible(['name_en', 'name_ar', 'main_image', 'description_ar', 'description_en']);
         }
@@ -74,12 +69,6 @@ class ProductService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($this->lang, 5);
         }
-
-        // foreach ($products as $product) {
-        //     $product_limits = ProductLimit::where('product_id', $product->id)->get();
-        //     $product['limits'] = $product_limits;
-        // }
-
         return ResponseWithSuccessData($this->lang, $products, 1);
     }
 
@@ -122,13 +111,6 @@ class ProductService
         if (!$category) {
             return RespondWithBadRequestData($this->lang, 8);
         }
-
-        // Check if store exists
-        // $store = Store::find($request->store_id);
-        // if (!$store) {
-        //     return RespondWithBadRequestData($this->lang, 8);
-        // }
-
         // Check if brand exists
         $brand = Brand::find($request->brand_id);
         if (!$brand) {
@@ -243,18 +225,6 @@ class ProductService
             $product_limit->product_id = $product->id;
         }
 
-
-        // Handle existing images to delete
-        // $removeImageIds = $request->input('remove_image_ids', []);
-        // if (!empty($removeImageIds)) {
-        //     foreach ($removeImageIds as $imageId) {
-        //         $image = ProductImage::find($imageId);
-        //         if ($image) {
-        //             $image->delete(); // Soft delete
-        //         }
-        //     }
-        // }
-
         // Update product details
         $product->update($request->only([
             'name_ar',
@@ -270,11 +240,6 @@ class ProductService
             'currency_code',
             'category_id'
         ]));
-        // dd($product);
-
-        // Debug ProductLimit update
-        // dd($product_limit);
-
         // Update ProductLimit data
         $product_limit->min_limit = $request->min_limit;
         $product_limit->max_limit = $request->max_limit;
@@ -335,173 +300,9 @@ class ProductService
             return RespondWithBadRequest($this->lang, 9);
         }
     }
-    // public function update(Request $request, $id, $checkToken)
-    // {
-    //     // Check for token validity
-    //     if (!CheckToken() && $checkToken) {
-    //         return RespondWithBadRequest($this->lang, 5);
-    //     }
-    //     // Validate the incoming request data
-    //     $validator = Validator::make(
-    //         $request->all(),
-    //         [
-    //             'name_ar' => 'required|string',
-    //             'name_en' => 'nullable|string',
-    //             'description_ar' => 'nullable|string',
-    //             'description_en' => 'nullable|string',
-    //             'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    //             'is_have_expired' => 'required|boolean',
-    //             'type' => 'required|string|in:complete,raw',
-    //             'is_remind' => 'required|boolean',
-    //             'sku' => 'required|string',
-    //             'barcode' => 'required|string',
-    //             'main_unit_id' => 'required|integer',
-    //             'currency_code' => 'required|string',
-    //             'category_id' => 'required|integer'
-    //         ]
-    //     );
-
-    //     // Handle validation failure
-    //     if ($validator->fails()) {
-    //         return RespondWithBadRequestWithData($validator->errors());
-    //     }
-
-    //     // Retrieve the product by its ID
-    //     $product = Product::find($id);
-    //     if (!$product) {
-    //         return RespondWithBadRequestData($this->lang, 8);
-    //     }
-
-
-    //     // Retrieve the ProductLimit
-    //     $product_limit = ProductLimit::where('product_id', $product->id)->first();
-    //     if (!$product_limit) {
-    //         // If ProductLimit doesn't exist, create a new one
-    //         $product_limit = new ProductLimit();
-    //         $product_limit->product_id = $product->id;
-    //     }
-
-
-    //     // Update product attributes
-    //     $product->update($request->only([
-    //         'name_ar',
-    //         'name_en',
-    //         'description_ar',
-    //         'description_en',
-    //         'type',
-    //         'is_have_expired',
-    //         'is_remind',
-    //         'sku',
-    //         'barcode',
-    //         'main_unit_id',
-    //         'currency_code',
-    //         'category_id'
-    //     ]));
-    //     // dd($product);
-
-    //     // Debug ProductLimit update
-    //     // dd($product_limit);
-
-    //     // Update ProductLimit data
-    //     $product_limit->min_limit = $request->min_limit;
-    //     $product_limit->max_limit = $request->max_limit;
-    //     $product_limit->store_id = $request->store_id;
-
-    //     $product_limit->save();
-
-    //     // Handle image upload (main image)
-    //     if ($request->hasFile('main_image')) {
-    //         $main_image = $request->file('main_image');
-    //         DeleteFile('images/products', $product->main_image);
-    //         UploadFile('images/products', 'main_image', $product, $main_image);
-    //     }
-
-
-    //     if ($request->hasFile('images')) {
-    //         $images = $request->file('images');
-    //         $validator = Validator::make($request->all(), [
-    //             'images.*' => 'mimes:jpeg,jpg,png,gif,svg|max:2048'
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return RespondWithBadRequestWithData($validator->errors());
-    //         }
-
-
-    //         foreach ($images as $image) {
-    //             if ($image->isValid()) {
-    //                 $product_image = new ProductImage();
-    //                 $product_image->product_id = $product->id;
-    //                 $product_image->created_by = Auth::guard('admin')->user()->id;
-
-    //                 // Save the file name in the 'image' column
-    //                 $fileName = UploadFile('images/products/gallery', 'image', $product_image, $image);
-    //                 $product_image->image = $fileName;
-    //                 $product_image->save();
-    //             }
-    //         }
-
-
-    //         // foreach ($images as $image) {
-    //         //     if ($image->isValid()) {
-    //         //         $product_image = new ProductImage();
-    //         //         $product_image->product_id = $product->id;
-    //         //         // $product_image->created_by = Auth::guard('api')->user()->id;
-    //         //         $product_image->created_by = 13;
-
-    //         //         $product_image->save();
-    //         //         DeleteFile('images/products/gallery', 'image', $product_image->image);
-    //         //         UploadFile('images/products/gallery', 'image', $product_image, $image);
-    //         //     }
-    //         // }
-    //     }
-
-    //     // Check if the data was successfully updated
-    //     if ($product->wasChanged() || $product_limit->wasChanged()) {
-    //         return RespondWithSuccessRequest($this->lang, 1);
-    //     } else {
-    //         return RespondWithBadRequest($this->lang, 11);
-    //     }
-    //     // Check if the data hasn't changed
-    //     if ($this->isProductUnchanged($product, $request)) {
-    //         return RespondWithBadRequestData($this->lang, 10);
-    //     }
-
-    //     // Validate product name uniqueness
-    //     if (CheckExistColumnValue('products', 'name_ar', $request->name_ar)) {
-    //         return RespondWithBadRequest($this->lang, 9);
-    //     }
-    // }
-
-
-    // public function DeleteExistProductImage(Request $request, $checkToken)
-    // {
-    //     // Retrieve the IDs of the images to be removed
-    //     $removeImageIds = $request->input('remove_image_ids', []);
-
-    //     foreach ($removeImageIds as $id) {
-    //         // Find the image by ID
-    //         $image = ProductImage::find($id);
-
-    //         if ($image) {
-    //             // Soft delete: update 'deleted_at' field
-    //             $image->delete(); // This will set 'deleted_at' to the current timestamp if the model uses SoftDeletes.
-    //         }
-    //     }
-
-    //     // Return response or perform other logic as needed
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'message' => 'Images have been marked as deleted.',
-    //     ]);
-    // }
 
     public function delete(Request $request, $id, $checkToken, $oneProductDelete)
     {
-        //        if (!CheckToken() && $checkToken) {
-        //            return RespondWithBadRequest($this->lang, 5);
-        //        }
-        //        dd($id);
 
         $product = Product::find($id);
         if (!$product) {
