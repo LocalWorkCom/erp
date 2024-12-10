@@ -157,6 +157,7 @@ return [
     'EnterTableNumber' => 'يجب اختيار رقم طاولة',
     'EnterDepartment' => 'يجب اختيار قسم',
     'EnterCapacity' => 'يجب اختيار سعة',
+    'EnterEmployee' => 'يجب اختيار الموظف',
     'EnterImage' => 'يجب اختيار صورة',
     'EnterUnit' => 'يجب اختيار وحدة',
     'EnterCurrency' => 'يجب اختيار عملة',

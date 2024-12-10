@@ -92,6 +92,7 @@ return [
     'EnterTableNumber' => 'Please choose a table number',
     'EnterDepartment' => 'Please choose a department',
     'EnterCapacity' => 'Please choose a capacity',
+    'EnterEmployee' => 'Please choose a employee',
     'EnterImage' => 'Please choose an image',
     'EnterUnit' => 'Please choose a unit',
     'EnterCurrency' => 'Please choose a currency',
