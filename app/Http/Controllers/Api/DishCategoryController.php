@@ -54,6 +54,8 @@ class DishCategoryController extends Controller
                 'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
             ]);
 
+
+            
             $categoryData = [
                 'name_ar' => $request->name_ar,
                 'name_en' => $request->name_en,

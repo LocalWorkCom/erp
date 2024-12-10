@@ -51,7 +51,7 @@ class ColorController extends Controller
             $validator = Validator::make($request->all(), [
                 "name_ar" => "required",
                 "name_en" => "required",
-                'hexa_code' => 'required',
+                'hexa_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
 
             ]);
 

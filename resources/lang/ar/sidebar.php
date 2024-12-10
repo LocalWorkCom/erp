@@ -63,5 +63,6 @@ return[
     'invoiceSetting' => 'اعدادات الفواتير',
     'leaveNationals' => 'leaveNationals',
     'leaveSetting' => 'leaveSetting',
+    'website' => 'الموقع',
 
 ];

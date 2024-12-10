@@ -39,7 +39,7 @@
                 </li>
                 <!-- End::slide -->
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.client_side')</span></li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.client_side')</span></li> --}}
                 <!-- End::slide__category -->
                 <li class="slide">
                     <a href="{{ route('client.index') }}" class="side-menu__item">
@@ -76,17 +76,13 @@
                                             <a href="{{ route('floors.list') }}"
                                                 class="side-menu__item">@lang('sidebar.Floors') </a>
                                         </li>
-                                        <li class="slide">
-                                            <a href="{{ route('floorPartitions.list') }}"
-                                                class="side-menu__item">@lang('sidebar.FloorPartition')</a>
-                                        </li>
                                         <li class="slide has-sub">
-                                            <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Positions')
+                                            <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.FloorPartition')
                                                 <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                             <ul class="slide-menu child3">
                                                 <li class="slide">
-                                                    <a href="{{ route('positions.list') }}"
-                                                        class="side-menu__item">@lang('sidebar.Positions') </a>
+                                                    <a href="{{ route('floorPartitions.list') }}"
+                                                        class="side-menu__item">@lang('sidebar.FloorPartition') </a>
                                                 </li>
                                                 <li class="slide">
                                                     <a href="{{ route('tables.list') }}"
@@ -122,7 +118,7 @@
                 <!-- End::slide -->
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.HR SYSTEM')</span></li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.HR SYSTEM')</span></li> --}}
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
@@ -147,7 +143,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Positions') }}" class="side-menu__item">
+                            <a href="{{ route('positions.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -266,7 +262,7 @@
                 </li>
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Store') </span></li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Store') </span></li> --}}
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
@@ -322,7 +318,7 @@
                 </li>
 
 
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Invoices') </span>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Invoices') </span> --}}
                 </li>
 
                 <!-- End::slide__category -->
@@ -378,8 +374,8 @@
                         </li>
                     </ul>
                 </li>
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Purchase') </span>
-                </li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Purchase') </span> --}}
+                {{-- </li> --}}
 
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
@@ -415,7 +411,7 @@
                     </ul>
                 </li>
                 <!-- End::Purchase -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Offers/Discounts') </span></li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Offers/Discounts') </span></li> --}}
 
 
                 <!-- End::slide__category -->
@@ -483,7 +479,7 @@
                     </ul>
                 </li>
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Transactions') </span></li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Transactions') </span></li> --}}
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
@@ -518,8 +514,8 @@
                 </li>
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">@lang('sidebar.Setting') </span>
-                </li>
+                {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Setting') </span>
+                </li> --}}
                 <!-- End::slide__category -->
 
                 <!-- Start::slide -->
@@ -572,6 +568,8 @@
                     </ul>
                 </li>
                 <!-- End::slide -->
+                <li class="slide__category"><span class="category-name">@lang('sidebar.website') </span>
+                </li>
             </ul>
             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
                     width="24" height="24" viewBox="0 0 24 24">
