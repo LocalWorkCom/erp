@@ -60,9 +60,8 @@
                                         <th scope="col">@lang('product.Type')</th>
                                         <th scope="col">@lang('product.ArabicCategory')</th>
                                         <th scope="col">@lang('product.EnglishCategory')</th>
-                                        <th scope="col">@lang('product.Sku')</th>
                                         <th scope="col">@lang('product.Barcode')</th>
-                                        <th scope="col">@lang('product.Code')</th>
+                                        <th scope="col">@lang('product.Sku')</th>
                                         <th scope="col">@lang('product.IsHaveExpired')</th>
                                         <th scope="col">@lang('category.Actions')</th>
                                     </tr>
@@ -80,9 +79,8 @@
                                             <td>@lang('product.' . ucfirst($product->type))</td>
                                             <td>{{ $product->Category->name_en }}</td>
                                             <td>{{ $product->Category->name_ar }}</td>
-                                            <td>{{ $product->Sku }}</td>
                                             <td>{{ $product->barcode }}</td>
-                                            <td>{{ $product->code }}</td>
+                                            <td>{{ $product->sku }}</td>
                                             @php
                                                 $translationKey = $product->is_have_expired
                                                     ? 'category.yes'

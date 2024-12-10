@@ -30,7 +30,7 @@
                 <!-- End::slide__category -->
 
                 <li class="slide">
-                    <a href="{{ route('home') }}" class="side-menu__item">
+                    <a href="{{ route('dashboard.home') }}" class="side-menu__item">
                         <span class=" side-menu__icon">
                             <i class='bx bx-desktop'></i>
                         </span>
@@ -105,8 +105,11 @@
                                     <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Dishes') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.DishesCategory') </a>
+                                    <a href="{{ route('dashboard.dish-categories.index') }}" class="side-menu__item">
+                                        @lang('sidebar.DishesCategory')
+                                    </a>
                                 </li>
+
                                 <li class="slide">
                                     <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Recipes') </a>
                                 </li>
@@ -134,7 +137,7 @@
                         </li>
                         <!-- Start::slide -->
                         <li class="slide">
-                            <a href="{{ url('Employee') }}" class="side-menu__item">
+                            <a href="{{ route('employees.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -143,7 +146,7 @@
                         </li>
 
                         <li class="slide">
-                            <a href="{{ url('Positions') }}" class="side-menu__item">
+                            <a href="{{ route('positions.index') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
                                     <i class='bx bx-desktop'></i>
                                 </span>
@@ -319,7 +322,7 @@
 
 
                 {{-- <li class="slide__category"><span class="category-name">@lang('sidebar.Invoices') </span> --}}
-                </li>
+{{--                </li>--}}
 
                 <!-- End::slide__category -->
                 <li class="slide has-sub">
@@ -532,7 +535,7 @@
                             <a href="javascript:void(0)">@lang('sidebar.Setting') </a>
                         </li>
                         <li class="slide">
-                            <a href="{{ url('countries') }}" class="side-menu__item">@lang('sidebar.countries') </a>
+                            <a href="{{ route('countries.list') }}" class="side-menu__item">@lang('sidebar.countries') </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
@@ -568,8 +571,70 @@
                     </ul>
                 </li>
                 <!-- End::slide -->
+
+
+                <!-- website -->
                 <li class="slide__category"><span class="category-name">@lang('sidebar.website') </span>
                 </li>
+                <li class="slide">
+                    <a href="{{ route('logos.list') }}" class="side-menu__item">
+                        <span class=" side-menu__icon">
+                            <i class='bx bx-desktop'></i>
+                        </span>
+                        <span class="side-menu__label">@lang('sidebar.Logo')</span>
+                    </a>
+                </li>
+{{--                <!-- Start::slide -->--}}
+{{--                <li class="slide has-sub">--}}
+{{--                    <a href="javascript:void(0);" class="side-menu__item">--}}
+{{--                        <span class=" side-menu__icon">--}}
+{{--                            <i class='bx bx-cube'></i>--}}
+{{--                        </span>--}}
+{{--                        <span class="side-menu__label">@lang('sidebar.Setting') </span>--}}
+{{--                        <i class="fe fe-chevron-right side-menu__angle"></i>--}}
+{{--                    </a>--}}
+{{--                    <ul class="slide-menu child1">--}}
+{{--                        <li class="slide side-menu__label1">--}}
+{{--                            <a href="javascript:void(0)">@lang('sidebar.Setting') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('countries') }}" class="side-menu__item">@lang('sidebar.countries') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ route('sizes.list') }}" class="side-menu__item">@lang('sidebar.size') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ route('units.list') }}" class="side-menu__item">@lang('sidebar.Units') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('Point_system') }}" class="side-menu__item">@lang('sidebar.Point_system') </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>--}}
+{{--                        </li>--}}
+
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('ExcusesSetting') }}" class="side-menu__item">@lang('sidebar.ExcusesSetting') </a>--}}
+{{--                        </li>--}}
+
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('invoiceSetting') }}" class="side-menu__item">@lang('sidebar.invoiceSetting') </a>--}}
+{{--                        </li>--}}
+
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('leaveSetting') }}" class="side-menu__item">@lang('sidebar.leaveSetting') </a>--}}
+{{--                        </li>--}}
+
+{{--                        <li class="slide">--}}
+{{--                            <a href="{{ url('leaveNationals') }}" class="side-menu__item">@lang('sidebar.leaveNationals') </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
+{{--                <!-- End::slide -->--}}
+
             </ul>
             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
                     width="24" height="24" viewBox="0 0 24 24">
