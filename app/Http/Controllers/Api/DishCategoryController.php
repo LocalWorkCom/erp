@@ -3,20 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
-use App\Models\DishCategory;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class DishCategoryController extends Controller
 {
+    protected $dishCategoryService;
+
+    public function __construct(DishCategoryService $dishCategoryService)
+    {
+        $this->dishCategoryService = $dishCategoryService;
+    }
+
     public function index(Request $request)
     {
         try {
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            $categories = $withTrashed ? DishCategory::withTrashed()->with(['parent', 'children'])->get() : DishCategory::with(['parent', 'children'])->get();
+            $categories = $this->dishCategoryService->index($withTrashed);
 
             return ResponseWithSuccessData($lang, $categories, 1);
         } catch (\Exception $e) {
@@ -29,7 +35,7 @@ class DishCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $category = DishCategory::withTrashed()->with(['parent', 'children'])->findOrFail($id);
+            $category = $this->dishCategoryService->show($id);
 
             return ResponseWithSuccessData($lang, $category, 1);
         } catch (\Exception $e) {
@@ -38,42 +44,45 @@ class DishCategoryController extends Controller
         }
     }
 
+    public function create(Request $request)
+    {
+        try {
+            $lang = $request->header('lang', 'ar');
+            $categories = $this->dishCategoryService->index();
+
+            return ResponseWithSuccessData($lang, ['parent_categories' => $categories], 1);
+        } catch (\Exception $e) {
+            Log::error('Error preparing data for creating dish category: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
+    public function edit(Request $request, $id)
+    {
+        try {
+            $lang = $request->header('lang', 'ar');
+            $category = $this->dishCategoryService->show($id);
+            $categories = $this->dishCategoryService->index();
+
+            return ResponseWithSuccessData($lang, ['category' => $category, 'parent_categories' => $categories], 1);
+        } catch (\Exception $e) {
+            Log::error('Error preparing data for editing dish category: ' . $e->getMessage());
+            return RespondWithBadRequestData($lang, 2);
+        }
+    }
+
     public function store(Request $request)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            $data = $request->all();
+            $data['created_by'] = auth()->id();
 
-            $request->validate([
-                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
-                'description_ar' => 'nullable|string',
-                'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'parent_id' => 'nullable|exists:dish_categories,id',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
-            ]);
-
-
-            
-            $categoryData = [
-                'name_ar' => $request->name_ar,
-                'name_en' => $request->name_en,
-                'description_ar' => $request->description_ar,
-                'description_en' => $request->description_en,
-                'parent_id' => $request->parent_id,
-                'is_active' => $request->is_active,
-                'created_by' => auth()->id(),
-            ];
-
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('dish_categories', 'public');
-                $categoryData['image_path'] = $imagePath;
-            }
-
-            $category = DishCategory::create($categoryData);
+            $category = $this->dishCategoryService->store($data, $request->file('image'));
 
             return ResponseWithSuccessData($lang, $category, 1);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return RespondWithBadRequestWithData($e->errors());
         } catch (\Exception $e) {
             Log::error('Error creating dish category: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -84,41 +93,14 @@ class DishCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            $data = $request->all();
+            $data['modified_by'] = auth()->id();
 
-            $request->validate([
-                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
-                'description_ar' => 'nullable|string',
-                'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'parent_id' => 'nullable|exists:dish_categories,id',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
-            ]);
-
-            $category = DishCategory::findOrFail($id);
-
-            $categoryData = [
-                'name_ar' => $request->name_ar,
-                'name_en' => $request->name_en,
-                'description_ar' => $request->description_ar,
-                'description_en' => $request->description_en,
-                'parent_id' => $request->parent_id,
-                'is_active' => $request->is_active,
-                'modified_by' => auth()->id(),
-            ];
-
-            if ($request->hasFile('image')) {
-                if ($category->image_path && Storage::exists($category->image_path)) {
-                    Storage::delete($category->image_path);
-                }
-                $imagePath = $request->file('image')->store('dish_categories', 'public');
-                $categoryData['image_path'] = $imagePath;
-            }
-
-            $category->update($categoryData);
+            $category = $this->dishCategoryService->update($id, $data, $request->file('image'));
 
             return ResponseWithSuccessData($lang, $category, 1);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return RespondWithBadRequestWithData($e->errors());
         } catch (\Exception $e) {
             Log::error('Error updating dish category: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -129,9 +111,8 @@ class DishCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $category = DishCategory::findOrFail($id);
-            $category->update(['deleted_by' => auth()->id()]);
-            $category->delete();
+
+            $this->dishCategoryService->destroy($id);
 
             return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
@@ -144,8 +125,7 @@ class DishCategoryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $category = DishCategory::withTrashed()->findOrFail($id);
-            $category->restore();
+            $category = $this->dishCategoryService->restore($id);
 
             return ResponseWithSuccessData($lang, $category, 1);
         } catch (\Exception $e) {
