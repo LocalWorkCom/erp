@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\LogoController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
@@ -188,5 +189,12 @@ Route::prefix('dashboard')->group(function () {
         Route::get('edit/{id}', [ClientController::class, 'edit'])->name('client.edit');
         Route::put('update/{id}', [ClientController::class, 'update'])->name('client.update');
         Route::delete('delete/{id}', [ClientController::class, 'destroy'])->name('client.delete');
+    });
+
+    Route::get('/logos', [LogoController::class, 'index'])->name('logos.list');
+    Route::group(['prefix' => 'logo'], function () {
+        Route::post('store', [LogoController::class, 'store'])->name('logo.store');
+        Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update');
+        Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete');
     });
 });
