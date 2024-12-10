@@ -65,5 +65,6 @@ return[
     'leaveSetting' => 'leaveSetting',
     'website' => 'الموقع',
     'Logo' => 'اللوجو',
+    'Slider' => 'السلايدر',
 
 ];

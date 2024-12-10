@@ -65,5 +65,6 @@ return [
     'leaveSetting' => 'Leave Setting',
     'website' => 'Website',
     'Logo' => 'Logo',
+    'Slider' => 'Slider',
 
 ];
