@@ -24,17 +24,8 @@ class PositionController extends Controller
     public function index()
     {
         $positions = $this->positionService->getAllPositions($this->checkToken);
-<<<<<<< HEAD
-        return view('dashboard.position.list', compact('positions'));
-    }
-    public function show($id)
-    {
-        $client = $this->positionService->getPosition($id);
-        return view('dashboard.clients.show', compact('client'));
-=======
         $departments = Department::get();
         return view('dashboard.position.index', compact('positions', 'departments'));
->>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 
     public function store(Request $request)
