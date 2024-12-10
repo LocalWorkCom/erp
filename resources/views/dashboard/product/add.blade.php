@@ -77,12 +77,6 @@
                                     </div>
 
                                     <div class="col-xl-4">
-                                        <label for="main_image" class="form-label">@lang('product.Image')</label>
-                                        <input type="file" name="main_image" id="main_image" class="form-control" required>
-                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
-                                    </div>
-
-                                    <div class="col-xl-4">
                                         <label for="main_unit_id" class="form-label">@lang('product.Unit')</label>
                                         <select name="main_unit_id" id="main_unit_id" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseUnit')</option>
@@ -131,12 +125,12 @@
                                         <input type="text" name="barcode" id="barcode" class="form-control" placeholder="@lang('product.Barcode')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterBarcode')</div>
                                     </div>
-
+{{-- 
                                     <div class="col-xl-4">
                                         <label for="price" class="form-label">@lang('product.Price')</label>
                                         <input type="number" name="price" id="price" class="form-control" placeholder="@lang('product.Price')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterPrice')</div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-xl-4">
                                         <label for="min_limit" class="form-label">@lang('product.MinLimit')</label>
                                         <input type="number" name="min_limit" id="min_limit" class="form-control" placeholder="@lang('product.MinLimit')" required>
@@ -191,10 +185,21 @@
                                     </div>
 
                                     <div class="col-xl-4">
+                                        <label for="main_image" class="form-label">@lang('product.Image')</label>
+                                        <input type="file" name="main_image" id="main_image" class="form-control" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <label for="images" class="form-label">@lang('product.Images')</label>
+                                        <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                        <div class="invalid-feedback">@lang('validation.EnterImages')</div>
+                                    </div>
+                                    {{-- <div class="col-xl-4">
                                         <label for="expiry_date" class="form-label">@lang('product.ExpiryDate')</label>
                                         <input type="date" name="expiry_date" id="expiry_date" class="form-control">
                                         <div class="invalid-feedback">@lang('validation.expiry_date')</div>
-                                    </div>
+                                    </div> --}}
 
                                     <center>
                                         <div class="col-xl-4">

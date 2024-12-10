@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
+use App\Models\Unit;
 use App\Models\Brand;
-use App\Models\Category;
+use App\Models\Store;
 use App\Models\Country;
 use App\Models\Product;
 
-use App\Models\Store;
-use App\Models\Unit;
+use App\Models\Category;
+use App\Models\ProductLimit;
+use Illuminate\Http\Request;
+use App\Services\UnitService;
 use App\Services\BrandService;
-use App\Services\CategoryService;
 use App\Services\CountryService;
 use App\Services\ProductService;
-use App\Services\UnitService;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -100,12 +101,14 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
+
         $product = Product::findOrFail($id);
+        $product_limit = ProductLimit::where('product_id', $product->id)->first();
 
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
@@ -132,20 +135,56 @@ class ProductController extends Controller
         }
         $Stores = Store::all();
 
-        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Stores', 'Brands'));
+        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Stores', 'Brands', 'product_limit'));
     }
 
     public function show($id)
     {
-        $product = Product::with(['brand', 'productLimit'])->findOrFail($id);
-        //        dd($product);
-        return view('dashboard.product.show', compact('product'));
+        $request = new Request(); // Create a blank request object if needed
+
+        $product = Product::with(['brand', 'productLimit', 'images'])->findOrFail($id);
+
+        $response = $this->countryService->index($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $Countries = Country::hydrate($responseData['data']);
+        $Currencies = [];
+
+        foreach ($Countries as $country) {
+            // Check if currency_code exists and add it to the array
+            if (isset($country->currency_code)) {
+                $Currencies[] = $country->currency_code;
+            }
+        }
+
+        return view('dashboard.product.show', compact('product', 'Currencies'));
     }
+
+    // public function show($id)
+    // {
+    //     $request = new Request(); // Create a blank request object if needed
+
+    //     $product = Product::with(['brand', 'productLimit'])->findOrFail($id);
+
+
+    //     $response  = $this->countryService->index($request, $this->checkToken);
+    //     $responseData = json_decode($response->getContent(), true);
+    //     $Countries = Country::hydrate($responseData['data']);
+    //     $Currencies = [];
+
+    //     foreach ($Countries as $country) {
+    //         // Check if currency_code exists and add it to the array
+    //         if (isset($country->currency_code)) {
+    //             $Currencies[] = $country->currency_code;
+    //         }
+    //     }
+
+    //     return view('dashboard.product.show', compact('product', 'Currencies'));
+    // }
 
     public function update(Request $request, $id)
     {
-        //        dd($request->all());
         $response = $this->productService->update($request, $id, $this->checkToken);
+        // dd($response);
         //        dd($response);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
@@ -153,7 +192,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 
     public function delete(Request $request, $id)
@@ -163,6 +202,6 @@ class ProductController extends Controller
         //        dd($response);
         $responseData = $response->original;
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard.products')->with('message', $message);
     }
 }

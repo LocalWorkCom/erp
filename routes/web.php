@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BrandController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,17 @@ use Illuminate\Support\Facades\Session;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+Route::get('/dashboard/login', [LoginController::class, 'showLoginForm'])->name('dashboard.login');
+Route::post('/dashboard/login', [LoginController::class, 'login'])->name('dashboard.submitlogin');
+Route::post('/dashboard/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('dashboard', function () {
+        return view('dashboard.index');
+    })->name('dashboard.home');
+});
 
 
 Route::get('/set-locale/{locale}', function ($locale) {
@@ -43,11 +56,9 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return view('dashboard.index');
-})->name('home');
 
-Route::prefix('dashboard')->group(function () {
+
+Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list');
     Route::group(['prefix' => 'product'], function () {
@@ -82,7 +93,6 @@ Route::prefix('dashboard')->group(function () {
     });
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
     Route::group(['prefix' => 'country'], function () {
-
         Route::post('store', [CountryController::class, 'store'])->name('country.store');
         Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
         Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
@@ -150,13 +160,6 @@ Route::prefix('dashboard')->group(function () {
         Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
     });
 
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
-    Route::group(['prefix' => 'position'], function () {
-        Route::post('store', [PositionController::class, 'store'])->name('position.store');
-        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
-        Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
-    });
-
     Route::get('/tables', [TableController::class, 'index'])->name('tables.list');
     Route::group(['prefix' => 'table'], function () {
         Route::post('store', [TableController::class, 'store'])->name('table.store');
@@ -196,5 +199,24 @@ Route::prefix('dashboard')->group(function () {
         Route::post('store', [LogoController::class, 'store'])->name('logo.store');
         Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update');
         Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete');
+
+        //HR
+        Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+        Route::group(['prefix' => 'position'], function () {
+            Route::post('store', [PositionController::class, 'store'])->name('position.store');
+            Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+            Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
+        });
+
+        Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+        Route::group(['prefix' => 'employee'], function () {
+            Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
+            Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
+            Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+            Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+            Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+            Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
+        });
     });
+
 });
