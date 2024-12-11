@@ -20,4 +20,5 @@ return [
     'HasKidsArea' => 'Has Kids Area',
     'IsDelivery' => 'Has Delivery',
     'SelectCountry' => 'Select Country',
+    'SelectEmployee' => 'Select Employee',
 ];

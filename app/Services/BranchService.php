@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Branch;
+use App\Models\Employee;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -46,6 +47,7 @@ class BranchService
             'latitute' => 'nullable|string', // Matches the database
             'longitute' => 'nullable|string', // Matches the database
             'country_id' => 'required|integer|exists:countries,id',
+            'employee_id' => 'integer|exists:employees,id',
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
@@ -59,7 +61,8 @@ class BranchService
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        try {
+        //try {
+            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
             $branch = Branch::create([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
@@ -70,7 +73,8 @@ class BranchService
                 'country_id' => $request->country_id,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'manager_name' => $request->manager_name,
+                'employee_id' => $request->employee_id,
+                'manager_name' => $manager_name,
                 'opening_hour' => $request->opening_hour,
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
@@ -79,10 +83,10 @@ class BranchService
             ]);
 
             return ResponseWithSuccessData($this->lang, $branch, 1);
-        } catch (\Exception $e) {
-            Log::error('Error creating branch: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     Log::error('Error creating branch: ' . $e->getMessage());
+        //     return RespondWithBadRequestData($this->lang, 2);
+        // }
     }
 
     /**
@@ -115,6 +119,7 @@ class BranchService
             'latitute' => 'nullable|string', // Matches the database
             'longitute' => 'nullable|string', // Matches the database
             'country_id' => 'required|integer|exists:countries,id',
+            'employee_id' => 'integer|exists:employees,id', 
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
@@ -129,8 +134,9 @@ class BranchService
         }
 
         try {
-            $branch = Branch::findOrFail($id);
 
+            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
+            $branch = Branch::findOrFail($id);
             $branch->update([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
@@ -141,7 +147,8 @@ class BranchService
                 'country_id' => $request->country_id,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'manager_name' => $request->manager_name,
+                'employee_id' => $request->employee_id,
+                'manager_name' => $manager_name,                
                 'opening_hour' => $request->opening_hour,
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
@@ -183,6 +190,16 @@ class BranchService
         } catch (\Exception $e) {
             Log::error('Error restoring branch: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
+
+    public function employeeDetails($id, $field)
+    {
+        $employee_details = Employee::where('id', $id)->first();
+        if($employee_details){
+            return $field = $employee_details->$field;
+        }else{
+            return null;
         }
     }
 }

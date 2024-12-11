@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->softDeletes()->after('updated_at');
-        });
+        // Schema::table('employees', function (Blueprint $table) {
+        //     $table->softDeletes()->after('updated_at');
+        // });
     }
 
     /**

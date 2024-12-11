@@ -43,10 +43,10 @@ class ColorController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('colors')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/colors')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('colors')->with('message',$message);
+        return redirect('dashboard/colors')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -55,10 +55,10 @@ class ColorController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('colors')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/colors')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('colors')->with('message',$message);
+        return redirect('dashboard/colors')->with('message',$message);
     }
 
     public function delete(Request $request, $id)
@@ -66,6 +66,6 @@ class ColorController extends Controller
         $response = $this->ColorService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('colors')->with('message',$message);
+        return redirect('dashboard/colors')->with('message',$message);
     }
 }

@@ -65,7 +65,8 @@
                                                 <div class="row gy-4">
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                                         <label for="department" class="form-label">@lang('position.Department')</label>
-                                                        <select class="form-select" id="department" name="department_id"
+                                                        <<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
+                                                            <select class="form-select" id="department" name="department_id"
                                                             required>
                                                             <option value="" disabled selected>@lang('position.ChooseDepartment')
                                                             </option>
@@ -73,14 +74,26 @@
                                                                 <option value="{{ $position->id }}">
                                                                     {{ $position->name_ar . ' | ' . $position->name_en }}
                                                                 </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="valid-feedback">
-                                                            @lang('validation.Correct')
-                                                        </div>
-                                                        <div class="invalid-feedback">
-                                                            @lang('validation.EnterDepartment')
-                                                        </div>
+                                                                =======
+                                                                <select class="form-select" id="department"
+                                                                    name="department_id" required>
+                                                                    <option value="" disabled selected>
+                                                                        @lang('position.ChooseDepartment')
+                                                                    </option>
+                                                                    @foreach ($positions as $position)
+                                                                        <option value="{{ $position->id }}">
+                                                                            {{ $position->name_ar . ' | ' . $position->name_en }}
+                                                                        </option>
+                                                                        >>>>>>>
+                                                                        699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="valid-feedback">
+                                                                    @lang('validation.Correct')
+                                                                </div>
+                                                                <div class="invalid-feedback">
+                                                                    @lang('validation.EnterDepartment')
+                                                                </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
@@ -167,16 +180,29 @@
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-12">
-                                                        <label for="edit-department"
-                                                            class="form-label">@lang('position.Department')</label>
-                                                        <select id="edit-department" class="form-select"
-                                                            name="department_id" required>
-                                                            @foreach ($departments as $department)
-                                                                <option value="{{ $department->id }}">
-                                                                    {{ $department->name_ar }} | {{ $department->name_en }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
+                                                            <label for="edit-department" class="form-label">
+                                                            @lang('position.Department')</label>
+                                                            <select id="edit-department" class="form-select"
+                                                                name="department_id" required>
+                                                                @foreach ($positions as $position)
+                                                                    <option value="{{ $position->id }}">
+                                                                        {{ $position->name_ar }} | {{ $position->name_en }}
+                                                                    </option>
+                                                                    =======
+                                                                    <label for="edit-department"
+                                                                        class="form-label">@lang('position.Department')</label>
+                                                                    <select id="edit-department" class="form-select"
+                                                                        name="department_id" required>
+                                                                        @foreach ($departments as $department)
+                                                                            <option value="{{ $department->id }}">
+                                                                                {{ $department->name_ar }} |
+                                                                                {{ $department->name_en }}
+                                                                            </option>
+                                                                            >>>>>>>
+                                                                            699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
+                                                                        @endforeach
+                                                                    </select>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-name-ar"

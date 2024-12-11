@@ -29,6 +29,11 @@ class PositionService
         return Position::all();
     }
 
+    public function getPosition($id)
+    {
+        return Position::findOrFail($id);
+    }
+
     public function createPosition($data, $checkToken)
     {
         $lang = app()->getLocale();
@@ -41,7 +46,7 @@ class PositionService
         $position->description_ar = $data['description_ar'];
         $position->description_en = $data['description_en'];
         $position->department_id = $data['department_id'];
-        // $position->created_by = Auth::user()->id;
+        $position->created_by = Auth::user()->id;
         $position->created_at = now();
         $position->save();
     }
@@ -59,7 +64,7 @@ class PositionService
         $position->description_ar = $data['description_ar'];
         $position->description_en = $data['description_en'];
         $position->department_id = $data['department_id'];
-        // $position->updated_by = Auth::user()->id;
+        $position->updated_by = Auth::user()->id;
         $position->updated_at = now();
         $position->save();
     }
@@ -73,7 +78,7 @@ class PositionService
         }
 
         $position = Position::find($id);
-        // $position->deleted_by = Auth::user()->id;
+        $position->deleted_by = Auth::user()->id;
         $position->save();
         $position->delete();
     }

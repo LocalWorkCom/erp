@@ -30,6 +30,13 @@ class FloorController extends Controller
         return view('dashboard.floor.list', compact('Floors', 'branches'));
     }
 
+    public function show($id)
+    {
+        $response = $this->floorService->show($id);
+        $responseData = $response->original;
+        return $Floors = $responseData['data'];
+    }
+
     public function store(Request $request)
     {
 //        dd($request->all());
@@ -41,7 +48,7 @@ class FloorController extends Controller
             return redirect('floors')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('floors')->with('message',$message);
+        return redirect()->route('floors.list')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -52,16 +59,16 @@ class FloorController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('floors')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/floors')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('floors')->with('message',$message);
+        return redirect()->route('floors.list')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->floorService->delete($request, $id);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('floors')->with('message',$message);
+        return redirect()->route('floors.list')->with('message',$message);
     }
 }
