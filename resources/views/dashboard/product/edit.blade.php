@@ -11,9 +11,16 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('product.EditProduct')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">
+                            @lang('product.Products')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('product.edit', ['id' => $id]) }}">@lang('product.EditProduct')</a>
+                    </li>
                 </ol>
+
             </nav>
         </div>
     </div>
@@ -38,7 +45,8 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form method="POST" action="{{ route('product.update', $product->id) }}" class="needs-validation" novalidate enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('product.update', $product->id) }}"
+                                class="needs-validation" novalidate enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="row gy-4">
@@ -47,8 +55,9 @@
                                         <select name="brand_id" class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('product.ChooseBrand')</option>
                                             @foreach ($Brands as $Brand)
-                                                <option value="{{ $Brand->id }}" {{ $Brand->id == $product->brand_id ? 'selected' : '' }}>
-                                                    {{ $Brand->name_ar . " | ".$Brand->name_en  }}
+                                                <option value="{{ $Brand->id }}"
+                                                    {{ $Brand->id == $product->brand_id ? 'selected' : '' }}>
+                                                    {{ $Brand->name_ar . ' | ' . $Brand->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -57,13 +66,17 @@
 
                                     <div class="col-xl-6">
                                         <label for="name_ar" class="form-label">@lang('product.ArabicName')</label>
-                                        <input type="text" name="name_ar" id="name_ar" class="form-control" value="{{ old('name_ar', $product->name_ar) }}" placeholder="@lang('product.ArabicName')" required>
+                                        <input type="text" name="name_ar" id="name_ar" class="form-control"
+                                            value="{{ old('name_ar', $product->name_ar) }}" placeholder="@lang('product.ArabicName')"
+                                            required>
                                         <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
                                     </div>
 
                                     <div class="col-xl-6">
                                         <label for="name_en" class="form-label">@lang('product.EnglishName')</label>
-                                        <input type="text" name="name_en" id="name_en" class="form-control" value="{{ old('name_en', $product->name_en) }}" placeholder="@lang('product.EnglishName')">
+                                        <input type="text" name="name_en" id="name_en" class="form-control"
+                                            value="{{ old('name_en', $product->name_en) }}"
+                                            placeholder="@lang('product.EnglishName')">
                                         <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
                                     </div>
 
@@ -79,14 +92,16 @@
                                         <div class="invalid-feedback">@lang('validation.EnterEnglishDesc')</div>
                                     </div>
 
-                                   
+
                                     <div class="col-xl-4">
                                         <label for="main_unit_id" class="form-label">@lang('product.Unit')</label>
-                                        <select name="main_unit_id" id="main_unit_id" class="js-example-basic-single form-control" required>
+                                        <select name="main_unit_id" id="main_unit_id"
+                                            class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('product.ChooseUnit')</option>
                                             @foreach ($Units as $Unit)
-                                                <option value="{{ $Unit->id }}" {{ $Unit->id == $product->main_unit_id ? 'selected' : '' }}>
-                                                    {{ $Unit->name_ar. " | ".$Unit->name_en }}
+                                                <option value="{{ $Unit->id }}"
+                                                    {{ $Unit->id == $product->main_unit_id ? 'selected' : '' }}>
+                                                    {{ $Unit->name_ar . ' | ' . $Unit->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -95,10 +110,12 @@
 
                                     <div class="col-xl-4">
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
-                                        <select name="currency_code" id="currency_code" class="js-example-basic-single form-control" required>
+                                        <select name="currency_code" id="currency_code"
+                                            class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('product.ChooseCurrency')</option>
                                             @foreach ($Currencies as $index => $Currency)
-                                                <option value="{{ $index }}" {{ $index == $product->currency_code ? 'selected' : '' }}>
+                                                <option value="{{ $index }}"
+                                                    {{ $index == $product->currency_code ? 'selected' : '' }}>
                                                     {{ $Currency }}
                                                 </option>
                                             @endforeach
@@ -108,18 +125,20 @@
 
                                     <div class="col-xl-4">
                                         <label for="category_id" class="form-label">@lang('product.Category')</label>
-                                        <select name="category_id" id="category_id" class="js-example-basic-single form-control" required>
+                                        <select name="category_id" id="category_id"
+                                            class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('product.ChooseCategory')</option>
                                             @foreach ($Categories as $Category)
-                                                <option value="{{ $Category->id }}" {{ $Category->id == $product->category_id ? 'selected' : '' }}>
-                                                    {{ $Category->name_ar . " | ".$Category->name_en }}
+                                                <option value="{{ $Category->id }}"
+                                                    {{ $Category->id == $product->category_id ? 'selected' : '' }}>
+                                                    {{ $Category->name_ar . ' | ' . $Category->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCategory')</div>
                                     </div>
 
-                                    <div class="col-xl-4">
+                                    {{-- <div class="col-xl-4">
                                         <label for="store_id" class="form-label">@lang('product.Store')</label>
                                         <select name="store_id" id="store_id" class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('product.ChooseStore')</option>
@@ -130,11 +149,13 @@
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterStore')</div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-xl-4">
                                         <label for="barcode" class="form-label">@lang('product.Barcode')</label>
-                                        <input type="text" name="barcode" id="barcode" class="form-control" value="{{ old('barcode', $product->barcode) }}" placeholder="@lang('product.Barcode')" required>
+                                        <input type="text" name="barcode" id="barcode" class="form-control"
+                                            value="{{ old('barcode', $product->barcode) }}"
+                                            placeholder="@lang('product.Barcode')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterBarcode')</div>
                                     </div>
 
@@ -146,32 +167,41 @@
 
                                     <div class="col-xl-4">
                                         <label for="min_limit" class="form-label">@lang('product.MinLimit')</label>
-                                        <input type="number" name="min_limit" id="min_limit" class="form-control" value="{{ old('min_limit', $product_limit ? $product_limit->min_limit : '') }}" placeholder="@lang('product.MinLimit')">
+                                        <input type="number" name="min_limit" id="min_limit" class="form-control"
+                                            value="{{ old('min_limit', $product_limit ? $product_limit->min_limit : '') }}"
+                                            placeholder="@lang('product.MinLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMinLimit')</div>
                                     </div>
-                                    
+
                                     <div class="col-xl-4">
                                         <label for="max_limit" class="form-label">@lang('product.MaxLimit')</label>
-                                        <input type="number" name="max_limit" id="max_limit" class="form-control" value="{{ old('max_limit', $product_limit ? $product_limit->max_limit : '') }}" placeholder="@lang('product.MaxLimit')">
+                                        <input type="number" name="max_limit" id="max_limit" class="form-control"
+                                            value="{{ old('max_limit', $product_limit ? $product_limit->max_limit : '') }}"
+                                            placeholder="@lang('product.MaxLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMaxLimit')</div>
                                     </div>
-                                    
-                                    
+
+
 
                                     <div class="col-xl-4">
                                         <label for="sku" class="form-label">@lang('product.Sku')</label>
-                                        <input type="text" name="sku" id="sku" class="form-control" value="{{ old('sku', $product->sku) }}" placeholder="@lang('product.Sku')" required>
+                                        <input type="text" name="sku" id="sku" class="form-control"
+                                            value="{{ old('sku', $product->sku) }}" placeholder="@lang('product.Sku')"
+                                            required>
                                         <div class="invalid-feedback">@lang('validation.Entercode')</div>
                                     </div>
 
                                     <div class="col-xl-4">
                                         <p class="mb-2 text-muted">@lang('product.Type')</p>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="type" value="raw" class="form-check-input" {{ $product->type == 'raw' ? 'checked' : '' }} required>
+                                            <input type="radio" name="type" value="raw" class="form-check-input"
+                                                {{ $product->type == 'raw' ? 'checked' : '' }} required>
                                             <label class="form-check-label">@lang('product.Raw')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="type" value="complete" class="form-check-input" {{ $product->type == 'complete' ? 'checked' : '' }} required>
+                                            <input type="radio" name="type" value="complete"
+                                                class="form-check-input"
+                                                {{ $product->type == 'complete' ? 'checked' : '' }} required>
                                             <label class="form-check-label">@lang('product.Complete')</label>
                                         </div>
                                     </div>
@@ -179,11 +209,15 @@
                                     <div class="col-xl-4">
                                         <p class="mb-2 text-muted">@lang('product.Remind')</p>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_remind" value="1" class="form-check-input" {{ $product->is_remind ? 'checked' : '' }} required>
+                                            <input type="radio" name="is_remind" value="1"
+                                                class="form-check-input" {{ $product->is_remind ? 'checked' : '' }}
+                                                required>
                                             <label class="form-check-label">@lang('category.yes')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_remind" value="0" class="form-check-input" {{ !$product->is_remind ? 'checked' : '' }} required>
+                                            <input type="radio" name="is_remind" value="0"
+                                                class="form-check-input" {{ !$product->is_remind ? 'checked' : '' }}
+                                                required>
                                             <label class="form-check-label">@lang('category.no')</label>
                                         </div>
                                     </div>
@@ -191,11 +225,15 @@
                                     <div class="col-xl-4">
                                         <p class="mb-2 text-muted">@lang('product.IsHaveExpired')</p>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_have_expired" value="1" class="form-check-input" {{ $product->is_have_expired ? 'checked' : '' }} required>
+                                            <input type="radio" name="is_have_expired" value="1"
+                                                class="form-check-input" {{ $product->is_have_expired ? 'checked' : '' }}
+                                                required>
                                             <label class="form-check-label">@lang('category.yes')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_have_expired" value="0" class="form-check-input" {{ !$product->is_have_expired ? 'checked' : '' }} required>
+                                            <input type="radio" name="is_have_expired" value="0"
+                                                class="form-check-input" {{ !$product->is_have_expired ? 'checked' : '' }}
+                                                required>
                                             <label class="form-check-label">@lang('category.no')</label>
                                         </div>
                                     </div>
@@ -205,12 +243,13 @@
                                         <input type="file" name="main_image" id="main_image" class="form-control">
                                         <div class="invalid-feedback">@lang('validation.EnterImage')</div>
                                     </div>
-                            
+
                                     <div class="col-xl-4 mx-auto">
                                         <!-- Show the current image if it exists -->
                                         @if ($product->image)
                                             <div class="mb-3">
-                                                <img src="{{ asset($product->image) }}" alt="Category Image" width="150" height="150">
+                                                <img src="{{ asset($product->image) }}" alt="Category Image"
+                                                    width="150" height="150">
                                             </div>
                                             <!-- Hidden input to send the current image -->
                                             <input type="hidden" name="image" value="{{ $product->image }}">
@@ -218,24 +257,33 @@
                                     </div>
 
 
-                                    {{-- <div class="col-xl-4 mx-auto">
+                                    <div class="col-xl-4 mx-auto">
                                         <!-- Show current gallery images -->
                                         <div class="mb-3">
                                             @foreach ($product->images as $image)
-                                                <div class="image-preview" style="display: inline-block; position: relative; margin: 5px;">
-                                                    <img src="{{ asset($image->image) }}" alt="Product Image" width="150" height="150">
-                                                    <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-id="{{ $image->id }}">Remove</button>
+                                                <div class="image-preview"
+                                                    style="display: inline-block; position: relative; margin: 5px;">
+                                                    <img src="{{ asset($image->image) }}" alt="Product Image"
+                                                        width="150" height="150">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-image-btn"
+                                                        data-id="{{ $image->id }}">
+                                                        Remove
+                                                    </button>
+                                                    <!-- Hidden input to track removed images -->
+                                                    <input type="hidden" name="remove_image_ids[]" value=""
+                                                        class="remove-image-id">
                                                 </div>
-                                                <!-- Hidden input to track removed images -->
-                                                <input type="hidden" name="remove_image_ids[]" value="" class="remove-image-id">
                                             @endforeach
                                         </div>
-                                    
+
+
                                         <!-- New image upload -->
                                         <label for="images" class="form-label">@lang('product.Images')</label>
-                                        <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                        <input type="file" name="images[]" id="images" class="form-control"
+                                            multiple>
                                         <div class="invalid-feedback">@lang('validation.EnterImage')</div>
-                                    </div> --}}
+                                    </div>
+
 
                                     {{-- <div class="col-xl-4">
                                         <label for="expiry_date" class="form-label">@lang('product.ExpiryDate')</label>
@@ -245,7 +293,8 @@
 
                                     <center>
                                         <div class="col-xl-4">
-                                            <button type="submit" class="btn btn-primary form-control">@lang('category.save')</button>
+                                            <button type="submit"
+                                                class="btn btn-primary form-control">@lang('category.save')</button>
                                         </div>
                                     </center>
                                 </div>
@@ -266,20 +315,23 @@
     <!-- Custom JS -->
     @vite('resources/assets/js/validation.js')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('.js-example-basic-single').select2();
         });
     </script>
     <script>
-        document.querySelectorAll('.remove-image-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const imageId = this.getAttribute('data-id');
-                const hiddenInput = this.nextElementSibling; // Target the hidden input
-    
-                if (hiddenInput && imageId) {
-                    hiddenInput.value = imageId; // Add ID to the hidden input for removal
-                    this.closest('.image-preview').remove(); // Remove the image preview
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            const removeButtons = document.querySelectorAll('.remove-image-btn');
+
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageId = this.getAttribute('data-id');
+                    const hiddenInput = this.parentElement.querySelector('.remove-image-id');
+                    if (hiddenInput) {
+                        hiddenInput.value = imageId;
+                    }
+                    this.parentElement.style.display = 'none'; // Hide the image preview
+                });
             });
         });
     </script>

@@ -11,9 +11,16 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('product.show')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">
+                            @lang('product.Products')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('product.show', ['id' => $id]) }}">@lang('product.show')</a>
+                    </li>
                 </ol>
+                
             </nav>
         </div>
     </div>
@@ -46,34 +53,7 @@
                                     <label class="form-label">@lang('product.EnglishDesc')</label>
                                     <p class="form-text">{{ $product->description_en == null ? __('category.none') :  $product->description_en }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                    <label class="form-label">@lang('product.Image')</label>
-                                    @if ($product->image)
-                                        <div class="mb-3">
-                                            <img src="{{ asset($product->image) }}" alt="Category Image" width="150" height="150">
-                                        </div>
-                                        <!-- Hidden input to send the current image -->
-                                        <input type="hidden" name="image" value="{{ $product->image }}">
-                                    @else
-                                        <p class="form-text">@lang('category.none')</p>
-                                    @endif
-                                </div>
-
-                                
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                    <label class="form-label">@lang('product.Images')</label>
-                                    @if ($product->images->count())
-                                        <div class="gallery">
-                                            @foreach ($product->images as $image)
-                                                <div class="mb-3">
-                                                    <img src="{{ asset('images/products/gallery/' . $image->image) }}" alt="Product Image" width="150" height="150">
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <p class="form-text">@lang('category.none')</p>
-                                    @endif
-                                </div> --}}
+                               
                                 
                                 {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Price')</label>
@@ -95,7 +75,7 @@
                                     <label class="form-label">@lang('product.Brand')</label>
                                     <p class="form-text">{{ $product->brand->name_ar . ' | ' . $product->brand->name_en ?? __('category.none') }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Store')</label>
                                     @if ($product->productLimit->isNotEmpty())
                                         <ul>
@@ -106,7 +86,7 @@
                                     @else
                                         <p class="form-text">@lang('category.none')</p>
                                     @endif
-                                </div>
+                                </div> --}}
 
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Category')</label>
@@ -127,6 +107,35 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Remind')</label>
                                     <p class="form-text">{{ $product->is_remind ? __('category.yes') : __('category.no') }}</p>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                    <label class="form-label">@lang('product.Image')</label>
+                                    @if ($product->image)
+                                        <div class="mb-3">
+                                            <img src="{{ asset($product->image) }}" alt="Category Image" width="150" height="150">
+                                        </div>
+                                        <!-- Hidden input to send the current image -->
+                                        <input type="hidden" name="image" value="{{ $product->image }}">
+                                    @else
+                                        <p class="form-text">@lang('category.none')</p>
+                                    @endif
+                                </div>
+
+                                
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                    <label class="form-label">@lang('product.Images')</label>
+                                    @if ($product->images->count())
+                                        <div class="gallery">
+                                            @foreach ($product->images as $image)
+                                                <div class="mb-3">
+                                                    <img src="{{ asset( $image->image) }}" alt="Product Image" width="150" height="150">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="form-text">@lang('category.none')</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>

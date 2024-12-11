@@ -85,9 +85,9 @@ class ProductController extends Controller
             }
         }
 
-        $Stores = Store::all();
+        // $Stores = Store::all();
 
-        return view('dashboard.product.add', compact('Brands', 'Categories', 'Units', 'Currencies', 'Stores'));
+        return view('dashboard.product.add', compact('Brands', 'Categories', 'Units', 'Currencies'));
     }
 
     public function store(Request $request)
@@ -101,7 +101,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard/products')->with('message', $message);
     }
 
     public function edit(Request $request, $id)
@@ -133,9 +133,9 @@ class ProductController extends Controller
                 $Currencies[] = $country->currency_code;
             }
         }
-        $Stores = Store::all();
+        // $Stores = Store::all();
 
-        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Stores', 'Brands', 'product_limit'));
+        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit','id'));
     }
 
     public function show($id)
@@ -156,7 +156,7 @@ class ProductController extends Controller
             }
         }
 
-        return view('dashboard.product.show', compact('product', 'Currencies'));
+        return view('dashboard.product.show', compact('product', 'Currencies','id'));
     }
 
     // public function show($id)
@@ -192,7 +192,7 @@ class ProductController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard/products')->with('message', $message);
     }
 
     public function delete(Request $request, $id)
@@ -202,6 +202,6 @@ class ProductController extends Controller
         //        dd($response);
         $responseData = $response->original;
         $message = $responseData['message'];
-        return redirect('products')->with('message', $message);
+        return redirect('dashboard/products')->with('message', $message);
     }
 }

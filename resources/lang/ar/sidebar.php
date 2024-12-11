@@ -64,5 +64,7 @@ return[
     'leaveNationals' => 'leaveNationals',
     'leaveSetting' => 'leaveSetting',
     'website' => 'الموقع',
+    'Logo' => 'اللوجو',
+    'Slider' => 'السلايدر',
 
 ];

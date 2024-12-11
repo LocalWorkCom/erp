@@ -40,13 +40,18 @@ class BrandController extends Controller
         return view('dashboard.brand.list', compact('brands'));
     }
 
+    // public function create()
+    // {
+
+    //     // Pass it to the service
+    //     // $response  = $this->BrandService ->create($request, $this->checkToken);
+    //     // $responseData = json_decode($response->getContent(), true);
+    //     // $products = $responseData['data'];
+    //     return view('dashboard.brand.add');
+    // }
     public function create()
     {
-
-        // Pass it to the service
-        // $response  = $this->BrandService ->create($request, $this->checkToken);
-        // $responseData = json_decode($response->getContent(), true);
-        // $products = $responseData['data'];
+        // $brands = Brand::where('active', 1)->get();
         return view('dashboard.brand.add');
     }
 
@@ -61,13 +66,23 @@ class BrandController extends Controller
         $message = $responseData['message'];
         return redirect()->route('brands.list')->with('message', $message);
     }
+    
+    public function show($id)
+    {
+        $brand = Brand::findOrFail($id);
+        //        dd($category);
+        return view('dashboard.brand.show', compact('brand','id'));
+    }
 
     public function edit($id)
     {
         $brand = Brand::findOrFail($id);
         $brands = Brand::all(); // Fetch only active categories
-        return view('dashboard.brand.edit', compact('brand', 'brands'));
+        // $brands = Brand::where('active', 1)->get(); // Fetch only active categories
+
+        return view('dashboard.brand.edit', compact('brand', 'brands','id'));
     }
+
     public function update(Request $request, $id)
     {
         $response =  $this->BrandService->update($request, $id, $this->checkToken);
@@ -77,19 +92,16 @@ class BrandController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
-        return redirect()->route('brands.list')->with('message', $message);
-    }
-    public function show($id)
-    {
-        $brand = Brand::findOrFail($id);
-        //        dd($category);
-        return view('dashboard.brand.show', compact('brand'));
+        return redirect('dashboard/brands')->with('message',$message);
+
     }
     public function delete(Request $request, $id)
     {
         $response = $this->BrandService->destroy($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect()->route('brands.list')->with('message', $message);
+        return redirect('dashboard/brands')->with('message',$message);
+
     }
+
 }

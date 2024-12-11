@@ -21,5 +21,6 @@ return[
     'HasKidsArea' => 'يوجد منطقة للاطفال',
     'IsDelivery' => 'يوجد توصيل',
     'SelectCountry' => 'اختر دولة',
+    'SelectEmployee' => 'اختر مدير',
 
 ];

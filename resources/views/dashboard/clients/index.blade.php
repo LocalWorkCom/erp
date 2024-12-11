@@ -39,12 +39,18 @@
                             </a>
                         </div>
                         <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
                                 </div>
                             @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">

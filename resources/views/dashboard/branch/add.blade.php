@@ -92,11 +92,11 @@
                                     </div>
 
                                     <!-- Latitude and Longitude -->
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.Latitude')</label>
                                         <input type="text" class="form-control" name="latitute" value="{{ old('latitute') }}">
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.Longitude')</label>
                                         <input type="text" class="form-control" name="longitute" value="{{ old('longitute') }}">
                                     </div>
@@ -116,15 +116,23 @@
                                     <!-- Manager Name -->
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('branch.ManagerName')</label>
-                                        <input type="text" class="form-control" name="manager_name" value="{{ old('manager_name') }}">
+                                        <select class="form-control select2" name="employee_id" id="employee_id" required>
+                                            <option value="" disabled selected>@lang('branch.SelectEmployee')</option>
+                                            @foreach($employees as $employee)
+                                                <option value="{{ $employee->id }}">{{ $employee->first_name."  ". $employee->last_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterEmployee')
+                                        </div>
                                     </div>
 
                                     <!-- Opening and Closing Hours -->
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.OpeningHour')</label>
                                         <input type="time" class="form-control" name="opening_hour" value="{{ old('opening_hour') }}">
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.ClosingHour')</label>
                                         <input type="time" class="form-control" name="closing_hour" value="{{ old('closing_hour') }}">
                                     </div>

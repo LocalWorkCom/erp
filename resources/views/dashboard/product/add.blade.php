@@ -11,8 +11,14 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('product.Products')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('product.AddProduct')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">
+                            @lang('product.Products')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('product.create') }}">@lang('product.AddProduct')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -108,7 +114,7 @@
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCategory')</div>
                                     </div>
-
+{{-- 
                                     <div class="col-xl-4">
                                         <label for="store_id" class="form-label">@lang('product.Store')</label>
                                         <select name="store_id" id="store_id" class="js-example-basic-single form-control" required>
@@ -118,7 +124,7 @@
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterStore')</div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-xl-4">
                                         <label for="barcode" class="form-label">@lang('product.Barcode')</label>

@@ -66,7 +66,7 @@
               <a class="nav-link" href="index.html">الرئيسية</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">قائمة الطعام</a>
+              <a class="nav-link" href="shop.html">قائمة الطعام</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">تواصل معنا</a>
@@ -83,7 +83,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn" href="#"> تسجيل الدخول </a>
+              <a class="nav-link btn align-items-center" href="#"><i class="fas fa-user-circle"></i>
+                <span>تسجيل الدخول</span>
+              </a>
             </li>
 
 
@@ -111,22 +113,22 @@
   </header>
   <main>
     <section class="location-pop-up">
-          <div id="modal" class="modal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
-            <h2>السماح للموقع  بتحديد موقعك؟</h2>
-          </div>
-          <div class="modal-footer d-flex flex-column border-0">
-            <button type="button" class="btn" data-bs-dismiss="modal">سماح</button>
-            <button type="button" class="btn reversed main-color">حدد على الخريطة </button>
+      <div id="modal" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <h2>السماح للموقع بتحديد موقعك؟</h2>
+            </div>
+            <div class="modal-footer d-flex flex-column border-0">
+              <button type="button" class="btn" data-bs-dismiss="modal">سماح</button>
+              <button type="button" class="btn reversed main-color">حدد على الخريطة </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </section>
 
     <section class="intro">
@@ -313,28 +315,31 @@
           وجبات متنوعه من المأكولات الكويتية يمكنك الطلب منها بكل سهولة
         </p>
         <div class="plates-slider owl-carousel owl-theme">
-          <div class="item mb-4 plate position-relative" data-aos="zoom-in">
-            <a href="#">
-              <figure class="plate-img m-0">
-                <img src="SiteAssets/images/plate1.png" alt="">
-                <figcaption class="pt-4 text-center">
-                  <h5>كبسة فراخ </h5>
-                  <span class="badge bg-warning text-dark">
-                    <i class="fas fa-star"></i>
-                    الاعلى تقييم
-                  </span>
+          <div class="item mb-4" data-aos="zoom-in">
+            <div class="plate">
+              <a href="#">
+                <figure class="plate-img m-0">
+                  <img src="SiteAssets/images/plate1.png" alt="">
+                </figure>
+              </a>
+              <div class="fav">
+                <a href=""><i class="far fa-heart"></i></a>
+              </div>
+              <div class="text-center pt-4">
+                <h5>كبسة فراخ </h5>
+                <span class="badge bg-warning text-dark">
+                  <i class="fas fa-star"></i>
+                  الاعلى تقييم
+                </span>
 
-                  <div class="d-flex justify-content-between pt-4">
-                    <button class="btn">
-                      + أضف الي العربة</button>
-                    <span> 300 ج . م</span>
-                  </div>
-                </figcaption>
-              </figure>
-            </a>
+                <div class="d-flex justify-content-between pt-4">
+                  <button class="btn">
+                    + أضف الي العربة</button>
+                  <span> 300 ج . م</span>
+                </div>
+              </div>
+            </div>
           </div>
-
-
         </div>
       </div>
     </section>
@@ -385,7 +390,7 @@
         </div>
       </div>
     </section>
-    
+
   </main>
   <footer>
     <div class="footer-curve"></div>
@@ -453,7 +458,7 @@
   <script>
     AOS.init();
   </script>
-<!-- 
+  <!-- 
   <script>
     $('.owl-slider').owlCarousel({
       items: 1,

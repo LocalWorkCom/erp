@@ -11,7 +11,8 @@ class ProductImage extends Model
     use HasFactory ,SoftDeletes;
 
     protected $table = 'product_images';
-    protected $appends = ['image'];
+    protected $appends = ['main'];
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'product_id',
@@ -27,9 +28,10 @@ class ProductImage extends Model
         'modify_by',
         'updated_at',
         'deleted_at',
+        'image'
 
     ];
-    public function getImageAttribute($value)
+    public function getMainAttribute($value)
     {
         return BaseUrl() . '/' . $this->image;
     }

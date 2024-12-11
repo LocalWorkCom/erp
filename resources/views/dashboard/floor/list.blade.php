@@ -20,6 +20,7 @@
             </nav>
         </div>
     </div>
+
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Start:: row-4 -->
@@ -38,6 +39,7 @@
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('floor.AddFloor')
                             </button>
+
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
@@ -101,6 +103,7 @@
                                                             @lang('validation.EnterEnglishName')
                                                         </div>
                                                     </div>
+
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label class="form-label">@lang('floor.Type')</label>
                                                         <div class="form-check">
@@ -155,6 +158,7 @@
                                                             @lang('validation.EnterEnglishName')
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -167,6 +171,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -189,7 +194,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <div class="col-xl-12 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-branch" class="form-label">@lang('floor.Branch')</label>
                                                         <select id="edit-branch" class="form-select" name="branch_id" required>
                                                             @foreach($branches as $branch)
@@ -205,6 +210,8 @@
                                                         <label for="edit-name-en" class="form-label">@lang('floor.EnglishName')</label>
                                                         <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
                                                     </div>
+
+                                                    <?php /*
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-type" class="form-label">@lang('floor.Type')</label>
                                                         <select id="edit-type" class="form-select" name="type" required>
@@ -221,6 +228,63 @@
                                                             <option value="3">@lang('floor.Both')</option>
                                                         </select>
                                                     </div>
+                                                    */?>
+
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label class="form-label">@lang('floor.Type')</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="type" id="typeIndoor" value="1" required>
+                                                            <label class="form-check-label" for="typeIndoor">
+                                                                @lang('floor.Indoor')
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="type" id="typeOutdoor" value="2">
+                                                            <label class="form-check-label" for="typeOutdoor">
+                                                                @lang('floor.Outdoor')
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="type" id="typeBoth" value="3">
+                                                            <label class="form-check-label" for="typeBoth">
+                                                                @lang('floor.Both')
+                                                            </label>
+                                                        </div>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label class="form-label">@lang('floor.Smoking')</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="typeIndoor" value="1" required>
+                                                            <label class="form-check-label" for="typeIndoor">
+                                                                @lang('floor.Smokin')
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="typeOutdoor" value="2">
+                                                            <label class="form-check-label" for="typeOutdoor">
+                                                                @lang('floor.NoSmokin')
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="typeBoth" value="3">
+                                                            <label class="form-check-label" for="typeBoth">
+                                                                @lang('floor.Both')
+                                                            </label>
+                                                        </div>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -231,6 +295,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -270,6 +335,7 @@
                             </div>
 
                         </div>
+
                         <div class="card-body">
                             @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
@@ -326,7 +392,7 @@
                                             </a>
 
                                             <!-- Edit Button -->
-                                            <button type="button"
+                                            <!-- <button type="button"
                                                     class="btn btn-orange-light btn-wave edit-floor-btn"
                                                     data-id="{{ $floors->id }}"
                                                     data-name-ar="{{ $floors->name_ar }}"
@@ -335,6 +401,13 @@
                                                     data-smoking="{{ $floors->smoking }}"
                                                     data-branch-id="{{ $floors->branch_id }}"
                                                     data-route="{{ route('floor.update', ':id') }}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editModal">
+                                                @lang('category.edit') <i class="ri-edit-line"></i>
+                                            </button> -->
+                                            <button type="button"
+                                                    class="btn btn-orange-light btn-wave edit-floor-btn"
+                                                    data-id="{{ $floors->id }}"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
                                                 @lang('category.edit') <i class="ri-edit-line"></i>
@@ -371,6 +444,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -407,31 +481,31 @@
         const editForm = document.getElementById('edit-floor-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
-        const typeSelect = document.getElementById('edit-type');
-        const smokingSelect = document.getElementById('edit-smoking');
-        const branchSelect = document.getElementById('edit-branch');
+        // const typeSelect = document.getElementById('edit-type');
+        // const smokingSelect = document.getElementById('edit-smoking');
+        // const branchSelect = document.getElementById('edit-branch');
 
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 // Get floor details from data attributes
                 const floorId = this.getAttribute('data-id');
-                const nameAr = this.getAttribute('data-name-ar');
-                const nameEn = this.getAttribute('data-name-en');
-                const type = this.getAttribute('data-type');
-                const smoking = this.getAttribute('data-smoking');
-                const branchId = this.getAttribute('data-branch-id');
-                const routeTemplate = this.getAttribute('data-route');
+                var get_url = "{{ route('floor.show', 'id') }}";
+                get_url = get_url.replace('id', floorId);
+                $.get(get_url, function(data) {
+                    nameArInput.value = data.name_ar;
+                    nameEnInput.value = data.name_en;
+                });
 
                 // Set form action URL dynamically
-                const updateRoute = routeTemplate.replace(':id', floorId);
-                editForm.action = updateRoute;
+                // const updateRoute = routeTemplate.replace(':id', floorId);
+                // editForm.action = updateRoute;
 
-                // Populate the modal fields
-                nameArInput.value = nameAr;
-                nameEnInput.value = nameEn;
-                typeSelect.value = type;
-                smokingSelect.value = smoking;
-                branchSelect.value = branchId;
+                // // Populate the modal fields
+                // nameArInput.value = nameAr;
+                // nameEnInput.value = nameEn;
+                // typeSelect.value = type;
+                // smokingSelect.value = smoking;
+                // branchSelect.value = branchId;
             });
         });
     });

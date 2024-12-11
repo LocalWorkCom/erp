@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ForgetPasswordController;
+use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BrandController;
@@ -11,11 +12,15 @@ use App\Http\Controllers\Dashboard\CouponController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\LogoController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SizeController;
+use App\Http\Controllers\Dashboard\SliderController;
 use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
+use App\Http\Controllers\Dashboard\DishCategoryController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
@@ -102,7 +107,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list');
     Route::group(['prefix' => 'country'], function () {
-
         Route::post('store', [CountryController::class, 'store'])->name('country.store');
         Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update');
         Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete');
@@ -159,6 +163,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');
     Route::group(['prefix' => 'floor'], function () {
         Route::post('store', [FloorController::class, 'store'])->name('floor.store');
+        Route::get('show/{id}', [FloorController::class, 'show'])->name('floor.show');
         Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update');
         Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete');
     });
@@ -168,13 +173,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('store', [FloorPartitionController::class, 'store'])->name('floorPartition.store');
         Route::put('update/{id}', [FloorPartitionController::class, 'update'])->name('floorPartition.update');
         Route::delete('delete/{id}', [FloorPartitionController::class, 'delete'])->name('floorPartition.delete');
-    });
-
-    Route::get('/positions', [PositionController::class, 'index'])->name('positions.list');
-    Route::group(['prefix' => 'position'], function () {
-        Route::post('store', [PositionController::class, 'store'])->name('position.store');
-        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
-        Route::delete('delete/{id}', [PositionController::class, 'delete'])->name('position.delete');
     });
 
     Route::get('/tables', [TableController::class, 'index'])->name('tables.list');
@@ -210,4 +208,51 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [ClientController::class, 'update'])->name('client.update');
         Route::delete('delete/{id}', [ClientController::class, 'destroy'])->name('client.delete');
     });
+
+    //website setting
+    Route::get('/logos', [LogoController::class, 'index'])->name('logos.list');
+    Route::group(['prefix' => 'logo'], function () {
+        Route::post('store', [LogoController::class, 'store'])->name('logo.store');
+        Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update');
+        Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete');
+    });
+
+    Route::get('/sliders', [SliderController::class, 'index'])->name('sliders.list');
+    Route::group(['prefix' => 'slider'], function () {
+        Route::get('create', [SliderController::class, 'create'])->name('slider.create');
+        Route::post('store', [SliderController::class, 'store'])->name('slider.store');
+        Route::get('show/{id}', [SliderController::class, 'show'])->name('slider.show');
+        Route::get('edit/{id}', [SliderController::class, 'edit'])->name('slider.edit');
+        Route::put('update/{id}', [SliderController::class, 'update'])->name('slider.update');
+        Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete');
+    });
+
+    //HR
+    Route::get('/positions', [PositionController::class, 'index'])->name('positions.index');
+    Route::group(['prefix' => 'position'], function () {
+        Route::post('store', [PositionController::class, 'store'])->name('position.store');
+        Route::put('update/{id}', [PositionController::class, 'update'])->name('position.update');
+        Route::delete('delete/{id}', [PositionController::class, 'destroy'])->name('position.delete');
+    });
+
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.list');
+    Route::group(['prefix' => 'employee'], function () {
+        Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');
+        Route::post('store', [EmployeeController::class, 'store'])->name('employee.store');
+        Route::get('show/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+        Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+        Route::put('update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+        Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
+    });
+
+    Route::prefix('dish-categories')->group(function () {
+        Route::get('/', [DishCategoryController::class, 'index'])->name('dashboard.dish-categories.index');
+        Route::get('/create', [DishCategoryController::class, 'create'])->name('dashboard.dish-categories.create');
+        Route::post('/', [DishCategoryController::class, 'store'])->name('dashboard.dish-categories.store');
+        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dashboard.dish-categories.edit');
+        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update');
+        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
+    });
+
 });

@@ -21,6 +21,7 @@ class Branch extends Model
         'country_id',
         'phone',
         'email',
+        'employee_id',
         'manager_name',
         'opening_hour',
         'closing_hour',

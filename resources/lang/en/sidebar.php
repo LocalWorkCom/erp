@@ -64,5 +64,7 @@ return [
     'leaveNationals' => 'Leave Nationals',
     'leaveSetting' => 'Leave Setting',
     'website' => 'Website',
+    'Logo' => 'Logo',
+    'Slider' => 'Slider',
 
 ];
