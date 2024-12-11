@@ -90,7 +90,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('employee.email')</label>
                                         <input type="email" class="form-control" id="email" name="email"
-                                            value="" placeholder="@lang('employee.email')">
+                                            value="{{ $employee->email }}" placeholder="@lang('employee.email')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>

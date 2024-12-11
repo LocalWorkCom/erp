@@ -104,8 +104,6 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         $employee = Employee::findOrFail($id);
-        $user = User::find($employee->user_id);
-
         $validatedData = $request->validate([
             'employee_code' => 'nullable|string',
             'first_name' => 'nullable|string',
@@ -113,7 +111,7 @@ class EmployeeController extends Controller
             'email' => [
                 'nullable',
                 'email',
-                $user ? Rule::unique('users')->ignore($user->id) : null,
+                Rule::unique('employees')->ignore($employee),
             ],
             // 'password' => 'nullable|string',
             'phone' => 'nullable|string',
@@ -149,7 +147,7 @@ class EmployeeController extends Controller
     }
     public function destroy($id)
     {
-        $this->employeeService->deleteClient($id, $this->checkToken);
-        return redirect()->route('client.index')->with('success', 'Client deleted successfully!');
+        $this->employeeService->deleteEmployee($id, $this->checkToken);
+        return redirect()->route('employees.list')->with('success', 'Employee deleted successfully!');
     }
 }
