@@ -64,17 +64,17 @@ class Handler extends ExceptionHandler
             // Handle different status codes
             switch ($statusCode) {
                 case 401:
-                    return response()->view('Theme.error.401', [], 401);
+                    return response()->view('dashboard.error.401', [], 401);
                 case 404:
-                    return response()->view('Theme.error.404', [], 404);
+                    return response()->view('dashboard.error.404', [], 404);
                 case 403:
-                    return response()->view('Theme.error.403', [], 403);
+                    return response()->view('dashboard.error.403', [], 403);
                 case 422:
-                    return response()->view('Theme.error.422', [], 422);
+                    return response()->view('dashboard.error.422', [], 422);
                 case 500:
-                    return response()->view('Theme.error.500', [], 500);
+                    return response()->view('dashboard.error.500', [], 500);
                 default:
-                    return response()->view('Theme.error.404', [], $statusCode);
+                    return response()->view('dashboard.error.404', [], $statusCode);
             }
         }
 

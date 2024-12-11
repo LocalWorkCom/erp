@@ -51,19 +51,22 @@
                                     <label class="form-label">@lang('brand.EnglishDesc')</label>
                                     <p class="form-text">{{ $brand->description_en == null ? __('brand.none') :  $brand->description_en}}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('brand.Remind')</label>
+                                    <p class="form-text">
+                                        {{ $brand->is_active ? __('brand.yes') : __('brand.no') }}
+                                    </p>
+                                </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <label class="form-label">@lang('brand.Image')</label>
-                                    @if ($brand->image)
+                                    @if ($brand->logo_path)
                                         <div class="mb-3">
-                                            <img src="{{ asset($brand->image) }}" alt="Category Image" width="150" height="150">
+                                            <img src="{{ asset($brand->logo_path) }}" alt="Brand Image" width="150" height="150">
                                         </div>
-                                        <!-- Hidden input to send the current image -->
-                                        <input type="hidden" name="image" value="{{ $brand->image }}">
                                     @else
-                                        <p class="form-text">@lang('category.none')</p>
+                                        <p class="form-text">@lang('brand.none')</p>
                                     @endif
                                 </div>
-                         
                             </div>
                         </div>
                     </div>

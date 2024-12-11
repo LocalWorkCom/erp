@@ -36,5 +36,6 @@ return [
     'Raw' => 'Raw',
     'AddProduct'=>'Add Product',
     'EditProduct'=>'Edit Product',
-    'show'=>'Show Product'
+    'show'=>'Show Product',
+    'Images' => 'Images'
 ];
