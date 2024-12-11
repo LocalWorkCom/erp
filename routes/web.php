@@ -19,6 +19,8 @@ use App\Http\Controllers\Dashboard\SliderController;
 use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\DishCategoryController;
+use App\Http\Controllers\Dashboard\RecipeController;
+
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -244,5 +246,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dashboard.dish-categories.show');
 
     });
+// Recipe routes
+Route::prefix('recipes')->group(function () {
+    Route::get('/', [RecipeController::class, 'index'])->name('dashboard.recipes.index');
+    Route::get('/show/{id}', [RecipeController::class, 'show'])->name('dashboard.recipes.show');
+    Route::get('/create', [RecipeController::class, 'create'])->name('dashboard.recipes.create');
+    Route::post('/', [RecipeController::class, 'store'])->name('dashboard.recipes.store');
+    Route::get('/edit/{id}', [RecipeController::class, 'edit'])->name('dashboard.recipes.edit');
+    Route::put('/{id}', [RecipeController::class, 'update'])->name('dashboard.recipes.update');
+    Route::delete('/{id}', [RecipeController::class, 'delete'])->name('dashboard.recipes.delete');
+    Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('dashboard.recipes.restore');
+});
 
 });
