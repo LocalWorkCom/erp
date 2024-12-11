@@ -399,17 +399,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="notes" class="form-label">@lang('employee.notes')</label>
-                                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ old('notes') }}</textarea>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterNotes')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="biometric_id" class="form-label">@lang('employee.bankAccount')</label>
+                                        <label for="biometric_id" class="form-label">@lang('employee.biometricId')</label>
                                         <input type="text" class="form-control" id="biometric_id" name="biometric_id"
                                             value="{{ old('biometric_id') }}" placeholder="@lang('employee.biometricId')">
                                         <div class="valid-feedback">
@@ -419,6 +409,17 @@
                                             @lang('validation.EnterBiometricId')
                                         </div>
                                     </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="notes" class="form-label">@lang('employee.notes')</label>
+                                        <textarea class="form-control" id="notes" name="notes" rows="4">{{ old('notes') }}</textarea>
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterNotes')
+                                        </div>
+                                    </div>
+
                                     <center>
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                             <input type="submit" class="form-control btn btn-primary " id="input-submit"
