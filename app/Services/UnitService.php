@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class UnitService
@@ -51,7 +52,7 @@ class UnitService
         if (CheckExistColumnValue('units', 'name_ar', $name_ar) || CheckExistColumnValue('units', 'name_ar', $name_ar)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $created_by = 13;
+        $created_by =  Auth::guard('admin')->user()->id;
 
 
         $unit = new Unit();
@@ -93,7 +94,7 @@ class UnitService
         if (CheckExistColumnValue('units', 'name_ar', $request->name_ar) && CheckExistColumnValue('units', 'name_en', $request->name_en)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $modify_by = 13;
+        $modify_by =  Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the unit model
         $unit->name_ar = $request->name_ar;

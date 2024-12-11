@@ -43,10 +43,10 @@ class GiftController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('gifts')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/gifts')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('gifts')->with('message',$message);
+        return redirect('dashboard/gifts')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -55,10 +55,10 @@ class GiftController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('gifts')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/gifts')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('gifts')->with('message',$message);
+        return redirect('dashboard/gifts')->with('message',$message);
     }
 
     public function delete(Request $request, $id)

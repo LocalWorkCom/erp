@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ColorService
@@ -56,7 +57,7 @@ class ColorService
             return RespondWithBadRequest($lang, 9);
         }
 
-        $created_by = 1;
+        $created_by =  Auth::guard('admin')->user()->id;
 
         // Create the new color
         $color = new Color();
@@ -104,7 +105,7 @@ class ColorService
             return RespondWithBadRequest($lang, 9);
         }
 
-        $modified_by = 13;
+        $modified_by =  Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the color model
         $color->name_ar = $request->name_ar;
