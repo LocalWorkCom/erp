@@ -27,14 +27,11 @@ class PositionService
         }
 
         return Position::all();
-<<<<<<< HEAD
     }
 
     public function getPosition($id)
     {
         return Position::findOrFail($id);
-=======
->>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     }
 
     public function createPosition($data, $checkToken)
@@ -49,16 +46,12 @@ class PositionService
         $position->description_ar = $data['description_ar'];
         $position->description_en = $data['description_en'];
         $position->department_id = $data['department_id'];
-        // $position->created_by = Auth::user()->id;
+        $position->created_by = Auth::user()->id;
         $position->created_at = now();
         $position->save();
     }
 
-<<<<<<< HEAD
-    public function edit(Request $request, $id)
-=======
     public function updatePosition($data, $id, $checkToken)
->>>>>>> 699fe20f9b11eae99024815d6861e2f3a42cddb8
     {
         $lang = app()->getLocale();
         if (!CheckToken() && $checkToken) {
@@ -71,7 +64,7 @@ class PositionService
         $position->description_ar = $data['description_ar'];
         $position->description_en = $data['description_en'];
         $position->department_id = $data['department_id'];
-        // $position->updated_by = Auth::user()->id;
+        $position->updated_by = Auth::user()->id;
         $position->updated_at = now();
         $position->save();
     }
@@ -85,7 +78,7 @@ class PositionService
         }
 
         $position = Position::find($id);
-        // $position->deleted_by = Auth::user()->id;
+        $position->deleted_by = Auth::user()->id;
         $position->save();
         $position->delete();
     }

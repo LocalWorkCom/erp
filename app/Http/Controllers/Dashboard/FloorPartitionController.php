@@ -35,7 +35,7 @@ class FloorPartitionController extends Controller
             return redirect('floor-partitions')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('floor-partitions')->with('message',$message);
+        return redirect('dashboard/floor-partitions')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -44,16 +44,16 @@ class FloorPartitionController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('floor-partitions')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/floor-partitions')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('floor-partitions')->with('message',$message);
+        return redirect('dashboard/floor-partitions')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->floorPartitionService->delete($request, $id);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('floor-partitions')->with('message',$message);
+        return redirect('dashboard/floor-partitions')->with('message',$message);
     }
 }

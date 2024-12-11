@@ -92,6 +92,7 @@
                                             @lang('validation.EnterEnglishDesc')
                                         </div>
                                     </div>
+                                    
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="input-file" class="form-label">@lang('category.Image')</label>
 
@@ -112,6 +113,7 @@
                                             @lang('validation.EnterImage')
                                         </div>
                                     </div>
+
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('category.parent')</p>
                                         <select class="form-control" data-trigger name="parent_id" id="choices-single-default">

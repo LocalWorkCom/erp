@@ -6,6 +6,7 @@ use App\Models\Floor;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FloorService
@@ -54,7 +55,7 @@ class FloorService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor = new Floor();
             $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
@@ -85,7 +86,7 @@ class FloorService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor = Floor::findOrFail($id);
             $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
@@ -104,7 +105,7 @@ class FloorService
     public function delete(Request $request, $id)
     {
         try {
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
 
             $floor = Floor::find($id);
             if (!$floor) {

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Size;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SizeService
@@ -54,7 +55,7 @@ class SizeService
         if (CheckExistColumnValue('sizes', 'name_ar', $name_ar) || CheckExistColumnValue('sizes', 'name_ar', $name_ar)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $created_by = 13;
+        $created_by =  Auth::guard('admin')->user()->id;
 
         $size = new Size();
         $size->name_ar = $name_ar;
@@ -98,7 +99,7 @@ class SizeService
         if (CheckExistColumnValue('sizes', 'name_ar', $request->name_ar) && CheckExistColumnValue('sizes', 'name_en', $request->name_en) && CheckExistColumnValue('sizes', 'category_id', $request->category_id)) {
             return RespondWithBadRequest($lang, 9);
         }
-        $modified_by  = 13;
+        $modified_by  =  Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the size model
         $size->name_ar = $request->name_ar;
