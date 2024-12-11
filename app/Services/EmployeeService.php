@@ -42,37 +42,37 @@ class EmployeeService
         // $user->save();
 
         $employee = new Employee();
-        $employee->employee_code = $data['employee_code'];
+        $employee->employee_code = $data['employee_code'] ?? null;
         // $employee->user_id = $user->id;
-        $employee->first_name = $data['first_name'];
-        $employee->last_name = $data['last_name'];
-        $employee->email = $data['email'];
-        $employee->phone_number = $data['phone'];
-        $employee->gender = $data['gender'];
-        $employee->birth_date = $data['birth_date'];
-        $employee->national_id = $data['national_id'];
-        $employee->passport_number = $data['passport_number'];
-        $employee->marital_status = $data['marital_status'];
-        $employee->blood_group = $data['blood_group'];
-        $employee->emergency_contact_name = $data['emergency_contact_name'];
-        $employee->emergency_contact_relationship = $data['emergency_contact_relationship'];
-        $employee->emergency_contact_phone = $data['emergency_contact_phone'];
-        $employee->address_en = $data['address_en'];
-        $employee->address_ar = $data['address_ar'];
-        $employee->nationality_id = $data['nationality_id'];
-        $employee->department_id = $data['department_id'];
-        $employee->position_id = $data['position_id'];
-        $employee->supervisor_id = $data['supervisor_id'];
-        $employee->hire_date = $data['hire_date'];
-        $employee->salary = $data['salary'];
-        $employee->assurance_salary = $data['assurance_salary'];
-        $employee->assurance_number = $data['assurance_number'];
-        $employee->bank_account = $data['bank_account'];
-        $employee->employment_type = $data['employment_type'];
-        $employee->status = $data['status'];
-        $employee->notes = $data['notes'];
-        $employee->is_biometric = $data['is_biometriic'];
-        $employee->biometric_id = $data['biometric_id'];
+        $employee->first_name = $data['first_name'] ?? null;
+        $employee->last_name = $data['last_name'] ?? null;
+        $employee->email = $data['email'] ?? null;
+        $employee->phone_number = $data['phone'] ?? null;
+        $employee->gender = $data['gender'] ?? null;
+        $employee->birth_date = $data['birth_date'] ?? null;
+        $employee->national_id = $data['national_id'] ?? null;
+        $employee->passport_number = $data['passport_number'] ?? null;
+        $employee->marital_status = $data['marital_status'] ?? null;
+        $employee->blood_group = $data['blood_group'] ?? null;
+        $employee->emergency_contact_name = $data['emergency_contact_name'] ?? null;
+        $employee->emergency_contact_relationship = $data['emergency_contact_relationship'] ?? null;
+        $employee->emergency_contact_phone = $data['emergency_contact_phone'] ?? null;
+        $employee->address_en = $data['address_en'] ?? null;
+        $employee->address_ar = $data['address_ar'] ?? null;
+        $employee->nationality_id = $data['nationality_id'] ?? null;
+        $employee->department_id = $data['department_id'] ?? null;
+        $employee->position_id = $data['position_id'] ?? null;
+        $employee->supervisor_id = $data['supervisor_id'] ?? null;
+        $employee->hire_date = $data['hire_date'] ?? null;
+        $employee->salary = $data['salary'] ?? null;
+        $employee->assurance_salary = $data['assurance_salary'] ?? null;
+        $employee->assurance_number = $data['assurance_number'] ?? null;
+        $employee->bank_account = $data['bank_account'] ?? null;
+        $employee->employment_type = $data['employment_type'] ?? null;
+        $employee->status = $data['status'] ?? null;
+        $employee->notes = $data['notes'] ?? null;
+        $employee->is_biometric = $data['is_biometric'] ?? null;
+        $employee->biometric_id = $data['biometric_id'] ?? null;
         $employee->created_by = Auth::user()->id;
         $employee->save();
     }
@@ -136,6 +136,6 @@ class EmployeeService
         $employee = Employee::findOrFail($id);
 
         $employee->delete();
-        User::find($employee->user_id)->delete();
+        // User::findOrFail($employee->user_id)->delete();
     }
 }
