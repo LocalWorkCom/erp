@@ -32,7 +32,7 @@
                             <div class="row gy-4">
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.name')</label>
-                                    <p class="form-text">{{ $employee->first_name . $employee->last_name }}</p>
+                                    <p class="form-text">{{ $employee->first_name . ' ' . $employee->last_name }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.code')</label>
@@ -47,16 +47,7 @@
                                     <p class="form-text">{{ $employee->phone_number }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.country')</label>
-                                    @if ($employee->country_id)
-                                        <p class="form-text">
-                                            {{ $employee->country->name_ar . '|' . $employee->country->name_en }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
-                                </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.country')</label>
+                                    <label class="form-label">@lang('employee.gender')</label>
                                     @if ($employee->gender)
                                         <p class="form-text">
                                             {{ $employee->gender }}</p>
@@ -74,7 +65,7 @@
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.nationalId')</label>
+                                    <label class="form-label">@lang('employee.national_id')</label>
                                     @if ($employee->national_id)
                                         <p class="form-text">
                                             {{ $employee->national_id }}</p>
@@ -137,14 +128,6 @@
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.englishAddress')</label>
-                                    <p class="form-text">{{ $employee->addresse_en }}</p>
-                                </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.arabicAddress')</label>
-                                    <p class="form-text">{{ $employee->addresse_ar }}</p>
-                                </div>
-                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.nationality')</label>
                                     <p class="form-text">
                                         {{ $employee->nationality->name_ar . '|' . $employee->nationality->name_en }}</p>
@@ -153,7 +136,7 @@
                                     <label class="form-label">@lang('employee.department')</label>
                                     @if ($employee->department_id)
                                         <p class="form-text">
-                                            {{ $employee->department->name_en}}</p>
+                                            {{ $employee->department->name_en }}</p>
                                     @else
                                         <p class="form-text">@lang('employee.notExist')</p>
                                     @endif
@@ -162,7 +145,7 @@
                                     <label class="form-label">@lang('employee.position')</label>
                                     @if ($employee->position_id)
                                         <p class="form-text">
-                                            {{ $employee->position->name_en}}</p>
+                                            {{ $employee->position->name_en }}</p>
                                     @else
                                         <p class="form-text">@lang('employee.notExist')</p>
                                     @endif
@@ -171,18 +154,18 @@
                                     <label class="form-label">@lang('employee.supervisor')</label>
                                     @if ($employee->supervisor_id)
                                         <p class="form-text">
-                                            {{ $employee->supervisor->employee_code}}</p>
+                                            {{ $employee->supervisor->employee_code }}</p>
                                     @else
                                         <p class="form-text">@lang('employee.notExist')</p>
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.hireDate')</label>
-                                    <p class="form-text">{{ $employee->hire_date}}</p>
+                                    <p class="form-text">{{ $employee->hire_date }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.salary')</label>
-                                    <p class="form-text">{{ $employee->salary}}</p>
+                                    <p class="form-text">{{ $employee->salary }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.is_active')</label>

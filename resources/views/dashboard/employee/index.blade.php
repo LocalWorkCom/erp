@@ -61,7 +61,6 @@
                                         <th scope="col">@lang('employee.code')</th>
                                         <th scope="col">@lang('employee.email')</th>
                                         <th scope="col">@lang('employee.phone')</th>
-                                        <th scope="col">@lang('employee.country')</th>
                                         <th scope="col">@lang('employee.gender')</th>
                                         <th scope="col">@lang('employee.dob')</th>
                                         <th scope="col">@lang('employee.national_id')</th>
@@ -81,14 +80,6 @@
                                             <td>{{ $employee->employee_code }}</td>
                                             <td>{{ $employee->email }}</td>
                                             <td>{{ $employee->phone_number ?? '-----' }}</td>
-                                            <td>
-                                                @if ($employee->country_id)
-                                                    {{ $employee->country->name_ar . ' | ' . $employee->country->name_en }}
-                                                @else
-                                                    {{ '-----' }}
-                                                @endif
-                                            </td>
-
                                             <td>{{ $employee->gender }}</td>
                                             <td>{{ $employee->birth_date }}</td>
                                             <td>{{ $employee->national_id }}</td>

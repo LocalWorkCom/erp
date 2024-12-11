@@ -135,21 +135,9 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <p class="mb-2 text-muted">@lang('employee.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control">
-                                            <option value="" disabled>@lang('employee.chooseCountry')</option>
-                                            @foreach ($countries as $country)
-                                                <option value="{{ $country->id }}">
-                                                    {{ $country->name_ar . ' | ' . $country->name_en }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('employee.nationalId')</label>
+                                        <label for="input-placeholder" class="form-label">@lang('employee.national_id')</label>
                                         <input type="text" class="form-control" id="national_id" name="national_id"
-                                            value="{{ $employee->national_id }}" placeholder="@lang('employee.nationalId')">
+                                            value="{{ $employee->national_id }}" placeholder="@lang('employee.national_id')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -158,10 +146,10 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('employee.PassportNumber')</label>
+                                        <label for="input-placeholder" class="form-label">@lang('employee.passport')</label>
                                         <input type="text" class="form-control" id="passport_number"
                                             name="passport_number" value="{{ $employee->pasport_number }}"
-                                            placeholder="@lang('employee.PassportNumber')">
+                                            placeholder="@lang('employee.passport')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>

@@ -160,7 +160,7 @@
                                         <label for="input-placeholder" class="form-label">@lang('employee.PassportNumber')</label>
                                         <input type="text" class="form-control" id="passport_number"
                                             name="passport_number" value="{{ old('passport_number') }}"
-                                            placeholder="@lang('employee.PassportNumber')" required>
+                                            placeholder="@lang('employee.PassportNumber')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -283,7 +283,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.supervisor')</p>
                                         <select name="supervisor_id" class="js-example-basic-single form-control">
-                                            <option value="" disabled>@lang('employee.selectSupervisor')</option>
+                                            <option value="" disabled selected>@lang('employee.selectSupervisor')</option>
                                             @foreach ($supervisors as $supervisor)
                                                 <option value="{{ $supervisor->id }}">
                                                     {{ $supervisor->first_name . ' ' . $supervisor->last_name }}
