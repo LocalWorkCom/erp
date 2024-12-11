@@ -27,6 +27,7 @@ use App\Http\Controllers\Dashboard\RecipeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -267,4 +268,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [RecipeController::class, 'delete'])->name('dashboard.recipes.delete')->middleware('role_or_permission:delete recipes');
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('dashboard.recipes.restore')->middleware('role_or_permission:create recipes');
     });
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
+    Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
+
 });

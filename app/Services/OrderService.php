@@ -1,47 +1,38 @@
 <?php
 
-namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+namespace App\Services;
+
 use App\Models\ClientAddress;
-use App\Models\ClientDetail;
 use App\Models\Dish;
+use App\Models\DishAddon;
+use App\Models\Gift;
+use App\Models\Menu;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
+use App\Models\OrderProduct;
 use App\Models\OrderTracking;
 use App\Models\OrderTransaction;
-use App\Models\RecipeAddon;
-use App\Models\DishAddon;
-use App\Models\Menu;
+use App\Models\ProductUnit;
+use App\Models\Store;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-use App\Models\OrderProduct;
-use App\Models\ProductUnit;
-use App\Models\Store;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Redis;
-
-class OrderController extends Controller
+class OrderService
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-    // YourController.php
-
-    public function index(Request $request)
+ 
+    public function index(Request $request, $checkToken)
     {
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-        if (!CheckToken()) {
+        if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
         $orders = Order::all();
@@ -49,13 +40,15 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $order['details'] = OrderDetail::where('order_id', $order->id)->get();
             $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
-            $order['transaction'] = OrderTransaction::where('order_id', $order->id)->get();
+            $order['transaction'] = OrderTransaction::where('order_id', $order->id)->first();
+
         }
+
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $checkToken)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
@@ -365,7 +358,19 @@ class OrderController extends Controller
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
-    public function cancel_order(Request $request)
+    public function show($lang, $id, $checkToken)
+    {
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
+        }
+        $order = Order::find($id);
+
+        $order['details'] = OrderDetail::where('order_id', $id)->get();
+        $order['addons'] = OrderAddon::where('order_id', $id)->get();
+
+        return ResponseWithSuccessData($lang, $order, 1);
+    }
+    public function cancel_order(Request $request, $checkToken)
     {
 
         $lang = $request->header('lang', 'ar');
