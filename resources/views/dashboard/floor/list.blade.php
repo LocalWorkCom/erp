@@ -233,20 +233,20 @@
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label class="form-label">@lang('floor.Type')</label>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeIndoor" value="1" required>
-                                                            <label class="form-check-label" for="typeIndoor">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-indoor{{$branch->id}}" value="1" required>
+                                                            <label class="form-check-label" for="type-indoor">
                                                                 @lang('floor.Indoor')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeOutdoor" value="2">
-                                                            <label class="form-check-label" for="typeOutdoor">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-outdoor{{$branch->id}}" value="2">
+                                                            <label class="form-check-label" for="type-outdoor">
                                                                 @lang('floor.Outdoor')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeBoth" value="3">
-                                                            <label class="form-check-label" for="typeBoth">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-both{{$branch->id}}" value="3">
+                                                            <label class="form-check-label" for="type-both">
                                                                 @lang('floor.Both')
                                                             </label>
                                                         </div>
@@ -261,20 +261,20 @@
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label class="form-label">@lang('floor.Smoking')</label>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeIndoor" value="1" required>
-                                                            <label class="form-check-label" for="typeIndoor">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-indoor{{$branch->id}}" value="1" required>
+                                                            <label class="form-check-label" for="smokin-indoor">
                                                                 @lang('floor.Smokin')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeOutdoor" value="2">
-                                                            <label class="form-check-label" for="typeOutdoor">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-outdoor{{$branch->id}}" value="2">
+                                                            <label class="form-check-label" for="smokin-outdoor">
                                                                 @lang('floor.NoSmokin')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeBoth" value="3">
-                                                            <label class="form-check-label" for="typeBoth">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-both{{$branch->id}}" value="3">
+                                                            <label class="form-check-label" for="smokin-both">
                                                                 @lang('floor.Both')
                                                             </label>
                                                         </div>
@@ -481,19 +481,47 @@
         const editForm = document.getElementById('edit-floor-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
-        // const typeSelect = document.getElementById('edit-type');
-        // const smokingSelect = document.getElementById('edit-smoking');
-        // const branchSelect = document.getElementById('edit-branch');
+        const editBranch = document.getElementById('edit-branch');
+        const typeIndoor = document.getElementById('type-indoor');
+        const typeOutdoor = document.getElementById('type-outdoor');
+        const typeBoth = document.getElementById('type-both');
+        const smokinIndoor = document.getElementById('smokin-indoor');
+        const smokinOutdoor = document.getElementById('smokin-outdoor');
+        const smokinBoth = document.getElementById('smokin-both');
+        var get_url = "{{ route('floor.show', 'id') }}";
+        var edit_url = "{{ route('floor.update', 'id') }}";
 
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 // Get floor details from data attributes
-                const floorId = this.getAttribute('data-id');
-                var get_url = "{{ route('floor.show', 'id') }}";
+                const floorId = this.getAttribute('data-id');                
                 get_url = get_url.replace('id', floorId);
                 $.get(get_url, function(data) {
                     nameArInput.value = data.name_ar;
                     nameEnInput.value = data.name_en;
+                    editBranch.value = data.branch_id;
+                    if(data.type == 1){
+                        typeIndoor+floorId.checked = true; 
+                    }
+                    if(data.type == 2){
+                        typeOutdoor+floorId.checked = true; 
+                    }
+                    if(data.type == 3){
+                        typeBoth+floorId.checked = true; 
+                    }
+
+                    if(data.smoking == 1){
+                        smokinIndoor+floorId.checked = true; 
+                    }
+                    if(data.smoking == 2){
+                        smokinOutdoor+floorId.checked = true; 
+                    }
+                    if(data.smoking == 3){
+                        smokinBoth+floorId.checked = true; 
+                    }
+
+                    edit_url = edit_url.replace('id', floorId);
+                    editForm.action = edit_url;
                 });
 
                 // Set form action URL dynamically

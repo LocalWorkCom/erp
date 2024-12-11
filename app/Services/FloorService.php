@@ -72,7 +72,7 @@ class FloorService
 
     public function edit(Request $request,$id)
     {
-        try {
+        //try {
             $validateData = Validator::make($request->all(), [
                 'branch_id' => 'required|integer|exists:branches,id',
                 'name_ar' => 'required',
@@ -96,9 +96,9 @@ class FloorService
             $floor->save();
 
             return ResponseWithSuccessData($this->lang, $floor, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($this->lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($this->lang, 2);
+        // }
     }
 
     public function delete(Request $request, $id)
