@@ -11,7 +11,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('branch.Branches')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('branches.list') }}">@lang('branch.Branches')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('branch.EditBranch')</li>
                 </ol>
             </nav>

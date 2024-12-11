@@ -14,8 +14,14 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('brand.Brands')</li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('dashboard.home') }}">
+                            @lang('sidebar.Main')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
+                    </li>
                 </ol>
             </nav>
         </div>

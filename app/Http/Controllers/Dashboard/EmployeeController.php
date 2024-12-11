@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Department;
+use App\Models\Employee;
+use App\Models\Nationality;
+use App\Models\Position;
 use App\Models\User;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -33,63 +38,116 @@ class EmployeeController extends Controller
     public function create()
     {
         $countries = Country::all();
-        return view('dashboard.clients.create', compact('countries'));
+        $nationalities = Nationality::all();
+        $departments = Department::all();
+        $positions = Position::all();
+        $supervisors = Employee::all();
+        return view(
+            'dashboard.employee.create',
+            compact('countries', 'nationalities', 'departments', 'positions', 'supervisors')
+        );
     }
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'employee_code' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|email|unique:users',
             // 'password' => 'nullable|string',
-            'country_id' => 'required|exists:countries,id',
             'phone' => 'required|string',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
-            'date_of_birth' => 'nullable|date',
-            'is_active' => 'required|boolean',
-            'address' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'postal_code' => 'nullable|string',
-            'is_default' => 'nullable|boolean'
+            'gender' => 'nullable|string',
+            'birth_date' => 'nullable|date',
+            'national_id' => 'nullable|string',
+            'passport_number' => 'nullable|string',
+            'marital_status' => 'nullable|string',
+            'blood_group' => 'nullable|string',
+            'emergency_contact_name' => 'nullable|string',
+            'emergency_contact_relationship' => 'nullable|string',
+            'emergency_contact_phone' => 'nullable|string',
+            'address_en' => 'nullable|string',
+            'address_ar' => 'nullable|string',
+            'nationality_id' => 'nullable|exists:id,nationalities',
+            'department_id' => 'nullable|exists:id,departments',
+            'position_id' => 'nullable|exists:id,positions',
+            'supervisor_id' => 'nullable|exists:id,employees',
+            'hire_date' => 'nullable|date',
+            'salary' => 'nullable|string',
+            'assurance_salary' => 'nullable|string',
+            'assurance_number' => 'nullable|string',
+            'bank_account' => 'nullable|string',
+            'employment_type' => 'nullable|string',
+            'status' => 'required|string',
+            'notes' => 'nullable|string',
+            'is_biometric' => 'nullable|boolean',
+            'biometric_id' => 'nullable|string',
         ]);
 
-        $this->employeeService->createClient($validatedData, $this->checkToken);
-        return redirect()->route('client.index')->with('success', 'Client created successfully!');
+        $this->employeeService->createEmployee($validatedData, $this->checkToken);
+        return redirect()->route('employees.list')->with('success', 'Employee created successfully!');
     }
 
     public function edit($id)
     {
-        $client = User::where('flag', 'client')->with('clientDetails', 'addresses')->findOrFail($id);
+        $employee = Employee::findOrFail($id);
         $countries = Country::all();
-        return view('dashboard.clients.edit', compact('countries', 'client'));
+        $nationalities = Nationality::all();
+        $departments = Department::all();
+        $positions = Position::all();
+        $supervisors = Employee::all();
+        return view(
+            'dashboard.employee.edit',
+            compact('employee', 'countries', 'nationalities', 'departments', 'positions', 'supervisors')
+        );
     }
 
     public function update(Request $request, $id)
     {
+        $employee = Employee::findOrFail($id);
         $validatedData = $request->validate([
+            'employee_code' => 'nullable|string',
             'first_name' => 'nullable|string',
             'last_name' => 'nullable|string',
-            'email' => 'nullable|email|unique:users,email,' . $id,
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('employees')->ignore($employee),
+            ],
             // 'password' => 'nullable|string',
-            'country_id' => 'nullable|exists:countries,id',
             'phone' => 'nullable|string',
-            'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
-            'date_of_birth' => 'nullable|date',
-            'is_active' => 'nullable|boolean',
-            'address' => 'nullable|string',
-            'city' => 'nullable|string',
-            'state' => 'nullable|string',
-            'postal_code' => 'nullable|string',
-            'is_default' => 'nullable|boolean'
+            'gender' => 'nullable',
+            'birth_date' => 'nullable|date',
+            'national_id' => 'nullable|string',
+            'passport_number' => 'nullable|string',
+            'marital_status' => 'nullable|string',
+            'blood_group' => 'nullable|string',
+            'emergency_contact_name' => 'nullable|string',
+            'emergency_contact_relationship' => 'nullable|string',
+            'emergency_contact_phone' => 'nullable|string',
+            'address_en' => 'nullable|string',
+            'address_ar' => 'nullable|string',
+            'nationality_id' => 'nullable|exists:nationalities,id',
+            'department_id' => 'nullable|exists:departments,id',
+            'position_id' => 'nullable|exists:positions,id',
+            'supervisor_id' => 'nullable|exists:employees,id',
+            'hire_date' => 'nullable|date',
+            'salary' => 'nullable|string',
+            'assurance_salary' => 'nullable|string',
+            'assurance_number' => 'nullable|string',
+            'bank_account' => 'nullable|string',
+            'employment_type' => 'nullable|string',
+            'status' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'is_biometric' => 'nullable|boolean',
+            'biometric_id' => 'nullable|string',
         ]);
 
-        $this->employeeService->updateClient($validatedData, $id, $this->checkToken);
-        return redirect()->route('client.index')->with('success', 'Client updated successfully!');
+        $this->employeeService->updateEmployee($validatedData, $id, $this->checkToken);
+        return redirect()->route('employees.list')->with('success', 'Employee updated successfully!');
     }
     public function destroy($id)
     {
-        $this->employeeService->deleteClient($id, $this->checkToken);
-        return redirect()->route('client.index')->with('success', 'Client deleted successfully!');
+        $this->employeeService->deleteEmployee($id, $this->checkToken);
+        return redirect()->route('employees.list')->with('success', 'Employee deleted successfully!');
     }
 }
