@@ -78,11 +78,11 @@
                                             <td>{{ $employee->email }}</td>
                                             <td>{{ $employee->phone_number ?? '-----' }}</td>
                                             <td>{{ $employee->national_id }}</td>
-                                            <td>{{ app()->getLocale() === 'ar' ? $employee->nationality->name_ar : $employee->nationality->name_en }}
+                                            <td>{{ $employee->nationality ? (app()->getLocale() === 'ar' ? $employee->nationality->name_ar : $employee->nationality->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ app()->getLocale() === 'ar' ? $employee->department->name_ar : $employee->department->name_en }}
+                                            <td>{{ $employee->department ? (app()->getLocale() === 'ar' ? $employee->department->name_ar : $employee->department->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en }}
+                                            <td>{{ $employee->position ? (app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en) : '-----' }}
                                             </td>
                                             <td>
                                                 @if ($employee->supervisor_id)
