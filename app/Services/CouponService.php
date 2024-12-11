@@ -7,6 +7,7 @@ use App\Models\Floor;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -69,7 +70,7 @@ class CouponService
                 'start_date' => $validatedData['start_date'],
                 'end_date' => $validatedData['end_date'],
                 'is_active' => $validatedData['is_active'],
-                'created_by' =>13,
+                'created_by' => Auth::guard('admin')->user()->id,
                 'count_usage' => 0,
             ]);
 
@@ -111,7 +112,7 @@ class CouponService
                 'start_date' => $validatedData['start_date'],
                 'end_date' => $validatedData['end_date'],
                 'is_active' => $validatedData['is_active'],
-                'modified_by' =>13,
+                'modified_by' => Auth::guard('admin')->user()->id,
             ]);
 
             if (!empty($validatedData['branches'])) {
