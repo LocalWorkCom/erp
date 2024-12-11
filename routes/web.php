@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BrandController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Dashboard\UnitController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,13 +37,22 @@ Route::get('/dashboard/login', [LoginController::class, 'showLoginForm'])->name(
 Route::post('/dashboard/login', [LoginController::class, 'login'])->name('dashboard.submitlogin');
 Route::post('/dashboard/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth:admin'])->group(function () {
-    Route::get('dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard.home');
-});
+Route::get('/dashboard/forgot-password', [ForgetPasswordController::class, 'showLinkRequestForm'])->name('dashboard.password.request');
+Route::post('/dashboard/forgot-password', [ForgetPasswordController::class, 'sendResetLinkEmail'])->name('dashboard.password.email');
+Route::get('/dashboard/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/dashboard/reset-password', [ForgetPasswordController::class, 'reset'])->name('dashboard.password.update');
 
+Route::middleware(['auth:admin'])->get('dashboard', function () {
+    $user = User::find(1);
+    $user_id = User::find(2);
+    $user->assignRole('superAdmin', 'admin');
+    $user_id->assignRole('Admin', 'admin');
+    return view('dashboard.index');
+})->name('dashboard.home');
 
+Route::get('/error/403', function () {
+    return view('dashboard.errors.403');
+})->name('dashboard.error.403');
 Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
         session(['locale' => $locale]);

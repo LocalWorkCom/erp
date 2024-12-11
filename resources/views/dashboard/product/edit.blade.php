@@ -79,23 +79,7 @@
                                         <div class="invalid-feedback">@lang('validation.EnterEnglishDesc')</div>
                                     </div>
 
-                                    <div class="col-xl-4">
-                                        <label for="main_image" class="form-label">@lang('product.Image')</label>
-                                        <input type="file" name="main_image" id="main_image" class="form-control">
-                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
-                                    </div>
-
-                                    <div class="col-xl-4 mx-auto">
-                                        <!-- Show the current image if it exists -->
-                                        @if ($product->image)
-                                            <div class="mb-3">
-                                                <img src="{{ asset($product->image) }}" alt="Category Image" width="150" height="150">
-                                            </div>
-                                            <!-- Hidden input to send the current image -->
-                                            <input type="hidden" name="image" value="{{ $product->image }}">
-                                        @endif
-                                    </div>
-
+                                   
                                     <div class="col-xl-4">
                                         <label for="main_unit_id" class="form-label">@lang('product.Unit')</label>
                                         <select name="main_unit_id" id="main_unit_id" class="js-example-basic-single form-control" required>
@@ -154,23 +138,25 @@
                                         <div class="invalid-feedback">@lang('validation.EnterBarcode')</div>
                                     </div>
 
-                                    <div class="col-xl-4">
+                                    {{-- <div class="col-xl-4">
                                         <label for="price" class="form-label">@lang('product.Price')</label>
                                         <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $product->price) }}" placeholder="@lang('product.Price')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterPrice')</div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="col-xl-4">
                                         <label for="min_limit" class="form-label">@lang('product.MinLimit')</label>
-                                        <input type="number" name="min_limit" id="min_limit" class="form-control" value="{{ old('min_limit', $product->min_limit) }}" placeholder="@lang('product.MinLimit')">
+                                        <input type="number" name="min_limit" id="min_limit" class="form-control" value="{{ old('min_limit', $product_limit ? $product_limit->min_limit : '') }}" placeholder="@lang('product.MinLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMinLimit')</div>
                                     </div>
-
+                                    
                                     <div class="col-xl-4">
                                         <label for="max_limit" class="form-label">@lang('product.MaxLimit')</label>
-                                        <input type="number" name="max_limit" id="max_limit" class="form-control" value="{{ old('max_limit', $product->max_limit) }}" placeholder="@lang('product.MaxLimit')">
+                                        <input type="number" name="max_limit" id="max_limit" class="form-control" value="{{ old('max_limit', $product_limit ? $product_limit->max_limit : '') }}" placeholder="@lang('product.MaxLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMaxLimit')</div>
                                     </div>
+                                    
+                                    
 
                                     <div class="col-xl-4">
                                         <label for="sku" class="form-label">@lang('product.Sku')</label>
@@ -215,10 +201,47 @@
                                     </div>
 
                                     <div class="col-xl-4">
+                                        <label for="main_image" class="form-label">@lang('product.Image')</label>
+                                        <input type="file" name="main_image" id="main_image" class="form-control">
+                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
+                                    </div>
+                            
+                                    <div class="col-xl-4 mx-auto">
+                                        <!-- Show the current image if it exists -->
+                                        @if ($product->image)
+                                            <div class="mb-3">
+                                                <img src="{{ asset($product->image) }}" alt="Category Image" width="150" height="150">
+                                            </div>
+                                            <!-- Hidden input to send the current image -->
+                                            <input type="hidden" name="image" value="{{ $product->image }}">
+                                        @endif
+                                    </div>
+
+
+                                    {{-- <div class="col-xl-4 mx-auto">
+                                        <!-- Show current gallery images -->
+                                        <div class="mb-3">
+                                            @foreach ($product->images as $image)
+                                                <div class="image-preview" style="display: inline-block; position: relative; margin: 5px;">
+                                                    <img src="{{ asset($image->image) }}" alt="Product Image" width="150" height="150">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-id="{{ $image->id }}">Remove</button>
+                                                </div>
+                                                <!-- Hidden input to track removed images -->
+                                                <input type="hidden" name="remove_image_ids[]" value="" class="remove-image-id">
+                                            @endforeach
+                                        </div>
+                                    
+                                        <!-- New image upload -->
+                                        <label for="images" class="form-label">@lang('product.Images')</label>
+                                        <input type="file" name="images[]" id="images" class="form-control" multiple>
+                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
+                                    </div> --}}
+
+                                    {{-- <div class="col-xl-4">
                                         <label for="expiry_date" class="form-label">@lang('product.ExpiryDate')</label>
                                         <input type="date" name="expiry_date" id="expiry_date" class="form-control" value="{{ old('expiry_date', $product->expiry_date) }}">
                                         <div class="invalid-feedback">@lang('validation.expiry_date')</div>
-                                    </div>
+                                    </div> --}}
 
                                     <center>
                                         <div class="col-xl-4">
@@ -245,6 +268,19 @@
     <script>
         $(document).ready(function () {
             $('.js-example-basic-single').select2();
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.remove-image-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const imageId = this.getAttribute('data-id');
+                const hiddenInput = this.nextElementSibling; // Target the hidden input
+    
+                if (hiddenInput && imageId) {
+                    hiddenInput.value = imageId; // Add ID to the hidden input for removal
+                    this.closest('.image-preview').remove(); // Remove the image preview
+                }
+            });
         });
     </script>
 @endsection

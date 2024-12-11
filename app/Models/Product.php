@@ -29,9 +29,9 @@ class Product extends Model
         'is_remind',
         'name_ar',
         'name_en',
+        'currency_code',
         'description_ar',
         'description_en',
-        'expiry_date'
     ];
 
     protected $hidden = [
@@ -123,4 +123,9 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class, 'brand_id','id');
     }
+    public function images()
+    {
+    return $this->hasMany(ProductImage::class, 'product_id', 'id');
+    }
+
 }

@@ -33,6 +33,7 @@ class ProductImage extends Model
     {
         return BaseUrl() . '/' . $this->image;
     }
+    
     /**
      * Get the product that owns the image.
      */
