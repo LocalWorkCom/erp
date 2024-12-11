@@ -438,97 +438,54 @@
     @vite('resources/assets/js/choices.js')
     @vite('resources/assets/js/modal.js')
 @endsection
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
 <script>
-    $(document).ready(function(){
-        $('.edit-floor-btn').on('click', function() {
-            var floorId = this.getAttribute('data-id');   
-            var get_url = "{{ route('floor.show', 'id') }}";
-            var edit_url = "{{ route('floor.update', 'id') }}";
-            get_url = get_url.replace('id', floorId);
+    $('.edit-floor-btn').on('click', function() {
+        var floorId = $(this).data('id');
 
-            // AJAX request to fetch user details
-            $.ajax({
-                url: get_url, 
-                type: 'GET',
-                success: function(data) {
-                    // Populate the modal with the data
-                    $('#edit-name-ar').val(data.name_ar);
-                    $('#edit-name-en').val(data.name_en);
-                    $('#edit-branch').val(data.branch_id);
+        alert(floorId);
+        // AJAX request to fetch user details
+        $.ajax({
+            url: '/users/' + userId, 
+            type: 'GET',
+            success: function(data) {
+                // Populate the modal with the data
+                $('#userId').val(data.id);
+                $('#userName').val(data.name);
+                $('#userEmail').val(data.email);
 
-                    if(data.type == 1){
-                        $('#type-indoor').prop('checked', true);
-                    }else if(data.type == 2){
-                        $('#type-outdoor').prop('checked', true);
-                    }else{
-                        $('#type-both').prop('checked', true);
-                    }
-
-                    if(data.smoking == 1){
-                        $('#smokin-indoor').prop('checked', true);
-                    }else if(data.smoking == 2){
-                        $('#smokin-outdoor').prop('checked', true);
-                    }else{
-                        $('#smokin-both').prop('checked', true);
-                    }
-
-                    edit_url = edit_url.replace('id', floorId);
-                    $('#edit-floor-form').attr('action', edit_url);
-
-                    // Show the modal
-                    $('#editModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
-        });
-
-        $('.show-floor-btn').on('click', function() {
-            var floorId = this.getAttribute('data-id');   
-            var get_url = "{{ route('floor.show', 'id') }}";
-            get_url = get_url.replace('id', floorId);
-
-            // AJAX request to fetch user details
-            $.ajax({
-                url: get_url, 
-                type: 'GET',
-                success: function(data) {
-                    console.log(data);
-                    
-                    // Populate the modal with the data
-                    $('#show-name-ar').text(data.name_ar);
-                    $('#show-name-en').text(data.name_en);
-                    $('#show-branch').text(data.branches.name);
-
-                    if(data.type == 1){
-                        $('#show-type').text('indoor');
-                    }else if(data.type == 2){
-                        $('#show-type').text('outdoor');
-                    }else{
-                        $('#show-type').text('both');
-                    }
-
-                    if(data.smoking == 1){
-                        $('#show-smoking').text('smoking');
-                    }else if(data.smoking == 2){
-                        $('#show-smoking').text('no smoking');
-                    }else{
-                        $('#show-smoking').text('both');
-                    }
-
-                    // Show the modal
-                    $('#showModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
+                // Show the modal
+                $('#showModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error);
+            }
         });
     });
+
+    $('.showModal').on('click', function() {
+        var floorId = $(this).data('id');
+
+        alert(floorId);
+        // AJAX request to fetch user details
+        $.ajax({
+            url: '/users/' + userId, 
+            type: 'GET',
+            success: function(data) {
+                // Populate the modal with the data
+                $('#userId').val(data.id);
+                $('#userName').val(data.name);
+                $('#userEmail').val(data.email);
+
+                // Show the modal
+                $('#showModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error);
+            }
+        });
+    });
+
+
     <?php /*
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-floor-btn');

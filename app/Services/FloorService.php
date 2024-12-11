@@ -32,7 +32,7 @@ class FloorService
     public function show($id)
     {
         try {
-            $floor = Floor::with(['floorPartitions', 'tables', 'floorPartitions.tables'])->findOrFail($id);
+            $floor = Floor::with([ 'branches', 'floorPartitions', 'tables', 'floorPartitions.tables'])->findOrFail($id);
             $floor->makeHidden(['name'])->makeVisible(['name_ar', 'name_en']);
             return ResponseWithSuccessData($this->lang, $floor, 1);
         } catch (\Exception $e) {

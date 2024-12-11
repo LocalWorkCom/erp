@@ -20,7 +20,7 @@ class AssignRoleSeeder extends Seeder
 
         // Assign roles to specific users
         $user1 = User::find(1); // Assuming user ID 1 exists
-        $user2 = User::find(2); // Assuming user ID 2 exists
+        $user2 = User::find(9); // Assuming user ID 2 exists
 
         if ($user1) {
             $user1->assignRole($superAdminRole);

@@ -53,9 +53,7 @@ class FloorController extends Controller
 
     public function update(Request $request, $id)
     {
-//        dd($request->all());
         $response = $this->floorService->edit($request, $id);
-//        dd($response);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
