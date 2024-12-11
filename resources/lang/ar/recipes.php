@@ -1,0 +1,21 @@
+<?php
+return [
+    'Recipes' => 'الوصفات',
+    'ShowRecipe' => 'عرض الوصفة',
+    'RecipeDetails' => 'تفاصيل الوصفة',
+    'NameArabic' => 'الاسم (بالعربية)',
+    'NameEnglish' => 'الاسم (بالإنجليزية)',
+    'DescriptionArabic' => 'الوصف (بالعربية)',
+    'DescriptionEnglish' => 'الوصف (بالإنجليزية)',
+    'Price' => 'السعر',
+    'Status' => 'الحالة',
+    'Active' => 'نشط',
+    'Inactive' => 'غير نشط',
+    'Ingredients' => 'المكونات',
+    'LossPercent' => 'نسبة الفقد',
+    'Images' => 'الصور',
+    'NoImages' => 'لا توجد صور',
+    'Back' => 'رجوع',
+    'Unit' => 'الوحدة',
+    'None' => 'لا يوجد',
+];

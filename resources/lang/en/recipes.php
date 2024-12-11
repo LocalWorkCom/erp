@@ -1,0 +1,21 @@
+<?php
+return [
+    'Recipes' => 'Recipes',
+    'ShowRecipe' => 'Show Recipe',
+    'RecipeDetails' => 'Recipe Details',
+    'NameArabic' => 'Name (Arabic)',
+    'NameEnglish' => 'Name (English)',
+    'DescriptionArabic' => 'Description (Arabic)',
+    'DescriptionEnglish' => 'Description (English)',
+    'Price' => 'Price',
+    'Status' => 'Status',
+    'Active' => 'Active',
+    'Inactive' => 'Inactive',
+    'Ingredients' => 'Ingredients',
+    'LossPercent' => 'Loss Percent',
+    'Images' => 'Images',
+    'NoImages' => 'No Images Available',
+    'Back' => 'Back',
+    'Unit' => 'Unit',
+    'None' => 'None',
+];
