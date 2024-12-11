@@ -64,7 +64,7 @@ class PositionService
         $position->description_ar = $data['description_ar'];
         $position->description_en = $data['description_en'];
         $position->department_id = $data['department_id'];
-        $position->updated_by = Auth::user()->id;
+        $position->modified_by = Auth::user()->id;
         $position->updated_at = now();
         $position->save();
     }

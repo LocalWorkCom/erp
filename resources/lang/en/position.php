@@ -7,10 +7,13 @@ return [
     'EditPosition' => 'Edit Position',
     'AddPosition' => 'Add Position',
     'ID' => 'ID',
-    'ArabicName' => 'Arabic Name',
-    'EnglishName' => 'English Name',
-    'ArabicDesc' => 'Arabic Description',
-    'EnglishDesc' => 'English Description',
+    'name' => 'Name',
+    'description' => 'Description',
     'Actions' => 'Actions',
     'ChooseDepartment' => 'Choose Department',
+    'addPosition' => 'Add Position',
+    'show' => 'Show',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+
 ];

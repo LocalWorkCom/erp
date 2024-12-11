@@ -273,10 +273,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('position.ID')</th>
-                                        <th scope="col">@lang('position.ArabicName')</th>
-                                        <th scope="col">@lang('position.EnglishName')</th>
-                                        <th scope="col">@lang('position.ArabicDescr')</th>
-                                        <th scope="col">@lang('position.EnglishDescr')</th>
+                                        <th scope="col">@lang('position.name')</th>
+                                        <th scope="col">@lang('position.description')</th>
                                         <th scope="col">@lang('position.Department')</th>
                                         <th scope="col">@lang('position.Actions')</th>
                                     </tr>
@@ -285,11 +283,11 @@
                                     @foreach ($positions as $position)
                                         <tr>
                                             <td>{{ $position->id }}</td>
-                                            <td>{{ $position->name_ar }}</td>
-                                            <td>{{ $position->name_en }}</td>
-                                            <td>{{ $position->description_ar }}</td>
-                                            <td>{{ $position->description_en }}</td>
-                                            <td>{{ $position->department->name_ar . ' | ' . $position->department->name_en }}
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->name_ar : $position->name_en }}
+                                            </td>
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->description_ar : $position->description_en }}
+                                            </td>
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->department->name_ar : $position->department->name_en }}
                                             </td>
                                             <td>
                                                 <!-- Show Button -->
