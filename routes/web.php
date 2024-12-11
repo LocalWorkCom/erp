@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,10 +50,6 @@ Route::get('/dashboard/reset-password/{token}', [ForgetPasswordController::class
 Route::post('/dashboard/reset-password', [ForgetPasswordController::class, 'reset'])->name('dashboard.password.update');
 
 Route::middleware(['auth:admin'])->get('dashboard', function () {
-    $user = User::find(1);
-    $user_id = User::find(2);
-    $user->assignRole('superAdmin', 'admin');
-    $user_id->assignRole('Admin', 'admin');
     return view('dashboard.index');
 })->name('dashboard.home');
 
@@ -254,5 +252,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
     });
-
 });

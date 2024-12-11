@@ -123,6 +123,9 @@ class RolePermissionSeeder extends Seeder
             'users',
             'user_gifts',
             'vendors',
+            'logos',
+            'sliders',
+
         ];
 
         $actions = ['view', 'create', 'update', 'delete'];
