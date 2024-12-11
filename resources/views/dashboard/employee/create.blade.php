@@ -111,7 +111,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="gender" class="form-label">@lang('employee.gender')</label>
                                         <select class="js-example-basic-single form-control" id="gender" name="gender">
-                                            <option value="" selected disabled>@lang('validation.SelectGender')</option>
+                                            <option value="" selected disabled>@lang('employee.selectGender')</option>
                                             <option value="male">@lang('employee.male')</option>
                                             <option value="female">@lang('employee.female')</option>
                                         </select>
@@ -119,7 +119,7 @@
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.SelectGender')
+                                            @lang('validation.selectGender')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -133,7 +133,7 @@
                                             @lang('validation.EnterDateOfBirth')
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    {{-- <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.country')</p>
                                         <select name="country_id" class="js-example-basic-single form-control" required>
                                             <option value="" disabled>@lang('employee.chooseCountry')</option>
@@ -144,11 +144,11 @@
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('employee.nationalId')</label>
+                                        <label for="input-placeholder" class="form-label">@lang('employee.national_id')</label>
                                         <input type="text" class="form-control" id="national_id" name="national_id"
-                                            value="{{ old('national_id') }}" placeholder="@lang('employee.nationalId')" required>
+                                            value="{{ old('national_id') }}" placeholder="@lang('employee.national_id')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -157,10 +157,10 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('employee.PassportNumber')</label>
+                                        <label for="input-placeholder" class="form-label">@lang('employee.passport')</label>
                                         <input type="text" class="form-control" id="passport_number"
                                             name="passport_number" value="{{ old('passport_number') }}"
-                                            placeholder="@lang('employee.PassportNumber')">
+                                            placeholder="@lang('employee.passport')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -172,7 +172,7 @@
                                         <label for="marital_status" class="form-label">@lang('employee.maritalStatus')</label>
                                         <select class="js-example-basic-single form-control" id="marital_status"
                                             name="marital_status">
-                                            <option value="" selected disabled>@lang('validation.SelectMaritalStatus')</option>
+                                            <option value="" selected disabled>@lang('employee.selectMaritalStatus')</option>
                                             <option value="Married">@lang('employee.married')</option>
                                             <option value="Single">@lang('employee.single')</option>
                                             <option value="Divorced">@lang('employee.divorced')</option>
@@ -182,14 +182,14 @@
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.SelectMaritalStatus')
+                                            @lang('validation.selectMaritalStatus')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="blood_group" class="form-label">@lang('employee.bloodGroup')</label>
                                         <select class="js-example-basic-single form-control" id="blood_group"
                                             name="blood_group">
-                                            <option value="" selected disabled>@lang('validation.SelectBloodGroup')</option>
+                                            <option value="" selected disabled>@lang('employee.selectBloodGroup')</option>
                                             <option value="A+">A+</option>
                                             <option value="A-">A-</option>
                                             <option value="B+">B+</option>
@@ -203,14 +203,14 @@
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.SelectBloodGroup')
+                                            @lang('validation.selectBloodGroup')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="emergency_contact_name" class="form-label">@lang('employee.emergencyContactName')</label>
+                                        <label for="emergency_contact_name" class="form-label">@lang('employee.emergencyName')</label>
                                         <input type="text" class="form-control" id="emergency_contact_name"
                                             name="emergency_contact_name" value="{{ old('emergency_contact_name') }}"
-                                            placeholder="@lang('employee.emergencyContactName')">
+                                            placeholder="@lang('employee.emergencyName')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -220,11 +220,11 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="emergency_contact_relationship"
-                                            class="form-label">@lang('employee.emergencyContactRelationship')</label>
+                                            class="form-label">@lang('employee.emergencyRel')</label>
                                         <input type="text" class="form-control" id="emergency_contact_relationship"
                                             name="emergency_contact_relationship"
                                             value="{{ old('emergency_contact_relationship') }}"
-                                            placeholder="@lang('employee.emergencyContactName')">
+                                            placeholder="@lang('employee.emergencyRel')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -233,10 +233,10 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="emergency_contact_phone" class="form-label">@lang('employee.emergencyContactPhone')</label>
+                                        <label for="emergency_contact_phone" class="form-label">@lang('employee.emergencyPhone')</label>
                                         <input type="text" class="form-control" id="emergency_contact_phone"
                                             name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}"
-                                            placeholder="@lang('employee.emergencyContactPhone')">
+                                            placeholder="@lang('employee.emergencyPhone')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -247,10 +247,10 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.nationality')</p>
                                         <select name="nationality_id" class="js-example-basic-single form-control">
-                                            <option value="" disabled>@lang('employee.selectNationality')</option>
+                                            <option value="" selected disabled>@lang('employee.selectNationality')</option>
                                             @foreach ($nationalities as $nationality)
                                                 <option value="{{ $nationality->id }}">
-                                                    {{ $nationality->name_ar . ' | ' . $nationality->name_en }}
+                                                    {{ app()->getLocale() === 'ar' ? $nationality->name_ar : $nationality->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -259,10 +259,10 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.department')</p>
                                         <select name="department_id" class="js-example-basic-single form-control">
-                                            <option value="" disabled>@lang('employee.selectDepartment')</option>
+                                            <option value="" selected disabled>@lang('employee.selectDepartment')</option>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}">
-                                                    {{ $department->name_ar . ' | ' . $department->name_en }}
+                                                    {{ app()->getLocale() === 'ar' ? $department->name_ar : $department->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -271,10 +271,10 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.position')</p>
                                         <select name="position_id" class="js-example-basic-single form-control">
-                                            <option value="" disabled>@lang('employee.selectPosition')</option>
+                                            <option value="" selected disabled>@lang('employee.selectPosition')</option>
                                             @foreach ($positions as $position)
                                                 <option value="{{ $position->id }}">
-                                                    {{ $position->name_ar . ' | ' . $position->name_en }}
+                                                    {{ app()->getLocale() === 'ar' ? $position->name_ar : $position->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -286,7 +286,7 @@
                                             <option value="" disabled selected>@lang('employee.selectSupervisor')</option>
                                             @foreach ($supervisors as $supervisor)
                                                 <option value="{{ $supervisor->id }}">
-                                                    {{ $supervisor->first_name . ' ' . $supervisor->last_name }}
+                                                    {{ $supervisor->first_name . ' ' . $supervisor->last_name . ' | ' . $supervisor->employee_code }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -339,9 +339,9 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="bank_account" class="form-label">@lang('employee.bannkAccount')</label>
+                                        <label for="bank_account" class="form-label">@lang('employee.bankAccount')</label>
                                         <input type="text" class="form-control" id="bank_account" name="bank_account"
-                                            value="{{ old('bank_account') }}" placeholder="@lang('employee.bankAccounnt')">
+                                            value="{{ old('bank_account') }}" placeholder="@lang('employee.bankAccount')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -353,15 +353,15 @@
                                         <label for="employment_type" class="form-label">@lang('employee.employmentType')</label>
                                         <select class="js-example-basic-single form-control" id="employment_type"
                                             name="employment_type">
-                                            <option value="" selected disabled>@lang('validation.SelectEmploymentType')</option>
-                                            <option value="Part-Time">Part-Time</option>
-                                            <option value="Full-Time">Full-Time</option>
+                                            <option value="" selected disabled>@lang('employee.selectEmploymentType')</option>
+                                            <option value="Part-Time">@lang('employee.partTime')</option>
+                                            <option value="Full-Time">@lang('employee.fullTime')</option>
                                         </select>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.SelectEmploymentType')
+                                            @lang('validation.selectEmploymentType')
                                         </div>
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
@@ -409,7 +409,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="biometric_id" class="form-label">@lang('employee.bannkAccount')</label>
+                                        <label for="biometric_id" class="form-label">@lang('employee.bankAccount')</label>
                                         <input type="text" class="form-control" id="biometric_id" name="biometric_id"
                                             value="{{ old('biometric_id') }}" placeholder="@lang('employee.biometricId')">
                                         <div class="valid-feedback">
