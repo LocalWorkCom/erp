@@ -37,5 +37,7 @@ return [
     'AddProduct'=>'Add Product',
     'EditProduct'=>'Edit Product',
     'show'=>'Show Product',
-    'Images' => 'Images'
+    'Images' => 'Images',
+    'Factor' =>'Factor'
+
 ];
