@@ -108,6 +108,15 @@
                                         <div class="invalid-feedback">@lang('validation.EnterUnit')</div>
                                     </div>
 
+
+                                    <div class="col-xl-4">
+                                        <label for="factor" class="form-label">@lang('product.Factor')</label>
+                                        <input type="number" name="factor" id="factor"  step="0.1" class="form-control"
+                                            value="{{ old('factor', $product_unit ? $product_unit->factor : '') }}"
+                                            placeholder="@lang('product.Factor')">
+                                        <div class="invalid-feedback">@lang('validation.EnterFactor')</div>
+                                    </div>
+
                                     <div class="col-xl-4">
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
                                         <select name="currency_code" id="currency_code"

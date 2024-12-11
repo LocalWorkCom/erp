@@ -25,6 +25,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
+
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
         'numeric' => 'يجب ألا يزيد :attribute عن :max.',
@@ -168,6 +169,7 @@ return [
     'EnterOffer' => 'يجب اختيار عرض',
     'EnterArabicName' => 'يجب ادخال الاسم بالعربي',
     'EnterEnglishName' => 'يجب ادخال الاسم بالانجليزي',
+    'EnterHexaCode' => 'يجب ادخال المود بالهكسا ',
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterBarcode' => 'يجب ادخال الباركود',
