@@ -152,6 +152,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/floors', [FloorController::class, 'index'])->name('floors.list');
     Route::group(['prefix' => 'floor'], function () {
         Route::post('store', [FloorController::class, 'store'])->name('floor.store');
+        Route::get('show/{id}', [FloorController::class, 'show'])->name('floor.show');
         Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update');
         Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete');
     });
@@ -212,7 +213,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [SliderController::class, 'show'])->name('slider.show');
         Route::get('edit/{id}', [SliderController::class, 'edit'])->name('slider.edit');
         Route::put('update/{id}', [SliderController::class, 'update'])->name('slider.update');
-        Route::delete('delete/{id}', [SliderController::class, 'destroy'])->name('slider.delete');
+        Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete');
     });
 
     //HR
@@ -241,8 +242,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
-        Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dashboard.dish-categories.show');
-
     });
 
 });

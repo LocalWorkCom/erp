@@ -335,7 +335,6 @@
                             </div>
 
                         </div>
-
                         <div class="card-body">
                             @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
@@ -444,7 +443,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -481,31 +479,31 @@
         const editForm = document.getElementById('edit-floor-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
-        // const typeSelect = document.getElementById('edit-type');
-        // const smokingSelect = document.getElementById('edit-smoking');
-        // const branchSelect = document.getElementById('edit-branch');
+        const typeSelect = document.getElementById('edit-type');
+        const smokingSelect = document.getElementById('edit-smoking');
+        const branchSelect = document.getElementById('edit-branch');
 
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 // Get floor details from data attributes
                 const floorId = this.getAttribute('data-id');
-                var get_url = "{{ route('floor.show', 'id') }}";
-                get_url = get_url.replace('id', floorId);
-                $.get(get_url, function(data) {
-                    nameArInput.value = data.name_ar;
-                    nameEnInput.value = data.name_en;
-                });
+                const nameAr = this.getAttribute('data-name-ar');
+                const nameEn = this.getAttribute('data-name-en');
+                const type = this.getAttribute('data-type');
+                const smoking = this.getAttribute('data-smoking');
+                const branchId = this.getAttribute('data-branch-id');
+                const routeTemplate = this.getAttribute('data-route');
 
                 // Set form action URL dynamically
-                // const updateRoute = routeTemplate.replace(':id', floorId);
-                // editForm.action = updateRoute;
+                const updateRoute = routeTemplate.replace(':id', floorId);
+                editForm.action = updateRoute;
 
-                // // Populate the modal fields
-                // nameArInput.value = nameAr;
-                // nameEnInput.value = nameEn;
-                // typeSelect.value = type;
-                // smokingSelect.value = smoking;
-                // branchSelect.value = branchId;
+                // Populate the modal fields
+                nameArInput.value = nameAr;
+                nameEnInput.value = nameEn;
+                typeSelect.value = type;
+                smokingSelect.value = smoking;
+                branchSelect.value = branchId;
             });
         });
     });

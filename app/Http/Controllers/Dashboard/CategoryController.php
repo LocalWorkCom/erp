@@ -51,21 +51,21 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('categories')->with('message',$message);
+        return redirect('dashboard/categories')->with('message',$message);
     }
 
     public function show($id)
     {
         $category = Category::with('parent')->findOrFail($id);
 //        dd($category);
-        return view('dashboard.category.show', compact('category'));
+        return view('dashboard.category.show', compact('category','id'));
     }
 
     public function edit($id)
     {
         $category = Category::findOrFail($id);
         $categories = Category::where('active', 1)->get(); // Fetch only active categories
-        return view('dashboard.category.edit', compact('category', 'categories'));
+        return view('dashboard.category.edit', compact('category', 'categories','id'));
     }
 
     public function update(Request $request, $id)
@@ -79,14 +79,14 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('categories')->with('message',$message);
+        return redirect('dashboard/categories')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->categoryService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('categories')->with('message',$message);
+        return redirect('dashboard/categories')->with('message',$message);
     }
 
 }

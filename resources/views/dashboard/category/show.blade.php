@@ -11,8 +11,13 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('category.Categories')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.show')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('categories.list') }}'">@lang('category.Categories')</a>
+
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('category.show', ['id' => $id]) }}">@lang('category.show')</a>
+                    </li>
                 </ol>
             </nav>
         </div>

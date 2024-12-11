@@ -30,6 +30,13 @@ class FloorController extends Controller
         return view('dashboard.floor.list', compact('Floors', 'branches'));
     }
 
+    public function show($id)
+    {
+        $response = $this->floorService->show($id);
+        $responseData = $response->original;
+        return $Floors = $responseData['data'];
+    }
+
     public function store(Request $request)
     {
 //        dd($request->all());

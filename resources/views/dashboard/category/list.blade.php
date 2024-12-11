@@ -14,8 +14,14 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.Category')</li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('dashboard.home') }}">
+                            @lang('sidebar.Main')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('categories.list') }}'">@lang('category.Category')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -64,8 +70,8 @@
                                         <tr>
                                             {{-- @dd( $category) --}}
                                             <td>{{ $category->id }}</td>
-                                            <td><img src="{{ url($category->image) }}" alt=""
-                                                    width="100" height="100"></td>
+                                            <td><img src="{{ BaseUrl() . '/' . $category->image }}" alt=""
+                                                width="100" height="100"></td>
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>{{ $category->code }}</td>
