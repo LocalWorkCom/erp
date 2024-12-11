@@ -7,6 +7,7 @@ use App\Models\Position;
 
 use App\Models\Table;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TableService
@@ -57,7 +58,7 @@ class TableService
                 return RespondWithBadRequestNotAdd($this->lang, 9);
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $table = new Table();
             $table->floor_id = $request->floor_id;
             $table->floor_partition_id = $request->floor_partition_id;
@@ -100,7 +101,7 @@ class TableService
                 return RespondWithBadRequestData($this->lang, 9);
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $table = Table::findOrFail($id);
             $table->floor_id = $request->floor_id;
             $table->floor_partition_id = $request->floor_partition_id;
@@ -123,7 +124,7 @@ class TableService
     public function delete(Request $request, $id)
     {
         try {
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
 
             $table = Table::find($request->id);
             if (!$table) {

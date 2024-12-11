@@ -47,7 +47,7 @@ class UnitController extends Controller
             return redirect('units')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('units')->with('message',$message);
+        return redirect('dashboard/units')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -56,10 +56,10 @@ class UnitController extends Controller
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('units')->withErrors($validationErrors)->withInput();
+            return redirect('dashboard/units')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('units')->with('message',$message);
+        return redirect('dashboard/units')->with('message',$message);
     }
 
     public function delete(Request $request, $id)
@@ -67,6 +67,6 @@ class UnitController extends Controller
         $response = $this->UnitService->delete($request, $id, $this->checkToken);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('units')->with('message',$message);
+        return redirect('dashboard/units')->with('message',$message);
     }
 }

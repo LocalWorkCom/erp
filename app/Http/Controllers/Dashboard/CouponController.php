@@ -54,7 +54,7 @@ class CouponController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('coupons')->with('message',$message);
+        return redirect('dashboard/coupons')->with('message',$message);
     }
 
     public function edit($id)
@@ -78,7 +78,7 @@ class CouponController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('coupons')->with('message',$message);
+        return redirect('dashboard/coupons')->with('message',$message);
     }
 
     public function delete(Request $request, $id)
@@ -86,6 +86,6 @@ class CouponController extends Controller
         $response = $this->couponService->destroy($request, $id);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('coupons')->with('message',$message);
+        return redirect('dashboard/coupons')->with('message',$message);
     }
 }
