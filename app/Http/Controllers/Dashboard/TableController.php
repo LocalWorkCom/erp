@@ -43,7 +43,7 @@ class TableController extends Controller
             return redirect('tables')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('tables')->with('message',$message);
+        return redirect('dashboard/tables')->with('message',$message);
     }
 
     public function update(Request $request, $id)
@@ -57,13 +57,13 @@ class TableController extends Controller
             return redirect('tables')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect('tables')->with('message',$message);
+        return redirect('dashboard/tables')->with('message',$message);
     }
     public function delete(Request $request, $id)
     {
         $response = $this->tableService->delete($request, $id);
         $responseData = $response->original;
         $message= $responseData['message'];
-        return redirect('tables')->with('message',$message);
+        return redirect('dashboard/tables')->with('message',$message);
     }
 }

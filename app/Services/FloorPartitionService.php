@@ -7,6 +7,7 @@ use App\Models\FloorPartition;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FloorPartitionService
@@ -44,7 +45,7 @@ class FloorPartitionService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor_partition = new FloorPartition();
             $floor_partition->floor_id = $request->floor_id;
             $floor_partition->name_ar = $request->name_ar;
@@ -77,7 +78,7 @@ class FloorPartitionService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor_partition = FloorPartition::findOrFail($id);
             $floor_partition->floor_id = $request->floor_id;
             $floor_partition->name_ar = $request->name_ar;
@@ -97,7 +98,7 @@ class FloorPartitionService
     public function delete(Request $request, $id)
     {
         try {
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
 
             $floor_partition = FloorPartition::find($id);
             if (!$floor_partition) {

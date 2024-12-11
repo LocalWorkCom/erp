@@ -18,7 +18,7 @@ return [
     'No' => 'لا',
     'None' => 'لا يوجد',
     'Back' => 'رجوع',
-    'IsActive' => 'متاح',
+    'IsActive' => 'نشط',
     'Save' => 'حفظ',
     'DescriptionArabic' => 'الوصف (بالعربية)',
     'DescriptionEnglish' => 'الوصف (بالإنجليزية)',

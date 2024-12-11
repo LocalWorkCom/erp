@@ -138,13 +138,13 @@
                                     @endcan
                                     @can('view dish_categories')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.DishesCategory')
+                                            <a href="{{ route('dashboard.dish-categories.index') }}" class="side-menu__item">@lang('sidebar.DishesCategory')
                                             </a>
                                         </li>
                                     @endcan
                                     @can('view recipes')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Recipes')
+                                            <a href="{{ route('dashboard.recipes.index') }}" class="side-menu__item">@lang('sidebar.Recipes')
                                             </a>
                                         </li>
                                     @endcan
@@ -180,7 +180,7 @@
                             <!-- Start::slide -->
                             @can('view employees')
                                 <li class="slide">
-                                    <a href="{{ url('Employee') }}" class="side-menu__item">
+                                    <a href="{{ route('employees.list') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -190,7 +190,7 @@
                             @endcan
                             @can('view positions')
                                 <li class="slide">
-                                    <a href="{{ url('Positions') }}" class="side-menu__item">
+                                    <a href="{{ route('positions.index') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -200,7 +200,7 @@
                             @endcan
                             @can('view departments')
                                 <li class="slide">
-                                    <a href="{{ url('Departments') }}" class="side-menu__item">
+                                    <a href="{{ route('departments.list') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -666,7 +666,7 @@
                                     <a href="{{ route('units.list') }}" class="side-menu__item">@lang('sidebar.Units') </a>
                                 </li>
                             @endcan
-                            @can('view point_systems')
+                            {{-- @can('view point_systems')
                                 <li class="slide">
                                     <a href="{{ url('Point_system') }}" class="side-menu__item">@lang('sidebar.Point_system') </a>
                                 </li>
@@ -695,7 +695,7 @@
                                 <li class="slide">
                                     <a href="{{ url('leaveNationals') }}" class="side-menu__item">@lang('sidebar.leaveNationals') </a>
                                 </li>
-                            @endcan
+                            @endcan --}}
                         </ul>
                     </li>
                 @endif
