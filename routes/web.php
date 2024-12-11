@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\BranchController;
@@ -234,6 +235,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.delete');
     });
 
+    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.list');
+    Route::group(['prefix' => 'department'], function () {
+        Route::get('create', [DepartmentController::class, 'create'])->name('department.create');
+        Route::post('store', [DepartmentController::class, 'store'])->name('department.store');
+        Route::get('show/{id}', [DepartmentController::class, 'show'])->name('department.show');
+        Route::get('edit/{id}', [DepartmentController::class, 'edit'])->name('department.edit');
+        Route::put('update/{id}', [DepartmentController::class, 'update'])->name('department.update');
+        Route::delete('delete/{id}', [DepartmentController::class, 'destroy'])->name('department.delete');
+    });
+
     Route::prefix('dish-categories')->group(function () {
         Route::get('/', [DishCategoryController::class, 'index'])->name('dashboard.dish-categories.index');
         Route::get('/create', [DishCategoryController::class, 'create'])->name('dashboard.dish-categories.create');
@@ -243,5 +254,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore');
     });
-
 });
