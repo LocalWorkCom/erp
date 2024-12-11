@@ -85,8 +85,8 @@
                                             <td>{{ $employee->position ? (app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en) : '-----' }}
                                             </td>
                                             <td>
-                                                @if ($employee->supervisor_id)
-                                                    {{ $employee->supervisor->employee_code }}
+                                                @if ($employee->supervisor)
+                                                    {{ $employee->supervisor->first_name . ' ' . $employee->supervisor->last_name . ' | ' . $employee->supervisor->employee_code }}
                                                 @else
                                                     {{ '-----' }}
                                                 @endif
