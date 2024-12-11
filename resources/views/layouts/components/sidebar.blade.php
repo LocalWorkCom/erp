@@ -655,7 +655,7 @@
                                     <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
                                 </li>
                             @endcan
-                            @can('view size')
+                            @can('view sizes')
                                 <li class="slide">
                                     <a href="{{ route('sizes.list') }}" class="side-menu__item">@lang('sidebar.size') </a>
                                 </li>
