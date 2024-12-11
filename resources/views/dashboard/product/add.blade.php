@@ -94,6 +94,13 @@
                                     </div>
 
                                     <div class="col-xl-4">
+                                        <label for="factor" class="form-label">@lang('product.Factor')</label>
+                                        <input type="number" name="factor" id="factor" class="form-control" 
+                                               placeholder="@lang('product.Factor')" step="0.1" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterFactor')</div>
+                                    </div>
+                                    
+                                    <div class="col-xl-4">
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
                                         <select name="currency_code" id="currency_code" class="js-example-basic-single form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCurrency')</option>
