@@ -60,7 +60,7 @@
                                     <tr>
                                         <th scope="col">@lang('roles.Id')</th>
                                         <th scope="col">@lang('roles.name')</th>
-                                        <th scope="col">@lang('roles.guard')</th>
+                                        {{-- <th scope="col">@lang('roles.guard')</th> --}}
                                         <th scope="col">@lang('roles.permission')</th>
                                         <th scope="col">@lang('roles.Actions')</th>
                                     </tr>
@@ -70,7 +70,7 @@
                                         <tr>
                                             <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
-                                            <td>{{ $role->guard_name }}</td>
+                                            {{-- <td>{{ $role->guard_name }}</td> --}}
                                             <td>
                                                 @foreach ($role->permissions->take(10) as $permission)
                                                     {{ __("permissions.{$permission->name}") }}{{ !$loop->last && $loop->iteration % 4 != 0 ? ' - ' : '' }}
