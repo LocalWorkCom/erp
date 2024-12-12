@@ -73,6 +73,20 @@ Route::get('/', function () {
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
+    
+    // Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
+    Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
+    ->name('products.units.list')
+    ->middleware('role_or_permission:view products');
+    // Route::post('product/units/save', [ProductController::class, 'saveUnits'])
+    // ->name('product.units.save')
+    // ->middleware('role_or_permission:view products');
+    Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
+    ->name('product.units.save')
+    ->middleware('role_or_permission:view products');
+
+    Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
+    ->name('units.remove')->middleware('role_or_permission:view products');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
@@ -82,6 +96,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit')->middleware('role_or_permission:update products');
         Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete')->middleware('role_or_permission:delete products');
+        
+        
         // Route::get('units', [ProductUnitController::class, 'index']);
         // Route::post('unit/store', [ProductUnitController::class, 'store']);
         // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -96,6 +112,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
         // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
     });
+
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'category'], function () {
         Route::get('create', [CategoryController::class, 'create'])->name('category.create')->middleware('role_or_permission:create products');
