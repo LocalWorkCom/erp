@@ -2,6 +2,7 @@
 return [
     "orders" => "الطلبات",
     "order" => "الطلب",
+    "order_number" => "رقم الطلب",
     "type" => "نوع الطلب",
     "status" => "الحالة",
     "branch" => "الفرع",

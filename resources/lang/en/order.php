@@ -2,6 +2,8 @@
 return [
     "orders" => "Orders",
     "order" => "Order",
+    "order_number" => "order number",
+
     "type" => "Type",
     "status" => "Status",
     "branch" => "Branch",
@@ -14,5 +16,17 @@ return [
     "show" => "Show",
     "pending" => "Pending",
     "online" => "Online",
+    "paid" => "paid",
+    "unpaid" => "unpaid",
+    "delivery" => "delivery",
+    "in_resturant" => "in resturant",
+    "open" => "open",
+    "cart" => "cart",
+    "call_center" => "call center",
+    "takeaway" => " takeaway",
+    "status_paid" => "status payment",
+    "reject" => "reject",
+    "accept" => "accept",
+    "cancel" => "cancel",
 
 ];

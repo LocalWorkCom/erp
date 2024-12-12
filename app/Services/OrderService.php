@@ -367,6 +367,8 @@ class OrderService
 
         $order['details'] = OrderDetail::where('order_id', $id)->get();
         $order['addons'] = OrderAddon::where('order_id', $id)->get();
+        $order['transaction'] = OrderTransaction::where('order_id', $id)->first();
+
 
         return ResponseWithSuccessData($lang, $order, 1);
     }

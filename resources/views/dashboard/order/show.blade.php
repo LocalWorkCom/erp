@@ -31,77 +31,48 @@
                         <div class="card-body">
                             <div class="row gy-4">
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('order.ArabicName')</label>
-                                    <p class="form-text">{{ $order->name_ar }}</p>
+                                    <label class="form-label">@lang('order.branch')</label>
+                                    <p class="form-text">{{ $order->branch->name_ar }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('order.EnglishName')</label>
-                                    <p class="form-text">{{ $order->name_en }}</p>
+                                    <label class="form-label">@lang('order.date')</label>
+                                    <p class="form-text">{{ $order->date }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('order.ArabicDesc')</label>
-                                    <p class="form-text">{{ $order->description_ar == null ? __('category.none') :  $order->description_ar }}</p>
+                                    <label class="form-label">@lang('order.client')</label>
+                                    <p class="form-text">{{ $order->client->name }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('order.EnglishDesc')</label>
-                                    <p class="form-text">{{ $order->description_en == null ? __('category.none') :  $order->description_en }}</p>
+                                    <label class="form-label">@lang('order.phone')</label>
+                                    <p class="form-text">{{ $order->client->phone }}</p>
                                 </div>
-                              
-
-                            
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Price')</label>
-                                    <p class="form-text">{{ $order->price }}</p>
-                                </div> --}}
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Currency')</label>
-                                    <p class="form-text">{{ $Currencies[$order->currency_code] ?? __('category.none') }}</p>
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <label class="form-label">@lang('order.type')</label>
+                                    <p class="form-text">  <span class="badge bg-primary-transparent"> @lang('order.' . strtolower($order->type))</span></p>
+                                </div>
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <label class="form-label">@lang('order.status')</label>
+                                    <p class="form-text">     <span class="badge bg-warning-transparent"> @lang('order.' . strtolower($order->status))</span></p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Barcode')</label>
-                                    <p class="form-text">{{ $order->barcode }}</p>
+                                    <label class="form-label">@lang('order.status_paid')</label>
+                                    <p class="form-text"> <span class="badge bg-primary-transparent"> @lang('order.' . strtolower($order['transaction']['payment_status']))</span></p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Unit')</label>
-                                    <p class="form-text">{{ $order->mainUnit->name_ar ?? __('category.none') }}</p>
+                                    <label class="form-label">@lang('order.invoice_num')</label>
+                                    <p class="form-text">{{ $order->invoice_number }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Brand')</label>
-                                    <p class="form-text">{{ $order->brand->name_ar . ' | ' . $order->brand->name_en ?? __('category.none') }}</p>
+                                    <label class="form-label">@lang('order.order_number')</label>
+                                    <p class="form-text">{{ $order->order_number }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Store')</label>
-                                    @if ($order->orderLimit->isNotEmpty())
-                                        <ul>
-                                            @foreach ($order->orderLimit as $limit)
-                                                <li>{{ $limit->store->name_ar." | ".$limit->store->name_en }}</li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <p class="form-text">@lang('category.none')</p>
-                                    @endif
+                                    <label class="form-label">@lang('order.total_price')</label>
+                                    <p class="form-text">{{ $order->total_price_after_tax }}</p>
                                 </div>
-
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Category')</label>
-                                    <p class="form-text">{{ $order->category->name_ar . ' | ' . $order->category->name_en ?? __('category.none') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Type')</label>
-                                    <p class="form-text">{{ $order->type == 'raw' ? __('order.Raw') : __('order.Complete') }}</p>
-                                </div>
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.ExpiryDate')</label>
-                                    <p class="form-text">{{ $order->expiry_date ?? __('category.none') }}</p>
-                                </div> --}}
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.IsHaveExpired')</label>
-                                    <p class="form-text">{{ $order->is_have_expired ? __('category.yes') : __('category.no') }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('order.Remind')</label>
-                                    <p class="form-text">{{ $order->is_remind ? __('category.yes') : __('category.no') }}</p>
-                                </div>
+                          
+                              {{-- @foreach() --}}
+                     
                             </div>
                         </div>
                     </div>
