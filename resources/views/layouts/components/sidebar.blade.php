@@ -149,6 +149,13 @@
                                         </li>
                                     @endcan
 
+                                    @can('view recipes')
+                                        <li class="slide">
+                                            <a href="{{ route('dashboard.addon_categories.index') }}" class="side-menu__item">@lang('sidebar.AddonCategories')
+                                            </a>
+                                        </li>
+                                    @endcan
+
                                 </ul>
                             </li>
                         </ul>
