@@ -22,11 +22,13 @@ use App\Http\Controllers\Dashboard\TableController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\DishCategoryController;
 use App\Http\Controllers\Dashboard\RecipeController;
+use App\Http\Controllers\Dashboard\AddonCategoryController;
 
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\OrderController;
 
 /*
@@ -55,7 +57,7 @@ Route::middleware(['auth:admin'])->get('dashboard', function () {
 })->name('dashboard.home');
 
 Route::get('/error/403', function () {
-    return view('dashboard.errors.403');
+    return view('dashboard.error.403');
 })->name('dashboard.error.403');
 Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
@@ -72,6 +74,20 @@ Route::get('/', function () {
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
+    
+    // Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
+    Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
+    ->name('products.units.list')
+    ->middleware('role_or_permission:view products');
+    // Route::post('product/units/save', [ProductController::class, 'saveUnits'])
+    // ->name('product.units.save')
+    // ->middleware('role_or_permission:view products');
+    Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
+    ->name('product.units.save')
+    ->middleware('role_or_permission:view products');
+
+    Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
+    ->name('units.remove')->middleware('role_or_permission:view products');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
@@ -81,6 +97,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit')->middleware('role_or_permission:update products');
         Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete')->middleware('role_or_permission:delete products');
+        
+        
         // Route::get('units', [ProductUnitController::class, 'index']);
         // Route::post('unit/store', [ProductUnitController::class, 'store']);
         // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -95,6 +113,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
         // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
     });
+
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'category'], function () {
         Route::get('create', [CategoryController::class, 'create'])->name('category.create')->middleware('role_or_permission:create products');
@@ -257,7 +276,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update')->middleware('role_or_permission:update dish_categories');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete')->middleware('role_or_permission:delete dish_categories');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore')->middleware('role_or_permission:create dish_categories');
-  
+
     });
     // Recipe routes
     Route::prefix('recipes')->group(function () {
@@ -270,6 +289,31 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [RecipeController::class, 'delete'])->name('dashboard.recipes.delete')->middleware('role_or_permission:delete recipes');
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('dashboard.recipes.restore')->middleware('role_or_permission:create recipes');
     });
+
+
+Route::prefix('dashboard/addon-categories')->group(function () {
+    Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
+    Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
+    Route::post('/', [AddonCategoryController::class, 'store'])->name('dashboard.addon_categories.store');
+    Route::get('/{id}', [AddonCategoryController::class, 'show'])->name('dashboard.addon_categories.show');
+    Route::get('/{id}/edit', [AddonCategoryController::class, 'edit'])->name('dashboard.addon_categories.edit');
+    Route::put('/{id}', [AddonCategoryController::class, 'update'])->name('dashboard.addon_categories.update');
+    Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('dashboard.addon_categories.destroy');
+    Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
+});
+
+
+    //roles routws
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view recipes');
+        Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create recipes');
+        Route::post('store', [RoleController::class, 'store'])->name('role.store')->middleware('role_or_permission:create gifts');
+        Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware('role_or_permission:update recipes');
+        Route::put('update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware('role_or_permission:update gifts');
+        Route::delete('delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('role_or_permission:delete gifts');
+    });
+
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');

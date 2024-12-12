@@ -36,7 +36,7 @@
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('position.addPosition')
+                                @lang('position.add')
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -83,9 +83,9 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('position.ArabicName')</label>
+                                                            class="form-label">@lang('position.arabicName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('position.ArabicName')" name="name_ar" required>
+                                                            placeholder="@lang('position.arabicName')" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -95,9 +95,9 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('position.EnglishName')</label>
+                                                            class="form-label">@lang('position.englishName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('position.EnglishName')" name="name_en" required>
+                                                            placeholder="@lang('position.englishName')" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -179,24 +179,24 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-name-ar"
-                                                            class="form-label">@lang('position.ArabicName')</label>
+                                                            class="form-label">@lang('position.arabicName')</label>
                                                         <input type="text" id="edit-name-ar" class="form-control"
                                                             name="name_ar" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-name-en"
-                                                            class="form-label">@lang('position.EnglishName')</label>
+                                                            class="form-label">@lang('position.englishName')</label>
                                                         <input type="text" id="edit-name-en" class="form-control"
                                                             name="name_en" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-description-ar"
-                                                            class="form-label">@lang('position.ArabicDesc')</label>
+                                                            class="form-label">@lang('position.arabicDescr')</label>
                                                         <textarea type="text" id="edit-description-ar" class="form-control" name="description_ar"></textarea>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-description-en"
-                                                            class="form-label">@lang('position.EnglishDesc')</label>
+                                                            class="form-label">@lang('position.englishDescr')</label>
                                                         <textarea type="text" id="edit-description-en" class="form-control" name="description_en"></textarea>
                                                     </div>
                                                 </div>
@@ -215,7 +215,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h6 class="modal-title" id="showModalLabel">@lang('position.ShowPosition')</h6>
+                                            <h6 class="modal-title" id="showModalLabel">@lang('position.showPosition')</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -226,19 +226,19 @@
                                                     <p id="show-department" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.ArabicName')</label>
+                                                    <label class="form-label">@lang('position.arabicName')</label>
                                                     <p id="show-name-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.EnglishName')</label>
+                                                    <label class="form-label">@lang('position.englishName')</label>
                                                     <p id="show-name-en" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.ArabicDesc')</label>
+                                                    <label class="form-label">@lang('position.arabicDescr')</label>
                                                     <p id="show-description-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.EnglishDesc')</label>
+                                                    <label class="form-label">@lang('position.englishDescr')</label>
                                                     <p id="show-description-en" class="form-control-static"></p>
                                                 </div>
                                             </div>
@@ -296,8 +296,8 @@
                                                     data-id="{{ $position->id }}"
                                                     data-name-ar="{{ $position->name_ar }}"
                                                     data-name-en="{{ $position->name_en }}"
-                                                    data-description-ar="{{ $position->description_ar ?? __('position.none') }}"
-                                                    data-description-en="{{ $position->description_en ?? __('position.none') }}"
+                                                    data-description-ar="{{ $position->description_ar ?? '------' }}"
+                                                    data-description-en="{{ $position->description_en ?? '------' }}"
                                                     data-department-name="{{ $position->department->name_ar . ' | ' . $position->department->name_en }}"
                                                     data-bs-toggle="modal" data-bs-target="#showModal">
                                                     @lang('position.show') <i class="ri-eye-line"></i>
@@ -329,10 +329,8 @@
                                                     </button>
                                                 </form>
                                             </td>
-
                                         </tr>
                                     @endforeach
-
                                 </tbody>
                             </table>
                         </div>

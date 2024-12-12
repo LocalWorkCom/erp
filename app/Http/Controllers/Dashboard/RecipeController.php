@@ -64,25 +64,33 @@ class RecipeController extends Controller
     public function edit($id)
     {
         try {
+            \Log::info('Fetching recipe for editing', ['recipe_id' => $id]);
+    
             $recipe = $this->recipeService->show($id);
-            return view('dashboard.recipes.edit', compact('recipe'));
+            $products = $this->recipeService->getAllProducts();
+    
+            return view('dashboard.recipes.edit', compact('recipe', 'products'));
         } catch (\Exception $e) {
+            \Log::error('Failed to load recipe for editing', ['recipe_id' => $id, 'message' => $e->getMessage()]);
             return redirect()->route('dashboard.recipes.index')->with('error', 'Failed to load recipe.');
         }
     }
-
+    
     public function update(Request $request, $id)
     {
         try {
+            \Log::info('Updating recipe', ['recipe_id' => $id, 'data' => $request->all()]);
+    
             $data = $request->all();
             $this->recipeService->update($id, $data, $request->file('images'));
-
+    
             return redirect()->route('dashboard.recipes.index')->with('success', 'Recipe updated successfully.');
         } catch (\Exception $e) {
+            \Log::error('Failed to update recipe', ['recipe_id' => $id, 'message' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Failed to update recipe.');
         }
     }
-
+    
     public function delete($id)
     {
         try {
