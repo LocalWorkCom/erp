@@ -250,12 +250,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::prefix('dish-categories')->group(function () {
         Route::get('/', [DishCategoryController::class, 'index'])->name('dashboard.dish-categories.index')->middleware('role_or_permission:view dish_categories');
+        Route::get('/dish-categories/{id}/show', [DishCategoryController::class, 'show'])->name('dashboard.dish-categories.show')->middleware('role_or_permission:view dish_categories');
         Route::get('/create', [DishCategoryController::class, 'create'])->name('dashboard.dish-categories.create')->middleware('role_or_permission:create dish_categories');
         Route::post('/', [DishCategoryController::class, 'store'])->name('dashboard.dish-categories.store')->middleware('role_or_permission:create dish_categories');
         Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dashboard.dish-categories.edit')->middleware('role_or_permission:update dish_categories');
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update')->middleware('role_or_permission:update dish_categories');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete')->middleware('role_or_permission:delete dish_categories');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore')->middleware('role_or_permission:create dish_categories');
+  
     });
     // Recipe routes
     Route::prefix('recipes')->group(function () {
