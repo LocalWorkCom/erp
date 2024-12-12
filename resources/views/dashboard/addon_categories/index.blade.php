@@ -48,14 +48,12 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-                           <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>@lang('addon_categories.ID')</th>
-                                        <th>@lang('addon_categories.NameArabic')</th>
-                                        <th>@lang('addon_categories.NameEnglish')</th>
-                                        <th>@lang('addon_categories.DescriptionArabic')</th>
-                                        <th>@lang('addon_categories.DescriptionEnglish')</th>
+                                        <th>@lang('addon_categories.Name')</th>
+                                        <th>@lang('addon_categories.Description')</th>
                                         <th>@lang('addon_categories.Actions')</th>
                                     </tr>
                                 </thead>
@@ -63,10 +61,8 @@
                                     @foreach ($addonCategories as $addonCategory)
                                         <tr>
                                             <td>{{ $addonCategory->id }}</td>
-                                            <td>{{ $addonCategory->name_ar }}</td>
-                                            <td>{{ $addonCategory->name_en }}</td>
-                                            <td>{{ $addonCategory->description_ar ?? __('addon_categories.NoDescription') }}</td>
-                                            <td>{{ $addonCategory->description_en ?? __('addon_categories.NoDescription') }}</td>
+                                            <td>{{ $addonCategory->name }}</td>
+                                            <td>{{ $addonCategory->description ?? __('addon_categories.NoDescription') }}</td>
                                             <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.addon_categories.show', $addonCategory->id) }}" class="btn btn-info-light">

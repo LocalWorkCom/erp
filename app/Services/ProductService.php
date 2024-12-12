@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Unit;
 
 class ProductService
 {
@@ -149,7 +150,7 @@ class ProductService
         $product_limit->store_id = $request->store_id;
         $product_limit->save();
 
-         // Save product limits
+        // Save product limits
         //  $product_unit = new ProductUnit();
         //  $product_unit->product_id = $product->id;
         //  $product_unit->factor = $request->factor;
@@ -374,4 +375,95 @@ class ProductService
             }
         }
     }
+
+    public function addSize(Request $request, $productId)
+    {
+        $validated = $request->validate([
+            'size' => 'required|string|max:255',
+            'barcode' => 'required|string|max:255',
+        ]);
+
+        $this->productService->addSizeToProduct($productId, $validated);
+        return redirect()->back()->with('message', __('Size added successfully!'));
+    }
+
+    public function addColor(Request $request, $productId)
+    {
+        $validated = $request->validate([
+            'color' => 'required|string|max:255',
+        ]);
+
+        $this->productService->addColorToProduct($productId, $validated);
+        return redirect()->back()->with('message', __('Color added successfully!'));
+    }
+
+    public function list($productId, $checkToken)
+    {
+        $products = Product::with(['productUnits.unit' => function ($query) {
+            $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
+        }])->findOrFail($productId);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
+
+        return ResponseWithSuccessData($this->lang, $products, 1);
+    }
+
+
+
+    public function saveProductUnits(Request $request, $productId)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($productId);
+    
+        // Validate the units
+        $validated = $request->validate([
+            'units.*.unit_id' => 'required|exists:units,id',
+            'units.*.factor' => 'required|numeric',
+        ]);
+    
+        // Variable to track if anything changed
+        $changesMade = false;
+    
+        // Loop through the units and save them
+        foreach ($request->units as $unitData) {
+            // Find existing unit data
+            $existingUnit = $product->productUnits()->where('unit_id', $unitData['unit_id'])
+                ->where('product_units.created_by', Auth::guard('admin')->user()->id)
+                ->first();
+    
+            // If the unit exists and any attribute is different, update it
+            if ($existingUnit) {
+                if ($existingUnit->factor != $unitData['factor']) {
+                    $existingUnit->update([
+                        'factor' => $unitData['factor'],
+                    ]);
+                    $changesMade = true;
+                }
+            } else {
+                // Update or create the ProductUnit
+                ProductUnit::updateOrCreate(
+                    // Conditions to find the existing record
+                    [
+                        'unit_id' => $unitData['unit_id'],
+                        'product_id' => $productId,
+                        'created_by' => Auth::guard('admin')->user()->id,
+                    
+                        'factor' => $unitData['factor'],
+                    ]
+                );
+                $changesMade = true;
+            }
+            
+        }
+    
+        // If no changes were made, return a message
+        if (!$changesMade) {
+            return redirect()->back()->with('message', __('No changes were made.'));
+        }
+    
+        // Return a success response if changes were made
+        return RespondWithSuccessRequest($this->lang, 1);
+    }
+    
 }
