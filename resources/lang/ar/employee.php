@@ -59,5 +59,8 @@ return [
     'widowed' => 'أرمل',
     'partTime' => 'دوام جزئي',
     'fullTime' => 'دوام كامل',
-
+    'warning' => 'تحذير',
+    'deleteMsg' => 'هل انت متاكد من انك تريد ان تحذف هذا الموظف',
+    'yesDelete' => 'نعم حذف',
+    'cancelDelete' => 'الغاء'
 ];

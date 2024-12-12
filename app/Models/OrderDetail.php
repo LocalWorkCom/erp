@@ -62,7 +62,7 @@ class OrderDetail extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function dishes()
+    public function dish()
     {
         return $this->belongsTo(Dish::class, 'dish_id');
     }

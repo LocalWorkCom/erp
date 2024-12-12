@@ -426,7 +426,7 @@
                             @endcan
                             @can('view orders')
                                 <li class="slide">
-                                    <a href="{{ url('orders') }}" class="side-menu__item">
+                                    <a href="{{ url('dashboard/orders') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -673,12 +673,12 @@
                                     <a href="{{ route('units.list') }}" class="side-menu__item">@lang('sidebar.Units') </a>
                                 </li>
                             @endcan
-                            {{-- @can('view point_systems')
+                             @can('view roles')
                                 <li class="slide">
-                                    <a href="{{ url('Point_system') }}" class="side-menu__item">@lang('sidebar.Point_system') </a>
+                                    <a href="{{ route('roles.list') }}" class="side-menu__item">@lang('sidebar.roles') </a>
                                 </li>
                             @endcan
-                            @can('view Notification')
+                           {{-- @can('view Notification')
                                 <li class="slide">
                                     <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>
                                 </li>

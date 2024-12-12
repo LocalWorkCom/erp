@@ -57,6 +57,10 @@ return [
     'single' => 'Single',
     'divorced' => 'Divorced',
     'widowed' => 'Widowed',
-    'partTime'=>'Part-Time',
-    'fullTime'=>'Full-Time'
+    'partTime' => 'Part-Time',
+    'fullTime' => 'Full-Time',
+    'warning' => 'Warning',
+    'deleteMsg' => 'Are you sure you want to delete this employee',
+    'yesDelete' => 'Yes Delete',
+    'cancelDelete' => 'Cancel'
 ];
