@@ -73,13 +73,17 @@ class RecipeService
                     'message' => $e->getMessage(),
                 ]);
     
-                throw $e; // Re-throw the exception to stop further processing
+                throw $e; 
             }
         }
     
         if ($images) {
             foreach ($images as $image) {
-                $imagePath = $image->store('recipes', 'public');
+                $imagePath = 'images/recipes/' . $image->getClientOriginalName();
+                $image->move(public_path('images/recipes'), $image->getClientOriginalName());
+    
+                \Log::info('New image uploaded', ['path' => $imagePath]);
+    
                 RecipeImage::create([
                     'recipe_id' => $recipe->id,
                     'image_path' => $imagePath,
@@ -94,8 +98,10 @@ class RecipeService
 
     public function update($id, $data, $images)
     {
+        \Log::info('Starting recipe update', ['recipe_id' => $id, 'data' => $data]);
+    
         $recipe = Recipe::findOrFail($id);
-
+    
         $recipe->update([
             'name_ar' => $data['name_ar'],
             'name_en' => $data['name_en'],
@@ -106,11 +112,14 @@ class RecipeService
             'is_active' => $data['is_active'],
             'modified_by' => auth()->id(),
         ]);
-
+    
+        \Log::info('Recipe details updated', ['recipe_id' => $recipe->id]);
+    
+        // Update Ingredients
         Ingredient::where('recipe_id', $recipe->id)->delete();
         foreach ($data['ingredients'] as $ingredientData) {
             $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
-
+    
             Ingredient::create([
                 'recipe_id' => $recipe->id,
                 'product_id' => $ingredientData['product_id'],
@@ -119,26 +128,37 @@ class RecipeService
                 'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
             ]);
         }
-
-        if ($images) {
-            foreach ($recipe->images as $image) {
-                if (Storage::exists($image->image_path)) {
-                    Storage::delete($image->image_path);
-                }
-                $image->delete();
+    
+        \Log::info('Ingredients updated', ['recipe_id' => $recipe->id]);
+    
+    
+     
+       if ($images) {
+        foreach ($recipe->images as $image) {
+            $oldImagePath = public_path($image->image_path);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
             }
-
-            foreach ($images as $image) {
-                $imagePath = $image->store('recipes', 'public');
-                RecipeImage::create([
-                    'recipe_id' => $recipe->id,
-                    'image_path' => $imagePath,
-                ]);
-            }
+            $image->delete();
         }
 
+        foreach ($images as $image) {
+            $imagePath = 'images/recipes/' . $image->getClientOriginalName();
+            $image->move(public_path('images/recipes'), $image->getClientOriginalName());
+
+            \Log::info('New image uploaded', ['path' => $imagePath]);
+
+            RecipeImage::create([
+                'recipe_id' => $recipe->id,
+                'image_path' => $imagePath,
+            ]);
+        }
+    }
+
+    
         return $recipe;
     }
+    
 
     public function delete($id)
     {

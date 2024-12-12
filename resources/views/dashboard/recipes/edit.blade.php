@@ -114,10 +114,14 @@
 
                                     <div class="col-xl-12">
                                         <label for="images" class="form-label">@lang('recipes.Images')</label>
-                                        @if ($recipe->images)
+                                        @if ($recipe->images && $recipe->images->isNotEmpty())
                                             @foreach ($recipe->images as $image)
-                                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Recipe Image" width="100" height="100">
+                                                <div class="mb-3">
+                                                    <img src="{{ asset($image->image_path) }}" alt="Recipe Image" width="150" height="150">
+                                                </div>
                                             @endforeach
+                                        @else
+                                            <p class="form-text">@lang('recipes.NoImages')</p>
                                         @endif
                                         <input class="form-control" type="file" id="images" name="images[]" multiple>
                                     </div>
