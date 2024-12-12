@@ -14,7 +14,8 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('dashboard.home')}}">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('branches.list')}}">@lang('branch.Branches')</a></li>                    
                     <li class="breadcrumb-item active" aria-current="page">@lang('floor.Floors')</li>
                 </ol>
             </nav>
@@ -356,7 +357,7 @@
                                         <td>{{ $floors->name_en }}</td>
                                         <td>{{ ($floors->type == 1) ? __('floor.Indoor') : ($floors->type == 2 ? __('floor.Outdoor') : __('floor.Both')) }}</td>
                                         <td>{{ ($floors->smoking == 1) ? __('floor.Smokin') : ($floors->smoking == 2 ? __('floor.NoSmokin') : __('floor.Both')) }}</td>
-                                        <td>{{ $floors->branches->name_ar." | ".$floors->branches->name_en }}</td>
+                                        <td>{{ $floors->branches->name_site }}</td>
                                         <td>
                                             <!-- Show Button -->
                                             <a href="javascript:void(0);"
@@ -496,28 +497,26 @@
             $.ajax({
                 url: get_url, 
                 type: 'GET',
-                success: function(data) {
-                    console.log(data);
-                    
+                success: function(data) {                    
                     // Populate the modal with the data
                     $('#show-name-ar').text(data.name_ar);
                     $('#show-name-en').text(data.name_en);
-                    $('#show-branch').text(data.branches.name);
+                    $('#show-branch').text(data.branches.name_site);
 
                     if(data.type == 1){
-                        $('#show-type').text('indoor');
+                        $('#show-type').text('{{ __('floor.Indoor')}}');
                     }else if(data.type == 2){
-                        $('#show-type').text('outdoor');
+                        $('#show-type').text('{{ __('floor.Outdoor')}}');
                     }else{
-                        $('#show-type').text('both');
+                        $('#show-type').text('{{ __('floor.Both')}}');
                     }
 
                     if(data.smoking == 1){
-                        $('#show-smoking').text('smoking');
+                        $('#show-smoking').text('{{ __('floor.Smokin')}}');
                     }else if(data.smoking == 2){
-                        $('#show-smoking').text('no smoking');
+                        $('#show-smoking').text('{{ __('floor.NoSmokin')}}');
                     }else{
-                        $('#show-smoking').text('both');
+                        $('#show-smoking').text('{{ __('floor.Both')}}');
                     }
 
                     // Show the modal
@@ -529,102 +528,6 @@
             });
         });
     });
-    <?php /*
-    document.addEventListener('DOMContentLoaded', function () {
-        const editButtons = document.querySelectorAll('.edit-floor-btn');
-        const editForm = document.getElementById('edit-floor-form');
-        const nameArInput = document.getElementById('edit-name-ar');
-        const nameEnInput = document.getElementById('edit-name-en');
-        const editBranch = document.getElementById('edit-branch');
-
-        const typeIndoor = document.getElementById('type-indoor');
-        const typeOutdoor = document.getElementById('type-outdoor');
-        const typeBoth = document.getElementById('type-both');
-        const smokinIndoor = document.getElementById('smokin-indoor');
-        const smokinOutdoor = document.getElementById('smokin-outdoor');
-        const smokinBoth = document.getElementById('smokin-both');
-
-        var get_url = "{{ route('floor.show', 'id') }}";
-        var edit_url = "{{ route('floor.update', 'id') }}";
-
-        editButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                // Get floor details from data attributes
-                const floorId = this.getAttribute('data-id');                
-                get_url = get_url.replace('id', floorId);
-
-                console.log(get_url);
-                
-                $.get(get_url, function(data) {
-                    
-                    nameArInput.value = data.name_ar;
-                    nameEnInput.value = data.name_en;
-                    editBranch.value = data.branch_id;
-                    if(data.type == 1){
-                        typeIndoor.checked = true; 
-                    }
-                    if(data.type == 2){
-                        typeOutdoor.checked = true; 
-                    }
-                    if(data.type == 3){
-                        typeBoth.checked = true; 
-                    }
-
-                    if(data.smoking == 1){
-                        smokinIndoor.checked = true; 
-                    }
-                    if(data.smoking == 2){
-                        smokinOutdoor.checked = true; 
-                    }
-                    if(data.smoking == 3){
-                        smokinBoth.checked = true; 
-                    }
-
-                    edit_url = edit_url.replace('id', floorId);
-                    editForm.action = edit_url;
-                });
-
-                // Set form action URL dynamically
-                // const updateRoute = routeTemplate.replace(':id', floorId);
-                // editForm.action = updateRoute;
-
-                // // Populate the modal fields
-                // nameArInput.value = nameAr;
-                // nameEnInput.value = nameEn;
-                // typeSelect.value = type;
-                // smokingSelect.value = smoking;
-                // branchSelect.value = branchId;
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const showButtons = document.querySelectorAll('.show-floor-btn');
-        const nameArElement = document.getElementById('show-name-ar');
-        const nameEnElement = document.getElementById('show-name-en');
-        const typeElement = document.getElementById('show-type');
-        const smokingElement = document.getElementById('show-smoking');
-        const branchElement = document.getElementById('show-branch');
-
-        showButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                // Get floor details from data attributes
-                const nameAr = this.getAttribute('data-name-ar');
-                const nameEn = this.getAttribute('data-name-en');
-                const type = this.getAttribute('data-type-show');
-                const smoking = this.getAttribute('data-smoking-show');
-                const branchName = this.getAttribute('data-branch-name');
-
-                // Populate the modal fields
-                nameArElement.textContent = nameAr;
-                nameEnElement.textContent = nameEn;
-                typeElement.textContent = type;
-                smokingElement.textContent = smoking;
-                branchElement.textContent = branchName;
-            });
-        });
-    });
-    */?>
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
