@@ -3,12 +3,11 @@
 @section('styles')
     <!-- SELECT2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    
 @endsection
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('roles.Edit')</h4>
+        <h4 class="fw-medium mb-0">@lang('roles.edit')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
@@ -16,7 +15,7 @@
                         <a href="{{ route('roles.list') }}">@lang('roles.roles')</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);">@lang('roles.Edit')</a>
+                        <a href="javascript:void(0);">@lang('roles.edit')</a>
                     </li>
                 </ol>
             </nav>
@@ -32,7 +31,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                @lang('roles.Edit')
+                                @lang('roles.edit')
                             </div>
                         </div>
                         <div class="card-body">
@@ -49,24 +48,24 @@
                             <form method="POST" action="{{ route('role.update', $role->id) }}" class="needs-validation">
                                 @csrf
 
-    @method('PUT')
+                                @method('PUT')
                                 <div class="row gy-4">
                                     <!-- Role Name -->
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label class="form-label">@lang('roles.Name')</label>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label class="form-label">@lang('roles.name')</label>
                                         <input type="text" class="form-control" name="name"
-                                            value="{{ old('name', $role->name) }}" placeholder="@lang('roles.Name')" required>
+                                            value="{{ old('name', $role->name) }}" placeholder="@lang('roles.name')" required>
                                         <div class="invalid-feedback">
                                             @lang('validation.EnterName')
                                         </div>
                                     </div>
 
-                                    <!-- Guard -->
+                                    {{-- <!-- Guard -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('roles.guard')</label>
                                         <input type="text" class="form-control" name="guard" value="admin"
                                             placeholder="@lang('roles.guard')" disabled>
-                                    </div>
+                                    </div> --}}
 
                                     <!-- Permissions -->
                                     <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
@@ -80,13 +79,12 @@
                                                                 <div class="form-check me-3">
                                                                     <input
                                                                         class="form-check-input form-checked-outline form-checked-success"
-                                                                        type="checkbox"
-                                                                        name="permissions_ids[]"
+                                                                        type="checkbox" name="permissions_ids[]"
                                                                         id="permission_{{ $loop->parent->index }}_{{ $loop->index }}"
                                                                         value="{{ $permission->name }}"
                                                                         {{ in_array($permission->name, $rolePermissions) ? 'checked' : '' }}>
                                                                     <label class="form-check-label"
-                                                                           for="permission_{{ $loop->parent->index }}_{{ $loop->index }}">
+                                                                        for="permission_{{ $loop->parent->index }}_{{ $loop->index }}">
                                                                         {{ __("permissions.{$permission->name}") }}
                                                                     </label>
                                                                 </div>
