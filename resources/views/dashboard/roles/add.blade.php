@@ -77,20 +77,8 @@
                                         <label class="form-label">@lang('roles.guard')</label>
                                         <input type="text" class="form-control" name="guard" value="admin"
                                             placeholder="@lang('roles.guard')" disabled>
-
                                     </div>
-
                                     <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
-                                        @php
-                                            // Group permissions by their second name
-                                            $groupedPermissions = [];
-                                            foreach ($permissions as $permission) {
-                                                $parts = explode(' ', $permission->name); // Assuming the second word defines the group
-                                                $group = $parts[1] ?? 'Others'; // Fallback to 'Others' if no second part
-                                                $groupedPermissions[$group][] = $permission;
-                                            }
-                                        @endphp
-
                                         <div class="row">
                                             @foreach ($groupedPermissions as $group => $groupPermissions)
                                                 <div class="col-md-6 mb-4">
@@ -101,7 +89,7 @@
                                                                 <div class="form-check me-3">
                                                                     <input
                                                                         class="form-check-input form-checked-outline form-checked-success"
-                                                                        type="checkbox"
+                                                                        type="checkbox" name="permissions_ids[]"
                                                                         id="permission_{{ $loop->parent->index }}_{{ $loop->index }}"
                                                                         value="{{ $permission->name }}">
                                                                     <label class="form-check-label"

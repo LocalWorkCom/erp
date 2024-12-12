@@ -7,16 +7,16 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('brand.ShowBrand')</h4>
+        <h4 class="fw-medium mb-0">@lang('roles.Showroles')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
-
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('roles.list') }}'">@lang('roles.roles')</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="{{ route('brand.show', ['id' => $id]) }}">@lang('brand.ShowBrand')</a>
+                        <a href="{{ route('role.show', ['id' => $id]) }}">@lang('roles.Showroles')</a>
                     </li>
                 </ol>
             </nav>
@@ -31,39 +31,37 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('brand.ShowBrand')</div>
+                            <div class="card-title">@lang('roles.Showroles')</div>
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
+                                <!-- Role Name -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('brand.ArabicName')</label>
-                                    <p class="form-text">{{ $brand->name_ar }}</p>
+                                    <label class="form-label">@lang('roles.name')</label>
+                                    <p class="form-text">{{ $role->name }}</p>
                                 </div>
+
+                                <!-- Guard Name -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('brand.EnglishName')</label>
-                                    <p class="form-text">{{ $brand->name_en }}</p>
+                                    <label class="form-label">@lang('roles.EnglishName')</label>
+                                    <p class="form-text">{{ $role->guard_name }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('brand.ArabicDesc')</label>
-                                    <p class="form-text">{{ $brand->description_ar == null ? __('brand.none') :  $brand->description_ar}}</p>
+
+                                <!-- Permissions -->
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <label class="form-label">@lang('roles.ArabicDesc')</label>
+                                    <ul class="list-group d-flex flex-wrap" style="gap: 10px;">
+
+                                            <li class="list-group-item" style="flex: 0 0 calc(50% - 10px);">
+                                                @foreach ($role->permissions as $permission)
+                                                {{ $permission->name }}  ---
+                                                @endforeach
+                                            </li>
+
+                                    </ul>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('brand.EnglishDesc')</label>
-                                    <p class="form-text">{{ $brand->description_en == null ? __('brand.none') :  $brand->description_en}}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                    <label class="form-label">@lang('brand.Image')</label>
-                                    @if ($brand->image)
-                                        <div class="mb-3">
-                                            <img src="{{ asset($brand->image) }}" alt="Category Image" width="150" height="150">
-                                        </div>
-                                        <!-- Hidden input to send the current image -->
-                                        <input type="hidden" name="image" value="{{ $brand->image }}">
-                                    @else
-                                        <p class="form-text">@lang('category.none')</p>
-                                    @endif
-                                </div>
-                         
+
+
                             </div>
                         </div>
                     </div>
