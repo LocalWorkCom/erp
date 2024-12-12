@@ -25,8 +25,24 @@ return [
     "call_center" => "call center",
     "takeaway" => " takeaway",
     "status_paid" => "status payment",
+    "payment_method" => "payment method",
+    "price" => "price",
+    "name" => "name",
+    "address" => "address",
+    "city" => "city",
     "reject" => "reject",
     "accept" => "accept",
     "cancel" => "cancel",
+    "phone" => "phone",
+    "refund" => "refund",
+    "completed" => "completed",
+    "total_before_tax" => "total before tax",
+    "total_after_tax" => "total after tax",
+    "quantity" => "quantity",
+    "note" => "note",
+    "state" => "state",
+    "email" => "email",
+    "purchase" => "purchase"
+
 
 ];
