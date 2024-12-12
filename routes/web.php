@@ -272,7 +272,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
 
     //Purchases
-    Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.list')->middleware('role_or_permission:view vendors');
+    Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
     Route::group(['prefix' => 'vendor'], function () {
         Route::get('create', [VendorController::class, 'create'])->name('vendor.create')->middleware('role_or_permission:create vendors');
         Route::post('store', [VendorController::class, 'store'])->name('vendor.store')->middleware('role_or_permission:create vendors');

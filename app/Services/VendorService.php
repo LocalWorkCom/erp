@@ -26,7 +26,7 @@ class VendorService
             return RespondWithBadRequest($lang, 5);
         }
 
-        return Vendor::all();
+        return Vendor::with('country')->get();
     }
 
     public function getVendor($id)
@@ -43,9 +43,12 @@ class VendorService
         $vendor = new Vendor();
         $vendor->name_ar = $data['name_ar'];
         $vendor->name_en = $data['name_en'];
-        $vendor->description_ar = $data['description_ar'];
-        $vendor->description_en = $data['description_en'];
-        $vendor->department_id = $data['department_id'];
+        $vendor->contact_person = $data['contact_person'];
+        $vendor->phone = $data['phone'];
+        $vendor->email = $data['email'];
+        $vendor->address_ar = $data['address_ar'];
+        $vendor->address_en = $data['address_en'];
+        $vendor->country_id = $data['country_id'];
         $vendor->created_by = Auth::user()->id;
         $vendor->created_at = now();
         $vendor->save();
@@ -61,9 +64,12 @@ class VendorService
         $vendor = Vendor::findOrFail($id);
         $vendor->name_ar = $data['name_ar'];
         $vendor->name_en = $data['name_en'];
-        $vendor->description_ar = $data['description_ar'];
-        $vendor->description_en = $data['description_en'];
-        $vendor->department_id = $data['department_id'];
+        $vendor->contact_person = $data['contact_person'];
+        $vendor->phone = $data['phone'];
+        $vendor->email = $data['email'];
+        $vendor->address_ar = $data['address_ar'];
+        $vendor->address_en = $data['address_en'];
+        $vendor->country_id = $data['country_id'];
         $vendor->modified_by = Auth::user()->id;
         $vendor->updated_at = now();
         $vendor->save();
