@@ -27,6 +27,7 @@ use App\Http\Controllers\Dashboard\RecipeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -266,5 +267,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [RecipeController::class, 'update'])->name('dashboard.recipes.update')->middleware('role_or_permission:update recipes');
         Route::delete('/{id}', [RecipeController::class, 'delete'])->name('dashboard.recipes.delete')->middleware('role_or_permission:delete recipes');
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('dashboard.recipes.restore')->middleware('role_or_permission:create recipes');
+    });
+
+    //roles routws
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view recipes');
+        Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create recipes');
+        Route::post('store', [RoleController::class, 'store'])->name('role.store')->middleware('role_or_permission:create gifts');
+        Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware('role_or_permission:update recipes');
+        Route::put('update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware('role_or_permission:update gifts');
+        Route::delete('delete/{id}', [RoleController::class, 'delete'])->name('role.delete')->middleware('role_or_permission:delete gifts');
     });
 });
