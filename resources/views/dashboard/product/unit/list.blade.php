@@ -61,14 +61,7 @@
                                         <th scope="col">@lang('product.Image')</th>
                                         <th scope="col">@lang('product.ArabicName')</th>
                                         <th scope="col">@lang('product.EnglishName')</th>
-                                        <th scope="col">@lang('product.EnglishUnit')</th>
-                                        <th scope="col">@lang('product.ArabicUnit')</th>
-                                        <th scope="col">@lang('product.Type')</th>
-                                        <th scope="col">@lang('product.ArabicCategory')</th>
-                                        <th scope="col">@lang('product.EnglishCategory')</th>
-                                        <th scope="col">@lang('product.Barcode')</th>
-                                        <th scope="col">@lang('product.Sku')</th>
-                                        <th scope="col">@lang('product.IsHaveExpired')</th>
+                                        <th scope="col">@lang('product.Factor')</th>
                                         <th scope="col">@lang('category.Actions')</th>
                                     </tr>
                                 </thead>
@@ -86,7 +79,7 @@
                                             <td>{{ $product->Category->name_en }}</td>
                                             <td>{{ $product->Category->name_ar }}</td>
                                             <td>{{ $product->barcode }}</td>
-                                            <td>{{ $product->sku }}</td>
+                                            <td>{{ $product->factor }}</td>
                                             @php
                                                 $translationKey = $product->is_have_expired
                                                     ? 'category.yes'
@@ -114,15 +107,6 @@
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
-
-
-                                                 <!-- Dropdown Menu -->
-                                                    <select class="form-select d-inline" style="width: auto;" onchange="navigateOption(this.value, {{ $product->id }})">
-                                                        <option value="">{{ __('product.options') }}</option>
-                                                        <option value="sizes">@lang('product.Sizes')</option>
-                                                        <option value="colors">@lang('product.Colors')</option>
-                                                        <option value="units">@lang('product.Units')</option>
-                                                    </select>
 
                                             </td>
 

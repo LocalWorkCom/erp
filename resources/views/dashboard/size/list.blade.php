@@ -14,8 +14,15 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('size.Sizes')</li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('dashboard.home') }}">
+                            @lang('sidebar.Main')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('sizes.list') }}'">@lang('size.Sizes')</a>
+                    </li>
+
                 </ol>
             </nav>
         </div>
@@ -217,7 +224,8 @@
                             @endif
                                 @if ($errors->any())
                                     @foreach ($errors->all() as $error)
-                                        <div class="alert alert-solid-danger alert-dismissible fade show">
+                        
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
                                             {{ $error }}
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                                 <i class="bi bi-x"></i>
@@ -237,51 +245,53 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($Sizes as $sizes)
-                                        <tr>
-                                            <td>{{ $sizes->id }}</td>
-                                            <td>{{ $sizes->name_ar }}</td>
-                                            <td>{{ $sizes->name_en }}</td>
-                                            <td>{{ $sizes->category->name_ar.' | '.$sizes->category->name_en }}</td>
-                                            <td>
-                                                <!-- Show Button -->
-                                                <a href="javascript:void(0);"
-                                                   class="btn btn-info-light btn-wave show-size-btn"
-                                                   data-id="{{ $sizes->id }}"
-                                                   data-name-ar="{{ $sizes->name_ar }}"
-                                                   data-name-en="{{ $sizes->name_en }}"
-                                                   data-category-name="{{ $sizes->category->name_ar.' | '.$sizes->category->name_en?? '' }}"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#showModal">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
-
-                                                <!-- Edit Button -->
-                                                <button type="button"
-                                                        class="btn btn-orange-light btn-wave edit-size-btn"
-                                                        data-id="{{ $sizes->id }}"
-                                                        data-name-ar="{{ $sizes->name_ar }}"
-                                                        data-name-en="{{ $sizes->name_en }}"
-                                                        data-category-id="{{ $sizes->category->id }}"
-                                                data-route="{{ route('size.update', ':id') }}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editModal">
+                                    <tr>
+                                        <td>{{ $sizes->id }}</td>
+                                        <td>{{ $sizes->name_ar }}</td>
+                                        <td>{{ $sizes->name_en }}</td>
+                                        <td>
+                                            @if ($sizes->category)
+                                                {{ $sizes->category->name_ar . ' | ' . $sizes->category->name_en }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <!-- Show Button -->
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-info-light btn-wave show-size-btn"
+                                               data-id="{{ $sizes->id }}"
+                                               data-name-ar="{{ $sizes->name_ar }}"
+                                               data-name-en="{{ $sizes->name_en }}"
+                                               data-category-name="{{ $sizes->category ? $sizes->category->name_ar . ' | ' . $sizes->category->name_en : '' }}"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#showModal">
+                                                @lang('category.show') <i class="ri-eye-line"></i>
+                                            </a>
+                                
+                                            <!-- Edit Button -->
+                                            <button type="button"
+                                                    class="btn btn-orange-light btn-wave edit-size-btn"
+                                                    data-id="{{ $sizes->id }}"
+                                                    data-name-ar="{{ $sizes->name_ar }}"
+                                                    data-name-en="{{ $sizes->name_en }}"
+                                                    data-category-id="{{ $sizes->category ? $sizes->category->id : '' }}"
+                                                    data-route="{{ route('size.update', ':id') }}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editModal">
                                                 @lang('category.edit') <i class="ri-edit-line"></i>
+                                            </button>
+                                
+                                            <!-- Delete Button -->
+                                            <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
-
-
-                                                <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-
-                                        </tr>
-                                    @endforeach
-
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                
                                 </tbody>
                             </table>
                         </div>

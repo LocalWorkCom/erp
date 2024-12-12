@@ -61,14 +61,11 @@
                                         <th scope="col">@lang('employee.code')</th>
                                         <th scope="col">@lang('employee.email')</th>
                                         <th scope="col">@lang('employee.phone')</th>
-                                        <th scope="col">@lang('employee.gender')</th>
-                                        <th scope="col">@lang('employee.dob')</th>
                                         <th scope="col">@lang('employee.national_id')</th>
                                         <th scope="col">@lang('employee.nationality')</th>
                                         <th scope="col">@lang('employee.department')</th>
                                         <th scope="col">@lang('employee.position')</th>
                                         <th scope="col">@lang('employee.supervisor')</th>
-                                        <th scope="col">@lang('employee.salary')</th>
                                         <th scope="col">@lang('employee.actions')</th>
                                     </tr>
                                 </thead>
@@ -76,27 +73,24 @@
                                     @foreach ($employees as $employee)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ $employee->first_name . $employee->last_name }}</td>
+                                            <td>{{ $employee->first_name . ' ' . $employee->last_name }}</td>
                                             <td>{{ $employee->employee_code }}</td>
                                             <td>{{ $employee->email }}</td>
                                             <td>{{ $employee->phone_number ?? '-----' }}</td>
-                                            <td>{{ $employee->gender }}</td>
-                                            <td>{{ $employee->birth_date }}</td>
                                             <td>{{ $employee->national_id }}</td>
-                                            <td>{{ $employee->nationality->name_ar . ' | ' . $employee->nationality->name_en }}
+                                            <td>{{ $employee->nationality ? (app()->getLocale() === 'ar' ? $employee->nationality->name_ar : $employee->nationality->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ $employee->department->name_ar . ' | ' . $employee->department->name_en }}
+                                            <td>{{ $employee->department ? (app()->getLocale() === 'ar' ? $employee->department->name_ar : $employee->department->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ $employee->position->name_ar . ' | ' . $employee->position->name_en }}
+                                            <td>{{ $employee->position ? (app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en) : '-----' }}
                                             </td>
                                             <td>
-                                                @if ($employee->supervisor_id)
-                                                    {{ $employee->supervisor->employee_code }}
+                                                @if ($employee->supervisor)
+                                                    {{ $employee->supervisor->first_name . ' ' . $employee->supervisor->last_name . ' | ' . $employee->supervisor->employee_code }}
                                                 @else
                                                     {{ '-----' }}
                                                 @endif
                                             </td>
-                                            <td>{{ $employee->salary }}</td>
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="{{ route('employee.show', $employee->id) }}"
