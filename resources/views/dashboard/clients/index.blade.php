@@ -112,11 +112,12 @@
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('client.delete', $user->id) }}"
-                                                    method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" id="delete-form-{{ $user->id }}"
+                                                    action="{{ route('client.delete', $user->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
+                                                    <button type="button" onclick="delete_item({{ $user->id }})"
+                                                        class="btn btn-danger-light btn-wave">
                                                         @lang('client.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
@@ -150,13 +151,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
 
 <script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
+    function delete_item(id) {
+        Swal.fire({
+            title: "@lang('client.warning')",
+            text: "@lang('client.deleteMsg')",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "@lang('client.yesDelete')",
+            cancelButtonText: "@lang('client.cancelDelete')",
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

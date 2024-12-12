@@ -38,6 +38,9 @@ return [
     'EditProduct'=>'Edit Product',
     'show'=>'Show Product',
     'Images' => 'Images',
-    'Factor' =>'Factor'
-
+    'Factor' =>'Factor',
+    'options' =>'Options',
+    'Sizes' => 'Sizes',
+    'Colors' => 'Colors',
+    'Units' => 'Units'
 ];

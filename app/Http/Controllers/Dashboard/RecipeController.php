@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Services\RecipeService;
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 
 class RecipeController extends Controller
@@ -32,21 +34,33 @@ class RecipeController extends Controller
     
     public function create()
     {
-        return view('dashboard.recipes.create');
+        try {
+            $products = $this->recipeService->getAllProducts();
+            return view('dashboard.recipes.create', compact('products'));
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.recipes.index')->with('error', 'Failed to load the create recipe page.');
+        }
     }
+    
+    
 
     public function store(Request $request)
     {
         try {
+            Log::info('Storing a new recipe', ['data' => $request->all()]);
+    
             $data = $request->all();
             $this->recipeService->store($data, $request->file('images'));
-
+    
             return redirect()->route('dashboard.recipes.index')->with('success', 'Recipe created successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed while creating recipe', ['errors' => $e->errors()]);
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create recipe.');
+            Log::error('Failed to create recipe', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Failed to create recipe. Please try again later.');
         }
     }
-
     public function edit($id)
     {
         try {
