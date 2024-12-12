@@ -56,7 +56,7 @@ Route::middleware(['auth:admin'])->get('dashboard', function () {
 })->name('dashboard.home');
 
 Route::get('/error/403', function () {
-    return view('dashboard.errors.403');
+    return view('dashboard.error.403');
 })->name('dashboard.error.403');
 Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
