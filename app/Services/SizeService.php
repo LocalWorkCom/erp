@@ -3,7 +3,7 @@
 
 namespace App\Services;
 use App\Models\Size;
-
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,12 +23,15 @@ class SizeService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $sizes = Size::all();
+        // $sizes = Size::all();
+        $categories = Category::all();
+        $sizes = Size::whereNotNull('category_id')->get();
+
 
         if (!$checkToken) {
             $sizes = $sizes->makeVisible(['name_en', 'name_ar']);
         }
-        return ResponseWithSuccessData($lang, $sizes, 1);
+        return ResponseWithSuccessData($lang, $sizes, 1 ,$categories);
     }
     public function store(Request $request, $checkToken)
     {

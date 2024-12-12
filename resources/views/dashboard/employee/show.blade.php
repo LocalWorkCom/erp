@@ -36,142 +36,136 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.code')</label>
-                                    <p class="form-text">{{ $employee->employee_code }}</p>
+                                    <p class="form-text">{{ $employee->employee_code ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.email')</label>
-                                    <p class="form-text">{{ $employee->email }}</p>
+                                    <p class="form-text">{{ $employee->email ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.phone')</label>
-                                    <p class="form-text">{{ $employee->phone_number }}</p>
+                                    <p class="form-text">{{ $employee->phone_number ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.gender')</label>
-                                    @if ($employee->gender)
-                                        <p class="form-text">
-                                            {{ $employee->gender }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text"> {{ $employee->gender ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.dob')</label>
-                                    @if ($employee->birth_date)
-                                        <p class="form-text">
-                                            {{ $employee->birth_date }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->birth_date ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.national_id')</label>
-                                    @if ($employee->national_id)
-                                        <p class="form-text">
-                                            {{ $employee->national_id }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->national_id ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.passport')</label>
-                                    @if ($employee->passport_number)
-                                        <p class="form-text">
-                                            {{ $employee->passport_number }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->passport_number ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.maritalStatus')</label>
-                                    @if ($employee->marital_status)
-                                        <p class="form-text">
-                                            {{ $employee->marital_status }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->marital_status ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.bloodGroup')</label>
-                                    @if ($employee->blood_group)
-                                        <p class="form-text">
-                                            {{ $employee->blood_group }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->blood_group ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.emergencyName')</label>
-                                    @if ($employee->emergency_contact_name)
-                                        <p class="form-text">
-                                            {{ $employee->emergency_contact_name }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text"> {{ $employee->emergency_contact_name ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.emergencyRel')</label>
-                                    @if ($employee->emergency_contact_relationship)
-                                        <p class="form-text">
-                                            {{ $employee->emergency_contact_relationship }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->emergency_contact_relationship ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.emergencyPhone')</label>
-                                    @if ($employee->emergency_contact_phone)
-                                        <p class="form-text">
-                                            {{ $employee->emergency_contact_phone }}</p>
-                                    @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
-                                    @endif
+                                    <p class="form-text">{{ $employee->emergency_contact_phone ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.nationality')</label>
-                                    <p class="form-text">
-                                        {{ $employee->nationality->name_ar . '|' . $employee->nationality->name_en }}</p>
+                                    @if ($employee->nationality_id)
+                                        <p class="form-text">
+                                            {{ app()->getLocale() === 'ar' ? $employee->nationality->name_ar : $employee->nationality->name_en }}
+                                        </p>
+                                    @else
+                                        <p class="form-text">--------</p>
+                                    @endif
+
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.department')</label>
                                     @if ($employee->department_id)
                                         <p class="form-text">
-                                            {{ $employee->department->name_en }}</p>
+                                            {{ app()->getLocale() === 'ar' ? $employee->department->name_ar : $employee->department->name_en }}
+                                        </p>
                                     @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
+                                        <p class="form-text">--------</p>
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.position')</label>
                                     @if ($employee->position_id)
                                         <p class="form-text">
-                                            {{ $employee->position->name_en }}</p>
+                                            {{ app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en }}
+                                        </p>
                                     @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
+                                        <p class="form-text">--------</p>
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.supervisor')</label>
                                     @if ($employee->supervisor_id)
                                         <p class="form-text">
-                                            {{ $employee->supervisor->employee_code }}</p>
+                                            {{ $employee->supervisor->first_name . ' ' . $employee->supervisor->last_name . ' | ' . $employee->supervisor->employee_code }}
+                                        </p>
                                     @else
-                                        <p class="form-text">@lang('employee.notExist')</p>
+                                        <p class="form-text">--------</p>
                                     @endif
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.hireDate')</label>
-                                    <p class="form-text">{{ $employee->hire_date }}</p>
+                                    <p class="form-text">{{ $employee->hire_date ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('employee.salary')</label>
-                                    <p class="form-text">{{ $employee->salary }}</p>
+                                    <p class="form-text">{{ $employee->salary ?? '--------' }}</p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                    <label class="form-label">@lang('employee.is_active')</label>
+                                    <label class="form-label">@lang('employee.assuranceSalary')</label>
+                                    <p class="form-text">{{ $employee->assurance_salary ?? '--------' }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.assuranceNumber')</label>
+                                    <p class="form-text">{{ $employee->assurance_number ?? '--------' }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.bankAccount')</label>
+                                    <p class="form-text">{{ $employee->bank_account ?? '--------' }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.employmentType')</label>
+                                    <p class="form-text">{{ $employee->employment_type ?? '--------' }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.status')</label>
                                     <p class="form-text">
-                                        {{ $employee->status == 'active' ? __('employee.yes') : __('employee.no') }}
+                                        {{ $employee->status == 'active' ? __('employee.active') : __('employee.notActive') }}
                                     </p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.isBiometric')</label>
+                                    <p class="form-text">
+                                        {{ $employee->is_biometric == '1' ? __('employee.yes') : __('employee.no') }}
+                                    </p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.biometricId')</label>
+                                    <p class="form-text">{{ $employee->biometric_id ?? '--------' }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('employee.notes')</label>
+                                    <p class="form-text">{{ $employee->notes ?? '--------' }}</p>
                                 </div>
                             </div>
                         </div>

@@ -17,6 +17,7 @@ use App\Services\CountryService;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
+use App\Models\ProductUnit;
 
 class ProductController extends Controller
 {
@@ -109,6 +110,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
         $product_limit = ProductLimit::where('product_id', $product->id)->first();
+        $product_unit = ProductUnit::where('product_id', $product->id)->first();
 
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
@@ -135,7 +137,7 @@ class ProductController extends Controller
         }
         // $Stores = Store::all();
 
-        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit','id'));
+        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit','product_unit','id'));
     }
 
     public function show($id)

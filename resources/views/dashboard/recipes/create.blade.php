@@ -96,11 +96,11 @@
                                             <tbody id="ingredients-table">
                                                 <tr>
                                                     <td>
-                                                        <select name="ingredients[0][product_id]" class="form-control select2" required>
-                                                            @foreach ($products as $product)
-                                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <select name="ingredients[0][product_id]" class="form-control select2" required>
+                                                        @foreach ($products as $product)
+                                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                        @endforeach
+                                                    </select>
                                                     </td>
                                                     <td>
                                                         <input type="number" name="ingredients[0][quantity]" class="form-control" min="0" step="0.01" required>

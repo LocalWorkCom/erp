@@ -13,8 +13,11 @@ return [
     'Image' => 'Image',
     'Save' => 'Save',
     'Actions' => 'Actions',
-
     'edit' => 'Edit',
     'show' => 'Show',
     'delete' => 'Delete',
+    'yes' => 'yes',
+    'no' => 'no',
+    'Remind' => 'Remind',
+
 ];

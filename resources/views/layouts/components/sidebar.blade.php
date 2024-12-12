@@ -5,7 +5,7 @@
         <a href="{{ route('dashboard.home') }}" class="header-logo">
             <img src="{{ asset('build/assets/images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
             <img src="{{ asset('build/assets/images/brand-logos/toggle-logo.png') }}" alt="logo" class="toggle-logo">
-            <img src="{{ asset('build/assets/images/brand-logos/desktop-dark.png') }}" alt="logo"
+            <img src="{{ asset('build/assets/images/brand-logos/desktop.png') }}" alt="logo"
                 class="desktop-dark">
             <img src="{{ asset('build/assets/images/brand-logos/toggle-dark.png') }}" alt="logo"
                 class="toggle-dark">
@@ -419,7 +419,7 @@
                             @endcan
                             @can('view orders')
                                 <li class="slide">
-                                    <a href="{{ url('orders') }}" class="side-menu__item">
+                                    <a href="{{ url('dashboard/orders') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -655,7 +655,7 @@
                                     <a href="{{ route('colors.list') }}" class="side-menu__item">@lang('sidebar.colors') </a>
                                 </li>
                             @endcan
-                            @can('view size')
+                            @can('view sizes')
                                 <li class="slide">
                                     <a href="{{ route('sizes.list') }}" class="side-menu__item">@lang('sidebar.size') </a>
                                 </li>

@@ -211,42 +211,23 @@
                                                         <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
                                                     </div>
 
-                                                    <?php /*
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-type" class="form-label">@lang('floor.Type')</label>
-                                                        <select id="edit-type" class="form-select" name="type" required>
-                                                            <option value="1">@lang('floor.Indoor')</option>
-                                                            <option value="2">@lang('floor.Outdoor')</option>
-                                                            <option value="3">@lang('floor.Both')</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-smoking" class="form-label">@lang('floor.Smoking')</label>
-                                                        <select id="edit-smoking" class="form-select" name="smoking" required>
-                                                            <option value="1">@lang('floor.Smokin')</option>
-                                                            <option value="2">@lang('floor.NoSmokin')</option>
-                                                            <option value="3">@lang('floor.Both')</option>
-                                                        </select>
-                                                    </div>
-                                                    */?>
-
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label class="form-label">@lang('floor.Type')</label>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeIndoor" value="1" required>
-                                                            <label class="form-check-label" for="typeIndoor">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-indoor" value="1" required>
+                                                            <label class="form-check-label" for="type-indoor">
                                                                 @lang('floor.Indoor')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeOutdoor" value="2">
-                                                            <label class="form-check-label" for="typeOutdoor">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-outdoor" value="2">
+                                                            <label class="form-check-label" for="type-outdoor">
                                                                 @lang('floor.Outdoor')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="type" id="typeBoth" value="3">
-                                                            <label class="form-check-label" for="typeBoth">
+                                                            <input class="form-check-input" type="radio" name="type" id="type-both" value="3">
+                                                            <label class="form-check-label" for="type-both">
                                                                 @lang('floor.Both')
                                                             </label>
                                                         </div>
@@ -261,20 +242,20 @@
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label class="form-label">@lang('floor.Smoking')</label>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeIndoor" value="1" required>
-                                                            <label class="form-check-label" for="typeIndoor">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-indoor" value="1" required>
+                                                            <label class="form-check-label" for="smokin-indoor">
                                                                 @lang('floor.Smokin')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeOutdoor" value="2">
-                                                            <label class="form-check-label" for="typeOutdoor">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-outdoor" value="2">
+                                                            <label class="form-check-label" for="smokin-outdoor">
                                                                 @lang('floor.NoSmokin')
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="smoking" id="typeBoth" value="3">
-                                                            <label class="form-check-label" for="typeBoth">
+                                                            <input class="form-check-input" type="radio" name="smoking" id="smokin-both" value="3">
+                                                            <label class="form-check-label" for="smokin-both">
                                                                 @lang('floor.Both')
                                                             </label>
                                                         </div>
@@ -381,30 +362,12 @@
                                             <a href="javascript:void(0);"
                                                class="btn btn-info-light btn-wave show-floor-btn"
                                                data-id="{{ $floors->id }}"
-                                               data-name-ar="{{ $floors->name_ar }}"
-                                               data-name-en="{{ $floors->name_en }}"
-                                               data-type-show="{{ ($floors->type == 1) ? __('floor.Indoor') : ($floors->type == 2 ? __('floor.Outdoor') : __('floor.Both')) }}"
-                                               data-smoking-show="{{ ($floors->smoking == 1) ? __('floor.Smokin') : ($floors->smoking == 2 ? __('floor.NoSmokin') : __('floor.Both')) }}"
-                                               data-branch-name="{{ $floors->branches->name_ar . " | " .  $floors->branches->name_en}}"
                                                data-bs-toggle="modal"
                                                data-bs-target="#showModal">
                                                 @lang('category.show') <i class="ri-eye-line"></i>
                                             </a>
 
                                             <!-- Edit Button -->
-                                            <!-- <button type="button"
-                                                    class="btn btn-orange-light btn-wave edit-floor-btn"
-                                                    data-id="{{ $floors->id }}"
-                                                    data-name-ar="{{ $floors->name_ar }}"
-                                                    data-name-en="{{ $floors->name_en }}"
-                                                    data-type="{{ $floors->type }}"
-                                                    data-smoking="{{ $floors->smoking }}"
-                                                    data-branch-id="{{ $floors->branch_id }}"
-                                                    data-route="{{ route('floor.update', ':id') }}"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editModal">
-                                                @lang('category.edit') <i class="ri-edit-line"></i>
-                                            </button> -->
                                             <button type="button"
                                                     class="btn btn-orange-light btn-wave edit-floor-btn"
                                                     data-id="{{ $floors->id }}"
@@ -475,25 +438,150 @@
     @vite('resources/assets/js/choices.js')
     @vite('resources/assets/js/modal.js')
 @endsection
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
 <script>
+    $(document).ready(function(){
+        $('.edit-floor-btn').on('click', function() {
+            var floorId = this.getAttribute('data-id');   
+            var get_url = "{{ route('floor.show', 'id') }}";
+            var edit_url = "{{ route('floor.update', 'id') }}";
+            get_url = get_url.replace('id', floorId);
+
+            // AJAX request to fetch user details
+            $.ajax({
+                url: get_url, 
+                type: 'GET',
+                success: function(data) {
+                    // Populate the modal with the data
+                    $('#edit-name-ar').val(data.name_ar);
+                    $('#edit-name-en').val(data.name_en);
+                    $('#edit-branch').val(data.branch_id);
+
+                    if(data.type == 1){
+                        $('#type-indoor').prop('checked', true);
+                    }else if(data.type == 2){
+                        $('#type-outdoor').prop('checked', true);
+                    }else{
+                        $('#type-both').prop('checked', true);
+                    }
+
+                    if(data.smoking == 1){
+                        $('#smokin-indoor').prop('checked', true);
+                    }else if(data.smoking == 2){
+                        $('#smokin-outdoor').prop('checked', true);
+                    }else{
+                        $('#smokin-both').prop('checked', true);
+                    }
+
+                    edit_url = edit_url.replace('id', floorId);
+                    $('#edit-floor-form').attr('action', edit_url);
+
+                    // Show the modal
+                    $('#editModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error);
+                }
+            });
+        });
+
+        $('.show-floor-btn').on('click', function() {
+            var floorId = this.getAttribute('data-id');   
+            var get_url = "{{ route('floor.show', 'id') }}";
+            get_url = get_url.replace('id', floorId);
+
+            // AJAX request to fetch user details
+            $.ajax({
+                url: get_url, 
+                type: 'GET',
+                success: function(data) {
+                    console.log(data);
+                    
+                    // Populate the modal with the data
+                    $('#show-name-ar').text(data.name_ar);
+                    $('#show-name-en').text(data.name_en);
+                    $('#show-branch').text(data.branches.name);
+
+                    if(data.type == 1){
+                        $('#show-type').text('indoor');
+                    }else if(data.type == 2){
+                        $('#show-type').text('outdoor');
+                    }else{
+                        $('#show-type').text('both');
+                    }
+
+                    if(data.smoking == 1){
+                        $('#show-smoking').text('smoking');
+                    }else if(data.smoking == 2){
+                        $('#show-smoking').text('no smoking');
+                    }else{
+                        $('#show-smoking').text('both');
+                    }
+
+                    // Show the modal
+                    $('#showModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error);
+                }
+            });
+        });
+    });
+    <?php /*
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-floor-btn');
         const editForm = document.getElementById('edit-floor-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
-        // const typeSelect = document.getElementById('edit-type');
-        // const smokingSelect = document.getElementById('edit-smoking');
-        // const branchSelect = document.getElementById('edit-branch');
+        const editBranch = document.getElementById('edit-branch');
+
+        const typeIndoor = document.getElementById('type-indoor');
+        const typeOutdoor = document.getElementById('type-outdoor');
+        const typeBoth = document.getElementById('type-both');
+        const smokinIndoor = document.getElementById('smokin-indoor');
+        const smokinOutdoor = document.getElementById('smokin-outdoor');
+        const smokinBoth = document.getElementById('smokin-both');
+
+        var get_url = "{{ route('floor.show', 'id') }}";
+        var edit_url = "{{ route('floor.update', 'id') }}";
 
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 // Get floor details from data attributes
-                const floorId = this.getAttribute('data-id');
-                var get_url = "{{ route('floor.show', 'id') }}";
+                const floorId = this.getAttribute('data-id');                
                 get_url = get_url.replace('id', floorId);
+
+                console.log(get_url);
+                
                 $.get(get_url, function(data) {
+                    
                     nameArInput.value = data.name_ar;
                     nameEnInput.value = data.name_en;
+                    editBranch.value = data.branch_id;
+                    if(data.type == 1){
+                        typeIndoor.checked = true; 
+                    }
+                    if(data.type == 2){
+                        typeOutdoor.checked = true; 
+                    }
+                    if(data.type == 3){
+                        typeBoth.checked = true; 
+                    }
+
+                    if(data.smoking == 1){
+                        smokinIndoor.checked = true; 
+                    }
+                    if(data.smoking == 2){
+                        smokinOutdoor.checked = true; 
+                    }
+                    if(data.smoking == 3){
+                        smokinBoth.checked = true; 
+                    }
+
+                    edit_url = edit_url.replace('id', floorId);
+                    editForm.action = edit_url;
                 });
 
                 // Set form action URL dynamically
@@ -536,6 +624,7 @@
             });
         });
     });
+    */?>
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");

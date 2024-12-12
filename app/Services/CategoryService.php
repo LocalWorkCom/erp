@@ -89,9 +89,9 @@ class CategoryService
 
         return RespondWithSuccessRequest($lang, 1);
     }
+    
     public function update(Request $request, $id, $checkToken)
     {
-//        dd($request->all());
         $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
@@ -139,7 +139,7 @@ class CategoryService
             && $category->image == $request->file('image') ) {
             return  RespondWithBadRequestData($lang,10);
         }
-        $modify_by = 13;
+        $modify_by = Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the category model
         $category->name_ar = $request->name_ar;
@@ -163,6 +163,7 @@ class CategoryService
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
+
     public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();

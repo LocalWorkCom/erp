@@ -49,8 +49,8 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $order['details'] = OrderDetail::where('order_id', $order->id)->get();
             $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
+            $order['transaction'] = OrderTransaction::where('order_id', $order->id)->get();
         }
-
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
