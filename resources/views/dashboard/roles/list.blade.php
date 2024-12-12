@@ -30,11 +30,11 @@
                             <div class="card-title">@lang('roles.roles')</div>
                             <div class="card-header">
 
-                            <a href="{{route('role.create')}}" type="button" class="btn btn-primary label-btn">
-                                <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('roles.Add')
-                            </a>
-                        </div>
+                                <a href="{{ route('role.create') }}" type="button" class="btn btn-primary label-btn">
+                                    <i class="fe fe-plus label-btn-icon me-2"></i>
+                                    @lang('roles.Add')
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             @if (session('message'))
@@ -73,14 +73,14 @@
                                             <td>{{ $role->guard_name }}</td>
                                             <td>
                                                 @foreach ($role->permissions->take(10) as $permission)
-                                                    {{ $permission->name }}{{ !$loop->last && $loop->iteration % 4 != 0 ? ' - ' : '' }}
+                                                    {{ __("permissions.{$permission->name}") }}{{ !$loop->last && $loop->iteration % 4 != 0 ? ' - ' : '' }}
                                                     @if ($loop->iteration % 4 == 0 && !$loop->last)
                                                         <br>
                                                     @endif
                                                 @endforeach
 
                                                 @if ($role->permissions->count() > 10)
-                                                    ... <!-- Indicate there are more permissions -->
+                                                    ...
                                                 @endif
                                             </td>
 
@@ -137,12 +137,12 @@
     <script>
         function delete_item(id) {
             Swal.fire({
-                title: 'تنبيه',
-                text: 'هل انت متاكد من انك تريد ان تحذف هذه المهمه',
+                title: '{{ __('roles.warning_title') }}',
+                text: '{{ __('roles.delete_confirmation') }}',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'نعم, احذف',
-                cancelButtonText: 'إلغاء',
+                confirmButtonText: '{{ __('roles.confirm_delete') }}',
+                cancelButtonText: '{{ __('roles.cancel') }}',
                 confirmButtonColor: '#3085d6'
             }).then((result) => {
                 if (result.isConfirmed) {
