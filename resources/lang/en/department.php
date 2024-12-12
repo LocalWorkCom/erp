@@ -1,11 +1,10 @@
 <?php
 
 return [
-    'Positions' => 'Positions',
-    'Department' => 'Department',
-    'showPosition' => 'Show Position',
-    'EditPosition' => 'Edit Position',
-    'add' => 'Add Position',
+    'departments' => 'Departments',
+    'showDepartment' => 'Show Department',
+    'EditDepartment' => 'Edit Department',
+    'add' => 'Add Department',
     'ID' => 'ID',
     'name' => 'Name',
     'arabicName' => 'Arabic Name',
@@ -14,13 +13,12 @@ return [
     'arabicDescr' => 'Arabic Description',
     'englishDescr' => 'English Description',
     'Actions' => 'Actions',
-    'ChooseDepartment' => 'Choose Department',
-    'addPosition' => 'Add Position',
+    'addDepartment' => 'Add Department',
     'show' => 'Show',
     'edit' => 'Edit',
     'delete' => 'Delete',
     'warning' => 'Warning',
-    'deleteMsg' => 'Are you sure you want to delete this position',
+    'deleteMsg' => 'Are you sure you want to delete this Department',
     'yesDelete' => 'Yes Delete',
     'cancelDelete' => 'Cancel'
 ];

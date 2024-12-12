@@ -96,20 +96,21 @@
                                                 </a>
                                                 <div class="btn-group" role="group"> <button id="btnGroupVerticalDrop4"
                                                         type="button" class="btn btn-primary dropdown-toggle show"
-                                                        data-bs-toggle="dropdown" aria-expanded="true"> Dropdown </button>
+                                                        data-bs-toggle="dropdown" aria-expanded="true"> تغيير الحالة
+                                                    </button>
                                                     <ul class="dropdown-menu show" aria-labelledby="btnGroupVerticalDrop4"
                                                         style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 39px);"
                                                         data-popper-placement="bottom-start">
                                                         <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'accept']) }}"
-                                                                class="dropdown-item" >
+                                                                class="dropdown-item">
                                                                 @lang('order.accept') <i class="ri-accept-line"></i>
                                                             </a></li>
                                                         <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'reject']) }}"
-                                                                class="dropdown-item" >
+                                                                class="dropdown-item">
                                                                 @lang('order.reject') <i class="ri-reject-line"></i>
                                                             </a></li>
                                                         <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'cancel']) }}"
-                                                                class="dropdown-item" >
+                                                                class="dropdown-item">
                                                                 @lang('order.cancel') <i class="ri-reject-line"></i>
                                                             </a></li>
                                                     </ul>

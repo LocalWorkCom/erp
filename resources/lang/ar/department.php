@@ -1,24 +1,22 @@
 <?php
 
 return [
-    'Positions' => ' الوظائف',
-    'Department' => 'القسم',
-    'showPosition' => 'عرض الوظيفة',
+    'departments' => 'الاقسام',
+    'showDepartment' => 'عرض القسم',
     'show' => 'عرض',
     'edit' => 'تعديل ',
-    'add' => ' اضافةوظيفة ',
+    'add' => ' اضافة قسم ',
     'delete' => 'حذف',
     'ID' => '#',
-    'name' => 'اسم الوظيفة',
+    'name' => 'اسم القسم',
     'arabicName' => 'الاسم بالعربي',
     'englishName' => 'الاسم بالانجليزي',
     'description' => 'الوصف ',
     'arabicDescr' => 'الوصف بالعربي',
     'englishDescr' => 'الوصف بالانجليزي',
     'Actions' => 'العمليات',
-    'ChooseDepartment' => 'اختر القسم',
     'warning' => 'تحذير',
-    'deleteMsg' => 'هل انت متاكد من انك تريد ان تحذف هذه الوظيفة',
+    'deleteMsg' => 'هل انت متاكد من انك تريد ان تحذف هذه القسم',
     'yesDelete' => 'نعم حذف',
     'cancelDelete' => 'الغاء'
 ];

@@ -67,5 +67,6 @@ return[
     'Logo' => 'اللوجو',
     'Slider' => 'السلايدر',
     'AddonCategories'=>'فئات الاضافات'
+    'roles' => 'المهام',
 
 ];

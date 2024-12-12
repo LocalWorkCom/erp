@@ -67,5 +67,6 @@ return [
     'Logo' => 'Logo',
     'Slider' => 'Slider',
     'AddonCategories'=>'Addon Categories'
+    'roles' => 'Roles',
 
 ];

@@ -28,6 +28,7 @@ use App\Http\Controllers\Dashboard\AddonCategoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\OrderController;
 
 /*
@@ -56,7 +57,7 @@ Route::middleware(['auth:admin'])->get('dashboard', function () {
 })->name('dashboard.home');
 
 Route::get('/error/403', function () {
-    return view('dashboard.errors.403');
+    return view('dashboard.error.403');
 })->name('dashboard.error.403');
 Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
@@ -258,7 +259,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update')->middleware('role_or_permission:update dish_categories');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete')->middleware('role_or_permission:delete dish_categories');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore')->middleware('role_or_permission:create dish_categories');
-  
+
     });
     // Recipe routes
     Route::prefix('recipes')->group(function () {
@@ -283,6 +284,16 @@ Route::prefix('dashboard/addon-categories')->group(function () {
     Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
 });
 
+    //roles routws
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view recipes');
+        Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create recipes');
+        Route::post('store', [RoleController::class, 'store'])->name('role.store')->middleware('role_or_permission:create gifts');
+        Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware('role_or_permission:update recipes');
+        Route::put('update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware('role_or_permission:update gifts');
+        Route::delete('delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('role_or_permission:delete gifts');
+    });
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
