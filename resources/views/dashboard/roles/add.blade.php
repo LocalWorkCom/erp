@@ -44,7 +44,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                @lang('brand.Add')
+                                @lang('roles.Add')
                             </div>
                         </div>
                         <div class="card-body">
@@ -63,27 +63,29 @@
                                 @csrf
                                 <div class="row gy-4">
                                     <!-- Arabic Name -->
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label class="form-label">@lang('roles.Name')</label>
                                         <input type="text" class="form-control" name="name"
-                                            value="{{ old('name') }}" placeholder="@lang('roles.ArabicName')" required>
+                                            value="{{ old('name') }}" placeholder="@lang('roles.name')" required>
                                         <div class="invalid-feedback">
                                             @lang('validation.EnterName')
                                         </div>
                                     </div>
 
-                                    <!-- English Name -->
+                                    {{-- <!-- English Name -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('roles.guard')</label>
                                         <input type="text" class="form-control" name="guard" value="admin"
                                             placeholder="@lang('roles.guard')" disabled>
-                                    </div>
+                                    </div> --}}
+
                                     <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
                                         <div class="row">
                                             @foreach ($groupedPermissions as $group => $groupPermissions)
                                                 <div class="col-md-6 mb-4">
                                                     <div class="permission-group">
-                                                        <h5 class="group-title">{{ ucfirst($group) }}</h5>
+                                                        
+                                                        <h5 class="group-title">{{ __('permissions.' . $group) }}</h5>
                                                         <div class="d-flex flex-wrap">
                                                             @foreach ($groupPermissions as $permission)
                                                                 <div class="form-check me-3">

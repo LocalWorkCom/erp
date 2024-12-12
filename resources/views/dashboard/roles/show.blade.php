@@ -42,10 +42,10 @@
                                 </div>
 
                                 <!-- Guard Name -->
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                {{-- <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('roles.EnglishName')</label>
                                     <p class="form-text">{{ $role->guard_name }}</p>
-                                </div>
+                                </div> --}}
 
                                 <!-- Permissions -->
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
