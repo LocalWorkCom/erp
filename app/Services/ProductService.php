@@ -93,7 +93,7 @@ class ProductService
             'sku' => 'required|string|unique:products',
             'barcode' => 'required|string|unique:products',
             'main_unit_id' => 'required|integer',
-            'factor' => 'required|numeric|min:0',
+            // 'factor' => 'required|numeric|min:0',
             'currency_code' => 'required|string',
             'category_id' => 'required|integer'
         ]);
@@ -150,13 +150,13 @@ class ProductService
         $product_limit->save();
 
          // Save product limits
-         $product_unit = new ProductUnit();
-         $product_unit->product_id = $product->id;
-         $product_unit->factor = $request->factor;
-         $product_unit->unit_id = $request->main_unit_id;
-         $product_unit->created_by = Auth::guard('admin')->user()->id;
+        //  $product_unit = new ProductUnit();
+        //  $product_unit->product_id = $product->id;
+        //  $product_unit->factor = $request->factor;
+        //  $product_unit->unit_id = $request->main_unit_id;
+        //  $product_unit->created_by = Auth::guard('admin')->user()->id;
 
-         $product_unit->save();
+        //  $product_unit->save();
 
         // Handle file upload (main image)
         if ($request->hasFile('main_image')) {
@@ -213,7 +213,7 @@ class ProductService
                 'main_unit_id' => 'required|integer',
                 'currency_code' => 'required|string',
                 'category_id' => 'required|integer',
-                'factor' => 'required|numeric|min:0',
+                // 'factor' => 'required|numeric|min:0',
                 'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
             ]
         );
@@ -229,13 +229,13 @@ class ProductService
             return RespondWithBadRequestData($this->lang, 8);
         }
 
-        // Retrieve the product_unit
-        $product_unit = ProductUnit::where('product_id', $product->id)->first();
-        if (!$product_unit) {
-            // If product_unit doesn't exist, create a new one
-            $product_unit = new ProductUnit();
-            $product_unit->product_id = $product->id;
-        }
+        // // Retrieve the product_unit
+        // $product_unit = ProductUnit::where('product_id', $product->id)->first();
+        // if (!$product_unit) {
+        //     // If product_unit doesn't exist, create a new one
+        //     $product_unit = new ProductUnit();
+        //     $product_unit->product_id = $product->id;
+        // }
         // Retrieve the ProductLimit
         $product_limit = ProductLimit::where('product_id', $product->id)->first();
         if (!$product_limit) {
@@ -256,7 +256,7 @@ class ProductService
             'sku',
             'barcode',
             'main_unit_id',
-            'factor',
+            // 'factor',
             'currency_code',
             'category_id'
         ]));
@@ -267,11 +267,11 @@ class ProductService
 
         $product_limit->save();
 
-        $product_unit->factor = $request->factor;
-        $product_unit->unit_id = $request->main_unit_id;
-        $product_unit->created_by = Auth::guard('admin')->user()->id;
+        // $product_unit->factor = $request->factor;
+        // $product_unit->unit_id = $request->main_unit_id;
+        // $product_unit->created_by = Auth::guard('admin')->user()->id;
 
-        $product_unit->save();
+        // $product_unit->save();
 
         // Handle image upload (main image)
         if ($request->hasFile('main_image')) {
