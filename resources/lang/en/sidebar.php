@@ -66,5 +66,6 @@ return [
     'website' => 'Website',
     'Logo' => 'Logo',
     'Slider' => 'Slider',
+    'roles' => 'Roles',
 
 ];

@@ -49,7 +49,8 @@
                                                 @foreach ($errors->all() as $error)
                                                     <div class="alert alert-solid-danger alert-dismissible fade show">
                                                         {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close">
                                                             <i class="bi bi-x"></i>
                                                         </button>
                                                     </div>
@@ -98,17 +99,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form id="edit-unit-form" action="" method="POST" class="needs-validation" novalidate>
+                                        <form id="edit-unit-form" action="" method="POST" class="needs-validation"
+                                            novalidate>
                                             @csrf
                                             @method('PUT')
                                             @if ($errors->any())
                                                 @foreach ($errors->all() as $error)
                                                     <div class="alert alert-solid-danger alert-dismissible fade show">
                                                         {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close">
                                                             <i class="bi bi-x"></i>
                                                         </button>
                                                     </div>
@@ -116,13 +120,16 @@
                                             @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('unit.EditUnit')</h6>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-ar" class="form-label">@lang('unit.ArabicName')</label>
-                                                        <input type="text" id="edit-name-ar" class="form-control" name="name_ar" required>
+                                                        <label for="edit-name-ar"
+                                                            class="form-label">@lang('unit.ArabicName')</label>
+                                                        <input type="text" id="edit-name-ar" class="form-control"
+                                                            name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -131,8 +138,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-en" class="form-label">@lang('unit.EnglishName')</label>
-                                                        <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
+                                                        <label for="edit-name-en"
+                                                            class="form-label">@lang('unit.EnglishName')</label>
+                                                        <input type="text" id="edit-name-en" class="form-control"
+                                                            name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -143,19 +152,23 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                <button type="submit" class="btn btn-outline-primary">@lang('modal.save')</button>
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal">@lang('modal.close')</button>
+                                                <button type="submit"
+                                                    class="btn btn-outline-primary">@lang('modal.save')</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h6 class="modal-title" id="showModalLabel">@lang('unit.ShowUnit')</h6>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row gy-4">
@@ -170,7 +183,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
                                         </div>
                                     </div>
                                 </div>
@@ -186,17 +200,18 @@
                                     </button>
                                 </div>
                             @endif
-                                @if ($errors->any())
-                                    @foreach ($errors->all() as $error)
-                                        <div class="alert alert-solid-danger alert-dismissible fade show">
-                                            {{ $error }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('unit.ID')</th>
@@ -214,30 +229,26 @@
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="javascript:void(0);"
-                                                   class="btn btn-info-light btn-wave show-unit-btn"
-                                                   data-id="{{ $units->id }}"
-                                                   data-name-ar="{{ $units->name_ar }}"
-                                                   data-name-en="{{ $units->name_en }}"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#showModal">
+                                                    class="btn btn-info-light btn-wave show-unit-btn"
+                                                    data-id="{{ $units->id }}" data-name-ar="{{ $units->name_ar }}"
+                                                    data-name-en="{{ $units->name_en }}" data-bs-toggle="modal"
+                                                    data-bs-target="#showModal">
                                                     @lang('category.show') <i class="ri-eye-line"></i>
                                                 </a>
 
 
                                                 <!-- Edit Button -->
-                                                <button type="button"
-                                                        class="btn btn-orange-light btn-wave edit-unit-btn"
-                                                        data-id="{{ $units->id }}"
-                                                        data-name-ar="{{ $units->name_ar }}"
-                                                        data-name-en="{{ $units->name_en }}"
-                                                        data-route="{{ route('unit.update', ':id') }}"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editModal">
+                                                <button type="button" class="btn btn-orange-light btn-wave edit-unit-btn"
+                                                    data-id="{{ $units->id }}" data-name-ar="{{ $units->name_ar }}"
+                                                    data-name-en="{{ $units->name_en }}"
+                                                    data-route="{{ route('unit.update', ':id') }}" data-bs-toggle="modal"
+                                                    data-bs-target="#editModal">
                                                     @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </button>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('unit.delete', $units->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" action="{{ route('unit.delete', $units->id) }}"
+                                                    method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
@@ -283,15 +294,14 @@
     @vite('resources/assets/js/modal.js')
 @endsection
 <script>
-
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const editButtons = document.querySelectorAll('.edit-unit-btn');
         const editForm = document.getElementById('edit-unit-form');
         const nameArInput = document.getElementById('edit-name-ar');
         const nameEnInput = document.getElementById('edit-name-en');
 
         editButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 // Get unit details from data attributes
                 const unitId = this.getAttribute('data-id');
                 const nameAr = this.getAttribute('data-name-ar');
@@ -309,13 +319,13 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const showButtons = document.querySelectorAll('.show-unit-btn');
         const nameArElement = document.getElementById('show-name-ar');
         const nameEnElement = document.getElementById('show-name-en');
 
         showButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 // Get unit details from data attributes
                 const nameAr = this.getAttribute('data-name-ar');
                 const nameEn = this.getAttribute('data-name-en');
