@@ -33,5 +33,6 @@ return [
     'warning' => 'Warning',
     'yesDelete' => 'Yes Delete',
     'cancelDelete' => 'Cancel',
-    'deleteMsg' => 'Are you sure you want to delete this purchase?'
+    'deleteMsg' => 'Are you sure you want to delete this purchase?',
+    'print' => 'Print'
 ];
