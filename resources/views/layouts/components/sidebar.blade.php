@@ -671,6 +671,11 @@
                                     <a href="{{ route('roles.list') }}" class="side-menu__item">@lang('sidebar.roles') </a>
                                 </li>
                             @endcan
+                            @can('view permissions')
+                                <li class="slide">
+                                    <a href="{{ route('permissions.list') }}" class="side-menu__item">@lang('sidebar.permissions') </a>
+                                </li>
+                            @endcan
                            {{-- @can('view Notification')
                                 <li class="slide">
                                     <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>
