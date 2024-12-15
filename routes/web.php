@@ -256,22 +256,22 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [TermsAndConditionsController::class, 'update'])->name('term.update')->middleware('role_or_permission:update terms');
     });
 
-    Route::get('/privacies', [PrivacyPolicyController::class, 'index'])->name('privacies.list');
+    Route::get('/privacies', [PrivacyPolicyController::class, 'index'])->name('privacies.list')->middleware('role_or_permission:view privacies');
     Route::group(['prefix' => 'privacy'], function () {
-        Route::get('create', [PrivacyPolicyController::class, 'create'])->name('privacy.create');
-        Route::post('store', [PrivacyPolicyController::class, 'store'])->name('privacy.store');
-        Route::get('show/{id}', [PrivacyPolicyController::class, 'show'])->name('privacy.show');
-        Route::get('edit/{id}', [PrivacyPolicyController::class, 'edit'])->name('privacy.edit');
-        Route::put('update/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy.update');
+        Route::get('create', [PrivacyPolicyController::class, 'create'])->name('privacy.create')->middleware('role_or_permission:create privacies');
+        Route::post('store', [PrivacyPolicyController::class, 'store'])->name('privacy.store')->middleware('role_or_permission:create privacies');
+        Route::get('show/{id}', [PrivacyPolicyController::class, 'show'])->name('privacy.show')->middleware('role_or_permission:view privacies');
+        Route::get('edit/{id}', [PrivacyPolicyController::class, 'edit'])->name('privacy.edit')->middleware('role_or_permission:update privacies');
+        Route::put('update/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy.update')->middleware('role_or_permission:update privacies');
     });
 
-    Route::get('/returns', [ReturnPolicyController::class, 'index'])->name('returns.list');
+    Route::get('/returns', [ReturnPolicyController::class, 'index'])->name('returns.list')->middleware('role_or_permission:view returns');
     Route::group(['prefix' => 'return'], function () {
-        Route::get('create', [ReturnPolicyController::class, 'create'])->name('return.create');
-        Route::post('store', [ReturnPolicyController::class, 'store'])->name('return.store');
-        Route::get('show/{id}', [ReturnPolicyController::class, 'show'])->name('return.show');
-        Route::get('edit/{id}', [ReturnPolicyController::class, 'edit'])->name('return.edit');
-        Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update');
+        Route::get('create', [ReturnPolicyController::class, 'create'])->name('return.create')->middleware('role_or_permission:create returns');
+        Route::post('store', [ReturnPolicyController::class, 'store'])->name('return.store')->middleware('role_or_permission:create returns');
+        Route::get('show/{id}', [ReturnPolicyController::class, 'show'])->name('return.show')->middleware('role_or_permission:view returns');
+        Route::get('edit/{id}', [ReturnPolicyController::class, 'edit'])->name('return.edit')->middleware('role_or_permission:update returns');
+        Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update')->middleware('role_or_permission:update returns');
     });
 
     //HR

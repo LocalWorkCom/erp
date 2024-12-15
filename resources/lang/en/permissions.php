@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
@@ -523,4 +525,10 @@
   'edit addon_categorie' => 'edit addon_categorie',
   'print advances' => 'print advances',
   'print invoice' => 'print invoice',
+  'view privacies' => 'view privacies',
+  'create privacies' => 'create privacies',
+  'update privacies' => 'update privacies',
+  'view returns' => 'view returns',
+  'create returns' => 'create returns',
+  'update returns' => 'update returns',
 );
