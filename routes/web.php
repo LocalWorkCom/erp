@@ -82,20 +82,13 @@ Route::get('/', function () {
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
-    // Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
         ->name('products.units.list')
-        ->middleware('role_or_permission:view products');
-    // Route::post('product/units/save', [ProductController::class, 'saveUnits'])
-    // ->name('product.units.save')
-    // ->middleware('role_or_permission:view products');
+        ->middleware('role_or_permission:view product_units');
+        
     Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
         ->name('product.units.save')
-        ->middleware('role_or_permission:view products');
-
-    Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
-    ->name('units.remove')
-    ->middleware('role_or_permission:view products');
+        ->middleware('role_or_permission:view product_units');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
@@ -347,8 +340,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('role_or_permission:delete roles');
     });
 
-     //permissions routes
-     Route::group(['prefix' => 'permissions'], function () {
+    //permissions routes
+    Route::group(['prefix' => 'permissions'], function () {
         Route::get('/', [PermissionController::class, 'index'])->name('permissions.list')->middleware('role_or_permission:view permissions');
         Route::get('/show/{id}', [PermissionController::class, 'show'])->name('permission.show')->middleware('role_or_permission:view permissions');
         Route::get('/create', [PermissionController::class, 'create'])->name('permission.create')->middleware('role_or_permission:create permissions');
@@ -382,5 +375,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [PurchaseController::class, 'edit'])->name('purchase.edit')->middleware('role_or_permission:update purchase_invoices');
         Route::put('update/{id}', [PurchaseController::class, 'update'])->name('purchase.update')->middleware('role_or_permission:update purchase_invoices');
         Route::delete('delete/{id}', [PurchaseController::class, 'destroy'])->name('purchase.delete')->middleware('role_or_permission:delete purchase_invoices');
+        Route::get('print/{id}', [PurchaseController::class, 'print'])->name('purchase.print'); //->middleware('role_or_permission:print purchase_invoices');
     });
 });

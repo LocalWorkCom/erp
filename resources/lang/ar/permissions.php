@@ -524,6 +524,7 @@ return array (
   'addon_categories' => 'تصنيفات',
   'purchase_invoice' => 'فواتير المشتريات',
   'edit addon_categorie' => 'تعديل تصنيفات أضافات',
+  'view units_products' => 'عرض وحدات المنتج',
   'delete addon_categories' => 'حذف تصنيفات الأضافات',
   'print advances' => 'طباعه لال',
   'print invoice' => 'طباعه الفواتير',

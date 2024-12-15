@@ -174,10 +174,12 @@
                                                             @endforeach
                                                         @endif
                                                         <div class="modal-header">
-                                                            <h6 class="modal-title" id="editModalLabel">@lang('color.EditColor')
+                                                            <h6 class="modal-title" id="editModalLabel">
+                                                                @lang('roles.editPer')
                                                             </h6>
                                                             <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                            </button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row gy-4">

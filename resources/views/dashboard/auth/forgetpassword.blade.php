@@ -25,14 +25,14 @@
                         </div>
                         <div class="card custom-card rectangle2">
                             <div class="card-body p-5 rectangle3">
-                                <p class="h4 fw-semibold mb-2 text-center">forget password</p>
-                                <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome to EL Koute </p>
+                                <p class="h4 fw-semibold mb-2 text-center">@lang('auth.forgetPass')</p>
+                                <p class="mb-4 text-muted op-7 fw-normal text-center">@lang('auth.welcome')</p>
                                 <form method="POST" action="{{ route('dashboard.password.email') }}" class="needs-validation">
                                     @csrf
                                     <div class="row gy-3">
                                         <!-- Email Input -->
                                         <div class="col-xl-12">
-                                            <label for="signin-username" class="form-label text-default">Email</label>
+                                            <label for="signin-username" class="form-label text-default">@lang('auth.email')</label>
                                             <input type="text" class="form-control form-control-lg @error('email') is-invalid @enderror"
                                                    id="signin-username" name="email" placeholder="email" value="{{ old('email') }}">
                                             <div class="invalid-feedback">
@@ -43,7 +43,7 @@
                                         </div>
                                         <!-- Submit Button -->
                                         <div class="col-xl-12 d-grid mt-2">
-                                            <button type="submit" class="btn btn-lg btn-primary">Send Mail</button>
+                                            <button type="submit" class="btn btn-lg btn-primary">@lang('auth.sendmail')</button>
                                         </div>
                                     </div>
                                 </form>

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Position;
 use App\Models\PurchaseInvoice;
+use App\Models\PurchaseInvoicesDetails;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,29 @@ class PurchaseService
             return RespondWithBadRequest($lang, 5);
         }
 
-        return PurchaseInvoice::with('country')->get();
+        $purchases = PurchaseInvoice::with([
+            'vendor',
+            'store',
+            'purchaseInvoicesDetails',
+            'purchaseInvoicesDetails.category',
+            'purchaseInvoicesDetails.product',
+            'purchaseInvoicesDetails.unit'
+        ])->get();
+
+        return $purchases;
     }
 
     public function getPurchase($id)
     {
-        return PurchaseInvoice::findOrFail($id);
+        $purchases = PurchaseInvoice::with([
+            'vendor',
+            'store',
+            'purchaseInvoicesDetails',
+            'purchaseInvoicesDetails.category',
+            'purchaseInvoicesDetails.product',
+            'purchaseInvoicesDetails.unit'
+        ])->findOrFail($id);
+        return $purchases;
     }
 
     public function createPurchase($data, $checkToken)
@@ -42,17 +60,24 @@ class PurchaseService
             return RespondWithBadRequest($lang, 5);
         }
         $purchase = new PurchaseInvoice();
-        $purchase->name_ar = $data['name_ar'];
-        $purchase->name_en = $data['name_en'];
-        $purchase->contact_person = $data['contact_person'];
-        $purchase->phone = $data['phone'];
-        $purchase->email = $data['email'];
-        $purchase->address_ar = $data['address_ar'];
-        $purchase->address_en = $data['address_en'];
-        $purchase->country_id = $data['country_id'];
+        $purchase->Date = $data['date'];
+        $purchase->invoice_number = $data['invoice_number'];
+        $purchase->vendor_id = $data['vendor_id'];
+        $purchase->type = $data['type'];
+        $purchase->store_id = $data['store_id'];
         $purchase->created_by = Auth::user()->id;
-        $purchase->created_at = now();
         $purchase->save();
+
+        foreach ($data['products'] as $product) {
+            $purchaseDetails = new PurchaseInvoicesDetails();
+            $purchaseDetails->purchase_invoices_id = $purchase->id;
+            $purchaseDetails->category_id = $product['category_id'];
+            $purchaseDetails->product_id = $product['product_id'];
+            $purchaseDetails->unit_id = $product['unit_id'];
+            $purchaseDetails->price = $product['price'];
+            $purchaseDetails->quantity = $product['quantity'];
+            $purchaseDetails->save();
+        }
     }
 
     public function updatePurchase($data, $id, $checkToken)
@@ -63,17 +88,25 @@ class PurchaseService
         }
 
         $purchase = PurchaseInvoice::findOrFail($id);
-        $purchase->name_ar = $data['name_ar'];
-        $purchase->name_en = $data['name_en'];
-        $purchase->contact_person = $data['contact_person'];
-        $purchase->phone = $data['phone'];
-        $purchase->email = $data['email'];
-        $purchase->address_ar = $data['address_ar'];
-        $purchase->address_en = $data['address_en'];
-        $purchase->country_id = $data['country_id'];
+        $purchase->Date = $data['date'];
+        $purchase->invoice_number = $data['invoice_number'];
+        $purchase->vendor_id = $data['vendor_id'];
+        $purchase->type = $data['type'];
+        $purchase->store_id = $data['store_id'];
         $purchase->modified_by = Auth::user()->id;
         $purchase->updated_at = now();
         $purchase->save();
+
+        // Process each product
+        foreach ($data['products'] as $product) {
+            $purchaseDetails = PurchaseInvoicesDetails::findOrFail($product['id']);
+            $purchaseDetails->category_id = $product['category_id'];
+            $purchaseDetails->product_id = $product['product_id'];
+            $purchaseDetails->unit_id = $product['unit_id'];
+            $purchaseDetails->price = $product['price'];
+            $purchaseDetails->quantity = $product['quantity'];
+            $purchaseDetails->save();
+        }
     }
 
     public function deletePurchase($id, $checkToken)
