@@ -20,6 +20,7 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="SiteAssets/bootstrap-5.1.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="SiteAssets/fontawesome-free-5.15.4-web/css/all.min.css">
+
   <link rel="stylesheet" href="SiteAssets/css/animate.min.css">
   <link rel="stylesheet" href="SiteAssets/aos-master/dist/aos.css">
 
@@ -83,7 +84,8 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn align-items-center" href="#"><i class="fas fa-user-circle"></i>
+              <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="fas fa-user-circle"></i>
                 <span>تسجيل الدخول</span>
               </a>
             </li>
@@ -95,6 +97,14 @@
 
       </div>
     </nav>
+
+
+
+
+
+
+
+
     <div class="mobNav d-lg-none d-block ">
       <div id="sidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -105,7 +115,7 @@
           <a href="#"> <i class="fas fa-shopping-cart"></i>
           </a>
           <a href="#"> En</a>
-          <a href="#"> تسجيل الدخول </a>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"> تسجيل الدخول </a>
         </div>
       </div>
     </div>
@@ -449,12 +459,150 @@
       </div>
     </div>
   </footer>
+   <!-- modals -->
+
+<!-- login modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- body-register  -->
+      <div class="modal-body register px-4" id="registerBody">
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center">
+            <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+          </div>
+          
+          <div class="col-md-7 right-side p-3">
+            <h2 class="main-color fw-bold">مرحبا بك!</h2>
+            <h5> يمكنك انشاء حساب بكل سهولة</h5>
+            
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
+            </div>
+            
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
+              <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"> +02 <img src="./SiteAssets/images/egypt.png" alt=""></button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"> <small> +02</small> <img src="./SiteAssets/images/egypt.png" alt=""></a></li>
+              </ul>
+            </div>
+
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" id="emailInput" placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
+            </div>
+
+            <div class="input-group position-relative mb-3">
+              <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
+              <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                <i class="fas fa-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+
+            <button type="submit" class="btn py-3 mb-2 w-100">انشاء حساب</button>
+            
+            <p class="text-center">
+              <small>
+                هل لديك حساب بالفعل؟ 
+                <a href="#" class="main-color text-decoration-underline" id="showLoginLink" aria-label="تسجيل الدخول">تسجيل دخول</a>
+              </small>
+            </p>
+
+            <p class="text-center">
+              <small>
+                <span class="text-muted">عند انشاء حساب انت توافق علي</span> 
+                <a href="#" class="main-color text-decoration-underline" aria-label="سياسة الخصوصية والشروط والأحكام">
+                  سياسة الخصوصية و الشروط و الاحكام
+                </a>
+              </small>
+            </p>
+          </div>
+
+          <div class="col-md-5 login-background">
+            <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+          </div>
+        </div>
+      </div>
+<!-- body-login  -->
+      <div class="modal-body login d-none px-4" id="loginBody">
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center">
+            <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+          </div>
+          
+          <div class="col-md-7 right-side p-3">
+            <h2 class="main-color fw-bold">مرحبا بك!</h2>
+            <h5>تسجيل الدخول لتستمتع  بتجربة  طلب معدة خصيصا لك  </h5>
+            
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
+              <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"><small> +02</small> <img src="./SiteAssets/images/egypt.png" alt=""></button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"> +02 <img src="./SiteAssets/images/egypt.png" alt=""></a></li>
+              </ul>
+            </div>
+
+            <div class="input-group position-relative mb-3">
+              <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور الجديدة">
+              <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                <i class="fas fa-eye" id="eyeIcon"></i>
+              </button>
+            </div>
+            
+            <a  href="./forget-pass.html"> <small> هل نسيت كلمة المرور؟ </small></a>
+
+            <button type="submit" class="btn py-3 my-2 w-100"> تسجيل الدخول</button>
+            
+            <p class="text-center">
+              <small>
+                تسجيل الدخول باستخدام شبكات التواصل       
+                 
+              </small>
+            </p>
+
+            <div class="d-flex justify-content-center gap-lg-3">
+              <a class="social-media-btn d-flex align-items-center " href="#">
+                <img src="./SiteAssets/images/facebook-icon.png" alt="Facebook" class="ms-2" height="20">
+                <span>فيس بوك</span>
+              </a>
+            
+              <a class="social-media-btn d-flex align-items-center " href="#">
+                <img src="./SiteAssets/images/google-icon.png" alt="Google" class="ms-2" height="20">
+                <span>جوجل</span>
+              </a>
+            </div>
+            <p class="text-center">
+              <small>
+                <span class="text-dark"> مستخدم جديد؟   </span> 
+                <a href="#" class="main-color text-decoration-underline" id="showRegisterLink" aria-label="تسجيل حساب">تسجيل حساب</a>
+
+              </small>
+            </p>
+          </div>
+
+          <div class="col-md-5 login-background">
+            <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end login modal -->
+
+
   <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
   <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js"></script>
   <script src="SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js"></script>
 
   <!-- Main js -->
-  <script src="SiteAssets/js/style.js"></script>
+  <script src="./SiteAssets/js/style.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
   <!-- include Gallery (lightbox) plugin js-->
   <script src="SiteAssets/lightbox/js/lightbox.min.js"></script>
