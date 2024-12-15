@@ -1,6 +1,4 @@
-<?php
-
-return array (
+<?php return array (
   'view dashboard' => 'عرض الصفحه الرئيسيه',
   'create dashboard' => 'أنشاء الصفحه الرئيسيه',
   'update dashboard' => 'تعديل الصفحه الرئيسيه',
@@ -509,11 +507,9 @@ return array (
   'website' => 'الموقع الإلكتروني',
   'logos' => 'الشعارات',
   'sliders' => 'الشرائح',
-  'view addon_categories' => 'عرض تصنيفات الأضافات',
   'print purchase_invoice' => 'طباعه فواتير المشتريات',
-  'create addon_categories' => 'أضافه تصنيف للأضافات',
   'addon_categories' => 'تصنيفات',
   'purchase_invoice' => 'فواتير المشتريات',
-  'edit addon_categories' => 'تعديل فئات الأضافات',
   'edit addon_categorie' => 'تعديل تصنيفات أضافات',
+  'delete addon_categories' => 'حذف تصنيفات الأضافات',
 );

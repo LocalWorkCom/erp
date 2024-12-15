@@ -1,6 +1,4 @@
-<?php
-
-return array (
+<?php return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
@@ -508,11 +506,8 @@ return array (
   'website' => 'Website',
   'logos' => 'Logos',
   'sliders' => 'Sliders',
-  'view addon_categories' => 'view addon_categories',
   'print purchase_invoice' => 'print purchase_invoice',
-  'create addon_categories' => 'create addon_categories',
   'addon_categories' => 'Addon_categories',
   'purchase_invoice' => 'purchase_invoice',
-  'edit addon_categories' => 'edit addon_categories',
-  'edit addon_categorie' => 'edit addon_categorie',
+  
 );

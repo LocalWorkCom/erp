@@ -184,26 +184,56 @@ class PermissionController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        // Find the permission
-        $permission = Permission::find($id);
+{
+    // Find the permission
+    $permission = Permission::find($id);
 
-        if (!$permission) {
-            return response()->json(['error' => __('roles.permission_not_found')], 404);
-        }
-
-        // Check if the permission is assigned to any roles
-        $roleCount = DB::table('role_has_permissions')
-            ->where('permission_id', $id)
-            ->count();
-        if ($roleCount > 0) {
-            return response()->json(['error' => __('roles.delete_error')], 400);
-        }
-
-        // Proceed with deleting the permission if not assigned to any roles
-        $permission->delete();
-
-        return response()->json(['success' => __('roles.delete_success')]);
+    if (!$permission) {
+        return response()->json(['error' => __('roles.permission_not_found')], 404);
     }
+
+    // Check if the permission is assigned to any roles
+    $roleCount = DB::table('role_has_permissions')
+        ->where('permission_id', $id)
+        ->count();
+    if ($roleCount > 0) {
+        return response()->json(['error' => __('roles.delete_error')], 400);
+    }
+
+    // Remove language keys related to this permission (if applicable)
+    $this->removePermissionFromLangFiles($permission);
+
+    // Proceed with deleting the permission if not assigned to any roles
+    $permission->delete();
+
+    return response()->json(['success' => __('roles.delete_success')]);
+}
+
+private function removePermissionFromLangFiles($permission)
+{
+    // Define the language files to be checked
+    $langFiles = ['en', 'ar']; // Adjust according to your project
+
+    foreach ($langFiles as $lang) {
+        // Get the path of the language file
+        $langPath = resource_path("lang/{$lang}/permissions.php");
+
+        // Check if the language file exists
+        if (file_exists($langPath)) {
+            // Load the language file
+            $translations = include $langPath;
+
+            // Check if the permission key exists in the translations
+            if (isset($translations[$permission->name])) {
+                // Remove the permission key from the translations
+                unset($translations[$permission->name]);
+
+                // Save the updated language file
+                file_put_contents($langPath, '<?php return ' . var_export($translations, true) . ';');
+            }
+        }
+    }
+}
+
 
 }
