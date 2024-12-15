@@ -23,18 +23,18 @@ class VendorController extends Controller
     public function index()
     {
         $vendors = $this->vendorService->getAllvendors($this->checkToken);
-        return view('dashboard.vendor.index', compact('vendors'));
+        return view('dashboard.vendors.index', compact('vendors'));
     }
     public function show($id)
     {
         $vendor = $this->vendorService->getVendor($id);
-        return view('dashboard.vendor.show', compact('vendor'));
+        return view('dashboard.vendors.show', compact('vendor'));
     }
 
     public function create()
     {
         $countries = Country::all();
-        return view('dashboard.vendor.create', compact('countries'));
+        return view('dashboard.vendors.create', compact('countries'));
     }
 
     public function store(Request $request)
@@ -55,7 +55,7 @@ class VendorController extends Controller
     }
     public function edit($id)
     {
-        $vendor = Vendor::with('countries')->findOrFail($id);
+        $vendor = Vendor::with('country')->findOrFail($id);
         $countries = Country::all();
         return view('dashboard.vendors.edit', compact('countries', 'vendor'));
     }
@@ -63,7 +63,7 @@ class VendorController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-           'name_en' => 'nullable|string|max:255',
+            'name_en' => 'nullable|string|max:255',
             'name_ar' => 'nullable|string|max:255',
             'contact_person' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
