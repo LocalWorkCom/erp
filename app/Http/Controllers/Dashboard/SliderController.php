@@ -52,7 +52,7 @@ class SliderController extends Controller
         $slider->flag = $data['flag'];
         $slider->dish_id = $data['dish_id'] ?? null;
         $slider->offer_id = $data['offer_id'] ?? null;
-        $slider->created_by = 1 ;
+        $slider->created_by = auth()->id() ?? 1 ;
         $image = $request->file('image');
 //        dd($image);
         UploadFile('images/sliders', 'image', $slider, $image);
@@ -97,7 +97,7 @@ class SliderController extends Controller
         $slider->flag = $data['flag'];
         $slider->dish_id = $data['dish_id'];
         $slider->offer_id = $data['offer_id'];
-        $slider->modified_by = 1;
+        $slider->modified_by = auth()->id() ?? 1;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             // Upload the new image and update the slider record
@@ -123,7 +123,7 @@ class SliderController extends Controller
                 File::delete($imagePath);
             }
         }
-        $slider->deleted_by = 1;
+        $slider->deleted_by = auth()->id() ?? 1;
 
         $slider->delete();
 

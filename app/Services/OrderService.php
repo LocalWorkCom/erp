@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
- 
+
     public function index(Request $request, $checkToken)
     {
 
@@ -35,13 +35,14 @@ class OrderService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $orders = Order::all();
-
+        $orders = Order::with('Branch')->get();
         foreach ($orders as $order) {
             $order['details'] = OrderDetail::where('order_id', $order->id)->get();
             $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
             $order['transaction'] = OrderTransaction::where('order_id', $order->id)->first();
-
+            $order_tracking = OrderTracking::where('order_id', $order->id)->orderby('id', 'desc')->first();
+            $order['last_status'] = $order_tracking->order_status;
+            $order['next_status'] = $this->getNextStatus($order_tracking->order_status);
         }
 
 
@@ -370,7 +371,7 @@ class OrderService
         $order['transaction'] = OrderTransaction::where('order_id', $id)->first();
         $order['address'] = ClientAddress::where('id', $order->client_address_id)->first();
         $order['tracking'] = OrderTracking::where('order_id', $id)->get();
-                                                                                                                                                                         
+
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
@@ -410,5 +411,25 @@ class OrderService
             return RespondWithBadRequest($lang, 34);
         }
         return RespondWithSuccessRequest($lang, 1);
+    }
+    public function getNextStatus($status)
+    {
+        $next_status = array();
+        if ($status == 'pending') {
+            array_push($next_status, 'in_progress');
+            array_push($next_status, 'cancelled');
+        } else if ($status == 'cancelled' || $status == 'completed') {
+            $next_status = array();
+        } else if ($status == 'in_progress') {
+            array_push($next_status, 'on_way');
+            array_push($next_status, 'deliverd');
+            array_push($next_status, 'completed');
+        } else if ($status == 'on_way') {
+            array_push($next_status, 'deliverd');
+        } else if ($status == 'deliverd') {
+
+            array_push($next_status, 'completed');
+        }
+        return $next_status;
     }
 }

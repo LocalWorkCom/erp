@@ -68,6 +68,20 @@ function RespondWithBadRequest($lang, $code)
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+function CustomRespondWithBadRequest($message)
+{
+
+
+    $response_array = array(
+        'status' => false,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $message,
+        'code' => 400
+    );
+    $response_code = 400;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
 function RespondWithBadRequestWithData($data)
 {
 
