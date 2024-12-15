@@ -369,7 +369,8 @@ class OrderService
         $order['addons'] = OrderAddon::where('order_id', $id)->get();
         $order['transaction'] = OrderTransaction::where('order_id', $id)->first();
         $order['address'] = ClientAddress::where('id', $order->client_address_id)->first();
-
+        $order['tracking'] = OrderTracking::where('order_id', $id)->get();
+                                                                                                                                                                         
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
