@@ -509,5 +509,4 @@
   'print purchase_invoice' => 'print purchase_invoice',
   'addon_categories' => 'Addon_categories',
   'purchase_invoice' => 'purchase_invoice',
-  
 );
