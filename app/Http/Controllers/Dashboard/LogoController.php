@@ -42,7 +42,7 @@ class LogoController extends Controller
         $logo = new Logo();
         $logo->name_ar = $data['name_ar'];
         $logo->name_en = $data['name_en'];
-        $logo->created_by = 1 ;
+        $logo->created_by = auth()->id() ?? 1 ;
         $image = $request->file('image');
 //        dd($image);
         UploadFile('images/logos', 'image', $logo, $image);
@@ -78,7 +78,7 @@ class LogoController extends Controller
         $logo = Logo::findOrFail($id);
         $logo->name_ar = $data['name_ar'];
         $logo->name_en = $data['name_en'];
-        $logo->modified_by = 1;
+        $logo->modified_by = auth()->id() ?? 1;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             // Upload the new image and update the logo record
@@ -104,7 +104,7 @@ class LogoController extends Controller
                 File::delete($imagePath);
             }
         }
-        $logo->deleted_by = 1;
+        $logo->deleted_by = auth()->id() ?? 1;
 
         $logo->delete();
 

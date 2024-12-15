@@ -1,6 +1,4 @@
-<?php
-
-return array (
+<?php return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
@@ -404,7 +402,17 @@ return array (
   'view website' => 'View website',
   'setting website' => 'setting website',
   'view logos' => 'View logos',
+  'create logos' => 'Create logos',
+  'update logos' => 'Update logos',
+  'delete logos' => 'Delete logos',
   'view sliders' => 'View sliders',
+  'create sliders' => 'Create sliders',
+  'update sliders' => 'Update sliders',
+  'delete sliders' => 'Delete sliders',
+  'view terms' => 'view terms',
+  'create terms' => 'create terms',
+  'update terms' => 'update terms',
+  'delete terms' => 'Delete terms',
   'dashboard' => 'Dashboard',
   'actionbacklogs' => 'Actionbacklogs',
   'advance_requests' => 'Advance_requests',
@@ -508,12 +516,12 @@ return array (
   'website' => 'Website',
   'logos' => 'Logos',
   'sliders' => 'Sliders',
-  'view addon_categories' => 'view addon_categories',
   'print purchase_invoice' => 'print purchase_invoice',
-  'create addon_categories' => 'create addon_categories',
   'addon_categories' => 'Addon_categories',
   'purchase_invoice' => 'purchase_invoice',
   'edit addon_categories' => 'edit addon_categories',
   'edit addon_categorie' => 'edit addon_categorie',
   'view units_products' => 'view units_products',
+  'print advances' => 'print advances',
+  'print invoice' => 'print invoice',
 );
