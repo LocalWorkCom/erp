@@ -84,8 +84,7 @@
                                             @foreach ($groupedPermissions as $group => $groupPermissions)
                                                 <div class="col-md-6 mb-4">
                                                     <div class="permission-group">
-                                                        
-                                                        <h5 class="group-title">{{ __('permissions.' . $group) }}</h5>
+                                                        <h5 class="group-title"> {{  __("permissions.{$group}")}}</h5>
                                                         <div class="d-flex flex-wrap">
                                                             @foreach ($groupPermissions as $permission)
                                                                 <div class="form-check me-3">

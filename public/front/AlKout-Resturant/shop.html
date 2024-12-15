@@ -396,20 +396,94 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn" onclick="openCart()">
+                <button type="button" class="btn cart-btn" onclick="openCart()">
                     <i class="fas fa-shopping-cart"></i>
                 </button>
                 <div id="blur-overlay" class="blur-overlay"></div>
 
                 <div id="sideCart" class="sideCart">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeCart()">&times;</a>
-                    <div class="cart-content">
-                     
+                    <!-- <div class="cart"> -->
+                    <div class="cart-header p-4">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeCart()">&times;</a>
+                        <h4> تفاصيل العربة </h4>
+                        <div class="cart-total-items">
+                            3
+                        </div>
                     </div>
+                    <div class="cart-content p-4">
+                        <!-- <figure class="text-center">
+                            <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                            <figcaption>
+                                <h4>
+                                    لا توجد منتجات
+                                </h4>
+                            </figcaption>
+                        </figure> -->
+
+                        <div class="sideCart-plate p-4 mb-4">
+                            <a href="#">
+                                <figure class="sideCart-plate-img m-0">
+                                    <img src="SiteAssets/images/plate1.png" alt="">
+                                </figure>
+                            </a>
+                            <div class="cart-details">
+                                <h5>كبسة فراخ </h5>
+                                <div class="qty mt-3">
+                                    <span class="dec">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="num">
+                                        1
+                                    </span>
+                                    <span class="inc">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <p class="fw-bold"> 300 ج . م</p>
+                                <div class="btns">
+                                    <button class="btn reversed main-color" type="button">تعديل</button>
+                                    <button class="btn" type="button">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sideCart-plate p-4 mb-4">
+                            <a href="#">
+                                <figure class="sideCart-plate-img m-0">
+                                    <img src="SiteAssets/images/plate1.png" alt="">
+                                </figure>
+                            </a>
+                            <div class="cart-details">
+                                <h5>كبسة فراخ </h5>
+                                <div class="qty mt-3">
+                                    <span class="dec">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="num">
+                                        1
+                                    </span>
+                                    <span class="inc">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <p class="fw-bold"> 300 ج . م</p>
+                                <div class="btns">
+                                    <button class="btn reversed main-color" type="button">تعديل</button>
+                                    <button class="btn" type="button">حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-footer p-4">
+                        <a class="btn w-100 d-flex justify-content-between" href="cart.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span> أذهب الي العربة</span>
+                            <span> 300 ج . م</span>
+                        </a>
+                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </section>
-
     </main>
     <footer>
         <div class="footer-curve"></div>
