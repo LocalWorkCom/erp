@@ -247,14 +247,13 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete')->middleware('role_or_permission:delete sliders');
     });
 
-    Route::get('/terms', [TermsAndConditionsController::class, 'index'])->name('terms.list');
+    Route::get('/terms', [TermsAndConditionsController::class, 'index'])->name('terms.list')->middleware('role_or_permission:view terms');
     Route::group(['prefix' => 'term'], function () {
-        Route::get('create', [TermsAndConditionsController::class, 'create'])->name('term.create');
-        Route::post('store', [TermsAndConditionsController::class, 'store'])->name('term.store');
-        Route::get('show/{id}', [TermsAndConditionsController::class, 'show'])->name('term.show');
-        Route::get('edit/{id}', [TermsAndConditionsController::class, 'edit'])->name('term.edit');
-        Route::put('update/{id}', [TermsAndConditionsController::class, 'update'])->name('term.update');
-        Route::delete('delete/{id}', [TermsAndConditionsController::class, 'delete'])->name('term.delete');
+        Route::get('create', [TermsAndConditionsController::class, 'create'])->name('term.create')->middleware('role_or_permission:create terms');
+        Route::post('store', [TermsAndConditionsController::class, 'store'])->name('term.store')->middleware('role_or_permission:create terms');
+        Route::get('show/{id}', [TermsAndConditionsController::class, 'show'])->name('term.show')->middleware('role_or_permission:view terms');
+        Route::get('edit/{id}', [TermsAndConditionsController::class, 'edit'])->name('term.edit')->middleware('role_or_permission:update terms');
+        Route::put('update/{id}', [TermsAndConditionsController::class, 'update'])->name('term.update')->middleware('role_or_permission:update terms');
     });
 
     Route::get('/privacies', [PrivacyPolicyController::class, 'index'])->name('privacies.list');
@@ -264,7 +263,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [PrivacyPolicyController::class, 'show'])->name('privacy.show');
         Route::get('edit/{id}', [PrivacyPolicyController::class, 'edit'])->name('privacy.edit');
         Route::put('update/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy.update');
-        Route::delete('delete/{id}', [PrivacyPolicyController::class, 'delete'])->name('privacy.delete');
     });
 
     Route::get('/returns', [ReturnPolicyController::class, 'index'])->name('returns.list');
@@ -274,7 +272,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [ReturnPolicyController::class, 'show'])->name('return.show');
         Route::get('edit/{id}', [ReturnPolicyController::class, 'edit'])->name('return.edit');
         Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update');
-        Route::delete('delete/{id}', [ReturnPolicyController::class, 'delete'])->name('return.delete');
     });
 
     //HR
