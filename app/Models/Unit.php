@@ -40,6 +40,10 @@ class Unit extends Model
         return Request()->header('lang') == "en" ? $this->name_en : $this->name_ar;
     }
 
-  
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('unit_id', 'factor');
+    }
+    
     // Optionally, you can define other model properties or methods here
 }

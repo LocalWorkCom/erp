@@ -408,62 +408,55 @@ class ProductService
 
         return ResponseWithSuccessData($this->lang, $products, 1);
     }
-
-
-
     public function saveProductUnits(Request $request, $productId)
     {
         // Find the product by ID
-        $product = Product::findOrFail($productId);
-    
+        // $product = Product::findOrFail($productId);
+
         // Validate the units
-        $validated = $request->validate([
-            'units.*.unit_id' => 'required|exists:units,id',
-            'units.*.factor' => 'required|numeric',
-        ]);
-    
-        // Variable to track if anything changed
-        $changesMade = false;
-    
+        // $validated = $request->validate([
+        //     'units.*.unit_id' => 'required|exists:units,id',
+        //     'units.*.factor' => 'required|numeric',
+        //     'product_unit_id' => 'nullable|array',  // Ensure product_unit_id is an array if passed
+        // ]);
+        $product_unit_ids = $request->product_unit_id; // This is an array of product unit IDs, or null if creating new units
+
+        $product_units = ProductUnit::where('product_id', $productId)->get();
+        foreach ($product_units as $unit) {
+
+            if ($product_unit_ids && !in_array($unit->id, $product_unit_ids)) {
+                $unit->delete();
+            }
+        }
+        // Get the units and the product_unit_ids from the request
+        $units = $request->units;
+        
         // Loop through the units and save them
-        foreach ($request->units as $unitData) {
-            // Find existing unit data
-            $existingUnit = $product->productUnits()->where('unit_id', $unitData['unit_id'])
-                ->where('product_units.created_by', Auth::guard('admin')->user()->id)
-                ->first();
-    
-            // If the unit exists and any attribute is different, update it
-            if ($existingUnit) {
-                if ($existingUnit->factor != $unitData['factor']) {
-                    $existingUnit->update([
-                        'factor' => $unitData['factor'],
-                    ]);
-                    $changesMade = true;
-                }
-            } else {
-                // Update or create the ProductUnit
+        for ($i = 0; $i < count($units); $i++) {
+            $unitId = (int) $units[$i]['unit_id'];  // Cast unit_id to integer
+            $factor = $units[$i]['factor'];  // Factor value
+            // If product_unit_id is provided, update the existing record
+            if (isset($product_unit_ids[$i]) && $product_unit_ids[$i]) {
+                // Update existing ProductUnit
                 ProductUnit::updateOrCreate(
-                    // Conditions to find the existing record
+                    ['id' => (int) $product_unit_ids[$i]],  // Find the record by its ID
                     [
-                        'unit_id' => $unitData['unit_id'],
-                        'product_id' => $productId,
-                        'created_by' => Auth::guard('admin')->user()->id,
-                    
-                        'factor' => $unitData['factor'],
+                        'unit_id' => $unitId,  // Update unit_id
+                        'factor' => $factor,  // Update factor
                     ]
                 );
-                $changesMade = true;
+            } else {
+                // If no product_unit_id is provided, create a new ProductUnit
+                ProductUnit::create([
+                    'unit_id' => (int) $unitId,  // Ensure unit_id is treated as an integer
+                    'product_id' => (int) $productId,  // Ensure product_id is treated as an integer
+                    'created_by' => Auth::guard('admin')->user()->id,  // Keep created_by as is
+                    'factor' => $factor,  // Factor value
+                ]);
             }
-            
         }
-    
-        // If no changes were made, return a message
-        if (!$changesMade) {
-            return redirect()->back()->with('message', __('No changes were made.'));
-        }
-    
-        // Return a success response if changes were made
+
+        // Return a success response
         return RespondWithSuccessRequest($this->lang, 1);
     }
-    
 }

@@ -87,7 +87,9 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     ->middleware('role_or_permission:view products');
 
     Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
-    ->name('units.remove')->middleware('role_or_permission:view products');
+    ->name('units.remove')
+    ->middleware('role_or_permission:view products');
+
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
