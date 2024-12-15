@@ -37,11 +37,11 @@ $(document).ready(function () {
   });
 
   $('.categories-slider').owlCarousel({
-    items: 5,
-    loop: true,
+    items: 3,
+    loop: false,
     dots: true,
     nav: true,
-    margin: 15,
+    margin: 25,
     pagination: false,
     autoplay: false,
     autoplaySpeed: 1000,
@@ -64,10 +64,10 @@ $(document).ready(function () {
         nav: true
       },
 
-      1200: {
-        items: 5,
-        nav: true
-      }
+      // 1200: {
+      //   items: 5,
+      //   nav: true
+      // }
     }
   });
   $('.plates-slider').owlCarousel({
