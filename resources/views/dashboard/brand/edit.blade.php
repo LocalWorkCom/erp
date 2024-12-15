@@ -11,8 +11,13 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('brand.Brands')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('brand.EditBrand')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
+
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('brand.edit', ['id' => $id]) }}">@lang('brand.EditBrand')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -76,11 +81,42 @@
                                         <textarea class="form-control" name="description_en" rows="2">{{ old('description_en', $brand->description_en) }}</textarea>
                                     </div>
 
-
                                     <div class="col-xl-4">
-                                        <label for="logo_path" class="form-label">@lang('brand.Image')</label>
-                                        <input type="file" name="logo_path" id="logo_path" class="form-control" required>
-                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
+                                        <p class="mb-2 text-muted">@lang('brand.Remind')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_active" value="1"
+                                                class="form-check-input" {{ $brand->is_active ? 'checked' : '' }}
+                                                required>
+                                            <label class="form-check-label">@lang('brand.yes')</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_active" value="0"
+                                                class="form-check-input" {{ !$brand->is_active ? 'checked' : '' }}
+                                                required>
+                                            <label class="form-check-label">@lang('brand.no')</label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label for="input-file" class="form-label">@lang('brand.Image')</label>
+
+                                        <!-- Show the current logo_path if it exists -->
+                                        @if ($brand->logo_path)
+                                            <div class="mb-3">
+                                                <img src="{{ asset($brand->logo_path) }}" alt="Brand Image" width="150" height="150">
+                                            </div>
+                                            <!-- Hidden input to send the current logo_path -->
+                                            <input type="hidden" name="logo_path" value="{{ $brand->logo_path }}">
+                                        @endif
+
+                                        <input class="form-control" type="file" id="logo_path" name="logo_path">
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterImage')
+                                        </div>
                                     </div>
 
                                     <center>

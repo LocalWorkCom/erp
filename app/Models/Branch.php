@@ -9,9 +9,10 @@ class Branch extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ['name', 'address'];
+    protected $appends = ['name', 'address','name_site', 'address_site'];
 
     protected $fillable = [
+        'category_ids',
         'name_en',
         'name_ar',
         'address_en',
@@ -53,6 +54,16 @@ class Branch extends Model
     public function getAddressAttribute()
     {
         return request()->header('lang', 'ar') === 'en' ? $this->address_en : $this->address_ar;
+    }
+
+    public function getNameSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getAddressSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->address_en : $this->address_ar;
     }
 
     // Relationships

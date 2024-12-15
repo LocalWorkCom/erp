@@ -6,6 +6,7 @@ use App\Models\Floor;
 use App\Models\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FloorService
@@ -28,6 +29,17 @@ class FloorService
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $floor = Floor::with([ 'branches', 'floorPartitions', 'tables', 'floorPartitions.tables'])->findOrFail($id);
+            $floor->makeHidden(['name'])->makeVisible(['name_ar', 'name_en']);
+            return ResponseWithSuccessData($this->lang, $floor, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
+
     public function add(Request $request)
     {
         try {
@@ -43,7 +55,7 @@ class FloorService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor = new Floor();
             $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
@@ -61,7 +73,7 @@ class FloorService
 
     public function edit(Request $request,$id)
     {
-        try {
+        //try {
             $validateData = Validator::make($request->all(), [
                 'branch_id' => 'required|integer|exists:branches,id',
                 'name_ar' => 'required',
@@ -74,7 +86,7 @@ class FloorService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
             $floor = Floor::findOrFail($id);
             $floor->branch_id = $request->branch_id;
             $floor->name_ar = $request->name_ar;
@@ -85,15 +97,15 @@ class FloorService
             $floor->save();
 
             return ResponseWithSuccessData($this->lang, $floor, 1);
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($this->lang, 2);
-        }
+        // } catch (\Exception $e) {
+        //     return RespondWithBadRequestData($this->lang, 2);
+        // }
     }
 
     public function delete(Request $request, $id)
     {
         try {
-            $user_id = 13;
+            $user_id =  Auth::guard('admin')->user()->id;
 
             $floor = Floor::find($id);
             if (!$floor) {

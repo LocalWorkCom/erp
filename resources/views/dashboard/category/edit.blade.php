@@ -11,8 +11,13 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('category.Categories')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('category.edit')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('categories.list') }}'">@lang('category.Categories')</a>
+
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('category.edit', ['id' => $id]) }}">@lang('category.edit')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -87,6 +92,7 @@
                                             @lang('validation.EnterEnglishDesc')
                                         </div>
                                     </div>
+                                    
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label for="input-file" class="form-label">@lang('category.Image')</label>
 
@@ -107,6 +113,7 @@
                                             @lang('validation.EnterImage')
                                         </div>
                                     </div>
+
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('category.parent')</p>
                                         <select class="form-control" data-trigger name="parent_id" id="choices-single-default">

@@ -72,9 +72,7 @@ class BranchController extends Controller
 
     public function update(Request $request, $id)
     {
-//        dd($request->all());
         $response = $this->branchService->update($request, $id);
-//        dd($response);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
@@ -83,7 +81,7 @@ class BranchController extends Controller
         $message= $responseData['message'];
         return redirect()->route('branches.list')->with('message',$message);
     }
-    
+ 
     public function delete(Request $request, $id)
     {
         $response = $this->branchService->destroy($request, $id);

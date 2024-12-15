@@ -16,13 +16,13 @@ class OrderTracking extends Model
     // The attributes that are mass assignable
     protected $fillable = [
         'order_status',
-        'order_id'
+        'order_id',
+        
     ];
 
     protected $hidden = [
         'created_by',
         'deleted_by',
-        'created_at',
         'updated_at',
         'modify_by',
         'deleted_at',

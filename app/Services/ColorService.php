@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ColorService
@@ -41,7 +42,8 @@ class ColorService
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
-            'hexa_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'hexa_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
+
         ]);
 
         if ($validator->fails()) {
@@ -56,7 +58,7 @@ class ColorService
             return RespondWithBadRequest($lang, 9);
         }
 
-        $created_by = 1;
+        $created_by =  Auth::guard('admin')->user()->id;
 
         // Create the new color
         $color = new Color();
@@ -81,7 +83,7 @@ class ColorService
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
             'name_en' => 'string',
-            'hexa_code' => 'required|string', // Validate hex color code
+            'hexa_code' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
         ]);
 
         if ($validator->fails()) {
@@ -104,7 +106,7 @@ class ColorService
             return RespondWithBadRequest($lang, 9);
         }
 
-        $modified_by = 13;
+        $modified_by =  Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the color model
         $color->name_ar = $request->name_ar;

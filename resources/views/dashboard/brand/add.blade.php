@@ -11,8 +11,13 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('brand.Brands')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('brand.AddBrand')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
+
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('brand.create') }}">@lang('brand.AddBrand')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -75,6 +80,18 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('brand.EnglishDesc')</label>
                                         <textarea class="form-control" name="description_en" rows="2">{{ old('description_en') }}</textarea>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <p class="mb-2 text-muted">@lang('brand.Remind')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_active" value="1" class="form-check-input"  required>
+                                            <label class="form-check-label">@lang('brand.yes')</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="is_active" value="0" class="form-check-input" required>
+                                            <label class="form-check-label">@lang('brand.no')</label>
+                                        </div>
                                     </div>
 
                                     <div class="col-xl-4">

@@ -17,6 +17,7 @@ use App\Services\CountryService;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
+use App\Models\ProductUnit;
 
 class ProductController extends Controller
 {
@@ -57,6 +58,8 @@ class ProductController extends Controller
 
         return view('dashboard.product.list', compact('products'));
     }
+
+
 
     public function create(Request $request)
     {
@@ -109,6 +112,7 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
         $product_limit = ProductLimit::where('product_id', $product->id)->first();
+        $product_unit = ProductUnit::where('product_id', $product->id)->first();
 
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
@@ -135,7 +139,7 @@ class ProductController extends Controller
         }
         // $Stores = Store::all();
 
-        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit','id'));
+        return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit', 'product_unit', 'id'));
     }
 
     public function show($id)
@@ -156,30 +160,8 @@ class ProductController extends Controller
             }
         }
 
-        return view('dashboard.product.show', compact('product', 'Currencies','id'));
+        return view('dashboard.product.show', compact('product', 'Currencies', 'id'));
     }
-
-    // public function show($id)
-    // {
-    //     $request = new Request(); // Create a blank request object if needed
-
-    //     $product = Product::with(['brand', 'productLimit'])->findOrFail($id);
-
-
-    //     $response  = $this->countryService->index($request, $this->checkToken);
-    //     $responseData = json_decode($response->getContent(), true);
-    //     $Countries = Country::hydrate($responseData['data']);
-    //     $Currencies = [];
-
-    //     foreach ($Countries as $country) {
-    //         // Check if currency_code exists and add it to the array
-    //         if (isset($country->currency_code)) {
-    //             $Currencies[] = $country->currency_code;
-    //         }
-    //     }
-
-    //     return view('dashboard.product.show', compact('product', 'Currencies'));
-    // }
 
     public function update(Request $request, $id)
     {
@@ -203,5 +185,58 @@ class ProductController extends Controller
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/products')->with('message', $message);
+    }
+
+    public function unit(Request $request, $productId)
+    {
+        // Call service or perform any additional logic
+        $response  = $this->productService->list($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $product = Product::with('productUnits')->findOrFail($productId); // Load the product with its related units
+        $units = Unit::all();  // Retrieve all units from the units table
+
+        return view('dashboard.product.unit.list', compact('product', 'units'));
+    }
+
+    public function saveUnits(Request $request, $productId)
+    {
+        // Call the service method to save the units
+        $response = $this->productService->saveProductUnits($request, $productId);
+
+        // Ensure the response is in the expected format
+        $responseData = $response->original ?? [];
+
+        // Check if the response has a 'status' key
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
+            return redirect()->back()->with('error', __('An unexpected error occurred.'))->withInput();
+        }
+
+        // Success message
+        $message = $responseData['message'] ?? __('Operation completed successfully.');
+
+        // Redirect with success message
+        return redirect()->route('products.list', ['id' => $productId])->with('message', $message);
+    }
+
+
+    public function removeUnit(Request $request, $unitId)
+    {
+        // Find the Product Unit by ID
+        $unit = ProductUnit::findOrFail($unitId);
+
+        // Soft delete the unit (sets 'deleted_at' column)
+        $unit->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => __('Unit removed successfully.'),
+        ]);
     }
 }

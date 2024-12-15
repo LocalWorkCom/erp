@@ -26,15 +26,15 @@
                         <div class="card custom-card rectangle2">
                             <div class="card-body p-5 rectangle3">
                                 <p class="h4 fw-semibold mb-2 text-center">Sign In</p>
-                                <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome back Jhon !</p>
+                                <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome to EL Koute </p>
                                 <form method="POST" action="{{ route('dashboard.submitlogin') }}" class="needs-validation">
                                     @csrf
                                     <div class="row gy-3">
                                         <!-- Email Input -->
                                         <div class="col-xl-12">
-                                            <label for="signin-username" class="form-label text-default">User Name</label>
+                                            <label for="signin-username" class="form-label text-default">Email</label>
                                             <input type="text" class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                                   id="signin-username" name="email" placeholder="User name" value="{{ old('email') }}">
+                                                   id="signin-username" name="email" placeholder="email" value="{{ old('email') }}">
                                             <div class="invalid-feedback">
                                                 @error('email')
                                                 {{ $message }}
@@ -45,7 +45,7 @@
                                         <!-- Password Input -->
                                         <div class="col-xl-12 mb-2">
                                             <label for="signin-password" class="form-label text-default d-block">Password
-                                                <a href="{{ url('resetpassword-basic') }}" class="float-end text-primary">Forgot password?</a>
+                                                <a href="{{ route('dashboard.password.request') }}" class="float-end text-primary">Forgot password?</a>
                                             </label>
                                             <div class="input-group">
                                                 <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror"

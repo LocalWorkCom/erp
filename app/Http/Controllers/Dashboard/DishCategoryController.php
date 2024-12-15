@@ -85,6 +85,7 @@ class DishCategoryController extends Controller
 
     public function delete($id)
     {
+
         try {
             $this->dishCategoryService->delete($id);
 

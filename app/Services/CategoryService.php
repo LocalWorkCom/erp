@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 
 class CategoryService
 {
@@ -69,7 +70,6 @@ class CategoryService
                 return  RespondWithBadRequestWithData($category_valid);
             }
         }
-        $created_by = 13;
 
         $category = new Category();
         $category->name_ar = $name_ar;
@@ -79,7 +79,8 @@ class CategoryService
         $category->code = $code;
         $category->is_freeze = $is_freeze;
         $category->parent_id =  $parent_id;
-        $category->created_by =  $created_by;
+        $category->created_by = Auth::guard('admin')->user()->id;
+
         $category->save();
         if ($request->hasFile('image')) {
 
@@ -88,9 +89,9 @@ class CategoryService
 
         return RespondWithSuccessRequest($lang, 1);
     }
+    
     public function update(Request $request, $id, $checkToken)
     {
-//        dd($request->all());
         $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
@@ -138,7 +139,7 @@ class CategoryService
             && $category->image == $request->file('image') ) {
             return  RespondWithBadRequestData($lang,10);
         }
-        $modify_by = 13;
+        $modify_by = Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the category model
         $category->name_ar = $request->name_ar;
@@ -162,6 +163,7 @@ class CategoryService
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
+
     public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();

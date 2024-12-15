@@ -62,12 +62,7 @@ class BranchService
         }
 
         //try {
-            $employee_details = Employee::where('id', $request->employee_id)->first();
-            $manager_name = "";
-            if($employee_details){
-                $manager_name = $employee_details->first_name.' '.$employee_details->last_name;
-            }
-
+            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
             $branch = Branch::create([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
@@ -86,6 +81,8 @@ class BranchService
                 'is_delivery' => $request->is_delivery,
                 'created_by' =>1,
             ]);
+
+            AddBranchMenu($branch->id);
 
             return ResponseWithSuccessData($this->lang, $branch, 1);
         // } catch (\Exception $e) {
@@ -139,14 +136,9 @@ class BranchService
         }
 
         try {
-            $employee_details = Employee::where('id', $request->employee_id)->first();
-            $manager_name = "";
-            if($employee_details){
-                $manager_name = $employee_details->first_name.' '.$employee_details->last_name;
-            }
 
+            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
             $branch = Branch::findOrFail($id);
-
             $branch->update([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,
@@ -157,7 +149,8 @@ class BranchService
                 'country_id' => $request->country_id,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'manager_name' => $request->manager_name,
+                'employee_id' => $request->employee_id,
+                'manager_name' => $manager_name,                
                 'opening_hour' => $request->opening_hour,
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
@@ -199,6 +192,16 @@ class BranchService
         } catch (\Exception $e) {
             Log::error('Error restoring branch: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
+
+    public function employeeDetails($id, $field)
+    {
+        $employee_details = Employee::where('id', $id)->first();
+        if($employee_details){
+            return $field = $employee_details->$field;
+        }else{
+            return null;
         }
     }
 }
