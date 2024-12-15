@@ -111,7 +111,7 @@
 
                                                 <!-- Print Button -->
                                                 <a href="{{ route('purchase.print', $purchase->id) }}"
-                                                    class="btn btn-orange-light btn-wave">
+                                                    class="btn btn-success-light btn-wave">
                                                     @lang('purchase.print') <i class="ri-edit-line"></i>
                                                 </a>
                                             </td>
