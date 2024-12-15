@@ -330,7 +330,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
-    Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');

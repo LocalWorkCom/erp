@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
+use App\Models\Order;
+use App\Models\OrderTracking;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -24,7 +27,7 @@ class OrderController extends Controller
     }
 
     public function index(Request $request)
-    { 
+    {
         //        dd(app()->getLocale());
         $response = $this->orderService->index($request, $this->checkToken);
         $responseData = $response->original;
@@ -57,7 +60,7 @@ class OrderController extends Controller
     {
         $lang = App::getLocale(); // Get the current locale
 
-        $response = $this->orderService->show($lang, $id,$this->checkToken);
+        $response = $this->orderService->show($lang, $id, $this->checkToken);
 
         $responseData = $response->original;
 
@@ -65,8 +68,24 @@ class OrderController extends Controller
 
         return view('dashboard.order.show', compact('order'));
     }
+    public function changeStatus(Request $request)
+    {
+        $order_tracking = new  OrderTracking;
+        $order_tracking->order_id = $request->order_id;
+        $order_tracking->order_status = $request->status;
+        $order_tracking->created_by = Auth::guard('admin')->user()->id;
+        $order_tracking->time = date('H:i a');
+        $order_tracking->save();
+        if ($request->status == 'completed' || $request->status == 'cancelled' || $request->status == 'in_progress') {
 
-   
+            $order = Order::find($request->order_id);
+            $order->status = $request->status;
+            $order->save();
+        }
+        return true;
+    }
+
+
     // public function delete(Request $request, $id)
     // {
     //     $response = $this->orderService->destroy($request, $id);
