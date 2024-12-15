@@ -89,10 +89,15 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    // public function productUnits()
+    // {
+    //     return $this->belongsToMany(Unit::class, 'product_units', 'product_id', 'unit_id');
+    // }
+
     public function productUnits()
-    {
-        return $this->belongsToMany(Unit::class, 'product_units', 'product_id', 'unit_id');
-    }
+{
+    return $this->hasMany(ProductUnit::class);
+}
 
     public function colors()
     {
