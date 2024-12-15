@@ -35,8 +35,7 @@ class OrderService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $orders = Order::all();
-
+        $orders = Order::with('Branch')->get();
         foreach ($orders as $order) {
             $order['details'] = OrderDetail::where('order_id', $order->id)->get();
             $order['addons'] = OrderAddon::where('order_id', $order->id)->get();

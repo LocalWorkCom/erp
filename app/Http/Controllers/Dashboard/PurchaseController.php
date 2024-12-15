@@ -116,4 +116,26 @@ class PurchaseController extends Controller
         $this->purchaseService->deletePurchase($id, $this->checkToken);
         return redirect()->route('purchases.index')->with('success', 'Purchase deleted successfully!');
     }
+
+    public function print($id)
+    {
+
+        $vendors = Vendor::all();
+        $stores = Store::all();
+        $categories = Category::all();
+        $products = Product::all();
+        $units = Unit::all();
+
+
+        $purchase = PurchaseInvoice::with(
+            'vendor',
+            'store',
+            'purchaseInvoicesDetails'
+        )->findOrFail($id);
+
+        return view(
+            'dashboard.purchases.print',
+            compact('vendors', 'categories', 'products', 'units', 'stores', 'purchase')
+        );
+    }
 }
