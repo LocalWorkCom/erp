@@ -23,16 +23,19 @@
                                     alt="logo" class="desktop-dark">
                             </a>
                         </div>
+
                         <div class="card custom-card rectangle2">
                             <div class="card-body p-5 rectangle3">
-                                <p class="h4 fw-semibold mb-2 text-center">Sign In</p>
-                                <p class="mb-4 text-muted op-7 fw-normal text-center">Welcome to EL Koute </p>
+
+
+                                <p class="h4 fw-semibold mb-2 text-center">@lang('auth.signin')</p>
+                                <p class="mb-4 text-muted op-7 fw-normal text-center">@lang('auth.welcome') </p>
                                 <form method="POST" action="{{ route('dashboard.submitlogin') }}" class="needs-validation">
                                     @csrf
                                     <div class="row gy-3">
                                         <!-- Email Input -->
                                         <div class="col-xl-12">
-                                            <label for="signin-username" class="form-label text-default">Email</label>
+                                            <label for="signin-username" class="form-label text-default">@lang('auth.email')</label>
                                             <input type="text" class="form-control form-control-lg @error('email') is-invalid @enderror"
                                                    id="signin-username" name="email" placeholder="email" value="{{ old('email') }}">
                                             <div class="invalid-feedback">
@@ -44,8 +47,8 @@
 
                                         <!-- Password Input -->
                                         <div class="col-xl-12 mb-2">
-                                            <label for="signin-password" class="form-label text-default d-block">Password
-                                                <a href="{{ route('dashboard.password.request') }}" class="float-end text-primary">Forgot password?</a>
+                                            <label for="signin-password" class="form-label text-default d-block">@lang('auth.password')
+                                                <a href="{{ route('dashboard.password.request') }}" class="float-end text-primary">@lang('auth.forgetPass')</a>
                                             </label>
                                             <div class="input-group">
                                                 <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror"
@@ -66,18 +69,31 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
                                                 <label class="form-check-label text-muted fw-normal" for="rememberMe">
-                                                    Remember password?
-                                                </label>
+                                                    @lang('auth.remember')                                                </label>
                                             </div>
                                         </div>
 
                                         <!-- Submit Button -->
                                         <div class="col-xl-12 d-grid mt-2">
-                                            <button type="submit" class="btn btn-lg btn-primary">Sign In</button>
+                                            <button type="submit" class="btn btn-lg btn-primary">@lang('auth.signin')</button>
                                         </div>
                                     </div>
                                 </form>
+                            <div class="d-flex">
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('set-locale', 'en') }}">
+                                    <span class="avatar avatar-xs lh-1 me-2">
+                                        <img src="{{ asset('build/assets/images/flags/us_flag.png') }}" alt="img">
+                                    </span>
+                                     @lang('auth.English')
+                                </a>
 
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('set-locale', 'ar') }}">
+                                    <span class="avatar avatar-xs lh-1 me-2">
+                                        <img src="{{ asset('build/assets/images/flags/ar_flag.png') }}" alt="img">
+                                    </span>
+                                    @lang('auth.Arabic')
+                                </a>
+                            </div>
                             </div>
                         </div>
                     </div>
