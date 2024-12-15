@@ -108,6 +108,12 @@
                                                         @lang('purchase.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
+
+                                                <!-- Print Button -->
+                                                <a href="{{ route('purchase.print', $purchase->id) }}"
+                                                    class="btn btn-orange-light btn-wave">
+                                                    @lang('purchase.print') <i class="ri-edit-line"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
