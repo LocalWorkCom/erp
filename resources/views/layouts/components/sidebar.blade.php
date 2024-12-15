@@ -714,7 +714,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->can('view logos') || auth()->user()->can('view sliders'))
+                @if (auth()->user()->can('view logos') || auth()->user()->can('view sliders') || auth()->user()->can('view terms'))
                     <!-- website -->
                     <li class="slide__category"><span class="category-name">@lang('sidebar.website') </span>
                     </li>
@@ -739,6 +739,7 @@
                             </a>
                         </li>
                     @endcan
+                    @can('view terms')
                         <li class="slide">
                             <a href="{{ route('terms.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
@@ -747,6 +748,7 @@
                                 <span class="side-menu__label">@lang('sidebar.Terms')</span>
                             </a>
                         </li>
+                    @endcan
                     <li class="slide">
                             <a href="{{ route('privacies.list') }}" class="side-menu__item">
                                 <span class=" side-menu__icon">
