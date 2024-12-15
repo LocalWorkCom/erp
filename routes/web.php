@@ -75,20 +75,20 @@ Route::get('/', function () {
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
-    
+
     // Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
-    ->name('products.units.list')
-    ->middleware('role_or_permission:view products');
+        ->name('products.units.list')
+        ->middleware('role_or_permission:view products');
     // Route::post('product/units/save', [ProductController::class, 'saveUnits'])
     // ->name('product.units.save')
     // ->middleware('role_or_permission:view products');
     Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
-    ->name('product.units.save')
-    ->middleware('role_or_permission:view products');
+        ->name('product.units.save')
+        ->middleware('role_or_permission:view products');
 
     Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
-    ->name('units.remove')->middleware('role_or_permission:view products');
+        ->name('units.remove')->middleware('role_or_permission:view products');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
@@ -98,8 +98,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product.edit')->middleware('role_or_permission:update products');
         Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete')->middleware('role_or_permission:delete products');
-        
-        
+
+
         // Route::get('units', [ProductUnitController::class, 'index']);
         // Route::post('unit/store', [ProductUnitController::class, 'store']);
         // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -288,16 +288,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
 
-Route::prefix('dashboard/addon-categories')->group(function () {
-    Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
-    Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
-    Route::post('/', [AddonCategoryController::class, 'store'])->name('dashboard.addon_categories.store');
-    Route::get('/{id}', [AddonCategoryController::class, 'show'])->name('dashboard.addon_categories.show');
-    Route::get('/{id}/edit', [AddonCategoryController::class, 'edit'])->name('dashboard.addon_categories.edit');
-    Route::put('/{id}', [AddonCategoryController::class, 'update'])->name('dashboard.addon_categories.update');
-    Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('dashboard.addon_categories.destroy');
-    Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
-});
+    Route::prefix('dashboard/addon-categories')->group(function () {
+        Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
+        Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
+        Route::post('/', [AddonCategoryController::class, 'store'])->name('dashboard.addon_categories.store');
+        Route::get('/{id}', [AddonCategoryController::class, 'show'])->name('dashboard.addon_categories.show');
+        Route::get('/{id}/edit', [AddonCategoryController::class, 'edit'])->name('dashboard.addon_categories.edit');
+        Route::put('/{id}', [AddonCategoryController::class, 'update'])->name('dashboard.addon_categories.update');
+        Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('dashboard.addon_categories.destroy');
+        Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
+    });
 
 
     //roles routws
@@ -313,7 +313,7 @@ Route::prefix('dashboard/addon-categories')->group(function () {
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
-    Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
