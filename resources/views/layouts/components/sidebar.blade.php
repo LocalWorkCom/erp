@@ -739,6 +739,30 @@
                             </a>
                         </li>
                     @endcan
+                        <li class="slide">
+                            <a href="{{ route('terms.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Terms')</span>
+                            </a>
+                        </li>
+                    <li class="slide">
+                            <a href="{{ route('privacies.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Privacy')</span>
+                            </a>
+                        </li>
+                    <li class="slide">
+                            <a href="{{ route('returns.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Return')</span>
+                            </a>
+                        </li>
                 @endif
             </ul>
             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
