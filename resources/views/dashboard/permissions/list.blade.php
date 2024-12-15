@@ -75,16 +75,6 @@
 
 
                                             <td>
-                                                <a href="javascript:void(0);"
-                                                    class="btn btn-info-light btn-wave show-color-btn"
-                                                    data-id="{{ $permission->id }}"
-                                                    data-name-ar="{{ $permission->name_ar }}"
-                                                    data-name-en="{{ $permission->name_en }}" data-bs-toggle="modal"
-                                                    data-bs-target="#showModal">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
-
-
                                                 <!-- Edit Button -->
                                                 <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
                                                     data-id="{{ $permission->id }}" data-bs-toggle="modal"
@@ -93,16 +83,10 @@
                                                 </button>
 
                                                 <!-- Delete Button -->
-                                                {{-- <form class="d-inline" id="delete-form-{{ $permission->id }}"
-                                                    action="{{ route('permission.delete', $permission->id) }}"
-                                                    method="DELETE">
-                                                    @csrf
-                                                    @method('DELETE') --}}
                                                 <button type="button" onclick="delete_item({{ $permission->id }})"
                                                     class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
-                                                {{-- </form> --}}
                                             </td>
                                         </tr>
 
@@ -128,7 +112,8 @@
                                                         @endif
                                                         <div class="modal-header">
                                                             <h6 class="modal-title" id="exampleModalLabel1">
-                                                                @lang('roles.name')</h6>
+                                                                @lang('roles.AddPer')
+                                                            </h6>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
                                                         </div>
@@ -139,7 +124,7 @@
                                                                     <label for="input-placeholder"
                                                                         class="form-label">@lang('roles.ArabicName')</label>
                                                                     <input type="text" class="form-control"
-                                                                        placeholder="@lang('color.ArabicName')" name="name_ar"
+                                                                        placeholder="@lang('roles.ArabicName')" name="name_ar"
                                                                         required>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
                                                                     <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
@@ -148,9 +133,9 @@
                                                                 <!-- English Name Input -->
                                                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                                     <label for="input-placeholder"
-                                                                        class="form-label">@lang('color.EnglishName')</label>
+                                                                        class="form-label">@lang('roles.EnglishName')</label>
                                                                     <input type="text" class="form-control"
-                                                                        placeholder="@lang('color.EnglishName')" name="name_en"
+                                                                        placeholder="@lang('roles.EnglishName')" name="name_en"
                                                                         required>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
                                                                     <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
@@ -249,13 +234,10 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @vite('resources/assets/js/validation.js')
-    @vite('resources/assets/js/choices.js')
     @vite('resources/assets/js/choices.js')
     @vite('resources/assets/js/modal.js')
     <script>
@@ -279,7 +261,7 @@
                         url: '{{ route('permission.delete', ':id') }}'.replace(':id', idForm),
                         type: 'GET', // Use POST as the method
                         data: $(form).serialize() +
-                        '&_method=DELETE', // Add the method override in the data
+                            '&_method=DELETE', // Add the method override in the data
                         success: function(response) {
                             // Show success message
                             Swal.fire({
@@ -306,54 +288,6 @@
                 }
             });
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const editButtons = document.querySelectorAll('.edit-color-btn');
-            const editForm = document.getElementById('edit-color-form');
-            const nameArInput = document.getElementById('edit-name-ar');
-            const nameEnInput = document.getElementById('edit-name-en');
-            const hexaCodeInput = document.getElementById('edit-hexa-code');
-
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get color details from data attributes
-                    const colorId = this.getAttribute('data-id');
-                    const nameAr = this.getAttribute('data-name-ar');
-                    const nameEn = this.getAttribute('data-name-en');
-                    const hexaCode = this.getAttribute('data-hexa-code'); // Get hex code
-                    const routeTemplate = this.getAttribute('data-route');
-
-                    // Set form action URL dynamically
-                    const updateRoute = routeTemplate.replace(':id', colorId);
-                    editForm.action = updateRoute;
-
-                    // Populate the modal fields
-                    nameArInput.value = nameAr;
-                    nameEnInput.value = nameEn;
-                    hexaCodeInput.value = hexaCode; // Set hex code value
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const showButtons = document.querySelectorAll('.show-color-btn');
-            const nameArDisplay = document.getElementById('show-name-ar');
-            const nameEnDisplay = document.getElementById('show-name-en');
-            const hexaCodeDisplay = document.getElementById('show-hexa-code');
-
-            showButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const nameAr = this.getAttribute('data-name-ar');
-                    const nameEn = this.getAttribute('data-name-en');
-                    const hexaCode = this.getAttribute('data-hexa-code'); // Get hex code
-
-                    // Display the color details in the modal
-                    nameArDisplay.textContent = nameAr;
-                    nameEnDisplay.textContent = nameEn;
-                    hexaCodeDisplay.textContent = hexaCode; // Display hex code
-                });
-            });
-        });
 
         $(document).on('click', '.edit-color-btn', function() {
             var permissionId = $(this).data('id');
