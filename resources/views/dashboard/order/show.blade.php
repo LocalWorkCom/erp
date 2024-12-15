@@ -27,7 +27,7 @@
                     <div class="card custom-card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h4>تفاصيل الطلب</h4>
+                                <h4> @lang('order.order_details')</h4>
                             </div>
                         </div>
                         <div class="card-body">
@@ -65,7 +65,7 @@
                                     <label class="form-label">@lang('order.total_price')</label>
                                     <p class="form-text">{{ $order->total_price_after_tax }}</p>
                                 </div>
-                                <h4>تفاصيل العميل</h4>
+                                <h4>@lang('order.client_details')</h4>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('order.client')</label>
                                     <p class="form-text">{{ $order->client->name }}</p>
@@ -78,7 +78,7 @@
                                     <label class="form-label">@lang('order.email')</label>
                                     <p class="form-text">{{ $order->client->email }}</p>
                                 </div>
-                                <h4>تفاصيل العنوان</h4>
+                                <h4>@lang('order.address_details')</h4>
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('order.city')</label>
                                     <p class="form-text">{{ $order->address->city }}</p>
@@ -93,7 +93,7 @@
                                 </div>
 
 
-                                <h4>تفاصيل الدفع </h4>
+                                <h4> @lang('order.payment_details')</h4>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('order.status_paid')</label>
                                     <p class="form-text"> <span class="badge bg-primary-transparent">
@@ -120,7 +120,7 @@
                                     </p>
                                 </div>
 
-                                <h4>الاطباق</h4>
+                                <h4>@lang('order.dish_details')</h4>
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -149,8 +149,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                
-                                <h4>تفاصيل الاضافاات</h4>
+
+                                <h4>@lang('order.order_details')</h4>
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -173,9 +173,61 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                
+
+                            </div>
+                            
+                            <div class="main-content app-content">
+                                <h4>@lang('order.order_trackings')</h4>
+                                <div class="container-fluid">
+
+                                    <div class="row justify-content-center">
+                                        <div class="col-xxl-9 col-xl-10 col-sm-12">
+                                            <ul class="timeline list-unstyled">
+                                                @foreach ($order['tracking'] as $tracking)
+                                                    <li>
+                                                        <div class="timeline-time text-end">
+                                                            <span
+                                                                class="time d-inline-block">{{ date('Y-m-d', strtotime($tracking->created_at)) }}</span>
+                                                        </div>
+                                                        <div class="timeline-icon">
+                                                            <a href="javascript:void(0);"></a>
+                                                        </div>
+                                                        <div class="timeline-body">
+                                                            <div class="d-flex align-items-top timeline-main-content mt-0">
+                                                                <div class="flex-fill">
+                                                                    <div class="align-items-center">
+                                                                        <div class="mt-sm-0 mt-2">
+                                                                            <p class="mb-0 fs-14 fw-semibold">@lang('order.' . $tracking->order_status)
+                                                                            </p>
+                                                                            {{-- <p class="mb-0 text-muted">
+                                                                                Changed the password
+                                                                                of
+                                                                                gmail 4 hrs ago. <span
+                                                                                    class="badge bg-secondary">Update</span>
+                                                                            </p> --}}
+                                                                        </div>
+                                                                        <div class="ms-auto">
+                                                                            <span
+                                                                                class="float-end badge bg-light text-muted timeline-badge mt-2 rounded-1">
+                                                                                {{ date('H:i a', strtotime($tracking->time)) }}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
