@@ -410,31 +410,35 @@ class ProductService
     }
     public function saveProductUnits(Request $request, $productId)
     {
-        // Find the product by ID
-        // $product = Product::findOrFail($productId);
-
         // Validate the units
-        // $validated = $request->validate([
-        //     'units.*.unit_id' => 'required|exists:units,id',
-        //     'units.*.factor' => 'required|numeric',
-        //     'product_unit_id' => 'nullable|array',  // Ensure product_unit_id is an array if passed
-        // ]);
+        $validated = $request->validate([
+            'units.*.unit_id' => 'required|exists:units,id',
+            'units.*.factor' => 'required|numeric',
+            'product_unit_id' => 'nullable|array',  // Ensure product_unit_id is an array if passed
+        ]);
+
         $product_unit_ids = $request->product_unit_id; // This is an array of product unit IDs, or null if creating new units
 
+        // Get all the existing product units for the given product
         $product_units = ProductUnit::where('product_id', $productId)->get();
-        foreach ($product_units as $unit) {
 
+        // Remove units that are not in the submitted product_unit_ids
+        foreach ($product_units as $unit) {
             if ($product_unit_ids && !in_array($unit->id, $product_unit_ids)) {
                 $unit->delete();
             }
         }
-        // Get the units and the product_unit_ids from the request
+
+        // Get the units from the request
         $units = $request->units;
-        
+
         // Loop through the units and save them
         for ($i = 0; $i < count($units); $i++) {
             $unitId = (int) $units[$i]['unit_id'];  // Cast unit_id to integer
             $factor = $units[$i]['factor'];  // Factor value
+
+            // Check if the unit already exists for the given product
+
             // If product_unit_id is provided, update the existing record
             if (isset($product_unit_ids[$i]) && $product_unit_ids[$i]) {
                 // Update existing ProductUnit
@@ -446,6 +450,15 @@ class ProductService
                     ]
                 );
             } else {
+                $existingUnit = ProductUnit::where('product_id', $productId)
+                    ->where('unit_id', $unitId)
+                    ->exists();
+
+                if ($existingUnit) {
+                    // If the unit already exists for this product, return a flash message
+                    return CustomRespondWithBadRequest('The unit with ID ' . $unitId . ' already exists for this product.');
+                }
+
                 // If no product_unit_id is provided, create a new ProductUnit
                 ProductUnit::create([
                     'unit_id' => (int) $unitId,  // Ensure unit_id is treated as an integer
@@ -456,7 +469,7 @@ class ProductService
             }
         }
 
-        // Return a success response
+        // Return a success response after all units are processed
         return RespondWithSuccessRequest($this->lang, 1);
     }
 }
