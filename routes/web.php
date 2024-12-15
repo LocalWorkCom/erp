@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\OrderController;
+use App\Http\Controllers\Dashboard\VendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -259,10 +260,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.list')->middleware('role_or_permission:view departments');
     Route::group(['prefix' => 'department'], function () {
-        Route::get('create', [DepartmentController::class, 'create'])->name('department.create')->middleware('role_or_permission:create departments');
         Route::post('store', [DepartmentController::class, 'store'])->name('department.store')->middleware('role_or_permission:create departments');
-        Route::get('show/{id}', [DepartmentController::class, 'show'])->name('department.show')->middleware('role_or_permission:view departments');
-        Route::get('edit/{id}', [DepartmentController::class, 'edit'])->name('department.edit')->middleware('role_or_permission:update departments');
         Route::put('update/{id}', [DepartmentController::class, 'update'])->name('department.update')->middleware('role_or_permission:update departments');
         Route::delete('delete/{id}', [DepartmentController::class, 'destroy'])->name('department.delete')->middleware('role_or_permission:delete departments');
     });
@@ -276,7 +274,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dashboard.dish-categories.update')->middleware('role_or_permission:update dish_categories');
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dashboard.dish-categories.delete')->middleware('role_or_permission:delete dish_categories');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dashboard.dish-categories.restore')->middleware('role_or_permission:create dish_categories');
-
     });
     // Recipe routes
     Route::prefix('recipes')->group(function () {
@@ -318,4 +315,14 @@ Route::prefix('dashboard/addon-categories')->group(function () {
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::get('/order/change/{status}/{id}', [OrderController::class, 'changeStatus'])->name('order.change');
 
+    //Purchases
+    Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
+    Route::group(['prefix' => 'vendor'], function () {
+        Route::get('create', [VendorController::class, 'create'])->name('vendor.create')->middleware('role_or_permission:create vendors');
+        Route::post('store', [VendorController::class, 'store'])->name('vendor.store')->middleware('role_or_permission:create vendors');
+        Route::get('show/{id}', [VendorController::class, 'show'])->name('vendor.show')->middleware('role_or_permission:view vendors');
+        Route::get('edit/{id}', [VendorController::class, 'edit'])->name('vendor.edit')->middleware('role_or_permission:update vendors');
+        Route::put('update/{id}', [VendorController::class, 'update'])->name('vendor.update')->middleware('role_or_permission:update vendors');
+        Route::delete('delete/{id}', [VendorController::class, 'destroy'])->name('vendor.delete')->middleware('role_or_permission:delete vendors');
+    });
 });
