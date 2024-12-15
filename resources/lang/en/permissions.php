@@ -515,4 +515,7 @@ return array (
   'purchase_invoice' => 'purchase_invoice',
   'edit addon_categories' => 'edit addon_categories',
   'edit addon_categorie' => 'edit addon_categorie',
+  'test' => 'test',
+  'view invoice' => 'view invoice',
+  'OOPL' => 'OOPL',
 );

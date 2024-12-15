@@ -516,4 +516,7 @@ return array (
   'purchase_invoice' => 'فواتير المشتريات',
   'edit addon_categories' => 'تعديل فئات الأضافات',
   'edit addon_categorie' => 'تعديل تصنيفات أضافات',
+  'test' => 'عربي',
+  'view invoice' => 'عرض الفواتير',
+  'OOPL' => 'جحنمن',
 );
