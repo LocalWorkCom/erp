@@ -128,7 +128,12 @@
                                                     <option value="">{{ __('product.options') }}</option>
                                                     <option value="sizes">@lang('product.Sizes')</option>
                                                     <option value="colors">@lang('product.Colors')</option>
+                                                    @can('view product_units')
+
                                                     <option value="units">@lang('product.Units')</option>
+
+                                                    @endcan
+
                                                 </select> 
 
                                             </td>

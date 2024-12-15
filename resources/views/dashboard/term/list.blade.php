@@ -10,12 +10,12 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('slider.Sliders')</h4>
+        <h4 class="fw-medium mb-0">@lang('term.Terms')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);" onclick="window.location.href='{{ route('sliders.list') }}'">@lang('slider.Sliders')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="" onclick="window.location.href='{{ route('terms.list') }}'">@lang('term.Terms')</a></li>
                 </ol>
             </nav>
         </div>
@@ -30,11 +30,11 @@
                             style="
                         display: flex;
                         justify-content: space-between;">
-                            <div class="card-title">@lang('slider.Sliders')</div>
+                            <div class="card-title">@lang('term.Terms')</div>
                             <button type="button" class="btn btn-primary label-btn"
-                                onclick="window.location.href='{{ route('slider.create') }}'">
+                                onclick="window.location.href='{{ route('term.create') }}'">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('slider.AddSlider')
+                                @lang('term.AddTerm')
                             </button>
 
 
@@ -52,32 +52,20 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">@lang('category.ID')</th>
-                                    <th scope="col">@lang('slider.ArabicName')</th>
-                                    <th scope="col">@lang('slider.EnglishName')</th>
-                                    <th scope="col">@lang('slider.Image')</th>
-                                    <th scope="col">@lang('slider.Dish')</th>
-                                    <th scope="col">@lang('slider.Offer')</th>
+                                    <th scope="col">@lang('term.ArabicName')</th>
+                                    <th scope="col">@lang('term.EnglishName')</th>
                                     <th scope="col">@lang('category.Actions')</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($sliders as $slider)
+                                @foreach ($terms as $term)
                                     <tr>
-                                        <td>{{ $slider->id }}</td>
-                                        <td>{{ $slider->name_ar }}</td>
-                                        <td>{{ $slider->name_en }}</td>
-                                        <td><img src="{{ url($slider->image) }}" alt=""
-                                                 width="100" height="100"></td>
-                                        <td>{{ $slider->dish ? $slider->dish->name_ar . " | " . $slider->dish->name_en : __('category.none') }}</td>
-                                        <td>{{ $slider->offer ? $slider->offer->name_ar . " | " . $slider->offer->name_en : __('category.none') }}</td>
+                                        <td>{{ $term->id }}</td>
+                                        <td>{{ $term->name_ar }}</td>
+                                        <td>{{ $term->name_en }}</td>
                                         <td>
-                                            <a href="{{ route('slider.show', $slider->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
-                                            <a href="{{ route('slider.edit', $slider->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>
-                                            <form class="d-inline" action="{{ route('slider.delete', $slider->id) }}" method="POST" onsubmit="return confirmDelete()">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger-light btn-wave">@lang('category.delete') <i class="ri-delete-bin-line"></i></button>
-                                            </form>
+                                            <a href="{{ route('term.show', $term->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
+                                            <a href="{{ route('term.edit', $term->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

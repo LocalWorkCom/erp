@@ -12,7 +12,7 @@ class Product extends Model
 
     // Table associated with the model
     protected $table = 'products';
-    protected $appends = ['name', 'image','description'];
+    protected $appends = ['name', 'image', 'description'];
 
     // The attributes that are mass assignable
     protected $fillable = [
@@ -93,11 +93,19 @@ class Product extends Model
     // {
     //     return $this->belongsToMany(Unit::class, 'product_units', 'product_id', 'unit_id');
     // }
+    public function units()
+    {
+        return $this->belongsToMany(Unit::class, 'product_units')
+            ->withPivot('factor', 'unit_id') // Include all necessary pivot fields
+            ->withTimestamps(); // Optional: if your pivot table has timestamps
+    }
+
+    
 
     public function productUnits()
-{
-    return $this->hasMany(ProductUnit::class);
-}
+    {
+        return $this->hasMany(ProductUnit::class);
+    }
 
     public function colors()
     {
@@ -121,16 +129,15 @@ class Product extends Model
 
     public function productLimit()
     {
-        return $this->hasMany(ProductLimit::class,'product_id','id');
+        return $this->hasMany(ProductLimit::class, 'product_id', 'id');
     }
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class, 'brand_id','id');
+        return $this->belongsTo(Brand::class, 'brand_id', 'id');
     }
     public function images()
     {
-    return $this->hasMany(ProductImage::class, 'product_id', 'id');
+        return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
-
 }
