@@ -521,6 +521,7 @@
   'purchase_invoice' => 'purchase_invoice',
   'edit addon_categories' => 'edit addon_categories',
   'edit addon_categorie' => 'edit addon_categorie',
+  'view units_products' => 'view units_products',
   'print advances' => 'print advances',
   'print invoice' => 'print invoice',
 );

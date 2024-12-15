@@ -198,8 +198,8 @@ class ProductController extends Controller
             if ($unit->pivot) {
                 $factor = $unit->pivot->factor ?? null;  // Safely access pivot data
                 $unitId = $unit->pivot->unit_id ?? null;
+            }
         }
-    }
         // dd($productId, $unitId);  // Debugging output
 
         return view('dashboard.product.unit.list', compact('product', 'units'));
@@ -220,10 +220,11 @@ class ProductController extends Controller
             if (isset($responseData['data'])) {
                 $validationErrors = $responseData['data'];
                 return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
 
             // If no 'data' key is present, handle it gracefully
-            return redirect()->back()->with('error', __('An unexpected error occurred.'))->withInput();
         }
 
         // Success message
@@ -231,20 +232,5 @@ class ProductController extends Controller
 
         // Redirect with success message
         return redirect()->route('products.list', ['id' => $productId])->with('message', $message);
-    }
-
-    public function removeUnit(Request $request, $unitId)
-    {
-        dd(0);
-        // Find the Product Unit by ID
-        $unit = ProductUnit::findOrFail($unitId);
-
-        // Soft delete the unit (sets 'deleted_at' column)
-        $unit->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => __('Unit removed successfully.'),
-        ]);
     }
 }
