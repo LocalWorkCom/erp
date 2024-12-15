@@ -1,16 +1,21 @@
 <?php
-return[
-    'roles'=>'Roles',
-    'Add'=>'Add Role',
-    'Id'=>'Id',
-    'name'=>'Name',
-    'guard'=>'Guard',
-    'Actions'=>'Actions',
-    'edit'=>'Edit',
-    'permission'=>'Permission',
+return [
+    'roles' => 'Roles',
+    'Add' => 'Add Role',
+    'AddPer' => 'Add Permission',
+    'permissions' => 'permissions',
+    'Id' => 'Id',
+    'name' => 'Name',
+    'guard' => 'Guard',
+    'Actions' => 'Actions',
+    'edit' => 'Edit',
+    'permission' => 'Permission',
     'warning_title' => 'Warning',
     'delete_confirmation' => 'Are you sure you want to delete this role?',
     'confirm_delete' => 'Yes, delete it',
     'cancel' => 'Cancel',
-
+    'warning_titleper' => 'Are you sure?',
+    'delete_confirmationper' => 'You are about to delete this permission. This action cannot be undone.',
+    'delete_success' => 'Permission deleted successfully!',
+    'delete_error' => 'This permission is assigned to one or more roles and cannot be deleted.',
 ];
