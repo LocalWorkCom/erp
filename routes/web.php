@@ -82,20 +82,13 @@ Route::get('/', function () {
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
-    // Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
         ->name('products.units.list')
-        ->middleware('role_or_permission:view products');
-    // Route::post('product/units/save', [ProductController::class, 'saveUnits'])
-    // ->name('product.units.save')
-    // ->middleware('role_or_permission:view products');
+        ->middleware('role_or_permission:view product_units');
+        
     Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
         ->name('product.units.save')
-        ->middleware('role_or_permission:view products');
-
-    Route::delete('/units/remove/{id}', [ProductController::class, 'removeUnit'])
-        ->name('units.remove')
-        ->middleware('role_or_permission:view products');
+        ->middleware('role_or_permission:view product_units');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {

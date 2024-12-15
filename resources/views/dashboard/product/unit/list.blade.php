@@ -36,6 +36,16 @@
                             <div class="card-title">@lang('product.Product Units')</div>
                         </div>
                         <div class="card-body">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
                             <form action="{{ route('product.units.save', $product->id) }}" method="POST">
                                 @csrf
                                 <div class="col-xl-12">
@@ -102,6 +112,9 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        function confirmDelete() {
+            return confirm("@lang('validation.DeleteConfirm')");
+        }
         $(document).ready(function() {
             $('.select2').select2();
 
