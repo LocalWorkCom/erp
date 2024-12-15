@@ -5,8 +5,7 @@
         <a href="{{ route('dashboard.home') }}" class="header-logo">
             <img src="{{ asset('build/assets/images/brand-logos/desktop-logo.png') }}" alt="logo" class="desktop-logo">
             <img src="{{ asset('build/assets/images/brand-logos/toggle-logo.png') }}" alt="logo" class="toggle-logo">
-            <img src="{{ asset('build/assets/images/brand-logos/desktop.png') }}" alt="logo"
-                class="desktop-dark">
+            <img src="{{ asset('build/assets/images/brand-logos/desktop.png') }}" alt="logo" class="desktop-dark">
             <img src="{{ asset('build/assets/images/brand-logos/toggle-dark.png') }}" alt="logo"
                 class="toggle-dark">
         </a>
@@ -138,20 +137,23 @@
                                     @endcan
                                     @can('view dish_categories')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.dish-categories.index') }}" class="side-menu__item">@lang('sidebar.DishesCategory')
+                                            <a href="{{ route('dashboard.dish-categories.index') }}"
+                                                class="side-menu__item">@lang('sidebar.DishesCategory')
                                             </a>
                                         </li>
                                     @endcan
                                     @can('view recipes')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.recipes.index') }}" class="side-menu__item">@lang('sidebar.Recipes')
+                                            <a href="{{ route('dashboard.recipes.index') }}"
+                                                class="side-menu__item">@lang('sidebar.Recipes')
                                             </a>
                                         </li>
                                     @endcan
 
                                     @can('view recipes')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.addon_categories.index') }}" class="side-menu__item">@lang('sidebar.AddonCategories')
+                                            <a href="{{ route('dashboard.addon_categories.index') }}"
+                                                class="side-menu__item">@lang('sidebar.AddonCategories')
                                             </a>
                                         </li>
                                     @endcan
@@ -486,7 +488,7 @@
                                     <a href="javascript:void(0)">@lang('sidebar.Purchase') </a>
                                 </li>
                                 <li class="slide">
-                                    <a href="{{ url('Purchase') }}" class="side-menu__item">
+                                    <a href="{{ route('purchases.index') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -497,7 +499,7 @@
 
                             @can('view vendors')
                                 <li class="slide">
-                                    <a href="{{ url('Vendors') }}" class="side-menu__item">
+                                    <a href="{{ route('vendors.index') }}" class="side-menu__item">
                                         <span class=" side-menu__icon">
                                             <i class='bx bx-desktop'></i>
                                         </span>
@@ -673,12 +675,18 @@
                                     <a href="{{ route('units.list') }}" class="side-menu__item">@lang('sidebar.Units') </a>
                                 </li>
                             @endcan
-                             @can('view roles')
+                            @can('view roles')
                                 <li class="slide">
                                     <a href="{{ route('roles.list') }}" class="side-menu__item">@lang('sidebar.roles') </a>
                                 </li>
                             @endcan
+                            @can('view permissions')
+                                <li class="slide">
+                                    <a href="{{ route('permissions.list') }}" class="side-menu__item">@lang('sidebar.permissions') </a>
+                                </li>
+                            @endcan
                            {{-- @can('view Notification')
+                            {{-- @can('view Notification')
                                 <li class="slide">
                                     <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>
                                 </li>

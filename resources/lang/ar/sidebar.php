@@ -68,5 +68,6 @@ return[
     'Slider' => 'السلايدر',
     'AddonCategories'=>'فئات الاضافات',
     'roles' => 'المهام',
+    'permissions' => 'الصلاحيات',
 
 ];
