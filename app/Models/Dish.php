@@ -78,4 +78,8 @@ class Dish extends Model
     {
         return $this->hasMany(DishSize::class, 'dish_id');
     }
+    public function sizes()
+{
+    return $this->hasMany(DishSize::class);
+}
 }

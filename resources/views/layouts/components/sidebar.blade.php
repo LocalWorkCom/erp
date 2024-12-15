@@ -123,15 +123,15 @@
                                 <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Dishes')
                                     <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                 <ul class="slide-menu child2">
-                                    @can('view cuisines')
+                                @can('view cuisines')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Cuisines')
+                                            <a href="{{ route('dashboard.cuisines.index') }}" class="side-menu__item">@lang('sidebar.Cuisines')
                                             </a>
                                         </li>
                                     @endcan
                                     @can('view dishes')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Dishes')
+                                            <a href="{{ route('dashboard.dishes.index') }}" class="side-menu__item">@lang('sidebar.Dishes')
                                             </a>
                                         </li>
                                     @endcan
@@ -146,6 +146,12 @@
                                         <li class="slide">
                                             <a href="{{ route('dashboard.recipes.index') }}"
                                                 class="side-menu__item">@lang('sidebar.Recipes')
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view recipes')
+                                        <li class="slide">
+                                            <a href="{{ route('dashboard.addons.index') }}" class="side-menu__item">@lang('sidebar.Addons')
                                             </a>
                                         </li>
                                     @endcan

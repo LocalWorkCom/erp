@@ -26,7 +26,9 @@ use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\DishCategoryController;
 use App\Http\Controllers\Dashboard\RecipeController;
 use App\Http\Controllers\Dashboard\AddonCategoryController;
-
+use App\Http\Controllers\Dashboard\DishController;
+use App\Http\Controllers\Dashboard\AddonController;
+use App\Http\Controllers\Dashboard\CuisineController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -317,7 +319,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     //roles routes
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view roles');
 
-    Route::prefix('dashboard/addon-categories')->group(function () {
+    Route::prefix('/addon-categories')->group(function () {
         Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
         Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
         Route::post('/', [AddonCategoryController::class, 'store'])->name('dashboard.addon_categories.store');
@@ -377,4 +379,36 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [PurchaseController::class, 'destroy'])->name('purchase.delete')->middleware('role_or_permission:delete purchase_invoices');
         Route::get('print/{id}', [PurchaseController::class, 'print'])->name('purchase.print'); //->middleware('role_or_permission:print purchase_invoices');
     });
+
+    Route::prefix('/dishes')->group(function () {
+        Route::get('/', [DishController::class, 'index'])->name('dashboard.dishes.index'); 
+        Route::get('/create', [DishController::class, 'create'])->name('dashboard.dishes.create'); 
+        Route::post('/', [DishController::class, 'store'])->name('dashboard.dishes.store'); 
+        Route::get('/{id}', [DishController::class, 'show'])->name('dashboard.dishes.show'); 
+        Route::get('/{id}/edit', [DishController::class, 'edit'])->name('dashboard.dishes.edit'); 
+        Route::put('/{id}', [DishController::class, 'update'])->name('dashboard.dishes.update'); 
+        Route::delete('/{id}', [DishController::class, 'destroy'])->name('dashboard.dishes.destroy'); 
+        Route::post('/{id}/restore', [DishController::class, 'restore'])->name('dashboard.dishes.restore');
+    });
+    Route::prefix('/addons')->group(function () {
+        Route::get('/', [AddonController::class, 'index'])->name('dashboard.addons.index');
+        Route::get('/create', [AddonController::class, 'create'])->name('dashboard.addons.create');
+        Route::post('/', [AddonController::class, 'store'])->name('dashboard.addons.store');
+        Route::get('/{id}', [AddonController::class, 'show'])->name('dashboard.addons.show');
+        Route::get('/{id}/edit', [AddonController::class, 'edit'])->name('dashboard.addons.edit');
+        Route::put('/{id}', [AddonController::class, 'update'])->name('dashboard.addons.update');
+        Route::delete('/{id}', [AddonController::class, 'destroy'])->name('dashboard.addons.destroy');
+        Route::post('/{id}/restore', [AddonController::class, 'restore'])->name('dashboard.addons.restore');
+    });
+    
+    Route::prefix('/cuisines')->group(function () { 
+        Route::get('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'index'])->name('dashboard.cuisines.index');
+        Route::get('/create', [\App\Http\Controllers\Dashboard\CuisineController::class, 'create'])->name('dashboard.cuisines.create');
+        Route::post('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'store'])->name('dashboard.cuisines.store');
+        Route::get('/{id}/edit', [\App\Http\Controllers\Dashboard\CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
+        Route::put('/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'update'])->name('dashboard.cuisines.update');
+        Route::delete('/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
+        Route::post('/restore/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
+    });
+    
 });
