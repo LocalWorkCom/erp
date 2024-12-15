@@ -46,5 +46,17 @@ return [
     "cash" => "نقدا عند الاستلام",
     "state" => "الولاية",
     "email" => "البريد",
+    "dish_details" => "تفاصيل الطبق",
+    "payment_details" => "تفاصيل الدفع",
+    "client_details" => "تفاصيل العميل",
+    "address_details" => "تفاصيل العنوان",
+    "order_details" => "تفاصيل الطلب",
+    "pending" => "في انتظار الموافقة",
+    "in_progress" => "في مرحلة التحضير",
+    "completed" => "مكتمل",
+    "on_way" => "في الطريق اليك",
+    "deliverd" => "تم التسليم",
+    "cancelled" => "ملغي",
+    "order_trackings" => "متابعة الطلب"
 
 ];

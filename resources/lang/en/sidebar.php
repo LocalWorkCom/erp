@@ -66,6 +66,8 @@ return [
     'website' => 'Website',
     'Logo' => 'Logo',
     'Slider' => 'Slider',
+    'AddonCategories'=>'Addon Categories',
     'roles' => 'Roles',
+    'permissions' => 'Permissions',
 
 ];

@@ -16,6 +16,7 @@ class ProductUnit extends Model
         'unit_id',
         'product_id',
         'factor',
+        'created_by',
     ];
 
     protected $hidden = [

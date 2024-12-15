@@ -42,7 +42,18 @@ return [
     "note" => "note",
     "state" => "state",
     "email" => "email",
-    "purchase" => "purchase"
-
+    "purchase" => "purchase",
+    "dish_details" => "order details",
+    "payment_details" => "payment details",
+    "client_details" => "client details",
+    "address_details" => "address details",
+    "order_details" => "order details",
+    "pending" => "Pending",
+    "in_progress" => "Inprogress",
+    "completed" => "Completed",
+    "on_way" => "On Way",
+    "deliverd" => "Delivery",
+    "cancelled" => "Cancelled",
+    "order_trackings" => "Order Tracking"
 
 ];

@@ -66,6 +66,8 @@ return[
     'website' => 'الموقع',
     'Logo' => 'اللوجو',
     'Slider' => 'السلايدر',
+    'AddonCategories'=>'فئات الاضافات',
     'roles' => 'المهام',
+    'permissions' => 'الصلاحيات',
 
 ];

@@ -73,4 +73,9 @@ class Dish extends Model
     {
         return $this->belongsToMany(Dish::class, 'dish_addons', 'dish_id', 'addon_id');
     }
+
+    public function dishSizes()
+    {
+        return $this->hasMany(DishSize::class, 'dish_id');
+    }
 }
