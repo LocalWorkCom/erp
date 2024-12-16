@@ -34,10 +34,6 @@
                                     <i class="fe fe-plus label-btn-icon me-2"></i>
                                     @lang('roles.AddPer')
                                 </button>
-                                {{-- <a href="{{ route('role.create') }}" type="button" class="btn btn-primary label-btn">
-                                    <i class="fe fe-plus label-btn-icon me-2"></i>
-                                    @lang('roles.AddPer')
-                                </a> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -49,16 +45,15 @@
                                     </button>
                                 </div>
                             @endif
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                        {{ $error }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                            <i class="bi bi-x"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
-                            @endif
+                            @if (session('error'))
+                            <div class="alert alert-solid-danger alert-dismissible fade show">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        @endif
+
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
@@ -72,9 +67,9 @@
                                         <tr>
                                             <td>{{ $permission->id }}</td>
                                             <td>{{ __('permissions.' . $permission->name) }}</td>
-
-
                                             <td>
+                                                @can('')
+                                                @endcan
                                                 <!-- Edit Button -->
                                                 <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
                                                     data-id="{{ $permission->id }}" data-bs-toggle="modal"
@@ -96,7 +91,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <form action="{{ route('permission.store') }}" method="POST"
-                                                        class="needs-validation" validate>
+                                                        class="needs-validation" novalidate>
                                                         @csrf
                                                         @if ($errors->any())
                                                             @foreach ($errors->all() as $error)

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends Controller
 {
@@ -32,7 +33,25 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name_en' => 'required|string',
+            'name_ar' => 'required|string',
+        ]);
 
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
+        $existingPermission = DB::table('permissions')
+            ->where('name', $request->name_en)
+            ->where('guard_name', 'admin')
+            ->first();
+
+        if ($existingPermission) {
+            return redirect()->back()
+                ->with('error', __('roles.permission_already_exists', ['name' => $request->name_en]))
+                ->withInput();
+        }
         DB::table('permissions')->insert([
             'name' => $request->name_en,
             'guard_name' => 'admin',
@@ -132,7 +151,7 @@ class PermissionController extends Controller
         $arTranslations = include $arLangPath;
 
         // Find the existing translation for the permission name
-        $nameEn = $enTranslations[$permission->name] ?? '';
+        $nameEn = $permission->name;
         $nameAr = $arTranslations[$permission->name] ?? '';
 
         return response()->json([
@@ -150,12 +169,14 @@ class PermissionController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($id , $request->all());
-        // Validate the incoming data
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name_en' => 'required|string',
             'name_ar' => 'required|string',
         ]);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
 
         // Update the permission in the database
         $permission = DB::table('permissions')->find($request->id);
@@ -184,56 +205,54 @@ class PermissionController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
-    // Find the permission
-    $permission = Permission::find($id);
+    {
+        // Find the permission
+        $permission = Permission::find($id);
 
-    if (!$permission) {
-        return response()->json(['error' => __('roles.permission_not_found')], 404);
+        if (!$permission) {
+            return response()->json(['error' => __('roles.permission_not_found')], 404);
+        }
+
+        // Check if the permission is assigned to any roles
+        $roleCount = DB::table('role_has_permissions')
+            ->where('permission_id', $id)
+            ->count();
+        if ($roleCount > 0) {
+            return response()->json(['error' => __('roles.delete_error')], 400);
+        }
+
+        // Remove language keys related to this permission (if applicable)
+        $this->removePermissionFromLangFiles($permission);
+
+        // Proceed with deleting the permission if not assigned to any roles
+        $permission->delete();
+
+        return response()->json(['success' => __('roles.delete_success')]);
     }
 
-    // Check if the permission is assigned to any roles
-    $roleCount = DB::table('role_has_permissions')
-        ->where('permission_id', $id)
-        ->count();
-    if ($roleCount > 0) {
-        return response()->json(['error' => __('roles.delete_error')], 400);
-    }
+    private function removePermissionFromLangFiles($permission)
+    {
+        // Define the language files to be checked
+        $langFiles = ['en', 'ar']; // Adjust according to your project
 
-    // Remove language keys related to this permission (if applicable)
-    $this->removePermissionFromLangFiles($permission);
+        foreach ($langFiles as $lang) {
+            // Get the path of the language file
+            $langPath = resource_path("lang/{$lang}/permissions.php");
 
-    // Proceed with deleting the permission if not assigned to any roles
-    $permission->delete();
+            // Check if the language file exists
+            if (file_exists($langPath)) {
+                // Load the language file
+                $translations = include $langPath;
 
-    return response()->json(['success' => __('roles.delete_success')]);
-}
+                // Check if the permission key exists in the translations
+                if (isset($translations[$permission->name])) {
+                    // Remove the permission key from the translations
+                    unset($translations[$permission->name]);
 
-private function removePermissionFromLangFiles($permission)
-{
-    // Define the language files to be checked
-    $langFiles = ['en', 'ar']; // Adjust according to your project
-
-    foreach ($langFiles as $lang) {
-        // Get the path of the language file
-        $langPath = resource_path("lang/{$lang}/permissions.php");
-
-        // Check if the language file exists
-        if (file_exists($langPath)) {
-            // Load the language file
-            $translations = include $langPath;
-
-            // Check if the permission key exists in the translations
-            if (isset($translations[$permission->name])) {
-                // Remove the permission key from the translations
-                unset($translations[$permission->name]);
-
-                // Save the updated language file
-                file_put_contents($langPath, '<?php return ' . var_export($translations, true) . ';');
+                    // Save the updated language file
+                    file_put_contents($langPath, '<?php return ' . var_export($translations, true) . ';');
+                }
             }
         }
     }
-}
-
-
 }
