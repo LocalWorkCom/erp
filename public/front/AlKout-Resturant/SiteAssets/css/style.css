@@ -696,7 +696,7 @@ body.no-scroll {
 
 /* ****************************************************************************************** */
 /* categories section  */
-.categories {
+.categories, .follow-request {
     background: url(../images/bg-small.png) no-repeat center #fdf9f9;
     mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4);
     background-size: 100%;
@@ -989,7 +989,17 @@ footer .icon {
     display: flex;
     justify-content: space-between;
 }
-
+.checkout-page .form-check{
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    align-items: center;
+}
+.checkout-page .form-check img{
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+}
 /* login-register modal style  */
 
 .login-background {
@@ -1367,9 +1377,6 @@ a:hover {
   background-color: #ccc;
   z-index: -1;
 }
-
-
-
 .wizard .nav-tabs .nav-item .nav-link {
   width: 4rem;
   height: 4rem;
@@ -1394,9 +1401,12 @@ a:hover {
   border: 2px solid #fe0000;
   color: #ffffff;
 }
-/* *************** */
+
+.bg-dark-gray{
+    background-color: #DFDFDF4D;
+    border-radius: 10px;
+}
 /* responsive */
-/* *************** */
 @media(max-width: 1024px) {}
 
 @media(max-width: 992px) {}
