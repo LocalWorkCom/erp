@@ -365,7 +365,7 @@
 
                                     @can('view leave_types')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.VacationTypes')
+                                            <a href="{{ route('leave-types.list') }}" class="side-menu__item">@lang('sidebar.VacationTypes')
                                             </a>
                                         </li>
                                     @endcan
