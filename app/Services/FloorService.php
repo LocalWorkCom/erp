@@ -122,4 +122,14 @@ class FloorService
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
+
+    public function branch($branch_id)
+    {
+        try {
+            $floors = Floor::with(['floorPartitions', 'tables', 'floorPartitions.tables'])->where('branch_id', $branch_id)->get();
+            return ResponseWithSuccessData($this->lang, $floors, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
 }

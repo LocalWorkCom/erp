@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ForgetPasswordController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\ClientController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\CouponController;
+use App\Http\Controllers\Dashboard\FAQController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
@@ -30,15 +32,15 @@ use App\Http\Controllers\Dashboard\DishController;
 use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CuisineController;
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
+use App\Http\Controllers\Dashboard\LeaveTypeController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\PurchaseController;
+use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\VendorController;
-use Spatie\Permission\Contracts\Permission;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +169,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit')->middleware('role_or_permission:update branches');
         Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update')->middleware('role_or_permission:update branches');
         Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete')->middleware('role_or_permission:delete branches');
+
+        Route::get('/categories', [BranchMenuCategoryController::class, 'index'])->name('branch.categories.list')->middleware('role_or_permission:view branch_menu_categories');
+        Route::group(['prefix' => 'categories'], function () {
+            Route::post('store', [BranchMenuCategoryController::class, 'store'])->name('branch.categories.store')->middleware('role_or_permission:create branch_menu_categories');
+            Route::get('show/{id}', [BranchMenuCategoryController::class, 'show'])->name('branch.categories.show')->middleware('role_or_permission:view branch_menu_categories');
+            Route::put('update/{id}', [BranchMenuCategoryController::class, 'update'])->name('branch.categories.update')->middleware('role_or_permission:update branch_menu_categories');
+            Route::delete('delete/{id}', [BranchMenuCategoryController::class, 'delete'])->name('branch.categories.delete')->middleware('role_or_permission:delete branch_menu_categories');
+            Route::get('showAll/{branch_id}', [BranchMenuCategoryController::class, 'show_branch'])->name('branch.categories.show.all')->middleware('role_or_permission:view branch_menu_categories');
+        });
     });
 
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.list')->middleware('role_or_permission:view brands');
@@ -185,6 +196,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [FloorController::class, 'show'])->name('floor.show')->middleware('role_or_permission:view floors');
         Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update')->middleware('role_or_permission:update floors');
         Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete')->middleware('role_or_permission:delete floors');
+        Route::get('branch/{branch_id}', [FloorController::class, 'branch'])->name('floor.branch')->middleware('role_or_permission:view floors');
     });
 
     Route::get('/floor-partitions', [FloorPartitionController::class, 'index'])->name('floorPartitions.list')->middleware('role_or_permission:view floor_partitions');
@@ -199,6 +211,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('store', [TableController::class, 'store'])->name('table.store')->middleware('role_or_permission:create tables');
         Route::put('update/{id}', [TableController::class, 'update'])->name('table.update')->middleware('role_or_permission:update tables');
         Route::delete('delete/{id}', [TableController::class, 'delete'])->name('table.delete')->middleware('role_or_permission:delete tables');
+    });
+
+    Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types.list')->middleware('role_or_permission:view leave_types');
+    Route::group(['prefix' => 'leave-type'], function () {
+        Route::post('store', [LeaveTypeController::class, 'store'])->name('leave-type.store')->middleware('role_or_permission:create leave_types');
+        Route::get('show/{id}', [LeaveTypeController::class, 'show'])->name('leave-type.show')->middleware('role_or_permission:view leave_types');
+        Route::put('update/{id}', [LeaveTypeController::class, 'update'])->name('leave-type.update')->middleware('role_or_permission:update leave_types');
+        Route::delete('delete/{id}', [LeaveTypeController::class, 'delete'])->name('leave-type.delete')->middleware('role_or_permission:delete leave_types');
     });
 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.list')->middleware('role_or_permission:view coupons');
@@ -273,6 +293,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update')->middleware('role_or_permission:update returns');
     });
 
+    Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.list')->middleware('role_or_permission:view faqs');
+    Route::group(['prefix' => 'faq'], function () {
+        Route::get('create', [FAQController::class, 'create'])->name('faq.create')->middleware('role_or_permission:create faqs');
+        Route::post('store', [FAQController::class, 'store'])->name('faq.store')->middleware('role_or_permission:create faqs');
+        Route::get('show/{id}', [FAQController::class, 'show'])->name('faq.show')->middleware('role_or_permission:view faqs');
+        Route::get('edit/{id}', [FAQController::class, 'edit'])->name('faq.edit')->middleware('role_or_permission:update faqs');
+        Route::put('update/{id}', [FAQController::class, 'update'])->name('faq.update')->middleware('role_or_permission:update faqs');
+    });
+
     //HR
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index')->middleware('role_or_permission:view positions');
     Route::group(['prefix' => 'position'], function () {
@@ -321,7 +350,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     //roles routes
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view roles');
 
     Route::prefix('/addon-categories')->group(function () {
         Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
@@ -408,6 +436,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
+
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
         Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
@@ -418,4 +447,3 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
 });
-

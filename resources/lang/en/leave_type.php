@@ -1,14 +1,11 @@
 <?php
 
 return [
-    'Floors' => 'Floors',
-    'Tables' => 'Tables',
-    'Partitions' => 'Partitions',
-    'Partition' => 'Partition',
-    'Floor' => 'Floor',
-    'ShowFloor' => 'Show Floor',
-    'EditFloor' => 'Edit Floor',
-    'AddFloor' => 'Add Floor',
+    'LeaveType' => 'Leave Type',
+    'LeaveType' => 'Leave Type',
+    'ShowLeaveType' => 'Show Leave Type',
+    'EditLeaveType' => 'Edit Leave Type',
+    'AddLeaveType' => 'Add Leave Type',
     'ShowPartition' => 'Show Partition',
     'EditPartition' => 'Edit Partition',
     'AddPartition' => 'Add Partition',
@@ -23,7 +20,7 @@ return [
     'Type' => 'Type',
     'Status' => 'Status',
     'Smoking' => 'Smoking',
-    'Branch' => 'Branch',
+    'Leaves' => 'Leaves',
     'Indoor' => 'Indoor',
     'Outdoor' => 'Outdoor',
     'Available' => 'Available',
@@ -34,7 +31,7 @@ return [
     'Capacity' => 'Capacity',
     'Both' => 'Both',
     'ChooseBranch' => 'Choose Branch',
-    'ChooseFloor' => 'Choose Floor',
+    'ChooseLeaveType' => 'Choose Leave Type',
     'ChoosePartition' => 'Choose Partition',
     'DishesCategory' => 'Dishes Category',
 ];

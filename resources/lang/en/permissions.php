@@ -532,4 +532,12 @@
   'view returns' => 'view returns',
   'create returns' => 'create returns',
   'update returns' => 'update returns',
+  'view branch_menu_categories' => 'view branch_menu_categories',
+  'create branch_menu_categories' => 'create branch_menu_categories',
+  'update branch_menu_categories' => 'update branch_menu_categories',
+  'delete branch_menu_categories' => 'delete branch_menu_categories',
+  'create faqs' => 'create faqs',
+  'view faqs' => 'view faqs',
+  'update faqs' => 'update faqs',
 );
+

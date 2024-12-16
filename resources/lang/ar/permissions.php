@@ -535,5 +535,12 @@
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'view branch_menu_categories' => 'عرض تصنيف الاطباق للفرع',
+  'create branch_menu_categories' => 'اضف تصنيف الاطباق للفرع',
+  'update branch_menu_categories' => 'تعديل تصنيف الاطباق للفرع',
+  'delete branch_menu_categories' => 'حذف تصنيف الاطباق للفرع',
+  'create faqs' => 'اضافة اسئلة متكررة',
+  'view faqs' => 'عرض اسئلة متكررة',
+  'update faqs' => 'تعديل اسئلة متكررة',
   'Delete actionbacklogs' => 'حذف سجل الأجراءات',
 );

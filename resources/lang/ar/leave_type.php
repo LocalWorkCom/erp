@@ -1,14 +1,11 @@
 <?php
 
 return [
-    'Floors' => 'الادوار',
-    'Tables' => 'الطاولات',
-    'Partitions' => 'مناطق الادوار',
-    'Partition' => 'منطقة الدور',
-    'Floor' => 'الدور',
-    'ShowFloor' => 'عرض الدور',
-    'EditFloor' => 'تعديل الدور',
-    'AddFloor' => 'اضافة دور',
+    'LeaveType' => 'انواع الاجازات',
+    'LeaveType' => 'انواع الاجازات',
+    'ShowLeaveType' => 'عرض انواع الاجازات',
+    'EditLeaveType' => 'تعديل انواع الاجازات',
+    'AddLeaveType' => 'اضافة انواع الاجازات',
     'ShowPartition' => 'عرض المنطقة',
     'EditPartition' => 'تعديل المنطقة',
     'AddPartition' => 'اضافة منطقة',
@@ -23,7 +20,7 @@ return [
     'Type' => 'النوع',
     'Status' => 'الحالة',
     'Smoking' => 'التدخين',
-    'Branch' => 'الفرع',
+    'Leaves' => 'الاجازات',
     'Indoor' => 'داخلي',
     'Outdoor' => 'خارجي',
     'Available' => 'متاحة',
@@ -34,6 +31,6 @@ return [
     'Capacity' => 'السعة',
     'Both' => 'يوجد النوعين',
     'ChooseBranch' => 'اختر الفرع',
-    'ChooseFloor' => 'اختر الدور',
+    'ChooseLeaveType' => 'اختر انواع الاجازات',
     'DishesCategory' => 'تصنيف الاطباق',
 ];

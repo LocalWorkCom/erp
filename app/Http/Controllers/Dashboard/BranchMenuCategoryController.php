@@ -8,7 +8,7 @@ use App\Models\Country;
 use App\Services\FloorService;
 use Illuminate\Http\Request;
 
-class FloorController extends Controller
+class BranchMenuCategoryController extends Controller
 {
     protected $floorService;
 
@@ -66,7 +66,7 @@ class FloorController extends Controller
         return redirect()->route('floors.list')->with('message',$message);
     }
 
-    public function branch($branch_id)
+    public function show_branch($branch_id)
     {
         $response = $this->floorService->branch($branch_id);
         $responseData = $response->original;
