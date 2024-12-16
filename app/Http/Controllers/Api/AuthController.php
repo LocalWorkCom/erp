@@ -109,7 +109,7 @@ class AuthController extends Controller
 
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
-                return $this->respondError('Password Error', [
+                return respondError('Password Error', [
                     'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
                 ], 403);
                 // return RespondWithBadRequest($lang, 13);
