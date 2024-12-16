@@ -123,15 +123,15 @@
                                 <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Dishes')
                                     <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                 <ul class="slide-menu child2">
-                                    @can('view cuisines')
+                                @can('view cuisines')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Cuisines')
+                                            <a href="{{ route('dashboard.cuisines.index') }}" class="side-menu__item">@lang('sidebar.Cuisines')
                                             </a>
                                         </li>
                                     @endcan
                                     @can('view dishes')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.Dishes')
+                                            <a href="{{ route('dashboard.dishes.index') }}" class="side-menu__item">@lang('sidebar.Dishes')
                                             </a>
                                         </li>
                                     @endcan
@@ -146,6 +146,12 @@
                                         <li class="slide">
                                             <a href="{{ route('dashboard.recipes.index') }}"
                                                 class="side-menu__item">@lang('sidebar.Recipes')
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('view recipes')
+                                        <li class="slide">
+                                            <a href="{{ route('dashboard.addons.index') }}" class="side-menu__item">@lang('sidebar.Addons')
                                             </a>
                                         </li>
                                     @endcan
@@ -714,7 +720,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->can('view logos') || auth()->user()->can('view sliders'))
+                @if (auth()->user()->can('view logos') || auth()->user()->can('view sliders') || auth()->user()->can('view terms')|| auth()->user()->can('view privacies')|| auth()->user()->can('view returns'))
                     <!-- website -->
                     <li class="slide__category"><span class="category-name">@lang('sidebar.website') </span>
                     </li>
@@ -736,6 +742,36 @@
                                     <i class='bx bx-desktop'></i>
                                 </span>
                                 <span class="side-menu__label">@lang('sidebar.Slider')</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view terms')
+                        <li class="slide">
+                            <a href="{{ route('terms.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Terms')</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view privacies')
+                        <li class="slide">
+                            <a href="{{ route('privacies.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Privacy')</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view returns')
+                        <li class="slide">
+                            <a href="{{ route('returns.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Return')</span>
                             </a>
                         </li>
                     @endcan

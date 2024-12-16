@@ -189,14 +189,22 @@ class ProductController extends Controller
 
     public function unit(Request $request, $productId)
     {
-        // Call service or perform any additional logic
-        $response  = $this->productService->list($request, $this->checkToken);
+        $response = $this->productService->list($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        $product = Product::with('productUnits')->findOrFail($productId); // Load the product with its related units
-        $units = Unit::all();  // Retrieve all units from the units table
+        $product = Product::with('units')->findOrFail($productId); // Load product with units
+        $units = Unit::all();  // Retrieve all units
+
+        foreach ($product->units as $unit) {
+            if ($unit->pivot) {
+                $factor = $unit->pivot->factor ?? null;  // Safely access pivot data
+                $unitId = $unit->pivot->unit_id ?? null;
+            }
+        }
+        // dd($productId, $unitId);  // Debugging output
 
         return view('dashboard.product.unit.list', compact('product', 'units'));
     }
+
 
     public function saveUnits(Request $request, $productId)
     {
@@ -212,10 +220,11 @@ class ProductController extends Controller
             if (isset($responseData['data'])) {
                 $validationErrors = $responseData['data'];
                 return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
 
             // If no 'data' key is present, handle it gracefully
-            return redirect()->back()->with('error', __('An unexpected error occurred.'))->withInput();
         }
 
         // Success message
@@ -223,20 +232,5 @@ class ProductController extends Controller
 
         // Redirect with success message
         return redirect()->route('products.list', ['id' => $productId])->with('message', $message);
-    }
-
-
-    public function removeUnit(Request $request, $unitId)
-    {
-        // Find the Product Unit by ID
-        $unit = ProductUnit::findOrFail($unitId);
-
-        // Soft delete the unit (sets 'deleted_at' column)
-        $unit->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => __('Unit removed successfully.'),
-        ]);
     }
 }
