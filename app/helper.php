@@ -64,7 +64,7 @@ function RespondWithBadRequest($lang, $code)
         'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
         'code' => 400
     );
-    $response_code = 400;
+    $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -78,7 +78,7 @@ function CustomRespondWithBadRequest($message)
         'message' => $message,
         'code' => 400
     );
-    $response_code = 400;
+    $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -92,7 +92,7 @@ function RespondWithBadRequestWithData($data)
         'code' => 401,
         'data' => $data
     );
-    $response_code = 401;
+    $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -200,7 +200,7 @@ function RespondWithBadRequestData($lang, $code)
         'code' => 400,
         'data'   => []
     );
-    $response_code = 400;
+    $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -298,7 +298,7 @@ function RespondWithBadRequestNoChange()
         'code' => 401,
         'data'   => []
     );
-    $response_code = 401;
+    $response_code = 200;
     $response = Response::json($response_array, $response_code);
     return $response;
 }
@@ -315,7 +315,7 @@ function RespondWithBadRequestNotExist()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 401;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -333,7 +333,7 @@ function RespondWithBadRequestNotHavePermeation()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 403;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -351,7 +351,7 @@ function RespondWithBadRequestNotDate()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 400;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -369,7 +369,7 @@ function RespondWithBadRequestNotAdd()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 400;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -387,7 +387,7 @@ function RespondWithBadRequestNotAvailable()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 404;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -405,7 +405,7 @@ function RespondWithBadRequestNotClosing()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 403;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -422,7 +422,7 @@ function RespondWithBadRequestNoLeave()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 400;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -441,7 +441,7 @@ function RespondWithBadRequestDataExist()
     );
 
     // Change the response code to 404 for "Not Found"
-    $response_code = 401;
+    $response_code = 200;
 
     return Response::json($response_array, $response_code);
 }
@@ -808,7 +808,7 @@ function GetCurrencyCodes()
 function AddBranchMenu($branch_id)
 {
     $get_dish_categories = $this->GetDishCategories();
-    foreach($get_dish_categories as $get_dish_category){
+    foreach ($get_dish_categories as $get_dish_category) {
         $branch_menu_category = new BranchMenuCategory();
         $branch_menu_category->branch_id = $branch_id;
         $branch_menu_category->dish_category_id = $get_dish_category->id;
@@ -821,26 +821,26 @@ function AddBranchMenu($branch_id)
     $get_dishes = $this->GetDishes();
     $price = 0;
     $dish_size_id = null;
-    foreach($get_dishes as $get_dish){
-        if($get_dish->has_sizes == 1){
-            if($get_dish->dishSizes){
+    foreach ($get_dishes as $get_dish) {
+        if ($get_dish->has_sizes == 1) {
+            if ($get_dish->dishSizes) {
                 $price = $get_dish->dishSizes->price;
                 $dish_size_id = $get_dish->dishSizes->price;
             }
-        }else{
+        } else {
             $price = $get_dish->price;
         }
-            $get_dish = new Menu();
-            $get_dish->branch_id = $branch_id;
-            $get_dish->dish_id = $get_dish->id;
-            $get_dish->dish_size_id = $dish_size_id ;
-            $get_dish->dish_category_id = $get_dish->category_id;
-            $get_dish->branch_menu_category_id = $branch_menu_category->id;
-            $get_dish->cuisine_id = $get_dish->cuisine_id ;
-            $get_dish->price = $price;
-            $get_dish->is_active = 1;
-            $get_dish->created_by = auth()->user()->id;
-            $get_dish->save();
+        $get_dish = new Menu();
+        $get_dish->branch_id = $branch_id;
+        $get_dish->dish_id = $get_dish->id;
+        $get_dish->dish_size_id = $dish_size_id;
+        $get_dish->dish_category_id = $get_dish->category_id;
+        $get_dish->branch_menu_category_id = $branch_menu_category->id;
+        $get_dish->cuisine_id = $get_dish->cuisine_id;
+        $get_dish->price = $price;
+        $get_dish->is_active = 1;
+        $get_dish->created_by = auth()->user()->id;
+        $get_dish->save();
     }
 }
 
@@ -857,4 +857,28 @@ function GetDishes()
 function GetDishesByCategory($category_id)
 {
     return Dish::where('category_id', $category_id)->get();
+}
+function respondError($error, $code, $errorMessages = [])
+{
+    if ($code == 404) {
+        $code1 = 404;
+    } elseif ($code == 500) {
+        $code1 = 500;
+    } else {
+        $code1 = 200;
+    }
+    $response = [
+        'code' => $code,
+        'status' => false,
+        'message' => $error,
+        'data' => null,
+    ];
+
+
+    if (!empty($errorMessages)) {
+        $response['errorData'] = $errorMessages;
+    }
+
+
+    return response()->json($response, $code1);
 }

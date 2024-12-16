@@ -41,19 +41,37 @@
                                 </div>
 
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                    <label class="form-label">@lang('term.ArabicDescription')</label>
+                                    <label class="form-label">@lang('term.ArabicQuestion')</label>
                                     <div class="card">
                                         <div class="card-body">
-                                            {!! $faq->description_ar !!}
+                                            {!! $faq->question_ar !!}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                    <label class="form-label">@lang('term.EnglishDescription')</label>
+                                    <label class="form-label">@lang('term.EnglishQuestion')</label>
                                     <div class="card">
                                         <div class="card-body">
-                                            {!! $faq->description_en !!}
+                                            {!! $faq->question_en !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <label class="form-label">@lang('term.ArabicAnswer')</label>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            {!! $faq->answer_ar !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <label class="form-label">@lang('term.EnglishAnswer')</label>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            {!! $faq->answer_en !!}
                                         </div>
                                     </div>
                                 </div>
