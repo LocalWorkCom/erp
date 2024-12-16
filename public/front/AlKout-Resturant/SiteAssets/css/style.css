@@ -358,7 +358,26 @@ body.no-scroll {
     align-items: center;
     font-size: small;
 }
-
+.pro-dec{
+    border: 2px solid #ddd;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pro-inc{
+    background-color: #FE0000;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .num {
     margin-inline: 0.5rem;
 }
@@ -1271,7 +1290,6 @@ a:hover {
     color: black !important;
 }
 
-<<<<<<< HEAD
 /* product-details */
 .product-details {
     background-color: #f2f3f4;
@@ -1282,9 +1300,43 @@ a:hover {
     background-color: #fff;
     border-radius: 0.5rem;
     padding: 1.5rem;
-=======
-/* follow-request page  */
+}
+.form-check {
+    padding-left: 0;
+    display: flex;
+    justify-content: space-between;
+    min-height: 2rem;
+}
 
+.form-check .form-check-input {
+    float: none;
+    margin-left: 0.5rem;
+}
+
+.form-check-input:checked {
+    background-color: #FE0000;
+    border-color: #FE0000;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}
+.product{
+    background: #f2f3f4;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 1rem;
+}
+.form-floating>label{
+    right: 0;
+    left: auto;
+}
+.product .product-img img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+}
+/* follow request page */
 .wizard,
 .wizard .nav-tabs,
 .wizard .nav-tabs .nav-item {
@@ -1341,39 +1393,8 @@ a:hover {
   background: #fe0000;
   border: 2px solid #fe0000;
   color: #ffffff;
->>>>>>> 58834617a267ace403907e6b50dbbb33fd7c6cf7
 }
 
-.form-check {
-    padding-left: 0;
-    display: flex;
-    justify-content: space-between;
-    min-height: 2rem;
-}
-
-.form-check .form-check-input {
-    float: none;
-    margin-left: 0.5rem;
-}
-
-.form-check-input:checked {
-    background-color: #FE0000;
-    border-color: #FE0000;
-}
-
-.form-check-input:focus {
-    box-shadow: none;
-}
-.product{
-    background: #f2f3f4;
-    border-radius: 0.5rem;
-    text-align: center;
-    padding: 1rem;
-}
-.form-floating>label{
-    right: 0;
-    left: auto;
-}
 /* responsive */
 /* *************** */
 @media(max-width: 1024px) {}
