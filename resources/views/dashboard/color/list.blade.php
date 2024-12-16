@@ -79,7 +79,8 @@
                                                     <!-- Hexa Code Input -->
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-hexa-code" class="form-label">@lang('color.Hexacode')</label>
-                                                        <input type="text" class="form-control" placeholder="@lang('color.Hexacode')" name="hexa_code" required>
+                                                        <input type="text" class="form-control" placeholder="@lang('color.Hexacode')" 
+                                                               name="hexa_code" required pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnterHexaCode')</div>
                                                     </div>
@@ -135,7 +136,8 @@
                                                     <!-- Hexa Code Input -->
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-hexa-code" class="form-label">@lang('color.Hexacode')</label>
-                                                        <input type="text" id="edit-hexa-code" class="form-control" name="hexa_code" required>
+                                                        <input type="text" id="edit-hexa-code" class="form-control" name="hexa_code" 
+                                                                required pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnterHexaCode')</div>
                                                     </div>

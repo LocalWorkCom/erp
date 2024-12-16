@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Unit;
 
 class ProductService
 {
@@ -93,6 +94,7 @@ class ProductService
             'sku' => 'required|string|unique:products',
             'barcode' => 'required|string|unique:products',
             'main_unit_id' => 'required|integer',
+            // 'factor' => 'required|numeric|min:0',
             'currency_code' => 'required|string',
             'category_id' => 'required|integer'
         ]);
@@ -147,6 +149,15 @@ class ProductService
         $product_limit->max_limit = $request->max_limit;
         $product_limit->store_id = $request->store_id;
         $product_limit->save();
+
+        // Save product limits
+        //  $product_unit = new ProductUnit();
+        //  $product_unit->product_id = $product->id;
+        //  $product_unit->factor = $request->factor;
+        //  $product_unit->unit_id = $request->main_unit_id;
+        //  $product_unit->created_by = Auth::guard('admin')->user()->id;
+
+        //  $product_unit->save();
 
         // Handle file upload (main image)
         if ($request->hasFile('main_image')) {
@@ -203,6 +214,7 @@ class ProductService
                 'main_unit_id' => 'required|integer',
                 'currency_code' => 'required|string',
                 'category_id' => 'required|integer',
+                // 'factor' => 'required|numeric|min:0',
                 'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
             ]
         );
@@ -217,6 +229,14 @@ class ProductService
         if (!$product) {
             return RespondWithBadRequestData($this->lang, 8);
         }
+
+        // // Retrieve the product_unit
+        // $product_unit = ProductUnit::where('product_id', $product->id)->first();
+        // if (!$product_unit) {
+        //     // If product_unit doesn't exist, create a new one
+        //     $product_unit = new ProductUnit();
+        //     $product_unit->product_id = $product->id;
+        // }
         // Retrieve the ProductLimit
         $product_limit = ProductLimit::where('product_id', $product->id)->first();
         if (!$product_limit) {
@@ -237,6 +257,7 @@ class ProductService
             'sku',
             'barcode',
             'main_unit_id',
+            // 'factor',
             'currency_code',
             'category_id'
         ]));
@@ -246,6 +267,12 @@ class ProductService
         $product_limit->store_id = $request->store_id;
 
         $product_limit->save();
+
+        // $product_unit->factor = $request->factor;
+        // $product_unit->unit_id = $request->main_unit_id;
+        // $product_unit->created_by = Auth::guard('admin')->user()->id;
+
+        // $product_unit->save();
 
         // Handle image upload (main image)
         if ($request->hasFile('main_image')) {
@@ -347,5 +374,102 @@ class ProductService
                 return RespondWithSuccessRequest($this->lang, 1);
             }
         }
+    }
+
+    public function addSize(Request $request, $productId)
+    {
+        $validated = $request->validate([
+            'size' => 'required|string|max:255',
+            'barcode' => 'required|string|max:255',
+        ]);
+
+        $this->productService->addSizeToProduct($productId, $validated);
+        return redirect()->back()->with('message', __('Size added successfully!'));
+    }
+
+    public function addColor(Request $request, $productId)
+    {
+        $validated = $request->validate([
+            'color' => 'required|string|max:255',
+        ]);
+
+        $this->productService->addColorToProduct($productId, $validated);
+        return redirect()->back()->with('message', __('Color added successfully!'));
+    }
+
+    public function list($productId, $checkToken)
+    {
+        $products = Product::with(['productUnits.unit' => function ($query) {
+            $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
+        }])->findOrFail($productId);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
+
+        return ResponseWithSuccessData($this->lang, $products, 1);
+    }
+    public function saveProductUnits(Request $request, $productId)
+    {
+        // Validate the units
+        $validated = $request->validate([
+            'units.*.unit_id' => 'required|exists:units,id',
+            'units.*.factor' => 'required|numeric',
+            'product_unit_id' => 'nullable|array',  // Ensure product_unit_id is an array if passed
+        ]);
+
+        $product_unit_ids = $request->product_unit_id; // This is an array of product unit IDs, or null if creating new units
+
+        // Get all the existing product units for the given product
+        $product_units = ProductUnit::where('product_id', $productId)->get();
+
+        // Remove units that are not in the submitted product_unit_ids
+        foreach ($product_units as $unit) {
+            if ($product_unit_ids && !in_array($unit->id, $product_unit_ids)) {
+                $unit->delete();
+            }
+        }
+
+        // Get the units from the request
+        $units = $request->units;
+
+        // Loop through the units and save them
+        for ($i = 0; $i < count($units); $i++) {
+            $unitId = (int) $units[$i]['unit_id'];  // Cast unit_id to integer
+            $factor = $units[$i]['factor'];  // Factor value
+
+            // Check if the unit already exists for the given product
+
+            // If product_unit_id is provided, update the existing record
+            if (isset($product_unit_ids[$i]) && $product_unit_ids[$i]) {
+                // Update existing ProductUnit
+                ProductUnit::updateOrCreate(
+                    ['id' => (int) $product_unit_ids[$i]],  // Find the record by its ID
+                    [
+                        'unit_id' => $unitId,  // Update unit_id
+                        'factor' => $factor,  // Update factor
+                    ]
+                );
+            } else {
+                $existingUnit = ProductUnit::where('product_id', $productId)
+                    ->where('unit_id', $unitId)
+                    ->exists();
+
+                if ($existingUnit) {
+                    // If the unit already exists for this product, return a flash message
+                    return CustomRespondWithBadRequest('The unit with ID ' . $unitId . ' already exists for this product.');
+                }
+
+                // If no product_unit_id is provided, create a new ProductUnit
+                ProductUnit::create([
+                    'unit_id' => (int) $unitId,  // Ensure unit_id is treated as an integer
+                    'product_id' => (int) $productId,  // Ensure product_id is treated as an integer
+                    'created_by' => Auth::guard('admin')->user()->id,  // Keep created_by as is
+                    'factor' => $factor,  // Factor value
+                ]);
+            }
+        }
+
+        // Return a success response after all units are processed
+        return RespondWithSuccessRequest($this->lang, 1);
     }
 }

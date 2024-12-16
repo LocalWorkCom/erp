@@ -84,6 +84,8 @@ use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\BioTimeController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\EmployeeDeviceController;
+use App\Http\Controllers\Api\AddonCategoryController;
+
 
 
 /*
@@ -761,4 +763,13 @@ Route::group(['prefix' => 'hr-reports'], function () {
     Route::get('payroll/{id}', [HrReportController::class, 'employeePayrollReport']); //return the last payroll
     Route::get('employees/details', [HrReportController::class, 'listEmployeesReport']);
     Route::get('employees/details/{id}', [HrReportController::class, 'employeeReport']);
+});
+
+Route::prefix('addon-categories')->group(function () {
+    Route::get('/', [AddonCategoryController::class, 'index'])->name('api.addon_categories.index');
+    Route::get('/{id}', [AddonCategoryController::class, 'show'])->name('api.addon_categories.show');
+    Route::post('/', [AddonCategoryController::class, 'store'])->name('api.addon_categories.store');
+    Route::put('/{id}', [AddonCategoryController::class, 'update'])->name('api.addon_categories.update');
+    Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('api.addon_categories.destroy');
+    Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('api.addon_categories.restore');
 });

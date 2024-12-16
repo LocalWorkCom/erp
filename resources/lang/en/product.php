@@ -34,8 +34,18 @@ return [
     'ExpiryDate' => 'Expiry Date',
     'Complete' => 'Complete',
     'Raw' => 'Raw',
-    'AddProduct'=>'Add Product',
-    'EditProduct'=>'Edit Product',
-    'show'=>'Show Product',
-    'Images' => 'Images'
+    'AddProduct' => 'Add Product',
+    'EditProduct' => 'Edit Product',
+    'show' => 'Show Product',
+    'Images' => 'Images',
+    'Factor' => 'Factor',
+    'options' => 'Options',
+    'Sizes' => 'Sizes',
+    'Colors' => 'Colors',
+    'Units' => 'Units',
+    'Product Units' => 'Product Units',
+    'Actions' => 'Actions',
+    'Remove' => 'Remove',
+    'Add Unit' => 'Add Unit',
+    'Save' => 'Save'
 ];

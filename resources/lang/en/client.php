@@ -25,5 +25,9 @@ return [
     'state' => 'State',
     'postalCode' => 'Postal Code',
     'isDefault' => 'Make this default address?',
-    'save' => 'Save'
+    'save' => 'Save',
+    'warning' => 'Warning',
+    'deleteMsg' => 'Are you sure you want to delete this client',
+    'yesDelete' => 'Yes Delete',
+    'cancelDelete' => 'Cancel'
 ];

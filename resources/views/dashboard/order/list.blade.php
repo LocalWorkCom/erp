@@ -78,15 +78,11 @@
                                             <td>{{ $order->client->name }}</td>
                                             <td>{{ $order->total_price_after_tax }}</td>
                                             <td>
-                                                <span class="badge bg-warning-transparent"> @lang('order.' . strtolower($order->status))</span>
-
-
+                                                <span class="badge bg-warning-transparent"> @lang('order.' . strtolower($order->last_status))</span>
                                             </td>
 
                                             <td>
                                                 <span class="badge bg-primary-transparent"> @lang('order.' . strtolower($order['transaction']['payment_status']))</span>
-
-
                                             </td>
                                             <td>
                                                 <!-- Show Button -->
@@ -94,26 +90,29 @@
                                                     class="btn btn-info-light btn-wave show-order">
                                                     @lang('order.show') <i class="ri-eye-line"></i>
                                                 </a>
-                                                <div class="btn-group" role="group"> <button id="btnGroupVerticalDrop4"
-                                                        type="button" class="btn btn-primary dropdown-toggle show"
-                                                        data-bs-toggle="dropdown" aria-expanded="true"> Dropdown </button>
-                                                    <ul class="dropdown-menu show" aria-labelledby="btnGroupVerticalDrop4"
-                                                        style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 39px);"
-                                                        data-popper-placement="bottom-start">
-                                                        <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'accept']) }}"
-                                                                class="dropdown-item" >
-                                                                @lang('order.accept') <i class="ri-accept-line"></i>
-                                                            </a></li>
-                                                        <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'reject']) }}"
-                                                                class="dropdown-item" >
-                                                                @lang('order.reject') <i class="ri-reject-line"></i>
-                                                            </a></li>
-                                                        <li> <a href="{{ route('order.change', ['id' => $order->id, 'status' => 'cancel']) }}"
-                                                                class="dropdown-item" >
-                                                                @lang('order.cancel') <i class="ri-reject-line"></i>
-                                                            </a></li>
-                                                    </ul>
-                                                </div>
+                                                @if ($order->last_status != 'completed')
+                                                    <div class="btn-group" role="group"> <button
+                                                            id="btnGroupVerticalDrop4" type="button"
+                                                            class="btn btn-primary dropdown-toggle show"
+                                                            data-bs-toggle="dropdown" aria-expanded="true"> تغيير الحالة
+                                                        </button>
+                                                        <ul class="dropdown-menu show"
+                                                            aria-labelledby="btnGroupVerticalDrop4"
+                                                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 39px);"
+                                                            data-popper-placement="bottom-start">
+                                                            @foreach ($order['next_status'] as $status)
+                                                                <li>
+                                                                    <a onclick="ChangeOrder('{{ $order->id }}', '{{ $status }}')"
+                                                                        class="dropdown-item">
+                                                                        @lang('order.' . $status)
+                                                                        <i class="ri-{{ $status }}-line"></i>
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+
+                                                    </div>
+                                                @endif
 
                                                 <!-- Edit Button -->
 
@@ -159,6 +158,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
@@ -166,5 +166,47 @@
 <script>
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function ChangeOrder(orderId, status) {
+        Swal.fire({
+            title: '@lang('order.confirm_action')',
+            text: '@lang('order.are_you_sure')',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '@lang('order.yes_proceed')',
+            cancelButtonText: '@lang('order.no_cancel')'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Call the AJAX route
+                $.ajax({
+                    url: '{{ route('order.change') }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        order_id: orderId,
+                        status: status
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            '@lang('order.success')',
+                            "response.message",
+                            'success'
+                        );
+                        // Optionally reload the page or update the UI
+                        location.reload();
+                    },
+                    error: function(error) {
+                        Swal.fire(
+                            '@lang('order.error')',
+                            error.responseJSON.message,
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
     }
 </script>

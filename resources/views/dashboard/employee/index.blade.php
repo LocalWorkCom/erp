@@ -61,14 +61,11 @@
                                         <th scope="col">@lang('employee.code')</th>
                                         <th scope="col">@lang('employee.email')</th>
                                         <th scope="col">@lang('employee.phone')</th>
-                                        <th scope="col">@lang('employee.gender')</th>
-                                        <th scope="col">@lang('employee.dob')</th>
                                         <th scope="col">@lang('employee.national_id')</th>
                                         <th scope="col">@lang('employee.nationality')</th>
                                         <th scope="col">@lang('employee.department')</th>
                                         <th scope="col">@lang('employee.position')</th>
                                         <th scope="col">@lang('employee.supervisor')</th>
-                                        <th scope="col">@lang('employee.salary')</th>
                                         <th scope="col">@lang('employee.actions')</th>
                                     </tr>
                                 </thead>
@@ -76,27 +73,24 @@
                                     @foreach ($employees as $employee)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ $employee->first_name . $employee->last_name }}</td>
+                                            <td>{{ $employee->first_name . ' ' . $employee->last_name }}</td>
                                             <td>{{ $employee->employee_code }}</td>
                                             <td>{{ $employee->email }}</td>
                                             <td>{{ $employee->phone_number ?? '-----' }}</td>
-                                            <td>{{ $employee->gender }}</td>
-                                            <td>{{ $employee->birth_date }}</td>
                                             <td>{{ $employee->national_id }}</td>
-                                            <td>{{ $employee->nationality->name_ar . ' | ' . $employee->nationality->name_en }}
+                                            <td>{{ $employee->nationality ? (app()->getLocale() === 'ar' ? $employee->nationality->name_ar : $employee->nationality->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ $employee->department->name_ar . ' | ' . $employee->department->name_en }}
+                                            <td>{{ $employee->department ? (app()->getLocale() === 'ar' ? $employee->department->name_ar : $employee->department->name_en) : '-----' }}
                                             </td>
-                                            <td>{{ $employee->position->name_ar . ' | ' . $employee->position->name_en }}
+                                            <td>{{ $employee->position ? (app()->getLocale() === 'ar' ? $employee->position->name_ar : $employee->position->name_en) : '-----' }}
                                             </td>
                                             <td>
-                                                @if ($employee->supervisor_id)
-                                                    {{ $employee->supervisor->employee_code }}
+                                                @if ($employee->supervisor)
+                                                    {{ $employee->supervisor->first_name . ' ' . $employee->supervisor->last_name . ' | ' . $employee->supervisor->employee_code }}
                                                 @else
                                                     {{ '-----' }}
                                                 @endif
                                             </td>
-                                            <td>{{ $employee->salary }}</td>
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="{{ route('employee.show', $employee->id) }}"
@@ -111,12 +105,12 @@
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline"
-                                                    action="{{ route('employee.delete', $employee->id) }}" method="POST"
-                                                    onsubmit="return confirmDelete()">
+                                                <form class="d-inline" id="delete-form-{{ $employee->id }}"
+                                                    action="{{ route('employee.delete', $employee->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
+                                                    <button type="button" class="btn btn-danger-light btn-wave"
+                                                        onclick="delete_item({{ $employee->id }})">
                                                         @lang('employee.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
@@ -150,13 +144,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
 
 <script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
+    function delete_item(id) {
+        Swal.fire({
+            title: "@lang('employee.warning')",
+            text: "@lang('employee.deleteMsg')",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "@lang('employee.yesDelete')",
+            cancelButtonText: "@lang('employee.cancelDelete')",
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

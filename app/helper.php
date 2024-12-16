@@ -21,6 +21,10 @@ use App\Models\CashierMachine;
 use App\Models\Country;
 use App\Models\LeaveRequest;
 use App\Models\Employee;
+use App\Models\DishCategory;
+use App\Models\Dish;
+use App\Models\BranchMenuCategory;
+use App\Models\Menu;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -58,6 +62,20 @@ function RespondWithBadRequest($lang, $code)
         'status' => false,
         // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
         'message' => $lang == 'ar' ? $APICode->api_code_message_ar : $APICode->api_code_message_en,
+        'code' => 400
+    );
+    $response_code = 400;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+function CustomRespondWithBadRequest($message)
+{
+
+
+    $response_array = array(
+        'status' => false,
+        // 'apiTitle' => $lang == 'ar' ? $APICode->api_code_title_ar : $APICode->api_code_title_en,
+        'message' => $message,
         'code' => 400
     );
     $response_code = 400;
@@ -785,4 +803,58 @@ function GetCurrencyCodes()
 {
     $Currencies = Country::select('currency_code', 'id')->get();
     return $Currencies;
+}
+
+function AddBranchMenu($branch_id)
+{
+    $get_dish_categories = $this->GetDishCategories();
+    foreach($get_dish_categories as $get_dish_category){
+        $branch_menu_category = new BranchMenuCategory();
+        $branch_menu_category->branch_id = $branch_id;
+        $branch_menu_category->dish_category_id = $get_dish_category->id;
+        $branch_menu_category->parent_id = $get_dish_category->parent_id;
+        $branch_menu_category->is_active = 1;
+        $branch_menu_category->created_by = auth()->user()->id;
+        $branch_menu_category->save();
+    }
+
+    $get_dishes = $this->GetDishes();
+    $price = 0;
+    $dish_size_id = null;
+    foreach($get_dishes as $get_dish){
+        if($get_dish->has_sizes == 1){
+            if($get_dish->dishSizes){
+                $price = $get_dish->dishSizes->price;
+                $dish_size_id = $get_dish->dishSizes->price;
+            }
+        }else{
+            $price = $get_dish->price;
+        }
+            $get_dish = new Menu();
+            $get_dish->branch_id = $branch_id;
+            $get_dish->dish_id = $get_dish->id;
+            $get_dish->dish_size_id = $dish_size_id ;
+            $get_dish->dish_category_id = $get_dish->category_id;
+            $get_dish->branch_menu_category_id = $branch_menu_category->id;
+            $get_dish->cuisine_id = $get_dish->cuisine_id ;
+            $get_dish->price = $price;
+            $get_dish->is_active = 1;
+            $get_dish->created_by = auth()->user()->id;
+            $get_dish->save();
+    }
+}
+
+function GetDishCategories()
+{
+    return DishCategory::all();
+}
+
+function GetDishes()
+{
+    return Dish::all();
+}
+
+function GetDishesByCategory($category_id)
+{
+    return Dish::where('category_id', $category_id)->get();
 }

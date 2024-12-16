@@ -14,7 +14,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('sidebar.Main')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('position.Positions')</li>
                 </ol>
             </nav>
@@ -36,7 +36,7 @@
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('position.AddPosition')
+                                @lang('position.add')
                             </button>
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -65,41 +65,27 @@
                                                 <div class="row gy-4">
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                                         <label for="department" class="form-label">@lang('position.Department')</label>
-                                                        <<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
-                                                            <select class="form-select" id="department" name="department_id"
+                                                        <select class="form-select" id="department" name="department_id"
                                                             required>
                                                             <option value="" disabled selected>@lang('position.ChooseDepartment')
                                                             </option>
-                                                            @foreach ($positions as $position)
-                                                                <option value="{{ $position->id }}">
-                                                                    {{ $position->name_ar . ' | ' . $position->name_en }}
-                                                                </option>
-                                                                =======
-                                                                <select class="form-select" id="department"
-                                                                    name="department_id" required>
-                                                                    <option value="" disabled selected>
-                                                                        @lang('position.ChooseDepartment')
-                                                                    </option>
-                                                                    @foreach ($positions as $position)
-                                                                        <option value="{{ $position->id }}">
-                                                                            {{ $position->name_ar . ' | ' . $position->name_en }}
-                                                                        </option>
-                                                                        >>>>>>>
-                                                                        699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="valid-feedback">
-                                                                    @lang('validation.Correct')
-                                                                </div>
-                                                                <div class="invalid-feedback">
-                                                                    @lang('validation.EnterDepartment')
-                                                                </div>
+                                                            @foreach ($departments as $department)
+                                                                <option value="{{ $department->id }}">
+                                                                    {{ $department->name_en }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterDepartment')
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('position.ArabicName')</label>
+                                                            class="form-label">@lang('position.arabicName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('position.ArabicName')" name="name_ar" required>
+                                                            placeholder="@lang('position.arabicName')" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -109,9 +95,9 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                            class="form-label">@lang('position.EnglishName')</label>
+                                                            class="form-label">@lang('position.englishName')</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="@lang('position.EnglishName')" name="name_en" required>
+                                                            placeholder="@lang('position.englishName')" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -180,50 +166,37 @@
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-12">
-                                                        <<<<<<< HEAD:resources/views/dashboard/position/list.blade.php
-                                                            <label for="edit-department" class="form-label">
+                                                        <label for="edit-department" class="form-label">
                                                             @lang('position.Department')</label>
-                                                            <select id="edit-department" class="form-select"
-                                                                name="department_id" required>
-                                                                @foreach ($positions as $position)
-                                                                    <option value="{{ $position->id }}">
-                                                                        {{ $position->name_ar }} | {{ $position->name_en }}
-                                                                    </option>
-                                                                    =======
-                                                                    <label for="edit-department"
-                                                                        class="form-label">@lang('position.Department')</label>
-                                                                    <select id="edit-department" class="form-select"
-                                                                        name="department_id" required>
-                                                                        @foreach ($departments as $department)
-                                                                            <option value="{{ $department->id }}">
-                                                                                {{ $department->name_ar }} |
-                                                                                {{ $department->name_en }}
-                                                                            </option>
-                                                                            >>>>>>>
-                                                                            699fe20f9b11eae99024815d6861e2f3a42cddb8:resources/views/dashboard/position/index.blade.php
-                                                                        @endforeach
-                                                                    </select>
+                                                        <select id="edit-department" class="form-select"
+                                                            name="department_id">
+                                                            @foreach ($departments as $department)
+                                                                <option value="{{ $department->id }}">
+                                                                    {{ $department->name_ar }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-name-ar"
-                                                            class="form-label">@lang('position.ArabicName')</label>
+                                                            class="form-label">@lang('position.arabicName')</label>
                                                         <input type="text" id="edit-name-ar" class="form-control"
                                                             name="name_ar" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-name-en"
-                                                            class="form-label">@lang('position.EnglishName')</label>
+                                                            class="form-label">@lang('position.englishName')</label>
                                                         <input type="text" id="edit-name-en" class="form-control"
                                                             name="name_en" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-description-ar"
-                                                            class="form-label">@lang('position.ArabicDesc')</label>
+                                                            class="form-label">@lang('position.arabicDescr')</label>
                                                         <textarea type="text" id="edit-description-ar" class="form-control" name="description_ar"></textarea>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-description-en"
-                                                            class="form-label">@lang('position.EnglishDesc')</label>
+                                                            class="form-label">@lang('position.englishDescr')</label>
                                                         <textarea type="text" id="edit-description-en" class="form-control" name="description_en"></textarea>
                                                     </div>
                                                 </div>
@@ -242,7 +215,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h6 class="modal-title" id="showModalLabel">@lang('position.ShowPosition')</h6>
+                                            <h6 class="modal-title" id="showModalLabel">@lang('position.showPosition')</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -253,19 +226,19 @@
                                                     <p id="show-department" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.ArabicName')</label>
+                                                    <label class="form-label">@lang('position.arabicName')</label>
                                                     <p id="show-name-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.EnglishName')</label>
+                                                    <label class="form-label">@lang('position.englishName')</label>
                                                     <p id="show-name-en" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.ArabicDesc')</label>
+                                                    <label class="form-label">@lang('position.arabicDescr')</label>
                                                     <p id="show-description-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-12">
-                                                    <label class="form-label">@lang('position.EnglishDesc')</label>
+                                                    <label class="form-label">@lang('position.englishDescr')</label>
                                                     <p id="show-description-en" class="form-control-static"></p>
                                                 </div>
                                             </div>
@@ -300,10 +273,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('position.ID')</th>
-                                        <th scope="col">@lang('position.ArabicName')</th>
-                                        <th scope="col">@lang('position.EnglishName')</th>
-                                        <th scope="col">@lang('position.ArabicDescr')</th>
-                                        <th scope="col">@lang('position.EnglishDescr')</th>
+                                        <th scope="col">@lang('position.name')</th>
+                                        <th scope="col">@lang('position.description')</th>
                                         <th scope="col">@lang('position.Department')</th>
                                         <th scope="col">@lang('position.Actions')</th>
                                     </tr>
@@ -312,11 +283,11 @@
                                     @foreach ($positions as $position)
                                         <tr>
                                             <td>{{ $position->id }}</td>
-                                            <td>{{ $position->name_ar }}</td>
-                                            <td>{{ $position->name_en }}</td>
-                                            <td>{{ $position->description_ar }}</td>
-                                            <td>{{ $position->description_en }}</td>
-                                            <td>{{ $position->department->name_ar . ' | ' . $position->department->name_en }}
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->name_ar : $position->name_en }}
+                                            </td>
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->description_ar : $position->description_en }}
+                                            </td>
+                                            <td>{{ app()->getLocale() === 'ar' ? $position->department->name_ar : $position->department->name_en }}
                                             </td>
                                             <td>
                                                 <!-- Show Button -->
@@ -325,8 +296,8 @@
                                                     data-id="{{ $position->id }}"
                                                     data-name-ar="{{ $position->name_ar }}"
                                                     data-name-en="{{ $position->name_en }}"
-                                                    data-description-ar="{{ $position->description_ar ?? __('position.none') }}"
-                                                    data-description-en="{{ $position->description_en ?? __('position.none') }}"
+                                                    data-description-ar="{{ $position->description_ar ?? '------' }}"
+                                                    data-description-en="{{ $position->description_en ?? '------' }}"
                                                     data-department-name="{{ $position->department->name_ar . ' | ' . $position->department->name_en }}"
                                                     data-bs-toggle="modal" data-bs-target="#showModal">
                                                     @lang('position.show') <i class="ri-eye-line"></i>
@@ -347,20 +318,19 @@
                                                 </button>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline"
+                                                <form class="d-inline" id="delete-form-{{ $position->id }}"
                                                     action="{{ route('position.delete', $position->id) }}" method="POST"
                                                     onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
+                                                    <button type="button" onclick="delete_item({{ $position->id }})"
+                                                        class="btn btn-danger-light btn-wave">
                                                         @lang('position.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
                                             </td>
-
                                         </tr>
                                     @endforeach
-
                                 </tbody>
                             </table>
                         </div>
@@ -387,6 +357,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
@@ -452,7 +423,20 @@
         });
     });
 
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
+    function delete_item(id) {
+        Swal.fire({
+            title: "@lang('position.warning')",
+            text: "@lang('position.deleteMsg')",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "@lang('position.yesDelete')",
+            cancelButtonText: "@lang('position.cancelDelete')",
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

@@ -82,6 +82,8 @@ class BranchService
                 'created_by' =>1,
             ]);
 
+            AddBranchMenu($branch->id);
+
             return ResponseWithSuccessData($this->lang, $branch, 1);
         // } catch (\Exception $e) {
         //     Log::error('Error creating branch: ' . $e->getMessage());

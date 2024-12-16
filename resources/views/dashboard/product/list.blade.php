@@ -20,7 +20,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">@lang('product.Products')</a>
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('products.list') }}'">@lang('product.Products')</a>
                     </li>
                 </ol>
             </nav>
@@ -54,7 +55,7 @@
                                     </button>
                                 </div>
                             @endif
-                                <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('product.ID')</th>
@@ -77,7 +78,7 @@
                                         <tr>
                                             <td>{{ $product->id }}</td>
                                             <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""
-                                                     width="100" height="100"></td>
+                                                    width="100" height="100"></td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit->name_en }}</td>
@@ -96,24 +97,45 @@
                                             <td> @lang($translationKey)</td>
                                             <td>
                                                 <!-- Show Button -->
-                                                <a href="{{route('product.show',$product->id)}}"
-                                                   class="btn btn-info-light btn-wave show-category">
+                                                <a href="{{ route('product.show', $product->id) }}"
+                                                    class="btn btn-info-light btn-wave show-category">
                                                     @lang('category.show') <i class="ri-eye-line"></i>
                                                 </a>
 
                                                 <!-- Edit Button -->
-                                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-orange-light btn-wave">
+                                                <a href="{{ route('product.edit', $product->id) }}"
+                                                    class="btn btn-orange-light btn-wave">
                                                     @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </a>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('product.delete', $product->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" action="{{ route('product.delete', $product->id) }}"
+                                                    method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
+                                                {{-- <button type="button" class="btn btn-success btn-wave"
+                                                    onclick="navigateOption('units', {{ $product->id }})">
+                                                    @lang('YourNewButtonLabel') <i class="fe fe-custom-icon"></i>
+                                                </button> --}}
+
+                                                <!-- Dropdown Menu -->
+                                                <select class="form-select d-inline" style="width: auto;"
+                                                    onchange="navigateOption(this.value, {{ $product->id }})">
+                                                    <option value="">{{ __('product.options') }}</option>
+                                                    <option value="sizes">@lang('product.Sizes')</option>
+                                                    <option value="colors">@lang('product.Colors')</option>
+                                                    @can('view product_units')
+
+                                                    <option value="units">@lang('product.Units')</option>
+
+                                                    @endcan
+
+                                                </select> 
+
                                             </td>
 
                                         </tr>
@@ -150,6 +172,24 @@
     @vite('resources/assets/js/datatables.js')
 @endsection
 <script>
+    function confirmDelete() {
+        return confirm("@lang('validation.DeleteConfirm')");
+    }
+</script>
+<script>
+    function navigateOption(value, productId) {
+        if (value) {
+            const routes = {
+                sizes: "{{ url('dashboard/products/sizes') }}/" + productId,
+                colors: "{{ url('dashboard/products/colors') }}/" + productId,
+                units: "{{ url('dashboard/products/unit/list') }}/" + productId
+            };
+            console.log("Redirecting to: ", routes[value]); // Debugging output
+            window.location.href = routes[value];
+        }
+    }
+
+
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
     }

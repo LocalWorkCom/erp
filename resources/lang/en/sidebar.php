@@ -66,5 +66,11 @@ return [
     'website' => 'Website',
     'Logo' => 'Logo',
     'Slider' => 'Slider',
+    'Terms' => 'Terms And Conditions',
+    'Privacy' => 'Privacy Policy',
+    'Return' => 'Return Policy',
+    'AddonCategories'=>'Addon Categories',
+    'roles' => 'Roles',
+    'permissions' => 'Permissions',
 
 ];

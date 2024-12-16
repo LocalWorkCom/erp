@@ -45,7 +45,7 @@ class FloorController extends Controller
 //        dd($responseData);
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('floors')->withErrors($validationErrors)->withInput();
+            return redirect()->route('floors.list')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
         return redirect()->route('floors.list')->with('message',$message);
@@ -53,13 +53,11 @@ class FloorController extends Controller
 
     public function update(Request $request, $id)
     {
-//        dd($request->all());
         $response = $this->floorService->edit($request, $id);
-//        dd($response);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect('dashboard/floors')->withErrors($validationErrors)->withInput();
+            return redirect()->route('floors.list')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
         return redirect()->route('floors.list')->with('message',$message);
