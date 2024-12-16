@@ -989,7 +989,17 @@ footer .icon {
     display: flex;
     justify-content: space-between;
 }
-
+.checkout-page .form-check{
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    align-items: center;
+}
+.checkout-page .form-check img{
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+}
 /* login-register modal style  */
 
 .login-background {
