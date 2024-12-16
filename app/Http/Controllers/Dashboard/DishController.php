@@ -55,11 +55,11 @@ class DishController extends Controller
 
     public function create()
     {
-        $categories = $this->dishCategoryService->index(); // Dish categories
-        $addons = $this->addonService->index(); // Available addons
-        $addonCategories = $this->addonCategoryService->index(); // Addon categories
-        $cuisines = $this->cuisineService->index(); // Cuisines
-        $recipes = $this->recipeService->index(); // Recipes
+        $categories = $this->dishCategoryService->index(); 
+        $addons = $this->addonService->index(); 
+        $addonCategories = $this->addonCategoryService->index(); 
+        $cuisines = $this->cuisineService->index(); 
+        $recipes = $this->recipeService->index(); 
     
         return view('dashboard.dish.create', compact('categories', 'addons', 'addonCategories', 'cuisines', 'recipes'));
     }
@@ -68,7 +68,7 @@ class DishController extends Controller
     {
         try {
             $data = $request->all();
-            $data['created_by'] = auth()->id();
+            $data['created_by'] = auth()->id(); 
     
             $this->dishService->store($data, $request->file('image'));
     
@@ -76,9 +76,12 @@ class DishController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+            \Log::error('Dish creation failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', __('dishes.DishCreationFailed'));
         }
     }
+    
+    
     
 
     public function edit($id)

@@ -37,9 +37,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        @if (session('locale') == 'ar' )
+                        <a class="nav-link" href="{{ route('set-locale', 'en') }}">
                             En
                         </a>
+                        @else
+                        <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
+                            Ar
+                        </a>
+                        @endif
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link btn align-items-center" data-bs-toggle="modal"

@@ -116,6 +116,42 @@
                                         </ul>
                                     </li>
 
+                                    <li class="slide has-sub">
+                                        <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.branchMenuCategory')
+                                            <i class="fe fe-chevron-right side-menu__angle"></i></a>
+                                        <ul class="slide-menu child2">
+                                            @can('view branch_menu_categories')
+                                                <li class="slide">
+                                                    <a href="{{ route('branch.categories.list') }}"
+                                                        class="side-menu__item">@lang('sidebar.branchMenuCategory') </a>
+                                                </li>
+                                            @endcan
+
+
+                                            <!-- <li class="slide has-sub">
+                                                <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.FloorPartition')
+                                                    <i class="fe fe-chevron-right side-menu__angle"></i></a>
+                                                <ul class="slide-menu child3">
+                                                    @can('view floor_partitions')
+                                                        <li class="slide">
+                                                            <a href="{{ route('floorPartitions.list') }}"
+                                                                class="side-menu__item">@lang('sidebar.FloorPartition') </a>
+                                                        </li>
+                                                    @endcan
+
+                                                    @can('view Tables')
+                                                        <li class="slide">
+                                                            <a href="{{ route('tables.list') }}"
+                                                                class="side-menu__item">@lang('sidebar.Tables') </a>
+                                                        </li>
+                                                    @endcan
+
+                                                </ul>
+                                            </li> -->
+
+                                        </ul>
+                                    </li>
+
 
                                 </ul>
                             </li>
@@ -329,7 +365,14 @@
 
                                     @can('view leave_types')
                                         <li class="slide">
-                                            <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.VacationTypes')
+                                            <a href="{{ route('leave-types.list') }}" class="side-menu__item">@lang('sidebar.VacationTypes')
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('view leave_settings')
+                                        <li class="slide">
+                                            <a href="{{ route('leave-settings.list') }}" class="side-menu__item">@lang('sidebar.VacationSettings')
                                             </a>
                                         </li>
                                     @endcan
@@ -772,6 +815,16 @@
                                     <i class='bx bx-desktop'></i>
                                 </span>
                                 <span class="side-menu__label">@lang('sidebar.Return')</span>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view faqs')
+                        <li class="slide">
+                            <a href="{{ route('faqs.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.FAQ')</span>
                             </a>
                         </li>
                     @endcan

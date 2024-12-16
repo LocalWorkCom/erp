@@ -70,10 +70,10 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-6">
+                                    <!-- <div class="col-xl-6">
                                         <label for="price" class="form-label">@lang('recipes.Price')</label>
                                         <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $recipe->price) }}" min="0" step="0.01" required>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-xl-12">
                                         <label for="ingredients" class="form-label">@lang('recipes.Ingredients')</label>

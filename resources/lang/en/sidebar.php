@@ -69,8 +69,11 @@ return [
     'Terms' => 'Terms And Conditions',
     'Privacy' => 'Privacy Policy',
     'Return' => 'Return Policy',
+    'FAQ' => 'Frequently Asked Questions',
     'AddonCategories'=>'Addon Categories',
     'roles' => 'Roles',
     'permissions' => 'Permissions',
+    'branchMenuCategory' => 'Branch Menu Category',
+    'VacationSettings' => 'Vacation Settings',
 
 ];

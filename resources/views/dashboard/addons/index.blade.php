@@ -54,7 +54,7 @@
                                         <th>@lang('addons.ID')</th>
                                         <th>@lang('addons.NameArabic')</th>
                                         <th>@lang('addons.NameEnglish')</th>
-                                        <th>@lang('addons.Price')</th>
+                                        <!-- <th>@lang('addons.Price')</th> -->
                                         <th>@lang('addons.Actions')</th>
                                     </tr>
                                 </thead>
@@ -64,7 +64,7 @@
                                             <td>{{ $addon->id }}</td>
                                             <td>{{ $addon->name_ar }}</td>
                                             <td>{{ $addon->name_en }}</td>
-                                            <td>{{ $addon->price }}</td>
+                                            <!-- <td>{{ $addon->price }}</td> -->
                                             <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.addons.show', $addon->id) }}" class="btn btn-info-light">
