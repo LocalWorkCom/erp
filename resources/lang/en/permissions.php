@@ -534,6 +534,7 @@ return array (
   'view returns' => 'view returns',
   'create returns' => 'create returns',
   'update returns' => 'update returns',
+  'view addons' => 'view addons',
   'view branch_menu_categories' => 'view branch_menu_categories',
   'create branch_menu_categories' => 'create branch_menu_categories',
   'update branch_menu_categories' => 'update branch_menu_categories',

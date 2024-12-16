@@ -537,6 +537,7 @@ return array (
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'view addons' => 'عرض الاضافات',
   'view branch_menu_categories' => 'عرض تصنيف الاطباق للفرع',
   'create branch_menu_categories' => 'اضف تصنيف الاطباق للفرع',
   'update branch_menu_categories' => 'تعديل تصنيف الاطباق للفرع',
