@@ -79,7 +79,7 @@ class AuthController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            App::setLocale(locale: $lang);  // Set the locale based on the header
+            App::setLocale($lang);  // Set the locale based on the header
             $messages = [
                 'email.required' => 'البريد الالكتروني مطلوب.',
                 'email.exists' => 'بيانات الاعتماد غير صحيحة.',
