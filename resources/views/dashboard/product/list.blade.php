@@ -192,7 +192,7 @@
         if (value) {
             const routes = {
                 sizes: "{{ url('dashboard/products/size/list') }}/" + productId,
-                // colors: "{{ url('dashboard/products/color/list') }}/" + productId,
+                colors: "{{ url('dashboard/products/color/list') }}/" + productId,
                 units: "{{ url('dashboard/products/unit/list') }}/" + productId
             };
             console.log("Redirecting to: ", routes[value]); // Debugging output

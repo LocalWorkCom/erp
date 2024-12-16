@@ -17,6 +17,7 @@ use App\Services\CountryService;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
+use App\Models\Color;
 use App\Models\ProductUnit;
 use App\Models\Size;
 
@@ -206,7 +207,6 @@ class ProductController extends Controller
         return view('dashboard.product.unit.list', compact('product', 'units'));
     }
 
-
     public function saveUnits(Request $request, $productId)
     {
         // Call the service method to save the units
@@ -258,6 +258,52 @@ class ProductController extends Controller
     {
         // Call the service method to save the units
         $response = $this->productService->saveProductSizes($request, $productId);
+
+        // Ensure the response is in the expected format
+        $responseData = $response->original ?? [];
+
+        // Check if the response has a 'status' key
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                // dd(0);
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
+        }
+
+        // Success message
+        $message = $responseData['message'] ?? __('Operation completed successfully.');
+
+        // Redirect with success message
+        return redirect()->route('products.list', ['id' => $productId])->with('message', $message);
+    }
+    public function color(Request $request, $productId)
+    {
+        $response = $this->productService->listColor($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $product = Product::with('product_colors')->findOrFail($productId); // Load product with sizes
+        $colors = Color::all();  // Retrieve all sizes
+
+        foreach ($product->colors as $color) {
+            if ($color->pivot) {
+                $colorId = $color->pivot->color_id ?? null;
+            }
+        }
+        // dd($productId, $unitId);  // Debugging output
+
+        return view('dashboard.product.color.list', compact('product', 'colors'));
+    }
+
+
+    public function saveColors(Request $request, $productId)
+    {
+        // Call the service method to save the units
+        $response = $this->productService->saveProductColors($request, $productId);
 
         // Ensure the response is in the expected format
         $responseData = $response->original ?? [];

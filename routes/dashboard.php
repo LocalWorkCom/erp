@@ -89,7 +89,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         ->middleware('role_or_permission:view product_sizes');
 
     // product_colors
-
     Route::get('/products/color/list/{productId}', [ProductController::class, 'color'])
     ->name('products.colors.list')
     ->middleware('role_or_permission:view product_colors');

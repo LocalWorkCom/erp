@@ -36,7 +36,9 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return respondError('Validation Error.',400, $validator->errors());
+
+            // return RespondWithBadRequestWithData($validator->errors());
         }
 
         //  Create User
@@ -77,16 +79,23 @@ class AuthController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            App::setLocale(locale: $lang);  // Set the locale based on the header
-
-            // Validate email and password fields
+            App::setLocale($lang);  // Set the locale based on the header
+            $messages = [
+                'email.required' => 'البريد الالكتروني مطلوب.',
+                'email.exists' => 'بيانات الاعتماد غير صحيحة.',
+                'password.required' => 'كلمة المرور مطلوبة.',
+            ];
+        
+            // Validate the request
             $validator = Validator::make($request->all(), [
-                "email" => "required|email",
+                "email" => "required|email|exists:users,email",
                 "password" => "required"
-            ]);
+            ], $messages);
 
             if ($validator->fails()) {
-                return RespondWithBadRequestWithData($validator->errors());
+                return respondError('Validation Error.',400, $validator->errors());
+
+                // return RespondWithBadRequestWithData($validator->errors());
             }
 
             // Attempt to authenticate the user
@@ -98,6 +107,7 @@ class AuthController extends Controller
                 $user = Auth::user();
 
                 $token = $user->createToken("myToken")->accessToken;
+
                 $data = [
                     "access_token" => $token,
                     'data' => $user
@@ -105,7 +115,10 @@ class AuthController extends Controller
 
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
-                return RespondWithBadRequest($lang, 13);
+                return respondError('Password Error',  403,[
+                    'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
+                ]);
+                // return RespondWithBadRequest($lang, 13);
             }
         } catch (\Exception $e) {
             return RespondWithBadRequest($lang, 14);

@@ -33,7 +33,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('product.Product Units')</div>
+                            <div class="card-title">@lang('product.Product Colors')</div>
                         </div>
                         <div class="card-body">
                             @if ($errors->any())
@@ -52,36 +52,35 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>@lang('product.Unit')</th>
-                                                <th>@lang('product.Factor')</th>
+                                                <th>@lang('product.Color')</th>
                                                 <th>@lang('product.Actions')</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="units-table" data-unit-count="{{ count($product->productUnits) }}">
-                                            @foreach ($product->productUnits as $index => $productUnit)
+                                        <tbody id="Colors-table" data-color-count="{{ count($product->productColors) }}">
+                                            @foreach ($product->productColors as $index => $productColor)
                                                 <tr>
                                                     <td>
-                                                        <select name="units[{{ $index }}][unit_id]"
+                                                        <select name="colors[{{ $index }}][color_id]"
                                                             class="form-control" required>
-                                                            <option value="">Select Unit</option>
-                                                            @foreach ($units as $unit)
-                                                                <option value="{{ $unit->id }}"
-                                                                    @if ($productUnit->unit_id == $unit->id) selected @endif>
-                                                                    {{ $unit->name_ar }}
+                                                            <option value="">Select Color</option>
+                                                            @foreach ($Colors as $color)
+                                                                <option value="{{ $color->id }}"
+                                                                    @if ($productColor->color_id == $color->id) selected @endif>
+                                                                    {{ $color->name_ar }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <input type="hidden" name="product_unit_id[]"
                                                             value="{{ $productUnit->id }}">
-                                                        <input type="number" name="units[{{ $index }}][factor]"
+                                                        <input type="number" name="Colors[{{ $index }}][factor]"
                                                             class="form-control" value="{{ $productUnit->factor }}"
                                                             required>
-                                                    </td>
+                                                    </td> --}}
                                                     <td>
                                                         <button type="button" class="btn btn-danger btn-sm remove-unit"
-                                                            data-unit-id="{{ $unit->pivot->unit_id ?? 'No Unit ID' }}"
+                                                            data-unit-id="{{ $unit->pivot->unit_id ?? 'No Color ID' }}"
                                                             data-product-id="{{ $product->id }}">
                                                             @lang('product.Remove')
                                                         </button>
@@ -92,8 +91,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <button type="button" id="add-unit"
-                                    class="btn btn-success btn-sm">@lang('product.Add Unit')</button>
+                                <button type="button" id="add-color"
+                                    class="btn btn-success btn-sm">@lang('product.Add Color')</button>
 
                                 <button type="submit" class="btn btn-primary mt-3">@lang('product.Save')</button>
                             </form>
@@ -115,55 +114,49 @@
         $(document).ready(function() {
             $('.select2').select2();
 
-            // Get the initial unit index from the data-unit-count attribute
-            let unitIndex = $('#units-table').data(
-                'unit-count'); // This will start from the count of existing units
+            // Initialize the color index
+            let colorIndex = $('#Colors-table').data('color-count') || 0;
 
-            // Add Unit Row
-            $('#add-unit').on('click', function() {
-                $('#units-table').append(`
-            <tr>
-                <td>
-                    <select name="units[${unitIndex}][unit_id]" class="form-control select2" required>
-                        @foreach ($units as $unit)
-                            <option value="{{ $unit->id }}">{{ $unit->name_ar }}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="units[${unitIndex}][factor]" class="form-control" required>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-unit">@lang('product.Remove')</button>
-                </td>
-            </tr>
-        `);
-
-                unitIndex++; // Increment unitIndex for the next unit row
+            // Function to add a new color row
+            function addColorRow() {
+                const rowHtml = `
+        <tr>
+            <td>
+                <select name="colors[${colorIndex}][color_id]" class="form-control select2" required>
+                    @foreach ($colors as $color)
+                        <option value="{{ $color->id }}">{{ $color->name_ar }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm remove-color">
+                    @lang('product.Remove')
+                </button>
+            </td>
+        </tr>`;
+                $('#Colors-table').append(rowHtml);
                 $('.select2').select2();
+                colorIndex++;
+            }
+
+            // Add color on button click
+            $('#add-color').on('click', function() {
+                addColorRow();
             });
 
-            $(document).on('click', '.remove-unit', function() {
-                // Get the current row and remove it
-                let $row = $(this).closest('tr');
-                $row.remove();
-
-                // Reindex all the unit fields in the table
-                $('#units-table tr').each(function(index) {
+            // Remove color and re-index rows
+            $(document).on('click', '.remove-color', function() {
+                $(this).closest('tr').remove();
+                $('#Colors-table tr').each(function(index) {
                     $(this).find('select, input').each(function() {
                         let name = $(this).attr('name');
-                        // Update the name attributes to reflect the new index
                         if (name) {
-                            let newName = name.replace(/\[\d+\]/, `[${index}]`);
-                            $(this).attr('name', newName);
+                            $(this).attr('name', name.replace(/\[\d+\]/, `[${index}]`));
                         }
                     });
                 });
-
-                // Update the unitIndex to the correct value (based on remaining rows)
-                unitIndex = $('#units-table tr').length;
+                colorIndex = $('#Colors-table tr').length;
             });
-
         });
     </script>
 
