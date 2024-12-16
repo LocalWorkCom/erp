@@ -72,5 +72,6 @@ return [
     'AddonCategories'=>'Addon Categories',
     'roles' => 'Roles',
     'permissions' => 'Permissions',
+    'branchMenuCategory' => 'Branch Menu Category',
 
 ];

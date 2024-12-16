@@ -72,5 +72,6 @@ return[
     'AddonCategories'=>'فئات الاضافات',
     'roles' => 'المهام',
     'permissions' => 'الصلاحيات',
+    'branchMenuCategory' => 'تصنيف الاطباق للفرع',
 
 ];

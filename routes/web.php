@@ -30,6 +30,8 @@ use App\Http\Controllers\Dashboard\DishController;
 use App\Http\Controllers\Dashboard\AddonController;
 use App\Http\Controllers\Dashboard\CuisineController;
 
+use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
@@ -163,6 +165,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [BranchController::class, 'edit'])->name('branch.edit')->middleware('role_or_permission:update branches');
         Route::put('update/{id}', [BranchController::class, 'update'])->name('branch.update')->middleware('role_or_permission:update branches');
         Route::delete('delete/{id}', [BranchController::class, 'delete'])->name('branch.delete')->middleware('role_or_permission:delete branches');
+
+        Route::get('/categories', [BranchMenuCategoryController::class, 'index'])->name('branch.categories.list')->middleware('role_or_permission:view branch_menu_categories');
+        Route::group(['prefix' => 'categories'], function () {
+            Route::post('store', [BranchMenuCategoryController::class, 'store'])->name('branch.categories.store')->middleware('role_or_permission:create branch_menu_categories');
+            Route::get('show/{id}', [BranchMenuCategoryController::class, 'show'])->name('branch.categories.show')->middleware('role_or_permission:view branch_menu_categories');
+            Route::put('update/{id}', [BranchMenuCategoryController::class, 'update'])->name('branch.categories.update')->middleware('role_or_permission:update branch_menu_categories');
+            Route::delete('delete/{id}', [BranchMenuCategoryController::class, 'delete'])->name('branch.categories.delete')->middleware('role_or_permission:delete branch_menu_categories');
+            Route::get('showAll/{branch_id}', [BranchMenuCategoryController::class, 'show_branch'])->name('branch.categories.show.all')->middleware('role_or_permission:view branch_menu_categories');
+        });
     });
 
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.list')->middleware('role_or_permission:view brands');
@@ -181,6 +192,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [FloorController::class, 'show'])->name('floor.show')->middleware('role_or_permission:view floors');
         Route::put('update/{id}', [FloorController::class, 'update'])->name('floor.update')->middleware('role_or_permission:update floors');
         Route::delete('delete/{id}', [FloorController::class, 'delete'])->name('floor.delete')->middleware('role_or_permission:delete floors');
+        Route::get('branch/{branch_id}', [FloorController::class, 'branch'])->name('floor.branch')->middleware('role_or_permission:view floors');
     });
 
     Route::get('/floor-partitions', [FloorPartitionController::class, 'index'])->name('floorPartitions.list')->middleware('role_or_permission:view floor_partitions');

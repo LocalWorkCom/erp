@@ -35,4 +35,5 @@ return [
     'Both' => 'يوجد النوعين',
     'ChooseBranch' => 'اختر الفرع',
     'ChooseFloor' => 'اختر الدور',
+    'DishesCategory' => 'تصنيف الاطباق',
 ];

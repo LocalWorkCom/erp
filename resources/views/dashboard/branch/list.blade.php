@@ -90,12 +90,13 @@
                                                     </button>
                                                 </form>
 
-                                                <select class="form-select d-inline" style="width: 25%;">
-                                                    <option value="">{{ __('floor.Floors') }}</option>
-                                                    @foreach($branch->floors as $floor)
-                                                        <option value="{{ $floor->id }}">{{ $floor->name_ar }} | {{ $floor->name_en }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <a href="{{ route('floor.branch', $branch->id) }}" class="btn btn-orange-light btn-wave">
+                                                {{ __('floor.Floors') }} <i class="ri-show-line"></i>
+                                                </a>
+
+                                                <a href="{{ route('branch.categories.show.all', $branch->id) }}" class="btn btn-orange-light btn-wave">
+                                                {{ __('floor.DishesCategory') }} <i class="ri-show-line"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
