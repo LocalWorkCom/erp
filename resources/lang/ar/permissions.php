@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'عرض الصفحه الرئيسيه',
   'create dashboard' => 'أنشاء الصفحه الرئيسيه',
   'update dashboard' => 'تعديل الصفحه الرئيسيه',
@@ -526,4 +528,10 @@
   'delete addon_categories' => 'حذف تصنيفات الأضافات',
   'print advances' => 'طباعه لال',
   'print invoice' => 'طباعه الفواتير',
+  'view privacies' => 'عرض سياسة خصوصية',
+  'create privacies' => 'اضافة سياسة خصوصية',
+  'update privacies' => 'تعديل سياسة خصوصية',
+  'view returns' => 'عرض سياسة استرجاع',
+  'create returns' => 'اضافة سياسة استرجاع',
+  'update returns' => 'تعديل سياسة استرجاع',
 );

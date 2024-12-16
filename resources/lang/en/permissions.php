@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
@@ -524,4 +526,10 @@
   'view units_products' => 'view units_products',
   'print advances' => 'print advances',
   'print invoice' => 'print invoice',
+  'view privacies' => 'view privacies',
+  'create privacies' => 'create privacies',
+  'update privacies' => 'update privacies',
+  'view returns' => 'view returns',
+  'create returns' => 'create returns',
+  'update returns' => 'update returns',
 );
