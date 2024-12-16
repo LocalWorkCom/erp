@@ -22,7 +22,6 @@ $basePath = base_path("routes");
 if (File::exists("{$basePath}/dashboard.php")) {
     require "{$basePath}/dashboard.php";
 }
-
 if (File::exists("{$basePath}/website.php")) {
     require "{$basePath}/website.php";
 }

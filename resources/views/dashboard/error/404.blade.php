@@ -30,7 +30,7 @@
                                 never been existed.
                             </p>
 
-                            <a href="{{ route('home') }}" class="btn btn-primary"><i
+                            <a href="{{ route('dashboard.home') }}" class="btn btn-primary"><i
                                     class="ri-arrow-left-line align-middle me-1 d-inline-block"></i>BACK TO HOME</a>
                         </div>
                     </div>

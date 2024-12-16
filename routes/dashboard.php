@@ -68,7 +68,7 @@ Route::middleware(['auth:admin'])->get('dashboard', function () {
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
-
+    // product_units
     Route::get('/products/unit/list/{productId}', [ProductController::class, 'unit'])
         ->name('products.units.list')
         ->middleware('role_or_permission:view product_units');
@@ -76,6 +76,25 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::post('product/{id}/units/save', [ProductController::class, 'saveUnits'])
         ->name('product.units.save')
         ->middleware('role_or_permission:view product_units');
+
+    // product_sizes
+    Route::get('/products/size/list/{productId}', [ProductController::class, 'size'])
+    ->name('products.sizes.list')
+    ->middleware('role_or_permission:view product_sizes');
+
+    Route::post('product/{id}/sizes/save', [ProductController::class, 'saveSizes'])
+        ->name('product.sizes.save')
+        ->middleware('role_or_permission:view product_sizes');
+
+    // product_colors
+
+    Route::get('/products/color/list/{productId}', [ProductController::class, 'color'])
+    ->name('products.colors.list')
+    ->middleware('role_or_permission:view product_colors');
+
+    Route::post('product/{id}/colors/save', [ProductController::class, 'saveColors'])
+        ->name('product.colors.save')
+        ->middleware('role_or_permission:view product_colors');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
@@ -342,6 +361,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
+    Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
@@ -397,3 +418,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
 });
+

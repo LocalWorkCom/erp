@@ -14,6 +14,8 @@ class ProductSize extends Model
         'size_id',
         'product_id',
         'code_size',
+        'created_by',
+
     ];
     
     protected $hidden = [
