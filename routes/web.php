@@ -103,13 +103,13 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     // product_colors
 
-    // Route::get('/products/size/list/{productId}', [ProductController::class, 'size'])
-    // ->name('products.sizes.list')
-    // ->middleware('role_or_permission:view product_sizes');
+    Route::get('/products/color/list/{productId}', [ProductController::class, 'color'])
+    ->name('products.colors.list')
+    ->middleware('role_or_permission:view product_colors');
         
-    // Route::post('product/{id}/sizes/save', [ProductController::class, 'saveSizes'])
-    //     ->name('product.sizes.save')
-    //     ->middleware('role_or_permission:view product_sizes');
+    Route::post('product/{id}/colors/save', [ProductController::class, 'saveColors'])
+        ->name('product.colors.save')
+        ->middleware('role_or_permission:view product_colors');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.list')->middleware('role_or_permission:view products');
     Route::group(['prefix' => 'product'], function () {
