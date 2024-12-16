@@ -77,7 +77,7 @@ Route::get('/set-locale/{locale}', function ($locale) {
 })->name('set-locale');
 
 Route::get('/', function () {
-    return view('index');
+    return view('website.landing');
 })->name('home');
 
 
