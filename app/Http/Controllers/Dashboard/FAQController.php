@@ -98,6 +98,13 @@ class FAQController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $faq = FAQ::findOrFail($id);
+        $faq->deleted_by = auth()->id() ?? 1;
+        $faq->delete();
+
+        $response = RespondWithSuccessRequest($this->lang, 1);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        return redirect('dashboard/faqs')->with('message', $message);
     }
 }

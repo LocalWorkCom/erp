@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
@@ -539,5 +541,5 @@
   'create faqs' => 'create faqs',
   'view faqs' => 'view faqs',
   'update faqs' => 'update faqs',
+  'delete faqs' => 'delete faqs',
 );
-

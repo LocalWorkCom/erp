@@ -300,6 +300,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [FAQController::class, 'show'])->name('faq.show')->middleware('role_or_permission:view faqs');
         Route::get('edit/{id}', [FAQController::class, 'edit'])->name('faq.edit')->middleware('role_or_permission:update faqs');
         Route::put('update/{id}', [FAQController::class, 'update'])->name('faq.update')->middleware('role_or_permission:update faqs');
+        Route::delete('delete/{id}', [FAQController::class, 'destroy'])->name('faq.delete')->middleware('role_or_permission:delete faqs');
     });
 
     //HR

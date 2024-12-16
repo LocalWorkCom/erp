@@ -66,6 +66,13 @@
                                         <td>
                                             <a href="{{ route('faq.show', $faq->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
                                             <a href="{{ route('faq.edit', $faq->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>
+                                            <form class="d-inline" id="delete-form-{{ $faq->id }}" action="{{ route('faq.delete', $faq->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="delete_item({{ $faq->id }})" class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -97,11 +104,28 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
 <script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
+    {{--function confirmDelete() {--}}
+    {{--    return confirm("@lang('validation.DeleteConfirm')");--}}
+    {{--}--}}
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>
