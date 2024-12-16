@@ -357,6 +357,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
+    Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');

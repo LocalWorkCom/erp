@@ -137,7 +137,7 @@
                                     <tbody>
                                         @foreach ($order['details'] as $detail)
                                             <tr>
-                                                <td>{{ $detail->dish->dish_id }}</td>
+                                                <td>{{ $detail->dish->name_ar }}</td>
                                                 <td>{{ $detail->price_befor_tax }}</td>
                                                 <td>{{ $detail->tax_value }}</td>
                                                 <td>{{ $detail->price_after_tax }}</td>
