@@ -808,7 +808,7 @@ function GetCurrencyCodes()
 function AddBranchMenu($branch_id)
 {
     $get_dish_categories = $this->GetDishCategories();
-    foreach($get_dish_categories as $get_dish_category){
+    foreach ($get_dish_categories as $get_dish_category) {
         $branch_menu_category = new BranchMenuCategory();
         $branch_menu_category->branch_id = $branch_id;
         $branch_menu_category->dish_category_id = $get_dish_category->id;
@@ -821,26 +821,26 @@ function AddBranchMenu($branch_id)
     $get_dishes = $this->GetDishes();
     $price = 0;
     $dish_size_id = null;
-    foreach($get_dishes as $get_dish){
-        if($get_dish->has_sizes == 1){
-            if($get_dish->dishSizes){
+    foreach ($get_dishes as $get_dish) {
+        if ($get_dish->has_sizes == 1) {
+            if ($get_dish->dishSizes) {
                 $price = $get_dish->dishSizes->price;
                 $dish_size_id = $get_dish->dishSizes->price;
             }
-        }else{
+        } else {
             $price = $get_dish->price;
         }
-            $get_dish = new Menu();
-            $get_dish->branch_id = $branch_id;
-            $get_dish->dish_id = $get_dish->id;
-            $get_dish->dish_size_id = $dish_size_id ;
-            $get_dish->dish_category_id = $get_dish->category_id;
-            $get_dish->branch_menu_category_id = $branch_menu_category->id;
-            $get_dish->cuisine_id = $get_dish->cuisine_id ;
-            $get_dish->price = $price;
-            $get_dish->is_active = 1;
-            $get_dish->created_by = auth()->user()->id;
-            $get_dish->save();
+        $get_dish = new Menu();
+        $get_dish->branch_id = $branch_id;
+        $get_dish->dish_id = $get_dish->id;
+        $get_dish->dish_size_id = $dish_size_id;
+        $get_dish->dish_category_id = $get_dish->category_id;
+        $get_dish->branch_menu_category_id = $branch_menu_category->id;
+        $get_dish->cuisine_id = $get_dish->cuisine_id;
+        $get_dish->price = $price;
+        $get_dish->is_active = 1;
+        $get_dish->created_by = auth()->user()->id;
+        $get_dish->save();
     }
 }
 
@@ -858,7 +858,7 @@ function GetDishesByCategory($category_id)
 {
     return Dish::where('category_id', $category_id)->get();
 }
- function respondError($error, $errorMessages = [], $code)
+function respondError($error, $code, $errorMessages = [])
 {
     if ($code == 404) {
         $code1 = 404;
@@ -871,7 +871,7 @@ function GetDishesByCategory($category_id)
         'code' => $code,
         'status' => false,
         'message' => $error,
-        'data' =>null,
+        'data' => null,
     ];
 
 
