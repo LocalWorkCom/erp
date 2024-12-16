@@ -140,7 +140,6 @@
 @endsection
 <script>
     function printInvoice(id) {
-        // Open the print Blade view in a new tab
         const url = `{{ route('purchase.print', ':id') }}`.replace(':id', id);
         const printWindow = window.open(url, '_blank');
     }

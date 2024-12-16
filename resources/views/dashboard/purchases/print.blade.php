@@ -41,7 +41,7 @@
             <tbody>
                 @foreach ($purchase->purchaseInvoicesDetails as $detail)
                     <tr>
-                        <td>{{ $detail->product->name_en }}</td>
+                        <td>{{ $detail->product->name_ar }}</td>
                         <td>{{ $detail->quantity }}</td>
                         <td>{{ $detail->price }}</td>
                         <td>{{ $detail->total_price }}</td>

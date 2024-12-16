@@ -405,16 +405,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
-<<<<<<< HEAD
-        Route::get('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'index'])->name('dashboard.cuisines.index');
-        Route::get('/create', [\App\Http\Controllers\Dashboard\CuisineController::class, 'create'])->name('dashboard.cuisines.create');
-        Route::post('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'store'])->name('dashboard.cuisines.store');
-        Route::get('/{id}/edit', [\App\Http\Controllers\Dashboard\CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
-        Route::put('/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'update'])->name('dashboard.cuisines.update');
-        Route::delete('/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
-        Route::post('/restore/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
-    });
-=======
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
         Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
@@ -424,5 +414,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
 
->>>>>>> 4fcd12667a9825cb62ccd606319d5a3a2555e47d
 });

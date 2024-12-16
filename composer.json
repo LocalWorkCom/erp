@@ -15,11 +15,8 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
-<<<<<<< HEAD
         "mike42/escpos-php": "^2.2",
-=======
         "simplesoftwareio/simple-qrcode": "^4.2",
->>>>>>> 4fcd12667a9825cb62ccd606319d5a3a2555e47d
         "spatie/laravel-permission": "^6.10"
     },
     "require-dev": {
