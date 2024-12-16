@@ -1,19 +1,17 @@
-<?php
-
-return array (
+<?php return array (
   'view dashboard' => 'عرض الصفحه الرئيسيه',
   'create dashboard' => 'أنشاء الصفحه الرئيسيه',
   'update dashboard' => 'تعديل الصفحه الرئيسيه',
   'delete dashboard' => 'حذف الصفحه الرئيسيه',
-  'view actionbacklogs' => 'عرض ',
-  'create actionbacklogs' => 'أنشاء',
+  'view actionbacklogs' => 'عرض سجل الإجراءات',
+  'create actionbacklogs' => 'تعديل سجل الإجراءات',
   'update actionbacklogs' => 'تعديل',
   'delete actionbacklogs' => 'حذف',
   'view advances' => ' ',
   'create advances' => ' ',
   'update advances' => '',
   'delete advances' => ' ',
-  'view advance_requests' => ' ',
+  'view advance_requests' => 'عرض طلبات السلفه',
   'create advance_requests' => ' ',
   'update advance_requests' => '',
   'delete advance_requests' => ' ',
@@ -418,7 +416,7 @@ return array (
   'categories' => 'الفئات',
   'client_addresses' => 'عناوين العملاء',
   'client_details' => 'تفاصيل العملاء',
-  'colors' => 'الألوان',
+  'colors' => 'تصني',
   'countries' => 'الدول',
   'coupons' => 'القسائم',
   'cuisines' => 'المطابخ',
@@ -534,4 +532,5 @@ return array (
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'Delete actionbacklogs' => 'حذف سجل الأجراءات',
 );

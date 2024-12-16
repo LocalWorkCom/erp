@@ -1,19 +1,17 @@
-<?php
-
-return array (
+<?php return array (
   'view dashboard' => 'view dashboard',
   'create dashboard' => 'Create Dashboard',
   'update dashboard' => 'update dashboard',
   'delete dashboard' => 'Delete dashboard',
-  'view actionbacklogs' => 'View actionbacklogs',
-  'create actionbacklogs' => 'Create actionbacklogs',
+  'view actionbacklogs' => 'view actionbacklogs',
+  'create actionbacklogs' => 'create actionbacklogs',
   'update actionbacklogs' => 'update actionbacklogs',
-  'delete actionbacklogs' => 'Delete actionbacklogs',
+  'Delete actionbacklogs' => 'Delete actionbacklogs',
   'view advances' => 'View advances',
   'create advances' => 'Create advances',
   'update advances' => 'update advances',
   'delete advances' => 'Delete advances',
-  'view advance_requests' => 'View advance requests',
+  'view advance_requests' => 'view advance_requests',
   'create advance_requests' => 'Create advance requests',
   'update advance_requests' => 'update advance requests',
   'delete advance_requests' => 'Delete advance requests',
@@ -521,7 +519,6 @@ return array (
   'print purchase_invoice' => 'print purchase_invoice',
   'addon_categories' => 'Addon_categories',
   'purchase_invoice' => 'purchase_invoice',
-  'edit addon_categories' => 'edit addon_categories',
   'edit addon_categorie' => 'edit addon_categorie',
   'view units_products' => 'view units_products',
   'print advances' => 'print advances',
