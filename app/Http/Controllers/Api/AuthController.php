@@ -80,12 +80,17 @@ class AuthController extends Controller
         try {
             $lang = $request->header('lang', 'ar');
             App::setLocale(locale: $lang);  // Set the locale based on the header
-
-            // Validate email and password fields
+            $messages = [
+                'email.required' => 'البريد الالكتروني مطلوب.',
+                'email.exists' => 'بيانات الاعتماد غير صحيحة.',
+                'password.required' => 'كلمة المرور مطلوبة.',
+            ];
+        
+            // Validate the request
             $validator = Validator::make($request->all(), [
-                "email" => "required|email",
+                "email" => "required|email|exists:users,email",
                 "password" => "required"
-            ]);
+            ], $messages);
 
             if ($validator->fails()) {
                 return respondError('Validation Error.', $validator->errors(), 400);
@@ -102,6 +107,7 @@ class AuthController extends Controller
                 $user = Auth::user();
 
                 $token = $user->createToken("myToken")->accessToken;
+
                 $data = [
                     "access_token" => $token,
                     'data' => $user
