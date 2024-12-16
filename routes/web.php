@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ColorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\CouponController;
+use App\Http\Controllers\Dashboard\FAQController;
 use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
@@ -288,6 +289,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update')->middleware('role_or_permission:update returns');
     });
 
+    Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.list')->middleware('role_or_permission:view faqs');
+    Route::group(['prefix' => 'faq'], function () {
+        Route::get('create', [FAQController::class, 'create'])->name('faq.create')->middleware('role_or_permission:create faqs');
+        Route::post('store', [FAQController::class, 'store'])->name('faq.store')->middleware('role_or_permission:create faqs');
+        Route::get('show/{id}', [FAQController::class, 'show'])->name('faq.show')->middleware('role_or_permission:view faqs');
+        Route::get('edit/{id}', [FAQController::class, 'edit'])->name('faq.edit')->middleware('role_or_permission:update faqs');
+        Route::put('update/{id}', [FAQController::class, 'update'])->name('faq.update')->middleware('role_or_permission:update faqs');
+    });
+
     //HR
     Route::get('/positions', [PositionController::class, 'index'])->name('positions.index')->middleware('role_or_permission:view positions');
     Route::group(['prefix' => 'position'], function () {
@@ -423,6 +433,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
+
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
         Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');

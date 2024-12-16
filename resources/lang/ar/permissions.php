@@ -535,5 +535,8 @@
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'create faqs' => 'اضافة اسئلة متكررة',
+  'view faqs' => 'عرض اسئلة متكررة',
+  'update faqs' => 'تعديل اسئلة متكررة',
   'Delete actionbacklogs' => 'حذف سجل الأجراءات',
 );

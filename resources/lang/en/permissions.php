@@ -532,4 +532,8 @@
   'view returns' => 'view returns',
   'create returns' => 'create returns',
   'update returns' => 'update returns',
+  'create faqs' => 'create faqs',
+  'view faqs' => 'view faqs',
+  'update faqs' => 'update faqs',
 );
+
