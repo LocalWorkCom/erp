@@ -775,6 +775,16 @@
                             </a>
                         </li>
                     @endcan
+                    @can('view faqs')
+                        <li class="slide">
+                            <a href="{{ route('faqs.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.FAQ')</span>
+                            </a>
+                        </li>
+                    @endcan
                 @endif
             </ul>
             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
