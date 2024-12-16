@@ -77,7 +77,7 @@ Route::get('/set-locale/{locale}', function ($locale) {
 })->name('set-locale');
 
 Route::get('/', function () {
-    return view('index');
+    return view('website.landing');
 })->name('home');
 
 
@@ -350,13 +350,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('store', [PermissionController::class, 'store'])->name('permission.store')->middleware('role_or_permission:create permissions');
         Route::get('{id}/edit', [PermissionController::class, 'edit'])->name('permissions.edit')->middleware('role_or_permission:update permissions');
         Route::put('update', [PermissionController::class, 'update'])->name('permission.update')->middleware('role_or_permission:update permissions');
-        Route::get('delete/{id}', [PermissionController::class, 'destroy'])->name('permission.delete');
+        Route::get('delete/{id}', [PermissionController::class, 'destroy'])->name('permission.delete')->middleware('role_or_permission:delete permissions');
     });
 
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
+    Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
@@ -403,6 +405,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
+<<<<<<< HEAD
         Route::get('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'index'])->name('dashboard.cuisines.index');
         Route::get('/create', [\App\Http\Controllers\Dashboard\CuisineController::class, 'create'])->name('dashboard.cuisines.create');
         Route::post('/', [\App\Http\Controllers\Dashboard\CuisineController::class, 'store'])->name('dashboard.cuisines.store');
@@ -411,4 +414,15 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [\App\Http\Controllers\Dashboard\CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
+=======
+        Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
+        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
+        Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
+        Route::get('/{id}/edit', [CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
+        Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
+        Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
+        Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
+    });
+
+>>>>>>> 4fcd12667a9825cb62ccd606319d5a3a2555e47d
 });

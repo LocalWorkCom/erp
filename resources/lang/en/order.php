@@ -3,7 +3,7 @@ return [
     "orders" => "Orders",
     "order" => "Order",
     "order_number" => "order number",
-
+    "tax" => "tax",
     "type" => "Type",
     "status" => "Status",
     "branch" => "Branch",
@@ -54,6 +54,9 @@ return [
     "on_way" => "On Way",
     "deliverd" => "Delivery",
     "cancelled" => "Cancelled",
-    "order_trackings" => "Order Tracking"
+    "order_trackings" => "Order Tracking",
+    "billing_to" => "Billing To",
+    "fees" => "fees"
+
 
 ];

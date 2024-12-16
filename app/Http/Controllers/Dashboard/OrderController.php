@@ -84,6 +84,41 @@ class OrderController extends Controller
         }
         return true;
     }
+    function changeStatusQr($id)
+    {
+        $order_tracking = new  OrderTracking;
+        $order_tracking->order_id = $id;
+        $order_tracking->order_status = 'deliverd';
+        $order_tracking->created_by = Auth::guard('admin')->user()->id;
+        $order_tracking->time = date('H:i a');
+        $order_tracking->save();
+
+        $order_tracking = new  OrderTracking;
+        $order_tracking->order_id = $id;
+        $order_tracking->order_status = 'completed';
+        $order_tracking->created_by = Auth::guard('admin')->user()->id;
+        $order_tracking->time = date('H:i a');
+        $order_tracking->save();
+
+        $order = Order::find($id);
+        $order->status = 'completed';
+        $order->save();
+
+        // return true;
+
+    }
+    public function printOrder($id)
+    {
+        $lang = App::getLocale(); // Get the current locale
+
+        $response = $this->orderService->show($lang, $id, $this->checkToken);
+
+        $responseData = $response->original;
+
+        $order = $responseData['data'];
+
+        return view('dashboard.order.print', compact('order'));
+    }
 
 
     // public function delete(Request $request, $id)
