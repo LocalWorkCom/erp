@@ -110,6 +110,9 @@
     <!-- STICKY JS -->
     <script src="{{ asset('build/assets/sticky.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
     <!-- APP JS -->
     @vite('resources/js/app.js')
 

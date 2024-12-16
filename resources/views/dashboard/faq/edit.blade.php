@@ -54,15 +54,24 @@
                                         <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
                                     </div>
 
-                                    <!-- Description Fields -->
                                     <div class="col-xl-6">
-                                        <label for="description_ar" class="form-label">@lang('term.ArabicDescription')</label>
-                                        <textarea name="description_ar" id="myeditorinstance_ar" class="form-control">{{ old('description_ar', $faq->description_ar) }}</textarea>
+                                        <label for="question_ar" class="form-label">@lang('term.ArabicQuestion')</label>
+                                        <textarea name="question_ar" id="myeditorinstance_ar" class="form-control">{{ old('question_ar', $faq->question_ar) }}</textarea>
                                     </div>
 
                                     <div class="col-xl-6">
-                                        <label for="description_en" class="form-label">@lang('term.EnglishDescription')</label>
-                                        <textarea name="description_en" id="myeditorinstance_en" class="form-control">{{ old('description_en', $faq->description_en) }}</textarea>
+                                        <label for="question_en" class="form-label">@lang('term.EnglishQuestion')</label>
+                                        <textarea name="question_en" id="myeditorinstance_en" class="form-control">{{ old('question_en', $faq->question_en) }}</textarea>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <label for="answer_ar" class="form-label">@lang('term.ArabicAnswer')</label>
+                                        <textarea name="answer_ar" id="myeditorinstance_ar" class="form-control">{{ old('answer_ar', $faq->answer_ar) }}</textarea>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <label for="answer_en" class="form-label">@lang('term.EnglishAnswer')</label>
+                                        <textarea name="answer_en" id="myeditorinstance_en" class="form-control">{{ old('answer_en', $faq->answer_en) }}</textarea>
                                     </div>
 
                                     <!-- Submit Button -->

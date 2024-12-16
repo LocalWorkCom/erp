@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'عرض الصفحه الرئيسيه',
   'create dashboard' => 'أنشاء الصفحه الرئيسيه',
   'update dashboard' => 'تعديل الصفحه الرئيسيه',
@@ -543,4 +545,5 @@
   'view faqs' => 'عرض اسئلة متكررة',
   'update faqs' => 'تعديل اسئلة متكررة',
   'Delete actionbacklogs' => 'حذف سجل الأجراءات',
+  'delete faqs' => 'حذف اسئلة متكررة',
 );
