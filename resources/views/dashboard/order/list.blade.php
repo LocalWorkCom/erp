@@ -90,12 +90,17 @@
                                                     class="btn btn-info-light btn-wave show-order">
                                                     @lang('order.show') <i class="ri-eye-line"></i>
                                                 </a>
+                                                <a href="{{ route('order.print', $order->id) }}"
+                                                    class="btn btn-info-light btn-wave show-order">
+                                                    @lang('order.print') <i class="ri-eye-line"></i>
+                                                </a>
                                                 @if ($order->last_status != 'completed')
                                                     <div class="btn-group" role="group"> <button
                                                             id="btnGroupVerticalDrop4" type="button"
                                                             class="btn btn-primary dropdown-toggle show"
                                                             data-bs-toggle="dropdown" aria-expanded="true"> تغيير الحالة
                                                         </button>
+                                                        
                                                         <ul class="dropdown-menu show"
                                                             aria-labelledby="btnGroupVerticalDrop4"
                                                             style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 39px);"
