@@ -20,5 +20,6 @@ return [
     'ArabicName'=>'الأسم بالعربيه',
     'EnglishName'=>'الأسم بالأنجليزيه',
     'editPer'=>'تعديل الصلاحيات',
-
+    'permission_already_exists' => 'الإذن ":name" موجود بالفعل.',
+    'permission_created' => 'تم إنشاء الإذن ":name" بنجاح.',
 ];

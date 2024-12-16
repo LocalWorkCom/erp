@@ -21,4 +21,6 @@ return [
     'delete_confirmationper' => 'You are about to delete this permission. This action cannot be undone.',
     'delete_success' => 'Permission deleted successfully!',
     'delete_error' => 'This permission is assigned to one or more roles and cannot be deleted.',
+    'permission_already_exists' => 'The permission ":name" already exists.',
+    'permission_created' => 'Permission ":name" created successfully.',
 ];
