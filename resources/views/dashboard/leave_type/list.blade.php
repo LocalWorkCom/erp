@@ -225,27 +225,21 @@
                                             </button>
 
                                             <!-- Delete Button -->
-                                            <form class="d-inline" action="{{ route('leave-type.delete', $leave_type->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                            <!-- <form class="d-inline" action="{{ route('leave-type.delete', $leave_type->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
+                                            </form> -->
+
+                                            <form class="d-inline" id="delete-form-{{ $leave_type->id }}" action="{{ route('leave-type.delete', $leave_type->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="delete_item({{ $leave_type->id }})" class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                             </form>
-
-                                            <select class="form-select d-inline" style="width: 25%;">
-                                                <option value="">{{ __('leave_type.Partitions') }}</option>
-                                                @foreach($leave_type->floorPartitions as $floor)
-                                                    <option value="{{ $floor->id }}">{{ $floor->name_ar }} | {{ $floor->name_en }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            <select class="form-select d-inline" style="width: 25%;">
-                                                <option value="">{{ __('leave_type.Tables') }}</option>
-                                                @foreach($leave_type->tables as $floor)
-                                                    <option value="{{ $floor->id }}">{{ $floor->name_ar }} | {{ $floor->name_en }}</option>
-                                                @endforeach
-                                            </select>
 
                                         </td>
 
@@ -288,14 +282,15 @@
 @endsection
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     $(document).ready(function(){
         $('.edit-floor-btn').on('click', function() {
-            var floorId = this.getAttribute('data-id');   
+            var leaveTypeId = this.getAttribute('data-id');   
             var get_url = "{{ route('leave-type.show', 'id') }}";
             var edit_url = "{{ route('leave-type.update', 'id') }}";
-            get_url = get_url.replace('id', floorId);
+            get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details
             $.ajax({
@@ -306,7 +301,7 @@
                     $('#edit-name-ar').val(data.name_ar);
                     $('#edit-name-en').val(data.name_en);
 
-                    edit_url = edit_url.replace('id', floorId);
+                    edit_url = edit_url.replace('id', leaveTypeId);
                     $('#edit-floor-form').attr('action', edit_url);
 
                     // Show the modal
@@ -319,15 +314,17 @@
         });
 
         $('.show-floor-btn').on('click', function() {
-            var floorId = this.getAttribute('data-id');   
+            var leaveTypeId = this.getAttribute('data-id');   
             var get_url = "{{ route('leave-type.show', 'id') }}";
-            get_url = get_url.replace('id', floorId);
+            get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details
             $.ajax({
                 url: get_url, 
                 type: 'GET',
-                success: function(data) {                    
+                success: function(data) {  
+                    console.log(data);
+                                      
                     // Populate the modal with the data
                     $('#show-name-ar').text(data.name_ar);
                     $('#show-name-en').text(data.name_en);
@@ -344,5 +341,22 @@
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function delete_item(id) {
+        Swal.fire({
+            title: 'تنبيه',
+            text: 'هل انت متاكد من انك تريد ان تحذف هذا الفرع',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم, احذف',
+            cancelButtonText: 'إلغاء',
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>
