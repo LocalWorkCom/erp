@@ -36,7 +36,8 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return respondError('Validation Error.', $validator->errors(), 400);
+            return respondError('Validation Error.',400, $validator->errors());
+
 
             // return RespondWithBadRequestWithData($validator->errors());
         }
@@ -93,7 +94,8 @@ class AuthController extends Controller
             ], $messages);
 
             if ($validator->fails()) {
-                return respondError('Validation Error.', $validator->errors(), 400);
+                return respondError('Validation Error.',400, $validator->errors());
+
 
                 // return RespondWithBadRequestWithData($validator->errors());
             }
@@ -115,9 +117,10 @@ class AuthController extends Controller
 
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
-                return respondError('Password Error', [
+                return respondError('Password Error',  403,[
                     'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
-                ], 403);
+                ]);
+
                 // return RespondWithBadRequest($lang, 13);
             }
         } catch (\Exception $e) {

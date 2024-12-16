@@ -535,4 +535,86 @@ class ProductService
         // Return a success response after all sizes are processed
         return RespondWithSuccessRequest($this->lang, 1);
     }
+     // product color
+     public function listColor($productId, $checkToken)
+     {
+         $products = Product::with(['productColors.color' => function ($query) {
+             $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
+         }])->findOrFail($productId);
+         if (!CheckToken() && $checkToken) {
+             return RespondWithBadRequest($this->lang, 5);
+         }
+ 
+         return ResponseWithSuccessData($this->lang, $products, 1);
+     }
+     public function saveProductColors(Request $request, $productId)
+     {
+         // dd($request);
+         // Validate the sizes
+         $validated = $request->validate([
+             'colors.*.color_id' => 'required|exists:colors,id',
+             'product_color_id' => 'nullable|array',  // Ensure product_color_id is an array if passed
+         ]);
+ 
+         $product_color_ids = $request->product_color_id; // This is an array of product color IDs, or null if creating new sizes
+ 
+         // Get all the existing product sizes for the given product
+         $product_colors = ProductColor::where('product_id', $productId)->get();
+ 
+         // Remove sizes that are not in the submitted product_size_ids
+         foreach ($product_colors as $color) {
+             if ($product_color_ids && !in_array($color->id, $product_color_ids)) {
+                 $color->delete();
+             }
+         }
+         // dd($request);
+         $colors = $request->product_colors;
+ 
+         // Loop through the sizes and save them
+         for ($i = 0; $i < count($colors); $i++) {
+             $colorId = (int) $colors[$i]['color_id'];  // Cast size_id to integer
+            //  $code_size = $colors[$i]['code_size'];  // code_size value
+ 
+             // Check if the size already exists for the given product
+             if (isset($product_color_ids[$i]) && $product_color_ids[$i]) {
+                 // Update existing ProductSize
+                 ProductColor::updateOrCreate(
+                     ['id' => (int) $product_color_ids[$i]],  // Find the record by its ID
+                     [
+                         'color_id' => $colorId,  // Update size_id
+                        //  'code_size' => $code_size,  // Update code_size
+                     ]
+                 );
+             } else {
+                 // dd(0);
+                 $existingColor = ProductColor::where('product_id', $productId)
+                     ->where('color_id', $colorId)
+                     ->exists();
+ 
+                 if ($existingColor) {
+                     // If the size already exists for this product, return a flash message
+                     return CustomRespondWithBadRequest('The size with ID ' . $colorId . ' already exists for this product.');
+                 }
+                //  $existingSize = ProductSize::
+                //      where('code_size', $code_size) // Match code_size
+                //      ->exists();
+ 
+                //  if ($existingSize) {
+                //      return CustomRespondWithBadRequest('The size with ID $value and code size ' . $code_size . ' already exists for this product.');
+ 
+                //      // $fail("The size with ID $value and code size '$codeSize' already exists for this product.");
+                //  }
+                 // If no product_size_id is provided, create a new ProductSize
+                 ProductSize::create([
+                     'color_id' => (int) $colorId,  // Ensure size_id is treated as an integer
+                     'product_id' => (int) $productId,  // Ensure product_id is treated as an integer
+                     'created_by' => Auth::guard('admin')->user()->id,  // Keep created_by as is
+                    //  'code_size' => $code_size,  // code_size value
+                 ]);
+             }
+         }
+ 
+         // Return a success response after all sizes are processed
+         return RespondWithSuccessRequest($this->lang, 1);
+     }
 }
