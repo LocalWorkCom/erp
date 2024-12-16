@@ -34,6 +34,8 @@ use App\Http\Controllers\Dashboard\CuisineController;
 
 use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
 use App\Http\Controllers\Dashboard\LeaveTypeController;
+use App\Http\Controllers\Dashboard\LeaveSettingController;
+
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\PermissionController;
 use App\Http\Controllers\Dashboard\PurchaseController;
@@ -219,6 +221,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [LeaveTypeController::class, 'show'])->name('leave-type.show')->middleware('role_or_permission:view leave_types');
         Route::put('update/{id}', [LeaveTypeController::class, 'update'])->name('leave-type.update')->middleware('role_or_permission:update leave_types');
         Route::delete('delete/{id}', [LeaveTypeController::class, 'delete'])->name('leave-type.delete')->middleware('role_or_permission:delete leave_types');
+    });
+
+    Route::get('/leave-settings', [LeaveSettingController::class, 'index'])->name('leave-settings.list')->middleware('role_or_permission:view leave_settings');
+    Route::group(['prefix' => 'leave-setting'], function () {
+        Route::post('store', [LeaveSettingController::class, 'store'])->name('leave-setting.store')->middleware('role_or_permission:create leave_settings');
+        Route::get('show/{id}', [LeaveSettingController::class, 'show'])->name('leave-setting.show')->middleware('role_or_permission:view leave_settings');
+        Route::put('update/{id}', [LeaveSettingController::class, 'update'])->name('leave-setting.update')->middleware('role_or_permission:update leave_settings');
+        Route::delete('delete/{id}', [LeaveSettingController::class, 'delete'])->name('leave-setting.delete')->middleware('role_or_permission:delete leave_settings');
     });
 
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.list')->middleware('role_or_permission:view coupons');

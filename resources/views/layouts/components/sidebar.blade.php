@@ -370,6 +370,13 @@
                                         </li>
                                     @endcan
 
+                                    @can('view leave_settings')
+                                        <li class="slide">
+                                            <a href="{{ route('leave-settings.list') }}" class="side-menu__item">@lang('sidebar.VacationSettings')
+                                            </a>
+                                        </li>
+                                    @endcan
+
                                 </ul>
                             </li>
                             <!-- End::slide -->

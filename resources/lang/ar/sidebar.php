@@ -73,5 +73,6 @@ return[
     'roles' => 'المهام',
     'permissions' => 'الصلاحيات',
     'branchMenuCategory' => 'تصنيف الاطباق للفرع',
+    'VacationSettings' => 'اعدادات الاجازات',
 
 ];

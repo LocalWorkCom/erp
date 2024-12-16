@@ -63,17 +63,22 @@ class LeaveTypeService
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
         try {
             $validateData = Validator::make($request->all(), [
-                'id' => 'required|exists:leave_types,id',
+                //'id' => 'required|uuid',
                 'name_ar' => 'required',
                 'name_en' => 'required'
             ]);
 
             if ($validateData->fails()) {
                 return RespondWithBadRequestWithData($validateData->errors());
+            }
+
+            $leave_type = LeaveType::find($id);
+            if (!$leave_type) {
+                return  RespondWithBadRequestNotExist();
             }
 
             $user_id = Auth::guard('admin')->user()->id;

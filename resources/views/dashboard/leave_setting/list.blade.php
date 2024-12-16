@@ -10,13 +10,13 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('leave_type.LeaveType')</h4>
+        <h4 class="fw-medium mb-0">@lang('leave_setting.LeaveType')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{route('dashboard.home')}}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item"><a href="#">@lang('leave_type.Leaves')</a></li>                    
-                    <li class="breadcrumb-item active" aria-current="page">@lang('leave_type.LeaveType')</li>
+                    <li class="breadcrumb-item"><a href="#">@lang('leave_setting.Leaves')</a></li>                    
+                    <li class="breadcrumb-item active" aria-current="page">@lang('leave_setting.LeaveType')</li>
                 </ol>
             </nav>
         </div>
@@ -33,19 +33,19 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
-                                @lang('leave_type.LeaveType')</div>
+                                @lang('leave_setting.LeaveType')</div>
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('leave_type.AddLeaveType')
+                                @lang('leave_setting.AddLeaveType')
                             </button>
 
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="{{ route('leave-type.store') }}" method="POST" class="needs-validation"
+                                        <form action="{{ route('leave-setting.store') }}" method="POST" class="needs-validation"
                                               novalidate>
                                             @csrf
                                             @if ($errors->any())
@@ -59,17 +59,49 @@
                                                 @endforeach
                                             @endif
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('leave_type.AddLeaveType')</h6>
+                                                <h6 class="modal-title" id="exampleModalLabel1">@lang('leave_setting.AddLeaveType')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                        <label for="branch" class="form-label">@lang('floor.Branch')</label>
+                                                        <select class="form-select" id="branch" name="leave_type_id" required>
+                                                            <option value="" disabled selected>@lang('floor.ChooseBranch')</option>
+                                                            @foreach ($eaveTypes as $eaveType)
+                                                                <option value="{{ $eaveType->id }}">{{ $eaveType->name_ar . " | " . $eaveType->name_en}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterBranch')
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                        <label for="branch" class="form-label">@lang('floor.Branch')</label>
+                                                        <select class="form-select" id="branch" name="country_id" required>
+                                                            <option value="" disabled selected>@lang('floor.ChooseBranch')</option>
+                                                            @foreach ($countries as $country)
+                                                                <option value="{{ $country->id }}">{{ $country->name_ar . " | " . $country->name_en}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterBranch')
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                               class="form-label">@lang('leave_type.ArabicName')</label>
+                                                               class="form-label">@lang('leave_setting.ArabicName')</label>
                                                         <input type="text" class="form-control"
-                                                               placeholder="@lang('leave_type.ArabicName')" name="name_ar" required>
+                                                               placeholder="@lang('leave_setting.ArabicName')" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -77,16 +109,43 @@
                                                             @lang('validation.EnterArabicName')
                                                         </div>
                                                     </div>
+
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                               class="form-label">@lang('leave_type.EnglishName')</label>
+                                                               class="form-label">@lang('leave_setting.EnglishName')</label>
                                                         <input type="text" class="form-control"
-                                                               placeholder="@lang('leave_type.EnglishName')" name="name_en" required>
+                                                               placeholder="@lang('leave_setting.EnglishName')" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
                                                         <div class="invalid-feedback">
                                                             @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="input-placeholder"
+                                                               class="form-label">@lang('leave_setting.ArabicName')</label>
+                                                        <input type="number" class="form-control"
+                                                               placeholder="@lang('leave_setting.ArabicName')" name="min_leave" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterArabicName')
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="input-placeholder"
+                                                               class="form-label">@lang('leave_setting.ArabicName')</label>
+                                                        <input type="number" class="form-control"
+                                                               placeholder="@lang('leave_setting.ArabicName')" name="max_leave" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterArabicName')
                                                         </div>
                                                     </div>
                                                 </div>
@@ -119,17 +178,17 @@
                                                 @endforeach
                                             @endif
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="editModalLabel">@lang('leave_type.EditFloor')</h6>
+                                                <h6 class="modal-title" id="editModalLabel">@lang('leave_setting.EditFloor')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-ar" class="form-label">@lang('leave_type.ArabicName')</label>
+                                                        <label for="edit-name-ar" class="form-label">@lang('leave_setting.ArabicName')</label>
                                                         <input type="text" id="edit-name-ar" class="form-control" name="name_ar" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-en" class="form-label">@lang('leave_type.EnglishName')</label>
+                                                        <label for="edit-name-en" class="form-label">@lang('leave_setting.EnglishName')</label>
                                                         <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
                                                     </div>
                                                 </div>
@@ -147,17 +206,17 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h6 class="modal-title" id="showModalLabel">@lang('leave_type.ShowFloor')</h6>
+                                            <h6 class="modal-title" id="showModalLabel">@lang('leave_setting.ShowFloor')</h6>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row gy-4">
                                                 <div class="col-xl-12">
-                                                    <label class="form-label">@lang('leave_type.ArabicName')</label>
+                                                    <label class="form-label">@lang('leave_setting.ArabicName')</label>
                                                     <p id="show-name-ar" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-xl-12">
-                                                    <label class="form-label">@lang('leave_type.EnglishName')</label>
+                                                    <label class="form-label">@lang('leave_setting.EnglishName')</label>
                                                     <p id="show-name-en" class="form-control-static"></p>
                                                 </div>
                                             </div>
@@ -193,23 +252,23 @@
                                 <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                 <tr>
-                                    <th scope="col">@lang('leave_type.ID')</th>
-                                    <th scope="col">@lang('leave_type.ArabicName')</th>
-                                    <th scope="col">@lang('leave_type.EnglishName')</th>
+                                    <th scope="col">@lang('leave_setting.ID')</th>
+                                    <th scope="col">@lang('leave_setting.ArabicName')</th>
+                                    <th scope="col">@lang('leave_setting.EnglishName')</th>
                                     <th scope="col">@lang('category.Actions')</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($LeaveType as $leave_type)
+                                @foreach ($LeaveType as $leave_setting)
                                     <tr>
-                                        <td>{{ $leave_type->id }}</td>
-                                        <td>{{ $leave_type->name_ar }}</td>
-                                        <td>{{ $leave_type->name_en }}</td>
+                                        <td>{{ $leave_setting->id }}</td>
+                                        <td>{{ $leave_setting->leaveTypes->name_ar }}</td>
+                                        <td>{{ $leave_setting->name_en }}</td>
                                         <td>
                                             <!-- Show Button -->
                                             <a href="javascript:void(0);"
                                                class="btn btn-info-light btn-wave show-floor-btn"
-                                               data-id="{{ $leave_type->id }}"
+                                               data-id="{{ $leave_setting->id }}"
                                                data-bs-toggle="modal"
                                                data-bs-target="#showModal">
                                                 @lang('category.show') <i class="ri-eye-line"></i>
@@ -218,16 +277,16 @@
                                             <!-- Edit Button -->
                                             <button type="button"
                                                     class="btn btn-orange-light btn-wave edit-floor-btn"
-                                                    data-id="{{ $leave_type->id }}"
+                                                    data-id="{{ $leave_setting->id }}"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
                                                 @lang('category.edit') <i class="ri-edit-line"></i>
                                             </button>
 
-                                            <form class="d-inline" id="delete-form-{{ $leave_type->id }}" action="{{ route('leave-type.delete', $leave_type->id) }}" method="POST">
+                                            <form class="d-inline" id="delete-form-{{ $leave_setting->id }}" action="{{ route('leave-setting.delete', $leave_setting->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" onclick="delete_item('{{ $leave_type->id }}')" class="btn btn-danger-light btn-wave">
+                                                <button type="button" onclick="delete_item('{{ $leave_setting->id }}')" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form>
@@ -279,8 +338,8 @@
     $(document).ready(function(){
         $('.edit-floor-btn').on('click', function() {
             var leaveTypeId = this.getAttribute('data-id');  
-            var get_url = "{{ route('leave-type.show', 'id') }}";
-            var edit_url = "{{ route('leave-type.update', 'id') }}";
+            var get_url = "{{ route('leave-setting.show', 'id') }}";
+            var edit_url = "{{ route('leave-setting.update', 'id') }}";
             get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details
@@ -307,7 +366,7 @@
 
         $('.show-floor-btn').on('click', function() {
             var leaveTypeId = this.getAttribute('data-id');   
-            var get_url = "{{ route('leave-type.show', 'id') }}";
+            var get_url = "{{ route('leave-setting.show', 'id') }}";
             get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details

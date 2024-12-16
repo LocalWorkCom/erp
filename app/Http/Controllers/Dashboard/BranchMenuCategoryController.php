@@ -23,7 +23,7 @@ class BranchMenuCategoryController extends Controller
         $responseData = $response->original;
         $Floors = $responseData['data'];
         $branches = Branch::all();
-        return view('dashboard.floor.list', compact('Floors', 'branches'));
+        //return view('dashboard.floor.list', compact('Floors', 'branches'));
     }
 
     public function show($id)
