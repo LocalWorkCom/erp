@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Storage;
 class DishService
 {
     public function index($withTrashed = false)
-    {
-        return $withTrashed
-            ? Dish::withTrashed()->with(['category', 'cuisine', 'sizes', 'details.recipe', 'addons'])->get()
-            : Dish::with(['category', 'cuisine', 'sizes', 'details.recipe', 'addons'])->get();
-    }
+{
+    return $withTrashed
+        ? Dish::withTrashed()->with(['dishCategory', 'cuisine', 'sizes', 'details.recipe', 'addons'])->get()
+        : Dish::with(['dishCategory', 'cuisine', 'sizes', 'details.recipe', 'addons'])->get();
+}
 
     public function show($id)
     {
