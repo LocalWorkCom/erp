@@ -534,4 +534,5 @@ return array (
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'view addons' => 'عرض الاضافات',
 );

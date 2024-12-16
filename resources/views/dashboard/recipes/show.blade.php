@@ -55,10 +55,10 @@
                                     <p class="form-text">{{ $recipe->type == 1 ? __('recipes.MainDish') : __('recipes.Drink') }}</p>
                                 </div>
 
-                                <div class="col-xl-6">
+                                <!-- <div class="col-xl-6">
                                     <label class="form-label">@lang('recipes.Price')</label>
                                     <p class="form-text">{{ $recipe->price }}</p>
-                                </div>
+                                </div> -->
 
                                 <div class="col-xl-6">
                                     <label class="form-label">@lang('recipes.IsActive')</label>

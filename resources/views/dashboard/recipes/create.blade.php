@@ -75,12 +75,12 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <!-- <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="price" class="form-label">@lang('recipes.Price')</label>
                                         <input type="number" class="form-control" id="price" name="price" value="{{ old('price') }}" min="0" step="0.01" required>
                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                         <div class="invalid-feedback">@lang('recipes.EnterPrice')</div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-xl-12">
                                         <label for="ingredients" class="form-label">@lang('recipes.Ingredients')</label>

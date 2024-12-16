@@ -532,4 +532,5 @@ return array (
   'view returns' => 'view returns',
   'create returns' => 'create returns',
   'update returns' => 'update returns',
+  'view addons' => 'view addons',
 );
