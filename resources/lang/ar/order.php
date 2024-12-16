@@ -57,6 +57,12 @@ return [
     "on_way" => "في الطريق اليك",
     "deliverd" => "تم التسليم",
     "cancelled" => "ملغي",
-    "order_trackings" => "متابعة الطلب"
+    "order_trackings" => "متابعة الطلب",
+    "print" => "طباعة",
+    "download" => "تحميل",
+    "billing_to" => "فاتورة لـ",
+    "sub_total" => "الاجمالي",
+    "tax_value" => "قيمة الضريبة",
+    "fees" => "الرسوم والخدمة"
 
 ];

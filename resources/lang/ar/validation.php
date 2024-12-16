@@ -151,6 +151,9 @@ return [
 
     //web
     'Correct' => 'صحيح',
+    'Alert' => 'تنبيه',
+    'Delete' => 'نعم, احذف',
+    'Cancel' => 'الغاء',
     'EnterBrand' => 'يجب اختيار براند',
     'EnterBranch' => 'يجب اختيار فرع',
     'EnterFloor' => 'يجب اختيار دور',
@@ -172,6 +175,10 @@ return [
     'EnterHexaCode' => 'يجب ادخال المود بالهكسا ',
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
+    'EnterArabicQue' => 'يجب ادخال السؤال بالعربي',
+    'EnterEnglishQue' => 'يجب ادخال السؤال بالانجليزي',
+    'EnterArabicAns' => 'يجب ادخال الاجابة بالعربي',
+    'EnterEnglishAns' => 'يجب ادخال الاجابة بالانجليزي',
     'EnterBarcode' => 'يجب ادخال الباركود',
     'EnterPrice' =>  'يجب ادخال السعر',
     'EnterMaxLimit' =>  'يجب ادخال الحد الاقصى',

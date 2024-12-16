@@ -5,145 +5,160 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
-    <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
         <h4 class="fw-medium mb-0">@lang('product.Products')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('dashboard.home') }}">
-                            @lang('sidebar.Main')
-                        </a>
+                        <a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('products.list') }}'">@lang('product.Products')</a>
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('products.list') }}'">@lang('product.Products')</a>
                     </li>
                 </ol>
             </nav>
         </div>
     </div>
+
     <div class="main-content app-content">
         <div class="container-fluid">
-            <!-- Start:: row-4 -->
+            <!-- Product Units Form -->
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header"
-                            style="
-                        display: flex;
-                        justify-content: space-between;">
-                            <div class="card-title">@lang('product.Products')</div>
-                            <button type="button" class="btn btn-primary label-btn"
-                                onclick="window.location.href='{{ route('product.create') }}'">
-                                <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('product.AddProduct')
-                            </button>
-
-
+                        <div class="card-header">
+                            <div class="card-title">@lang('product.Product Colors')</div>
                         </div>
                         <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
                             @endif
-                                <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">@lang('product.ID')</th>
-                                        <th scope="col">@lang('product.Image')</th>
-                                        <th scope="col">@lang('product.ArabicName')</th>
-                                        <th scope="col">@lang('product.EnglishName')</th>
-                                        <th scope="col">@lang('product.EnglishUnit')</th>
-                                        <th scope="col">@lang('product.ArabicUnit')</th>
-                                        <th scope="col">@lang('product.Type')</th>
-                                        <th scope="col">@lang('product.ArabicCategory')</th>
-                                        <th scope="col">@lang('product.EnglishCategory')</th>
-                                        <th scope="col">@lang('product.Barcode')</th>
-                                        <th scope="col">@lang('product.Sku')</th>
-                                        <th scope="col">@lang('product.IsHaveExpired')</th>
-                                        <th scope="col">@lang('category.Actions')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($products as $product)
-                                        <tr>
-                                            <td>{{ $product->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""
-                                                     width="100" height="100"></td>
-                                            <td>{{ $product->name_ar }}</td>
-                                            <td>{{ $product->name_en }}</td>
-                                            <td>{{ $product->mainUnit->name_en }}</td>
-                                            <td>{{ $product->mainUnit->name_ar }}</td>
-                                            <td>@lang('product.' . ucfirst($product->type))</td>
-                                            <td>{{ $product->Category->name_en }}</td>
-                                            <td>{{ $product->Category->name_ar }}</td>
-                                            <td>{{ $product->barcode }}</td>
-                                            <td>{{ $product->sku }}</td>
-                                            @php
-                                                $translationKey = $product->is_have_expired
-                                                    ? 'category.yes'
-                                                    : 'category.no';
-                                            @endphp
+                            <form action="{{ route('product.units.save', $product->id) }}" method="POST">
+                                @csrf
+                                <div class="col-xl-12">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('product.Color')</th>
+                                                <th>@lang('product.Actions')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Colors-table" data-color-count="{{ count($product->productColors) }}">
+                                            @foreach ($product->productColors as $index => $productColor)
+                                                <tr>
+                                                    <td>
+                                                        <select name="colors[{{ $index }}][color_id]"
+                                                            class="form-control" required>
+                                                            <option value="">Select Color</option>
+                                                            @foreach ($Colors as $color)
+                                                                <option value="{{ $color->id }}"
+                                                                    @if ($productColor->color_id == $color->id) selected @endif>
+                                                                    {{ $color->name_ar }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    {{-- <td>
+                                                        <input type="hidden" name="product_unit_id[]"
+                                                            value="{{ $productUnit->id }}">
+                                                        <input type="number" name="Colors[{{ $index }}][factor]"
+                                                            class="form-control" value="{{ $productUnit->factor }}"
+                                                            required>
+                                                    </td> --}}
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-sm remove-unit"
+                                                            data-unit-id="{{ $unit->pivot->unit_id ?? 'No Color ID' }}"
+                                                            data-product-id="{{ $product->id }}">
+                                                            @lang('product.Remove')
+                                                        </button>
 
-                                            <td> @lang($translationKey)</td>
-                                            <td>
-                                                <!-- Show Button -->
-                                                <a href="{{route('product.show',$product->id)}}"
-                                                   class="btn btn-info-light btn-wave show-category">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" id="add-color"
+                                    class="btn btn-success btn-sm">@lang('product.Add Color')</button>
 
-                                                <!-- Edit Button -->
-                                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-orange-light btn-wave">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
-                                                </a>
+                                <button type="submit" class="btn btn-primary mt-3">@lang('product.Save')</button>
+                            </form>
 
-                                                <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('product.delete', $product->id) }}" method="POST" onsubmit="return confirmDelete()">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
-
-
-                                                 <!-- Dropdown Menu -->
-                                                    <select class="form-select d-inline" style="width: auto;" onchange="navigateOption(this.value, {{ $product->id }})">
-                                                        <option value="">{{ __('product.options') }}</option>
-                                                        <option value="sizes">@lang('product.Sizes')</option>
-                                                        <option value="colors">@lang('product.Colors')</option>
-                                                        <option value="units">@lang('product.Units')</option>
-                                                    </select>
-
-                                            </td>
-
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End:: row-4 -->
-
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <!-- JQUERY CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        function confirmDelete() {
+            return confirm("@lang('validation.DeleteConfirm')");
+        }
+        $(document).ready(function() {
+            $('.select2').select2();
+
+            // Initialize the color index
+            let colorIndex = $('#Colors-table').data('color-count') || 0;
+
+            // Function to add a new color row
+            function addColorRow() {
+                const rowHtml = `
+        <tr>
+            <td>
+                <select name="colors[${colorIndex}][color_id]" class="form-control select2" required>
+                    @foreach ($colors as $color)
+                        <option value="{{ $color->id }}">{{ $color->name_ar }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm remove-color">
+                    @lang('product.Remove')
+                </button>
+            </td>
+        </tr>`;
+                $('#Colors-table').append(rowHtml);
+                $('.select2').select2();
+                colorIndex++;
+            }
+
+            // Add color on button click
+            $('#add-color').on('click', function() {
+                addColorRow();
+            });
+
+            // Remove color and re-index rows
+            $(document).on('click', '.remove-color', function() {
+                $(this).closest('tr').remove();
+                $('#Colors-table tr').each(function(index) {
+                    $(this).find('select, input').each(function() {
+                        let name = $(this).attr('name');
+                        if (name) {
+                            $(this).attr('name', name.replace(/\[\d+\]/, `[${index}]`));
+                        }
+                    });
+                });
+                colorIndex = $('#Colors-table tr').length;
+            });
+        });
+    </script>
 
     <!-- DATA-TABLES CDN -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -155,29 +170,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- INTERNAL DATADABLES JS -->
-    @vite('resources/assets/js/datatables.js')
 @endsection
-<script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
-</script>
-<script>
-    function navigateOption(value, productId) {
-        if (value) {
-            const routes = {
-                sizes: "{{ url('products/sizes') }}/" + productId,
-                colors: "{{ url('products/colors') }}/" + productId,
-                units: "{{ url('products/units') }}/" + productId
-            };
-            window.location.href = routes[value];
-        }
-    }
-
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
-</script>
-

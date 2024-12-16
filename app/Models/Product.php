@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Size;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -100,7 +101,28 @@ class Product extends Model
             ->withTimestamps(); // Optional: if your pivot table has timestamps
     }
 
-    
+    public function product_sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_sizes')
+            ->withPivot('code_size', 'size_id') // Include all necessary pivot fields
+            ->withTimestamps(); // Optional: if your pivot table has timestamps
+    }
+
+    public function product_colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_colors')
+            ->withPivot('color_id') // Include all necessary pivot fields
+            ->withTimestamps(); // Optional: if your pivot table has timestamps
+    }
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class);
+    } 
+
+    public function productSizes()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
 
     public function productUnits()
     {

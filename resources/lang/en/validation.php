@@ -85,6 +85,9 @@ return [
 
     //web
     'Correct' =>  'Looks good!',
+    'Alert' =>  'Alert',
+    'Delete' =>  'Yes, delete',
+    'Cancel' =>  'Cancel',
     'EnterBrand' => 'Please choose a brand',
     'EnterBranch' => 'Please choose a branch',
     'EnterFloor' => 'Please choose a floor',
@@ -106,6 +109,10 @@ return [
     'EnterEnglishName' => 'Please enter the English name',
     'EnterArabicDesc' => 'Please enter the Arabic description',
     'EnterEnglishDesc' =>  'Please enter the English description',
+    'EnterArabicQue' => 'Please enter the Arabic question',
+    'EnterEnglishQue' =>  'Please enter the English question',
+    'EnterArabicAns' => 'Please enter the Arabic answer',
+    'EnterEnglishAns' =>  'Please enter the English answer',
     'EnterBarcode' =>  'Please enter the barcode',
     'EnterPrice' =>  'Please enter the price',
     'EnterMaxLimit' =>  'Please enter the max limit',

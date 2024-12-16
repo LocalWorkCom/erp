@@ -19,14 +19,10 @@ class FloorController extends Controller
 
     public function index(Request $request)
     {
-//        dd(app()->getLocale());
         $response = $this->floorService->index($request);
-
         $responseData = $response->original;
-
         $Floors = $responseData['data'];
         $branches = Branch::all();
-//        dd($branches);
         return view('dashboard.floor.list', compact('Floors', 'branches'));
     }
 
@@ -68,5 +64,14 @@ class FloorController extends Controller
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect()->route('floors.list')->with('message',$message);
+    }
+
+    public function branch($branch_id)
+    {
+        $response = $this->floorService->branch($branch_id);
+        $responseData = $response->original;
+        $Floors = $responseData['data'];
+        $branches = Branch::all();
+        return view('dashboard.floor.list', compact('Floors', 'branches'));
     }
 }
