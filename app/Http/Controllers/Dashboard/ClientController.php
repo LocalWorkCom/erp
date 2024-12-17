@@ -38,8 +38,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|email|unique:users',
             // 'password' => 'nullable|string',
             'country_id' => 'required|exists:countries,id',
@@ -68,8 +67,7 @@ class ClientController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
+            'name' => 'nullable|string',
             'email' => 'nullable|email|unique:users,email,' . $id,
             // 'password' => 'nullable|string',
             'country_id' => 'nullable|exists:countries,id',
