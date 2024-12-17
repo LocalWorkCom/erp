@@ -595,7 +595,7 @@
                     <div class="d-flex align-items-center">
                         <div class="d-sm-flex wd-100p">
                             <div class="avatar avatar-sm"><img alt="avatar" class="rounded-circle"
-                                    src="{{ asset('build/assets/images/faces/1.jpg') }}"></div>
+                                    src="{{ asset('build/assets/images/images.png') }}"></div>
                             <div class="ms-2 my-auto d-none d-xl-flex">
                                 <h6 class=" font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">{{ auth()->user()->name }}
                                 </h6>
