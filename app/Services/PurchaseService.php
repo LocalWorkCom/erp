@@ -88,7 +88,7 @@ class PurchaseService
         }
 
         $purchase = PurchaseInvoice::findOrFail($id);
-        $purchase->Date = $data['date'];
+        $purchase->Date = $data['date'] ?? $purchase->Date;
         $purchase->invoice_number = $data['invoice_number'];
         $purchase->vendor_id = $data['vendor_id'];
         $purchase->type = $data['type'];

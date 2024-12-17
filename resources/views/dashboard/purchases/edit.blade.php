@@ -57,13 +57,13 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="date" class="form-label">@lang('purchase.date')</label>
                                         <input type="date" class="form-control" id="date" name="date"
-                                            value="{{ $purchase->Date }}" required>
+                                            value="{{ $purchase->Date }}">
                                     </div>
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="invoice_number" class="form-label">@lang('purchase.invoiceNumber')</label>
                                         <input type="text" class="form-control" id="invoice_number" name="invoice_number"
-                                            value="{{ $purchase->invoice_number }}" required>
+                                            value="{{ $purchase->invoice_number }}">
                                     </div>
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">

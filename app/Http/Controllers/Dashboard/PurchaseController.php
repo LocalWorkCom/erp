@@ -12,6 +12,8 @@ use App\Models\Unit;
 use App\Models\Vendor;
 use App\Services\PurchaseService;
 use Illuminate\Http\Request;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class PurchaseController extends Controller
 {
@@ -117,7 +119,7 @@ class PurchaseController extends Controller
         return redirect()->route('purchases.index')->with('success', 'Purchase deleted successfully!');
     }
 
-    public function print($id)
+    public function showInvoice($id)
     {
 
         $vendors = Vendor::all();
@@ -134,8 +136,14 @@ class PurchaseController extends Controller
         )->findOrFail($id);
 
         return view(
-            'dashboard.purchases.print',
+            'dashboard.purchases.invoice',
             compact('vendors', 'categories', 'products', 'units', 'stores', 'purchase')
         );
+    }
+
+    public function printInvoice($id)
+    {
+        $purchase = PurchaseInvoice::with('vendor', 'purchaseInvoicesDetails.product')->findOrFail($id);
+        return view('dashboard.purchases.print', compact('purchase'));
     }
 }
