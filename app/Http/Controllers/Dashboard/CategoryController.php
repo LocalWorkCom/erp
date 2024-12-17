@@ -27,11 +27,11 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-//        dd(app()->getLocale());
+        //        dd(app()->getLocale());
         $response = $this->categoryService->index($request, $this->checkToken);
 
         $responseData = $response->original;
- 
+
         $categories = $responseData['data'];
 
         return view('dashboard.category.list', compact('categories'));
@@ -50,43 +50,57 @@ class CategoryController extends Controller
             $validationErrors = $responseData['data'];
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('dashboard/categories')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('dashboard/categories')->with('message', $message);
     }
 
     public function show($id)
     {
         $category = Category::with('parent')->findOrFail($id);
-//        dd($category);
-        return view('dashboard.category.show', compact('category','id'));
+        //        dd($category);
+        return view('dashboard.category.show', compact('category', 'id'));
     }
 
     public function edit($id)
     {
         $category = Category::findOrFail($id);
         $categories = Category::where('active', 1)->get(); // Fetch only active categories
-        return view('dashboard.category.edit', compact('category', 'categories','id'));
+        return view('dashboard.category.edit', compact('category', 'categories', 'id'));
     }
 
     public function update(Request $request, $id)
     {
-//        dd($request->all());
+        //        dd($request->all());
         $response = $this->categoryService->update($request, $id, $this->checkToken);
-//        dd($response);
+        //        dd($response);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('dashboard/categories')->with('message',$message);
-    }
-    public function delete(Request $request, $id)
-    {
-        $response = $this->categoryService->delete($request, $id, $this->checkToken);
-        $responseData = $response->original;
-        $message= $responseData['message'];
-        return redirect('dashboard/categories')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('dashboard/categories')->with('message', $message);
     }
 
+    public function delete(Request $request, $id)
+    {
+        //        dd($request->all());
+        $response = $this->categoryService->delete($request, $id, $this->checkToken, true);
+        //        dd($response);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                // dd(0);
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
+        }
+        return redirect('dashboard/categories')->with('message', $message);
+    }
 }
