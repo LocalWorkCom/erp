@@ -44,6 +44,7 @@ class PrivacyPolicyController extends Controller
         $privacy->name_en = $data['name_en'];
         $privacy->description_ar = $data['description_ar'];
         $privacy->description_en = $data['description_en'];
+        $privacy->active = $data['active'];
         $privacy->created_by = auth()->id() ?? 1 ;
         $privacy->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -81,6 +82,7 @@ class PrivacyPolicyController extends Controller
         $privacy->name_en = $data['name_en'];
         $privacy->description_ar = $data['description_ar'];
         $privacy->description_en = $data['description_en'];
+        $privacy->active = $data['active'];
         $privacy->modified_by = auth()->id() ?? 1;
         $privacy->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -94,6 +96,12 @@ class PrivacyPolicyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $privacy = PrivacyPolicy::findOrFail($id);
+        $privacy->deleted_by = auth()->id() ?? 1;
+        $privacy->delete();
+        $response = RespondWithSuccessRequest($this->lang, 1);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        return redirect('dashboard/privacies')->with('message', $message);
     }
 }
