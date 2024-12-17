@@ -17,7 +17,7 @@ class Recipe extends Model
         'description_en',
         'description_ar',
         'type', // 1 for recipe, 2 for addon
-        'price',
+        // 'price',
         'is_active',
         'created_by',
         'modified_by',

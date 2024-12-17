@@ -67,10 +67,10 @@
                                         <textarea class="form-control" id="description_en" name="description_en" rows="4">{{ old('description_en', $addon->description_en) }}</textarea>
                                     </div>
 
-                                    <div class="col-xl-6">
+                                    <!-- <div class="col-xl-6">
                                         <label for="price" class="form-label">@lang('addons.Price')</label>
                                         <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $addon->price) }}" min="0" step="0.01" required>
-                                    </div>
+                                    </div> -->
 
                                     <div class="col-xl-6">
                                         <label for="is_active" class="form-label">@lang('addons.IsActive')</label>

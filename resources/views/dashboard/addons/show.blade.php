@@ -50,10 +50,10 @@
                                     <p class="form-text">{{ $addon->description_en ?? __('addons.NoDescription') }}</p>
                                 </div>
 
-                                <div class="col-xl-6">
+                                <!-- <div class="col-xl-6">
                                     <label class="form-label">@lang('addons.Price')</label>
                                     <p class="form-text">{{ $addon->price }}</p>
-                                </div>
+                                </div> -->
 
                                 <div class="col-xl-6">
                                     <label class="form-label">@lang('addons.IsActive')</label>

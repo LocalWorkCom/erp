@@ -256,11 +256,10 @@
                                                 @lang('category.edit') <i class="ri-edit-line"></i>
                                             </button>
 
-                                            <!-- Delete Button -->
-                                            <form class="d-inline" action="{{ route('logo.delete', $logo->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                            <form class="d-inline" id="delete-form-{{ $logo->id }}" action="{{ route('logo.delete', $logo->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger-light btn-wave">
+                                                <button type="button" onclick="delete_item({{ $logo->id }})" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form>
@@ -349,5 +348,21 @@
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>
