@@ -286,7 +286,7 @@
                                                     action="{{ route('logo.delete', $logo->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="button" onclick="delete_item({{ $logo->id }})"
+                                                    <button type="button" onclick="delete_item('{{ $logo->id }}')"
                                                         class="btn btn-danger-light btn-wave">
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>

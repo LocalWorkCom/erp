@@ -547,4 +547,6 @@ return array (
   'update faqs' => 'تعديل اسئلة متكررة',
   'Delete actionbacklogs' => 'حذف سجل الأجراءات',
   'delete faqs' => 'حذف اسئلة متكررة',
+  'delete returns' => 'حذف سياسة الاسترجاع',
+  'delete privacies' => 'حذف سياسة الخصوصية',
 );

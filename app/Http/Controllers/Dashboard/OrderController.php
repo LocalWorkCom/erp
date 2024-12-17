@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -120,7 +121,19 @@ class OrderController extends Controller
         return view('dashboard.order.print', compact('order'));
     }
 
-
+    public function changeItemStatus(Request $request)
+    {
+        // $request->validate([
+        //     'status' => 'required|in:pending,processing,completed,canceled',
+        // ]);
+    
+        $detail = OrderDetail::findOrFail($request->order_detail_id);
+        $detail->status = $request->input('status');
+        $detail->save();
+    
+        return true;
+    }
+    
     // public function delete(Request $request, $id)
     // {
     //     $response = $this->orderService->destroy($request, $id);

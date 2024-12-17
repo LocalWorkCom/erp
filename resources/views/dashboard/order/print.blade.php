@@ -66,7 +66,7 @@
                         <div class="card-header d-md-flex d-block">
                             <div class="h5 mb-0 d-sm-flex d-block align-items-center">
                                 <div>
-                                    <img src="{{ asset('build/assets/images/brand-logos/toggle-logo.png') }}"
+                                    <img src="{{ asset('build/assets/images/brand-logos/desktop.png') }}"
                                         alt="">
                                 </div>
                                 <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
@@ -104,7 +104,7 @@
                                             </p>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ms-auto mt-sm-0 mt-3">
-                                            {!! QrCode::size(200)->generate(route('order.change.status', $order->id)) !!}
+                                            {!! QrCode::size(100)->generate(route('order.change.status', $order->id)) !!}
 
                                         </div>
                                     </div>

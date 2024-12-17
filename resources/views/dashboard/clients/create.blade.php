@@ -54,25 +54,14 @@
                                 @csrf
                                 <div class="row gy-4">
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('client.firstName')</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name"
-                                            value="{{ old('first_name') }}" placeholder="@lang('client.firstName')" required>
+                                        <label for="input-placeholder" class="form-label">@lang('client.name')</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            value="{{ old('name') }}" placeholder="@lang('client.name')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.EnterFirstName')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('client.lastName')</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name"
-                                            value="{{ old('last_name') }}" placeholder="@lang('client.lastName')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterLastName')
+                                            @lang('validation.EnterName')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
