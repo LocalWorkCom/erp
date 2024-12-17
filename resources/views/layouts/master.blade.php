@@ -111,7 +111,25 @@
     <script src="{{ asset('build/assets/sticky.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+    <!-- Load Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <!-- Load Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Initialize Select2 -->
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2(); // Ensure this matches your element class.
+        });
+    </script>
+
 
     <!-- APP JS -->
     @vite('resources/js/app.js')

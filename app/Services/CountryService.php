@@ -31,8 +31,8 @@ class CountryService
             return RespondWithBadRequest($lang, 5);
         }
         $counties = Country::whereNull('deleted_at')
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         if (!$checkToken) {
             $counties = $counties->makeVisible(['name_en', 'name_ar', 'image', 'description_ar', 'description_en']);
@@ -82,7 +82,7 @@ class CountryService
         }
         // Validate the input
         $validator = Validator::make($request->all(), [
-           "name_ar" => "required",
+            "name_ar" => "required",
             "name_en" => "required",
             'currency_ar' => 'required',
             'currency_en' => 'required',
@@ -99,7 +99,7 @@ class CountryService
         if (!$country) {
             return  RespondWithBadRequestData($lang, 8);
         }
-        $modify_by = Auth::guard('api')->user()->id;
+        $modify_by = Auth::guard('admin')->user()->id;
 
         // Assign the updated values to the category model
         $country->name_ar = $request->name_ar;
@@ -108,44 +108,37 @@ class CountryService
         $country->currency_en = $request->currency_en;
         $country->code = $request->code;
         $country->currency_code = $request->currency_code;
-
+        $country->modify_by = $modify_by;
         // Update the category in the database
         $country->save();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    // public function delete(Request $request, $id, $checkToken)
-    // {
-    //     // Fetch the language header for response
-    //     $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
-    //     App::setLocale($lang);
+    public function destroy(Request $request,$id, $checkToken)
+    {
 
-    //     if (!CheckToken() && $checkToken) {
-    //         return RespondWithBadRequest($lang, 5);
-    //     }
-    //     // Find the category by ID, or throw a 404 if not found
-    //     $category = Category::find($id);
-    //     if (!$category) {
-    //         return  RespondWithBadRequestData($lang, 8);
-    //     }
-    //     // Check if there are any products associated with this category
-    //     if ($category->products()->count() > 0) {
-    //         return RespondWithBadRequest($lang, 6);
-    //     }
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
+        }
 
-    //     // Handle deletion of associated image if it exists
-    //     if ($category->image) {
-    //         $imagePath = public_path('images/categories/' . $category->image);
-    //         if (File::exists($imagePath)) {
-    //             File::delete($imagePath);
-    //         }
-    //     }
+        // Find the country
+        $country = Country::find($id);
+        if (!$country) {
+            return RespondWithBadRequestData($lang, 8); // Country not found
+        }
 
-    //     // Delete the category
-    //     $category->delete();
+        // Check if the country has related users
+        if ($country->users()->count() > 0) {
+            return RespondWithBadRequest($lang, 6); // Cannot delete country with related users
+        }
 
-    //     // Return success response
-    //     return RespondWithSuccessRequest($lang, 1);
-    // }
+        // Delete the country
+        $country->delete();
+
+        // Return success response
+        return RespondWithSuccessRequest($lang, 1);
+    }
 }

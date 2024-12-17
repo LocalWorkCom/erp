@@ -87,7 +87,8 @@
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="add-currency-ar"
                                                             class="form-label">@lang('country.ArabicCurrency')</label>
-                                                        <input type="text" id="add-currency-ar" placeholder="@lang('country.ArabicCurrency')" class="form-control"
+                                                        <input type="text" id="add-currency-ar"
+                                                            placeholder="@lang('country.ArabicCurrency')" class="form-control"
                                                             name="currency_ar" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.ArabicCurrency')</div>
@@ -97,14 +98,13 @@
                                                         <label for="add-currency-en"
                                                             class="form-label">@lang('country.EnglishCurrency')</label>
                                                         <input type="text" id="add-currency-en" class="form-control"
-                                                            name="currency_en" required placeholder="@lang('country.EnglishCurrency')" >
+                                                            name="currency_en" required placeholder="@lang('country.EnglishCurrency')">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnglishCurrency')</div>
                                                     </div>
-                                                     <!--  Code Input -->
-                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="add-code"
-                                                            class="form-label">@lang('country.code')</label>
+                                                    <!--  Code Input -->
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="add-code" class="form-label">@lang('country.code')</label>
                                                         <input type="text" id="add-code" class="form-control"
                                                             name="code" required placeholder="@lang('country.Code')">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
@@ -114,7 +114,8 @@
                                                         <label for="add-currency-code"
                                                             class="form-label">@lang('country.CurrencyCode')</label>
                                                         <input type="text" id="add-currency-code" class="form-control"
-                                                            name="currency_code" required placeholder="@lang('country.CurrencyCode')">
+                                                            name="currency_code" required
+                                                            placeholder="@lang('country.CurrencyCode')">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.CurrencyCode')</div>
                                                     </div>
@@ -135,8 +136,8 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form id="edit-country-form" action="" method="POST" class="needs-validation"
-                                            novalidate>
+                                        <form id="edit-country-form" action="" method="POST"
+                                            class="needs-validation" novalidate>
                                             @csrf
                                             @method('PUT')
                                             @if ($errors->any())
@@ -181,7 +182,7 @@
                                                         <label for="edit-currency-ar"
                                                             class="form-label">@lang('country.ArabicCurrency')</label>
                                                         <input type="text" id="edit-currency-ar" class="form-control"
-                                                            name="currency-ar" required>
+                                                            name="currency_ar" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.ArabicCurrency')</div>
                                                     </div>
@@ -190,12 +191,12 @@
                                                         <label for="edit-currency-en"
                                                             class="form-label">@lang('country.EnglishCurrency')</label>
                                                         <input type="text" id="edit-currency-en" class="form-control"
-                                                            name="currency-en" required>
+                                                            name="currency_en" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnglishCurrency')</div>
                                                     </div>
-                                                     <!--  Code Input -->
-                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <!--  Code Input -->
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-code"
                                                             class="form-label">@lang('country.code')</label>
                                                         <input type="text" id="edit-code" class="form-control"
@@ -206,8 +207,8 @@
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="edit-currency-code"
                                                             class="form-label">@lang('country.CurrencyCode')</label>
-                                                        <input type="text" id="edit-currency-code" class="form-control"
-                                                            name="currency-code" required>
+                                                        <input type="text" id="edit-currency-code"
+                                                            class="form-control" name="currency_code" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.CurrencyCode')</div>
                                                     </div>
@@ -249,7 +250,8 @@
                                                 <div class="col-xl-12">
                                                     <label class="form-label">@lang('country.ArabicCurrency')</label>
                                                     <p id="show-currency-ar" class="form-control-static"></p>
-                                                </div><div class="col-xl-12">
+                                                </div>
+                                                <div class="col-xl-12">
                                                     <label class="form-label">@lang('country.EnglishCurrency')</label>
                                                     <p id="show-currency-en" class="form-control-static"></p>
                                                 </div>
@@ -336,7 +338,7 @@
                                                 </button>
 
                                                 <!-- Delete Button -->
-                                                <form class="d-inline"
+                                                {{-- <form class="d-inline"
                                                     action="{{ route('country.delete', $country->id) }}" method="POST"
                                                     onsubmit="return confirmDelete()">
                                                     @csrf
@@ -344,7 +346,12 @@
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
+                                                <button type="button" onclick="delete_item('{{ $country->id }}')"
+                                                    class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
+
                                             </td>
 
                                         </tr>
@@ -376,6 +383,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
@@ -423,35 +431,75 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-    const showButtons = document.querySelectorAll('.show-country-btn');
-    const nameArDisplay = document.getElementById('show-name-ar');
-    const nameEnDisplay = document.getElementById('show-name-en');
-    const currencyCodeDisplay = document.getElementById('show-currency-code');
-    const currencyEnDisplay = document.getElementById('show-currency-en');
-    const currencyArDisplay = document.getElementById('show-currency-ar');
-    const CodeDisplay = document.getElementById('show-code');
+        const showButtons = document.querySelectorAll('.show-country-btn');
+        const nameArDisplay = document.getElementById('show-name-ar');
+        const nameEnDisplay = document.getElementById('show-name-en');
+        const currencyCodeDisplay = document.getElementById('show-currency-code');
+        const currencyEnDisplay = document.getElementById('show-currency-en');
+        const currencyArDisplay = document.getElementById('show-currency-ar');
+        const CodeDisplay = document.getElementById('show-code');
 
-    showButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const nameAr = this.getAttribute('data-name-ar');
-            const nameEn = this.getAttribute('data-name-en');
-            const Code = this.getAttribute('data-code');
-            const currencyCode = this.getAttribute('data-currency-code');
-            const currencyEn = this.getAttribute('data-currency-en');
-            const currencyAr = this.getAttribute('data-currency-ar');
+        showButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const nameAr = this.getAttribute('data-name-ar');
+                const nameEn = this.getAttribute('data-name-en');
+                const Code = this.getAttribute('data-code');
+                const currencyCode = this.getAttribute('data-currency-code');
+                const currencyEn = this.getAttribute('data-currency-en');
+                const currencyAr = this.getAttribute('data-currency-ar');
 
-            // Display the country details in the modal
-            nameArDisplay.textContent = nameAr;
-            nameEnDisplay.textContent = nameEn;
-            CodeDisplay.textContent = Code;
-            currencyCodeDisplay.textContent = currencyCode;
-            currencyEnDisplay.textContent = currencyEn;
-            currencyArDisplay.textContent = currencyAr;
+                // Display the country details in the modal
+                nameArDisplay.textContent = nameAr;
+                nameEnDisplay.textContent = nameEn;
+                CodeDisplay.textContent = Code;
+                currencyCodeDisplay.textContent = currencyCode;
+                currencyEnDisplay.textContent = currencyEn;
+                currencyArDisplay.textContent = currencyAr;
+            });
         });
     });
-});
 
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
+    function delete_item(id) {
+    Swal.fire({
+        title: '{{ __('country.warning_titleper') }}',
+        text: '{{ __('country.delete_confirmationper') }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '{{ __('country.confirm_delete') }}',
+        cancelButtonText: '{{ __('country.cancel') }}',
+        confirmButtonColor: '#3085d6'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var form = document.getElementById('delete-form-' + id);
+
+            $.ajax({
+                url: '{{ route('country.delete', ':id') }}'.replace(':id', id),
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'DELETE'
+                },
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '{{ __('country.delete_success') }}',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __('country.delete_error') }}',
+                        text: xhr.responseJSON?.error || 'An error occurred.',
+                        showConfirmButton: true
+                    });
+                }
+            });
+        }
+    });
+}
+
 </script>

@@ -44,6 +44,28 @@ class CountryController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $this->countryService->update($request, $id, $this->checkToken);
+        $response = $this->countryService->update($request, $id, $this->checkToken);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect()->route('countries.list')->with('message', $message);
+    }
+    public function destroy(Request $request, $id)
+    {
+        $response = $this->countryService->destroy($request,$id, $this->checkToken);
+        $responseData = $response->original;
+
+        // Handle errors and validation
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+
+        // Success response
+        $message = $responseData['message'];
+        return redirect()->route('countries.list')->with('message', $message);
     }
 }

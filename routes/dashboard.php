@@ -137,8 +137,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::group(['prefix' => 'country'], function () {
         Route::any('/get', [CountryController::class, 'show'])->name('country.show')->middleware('role_or_permission:view countries');
         Route::post('store', [CountryController::class, 'store'])->name('country.store')->middleware('role_or_permission:create countries');
-        Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update')->middleware('role_or_permission:update countries');
-        Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete')->middleware('role_or_permission:delete countries');
+        Route::put('update/{id}', [CountryController::class, 'update'])->name('country.update')->middleware('role_or_permission:update countries');
+        Route::delete('delete/{id}', [CountryController::class, 'destroy'])->name('country.delete')->middleware('role_or_permission:delete countries');
     });
 
     Route::get('/units', [UnitController::class, 'index'])->name('units.list')->middleware('role_or_permission:view units');
