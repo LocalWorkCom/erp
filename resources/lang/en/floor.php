@@ -36,4 +36,5 @@ return [
     'ChooseBranch' => 'Choose Branch',
     'ChooseFloor' => 'Choose Floor',
     'ChoosePartition' => 'Choose Partition',
+    'DishesCategory' => 'Dishes Category',
 ];

@@ -375,28 +375,7 @@ class ProductService
             }
         }
     }
-
-    public function addSize(Request $request, $productId)
-    {
-        $validated = $request->validate([
-            'size' => 'required|string|max:255',
-            'barcode' => 'required|string|max:255',
-        ]);
-
-        $this->productService->addSizeToProduct($productId, $validated);
-        return redirect()->back()->with('message', __('Size added successfully!'));
-    }
-
-    public function addColor(Request $request, $productId)
-    {
-        $validated = $request->validate([
-            'color' => 'required|string|max:255',
-        ]);
-
-        $this->productService->addColorToProduct($productId, $validated);
-        return redirect()->back()->with('message', __('Color added successfully!'));
-    }
-
+    // product unit
     public function list($productId, $checkToken)
     {
         $products = Product::with(['productUnits.unit' => function ($query) {
@@ -410,66 +389,230 @@ class ProductService
     }
     public function saveProductUnits(Request $request, $productId)
     {
-        // Validate the units
+        // Validate the input
         $validated = $request->validate([
             'units.*.unit_id' => 'required|exists:units,id',
             'units.*.factor' => 'required|numeric',
-            'product_unit_id' => 'nullable|array',  // Ensure product_unit_id is an array if passed
+            'product_unit_id' => 'nullable|array',
+            'product_unit_id.*' => 'nullable|integer|exists:product_units,id',
         ]);
 
-        $product_unit_ids = $request->product_unit_id; // This is an array of product unit IDs, or null if creating new units
+        $productUnitIds = $request->product_unit_id ?? [];
+        $productUnits = ProductUnit::where('product_id', $productId)->get();
 
-        // Get all the existing product units for the given product
-        $product_units = ProductUnit::where('product_id', $productId)->get();
-
-        // Remove units that are not in the submitted product_unit_ids
-        foreach ($product_units as $unit) {
-            if ($product_unit_ids && !in_array($unit->id, $product_unit_ids)) {
+        // Delete units that are not in the submitted product_unit_ids
+        foreach ($productUnits as $unit) {
+            if (!in_array($unit->id, $productUnitIds)) {
                 $unit->delete();
             }
         }
 
-        // Get the units from the request
         $units = $request->units;
 
-        // Loop through the units and save them
-        for ($i = 0; $i < count($units); $i++) {
-            $unitId = (int) $units[$i]['unit_id'];  // Cast unit_id to integer
-            $factor = $units[$i]['factor'];  // Factor value
+        // Save or update units
+        foreach ($units as $index => $unit) {
+            $unitId = (int) $unit['unit_id'];
+            $factor = $unit['factor'];
+            $productUnitId = $productUnitIds[$index] ?? null;
 
-            // Check if the unit already exists for the given product
+            // Check for duplicate units, excluding the current unit being updated
+            $existingUnitQuery = ProductUnit::where('product_id', $productId)
+                ->where('unit_id', $unitId);
+            if ($productUnitId) {
+                $existingUnitQuery->where('id', '!=', $productUnitId);
+            }
+            $existingUnit = $existingUnitQuery->exists();
 
-            // If product_unit_id is provided, update the existing record
-            if (isset($product_unit_ids[$i]) && $product_unit_ids[$i]) {
-                // Update existing ProductUnit
+            if ($existingUnit) {
+                // If the unit already exists for this product, return a flash message
+                return CustomRespondWithBadRequest(
+                    'The unit with ID ' . $unitId . ' already exists for this product.'
+                );
+            }
+
+            if ($productUnitId) {
+                // Update existing unit
                 ProductUnit::updateOrCreate(
-                    ['id' => (int) $product_unit_ids[$i]],  // Find the record by its ID
+                    ['id' => $productUnitId],
                     [
-                        'unit_id' => $unitId,  // Update unit_id
-                        'factor' => $factor,  // Update factor
+                        'unit_id' => $unitId,
+                        'factor' => $factor,
+                        'product_id' => $productId,
                     ]
                 );
             } else {
-                $existingUnit = ProductUnit::where('product_id', $productId)
-                    ->where('unit_id', $unitId)
-                    ->exists();
-
-                if ($existingUnit) {
-                    // If the unit already exists for this product, return a flash message
-                    return CustomRespondWithBadRequest('The unit with ID ' . $unitId . ' already exists for this product.');
-                }
-
-                // If no product_unit_id is provided, create a new ProductUnit
+                // Create new unit
                 ProductUnit::create([
-                    'unit_id' => (int) $unitId,  // Ensure unit_id is treated as an integer
-                    'product_id' => (int) $productId,  // Ensure product_id is treated as an integer
-                    'created_by' => Auth::guard('admin')->user()->id,  // Keep created_by as is
-                    'factor' => $factor,  // Factor value
+                    'unit_id' => $unitId,
+                    'factor' => $factor,
+                    'product_id' => $productId,
+                    'created_by' => Auth::guard('admin')->user()->id,
                 ]);
             }
         }
 
-        // Return a success response after all units are processed
+        // Return success response
+        return RespondWithSuccessRequest($this->lang, 1);
+    }
+    // product size
+    public function listSize($productId, $checkToken)
+    {
+        $products = Product::with(['productSizes.size' => function ($query) {
+            $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
+        }])->findOrFail($productId);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
+
+        return ResponseWithSuccessData($this->lang, $products, 1);
+    }
+    public function saveProductSizes(Request $request, $productId)
+    {
+        // dd($request);
+        // Validate the sizes
+        $validated = $request->validate([
+            // 'sizes' => 'required|array', // Ensure 'sizes' is an array
+            'sizes.*.size_id' => 'required|exists:sizes,id',
+            'sizes.*.code_size' => 'required|string|unique:product_sizes,code_size',
+            'product_size_id' => 'nullable|array',  // Ensure product_size_id is an array if passed
+        ]);
+
+        $product_size_ids = $request->product_size_id; // This is an array of product size IDs, or null if creating new sizes
+
+        // Get all the existing product sizes for the given product
+        $product_sizes = ProductSize::where('product_id', $productId)->get();
+
+        // Remove sizes that are not in the submitted product_size_ids
+        foreach ($product_sizes as $size) {
+            if ($product_size_ids && !in_array($size->id, $product_size_ids)) {
+                $size->delete();
+            }
+        }
+        // dd($request);
+        $sizes = $request->product_sizes;
+
+        // Loop through the sizes and save them
+        for ($i = 0; $i < count($sizes); $i++) {
+            $sizeId = (int) $sizes[$i]['size_id'];  // Cast size_id to integer
+            $code_size = $sizes[$i]['code_size'];  // code_size value
+
+            // Check if the size already exists for the given product
+            if (isset($product_size_ids[$i]) && $product_size_ids[$i]) {
+                // Update existing ProductSize
+                ProductSize::updateOrCreate(
+                    ['id' => (int) $product_size_ids[$i]],  // Find the record by its ID
+                    [
+                        'size_id' => $sizeId,  // Update size_id
+                        'code_size' => $code_size,  // Update code_size
+                    ]
+                );
+            } else {
+                // dd(0);
+                $existingSize = ProductSize::where('product_id', $productId)
+                    ->where('size_id', $sizeId)
+                    ->exists();
+
+                if ($existingSize) {
+                    // If the size already exists for this product, return a flash message
+                    return CustomRespondWithBadRequest('The size with ID ' . $sizeId . ' already exists for this product.');
+                }
+                $existingSize = ProductSize::where('code_size', $code_size) // Match code_size
+                    ->exists();
+
+                if ($existingSize) {
+                    return CustomRespondWithBadRequest('The size with ID $value and code size ' . $code_size . ' already exists for this product.');
+
+                    // $fail("The size with ID $value and code size '$codeSize' already exists for this product.");
+                }
+                // If no product_size_id is provided, create a new ProductSize
+                ProductSize::create([
+                    'size_id' => (int) $sizeId,  // Ensure size_id is treated as an integer
+                    'product_id' => (int) $productId,  // Ensure product_id is treated as an integer
+                    'created_by' => Auth::guard('admin')->user()->id,  // Keep created_by as is
+                    'code_size' => $code_size,  // code_size value
+                ]);
+            }
+        }
+
+        // Return a success response after all sizes are processed
+        return RespondWithSuccessRequest($this->lang, 1);
+    }
+    // product color
+    public function listColor($productId, $checkToken)
+    {
+        $products = Product::with(['productColors.color' => function ($query) {
+            $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
+        }])->findOrFail($productId);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
+
+        return ResponseWithSuccessData($this->lang, $products, 1);
+    }
+    public function saveProductColors(Request $request, $productId)
+    {
+        // Validate the input
+        $validated = $request->validate([
+            'colors.*.color_id' => 'required|exists:colors,id',
+            'product_color_id' => 'nullable|array',
+            'product_color_id.*' => 'nullable|integer|exists:product_colors,id',
+        ]);
+
+        $productColorIds = $request->product_color_id ?? [];
+        $colors = $request->colors;
+
+        // Fetch current product colors
+        $productColors = ProductColor::where('product_id', $productId)->get();
+
+        // Collect submitted color IDs
+        $submittedColorIds = collect($colors)->pluck('color_id')->toArray();
+
+        // Check for duplicates among submitted colors
+        if (count($submittedColorIds) !== count(array_unique($submittedColorIds))) {
+            return CustomRespondWithBadRequest('Duplicate colors are submitted.');
+        }
+
+        // Delete colors that are not in the submitted product_color_ids
+        foreach ($productColors as $color) {
+            if (!in_array($color->id, $productColorIds)) {
+                $color->delete();
+            }
+        }
+
+        // Save or update colors
+        foreach ($colors as $index => $color) {
+            $colorId = (int) $color['color_id'];
+            $productColorId = $productColorIds[$index] ?? null;
+
+            // Check if the same color already exists for this product
+            $existingColor = ProductColor::where('product_id', $productId)
+                ->where('color_id', $colorId)
+                ->where('id', '!=', $productColorId) // Exclude the current color being updated
+                ->exists();
+
+            if ($existingColor) {
+                return CustomRespondWithBadRequest(
+                    'The color with ID ' . $colorId . ' already exists for this product.'
+                );
+            }
+
+            if ($productColorId) {
+                // Update existing color
+                ProductColor::updateOrCreate(
+                    ['id' => $productColorId],
+                    ['color_id' => $colorId, 'product_id' => $productId]
+                );
+            } else {
+                // Create new color
+                ProductColor::create([
+                    'color_id' => $colorId,
+                    'product_id' => $productId,
+                    'created_by' => Auth::guard('admin')->user()->id,
+                ]);
+            }
+        }
+
+        // Return success response
         return RespondWithSuccessRequest($this->lang, 1);
     }
 }

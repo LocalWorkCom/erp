@@ -240,6 +240,34 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card mt-4">
+                            <div class="card-body p-4">
+                                <div class="notes">
+                                    <h4>
+                                        <i class="fas fa-file-alt main-color fa-xs"></i>
+                                        وفرناها عليك                                  
+                                      </h4>
+                                      <form>
+                                        <div class="my-3 d-flex ">
+                                          <input type="text" class="form-control" placeholder="أدخل كوبون الخصم" id="coupon">
+                                        <button type="submit" class="btn me-4">إضافة</button>
+                                       </div>
+                                      </form>
+                                </div>
+                                <div class="notes mt-4">
+                                    <h4>
+                                        <i class="fas fa-file-alt main-color fa-xs"></i>
+                                        لديك اى ملاحظات اضافيه؟
+                                    </h4>
+                                    <div class="form-floating mt-3">
+                                        <textarea class="form-control" placeholder="من فضلك اكتب ملاحظتك"
+                                            id="floatingTextarea2" style="height: 100px"></textarea>
+                                        <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="card">
@@ -316,6 +344,11 @@
 
                             </div>
                         </div>
+                        <button class="btn w-100 d-flex justify-content-between mt-5">
+                            <span> تابع الدفع <span class="me-2"> > </span>
+                            </span>
+                            <span>550 ج . م</span>
+                        </button>
                     </div>
 
                 </div>
@@ -323,7 +356,6 @@
         </section>
     </main>
     <footer>
-
         <div class="footer-curve"></div>
         <div class="container ">
             <figure class="footer-logo">
@@ -333,16 +365,47 @@
         <div class="footer">
             <div class="container py-sm-5 p-4">
                 <div class=" row m-0">
-                    <div class="col-md-3">
+                    <div class="col-md-3" data-aos="zoom-in">
                         <h4 class="footer-title"> تواصل معنا </h4>
                         <ul class="list-unstyled px-0 pt-4">
-                            <li><a href="#"> القائمة الرئيسية</a></li>
-                            <li><a href="#">العروض</a></li>
-                            <li><a href="#">فروعنا</a></li>
-                            <li><a href="#">الشروط والاحكام</a></li>
+                            <li>
+                                <ul class="list-unstyled social-media p-0">
+                                    <li>
+                                        <a href="#" class="ms-3">
+                                            <i class="fab fa-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="ms-3">
+                                            <i class="fab fa-snapchat"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="ms-3">
+                                            <i class="fab fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <span class="icon ms-2">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <a href="#">
+                                    010265899887
+                                </a>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <span class="icon ms-2">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <a href="#">
+                                    010265899887
+                                </a>
+                            </li>
                         </ul>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" data-aos="zoom-in">
                         <h4 class="footer-title">روابط سريعة </h4>
                         <ul class="list-unstyled px-0 pt-4">
                             <li><a href="#"> القائمة الرئيسية</a></li>
@@ -351,7 +414,7 @@
                             <li><a href="#">الشروط والاحكام</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" data-aos="zoom-in">
                         <h4 class="footer-title">المساعدة</h4>
                         <ul class="list-unstyled px-0 pt-4">
                             <li><a href="#"> خدمة العملاء </a></li>
@@ -359,7 +422,7 @@
                             <li><a href="#">سياسة الخصوصية</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" data-aos="zoom-in">
                         <h4 class="footer-title mb-4">مواعيد عمل المطعم</h4>
                         <p>الاحد الى الخميس من الساعه 10صباحا الى 10 مساء</p>
                         <p>الجمعة الي االسبت من الساعة 1 مساء الي 12 صباحا</p>
@@ -368,7 +431,6 @@
 
             </div>
             <div class="copywrite">
-
                 <p class="m-0">جميع الحقوق محفوظة لصالح <a href="#">الكوت</a> 2024</p>
             </div>
         </div>

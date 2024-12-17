@@ -49,7 +49,7 @@ class AddonService
             'description_ar' => $data['description_ar'] ?? null,
             'description_en' => $data['description_en'] ?? null,
             'type' => 2, // Ensures it's always an addon
-            'price' => $data['price'],
+            // 'price' => $data['price'],
             'is_active' => $data['is_active'],
             'created_by' => auth()->id(),
         ]);
@@ -74,7 +74,7 @@ class AddonService
             'description_ar' => $data['description_ar'] ?? null,
             'description_en' => $data['description_en'] ?? null,
             'type' => 2, // Ensures it remains an addon
-            'price' => $data['price'],
+            // 'price' => $data['price'],
             'is_active' => $data['is_active'],
             'modified_by' => auth()->id(),
         ]);

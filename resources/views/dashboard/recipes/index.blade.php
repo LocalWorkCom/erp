@@ -55,7 +55,7 @@
                                         <th>@lang('recipes.NameArabic')</th>
                                         <th>@lang('recipes.NameEnglish')</th>
                                         <th>@lang('recipes.Type')</th>
-                                        <th>@lang('recipes.Price')</th>
+                                        <!-- <th>@lang('recipes.Price')</th> -->
                                         <th>@lang('recipes.Actions')</th>
                                     </tr>
                                 </thead>
@@ -74,7 +74,7 @@
                                                     @lang('recipes.UnknownType')
                                                 @endif
                                             </td>
-                                            <td>{{ $recipe->price }}</td>
+                                            <!-- <td>{{ $recipe->price }}</td> -->
                                             <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.recipes.show', $recipe->id) }}" class="btn btn-info-light">

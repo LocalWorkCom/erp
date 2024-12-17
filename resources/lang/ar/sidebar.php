@@ -69,8 +69,11 @@ return[
     'Terms' => 'الشروط والاحكام',
     'Privacy' => 'سياسة الخصوصية',
     'Return' => 'سياسة الاسترجاع',
+    'FAQ' => 'الاسئلة المتكررة',
     'AddonCategories'=>'فئات الاضافات',
     'roles' => 'المهام',
     'permissions' => 'الصلاحيات',
+    'branchMenuCategory' => 'تصنيف الاطباق للفرع',
+    'VacationSettings' => 'اعدادات الاجازات',
 
 ];

@@ -1,4 +1,6 @@
-<?php return array (
+<?php
+
+return array (
   'view dashboard' => 'عرض الصفحه الرئيسيه',
   'create dashboard' => 'أنشاء الصفحه الرئيسيه',
   'update dashboard' => 'تعديل الصفحه الرئيسيه',
@@ -535,5 +537,14 @@
   'view returns' => 'عرض سياسة استرجاع',
   'create returns' => 'اضافة سياسة استرجاع',
   'update returns' => 'تعديل سياسة استرجاع',
+  'view addons' => 'عرض الاضافات',
+  'view branch_menu_categories' => 'عرض تصنيف الاطباق للفرع',
+  'create branch_menu_categories' => 'اضف تصنيف الاطباق للفرع',
+  'update branch_menu_categories' => 'تعديل تصنيف الاطباق للفرع',
+  'delete branch_menu_categories' => 'حذف تصنيف الاطباق للفرع',
+  'create faqs' => 'اضافة اسئلة متكررة',
+  'view faqs' => 'عرض اسئلة متكررة',
+  'update faqs' => 'تعديل اسئلة متكررة',
   'Delete actionbacklogs' => 'حذف سجل الأجراءات',
+  'delete faqs' => 'حذف اسئلة متكررة',
 );

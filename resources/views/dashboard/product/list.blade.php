@@ -126,8 +126,19 @@
                                                 <select class="form-select d-inline" style="width: auto;"
                                                     onchange="navigateOption(this.value, {{ $product->id }})">
                                                     <option value="">{{ __('product.options') }}</option>
+
+                                                    @can('view product_sizes')
+
                                                     <option value="sizes">@lang('product.Sizes')</option>
+
+                                                    @endcan
+
+                                                    @can('view product_colors')
+
                                                     <option value="colors">@lang('product.Colors')</option>
+                                                    
+                                                    @endcan
+
                                                     @can('view product_units')
 
                                                     <option value="units">@lang('product.Units')</option>
@@ -180,8 +191,8 @@
     function navigateOption(value, productId) {
         if (value) {
             const routes = {
-                sizes: "{{ url('dashboard/products/sizes') }}/" + productId,
-                colors: "{{ url('dashboard/products/colors') }}/" + productId,
+                sizes: "{{ url('dashboard/products/size/list') }}/" + productId,
+                colors: "{{ url('dashboard/products/color/list') }}/" + productId,
                 units: "{{ url('dashboard/products/unit/list') }}/" + productId
             };
             console.log("Redirecting to: ", routes[value]); // Debugging output
