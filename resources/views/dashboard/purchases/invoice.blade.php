@@ -103,7 +103,7 @@
                                                 @endforeach
                                                 <tr>
                                                     <td colspan="3"></td>
-                                                    <td colspan="2">
+                                                    <td colspan="3">
                                                         <table class="table table-sm text-nowrap mb-0 table-borderless">
                                                             <tbody>
                                                                 <tr>

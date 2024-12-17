@@ -112,7 +112,7 @@
                                                 <!-- Print Button -->
                                                 <a href="{{ route('purchase.showInvoice', $purchase->id) }}"
                                                     class="btn btn-success-light btn-wave">
-                                                    @lang('purchase.print') <i class="ri-edit-line"></i>
+                                                    @lang('purchase.print') <i class="bx bx-receipt"></i>
                                                 </a>
                                             </td>
                                         </tr>
