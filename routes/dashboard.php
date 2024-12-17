@@ -282,6 +282,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [TermsAndConditionsController::class, 'show'])->name('term.show')->middleware('role_or_permission:view terms');
         Route::get('edit/{id}', [TermsAndConditionsController::class, 'edit'])->name('term.edit')->middleware('role_or_permission:update terms');
         Route::put('update/{id}', [TermsAndConditionsController::class, 'update'])->name('term.update')->middleware('role_or_permission:update terms');
+        Route::delete('delete/{id}', [TermsAndConditionsController::class, 'destroy'])->name('term.delete')->middleware('role_or_permission:delete terms');
     });
 
     Route::get('/privacies', [PrivacyPolicyController::class, 'index'])->name('privacies.list')->middleware('role_or_permission:view privacies');
@@ -291,6 +292,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [PrivacyPolicyController::class, 'show'])->name('privacy.show')->middleware('role_or_permission:view privacies');
         Route::get('edit/{id}', [PrivacyPolicyController::class, 'edit'])->name('privacy.edit')->middleware('role_or_permission:update privacies');
         Route::put('update/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy.update')->middleware('role_or_permission:update privacies');
+        Route::delete('delete/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy.delete')->middleware('role_or_permission:delete privacies');
     });
 
     Route::get('/returns', [ReturnPolicyController::class, 'index'])->name('returns.list')->middleware('role_or_permission:view returns');
@@ -300,6 +302,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [ReturnPolicyController::class, 'show'])->name('return.show')->middleware('role_or_permission:view returns');
         Route::get('edit/{id}', [ReturnPolicyController::class, 'edit'])->name('return.edit')->middleware('role_or_permission:update returns');
         Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update')->middleware('role_or_permission:update returns');
+        Route::delete('delete/{id}', [ReturnPolicyController::class, 'destroy'])->name('return.delete')->middleware('role_or_permission:delete returns');
     });
 
     Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.list')->middleware('role_or_permission:view faqs');
