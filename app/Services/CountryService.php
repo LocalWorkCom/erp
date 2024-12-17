@@ -26,13 +26,13 @@ class CountryService
     public function index(Request $request, $checkToken)
     {
 
-        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        $lang = $request->header('lang', 'ar');
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        $counties = Country::where('deleted_at', null)->get();
-
-        // dd($categories);
+        $counties = Country::whereNull('deleted_at')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         if (!$checkToken) {
             $counties = $counties->makeVisible(['name_en', 'name_ar', 'image', 'description_ar', 'description_en']);
@@ -62,7 +62,7 @@ class CountryService
 
         $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
 
-        $counties = new Category();
+        $counties = new Country();
         $counties->name_ar = $request->name_ar;
         $counties->name_en = $request->name_en;
         $counties->currency_ar = $request->currency_ar;

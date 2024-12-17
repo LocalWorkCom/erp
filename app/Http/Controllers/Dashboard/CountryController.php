@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Services\CountryService;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,14 @@ class CountryController extends Controller
 
     public function store(Request $request)
     {
-        return $this->countryService->store($request, $this->checkToken);
+        $response = $this->countryService->store($request, $this->checkToken);
+        $responseData = $response->original;
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect()->route('countries.list')->with('message', $message);
     }
 
     public function update(Request $request, $id)

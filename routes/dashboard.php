@@ -68,7 +68,7 @@ Route::get('/error/403', function () {
 
 Route::middleware(['auth:admin'])->get('dashboard', function () {
     return view('dashboard.index');
-})->name('dashboard.home');
+})->name('dashboard.home')->middleware('role_or_permission:view dashboard');
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
