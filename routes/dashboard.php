@@ -83,8 +83,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     // product_sizes
     Route::get('/products/size/list/{productId}', [ProductController::class, 'size'])
-    ->name('products.sizes.list')
-    ->middleware('role_or_permission:view product_sizes');
+        ->name('products.sizes.list')
+        ->middleware('role_or_permission:view product_sizes');
 
     Route::post('product/{id}/sizes/save', [ProductController::class, 'saveSizes'])
         ->name('product.sizes.save')
@@ -92,8 +92,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     // product_colors
     Route::get('/products/color/list/{productId}', [ProductController::class, 'color'])
-    ->name('products.colors.list')
-    ->middleware('role_or_permission:view product_colors');
+        ->name('products.colors.list')
+        ->middleware('role_or_permission:view product_colors');
 
     Route::post('product/{id}/colors/save', [ProductController::class, 'saveColors'])
         ->name('product.colors.save')
@@ -422,6 +422,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [PurchaseController::class, 'update'])->name('purchase.update')->middleware('role_or_permission:update purchase_invoices');
         Route::delete('delete/{id}', [PurchaseController::class, 'destroy'])->name('purchase.delete')->middleware('role_or_permission:delete purchase_invoices');
         Route::get('print/{id}', [PurchaseController::class, 'print'])->name('purchase.print'); //->middleware('role_or_permission:print purchase_invoices');
+        Route::get('invoice/{id}', [PurchaseController::class, 'showInvoice'])->name('purchase.showInvoice'); //->middleware('role_or_permission:print purchase_invoices');
     });
 
     Route::prefix('/dishes')->group(function () {
@@ -455,5 +456,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
-
 });
