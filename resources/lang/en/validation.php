@@ -124,5 +124,8 @@ return [
     'EnterStartDate' => 'Please enter the start date',
     'EnterEndDate' => 'Please enter the end date',
     'DeleteConfirm'=> 'Are you sure you want to delete this item?',
+    'EnterLeaveType' => 'Please choose a leave type',
+    'EnterMinmum' => 'Please enter the minmum',
+    'EnterMaxmum' => 'Please enter the maxmum',
 
 ];

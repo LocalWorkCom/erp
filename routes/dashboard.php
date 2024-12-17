@@ -272,7 +272,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [SliderController::class, 'show'])->name('slider.show')->middleware('role_or_permission:view sliders');
         Route::get('edit/{id}', [SliderController::class, 'edit'])->name('slider.edit')->middleware('role_or_permission:update sliders');
         Route::put('update/{id}', [SliderController::class, 'update'])->name('slider.update')->middleware('role_or_permission:update sliders');
-        Route::delete('delete/{id}', [SliderController::class, 'delete'])->name('slider.delete')->middleware('role_or_permission:delete sliders');
+        Route::delete('delete/{id}', [SliderController::class, 'destroy'])->name('slider.delete')->middleware('role_or_permission:delete sliders');
     });
 
     Route::get('/terms', [TermsAndConditionsController::class, 'index'])->name('terms.list')->middleware('role_or_permission:view terms');

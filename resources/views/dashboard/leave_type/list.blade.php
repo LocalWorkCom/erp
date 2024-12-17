@@ -200,9 +200,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($LeaveType as $leave_type)
+                                @foreach ($LeaveType as $k_leave_type=>$leave_type)
                                     <tr>
-                                        <td>{{ $leave_type->id }}</td>
+                                        <td>{{ ++$k_leave_type }}</td>
                                         <td>{{ $leave_type->name_ar }}</td>
                                         <td>{{ $leave_type->name_en }}</td>
                                         <td>
