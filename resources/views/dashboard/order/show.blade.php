@@ -132,6 +132,7 @@
                                             <th>@lang('order.quantity')</th>
                                             <th>@lang('order.status')</th>
                                             <th>@lang('order.note')</th>
+                                            <th>@lang('order.actions')</th> <!-- New column for actions -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -145,10 +146,24 @@
                                                 <td>{{ $detail->quantity }}</td>
                                                 <td>@lang('order.' . strtolower($detail->status))</td>
                                                 <td>{{ $detail->note }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0)" 
+                                                       onclick="ChangeItemOrder('{{ $detail->id }}', 'cancel')"
+                                                       class="dropdown-item">
+                                                        @lang('order.cancel')
+                                                    </a>
+                                                    <a href="javascript:void(0)" 
+                                                       onclick="ChangeItemOrder('{{ $detail->id }}', 'refund')"
+                                                       class="dropdown-item">
+                                                        @lang('order.refund')
+                                                    </a>
+                                                </td>
+                                                
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+
 
                                 <h4>@lang('order.order_details')</h4>
                                 <table class="table">
@@ -159,6 +174,8 @@
                                             <th>@lang('order.quantity')</th>
                                             <th>@lang('order.total_before_tax')</th>
                                             <th>@lang('order.total_after_tax')</th>
+                                            <th>@lang('order.actions')</th> <!-- New column for actions -->
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -169,13 +186,26 @@
                                                 <td>{{ $addon->quantity }}</td>
                                                 <td>{{ $addon->price_before_tax }}</td>
                                                 <td>{{ $addon->price_after_tax }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0)" 
+                                                       onclick="ChangeItemOrder('{{ $addon->id }}', 'cancel')"
+                                                       class="dropdown-item">
+                                                        @lang('order.cancel')
+                                                    </a>
+                                                    <a href="javascript:void(0)" 
+                                                       onclick="ChangeItemOrder('{{ $addon->id }}', 'refund')"
+                                                       class="dropdown-item">
+                                                        @lang('order.refund')
+                                                    </a>
+                                                </td>
+                                                
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
 
                             </div>
-                            
+
                             <div class="main-content app-content">
                                 <h4>@lang('order.order_trackings')</h4>
                                 <div class="container-fluid">
@@ -197,7 +227,8 @@
                                                                 <div class="flex-fill">
                                                                     <div class="align-items-center">
                                                                         <div class="mt-sm-0 mt-2">
-                                                                            <p class="mb-0 fs-14 fw-semibold">@lang('order.' . $tracking->order_status)
+                                                                            <p class="mb-0 fs-14 fw-semibold">
+                                                                                @lang('order.' . $tracking->order_status)
                                                                             </p>
                                                                             {{-- <p class="mb-0 text-muted">
                                                                                 Changed the password
@@ -243,4 +274,47 @@
 
     <!-- SELECT2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        function ChangeItemOrder(order_detail_id, status) {
+            Swal.fire({
+                title: '@lang('order.confirm_action')',
+                text: '@lang('order.are_you_sure')',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@lang('order.yes_proceed')',
+                cancelButtonText: '@lang('order.no_cancel')'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Call the AJAX route
+                    $.ajax({
+                        url: '{{ route('order.change.item') }}',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            order_detail_id: order_detail_id,
+                            status: status
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                '@lang('order.success')',
+                                "response.message",
+                                'success'
+                            );
+                            // Optionally reload the page or update the UI
+                            location.reload();
+                        },
+                        error: function(error) {
+                            Swal.fire(
+                                '@lang('order.error')',
+                                error.responseJSON.message,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
