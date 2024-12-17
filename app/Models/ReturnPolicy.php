@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ReturnPolicy extends Model
 {
-    use HasFactory, softDeletes;
+    use HasFactory, softDeletes, UUID;
 
     protected $fillable = [
         'name_ar',
         'name_en',
         'description_ar',
         'description_en',
+        'active',
         'created_by',
         'modified_by',
         'deleted_by',

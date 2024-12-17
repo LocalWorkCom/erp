@@ -52,9 +52,9 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">@lang('category.ID')</th>
+                                    <th scope="col">@lang('slider.Image')</th>
                                     <th scope="col">@lang('slider.ArabicName')</th>
                                     <th scope="col">@lang('slider.EnglishName')</th>
-                                    <th scope="col">@lang('slider.Image')</th>
                                     <th scope="col">@lang('slider.Dish')</th>
                                     <th scope="col">@lang('slider.Offer')</th>
                                     <th scope="col">@lang('category.Actions')</th>
@@ -64,10 +64,10 @@
                                 @foreach ($sliders as $slider)
                                     <tr>
                                         <td>{{ $slider->id }}</td>
-                                        <td>{{ $slider->name_ar }}</td>
-                                        <td>{{ $slider->name_en }}</td>
                                         <td><img src="{{ url($slider->image) }}" alt=""
                                                  width="100" height="100"></td>
+                                        <td>{{ $slider->name_ar }}</td>
+                                        <td>{{ $slider->name_en }}</td>
                                         <td>{{ $slider->dish ? $slider->dish->name_ar . " | " . $slider->dish->name_en : __('category.none') }}</td>
                                         <td>{{ $slider->offer ? $slider->offer->name_ar . " | " . $slider->offer->name_en : __('category.none') }}</td>
                                         <td>
