@@ -10,7 +10,7 @@ use App\Traits\UUID;
 class Country extends Model
 {
     use HasFactory ,SoftDeletes, UUID;
-    protected $appends = ['name', 'code', 'currency'];
+    protected $appends = ['name', 'code', 'currency', 'name_site', 'currency_site'];
 
     protected $fillable = [
         'name_ar',
@@ -46,6 +46,17 @@ class Country extends Model
     {
         return Request()->header('lang') == "en" ? $this->currency_en : $this->currency_ar;
     }
+
+    public function getNameSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getCurrencySiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->currency_en : $this->currency_ar;
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
