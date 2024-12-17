@@ -2,10 +2,6 @@
 
 @section('styles')
     <!-- DATA-TABLES CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -46,7 +42,7 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form action="{{ route('product.units.save', $product->id) }}" method="POST">
+                            <form action="{{ route('product.colors.save', $product->id) }}" method="POST">
                                 @csrf
                                 <div class="col-xl-12">
                                     <table class="table table-bordered">
@@ -56,14 +52,14 @@
                                                 <th>@lang('product.Actions')</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="Colors-table" data-color-count="{{ count($product->productColors) }}">
+                                        <tbody id="colors-table" data-color-count="{{ count($product->productColors) }}">
                                             @foreach ($product->productColors as $index => $productColor)
                                                 <tr>
                                                     <td>
                                                         <select name="colors[{{ $index }}][color_id]"
                                                             class="form-control" required>
                                                             <option value="">Select Color</option>
-                                                            @foreach ($Colors as $color)
+                                                            @foreach ($colors as $color)
                                                                 <option value="{{ $color->id }}"
                                                                     @if ($productColor->color_id == $color->id) selected @endif>
                                                                     {{ $color->name_ar }}
@@ -73,14 +69,14 @@
                                                     </td>
                                                     {{-- <td>
                                                         <input type="hidden" name="product_unit_id[]"
-                                                            value="{{ $productUnit->id }}">
-                                                        <input type="number" name="Colors[{{ $index }}][factor]"
-                                                            class="form-control" value="{{ $productUnit->factor }}"
+                                                            value="{{ $productColor->id }}">
+                                                        <input type="number" name="units[{{ $index }}][factor]"
+                                                            class="form-control" value="{{ $productColor->factor }}"
                                                             required>
                                                     </td> --}}
                                                     <td>
-                                                        <button type="button" class="btn btn-danger btn-sm remove-unit"
-                                                            data-unit-id="{{ $unit->pivot->unit_id ?? 'No Color ID' }}"
+                                                        <button type="button" class="btn btn-danger btn-sm remove-color"
+                                                            data-color-id="{{ $color->pivot->color_id ?? 'No Color ID' }}"
                                                             data-product-id="{{ $product->id }}">
                                                             @lang('product.Remove')
                                                         </button>
@@ -108,18 +104,19 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+console.log(0);
         function confirmDelete() {
             return confirm("@lang('validation.DeleteConfirm')");
         }
         $(document).ready(function() {
             $('.select2').select2();
 
-            // Initialize the color index
-            let colorIndex = $('#Colors-table').data('color-count') || 0;
+            // Initialize color index based on existing rows
+            let colorIndex = $('#colors-table').data('color-count');
 
-            // Function to add a new color row
-            function addColorRow() {
-                const rowHtml = `
+            // Add a new color row
+            $('#add-color').on('click', function() {
+                const newRow = `
         <tr>
             <td>
                 <select name="colors[${colorIndex}][color_id]" class="form-control select2" required>
@@ -129,33 +126,29 @@
                 </select>
             </td>
             <td>
-                <button type="button" class="btn btn-danger btn-sm remove-color">
-                    @lang('product.Remove')
-                </button>
+                <button type="button" class="btn btn-danger btn-sm remove-color">@lang('product.Remove')</button>
             </td>
         </tr>`;
-                $('#Colors-table').append(rowHtml);
-                $('.select2').select2();
-                colorIndex++;
-            }
-
-            // Add color on button click
-            $('#add-color').on('click', function() {
-                addColorRow();
+                $('#colors-table').append(newRow);
+                $('.select2').select2(); // Reinitialize Select2
+                colorIndex++; // Increment the index
             });
 
-            // Remove color and re-index rows
+            // Remove a color row
             $(document).on('click', '.remove-color', function() {
                 $(this).closest('tr').remove();
-                $('#Colors-table tr').each(function(index) {
+                // Reindex rows after removal
+                $('#colors-table tr').each(function(index) {
                     $(this).find('select, input').each(function() {
-                        let name = $(this).attr('name');
+                        const name = $(this).attr('name');
                         if (name) {
-                            $(this).attr('name', name.replace(/\[\d+\]/, `[${index}]`));
+                            const newName = name.replace(/\[\d+\]/, `[${index}]`);
+                            $(this).attr('name', newName);
                         }
                     });
                 });
-                colorIndex = $('#Colors-table tr').length;
+                // Update the index
+                colorIndex = $('#colors-table tr').length;
             });
         });
     </script>
