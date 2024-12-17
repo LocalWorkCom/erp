@@ -215,19 +215,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($LeaveType as $leave_type)
-                                        <tr>
-                                            <td>{{ $leave_type->id }}</td>
-                                            <td>{{ $leave_type->name_ar }}</td>
-                                            <td>{{ $leave_type->name_en }}</td>
-                                            <td>
-                                                <!-- Show Button -->
-                                                <a href="javascript:void(0);"
-                                                    class="btn btn-info-light btn-wave show-floor-btn"
-                                                    data-id="{{ $leave_type->id }}" data-bs-toggle="modal"
-                                                    data-bs-target="#showModal">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
+                                @foreach ($LeaveType as $k_leave_type=>$leave_type)
+                                    <tr>
+                                        <td>{{ ++$k_leave_type }}</td>
+                                        <td>{{ $leave_type->name_ar }}</td>
+                                        <td>{{ $leave_type->name_en }}</td>
+                                        <td>
+                                            <!-- Show Button -->
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-info-light btn-wave show-floor-btn"
+                                               data-id="{{ $leave_type->id }}"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#showModal">
+                                                @lang('category.show') <i class="ri-eye-line"></i>
+                                            </a>
 
                                                 <!-- Edit Button -->
                                                 <button type="button"

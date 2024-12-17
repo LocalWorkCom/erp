@@ -153,7 +153,8 @@
                                                     name="products[0][price]" required></td>
                                             <td><input type="number" step="0.01" class="form-control"
                                                     name="products[0][quantity]" required></td>
-                                            <td><button type="button" class="btn btn-danger removeRow">Remove</button>
+                                            <td><button type="button"
+                                                    class="btn btn-danger removeRow">@lang('purchase.remove')</button>
                                             </td>
                                         </tr>
                                     </tbody>
