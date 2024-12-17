@@ -55,20 +55,11 @@
                                 @method('PUT')
                                 <div class="row gy-4">
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="first_name" class="form-label">@lang('client.firstName')</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name"
-                                            value="{{ $client->clientDetails->first_name }}"
-                                            placeholder="@lang('client.firstName')">
+                                        <label for="name" class="form-label">@lang('client.name')</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            value="{{ $client->name }}" placeholder="@lang('client.name')">
                                         <div class="valid-feedback">@lang('validation.Correct')</div>
-                                        <div class="invalid-feedback">@lang('validation.EnterFirstName')</div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="last_name" class="form-label">@lang('client.lastName')</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name"
-                                            value="{{ $client->clientDetails->last_name }}"
-                                            placeholder="@lang('client.lastName')">
-                                        <div class="valid-feedback">@lang('validation.Correct')</div>
-                                        <div class="invalid-feedback">@lang('validation.EnterLastName')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterName')</div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="email" class="form-label">@lang('client.email')</label>
