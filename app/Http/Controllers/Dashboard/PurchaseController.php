@@ -141,7 +141,7 @@ class PurchaseController extends Controller
         );
     }
 
-    public function printInvoice($id)
+    public function print($id)
     {
         $purchase = PurchaseInvoice::with('vendor', 'purchaseInvoicesDetails.product')->findOrFail($id);
         return view('dashboard.purchases.print', compact('purchase'));
