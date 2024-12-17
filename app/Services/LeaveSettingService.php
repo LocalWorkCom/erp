@@ -28,14 +28,24 @@ class LeaveSettingService
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $leave_setting = LeaveSetting::with(['countries', 'leaveTypes'])->findOrFail($id);
+            return ResponseWithSuccessData($this->lang, $leave_setting, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
+
     public function add(Request $request)
     {
         try {
             $validateData = Validator::make($request->all(), [
-                // 'leave_type_id' => 'required|exists:leave_types,id',
-                // 'country_id' => 'required|exists:countries,id',
-                // 'min_leave' => 'required|integer',
-                // 'max_leave' => 'required|integer'
+                'leave_type_id' => 'required|exists:leave_types,id',
+                'country_id' => 'required|exists:countries,id',
+                'min_leave' => 'required|integer',
+                'max_leave' => 'required|integer'
             ]);
 
             if ($validateData->fails()) {
@@ -57,11 +67,11 @@ class LeaveSettingService
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
         try {
             $validateData = Validator::make($request->all(), [
-                'id' => 'required|exists:leave_settings,id',
+                // 'id' => 'required|exists:leave_settings,id',
                 'leave_type_id' => 'required|exists:leave_types,id',
                 'country_id' => 'required|exists:countries,id',
                 'min_leave' => 'required|integer',
@@ -70,6 +80,11 @@ class LeaveSettingService
 
             if ($validateData->fails()) {
                 return RespondWithBadRequestWithData($validateData->errors());
+            }
+
+            $leave_setting = LeaveSetting::find($id);
+            if (!$leave_setting) {
+                return  RespondWithBadRequestNotExist();
             }
 
             $user_id = Auth::guard('admin')->user()->id;

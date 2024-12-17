@@ -44,6 +44,7 @@ class ReturnPolicyController extends Controller
         $return->name_en = $data['name_en'];
         $return->description_ar = $data['description_ar'];
         $return->description_en = $data['description_en'];
+        $return->active = $data['active'];
         $return->created_by = auth()->id() ?? 1 ;
         $return->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -81,6 +82,7 @@ class ReturnPolicyController extends Controller
         $return->name_en = $data['name_en'];
         $return->description_ar = $data['description_ar'];
         $return->description_en = $data['description_en'];
+        $return->active = $data['active'];
         $return->modified_by = auth()->id() ?? 1;
         $return->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -94,6 +96,12 @@ class ReturnPolicyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $return = ReturnPolicy::findOrFail($id);
+        $return->deleted_by = auth()->id() ?? 1;
+        $return->delete();
+        $response = RespondWithSuccessRequest($this->lang, 1);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        return redirect('dashboard/returns')->with('message', $message);
     }
 }

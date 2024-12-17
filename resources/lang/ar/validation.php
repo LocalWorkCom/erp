@@ -189,5 +189,8 @@ return [
     'EnterUsageLimit' => 'يجب ادخال حد الاستخدام',
     'EnterStartDate' => 'يجب ادخال تاريخ البدء',
     'EnterEndDate' => 'يجب ادخال تاريخ الانتهاء',
-    'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟'
+    'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟',
+    'EnterLeaveType' => 'يجب اختيار انواع الاجازات',
+    'EnterMinmum' => 'يجب ادخال الحد الادنى',
+    'EnterMaxmum' => 'يجب ادخال الحد الاقصى',
 ];

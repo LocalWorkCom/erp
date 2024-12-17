@@ -46,6 +46,7 @@ class FAQController extends Controller
         $faq->question_en = $data['question_en'];
         $faq->answer_ar = $data['answer_ar'];
         $faq->answer_en = $data['answer_en'];
+        $faq->active = $data['active'];
         $faq->created_by = auth()->id() ?? 1 ;
         $faq->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -85,6 +86,7 @@ class FAQController extends Controller
         $faq->question_en = $data['question_en'];
         $faq->answer_ar = $data['answer_ar'];
         $faq->answer_en = $data['answer_en'];
+        $faq->active = $data['active'];
         $faq->modified_by = auth()->id() ?? 1;
         $faq->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -101,7 +103,6 @@ class FAQController extends Controller
         $faq = FAQ::findOrFail($id);
         $faq->deleted_by = auth()->id() ?? 1;
         $faq->delete();
-
         $response = RespondWithSuccessRequest($this->lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];

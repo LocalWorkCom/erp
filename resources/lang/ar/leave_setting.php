@@ -1,11 +1,11 @@
 <?php
 
 return [
+    'LeaveSetting' => 'اعدادات الاجازات',
     'LeaveType' => 'انواع الاجازات',
-    'LeaveType' => 'انواع الاجازات',
-    'ShowLeaveType' => 'عرض انواع الاجازات',
-    'EditLeaveType' => 'تعديل انواع الاجازات',
-    'AddLeaveType' => 'اضافة انواع الاجازات',
+    'ShowLeaveSetting' => 'عرض اعدادات الاجازات',
+    'EditLeaveSetting' => 'تعديل اعدادات الاجازات',
+    'AddLeaveSetting' => 'اضافة اعدادات الاجازات',
     'ShowPartition' => 'عرض المنطقة',
     'EditPartition' => 'تعديل المنطقة',
     'AddPartition' => 'اضافة منطقة',
@@ -31,6 +31,12 @@ return [
     'Capacity' => 'السعة',
     'Both' => 'يوجد النوعين',
     'ChooseBranch' => 'اختر الفرع',
-    'ChooseLeaveType' => 'اختر انواع الاجازات',
     'DishesCategory' => 'تصنيف الاطباق',
+    'LeaveTypeName' => 'انواع الاجازات',
+    'CountryName' => 'الدولة',
+    'Minmum' => 'الحد الادنى',
+    'Maxmum' => 'الحد الاقصى',
+    'ChooseLeaveType' => 'اختر انواع الاجازات',
+    'ChooseCountry' => 'اختر الدولة',
+
 ];

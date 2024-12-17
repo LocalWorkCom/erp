@@ -15,5 +15,13 @@ return[
     'Show' => 'عرض',
     'Edit' => 'تعديل',
     'Delete' => 'حذف',
-    'Country' => 'دولة'
+    'Country' => 'دولة',
+    'warning_titleper' => 'هل أنت متأكد؟',
+    'delete_confirmationper' => 'هل تريد بالتأكيد حذف هذا العنصر؟',
+    'confirm_delete' => 'نعم، احذفه!',
+    'cancel' => 'إلغاء',
+    'delete_success' => 'تم الحذف بنجاح!',
+    'delete_error' => 'فشل في حذف العنصر.',
+    'not_found' => 'العنصر غير موجود.',
+    'country_in_use' => 'هذا البلد مستخدم حالياً ولا يمكن حذفه.',
 ];

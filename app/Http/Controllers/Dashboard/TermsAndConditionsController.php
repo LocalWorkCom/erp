@@ -44,6 +44,7 @@ class TermsAndConditionsController extends Controller
         $term->name_en = $data['name_en'];
         $term->description_ar = $data['description_ar'];
         $term->description_en = $data['description_en'];
+        $term->active = $data['active'];
         $term->created_by = auth()->id() ?? 1 ;
         $term->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -81,6 +82,7 @@ class TermsAndConditionsController extends Controller
         $term->name_en = $data['name_en'];
         $term->description_ar = $data['description_ar'];
         $term->description_en = $data['description_en'];
+        $term->active = $data['active'];
         $term->modified_by = auth()->id() ?? 1;
         $term->save();
         $response = RespondWithSuccessRequest($this->lang, 1);
@@ -94,6 +96,12 @@ class TermsAndConditionsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $term = TermsAndCondition::findOrFail($id);
+        $term->deleted_by = auth()->id() ?? 1;
+        $term->delete();
+        $response = RespondWithSuccessRequest($this->lang, 1);
+        $responseData = $response->original;
+        $message = $responseData['message'];
+        return redirect('dashboard/terms')->with('message', $message);
     }
 }

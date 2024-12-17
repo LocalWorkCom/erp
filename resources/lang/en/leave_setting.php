@@ -1,11 +1,11 @@
 <?php
 
 return [
+    'LeaveSetting' => 'Leave Setting',
     'LeaveType' => 'Leave Type',
-    'LeaveType' => 'Leave Type',
-    'ShowLeaveType' => 'Show Leave Type',
-    'EditLeaveType' => 'Edit Leave Type',
-    'AddLeaveType' => 'Add Leave Type',
+    'ShowLeaveSetting' => 'Show Leave Setting',
+    'EditLeaveSetting' => 'Edit Leave Setting',
+    'AddLeaveSetting' => 'Add Leave Setting',
     'ShowPartition' => 'Show Partition',
     'EditPartition' => 'Edit Partition',
     'AddPartition' => 'Add Partition',
@@ -31,7 +31,12 @@ return [
     'Capacity' => 'Capacity',
     'Both' => 'Both',
     'ChooseBranch' => 'Choose Branch',
-    'ChooseLeaveType' => 'Choose Leave Type',
     'ChoosePartition' => 'Choose Partition',
     'DishesCategory' => 'Dishes Category',
+    'LeaveTypeName' => 'Leave Type',
+    'CountryName' => 'Country',
+    'Minmum' => 'Minmum',
+    'Maxmum' => 'Maxmum',
+    'ChooseLeaveType' => 'Choose Leave Type',
+    'ChooseCountry' => 'Choose Country',
 ];
