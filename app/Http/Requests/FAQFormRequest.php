@@ -28,6 +28,7 @@ class FAQFormRequest extends FormRequest
             'question_en' => 'required|string',
             'answer_ar' => 'required|string',
             'answer_en' => 'required|string',
+            'active' => 'required|boolean',
         ];
     }
 }

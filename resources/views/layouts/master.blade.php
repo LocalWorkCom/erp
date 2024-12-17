@@ -25,6 +25,9 @@
     <!-- ICONS CSS -->
     <link href="{{ asset('build/assets/icon-fonts/icons.css') }}" rel="stylesheet">
 
+    <!-- Load Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
     <!-- APP SCSS -->
     @vite(['resources/sass/app.scss'])
 
@@ -112,16 +115,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-    <!-- Load jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-
-    <!-- Load Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-    <!-- Load Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     <!-- Initialize Select2 -->
     <script>
