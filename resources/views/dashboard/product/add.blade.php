@@ -49,10 +49,10 @@
                                 <div class="row gy-4">
                                     <div class="col-12">
                                         <p class="mb-2 text-muted">@lang('product.Brand')</p>
-                                        <select name="brand_id" class="js-example-basic-single form-control" required>
+                                        <select name="brand_id" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseBrand')</option>
                                             @foreach ($Brands as $Brand)
-                                                <option value="{{ $Brand->id }}">{{ $Brand->name_ar . " | ".$Brand->name_en }}</option>
+                                                <option value="{{ $Brand->id }}">{{ $Brand->name }}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
@@ -84,7 +84,7 @@
 
                                     <div class="col-xl-4">
                                         <label for="main_unit_id" class="form-label">@lang('product.Unit')</label>
-                                        <select name="main_unit_id" id="main_unit_id" class="js-example-basic-single form-control" required>
+                                        <select name="main_unit_id" id="main_unit_id" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseUnit')</option>
                                             @foreach ($Units as $Unit)
                                                 <option value="{{ $Unit->id }}">{{ $Unit->name_ar . " | ".$Unit->name_en }}</option>
@@ -102,7 +102,7 @@
                                     
                                     <div class="col-xl-4">
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
-                                        <select name="currency_code" id="currency_code" class="js-example-basic-single form-control" required>
+                                        <select name="currency_code" id="currency_code" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCurrency')</option>
                                             @foreach ($Currencies as $index => $Currency)
                                                 <option value="{{ $index }}">{{ $Currency }}</option>
@@ -113,7 +113,7 @@
 
                                     <div class="col-xl-4">
                                         <label for="category_id" class="form-label">@lang('product.Category')</label>
-                                        <select name="category_id" id="category_id" class="js-example-basic-single form-control" required>
+                                        <select name="category_id" id="category_id" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCategory')</option>
                                             @foreach ($Categories as $Category)
                                                 <option value="{{ $Category->id }}">{{ $Category->name_ar. " | ".$Category->name_en }}</option>

@@ -167,7 +167,7 @@ class CategoryService
     public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
-
+        
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -178,9 +178,12 @@ class CategoryService
         }
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {
-            return RespondWithBadRequest($lang, 6);
+            return CustomRespondWithBadRequest(
+                'The category have relation'
+            );
         }
-
+        
+        // dd($category);
         // Handle deletion of associated image if it exists
         if ($category->image) {
             $imagePath = public_path('images/categories/' . $category->image);

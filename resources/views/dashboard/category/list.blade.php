@@ -45,13 +45,15 @@
                             </a>
                         </div>
                         <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
                             @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
@@ -87,15 +89,24 @@
                                                 <a href="{{ route('category.edit', $category->id) }}" class="btn btn-orange-light btn-wave">
                                                     @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </a>
-
+                                                <form class="d-inline" id="delete-form-{{ $category->id }}"
+                                                    action="{{ route('category.delete', $category->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item({{ $category->id }})"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
+                                            
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                                {{-- <form class="d-inline" action="{{ route('category.delete', $category->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -134,6 +145,21 @@
 <script>
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>
 
