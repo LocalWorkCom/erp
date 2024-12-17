@@ -33,15 +33,18 @@
                         </div>
                         <div class="card-body">
                             @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                        {{ $error }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                            <i class="bi bi-x"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
+                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
                             @endif
+
                             <form action="{{ route('product.colors.save', $product->id) }}" method="POST">
                                 @csrf
                                 <div class="col-xl-12">
@@ -100,14 +103,31 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-console.log(0);
+        // Function to generate a new color row
+        function addNewColorRow(index) {
+            return `
+                <tr>
+                    <td>
+                        <select name="colors[${index}][color_id]" class="form-control select2" required>
+                            @foreach ($colors as $color)
+                                <option value="{{ $color->id }}">{{ $color->name_ar }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-color">@lang('product.Remove')</button>
+                    </td>
+                </tr>
+            `;
+        }
+
         function confirmDelete() {
             return confirm("@lang('validation.DeleteConfirm')");
         }
+
         $(document).ready(function() {
             $('.select2').select2();
 
@@ -116,19 +136,7 @@ console.log(0);
 
             // Add a new color row
             $('#add-color').on('click', function() {
-                const newRow = `
-        <tr>
-            <td>
-                <select name="colors[${colorIndex}][color_id]" class="form-control select2" required>
-                    @foreach ($colors as $color)
-                        <option value="{{ $color->id }}">{{ $color->name_ar }}</option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm remove-color">@lang('product.Remove')</button>
-            </td>
-        </tr>`;
+                const newRow = addNewColorRow(colorIndex);
                 $('#colors-table').append(newRow);
                 $('.select2').select2(); // Reinitialize Select2
                 colorIndex++; // Increment the index
@@ -164,3 +172,4 @@ console.log(0);
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 @endsection
+
