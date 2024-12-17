@@ -253,7 +253,6 @@ class ProductController extends Controller
         return view('dashboard.product.size.list', compact('product', 'sizes'));
     }
 
-
     public function saveSizes(Request $request, $productId)
     {
         // Call the service method to save the units
@@ -282,6 +281,7 @@ class ProductController extends Controller
         // Redirect with success message
         return redirect()->route('products.list', ['id' => $productId])->with('message', $message);
     }
+
     public function color(Request $request, $productId)
     {
         $response = $this->productService->listColor($request, $this->checkToken);
