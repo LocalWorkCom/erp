@@ -32,12 +32,14 @@
                         justify-content: space-between;">
                             <div class="card-title">
                                 @lang('country.Countries')</div>
+                                @can('create countries')
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('country.Add')
                             </button>
+                            @endcan
                             <!-- Add country Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -309,6 +311,8 @@
                                             <td>{{ $country->currency_code }}</td>
 
                                             <td>
+                                                @can('view countries')
+
                                                 <!-- Show Button -->
                                                 <a href="javascript:void(0);"
                                                     class="btn btn-info-light btn-wave show-country-btn"
@@ -321,7 +325,9 @@
                                                     data-bs-toggle="modal" data-bs-target="#showModal">
                                                     @lang('category.show') <i class="ri-eye-line"></i>
                                                 </a>
+                                                @endcan
 
+                                                @can('update countries')
 
                                                 <!-- Edit Button -->
                                                 <button type="button"
@@ -336,21 +342,15 @@
                                                     data-bs-toggle="modal" data-bs-target="#editModal">
                                                     @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </button>
+                                                @endcan
+                                                @can('delete countries')
 
                                                 <!-- Delete Button -->
-                                                {{-- <form class="d-inline"
-                                                    action="{{ route('country.delete', $country->id) }}" method="POST"
-                                                    onsubmit="return confirmDelete()">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form> --}}
                                                 <button type="button" onclick="delete_item('{{ $country->id }}')"
                                                     class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
+                                                @endcan
 
                                             </td>
 
