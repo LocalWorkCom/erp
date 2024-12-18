@@ -166,26 +166,15 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function () {
     $('.select2').select2();
 
-    // Toggle sizes section and price visibility
-    $('#has_sizes').on('change', function () {
-        if ($(this).val() == 1) {
-            $('#dish-sizes-section').removeClass('d-none');
-            $('#price-section').addClass('d-none');
-        } else {
-            $('#dish-sizes-section').addClass('d-none');
-            $('#price-section').removeClass('d-none');
-        }
-    });
- // Toggle sizes and recipes sections based on `has_sizes`
- $('#has_sizes').on('change', function () {
-        if ($(this).val() == 1) {
+    // Function to toggle visibility based on `has_sizes` value
+    function toggleSections() {
+        if ($('#has_sizes').val() == 1) {
             $('#dish-sizes-section').removeClass('d-none');
             $('#price-section').addClass('d-none');
             $('#dish-recipes-section').addClass('d-none');
@@ -194,36 +183,14 @@ $(document).ready(function () {
             $('#price-section').removeClass('d-none');
             $('#dish-recipes-section').removeClass('d-none');
         }
-    });
+    }
 
-    // Add Recipe Row for Dish Without Sizes
-    let recipeIndex = 0;
-    $('#add-dish-recipe').on('click', function () {
-        $('#dish-recipes-table').append(`
-            <tr>
-                <td>
-                    <select name="details[${recipeIndex}][recipe_id]" class="form-control select2" required>
-                        @foreach ($recipes as $recipe)
-                            <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="details[${recipeIndex}][quantity]" class="form-control" step="0.01" required>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
-                </td>
-            </tr>
-        `);
-        recipeIndex++;
-        $('.select2').select2();
-    });
+    // Initialize section visibility on page load
+    toggleSections();
 
-    // Remove Row
-    $(document).on('click', '.remove-row', function () {
-        $(this).closest('tr').remove();
-    });
+    // Toggle visibility when `has_sizes` value changes
+    $('#has_sizes').on('change', toggleSections);
+
     // Add Dish Size Row
     let sizeIndex = 0;
     $('#add-dish-size').on('click', function () {
@@ -272,6 +239,28 @@ $(document).ready(function () {
             </tr>
         `);
 
+        $('.select2').select2();
+    });
+
+    // Add Recipe Row for Dishes Without Sizes
+    let recipeIndex = 0;
+    $('#add-dish-recipe').on('click', function () {
+        $('#dish-recipes-table').append(`
+            <tr>
+                <td>
+                    <select name="details[${recipeIndex}][recipe_id]" class="form-control select2" required>
+                        @foreach ($recipes as $recipe)
+                            <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="details[${recipeIndex}][quantity]" class="form-control" step="0.01" required>
+                </td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
+            </tr>
+        `);
+        recipeIndex++;
         $('.select2').select2();
     });
 
@@ -352,6 +341,8 @@ $(document).ready(function () {
     $(document).on('click', '.remove-addon-category', function () {
         $(this).closest('.addon-category').remove();
     });
+
+    // Toggle Addons Section
     $('#has_addon').on('change', function () {
         if ($(this).val() == 1) {
             $('#dish-addons-section').removeClass('d-none');
@@ -359,7 +350,6 @@ $(document).ready(function () {
             $('#dish-addons-section').addClass('d-none');
         }
     });
-
 });
 </script>
 @endsection

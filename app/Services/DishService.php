@@ -31,6 +31,7 @@ class DishService
 
     public function store($data, $image)
     {
+        try {
         return DB::transaction(function () use ($data, $image) {
             try {
                 // Log the initial data
@@ -56,38 +57,47 @@ class DishService
                 $dish = Dish::create($validatedData);
                 Log::info('Dish Created', ['dish_id' => $dish->id]);
     
-                // Handle sizes and their recipes
-                if ($dish->has_sizes && isset($data['sizes'])) {
+                // Process sizes
+                if (isset($data['sizes'])) {
+                    Log::info('Processing Sizes for Dish', ['dish_id' => $dish->id, 'sizes' => $data['sizes']]);
+                
                     foreach ($data['sizes'] as $sizeIndex => $size) {
-                        $dishSize = DishSize::create([
-                            'dish_id' => $dish->id,
-                            'size_name_en' => $size['size_name_en'],
-                            'size_name_ar' => $size['size_name_ar'],
-                            'price' => $size['price'],
-                            'default_size' => isset($data['default_size']) && $data['default_size'] == $sizeIndex,
-                        ]);
-                        Log::info('Dish Size Created', ['dish_size_id' => $dishSize->id]);
-    
+                        try {
+                            $dishSize = DishSize::create([
+                                'dish_id' => $dish->id,
+                                'size_name_en' => $size['size_name_en'],
+                                'size_name_ar' => $size['size_name_ar'],
+                                'price' => $size['price'],
+                                'default_size' => isset($data['default_size']) && $data['default_size'] == $sizeIndex,
+                            ]);
+                            Log::info('Dish Size Created', ['dish_size_id' => $dishSize->id]);
+                        } catch (\Exception $e) {
+                            Log::error('Error Creating Dish Size', ['error' => $e->getMessage()]);
+                        }
+                
                         // Handle recipes for this size
                         if (isset($size['recipes'])) {
                             foreach ($size['recipes'] as $recipe) {
-                                DishDetail::create([
-                                    'dish_id' => $dish->id,
-                                    'dish_size_id' => $dishSize->id,
-                                    'recipe_id' => $recipe['recipe_id'],
-                                    'quantity' => $recipe['quantity'],
-                                ]);
-                                Log::info('Dish Recipe Added', [
-                                    'dish_id' => $dish->id,
-                                    'dish_size_id' => $dishSize->id,
-                                    'recipe_id' => $recipe['recipe_id'],
-                                    'quantity' => $recipe['quantity'],
-                                ]);
+                                try {
+                                    DishDetail::create([
+                                        'dish_id' => $dish->id,
+                                        'dish_size_id' => $dishSize->id,
+                                        'recipe_id' => $recipe['recipe_id'],
+                                        'quantity' => $recipe['quantity'],
+                                    ]);
+                                    Log::info('Dish Recipe Added', [
+                                        'dish_id' => $dish->id,
+                                        'dish_size_id' => $dishSize->id,
+                                        'recipe_id' => $recipe['recipe_id'],
+                                        'quantity' => $recipe['quantity'],
+                                    ]);
+                                } catch (\Exception $e) {
+                                    Log::error('Error Creating Dish Detail', ['error' => $e->getMessage()]);
+                                }
                             }
                         }
                     }
                 }
-    
                 // Handle recipes for dishes without sizes
                 if (!$dish->has_sizes && isset($data['details'])) {
                     foreach ($data['details'] as $detail) {
@@ -136,7 +146,14 @@ class DishService
                 Log::error('Dish Creation Failed', ['error' => $e->getMessage()]);
                 throw $e;
             }
+
+            
         });
+
+    } catch (\Exception $e) {
+        Log::error('Transaction Failed', ['error' => $e->getMessage()]);
+        throw $e;
+    }
     }
     
     
@@ -167,6 +184,7 @@ class DishService
             'addon_categories.*.addons.*.price' => 'required_if:has_addon,1|numeric|min:0',
         ])->validate();
     }
+    
 
     
 
