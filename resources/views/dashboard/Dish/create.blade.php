@@ -97,6 +97,14 @@
                                     </div>
 
                                     <div class="col-xl-6">
+                                        <label for="has_addon" class="form-label">@lang('dishes.HasAddon')</label>
+                                        <select name="has_addon" id="has_addon" class="form-control select2" required>
+                                            <option value="0">@lang('dishes.No')</option>
+                                            <option value="1">@lang('dishes.Yes')</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-xl-6">
                                         <label for="is_active" class="form-label">@lang('dishes.IsActive')</label>
                                         <select name="is_active" id="is_active" class="form-control select2" required>
                                             <option value="1">@lang('dishes.Active')</option>
@@ -124,7 +132,7 @@
                                     </div>
 
                                     <!-- Dish Addons -->
-                                    <div class="col-xl-12">
+                                    <div id="dish-addons-section" class="col-xl-12 d-none">
                                         <h5 class="mb-3">@lang('dishes.DishAddons')</h5>
                                         <div id="addon-categories-section"></div>
                                         <button type="button" class="btn btn-primary btn-sm mt-3 add-addon-category">@lang('dishes.AddAddonCategory')</button>
@@ -289,6 +297,14 @@ $(document).ready(function () {
     $(document).on('click', '.remove-addon-category', function () {
         $(this).closest('.addon-category').remove();
     });
+    $('#has_addon').on('change', function () {
+        if ($(this).val() == 1) {
+            $('#dish-addons-section').removeClass('d-none');
+        } else {
+            $('#dish-addons-section').addClass('d-none');
+        }
+    });
+
 });
 </script>
 @endsection

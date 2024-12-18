@@ -8,6 +8,8 @@ use App\Models\DishDetail;
 use App\Models\DishAddon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 
 class DishService
@@ -26,75 +28,118 @@ class DishService
             ->findOrFail($id);
     }
 
+
     public function store($data, $image)
     {
         return DB::transaction(function () use ($data, $image) {
-            // Validate dish data
-            $validatedData = $this->validateDishData($data);
+            try {
+                // Log the initial data
+                Log::info('Starting Dish Creation', ['data' => $data]);
+    
+               
+                $validatedData = $this->validateDishData($data);
+                Log::info('Validated Data', ['validated_data' => $validatedData]);    
+                if ($image) {
+                    $imagePath = 'images/dishes/' . $image->getClientOriginalName(); 
+                    $image->move(public_path('images/dishes'), $image->getClientOriginalName()); 
+                    Log::info('New image uploaded', ['path' => $imagePath]);
+                    $validatedData['image'] = $imagePath;
+                }
 
-            // Handle image upload
-            $validatedData['image'] = $image ? $image->store('images/dishes', 'public') : null;
-
-            // Create the main dish
-            $dish = Dish::create($validatedData);
-
-            // Handle dish sizes
-            if ($dish->has_sizes && isset($data['sizes'])) {
-                foreach ($data['sizes'] as $sizeIndex => $size) {
-                    $dishSize = DishSize::create([
-                        'dish_id' => $dish->id,
-                        'size_name_en' => $size['size_name_en'],
-                        'size_name_ar' => $size['size_name_ar'],
-                        'price' => $size['price'],
-                        'default_size' => isset($data['default_size']) && $data['default_size'] == $sizeIndex,
-                    ]);
-
-                    // Handle recipes for the size
-                    if (isset($size['recipes'])) {
-                        foreach ($size['recipes'] as $recipe) {
-                            DishDetail::create([
+                $validatedData['is_active'] = $validatedData['is_active'] ?? 1;
+                $validatedData['has_sizes'] = $validatedData['has_sizes'] ?? 0;
+                $validatedData['has_addon'] = $validatedData['has_addon'] ?? 0;
+                $validatedData['created_by'] = auth()->id();
+                Log::info('Default Values Set', ['validated_data' => $validatedData]);
+    
+                // Create the main dish
+                $dish = Dish::create($validatedData);
+                Log::info('Dish Created', ['dish_id' => $dish->id]);
+    
+                // Handle sizes and their recipes
+                if ($dish->has_sizes && isset($data['sizes'])) {
+                    foreach ($data['sizes'] as $sizeIndex => $size) {
+                        $dishSize = DishSize::create([
+                            'dish_id' => $dish->id,
+                            'size_name_en' => $size['size_name_en'],
+                            'size_name_ar' => $size['size_name_ar'],
+                            'price' => $size['price'],
+                            'default_size' => isset($data['default_size']) && $data['default_size'] == $sizeIndex,
+                        ]);
+                        Log::info('Dish Size Created', ['dish_size_id' => $dishSize->id]);
+    
+                        // Handle recipes for this size
+                        if (isset($size['recipes'])) {
+                            foreach ($size['recipes'] as $recipe) {
+                                DishDetail::create([
+                                    'dish_id' => $dish->id,
+                                    'dish_size_id' => $dishSize->id,
+                                    'recipe_id' => $recipe['recipe_id'],
+                                    'quantity' => $recipe['quantity'],
+                                ]);
+                                Log::info('Dish Recipe Added', [
+                                    'dish_id' => $dish->id,
+                                    'dish_size_id' => $dishSize->id,
+                                    'recipe_id' => $recipe['recipe_id'],
+                                    'quantity' => $recipe['quantity'],
+                                ]);
+                            }
+                        }
+                    }
+                }
+    
+                // Handle recipes for dishes without sizes
+                if (!$dish->has_sizes && isset($data['details'])) {
+                    foreach ($data['details'] as $detail) {
+                        DishDetail::create([
+                            'dish_id' => $dish->id,
+                            'dish_size_id' => null,
+                            'recipe_id' => $detail['recipe_id'],
+                            'quantity' => $detail['quantity'],
+                        ]);
+                        Log::info('Dish Recipe Added', [
+                            'dish_id' => $dish->id,
+                            'recipe_id' => $detail['recipe_id'],
+                            'quantity' => $detail['quantity'],
+                        ]);
+                    }
+                }
+    
+                // Handle addons
+                if ($dish->has_addon && isset($data['addon_categories'])) {
+                    foreach ($data['addon_categories'] as $addonCategory) {
+                        foreach ($addonCategory['addons'] as $addon) {
+                            DishAddon::create([
                                 'dish_id' => $dish->id,
-                                'dish_size_id' => $dishSize->id,
-                                'recipe_id' => $recipe['recipe_id'],
-                                'quantity' => $recipe['quantity'],
+                                'addon_id' => $addon['addon_id'],
+                                'quantity' => $addon['quantity'],
+                                'price' => $addon['price'],
+                                'addon_category_id' => $addonCategory['addon_category_id'],
+                                'min_addons' => $addonCategory['min_addons'],
+                                'max_addons' => $addonCategory['max_addons'],
+                            ]);
+                            Log::info('Dish Addon Added', [
+                                'dish_id' => $dish->id,
+                                'addon_id' => $addon['addon_id'],
+                                'quantity' => $addon['quantity'],
+                                'price' => $addon['price'],
+                                'addon_category_id' => $addonCategory['addon_category_id'],
                             ]);
                         }
                     }
                 }
+    
+                Log::info('Dish Creation Completed Successfully', ['dish_id' => $dish->id]);
+                return $dish;
+    
+            } catch (\Exception $e) {
+                Log::error('Dish Creation Failed', ['error' => $e->getMessage()]);
+                throw $e;
             }
-
-            // Handle dish details for dishes without sizes
-            if (!$dish->has_sizes && isset($data['details'])) {
-                foreach ($data['details'] as $detail) {
-                    DishDetail::create([
-                        'dish_id' => $dish->id,
-                        'dish_size_id' => null,
-                        'recipe_id' => $detail['recipe_id'],
-                        'quantity' => $detail['quantity'],
-                    ]);
-                }
-            }
-
-            // Handle addons
-            if ($dish->has_addon && isset($data['addon_categories'])) {
-                foreach ($data['addon_categories'] as $addonCategoryIndex => $addonCategory) {
-                    foreach ($addonCategory['addons'] as $addonIndex => $addon) {
-                        DishAddon::create([
-                            'dish_id' => $dish->id,
-                            'addon_id' => $addon['addon_id'],
-                            'quantity' => $addon['quantity'],
-                            'price' => $addon['price'],
-                            'addon_category_id' => $addonCategory['addon_category_id'],
-                            'min_addons' => $addonCategory['min_addons'] ?? null,
-                            'max_addons' => $addonCategory['max_addons'] ?? null,
-                        ]);
-                    }
-                }
-            }
-
-            return $dish;
         });
     }
+    
+    
 
     private function validateDishData($data)
     {
@@ -105,11 +150,11 @@ class DishService
             'description_ar' => 'nullable|string',
             'category_id' => 'required|integer|exists:dish_categories,id',
             'cuisine_id' => 'required|integer|exists:cuisines,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'price' => 'nullable|numeric|min:0',
-            'is_active' => 'required|boolean',
-            'has_sizes' => 'required|boolean',
-            'has_addon' => 'required|boolean',
+            'is_active' => 'required',
+            'has_sizes' => 'required',
+            'has_addon' => 'required',
             'sizes.*.size_name_en' => 'required_if:has_sizes,1|string|max:255',
             'sizes.*.size_name_ar' => 'required_if:has_sizes,1|string|max:255',
             'sizes.*.price' => 'required_if:has_sizes,1|numeric|min:0',
