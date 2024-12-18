@@ -32,13 +32,12 @@
                         justify-content: space-between;">
                             <div class="card-title">
                                 @lang('country.Countries')</div>
-                                @can('create countries')
-
-                            <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                                <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('country.Add')
-                            </button>
+                            @can('create countries')
+                                <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                    <i class="fe fe-plus label-btn-icon me-2"></i>
+                                    @lang('country.Add')
+                                </button>
                             @endcan
                             <!-- Add country Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -46,7 +45,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form action="{{ route('country.store') }}" method="POST" class="needs-validation"
-                                            novalidate>
+                                            novalidate enctype="multipart/form-data">
                                             @csrf
                                             @if ($errors->any())
                                                 @foreach ($errors->all() as $error)
@@ -121,6 +120,30 @@
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.CurrencyCode')</div>
                                                     </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="add-phone-code"
+                                                            class="form-label">@lang('country.phonecode')</label>
+                                                        <input type="text" id="add-phone-code" class="form-control"
+                                                            name="phone_code" required placeholder="@lang('country.phonecode')">
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.phonecode')</div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="add-length"
+                                                            class="form-label">@lang('country.length')</label>
+                                                        <input type="text" id="add-length" class="form-control"
+                                                            name="length" required placeholder="@lang('country.length')">
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.length')</div>
+                                                    </div>
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                        <label for="add-flag"
+                                                            class="form-label">@lang('country.flag')</label>
+                                                        <input type="file" id="add-flag" class="form-control"
+                                                            name="flag" required placeholder="@lang('country.flag')">
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.flag')</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -139,7 +162,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form id="edit-country-form" action="" method="POST"
-                                            class="needs-validation" novalidate>
+                                            class="needs-validation" novalidate enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             @if ($errors->any())
@@ -213,6 +236,30 @@
                                                             class="form-control" name="currency_code" required>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.CurrencyCode')</div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-phone-code"
+                                                            class="form-label">@lang('country.phonecode')</label>
+                                                        <input type="text" id="edit-phone-code" class="form-control"
+                                                            name="phone_code" required>
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.phonecode')</div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-length"
+                                                            class="form-label">@lang('country.length')</label>
+                                                        <input type="text" id="edit-length" class="form-control"
+                                                            name="length" required>
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.length')</div>
+                                                    </div>
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                        <label for="edit-flag"
+                                                            class="form-label">@lang('country.flag')</label>
+                                                        <input type="file" id="edit-flag" class="form-control"
+                                                            name="flag" required placeholder="@lang('country.flag')">
+                                                        <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                        <div class="invalid-feedback">@lang('validation.flag')</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -295,11 +342,13 @@
                                         <th scope="col">@lang('country.ArabicCurrency')</th>
                                         <th scope="col">@lang('country.EnglishCurrency')</th>
                                         <th scope="col">@lang('country.CurrencyCode')</th>
+                                        <th scope="col">@lang('country.flag')</th>
                                         <th scope="col">@lang('country.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($countries as $country)
+                                        {{-- {{ dd($country) }} --}}
                                         <tr>
                                             <td>{{ $country->name_ar }}</td>
                                             <td>{{ $country->name_en }}</td>
@@ -307,47 +356,50 @@
                                             <td>{{ $country->currency_ar }}</td>
                                             <td>{{ $country->currency_en }}</td>
                                             <td>{{ $country->currency_code }}</td>
-
+                                            <td></td>
                                             <td>
                                                 @can('view countries')
-
-                                                <!-- Show Button -->
-                                                <a href="javascript:void(0);"
-                                                    class="btn btn-info-light btn-wave show-country-btn"
-                                                    data-id="{{ $country->id }}" data-name-ar="{{ $country->name_ar }}"
-                                                    data-name-en="{{ $country->name_en }}"
-                                                    data-code="{{ $country->code }}"
-                                                    data-currency-ar="{{ $country->currency_ar }}"
-                                                    data-currency-en="{{ $country->currency_en }}"
-                                                    data-currency-code="{{ $country->currency_code }}"
-                                                    data-bs-toggle="modal" data-bs-target="#showModal">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
+                                                    <!-- Show Button -->
+                                                    <a href="javascript:void(0);"
+                                                        class="btn btn-info-light btn-wave show-country-btn"
+                                                        data-id="{{ $country->id }}" data-name-ar="{{ $country->name_ar }}"
+                                                        data-name-en="{{ $country->name_en }}"
+                                                        data-code="{{ $country->code }}"
+                                                        data-phone_code="{{ $country->phone_code }}"
+                                                        data-length="{{ $country->length }}"
+                                                        data-flag="{{ $country->flag }}"
+                                                        data-currency-ar="{{ $country->currency_ar }}"
+                                                        data-currency-en="{{ $country->currency_en }}"
+                                                        data-currency-code="{{ $country->currency_code }}"
+                                                        data-bs-toggle="modal" data-bs-target="#showModal">
+                                                        @lang('category.show') <i class="ri-eye-line"></i>
+                                                    </a>
                                                 @endcan
 
                                                 @can('update countries')
-
-                                                <!-- Edit Button -->
-                                                <button type="button"
-                                                    class="btn btn-orange-light btn-wave edit-country-btn"
-                                                    data-id="{{ $country->id }}" data-name-ar="{{ $country->name_ar }}"
-                                                    data-name-en="{{ $country->name_en }}"
-                                                    data-code="{{ $country->code }}"
-                                                    data-currency-ar="{{ $country->currency_ar }}"
-                                                    data-currency-en="{{ $country->currency_en }}"
-                                                    data-currency-code="{{ $country->currency_code }}"
-                                                    data-route="{{ route('country.update', ':id') }}"
-                                                    data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
-                                                </button>
+                                                    <!-- Edit Button -->
+                                                    <button type="button"
+                                                        class="btn btn-orange-light btn-wave edit-country-btn"
+                                                        data-id="{{ $country->id }}" data-name-ar="{{ $country->name_ar }}"
+                                                        data-name-en="{{ $country->name_en }}"
+                                                        data-code="{{ $country->code }}"
+                                                        data-currency-ar="{{ $country->currency_ar }}"
+                                                        data-currency-en="{{ $country->currency_en }}"
+                                                        data-currency-code="{{ $country->currency_code }}"
+                                                        data-phone-code="{{ $country->phone_code }}"
+                                                        data-length="{{ $country->length }}"
+                                                        data-flag="{{ $country->flag }}"
+                                                        data-route="{{ route('country.update', ':id') }}"
+                                                        data-bs-toggle="modal" data-bs-target="#editModal">
+                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                                                    </button>
                                                 @endcan
                                                 @can('delete countries')
-
-                                                <!-- Delete Button -->
-                                                <button type="button" onclick="delete_item('{{ $country->id }}')"
-                                                    class="btn btn-danger-light btn-wave">
-                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                </button>
+                                                    <!-- Delete Button -->
+                                                    <button type="button" onclick="delete_item('{{ $country->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
                                                 @endcan
 
                                             </td>
@@ -393,7 +445,9 @@
         const currencyEnInput = document.getElementById('edit-currency-en');
         const currencyCodeInput = document.getElementById('edit-currency-code');
         const currencyArInput = document.getElementById('edit-currency-ar');
-
+        const phoneCodeInput = document.getElementById('edit-phone-code');
+        const lengthInput = document.getElementById('edit-length');
+        const flagInput = document.getElementById('edit-flag');
         editButtons.forEach(button => {
             button.addEventListener('click', function() {
                 // Get country details from data attributes
@@ -404,13 +458,13 @@
                 const currencyEn = this.getAttribute('data-currency-en');
                 const currencyAr = this.getAttribute('data-currency-ar');
                 const currencyCode = this.getAttribute('data-currency-code');
-
+                const phone_code = this.getAttribute('data-phone-code');
+                const length = this.getAttribute('data-length');
+                const flag = this.getAttribute('data-flag');
                 const routeTemplate = this.getAttribute('data-route');
-
                 // Set form action URL dynamically
                 const updateRoute = routeTemplate.replace(':id', countryId);
                 editForm.action = updateRoute;
-
                 // Populate the modal fields
                 nameArInput.value = nameAr;
                 nameEnInput.value = nameEn;
@@ -418,6 +472,9 @@
                 currencyArInput.value = currencyAr;
                 currencyEnInput.value = currencyEn;
                 currencyCodeInput.value = currencyCode;
+                phoneCodeInput.value = phone_code;
+                lengthInput.value = length;
+                flagInput.value = flag;
             });
         });
     });
@@ -429,6 +486,9 @@
         const currencyCodeDisplay = document.getElementById('show-currency-code');
         const currencyEnDisplay = document.getElementById('show-currency-en');
         const currencyArDisplay = document.getElementById('show-currency-ar');
+        const phoneCodeDisplay = document.getElementById('show-phone-code');
+        const lengthDisplay = document.getElementById('show-length');
+        const flagDisplay = document.getElementById('show-flag');
         const CodeDisplay = document.getElementById('show-code');
 
         showButtons.forEach(button => {
@@ -439,7 +499,9 @@
                 const currencyCode = this.getAttribute('data-currency-code');
                 const currencyEn = this.getAttribute('data-currency-en');
                 const currencyAr = this.getAttribute('data-currency-ar');
-
+                const phoneCode = this.getAttribute('data-phone-code');
+                const length = this.getAttribute('data-length');
+                const flag = this.getAttribute('data-flag');
                 // Display the country details in the modal
                 nameArDisplay.textContent = nameAr;
                 nameEnDisplay.textContent = nameEn;
@@ -447,51 +509,53 @@
                 currencyCodeDisplay.textContent = currencyCode;
                 currencyEnDisplay.textContent = currencyEn;
                 currencyArDisplay.textContent = currencyAr;
+                phoneCodeDisplay.textContent = phoneCode;
+                lengthDisplay.textContent = length;
+                flagDisplay.textContent = flag;
             });
         });
     });
 
     function delete_item(id) {
-    Swal.fire({
-        title: '{{ __('country.warning_titleper') }}',
-        text: '{{ __('country.delete_confirmationper') }}',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '{{ __('country.confirm_delete') }}',
-        cancelButtonText: '{{ __('country.cancel') }}',
-        confirmButtonColor: '#3085d6'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            var form = document.getElementById('delete-form-' + id);
+        Swal.fire({
+            title: '{{ __('country.warning_titleper') }}',
+            text: '{{ __('country.delete_confirmationper') }}',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '{{ __('country.confirm_delete') }}',
+            cancelButtonText: '{{ __('country.cancel') }}',
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
 
-            $.ajax({
-                url: '{{ route('country.delete', ':id') }}'.replace(':id', id),
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    _method: 'DELETE'
-                },
-                success: function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '{{ __('country.delete_success') }}',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                $.ajax({
+                    url: '{{ route('country.delete', ':id') }}'.replace(':id', id),
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'DELETE'
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '{{ __('country.delete_success') }}',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
 
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '{{ __('country.delete_error') }}',
-                        text: xhr.responseJSON?.error || 'An error occurred.',
-                        showConfirmButton: true
-                    });
-                }
-            });
-        }
-    });
-}
-
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('country.delete_error') }}',
+                            text: xhr.responseJSON?.error || 'An error occurred.',
+                            showConfirmButton: true
+                        });
+                    }
+                });
+            }
+        });
+    }
 </script>

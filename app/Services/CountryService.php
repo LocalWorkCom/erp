@@ -42,6 +42,7 @@ class CountryService
     }
     public function store(Request $request, $checkToken)
     {
+        // dd($request->all());
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
         if (!CheckToken() && $checkToken) {
@@ -54,6 +55,9 @@ class CountryService
             'currency_en' => 'required',
             'currency_code' => 'required',
             'code' => 'required',
+            'phone_code' => 'required',
+            'length' => 'required',
+            'flag' => 'required|image|mimes:jpeg,png,jpg,gif|size:2048',
         ]);
 
         if ($validator->fails()) {
@@ -69,8 +73,14 @@ class CountryService
         $counties->currency_en = $request->currency_en;
         $counties->code = $request->code;
         $counties->currency_code = $request->currency_code;
-        // $counties->created_by = auth()->id();
+        $counties->phone_code = $request->phone_code;
+        $counties->length = $request->length;
+        $counties->created_by = auth()->id() ?? 1;
         $counties->save();
+        if ($request->hasFile('flag')) {
+            $image = $request->file('flag');
+            UploadFile('images/countries', 'flag', $counties, $image);
+        }
         return RespondWithSuccessRequest($lang, 1);
     }
     public function update(Request $request, $id, $checkToken)
@@ -127,14 +137,13 @@ class CountryService
         // Find the country
         $country = Country::find($id);
         if (!$country) {
-            return RespondWithBadRequestData($lang, 8); // Country not found
+            return RespondWithBadRequestData($lang, 8);
         }
 
         // Check if the country has related users
         if ($country->users()->count() > 0) {
-            return RespondWithBadRequest($lang, 6); // Cannot delete country with related users
+            return RespondWithBadRequest($lang, 6);
         }
-
         // Delete the country
         $country->delete();
 
