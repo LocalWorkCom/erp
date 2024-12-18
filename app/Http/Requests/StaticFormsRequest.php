@@ -26,6 +26,7 @@ class StaticFormsRequest extends FormRequest
             'name_en' => 'required|string',
             'description_ar' => 'required|string',
             'description_en' => 'required|string',
+            'active' => 'required|boolean',
         ];
     }
 }

@@ -43,7 +43,7 @@
                     <li class="slide">
                         <a href="{{ route('client.index') }}" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-desktop'></i>
+                                <i class='bi bi-person'></i>
                             </span>
                             <span class="side-menu__label">@lang('sidebar.clients')</span>
                         </a>
@@ -60,7 +60,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-food-menu'></i>
+                                <i class='bi bi-shop'></i>
                             </span>
                             <span class="side-menu__label">@lang('sidebar.Resturants') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -159,15 +159,17 @@
                                 <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.Dishes')
                                     <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                 <ul class="slide-menu child2">
-                                @can('view cuisines')
+                                    @can('view cuisines')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.cuisines.index') }}" class="side-menu__item">@lang('sidebar.Cuisines')
+                                            <a href="{{ route('dashboard.cuisines.index') }}"
+                                                class="side-menu__item">@lang('sidebar.Cuisines')
                                             </a>
                                         </li>
                                     @endcan
                                     @can('view dishes')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.dishes.index') }}" class="side-menu__item">@lang('sidebar.Dishes')
+                                            <a href="{{ route('dashboard.dishes.index') }}"
+                                                class="side-menu__item">@lang('sidebar.Dishes')
                                             </a>
                                         </li>
                                     @endcan
@@ -187,7 +189,8 @@
                                     @endcan
                                     @can('view recipes')
                                         <li class="slide">
-                                            <a href="{{ route('dashboard.addons.index') }}" class="side-menu__item">@lang('sidebar.Addons')
+                                            <a href="{{ route('dashboard.addons.index') }}"
+                                                class="side-menu__item">@lang('sidebar.Addons')
                                             </a>
                                         </li>
                                     @endcan
@@ -219,7 +222,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
+                                <i class="bi bi-person-badge"></i>
                             </span>
                             <span class="side-menu__label">@lang('sidebar.HR SYSTEM')</span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
@@ -232,9 +235,6 @@
                             @can('view employees')
                                 <li class="slide">
                                     <a href="{{ route('employees.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Employee') </span>
                                     </a>
                                 </li>
@@ -242,9 +242,6 @@
                             @can('view positions')
                                 <li class="slide">
                                     <a href="{{ route('positions.index') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Positions') </span>
                                     </a>
                                 </li>
@@ -252,9 +249,6 @@
                             @can('view departments')
                                 <li class="slide">
                                     <a href="{{ route('departments.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Departments') </span>
                                     </a>
                                 </li>
@@ -262,9 +256,6 @@
                             @can('view shifts')
                                 <li class="slide">
                                     <a href="{{ url('Shifts') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Shifts') </span>
                                     </a>
                                 </li>
@@ -272,9 +263,6 @@
                             @can('view timetables')
                                 <li class="slide">
                                     <a href="{{ url('TimeTables') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.TimeTables') </span>
                                     </a>
                                 </li>
@@ -283,9 +271,6 @@
                             @can('view timetables')
                                 <li class="slide">
                                     <a href="{{ url('Scheduled') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Scheduled') </span>
                                     </a>
                                 </li>
@@ -293,9 +278,6 @@
                             @can('view timetables')
                                 <li class="slide">
                                     <a href="{{ url('Attendance') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Attendance') </span>
                                     </a>
                                 </li>
@@ -303,9 +285,6 @@
 
                             <li class="slide">
                                 <a href="{{ url('FingerDevice') }}" class="side-menu__item">
-                                    <span class=" side-menu__icon">
-                                        <i class='bx bx-desktop'></i>
-                                    </span>
                                     <span class="side-menu__label">@lang('sidebar.FingerDevice') </span>
                                 </a>
                             </li>
@@ -313,9 +292,6 @@
                             <!-- Start::slide -->
                             <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
-                                    <span class=" side-menu__icon">
-                                        <i class='bx bx-food-menu'></i>
-                                    </span>
                                     <span class="side-menu__label">@lang('sidebar.excuses') </span>
                                     <i class="fe fe-chevron-right side-menu__angle"></i>
                                 </a>
@@ -343,9 +319,6 @@
                             <!-- Start::slide -->
                             <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
-                                    <span class=" side-menu__icon">
-                                        <i class='bx bx-food-menu'></i>
-                                    </span>
                                     <span class="side-menu__label">@lang('sidebar.Vacation') </span>
                                     <i class="fe fe-chevron-right side-menu__angle"></i>
                                 </a>
@@ -391,8 +364,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-shop-window"></i> </span>
                             <span class="side-menu__label">@lang('sidebar.Store') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -405,9 +377,6 @@
                             @can('view opening_balance')
                                 <li class="slide">
                                     <a href="{{ url('OppeningBalance') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.OppeningBalance') </span>
                                     </a>
                                 </li>
@@ -415,9 +384,6 @@
 
                             <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
-                                    <span class=" side-menu__icon">
-                                        <i class='bx bx-desktop'></i>
-                                    </span>
                                     @lang('sidebar.Lines')
                                     <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                 <ul class="slide-menu child2">
@@ -464,8 +430,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-receipt"></i> </span>
                             <span class="side-menu__label">@lang('sidebar.Invoices') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -478,9 +443,6 @@
                             @can('view orders')
                                 <li class="slide">
                                     <a href="{{ url('dashboard/orders') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.orders') </span>
                                     </a>
                                 </li>
@@ -489,9 +451,6 @@
                             @can('view products')
                                 <li class="slide">
                                     <a href="{{ route('products.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Products') </span>
                                     </a>
                                 </li>
@@ -500,9 +459,6 @@
                             @can('view categories')
                                 <li class="slide">
                                     <a href="{{ route('categories.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Category') </span>
                                     </a>
                                 </li>
@@ -510,9 +466,6 @@
                             @can('view brands')
                                 <li class="slide">
                                     <a href="{{ route('brands.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Brand') </span>
                                     </a>
                                 </li>
@@ -526,8 +479,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-wallet2"></i> </span>
                             <span class="side-menu__label">@lang('sidebar.Purchase') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -538,9 +490,6 @@
                                 </li>
                                 <li class="slide">
                                     <a href="{{ route('purchases.index') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Purchase') </span>
                                     </a>
                                 </li>
@@ -549,9 +498,6 @@
                             @can('view vendors')
                                 <li class="slide">
                                     <a href="{{ route('vendors.index') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Vendors') </span>
                                     </a>
                                 </li>
@@ -568,8 +514,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-gift"></i>                            </span>
                             <span class="side-menu__label">@lang('sidebar.Offers/Discounts') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -580,9 +525,6 @@
                             @can('view coupons')
                                 <li class="slide">
                                     <a href="{{ route('coupons.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Coupon') </span>
                                     </a>
                                 </li>
@@ -590,10 +532,7 @@
 
                             @can('view discounts')
                                 <li class="slide">
-                                    <a href="{{ url('Discount') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
+                                    <a href="{{ route('discounts.list') }}" class="side-menu__item">
                                         <span class="side-menu__label">@lang('sidebar.Discount') </span>
                                     </a>
                                 </li>
@@ -602,9 +541,6 @@
                             @can('view offers')
                                 <li class="slide">
                                     <a href="{{ url('Offers') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Offers') </span>
                                     </a>
                                 </li>
@@ -613,9 +549,6 @@
                             @can('view gifts')
                                 <li class="slide">
                                     <a href="{{ route('gifts.list') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.Gifts') </span>
                                     </a>
                                 </li>
@@ -624,9 +557,6 @@
                             @can('view point_systems')
                                 <li class="slide">
                                     <a href="{{ url('lolaityPoint') }}" class="side-menu__item">
-                                        <span class=" side-menu__icon">
-                                            <i class='bx bx-desktop'></i>
-                                        </span>
                                         <span class="side-menu__label">@lang('sidebar.lolaityPoint') </span>
                                     </a>
                                 </li>
@@ -641,8 +571,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-arrow-left-right"></i>                            </span>
                             <span class="side-menu__label">@lang('sidebar.Transactions') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -693,8 +622,7 @@
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
-                                <i class='bx bx-cube'></i>
-                            </span>
+                                <i class="bi bi-gear"></i>                            </span>
                             <span class="side-menu__label">@lang('sidebar.Setting') </span>
                             <i class="fe fe-chevron-right side-menu__angle"></i>
                         </a>
@@ -731,10 +659,11 @@
                             @endcan
                             @can('view permissions')
                                 <li class="slide">
-                                    <a href="{{ route('permissions.list') }}" class="side-menu__item">@lang('sidebar.permissions') </a>
+                                    <a href="{{ route('permissions.list') }}" class="side-menu__item">@lang('sidebar.permissions')
+                                    </a>
                                 </li>
                             @endcan
-                           {{-- @can('view Notification')
+                            {{-- @can('view Notification')
                             {{-- @can('view Notification')
                                 <li class="slide">
                                     <a href="{{ url('Notification') }}" class="side-menu__item">@lang('sidebar.Notification') </a>
@@ -763,7 +692,11 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->can('view logos') || auth()->user()->can('view sliders') || auth()->user()->can('view terms')|| auth()->user()->can('view privacies')|| auth()->user()->can('view returns'))
+                @if (auth()->user()->can('view logos') ||
+                        auth()->user()->can('view sliders') ||
+                        auth()->user()->can('view terms') ||
+                        auth()->user()->can('view privacies') ||
+                        auth()->user()->can('view returns'))
                     <!-- website -->
                     <li class="slide__category"><span class="category-name">@lang('sidebar.website') </span>
                     </li>

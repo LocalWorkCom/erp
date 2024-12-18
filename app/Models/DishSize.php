@@ -15,6 +15,8 @@ class DishSize extends Model
         'size_name_en',
         'size_name_ar',
         'price',
+        'default_size'
+       
     ];
 
     /**
@@ -23,5 +25,9 @@ class DishSize extends Model
     public function dish()
     {
         return $this->belongsTo(Dish::class);
+    }
+    public function details()
+    {
+        return $this->hasMany(DishDetail::class);
     }
 }

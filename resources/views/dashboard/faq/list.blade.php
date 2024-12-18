@@ -52,6 +52,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">@lang('category.ID')</th>
+                                    <th scope="col">@lang('term.active')</th>
                                     <th scope="col">@lang('term.ArabicName')</th>
                                     <th scope="col">@lang('term.EnglishName')</th>
                                     <th scope="col">@lang('category.Actions')</th>
@@ -61,6 +62,11 @@
                                 @foreach ($faqs as $faq)
                                     <tr>
                                         <td>{{ $faq->id }}</td>
+                                        <td>
+                                            <span class="badge {{ $faq->active ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $faq->active ? __('term.Active') : __('term.Inactive') }}
+                                            </span>
+                                        </td>
                                         <td>{{ $faq->name_ar }}</td>
                                         <td>{{ $faq->name_en }}</td>
                                         <td>
@@ -69,7 +75,7 @@
                                             <form class="d-inline" id="delete-form-{{ $faq->id }}" action="{{ route('faq.delete', $faq->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" onclick="delete_item({{ $faq->id }})" class="btn btn-danger-light btn-wave">
+                                                <button type="button" onclick="delete_item('{{ $faq->id }}')" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form>

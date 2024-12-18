@@ -52,6 +52,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">@lang('category.ID')</th>
+                                    <th scope="col">@lang('term.active')</th>
                                     <th scope="col">@lang('term.ArabicName')</th>
                                     <th scope="col">@lang('term.EnglishName')</th>
                                     <th scope="col">@lang('category.Actions')</th>
@@ -61,11 +62,25 @@
                                 @foreach ($terms as $term)
                                     <tr>
                                         <td>{{ $term->id }}</td>
+                                        <td>
+                                            <span class="badge {{ $term->active ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $term->active ? __('term.Active') : __('term.Inactive') }}
+                                            </span>
+                                        </td>
                                         <td>{{ $term->name_ar }}</td>
                                         <td>{{ $term->name_en }}</td>
                                         <td>
                                             <a href="{{ route('term.show', $term->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
                                             <a href="{{ route('term.edit', $term->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>
+                                            <form class="d-inline" id="delete-form-{{ $term->id }}"
+                                                  action="{{ route('term.delete', $term->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="delete_item('{{ $term->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -103,5 +118,20 @@
 <script>
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

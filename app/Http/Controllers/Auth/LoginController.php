@@ -15,37 +15,37 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+    $user = User::where('email', $credentials['email'])->first();
 
-        // Check if the user exists and is flagged as an admin
-        if (!$user || $user->flag != 'admin') {
-            return back()->withErrors([
-                'email' => 'Only admin users can log in.',
-            ])->onlyInput('email');
-        }
-
-        // Verify the password
-        if (!Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ])->onlyInput('email');
-        }
-
-        // Log the user in using Laravel's Auth system
-        Auth::login($user);
-
-        // Regenerate the session to prevent session fixation attacks
-        $request->session()->regenerate();
-
-        // Redirect to the dashboard
-        return redirect()->intended('dashboard');
+    // Check if the user exists and is flagged as an admin
+    if (!$user || $user->flag != 'admin') {
+        return back()->withErrors([
+            'email' => __('auth.only_admin'),  // Use lang helper to get the message
+        ])->onlyInput('email');
     }
+
+    // Verify the password
+    if (!Hash::check($credentials['password'], $user->password)) {
+        return back()->withErrors([
+            'email' => __('auth.invalid_credentials'),  // Use lang helper for invalid credentials message
+        ])->onlyInput('email');
+    }
+
+    // Log the user in using Laravel's Auth system
+    Auth::login($user);
+
+    // Regenerate the session to prevent session fixation attacks
+    $request->session()->regenerate();
+
+    // Redirect to the dashboard
+    return redirect()->intended('dashboard');
+}
 
 
     public function logout(Request $request)

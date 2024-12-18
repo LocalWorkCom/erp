@@ -56,10 +56,21 @@ class LogoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $logo = Logo::find($id);
+
+        if (!$logo) {
+            return response()->json(['error' => 'Logo not found'], 404);
+        }
+
+        return response()->json([
+            'name_ar' => $logo->name_ar,
+            'name_en' => $logo->name_en,
+            'image_id' => $logo->image,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

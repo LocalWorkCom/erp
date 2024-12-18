@@ -1133,7 +1133,10 @@ a:hover {
 }
 
 /* otp password styles  */
-
+.code-input{
+    direction: ltr;
+    text-align: end;
+}
 .code-input input {
     width: 3.5rem;
     height: 3rem;

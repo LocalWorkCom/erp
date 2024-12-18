@@ -91,10 +91,10 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($user->clientDetails && $user->clientDetails->is_active)
-                                                    {{ $user->clientDetails->is_active ? __('client.yes') : __('client.no') }}
+                                                @if ($user->clientDetails && $user->clientDetails->is_active == 1)
+                                                    @lang('client.yes')
                                                 @else
-                                                    ---
+                                                    @lang('client.no')
                                                 @endif
                                             </td>
 

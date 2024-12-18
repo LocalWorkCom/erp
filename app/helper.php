@@ -23,8 +23,12 @@ use App\Models\LeaveRequest;
 use App\Models\Employee;
 use App\Models\DishCategory;
 use App\Models\Dish;
-use App\Models\BranchMenuCategory;
+use App\Models\DishAddon;
+use App\Models\DishSize;
 use App\Models\Menu;
+use App\Models\BranchMenuCategory;
+use App\Models\BranchMenuAddon;
+use App\Models\BranchMenuSize;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -241,7 +245,7 @@ function UploadFile($path, $image, $model, $request)
 
     // Generate the asset path and remove the leading slash if exists
     $filePath = asset($path) . '/' . $filename;
-    $filePath = ltrim($filePath, '/'); // Remove the first slash if present
+    $filePath = url($filePath, '/'); // Remove the first slash if present
 
     // Save the file path to the model
     $model->$image = $filePath;
@@ -302,6 +306,21 @@ function RespondWithBadRequestNoChange()
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+
+function RespondWithBadRequestNoEmpty()
+{
+    $response_array = array(
+        'status' => true,
+        // 'apiTitle' => trans('validation.NoChange'),
+        'message' => trans('validation.NotAllowMessage'),
+        'code' => 401,
+        'data'   => []
+    );
+    $response_code = 200;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+
 //not used
 function RespondWithBadRequestNotExist()
 {
@@ -654,11 +673,11 @@ function getNearestBranch($userLat, $userLon)
             'id',
             'name',
             'address',
-            DB::raw("latitude, longitude, 
-                (6371 * acos(cos(radians($userLat)) 
-                * cos(radians(latitude)) 
-                * cos(radians(longitude) - radians($userLon)) 
-                + sin(radians($userLat)) 
+            DB::raw("latitude, longitude,
+                (6371 * acos(cos(radians($userLat))
+                * cos(radians(latitude))
+                * cos(radians(longitude) - radians($userLon))
+                + sin(radians($userLat))
                 * sin(radians(latitude)))) AS distance")
         )
         ->orderBy('distance', 'asc')
@@ -673,10 +692,10 @@ function scopeNearest($IDBranch, $latitude, $longitude)
     return DeliverySetting::where('branch_id', $IDBranch)
         ->select('*', DB::raw("
                 (6371 * acos(
-                    cos(radians($latitude)) * 
-                    cos(radians(latitude)) * 
-                    cos(radians(longitude) - radians($longitude)) + 
-                    sin(radians($latitude)) * 
+                    cos(radians($latitude)) *
+                    cos(radians(latitude)) *
+                    cos(radians(longitude) - radians($longitude)) +
+                    sin(radians($latitude)) *
                     sin(radians(latitude))
                 )) AS distance
             "))
@@ -807,57 +826,90 @@ function GetCurrencyCodes()
 
 function AddBranchMenu($branch_id)
 {
-    $get_dish_categories = $this->GetDishCategories();
-    foreach ($get_dish_categories as $get_dish_category) {
-        $branch_menu_category = new BranchMenuCategory();
-        $branch_menu_category->branch_id = $branch_id;
-        $branch_menu_category->dish_category_id = $get_dish_category->id;
-        $branch_menu_category->parent_id = $get_dish_category->parent_id;
-        $branch_menu_category->is_active = 1;
-        $branch_menu_category->created_by = auth()->user()->id;
-        $branch_menu_category->save();
-    }
+    $add_dish_categories = AddDishCategories($branch_id);
+    $add_dishes = AddDishes($branch_id);
+    $add_addons = AddAddons($branch_id);
+    $add_sizes = AddSizes($branch_id);   
+}
 
-    $get_dishes = $this->GetDishes();
-    $price = 0;
-    $dish_size_id = null;
-    foreach ($get_dishes as $get_dish) {
-        if ($get_dish->has_sizes == 1) {
-            if ($get_dish->dishSizes) {
-                $price = $get_dish->dishSizes->price;
-                $dish_size_id = $get_dish->dishSizes->price;
-            }
-        } else {
-            $price = $get_dish->price;
+function AddDishCategories($branch_id)
+{
+    $get_dish_categories = DishCategory::all();
+    if($get_dish_categories){
+        foreach($get_dish_categories as $get_dish_category) {
+            $branch_menu_category = BranchMenuCategory::firstOrCreate(
+                ['dish_category_id' => $get_dish_category->id, 'branch_id' => $branch_id, 'parent_id' => $get_dish_category->parent_id],
+                ['is_active' => 1, 'created_by' => auth()->user()->id]
+            );
         }
-        $get_dish = new Menu();
-        $get_dish->branch_id = $branch_id;
-        $get_dish->dish_id = $get_dish->id;
-        $get_dish->dish_size_id = $dish_size_id;
-        $get_dish->dish_category_id = $get_dish->category_id;
-        $get_dish->branch_menu_category_id = $branch_menu_category->id;
-        $get_dish->cuisine_id = $get_dish->cuisine_id;
-        $get_dish->price = $price;
-        $get_dish->is_active = 1;
-        $get_dish->created_by = auth()->user()->id;
-        $get_dish->save();
     }
 }
 
-function GetDishCategories()
+function AddDishes($branch_id)
 {
-    return DishCategory::all();
+    $get_dishes = Dish::all();
+    if($get_dishes){
+        foreach($get_dishes as $get_dish) {
+            $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
+            $branch_menu_category = Menu::firstOrCreate(
+                ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
+                [
+                    'dish_category_id' => $get_dish->category_id,
+                    'branch_menu_category_id' => $get_branch_menu_category->id, 
+                    'cuisine_id' => $get_dish->cuisine_id, 
+                    'price' => $get_dish->price, 
+                    'has_size' => $get_dish->has_sizes, 
+                    'has_addon' => $get_dish->has_addon, 
+                    'is_active' => 1,
+                    'created_by' => auth()->user()->id
+                ]
+            );
+        }
+    }
 }
 
-function GetDishes()
+function AddAddons($branch_id)
 {
-    return Dish::all();
+    $get_addons = DishAddon::all();
+    if($get_addons){
+        foreach($get_addons as $get_addon) {
+
+            $menu = Menu::where('dish_id', $get_addon->dish_id)->first();
+            $branch_menu_category = BranchMenuAddon::firstOrCreate(
+                ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
+                [
+                    'addon_category_id' => $get_addon->addon_category_id,
+                    'quantity' => $get_addon->quantity, 
+                    'price' => $get_addon->price, 
+                    'min_addons' => $get_addon->min_addons, 
+                    'max_addons' => $get_addon->max_addons, 
+                    'is_active' => 1,
+                    'created_by' => auth()->user()->id
+                ]
+            );
+        }
+    }
 }
 
-function GetDishesByCategory($category_id)
+function AddSizes($branch_id)
 {
-    return Dish::where('category_id', $category_id)->get();
+    $get_sizes = DishSize::all();
+    if($get_sizes){
+        foreach($get_sizes as $get_size) {
+            $menu = Menu::where('dish_id', $get_size->dish_id)->first();
+            $branch_menu_category = BranchMenuSize::firstOrCreate(
+                ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
+                [
+                    'price' => $get_size->price, 
+                    'default_size' => $get_size->default_size, 
+                    'is_active' => 1,
+                    'created_by' => auth()->user()->id
+                ]
+            );
+        }
+    } 
 }
+
 function respondError($error, $code, $errorMessages = [])
 {
     if ($code == 404) {

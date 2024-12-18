@@ -82,6 +82,13 @@ return [
     'NotAvailableMessage' => 'It cannot be add is not available',
     'NotClosingMessage' => 'It cannot be add, You have deficit ... Please fix it',
     'NoLeaveMessage' => 'It cannot be add, You did not have leaves',
+    'EnterCode' => ' Enter Country Code',
+    'ArabicCurrency' => ' Enter Arabic Currency',
+    'EnglishCurrency' => ' Enter English Currency',
+    'CurrencyCode' => 'Enter Currency Code',
+    'phonecode' => 'Enter phone code',
+    'flag' => 'Select flag country',
+    'length' => 'Enter length phone',
 
     //web
     'Correct' =>  'Looks good!',
@@ -123,6 +130,9 @@ return [
     'EnterUsageLimit' => 'Please enter the usage limit',
     'EnterStartDate' => 'Please enter the start date',
     'EnterEndDate' => 'Please enter the end date',
-    'DeleteConfirm'=> 'Are you sure you want to delete this item?',
+    'DeleteConfirm' => 'Are you sure you want to delete this item?',
+    'EnterLeaveType' => 'Please choose a leave type',
+    'EnterMinmum' => 'Please enter the minmum',
+    'EnterMaxmum' => 'Please enter the maxmum',
 
 ];

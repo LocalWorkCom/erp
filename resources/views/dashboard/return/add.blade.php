@@ -42,6 +42,17 @@
                             <form method="POST" action="{{ route('return.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="row gy-4">
+                                    <div class="col-xl-12">
+                                        <p class="mb-2 text-muted">@lang('term.active')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="active" value="1" class="form-check-input" checked required>
+                                            <label class="form-check-label">@lang('category.yes')</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="active" value="0" class="form-check-input" required>
+                                            <label class="form-check-label">@lang('category.no')</label>
+                                        </div>
+                                    </div>
                                     <div class="col-xl-6">
                                         <label for="code" class="form-label">@lang('term.ArabicName')</label>
                                         <input type="text" name="name_ar" id="code" class="form-control" placeholder="@lang('term.ArabicName')" required>

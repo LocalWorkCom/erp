@@ -47,5 +47,9 @@ return [
     'Actions' => 'Actions',
     'Remove' => 'Remove',
     'Add Unit' => 'Add Unit',
-    'Save' => 'Save'
+    'Save' => 'Save',
+    
+    'Product Colors' => 'الوان المنتج',
+    'Color' => 'الوان ',
+    'Add Color' => 'اضافه لون للمنتج'
 ];

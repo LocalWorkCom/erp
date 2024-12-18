@@ -54,25 +54,14 @@
                                 @csrf
                                 <div class="row gy-4">
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('client.firstName')</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name"
-                                            value="{{ old('first_name') }}" placeholder="@lang('client.firstName')" required>
+                                        <label for="input-placeholder" class="form-label">@lang('client.name')</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            value="{{ old('name') }}" placeholder="@lang('client.name')" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
                                         <div class="invalid-feedback">
-                                            @lang('validation.EnterFirstName')
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="input-placeholder" class="form-label">@lang('client.lastName')</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name"
-                                            value="{{ old('last_name') }}" placeholder="@lang('client.lastName')" required>
-                                        <div class="valid-feedback">
-                                            @lang('validation.Correct')
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterLastName')
+                                            @lang('validation.EnterName')
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -108,9 +97,9 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="date_of_birth" class="form-label">@lang('client.dateOfBirth')</label>
+                                        <label for="date_of_birth" class="form-label">@lang('client.dob')</label>
                                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                            value="{{ old('date_of_birth') }}" placeholder="@lang('client.dateOfBirth')">
+                                            value="{{ old('date_of_birth') }}" placeholder="@lang('client.dob')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -120,7 +109,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control" required>
+                                        <select name="country_id" class="select2 form-control" required>
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}">

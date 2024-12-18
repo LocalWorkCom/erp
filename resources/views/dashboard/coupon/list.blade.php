@@ -14,8 +14,15 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('coupon.Coupons')</li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('dashboard.home') }}">
+                            @lang('sidebar.Main')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('coupons.list') }}'">@lang('coupon.Coupons')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -50,47 +57,66 @@
                             @endif
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
-                                <tr>
-                                    <th scope="col">@lang('category.ID')</th>
-                                    <th scope="col">@lang('coupon.Code')</th>
-                                    <th scope="col">@lang('coupon.Type')</th>
-                                    <th scope="col">@lang('coupon.Value')</th>
-                                    <th scope="col">@lang('coupon.MinimumSpend')</th>
-                                    <th scope="col">@lang('coupon.UsageLimit')</th>
-                                    <th scope="col">@lang('coupon.StartDate')</th>
-                                    <th scope="col">@lang('coupon.EndDate')</th>
-                                    <th scope="col">@lang('coupon.IsActive')</th>
-                                    <th scope="col">@lang('category.Actions')</th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">@lang('category.ID')</th>
+                                        <th scope="col">@lang('coupon.Code')</th>
+                                        <th scope="col">@lang('coupon.Type')</th>
+                                        <th scope="col">@lang('coupon.Value')</th>
+                                        <th scope="col">@lang('coupon.MinimumSpend')</th>
+                                        <th scope="col">@lang('coupon.UsageLimit')</th>
+                                        <th scope="col">@lang('coupon.StartDate')</th>
+                                        <th scope="col">@lang('coupon.EndDate')</th>
+                                        <th scope="col">@lang('coupon.IsActive')</th>
+                                        <th scope="col">@lang('category.Actions')</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($coupons as $coupon)
-                                    <tr>
-                                        <td>{{ $coupon->id }}</td>
-                                        <td>{{ $coupon->code }}</td>
-                                        <td>@lang('coupon.' . ucfirst($coupon->type))</td>
-                                        <td>{{ $coupon->value }}</td>
-                                        <td>{{ $coupon->minimum_spend ?? '-' }}</td>
-                                        <td>{{ $coupon->usage_limit ?? '-' }}</td>
-                                        <td>{{ $coupon->start_date ? \Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d H:i') : '-' }}</td>
-                                        <td>{{ $coupon->end_date ? \Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d H:i') : '-' }}</td>
+                                    @foreach ($coupons as $coupon)
+                                        <tr>
+                                            <td>{{ $coupon->id }}</td>
+                                            <td>{{ $coupon->code }}</td>
+                                            <td>@lang('coupon.' . ucfirst($coupon->type))</td>
+                                            <td>{{ $coupon->value }}</td>
+                                            <td>{{ $coupon->minimum_spend ?? '-' }}</td>
+                                            <td>{{ $coupon->usage_limit ?? '-' }}</td>
+                                            <td>{{ $coupon->start_date ? \Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d H:i') : '-' }}
+                                            </td>
+                                            <td>{{ $coupon->end_date ? \Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d H:i') : '-' }}
+                                            </td>
 
-                                        <td>
-                <span class="badge {{ $coupon->is_active ? 'bg-success' : 'bg-danger' }}">
-                    {{ $coupon->is_active ? __('coupon.Active') : __('coupon.Inactive') }}
-                </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('coupon.show', $coupon->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
-                                            <a href="{{ route('coupon.edit', $coupon->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>
-                                            <form class="d-inline" action="{{ route('coupon.delete', $coupon->id) }}" method="POST" onsubmit="return confirmDelete()">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger-light btn-wave">@lang('category.delete') <i class="ri-delete-bin-line"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            <td>
+                                                <span class="badge {{ $coupon->is_active ? 'bg-success' : 'bg-danger' }}">
+                                                    {{ $coupon->is_active ? __('coupon.Active') : __('coupon.Inactive') }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('coupon.show', $coupon->id) }}"
+                                                    class="btn btn-info-light btn-wave">@lang('category.show') <i
+                                                        class="ri-eye-line"></i></a>
+                                                <a href="{{ route('coupon.edit', $coupon->id) }}"
+                                                    class="btn btn-orange-light btn-wave">@lang('category.edit') <i
+                                                        class="ri-edit-line"></i></a>
+                                                {{-- <form class="d-inline" action="{{ route('coupon.delete', $coupon->id) }}"
+                                                    method="POST" onsubmit="return confirmDelete()">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="btn btn-danger-light btn-wave">@lang('category.delete') <i
+                                                            class="ri-delete-bin-line"></i></button>
+                                                </form> --}}
+
+                                                <form class="d-inline" id="delete-form-{{ $coupon->id }}"
+                                                    action="{{ route('coupon.delete', $coupon->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item('{{ $coupon->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
 
                             </table>
@@ -125,5 +151,21 @@
 <script>
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

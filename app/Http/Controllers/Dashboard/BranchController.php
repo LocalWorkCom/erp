@@ -38,10 +38,8 @@ class BranchController extends Controller
     }
     public function store(Request $request)
     {
-//        dd($request->all());
         $response = $this->branchService->store($request);
         $responseData = $response->original;
-//        dd($responseData);
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
             return redirect()->back()->withErrors($validationErrors)->withInput();

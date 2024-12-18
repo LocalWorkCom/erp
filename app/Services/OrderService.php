@@ -371,7 +371,9 @@ class OrderService
         $order['transaction'] = OrderTransaction::where('order_id', $id)->first();
         $order['address'] = ClientAddress::where('id', $order->client_address_id)->first();
         $order['tracking'] = OrderTracking::where('order_id', $id)->get();
+        $order_tracking = OrderTracking::where('order_id', $order->id)->orderby('id', 'desc')->first();
 
+        $order['next_status'] = $this->getNextStatus($order_tracking->order_status);
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
@@ -432,4 +434,6 @@ class OrderService
         }
         return $next_status;
     }
+    
 }
+

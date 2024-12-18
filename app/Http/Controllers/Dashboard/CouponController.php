@@ -49,9 +49,17 @@ class CouponController extends Controller
     {
         $response = $this->couponService->store($request, $this->checkToken);
         $responseData = $response->original;
-        if (!$responseData['status'] && isset($responseData['data'])) {
-            $validationErrors = $responseData['data'];
-            return redirect()->back()->withErrors($validationErrors)->withInput();
+         // Check if the response has a 'status' key
+         if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
         }
         $message= $responseData['message'];
         return redirect('dashboard/coupons')->with('message',$message);
@@ -60,23 +68,35 @@ class CouponController extends Controller
     public function edit($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('dashboard.coupon.edit', compact('coupon'));
+        return view('dashboard.coupon.edit', compact('coupon', 'id'));
     }
 
     public function show($id)
     {
         $coupon = Coupon::findOrFail($id);
-        return view('dashboard.coupon.show', compact('coupon'));
+        return view('dashboard.coupon.show', compact('coupon', 'id'));
     }
 
     public function update(Request $request, $id)
     {
         $response = $this->couponService->update($request, $id);
         $responseData = $response->original;
-        if (!$responseData['status'] && isset($responseData['data'])) {
-            $validationErrors = $responseData['data'];
-            return redirect()->back()->withErrors($validationErrors)->withInput();
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                // dd(0);
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
         }
+        // if (!$responseData['status'] && isset($responseData['data'])) {
+        //     $validationErrors = $responseData['data'];
+        //     return redirect()->back()->withErrors($validationErrors)->withInput();
+        // }
         $message= $responseData['message'];
         return redirect('dashboard/coupons')->with('message',$message);
     }

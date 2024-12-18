@@ -4,10 +4,14 @@ namespace App\Services;
 
 use App\Models\Branch;
 use App\Models\Employee;
+use App\Models\Dish;
+
+
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BranchService
 {
@@ -62,6 +66,8 @@ class BranchService
         }
 
         //try {
+            //return $get_dishes = Dish::all();
+            $user_id =  Auth::guard('admin')->user()->id;
             $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
             $branch = Branch::create([
                 'name_en' => $request->name_en,
@@ -79,11 +85,10 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
-                'created_by' =>1,
+                'created_by' => $user_id,
             ]);
 
-            //AddBranchMenu($branch->id);
-
+            AddBranchMenu($branch->id);
             return ResponseWithSuccessData($this->lang, $branch, 1);
         // } catch (\Exception $e) {
         //     Log::error('Error creating branch: ' . $e->getMessage());
@@ -136,7 +141,7 @@ class BranchService
         }
 
         try {
-
+            $user_id =  Auth::guard('admin')->user()->id;
             $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
             $branch = Branch::findOrFail($id);
             $branch->update([
@@ -155,7 +160,7 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
-                'modified_by' => 13,
+                'modified_by' => $user_id,
             ]);
             return ResponseWithSuccessData($this->lang, $branch, 1);
         } catch (\Exception $e) {

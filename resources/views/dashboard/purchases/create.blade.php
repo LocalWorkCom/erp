@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="vendor_id" class="form-label">@lang('purchase.vendor')</label>
-                                        <select name="vendor_id" class="js-example-basic-single form-control" required>
+                                        <select name="vendor_id" class="select2 form-control" required>
                                             <option value="" disabled selected>@lang('purchase.chooseVendor')</option>
                                             @foreach ($vendors as $vendor)
                                                 <option value="{{ $vendor->id }}">
@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="store_id" class="form-label">@lang('purchase.store')</label>
-                                        <select name="store_id" class="js-example-basic-single form-control" required>
+                                        <select name="store_id" class="select2 form-control" required>
                                             <option value="" disabled selected>@lang('purchase.chooseStore')</option>
                                             @foreach ($stores as $store)
                                                 <option value="{{ $store->id }}">
@@ -91,7 +91,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('purchase.type')</p>
-                                        <select name="type" class="js-example-basic-single form-control" required>
+                                        <select name="type" class="select2 form-control" required>
                                             <option value="" disabled selected>@lang('purchase.chooseType')</option>
                                             <option value=0>@lang('purchase.purchase')</option>
                                             <option value=1>@lang('purchase.refund')</option>
@@ -117,7 +117,7 @@
                                     <tbody id="productRows">
                                         <tr>
                                             <td>
-                                                <select class="js-example-basic-single form-control"
+                                                <select class="select2 form-control"
                                                     name="products[0][category_id]" required>
                                                     <option value="" disabled selected>@lang('purchase.chooseCategory')</option>
                                                     @foreach ($categories as $category)
@@ -128,7 +128,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select class="js-example-basic-single form-control"
+                                                <select class="select2 form-control"
                                                     name="products[0][product_id]" required>
                                                     <option value="" disabled selected>@lang('purchase.chooseProduct')</option>
                                                     @foreach ($products as $product)
@@ -139,7 +139,7 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <select class="js-example-basic-single form-control"
+                                                <select class="select2 form-control"
                                                     name="products[0][unit_id]" required>
                                                     <option value="" disabled selected>@lang('purchase.chooseUnit')</option>
                                                     @foreach ($units as $unit)
@@ -153,7 +153,8 @@
                                                     name="products[0][price]" required></td>
                                             <td><input type="number" step="0.01" class="form-control"
                                                     name="products[0][quantity]" required></td>
-                                            <td><button type="button" class="btn btn-danger removeRow">Remove</button>
+                                            <td><button type="button"
+                                                    class="btn btn-danger removeRow">@lang('purchase.remove')</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -200,7 +201,7 @@
             const newRow = `
                 <tr>
                     <td>
-                        <select class="js-example-basic-single form-control" name="products[${rowCount}][category_id]" required>
+                        <select class="select2 form-control" name="products[${rowCount}][category_id]" required>
                             <option value="" disabled selected>@lang('purchase.chooseCategory')</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">
@@ -210,7 +211,7 @@
                         </select>
                     </td>
                     <td>
-                        <select class="js-example-basic-single form-control" name="products[${rowCount}][product_id]" required>
+                        <select class="select2 form-control" name="products[${rowCount}][product_id]" required>
                             <option value="" disabled selected>@lang('purchase.chooseProduct')</option>
                             @foreach ($products as $product)
                                 <option value="{{ $product->id }}">
@@ -220,7 +221,7 @@
                         </select>
                     </td>
                     <td>
-                        <select class="js-example-basic-single form-control" name="products[${rowCount}][unit_id]" required>
+                        <select class="select2 form-control" name="products[${rowCount}][unit_id]" required>
                             <option value="" disabled selected>@lang('purchase.chooseUnit')</option>
                             @foreach ($units as $unit)
                                 <option value="{{ $unit->id }}">

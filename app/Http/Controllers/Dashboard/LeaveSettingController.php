@@ -21,10 +21,10 @@ class LeaveSettingController extends Controller
     {
         $response = $this->leaveSettingService->index($request);
         $responseData = $response->original;
-        $LeaveType = $responseData['data'];
-        $eaveTypes = LeaveType::all();
+        $LeaveSetting = $responseData['data'];
+        $leaveTypes = LeaveType::all();
         $countries = Country::all();
-        return view('dashboard.leave_setting.list', compact('LeaveType', 'countries', 'eaveTypes'));
+        return view('dashboard.leave_setting.list', compact('LeaveSetting', 'countries', 'leaveTypes'));
     }
 
     public function show($id)
