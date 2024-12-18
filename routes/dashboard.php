@@ -178,6 +178,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
             Route::put('update/{id}', [BranchMenuCategoryController::class, 'update'])->name('branch.categories.update')->middleware('role_or_permission:update branch_menu_categories');
             Route::delete('delete/{id}', [BranchMenuCategoryController::class, 'delete'])->name('branch.categories.delete')->middleware('role_or_permission:delete branch_menu_categories');
             Route::get('showAll/{branch_id}', [BranchMenuCategoryController::class, 'show_branch'])->name('branch.categories.show.all')->middleware('role_or_permission:view branch_menu_categories');
+            Route::get('changeStatus/{id}', [BranchMenuCategoryController::class, 'change_status'])->name('branch.categories.changeStatus')->middleware('role_or_permission:update branch_menu_categories');
         });
     });
 

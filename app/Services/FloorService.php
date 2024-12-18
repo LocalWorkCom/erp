@@ -20,7 +20,6 @@ class FloorService
 
     public function index(Request $request)
     {
-//        dd(app()->getLocale());
         try {
             $floors = Floor::with(['floorPartitions', 'tables', 'floorPartitions.tables'])->get();
             return ResponseWithSuccessData($this->lang, $floors, 1);
@@ -73,7 +72,7 @@ class FloorService
 
     public function edit(Request $request,$id)
     {
-        //try {
+        try {
             $validateData = Validator::make($request->all(), [
                 'branch_id' => 'required|integer|exists:branches,id',
                 'name_ar' => 'required',
@@ -97,9 +96,9 @@ class FloorService
             $floor->save();
 
             return ResponseWithSuccessData($this->lang, $floor, 1);
-        // } catch (\Exception $e) {
-        //     return RespondWithBadRequestData($this->lang, 2);
-        // }
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
     }
 
     public function delete(Request $request, $id)
@@ -110,6 +109,11 @@ class FloorService
             $floor = Floor::find($id);
             if (!$floor) {
                 return  RespondWithBadRequestNotExist();
+            }
+
+            $floorPartitions = $floor->floorPartitions()->exists();
+            if($floorPartitions){
+                return  RespondWithBadRequestNoEmpty();
             }
 
             $floor->deleted_by = $user_id;
