@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control">
+                                        <select name="country_id" class="select2 form-control">
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}"
@@ -151,7 +151,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md1" value="1"
-                                                {{ $client->is_active == 1 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md1">
                                                 @lang('client.yes')
                                             </label>
@@ -159,7 +159,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md2" value="0"
-                                                {{ $client->is_active == 0 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md2">
                                                 @lang('client.no')
                                             </label>
