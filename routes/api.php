@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
+use App\Http\Controllers\Api\StaticPageController;
 use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ApiCodeController;
@@ -776,3 +777,6 @@ Route::prefix('addon-categories')->group(function () {
     Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('api.addon_categories.destroy');
     Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('api.addon_categories.restore');
 });
+
+Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
+
