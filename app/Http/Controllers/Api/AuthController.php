@@ -6,7 +6,9 @@ use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
 use App\Models\ClientDetail;
+use App\Models\Otp;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -130,30 +132,93 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
-        $validator = Validator::make($request->all(), [
-            "email" => "required|email",
-            "password" => "required",
-            'password_confirm' => 'required|same:password',
+        $messages = [
+            "phone.required" => "رقم الهاتف مطلوب.",
+            "phone.exists" => "رقم الهاتف غير مسجل.",
+            // "otp.required" => "رمز التحقق مطلوب.",
+            "password.required" => "كلمة المرور الجديدة مطلوبة.",
+            "password_confirm.required" => "تأكيد كلمة المرور مطلوب.",
+            "password_confirm.same" => "تأكيد كلمة المرور يجب أن يطابق كلمة المرور الجديدة.",
+        ];
 
-        ]);
+        $validator = Validator::make($request->all(), [
+            "phone" => "required|exists:users,phone",
+            // "otp" => "required",
+            "password" => "required",
+            "password_confirm" => "required|same:password",
+        ], $messages);
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
-        $user = User::where('email', $request->email)->first();
 
-        if (Hash::check($request->password, $user->password) == true) {
-            return RespondWithBadRequest($lang, 3);
+        // Verify OTP
+        // if (!$this->verifyPhone($request->phone, $request->otp)) {
+        //     return respondError("Invalid or expired OTP.", 400, [
+        //         'otp' => ['رمز التحقق غير صالح أو منتهي الصلاحية.']
+        //     ]);
+        // }
+
+        $user = User::where('phone', $request->phone)->first();
+
+        // Check if the new password is the same as the old one
+        if (Hash::check($request->password, $user->password)) {
+            return RespondWithBadRequest($lang,  3);
         }
-        Auth::login($user);
+
+        // Reset the password
         $user->password = Hash::make($request->password);
         $user->save();
-        $success['token'] = $user->createToken('MyApp')->accessToken;
-        $userData = $user->only(['id', 'name', 'email', 'phone']);
 
-        $success['user'] = array_merge($userData);
+        // Generate a new token
+        $token = $user->createToken("MyApp")->accessToken;
+
+        $userData = $user->only(['id', 'name', 'email', 'phone']);
+        $success = [
+            "token" => $token,
+            "user" => $userData,
+        ];
+
         return ResponseWithSuccessData($lang, $success, 15);
     }
+
+
+    // private function verifyPhone($phone, $otpInput)
+    // {
+    //     $otpRecord = Otp::where('phone', $phone)
+    //         ->where('otp', $otpInput)
+    //         ->first();
+
+    //     // Check if OTP exists and is not expired
+    //     if ($otpRecord && Carbon::now()->lt(Carbon::parse($otpRecord->expires_at))) {
+    //         // OTP is valid, delete it after verification
+    //         $otpRecord->delete();
+
+    //         return true;
+    //     }
+
+    //     return false; // OTP is invalid or expired
+    // }
+
+    // public function generateAndSendOtp($phone)
+    // {
+    //     $otp = rand(100000, 999999); // Generate a 6-digit OTP
+
+    //     // Save OTP in the database with an expiration time (e.g., 5 minutes)
+    //     Otp::updateOrCreate(
+    //         ['phone' => $phone],
+    //         [
+    //             'otp' => $otp,
+    //             'expires_at' => now()->addMinutes(5),
+    //         ]
+    //     );
+
+    //     // Send OTP to the user via SMS or other methods
+    //     // Example: Log OTP for demonstration purposes
+    //     Log::info("OTP for phone $phone: $otp");
+
+    //     return true; // Return success
+    // }
 
 
     public function Logout(Request $request)
