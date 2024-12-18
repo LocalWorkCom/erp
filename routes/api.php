@@ -146,22 +146,15 @@ Route::group(['middleware' => ['auth:admin', 'admin']], function () {
 // });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//api(both)
-Route::group(["middleware" => ["auth:api"]], function () {
-    Route::any("logout", [AuthController::class, "logout"]);
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    Route::group(['prefix' => 'user'], function () {
-        Route::get("profile", [ClientController::class, "viewProfile"]);
-        Route::post("profile/update", [ClientController::class, "updateProfile"]);
-
-        Route::get("client/orders", [ClientController::class, "listOrders"]);
-        Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
-        Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
-    });
+ //Country
+ Route::group(['prefix' => 'country'], function () {
+    Route::any('/', [CountryController::class, 'index']);
+    Route::any('/add', [CountryController::class, 'store']);
+    Route::any('/get', [CountryController::class, 'show']);
+    Route::any('/edit', [CountryController::class, 'update']);
+    Route::any('/delete', [CountryController::class, 'destroy']);
+});
+//end Country
 
     //Color
     Route::group(['prefix' => 'color'], function () {
@@ -181,15 +174,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::any('/delete', [SizeController::class, 'destroy']);
     });
     //end Size
-    //Country
-    Route::group(['prefix' => 'country'], function () {
-        Route::any('/', [CountryController::class, 'index']);
-        Route::any('/add', [CountryController::class, 'store']);
-        Route::any('/get', [CountryController::class, 'show']);
-        Route::any('/edit', [CountryController::class, 'update']);
-        Route::any('/delete', [CountryController::class, 'destroy']);
-    });
-    //end Country
+
 
     Route::group(['prefix' => 'category'], function () {
         Route::get('/', [CategoryController::class, 'index']);
@@ -218,6 +203,57 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
         Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
     });
+    Route::group(['prefix' => 'unit'], function () {
+        Route::get('/', [UnitController::class, 'index']);
+        Route::post('store', [UnitController::class, 'store']);
+        Route::post('update', [UnitController::class, 'update']);
+        Route::get('delete/{id}', [UnitController::class, 'delete']);
+    });
+     //  branches
+     Route::group(['prefix' => 'branches'], function () {
+        Route::get('branchList', [BranchController::class, 'index']);
+        Route::get('showBranch/{id}', [BranchController::class, 'show']);
+        Route::post('addBranch', [BranchController::class, 'store']);
+        Route::put('updateBranch/{id}', [BranchController::class, 'update']);
+        Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+        Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+    });
+     // Discounts
+     Route::group(['prefix' => 'discounts'], function () {
+        Route::get('discountList', [DiscountController::class, 'index']);
+        Route::get('showDiscount/{id}', [DiscountController::class, 'show']);
+        Route::post('addDiscount', [DiscountController::class, 'store']);
+        Route::put('updateDiscount/{id}', [DiscountController::class, 'update']);
+        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']);
+        Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']);
+    });
+
+    // Coupons
+    Route::group(['prefix' => 'coupons'], function () {
+        Route::get('couponList', [CouponController::class, 'index']);
+        Route::get('showCoupon/{id}', [CouponController::class, 'show']);
+        Route::post('addCoupon', [CouponController::class, 'store']);
+        Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
+        Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
+        Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
+        Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
+    });
+
+
+//api(both)
+Route::group(["middleware" => ["auth:api"]], function () {
+    Route::any("logout", [AuthController::class, "logout"]);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Route::group(['prefix' => 'user'], function () {
+        Route::get("profile", [ClientController::class, "viewProfile"]);
+        Route::post("profile/update", [ClientController::class, "updateProfile"]);
+
+        Route::get("client/orders", [ClientController::class, "listOrders"]);
+        Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
+        Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+    });
+
 
     Route::group(['prefix' => 'order'], function () {
         Route::get('/', [OrderController::class, 'index']);
@@ -242,12 +278,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/refund', [OrderReportController::class, 'OrderRefundReport']);
         Route::post('/refund/details', [OrderReportController::class, 'OrderRefundReportDetails']);
     });
-    Route::group(['prefix' => 'unit'], function () {
-        Route::get('/', [UnitController::class, 'index']);
-        Route::post('store', [UnitController::class, 'store']);
-        Route::post('update', [UnitController::class, 'update']);
-        Route::get('delete/{id}', [UnitController::class, 'delete']);
-    });
+
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notification/store', [NotificationController::class, 'store']);
 
@@ -282,15 +313,7 @@ Route::group(["middleware" => ["auth:api"]], function () {
     });
     // end opening balance
 
-    //  branches
-    Route::group(['prefix' => 'branches'], function () {
-        Route::get('branchList', [BranchController::class, 'index']);
-        Route::get('showBranch/{id}', [BranchController::class, 'show']);
-        Route::post('addBranch', [BranchController::class, 'store']);
-        Route::put('updateBranch/{id}', [BranchController::class, 'update']);
-        Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
-        Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
-    });
+
 
     // vendors
     Route::group(['prefix' => 'vendors'], function () {
@@ -343,27 +366,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::put('/update/{id}', [RecipeController::class, 'update'])->name('recipes.update');
         Route::delete('/delete/{id}', [RecipeController::class, 'destroy'])->name('recipes.destroy');
         Route::post('/restore/{id}', [RecipeController::class, 'restore'])->name('recipes.restore');
-    });
-
-    // Discounts
-    Route::group(['prefix' => 'discounts'], function () {
-        Route::get('discountList', [DiscountController::class, 'index']);
-        Route::get('showDiscount/{id}', [DiscountController::class, 'show']);
-        Route::post('addDiscount', [DiscountController::class, 'store']);
-        Route::put('updateDiscount/{id}', [DiscountController::class, 'update']);
-        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']);
-        Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']);
-    });
-
-    // Coupons
-    Route::group(['prefix' => 'coupons'], function () {
-        Route::get('couponList', [CouponController::class, 'index']);
-        Route::get('showCoupon/{id}', [CouponController::class, 'show']);
-        Route::post('addCoupon', [CouponController::class, 'store']);
-        Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
-        Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
-        Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
-        Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
     });
 
 
@@ -419,17 +421,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
     Route::prefix('dish-categories')->group(function () {
-        Route::get('/', [DishCategoryController::class, 'index'])->name('dish_categories.index'); 
-        Route::get('/create', [DishCategoryController::class, 'create'])->name('dish_categories.create'); 
-        Route::post('/', [DishCategoryController::class, 'store'])->name('dish_categories.store'); 
-        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dish_categories.edit'); 
-        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update'); 
-        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete'); 
-        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore'); 
+        Route::get('/', [DishCategoryController::class, 'index'])->name('dish_categories.index');
+        Route::get('/create', [DishCategoryController::class, 'create'])->name('dish_categories.create');
+        Route::post('/', [DishCategoryController::class, 'store'])->name('dish_categories.store');
+        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dish_categories.edit');
+        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update');
+        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
 
     });
-    
+
 
     // Gifts
     Route::group(['prefix' => 'gifts'], function () {

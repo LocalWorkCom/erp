@@ -331,7 +331,7 @@
                                         <td>{{ ($partition->type == 1) ? __('floor.Indoor') : ($partition->type == 2 ? __('floor.Outdoor') : __('floor.Both')) }}</td>
                                         <td>{{ ($partition->smoking == 1) ? __('floor.Smokin') : ($partition->smoking == 2 ? __('floor.NoSmokin') : __('floor.Both')) }}</td>
                                         <td>{{ $partition->capacity }}</td>
-                                        <td>{{ $partition->floors->name_ar." | ".$partition->floors->name_en }}</td>
+                                        <td>{{ $partition->floors != null ? $partition->floors->name_ar." | ".$partition->floors->name_en : "" }}</td>
                                         <td>
                                             <!-- Show Button -->
                                             <a href="javascript:void(0);"
@@ -342,7 +342,7 @@
                                                data-capacity="{{ $partition->capacity }}"
                                                data-type-show="{{ ($partition->type == 1) ? __('floor.Indoor') : ($partition->type == 2 ? __('floor.Outdoor') : __('floor.Both')) }}"
                                                data-smoking-show="{{ ($partition->smoking == 1) ? __('floor.Smokin') : ($partition->smoking == 2 ? __('floor.NoSmokin') : __('floor.Both')) }}"
-                                               data-floor-name="{{ $partition->floors->name_ar . ' | ' . $partition->floors->name_en }}"
+                                               data-floor-name="{{ $partition->floors != null ? $partition->floors->name_ar . ' | ' . $partition->floors->name_en : '' }}"
                                                data-bs-toggle="modal"
                                                data-bs-target="#showModal">
                                                 @lang('category.show') <i class="ri-eye-line"></i>

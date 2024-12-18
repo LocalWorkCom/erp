@@ -289,7 +289,6 @@
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th scope="col">@lang('country.Id')</th>
                                         <th scope="col">@lang('country.ArabicName')</th>
                                         <th scope="col">@lang('country.EnglishName')</th>
                                         <th scope="col">@lang('country.Code')</th>
@@ -302,7 +301,6 @@
                                 <tbody>
                                     @foreach ($countries as $country)
                                         <tr>
-                                            <td>{{ $country->id }}</td>
                                             <td>{{ $country->name_ar }}</td>
                                             <td>{{ $country->name_en }}</td>
                                             <td>{{ $country->code }}</td>

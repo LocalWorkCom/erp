@@ -23,8 +23,10 @@ use App\Models\LeaveRequest;
 use App\Models\Employee;
 use App\Models\DishCategory;
 use App\Models\Dish;
-use App\Models\BranchMenuCategory;
+use App\Models\DishAddon;
 use App\Models\Menu;
+use App\Models\BranchMenuCategory;
+use App\Models\BranchMenuAddon;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -302,6 +304,21 @@ function RespondWithBadRequestNoChange()
     $response = Response::json($response_array, $response_code);
     return $response;
 }
+
+function RespondWithBadRequestNoEmpty()
+{
+    $response_array = array(
+        'status' => true,
+        // 'apiTitle' => trans('validation.NoChange'),
+        'message' => trans('validation.NotAllowMessage'),
+        'code' => 401,
+        'data'   => []
+    );
+    $response_code = 200;
+    $response = Response::json($response_array, $response_code);
+    return $response;
+}
+
 //not used
 function RespondWithBadRequestNotExist()
 {
@@ -807,51 +824,87 @@ function GetCurrencyCodes()
 
 function AddBranchMenu($branch_id)
 {
-    $get_dish_categories = $this->GetDishCategories();
-    foreach ($get_dish_categories as $get_dish_category) {
-        $branch_menu_category = new BranchMenuCategory();
-        $branch_menu_category->branch_id = $branch_id;
-        $branch_menu_category->dish_category_id = $get_dish_category->id;
-        $branch_menu_category->parent_id = $get_dish_category->parent_id;
-        $branch_menu_category->is_active = 1;
-        $branch_menu_category->created_by = auth()->user()->id;
-        $branch_menu_category->save();
-    }
+    $add_dish_categories = AddDishCategories($branch_id);
+    
+    
+    $add_dishes = AddDishes($branch_id);
+    
+    
+    $add_addons = AddAddons($branch_id);
+    
+}
 
-    $get_dishes = $this->GetDishes();
-    $price = 0;
-    $dish_size_id = null;
-    foreach ($get_dishes as $get_dish) {
-        if ($get_dish->has_sizes == 1) {
-            if ($get_dish->dishSizes) {
-                $price = $get_dish->dishSizes->price;
-                $dish_size_id = $get_dish->dishSizes->price;
-            }
-        } else {
-            $price = $get_dish->price;
+function AddDishCategories($branch_id)
+{
+    $get_dish_categories = DishCategory::all();
+    if($get_dish_categories){
+        foreach($get_dish_categories as $get_dish_category) {
+            $branch_menu_category = new BranchMenuCategory();
+            $branch_menu_category->branch_id = $branch_id;
+            $branch_menu_category->dish_category_id = $get_dish_category->id;
+            $branch_menu_category->parent_id = $get_dish_category->parent_id;
+            $branch_menu_category->is_active = 1;
+            $branch_menu_category->created_by = auth()->user()->id;
+            $branch_menu_category->save();
         }
-        $get_dish = new Menu();
-        $get_dish->branch_id = $branch_id;
-        $get_dish->dish_id = $get_dish->id;
-        $get_dish->dish_size_id = $dish_size_id;
-        $get_dish->dish_category_id = $get_dish->category_id;
-        $get_dish->branch_menu_category_id = $branch_menu_category->id;
-        $get_dish->cuisine_id = $get_dish->cuisine_id;
-        $get_dish->price = $price;
-        $get_dish->is_active = 1;
-        $get_dish->created_by = auth()->user()->id;
-        $get_dish->save();
     }
 }
 
-function GetDishCategories()
+function AddDishes($branch_id)
 {
-    return DishCategory::all();
+    $get_dishes = Dish::all();
+    if($get_dishes){
+        $price = 0;
+        $dish_size_id = null;
+        foreach($get_dishes as $get_dish) {
+            if ($get_dish->has_sizes == 1) {
+                if ($get_dish->dishSizes) {
+                    $price = $get_dish->dishSizes->price;
+                    $dish_size_id = $get_dish->dishSizes->price;
+                }
+            } else {
+                $price = $get_dish->price;
+            }
+
+            $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
+
+            $add_dish = new Menu();
+            $add_dish->branch_id = $branch_id;
+            $add_dish->dish_id = $get_dish->id;
+            $add_dish->dish_size_id = $dish_size_id;
+            $add_dish->dish_category_id = $get_dish->category_id;
+            $add_dish->branch_menu_category_id = $get_branch_menu_category->id;
+            $add_dish->cuisine_id = $get_dish->cuisine_id;
+            $add_dish->price = $price;
+            $add_dish->is_active = 1;
+            $add_dish->created_by = auth()->user()->id;
+            $add_dish->save();
+        }
+    }
 }
 
-function GetDishes()
+function AddAddons($branch_id)
 {
-    return Dish::all();
+    $get_addons = DishAddon::all();
+    if($get_addons){
+        foreach($get_addons as $get_addon) {
+
+            $menu = Menu::where('dish_id', $get_addon->dish_id)->first();
+
+            $add_addon = new BranchMenuAddon();
+            $add_addon->branch_id = $branch_id;
+            $add_addon->menu_id = $menu->id;
+            $add_addon->dish_addon_id = $get_addon->id;
+            $add_addon->addon_category_id = $get_addon->addon_category_id;
+            $add_addon->quantity = $get_addon->quantity;
+            $add_addon->price = $get_addon->price;
+            $add_addon->min_addons = $get_addon->min_addons;
+            $add_addon->max_addons = $get_addon->max_addons;
+            $add_addon->is_active = 1;
+            $add_addon->created_by = auth()->user()->id;
+            $add_addon->save();
+        }
+    } 
 }
 
 function GetDishesByCategory($category_id)

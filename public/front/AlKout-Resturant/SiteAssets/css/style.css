@@ -65,7 +65,16 @@ p {
     font-weight: bold;
     opacity: 1;
 }
-
+.btn-no-modal {
+    box-shadow: none;
+    color: #f10909;
+    border: 1px solid #FE0000;
+    background-color:#ffffff;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    opacity: 1;
+}
 .btn:focus {
     outline: 0;
     box-shadow: none;
@@ -696,7 +705,7 @@ body.no-scroll {
 
 /* ****************************************************************************************** */
 /* categories section  */
-.categories, .follow-request {
+.categories {
     background: url(../images/bg-small.png) no-repeat center #fdf9f9;
     mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4);
     background-size: 100%;
@@ -1124,7 +1133,10 @@ a:hover {
 }
 
 /* otp password styles  */
-
+.code-input{
+    direction: ltr;
+    text-align: end;
+}
 .code-input input {
     width: 3.5rem;
     height: 3rem;
@@ -1347,6 +1359,7 @@ a:hover {
     object-fit: contain;
 }
 /* follow request page */
+
 .wizard,
 .wizard .nav-tabs,
 .wizard .nav-tabs .nav-item {
