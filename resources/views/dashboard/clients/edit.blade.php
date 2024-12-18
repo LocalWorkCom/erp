@@ -55,20 +55,11 @@
                                 @method('PUT')
                                 <div class="row gy-4">
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="first_name" class="form-label">@lang('client.firstName')</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name"
-                                            value="{{ $client->clientDetails->first_name }}"
-                                            placeholder="@lang('client.firstName')">
+                                        <label for="name" class="form-label">@lang('client.name')</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            value="{{ $client->name }}" placeholder="@lang('client.name')">
                                         <div class="valid-feedback">@lang('validation.Correct')</div>
-                                        <div class="invalid-feedback">@lang('validation.EnterFirstName')</div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="last_name" class="form-label">@lang('client.lastName')</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name"
-                                            value="{{ $client->clientDetails->last_name }}"
-                                            placeholder="@lang('client.lastName')">
-                                        <div class="valid-feedback">@lang('validation.Correct')</div>
-                                        <div class="invalid-feedback">@lang('validation.EnterLastName')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterName')</div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="email" class="form-label">@lang('client.email')</label>
@@ -112,7 +103,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control">
+                                        <select name="country_id" class="select2 form-control">
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}"
@@ -160,7 +151,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md1" value="1"
-                                                {{ $client->is_active == 1 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md1">
                                                 @lang('client.yes')
                                             </label>
@@ -168,7 +159,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md2" value="0"
-                                                {{ $client->is_active == 0 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md2">
                                                 @lang('client.no')
                                             </label>

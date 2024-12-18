@@ -18,9 +18,9 @@ class CountryController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            if (!CheckToken()) {
-                return RespondWithBadRequest($lang, 5);
-            }
+            // if (!CheckToken()) {
+            //     return RespondWithBadRequest($lang, 5);
+            // }
             $countries = Country::where('deleted_at',null)->get();
 
             return ResponseWithSuccessData($lang, $countries, 1);

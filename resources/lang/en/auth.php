@@ -15,4 +15,6 @@ return [
     'nepass'=>'New Password',
     'currentpass'=>'Current Passwprd',
     'resetpass'=>'Reset Password',
+    'only_admin' => 'Only admin users can log in.',
+    'invalid_credentials' => 'The provided credentials do not match our records.',
 ];

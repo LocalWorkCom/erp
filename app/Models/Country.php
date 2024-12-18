@@ -10,7 +10,8 @@ use App\Traits\UUID;
 class Country extends Model
 {
     use HasFactory ,SoftDeletes, UUID;
-    protected $appends = ['name', 'code', 'currency', 'name_site', 'currency_site'];
+    protected $appends = ['name', 'code', 'currency', 'name_site', 'currency_site', 'phone_code',
+    'length'];
 
     protected $fillable = [
         'name_ar',
@@ -19,7 +20,9 @@ class Country extends Model
         'currency_ar',
         'currency_en',
         'currency_code',
-        'job_years'
+        'job_years',
+        'phone_code',
+        'length'
     ];
 
 
@@ -35,7 +38,8 @@ class Country extends Model
         'code',
         'currency_ar',
         'currency_en',
-        'job_years'
+        'job_years',
+
 
     ];
     public function getNameAttribute($value)
