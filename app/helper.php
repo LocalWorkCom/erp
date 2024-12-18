@@ -882,3 +882,13 @@ function respondError($error, $code, $errorMessages = [])
 
     return response()->json($response, $code1);
 }
+ function getMostDishesOrdered($limit = 5)
+{
+    return Dish::select('dishes.id', 'dishes.name')
+        ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+        ->groupBy('dishes.id', 'dishes.name_ar')
+        ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->limit($limit)
+        ->get();
+}
