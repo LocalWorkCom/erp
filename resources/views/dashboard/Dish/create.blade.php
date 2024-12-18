@@ -87,6 +87,21 @@
                                         <label for="image" class="form-label">@lang('dishes.Image')</label>
                                         <input type="file" class="form-control" id="image" name="image">
                                     </div>
+<!-- Recipes for Dishes Without Sizes -->
+<div id="dish-recipes-section" class="col-xl-12 d-none">
+    <h5 class="mb-3">@lang('dishes.DishRecipes')</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@lang('dishes.Recipe')</th>
+                <th>@lang('dishes.Quantity')</th>
+                <th>@lang('dishes.Actions')</th>
+            </tr>
+        </thead>
+        <tbody id="dish-recipes-table"></tbody>
+    </table>
+    <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
+</div>
 
                                     <div class="col-xl-6">
                                         <label for="has_sizes" class="form-label">@lang('dishes.HasSizes')</label>
@@ -168,7 +183,47 @@ $(document).ready(function () {
             $('#price-section').removeClass('d-none');
         }
     });
+ // Toggle sizes and recipes sections based on `has_sizes`
+ $('#has_sizes').on('change', function () {
+        if ($(this).val() == 1) {
+            $('#dish-sizes-section').removeClass('d-none');
+            $('#price-section').addClass('d-none');
+            $('#dish-recipes-section').addClass('d-none');
+        } else {
+            $('#dish-sizes-section').addClass('d-none');
+            $('#price-section').removeClass('d-none');
+            $('#dish-recipes-section').removeClass('d-none');
+        }
+    });
 
+    // Add Recipe Row for Dish Without Sizes
+    let recipeIndex = 0;
+    $('#add-dish-recipe').on('click', function () {
+        $('#dish-recipes-table').append(`
+            <tr>
+                <td>
+                    <select name="details[${recipeIndex}][recipe_id]" class="form-control select2" required>
+                        @foreach ($recipes as $recipe)
+                            <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="details[${recipeIndex}][quantity]" class="form-control" step="0.01" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
+                </td>
+            </tr>
+        `);
+        recipeIndex++;
+        $('.select2').select2();
+    });
+
+    // Remove Row
+    $(document).on('click', '.remove-row', function () {
+        $(this).closest('tr').remove();
+    });
     // Add Dish Size Row
     let sizeIndex = 0;
     $('#add-dish-size').on('click', function () {
