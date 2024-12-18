@@ -26,13 +26,10 @@ class AuthController extends Controller
             "name" => "required|string",
             "email" => "required|email|unique:users",
             'country_id' => 'required|exists:countries,id',
+            'country_code' => 'required|string',
             "password" => "required",
             'phone' => 'required|unique:users,phone',
             "date_of_birth" => "nullable|date",
-            // "city" => "nullable|string",
-            // "state" => "required|string",
-            // "postal_code" => "nullable|string",
-            // "address" => "required|string",
 
         ]);
 
@@ -47,6 +44,7 @@ class AuthController extends Controller
         $user->flag = 'client';
         $user->phone = $request->phone;
         $user->country_id = $request->country_id;
+        $user->country_code = $request->country_code;
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -58,18 +56,6 @@ class AuthController extends Controller
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
 
-        // Create Client Address
-        // $clientAddress = new ClientAddress();
-        // $clientAddress->user_id = $user->id;
-        // $clientAddress->address = $request->address;
-        // $clientAddress->city = $request->city;
-        // $clientAddress->state = $request->state;
-        // $clientAddress->postal_code = $request->postal_code ?? null;
-        // $clientAddress->save();
-
-
-
-        // Response
         return RespondWithSuccessRequest($lang, 23);
     }
     public function Login(Request $request)
@@ -127,7 +113,7 @@ class AuthController extends Controller
         }
     }
 
-    public function reset_password(Request $request)
+    public function verifyPhone(Request $request)
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
@@ -135,7 +121,31 @@ class AuthController extends Controller
         $messages = [
             "phone.required" => "رقم الهاتف مطلوب.",
             "phone.exists" => "رقم الهاتف غير مسجل.",
-            // "otp.required" => "رمز التحقق مطلوب.",
+        ];
+
+        $validator = Validator::make($request->all(), [
+            "phone" => "required|exists:users,phone",
+        ], $messages);
+
+        if ($validator->fails()) {
+            return RespondWithBadRequestWithData($validator->errors());
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => __('Phone verified successfully.'),
+            'data' => ['phone' => $request->phone],
+        ], 200);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        $messages = [
+            "phone.required" => "رقم الهاتف مطلوب.",
+            "phone.exists" => "رقم الهاتف غير مسجل.",
             "password.required" => "كلمة المرور الجديدة مطلوبة.",
             "password_confirm.required" => "تأكيد كلمة المرور مطلوب.",
             "password_confirm.same" => "تأكيد كلمة المرور يجب أن يطابق كلمة المرور الجديدة.",
@@ -143,7 +153,6 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             "phone" => "required|exists:users,phone",
-            // "otp" => "required",
             "password" => "required",
             "password_confirm" => "required|same:password",
         ], $messages);
@@ -152,25 +161,16 @@ class AuthController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        // Verify OTP
-        // if (!$this->verifyPhone($request->phone, $request->otp)) {
-        //     return respondError("Invalid or expired OTP.", 400, [
-        //         'otp' => ['رمز التحقق غير صالح أو منتهي الصلاحية.']
-        //     ]);
-        // }
-
         $user = User::where('phone', $request->phone)->first();
 
         // Check if the new password is the same as the old one
         if (Hash::check($request->password, $user->password)) {
-            return RespondWithBadRequest($lang,  3);
+            return RespondWithBadRequest($lang, 3);
         }
 
-        // Reset the password
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // Generate a new token
         $token = $user->createToken("MyApp")->accessToken;
 
         $userData = $user->only(['id', 'name', 'email', 'phone']);
@@ -181,6 +181,8 @@ class AuthController extends Controller
 
         return ResponseWithSuccessData($lang, $success, 15);
     }
+
+
 
 
     // private function verifyPhone($phone, $otpInput)

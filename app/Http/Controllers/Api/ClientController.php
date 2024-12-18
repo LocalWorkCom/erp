@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientAddress;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,14 +36,10 @@ class ClientController extends Controller
         $clientDetails = $user->clientDetails;
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
+            'name' => 'nullable|string',
             "email" => "nullable|email|unique:users,email," . $user->id,
             "phone" => "nullable|string|unique:users,phone," . $user->id,
             'city' => 'nullable|string',
-            'postal_code' => 'nullable|string',
-            'address' => 'nullable|string',
-            'state' => 'nullable|string',
             'date_of_birth' => 'nullable|date',
         ]);
 
@@ -60,6 +55,8 @@ class ClientController extends Controller
             $user->phone = $request->phone;
         }
 
+        $user->save();
+
         if ($clientDetails) {
             if ($request->filled('first_name')) {
                 $clientDetails->first_name = $request->first_name;
@@ -73,30 +70,6 @@ class ClientController extends Controller
             $clientDetails->save();
         }
 
-        // For address fields
-        if ($request->filled(['address', 'city', 'postal_code', 'state'])) {
-            $userAddress = $user->addresses()->first();
-            if (!$userAddress) {
-                $userAddress = new ClientAddress();
-                $userAddress->user_id = $user->id;
-            }
-
-            if ($request->filled('address')) {
-                $userAddress->address = $request->address;
-            }
-            if ($request->filled('city')) {
-                $userAddress->city = $request->city;
-            }
-            if ($request->filled('postal_code')) {
-                $userAddress->postal_code = $request->postal_code;
-            }
-            if ($request->filled('state')) {
-                $userAddress->state = $request->state;
-            }
-            $userAddress->save();
-        }
-
-        $user->save();
 
         return ResponseWithSuccessData($lang, $clientDetails, 19);
     }
