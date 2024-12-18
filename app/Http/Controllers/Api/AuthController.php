@@ -26,13 +26,10 @@ class AuthController extends Controller
             "name" => "required|string",
             "email" => "required|email|unique:users",
             'country_id' => 'required|exists:countries,id',
+            'country_code' => 'required|string',
             "password" => "required",
             'phone' => 'required|unique:users,phone',
             "date_of_birth" => "nullable|date",
-            // "city" => "nullable|string",
-            // "state" => "required|string",
-            // "postal_code" => "nullable|string",
-            // "address" => "required|string",
 
         ]);
 
@@ -47,6 +44,7 @@ class AuthController extends Controller
         $user->flag = 'client';
         $user->phone = $request->phone;
         $user->country_id = $request->country_id;
+        $user->country_code = $request->country_code;
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -58,18 +56,6 @@ class AuthController extends Controller
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
 
-        // Create Client Address
-        // $clientAddress = new ClientAddress();
-        // $clientAddress->user_id = $user->id;
-        // $clientAddress->address = $request->address;
-        // $clientAddress->city = $request->city;
-        // $clientAddress->state = $request->state;
-        // $clientAddress->postal_code = $request->postal_code ?? null;
-        // $clientAddress->save();
-
-
-
-        // Response
         return RespondWithSuccessRequest($lang, 23);
     }
     public function Login(Request $request)
