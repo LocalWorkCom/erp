@@ -402,7 +402,11 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
-    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.change.item');
+    Route::post('/order-addon/change', [OrderController::class, 'changeAddonStatus'])->name('order.addon.change');
+    Route::get('/order/download/{id}', [OrderController::class, 'downloadOrder'])->name('order.download');
+
+    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.detail.change');
+
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
     Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
