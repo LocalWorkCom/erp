@@ -2,13 +2,16 @@
 
 
 namespace App\Services;
-use App\Models\Coupon;
-use App\Models\Floor;
+
 use App\Models\Unit;
+use App\Models\Floor;
+use App\Models\Coupon;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CouponService
@@ -43,13 +46,26 @@ class CouponService
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
-
     public function store(Request $request)
     {
         try {
+            // Define the validation rules
+            $validator = Validator::make($request->all(), [
+                'code' => [
+                    'required',
+                    'string',
+                    function ($attribute, $value, $fail) {
+                        $trimmedValue = trim($value);
+                        $exists = DB::table('coupons')
+                            ->where('code', $trimmedValue)
+                            ->whereNull('deleted_at')
+                            ->exists();
 
-            $validatedData = $request->validate([
-                'code' => 'required|string|unique:coupons,code',
+                        if ($exists) {
+                            $fail(__('The :attribute has already been taken.', ['attribute' => $attribute]));
+                        }
+                    },
+                ],
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
                 'minimum_spend' => 'nullable|numeric|min:0',
@@ -60,6 +76,21 @@ class CouponService
                 'branches' => 'nullable|array',
                 'branches.*' => 'integer|exists:branches,id',
             ]);
+
+
+            // Check if validation fails
+            if ($validator->fails()) {
+                // Check for unique code error specifically
+                if ($validator->errors()->has('code')) {
+                    return CustomRespondWithBadRequest('Duplicate code are submitted.');
+                }
+
+                // Return other validation errors
+                return RespondWithBadRequestData($this->lang, $validator->errors());
+            }
+
+            // Validation passed, proceed to create the coupon
+            $validatedData = $validator->validated();
 
             $coupon = Coupon::create([
                 'code' => $validatedData['code'],
@@ -88,8 +119,18 @@ class CouponService
     public function update(Request $request, $id)
     {
         try {
-            $validatedData = $request->validate([
-                'code' => 'required|string|unique:coupons,code,' . $id,
+            $coupon = Coupon::findOrFail($id);
+
+            $validator = Validator::make($request->all(), [
+                'code' => [
+                    'required',
+                    'string',
+                    Rule::unique('coupons', 'code')
+                        ->ignore($id) // Ignore the current record
+                        ->where(function ($query) {
+                            return $query->whereNull('deleted_at'); // Ignore soft-deleted records
+                        }),
+                ],
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
                 'minimum_spend' => 'nullable|numeric|min:0',
@@ -101,7 +142,18 @@ class CouponService
                 'branches.*' => 'integer|exists:branches,id',
             ]);
 
-            $coupon = Coupon::findOrFail($id);
+            if ($validator->fails()) {
+                // Check for unique code error specifically
+                if ($validator->errors()->has('code')) {
+                    return CustomRespondWithBadRequest('Duplicate code is submitted.');
+                }
+
+                // Return other validation errors
+                return RespondWithBadRequestData($this->lang, $validator->errors());
+            }
+
+            // Validation passed, update the coupon
+            $validatedData = $validator->validated();
 
             $coupon->update([
                 'code' => $validatedData['code'],
@@ -127,6 +179,7 @@ class CouponService
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
+
 
     public function destroy(Request $request, $id)
     {

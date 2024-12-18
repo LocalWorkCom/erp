@@ -11,9 +11,16 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('coupon.Coupons')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@lang('coupon.EditCoupon')</li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('coupons.list') }}'">
+                            @lang('coupon.Coupons')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="{{ route('coupon.edit', ['id' => $id]) }}">@lang('coupon.EditCoupon')</a>
+                    </li>
                 </ol>
+
             </nav>
         </div>
     </div>
