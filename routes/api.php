@@ -149,6 +149,7 @@ Route::group(['middleware' => ['auth:admin', 'admin']], function () {
  //Country
  Route::group(['prefix' => 'country'], function () {
     Route::any('/', [CountryController::class, 'index']);
+    Route::any('/country-code', [CountryController::class, 'getCountriesRegister']);
     Route::any('/add', [CountryController::class, 'store']);
     Route::any('/get', [CountryController::class, 'show']);
     Route::any('/edit', [CountryController::class, 'update']);
