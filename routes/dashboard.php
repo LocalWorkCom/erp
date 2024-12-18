@@ -376,7 +376,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     //roles routws
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view roles');
     Route::group(['prefix' => 'role'], function () {
         Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view roles');
         Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create roles');
