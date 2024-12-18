@@ -179,11 +179,10 @@
                                                 @lang('category.show') <i class="ri-eye-line"></i>
                                             </a>
 
-                                            <div class="col-xl-4">
-                                                <div class="toggle {{ ($branch_menu_category->is_active == 1) ? 'on' : 'off' }} mb-3 change-status-btn" data-id="{{ $branch_menu_category->id }}"> 
+                                                <button style="border: none;" id="nn_{{ $branch_menu_category->id }}" onclick="change_status_item({{ $branch_menu_category->id }})" class="toggle {{ ($branch_menu_category->is_active == 1) ? 'on' : 'off' }} mb-3 change-status-btn" data-id="{{ $branch_menu_category->id }}"> 
                                                     <span></span>
-                                                </div>
-                                            </div>
+                                                </button>
+
 
                                             <?php /*
                                             <!-- Edit Button -->
@@ -283,26 +282,26 @@
             });
         });
 
-        $('.change-status-btn').on('click', function() {
-            var dishCategoryId = this.getAttribute('data-id'); 
-            var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
-            edit_status_url = edit_status_url.replace('id', dishCategoryId);
-            //AJAX request to fetch user details
-            $.ajax({
-                url: edit_status_url, 
-                type: 'GET',
-                success: function(data) {                    
-                    if(data.is_active == 1){
-                        $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.Active')}}');
-                    }else{
-                        $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.NotActive')}}');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
-        });
+        // $('.change-status-btn').on('click', function() {
+        //     var dishCategoryId = this.getAttribute('data-id'); 
+        //     var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
+        //     edit_status_url = edit_status_url.replace('id', dishCategoryId);
+        //     //AJAX request to fetch user details
+        //     $.ajax({
+        //         url: edit_status_url, 
+        //         type: 'GET',
+        //         success: function(data) {                    
+        //             if(data.is_active == 1){
+        //                 $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.Active')}}');
+        //             }else{
+        //                 $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.NotActive')}}');
+        //             }
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.log('Error: ' + error);
+        //         }
+        //     });
+        // });
 
         $('.show-category-btn').on('click', function() {
             var dishCategoryId = this.getAttribute('data-id');   
@@ -313,9 +312,7 @@
             $.ajax({
                 url: get_url, 
                 type: 'GET',
-                success: function(data) {   
-                    console.log(data);
-                                     
+                success: function(data) {                                        
                     // Populate the modal with the data
                     $('#show-dish-category').text(data.dish_categories.name_site);
                     $('#show-branch').text(data.branches.name_site);
@@ -339,20 +336,62 @@
         return confirm("@lang('validation.DeleteConfirm')");
     }
 
-    function delete_item(id) {
-        Swal.fire({
-            title: 'تنبيه',
-            text: 'هل انت متاكد من انك تريد ان تحذف هذا الدور',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'نعم, احذف',
-            cancelButtonText: 'إلغاء',
-            confirmButtonColor: '#3085d6'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var form = document.getElementById('delete-form-' + id);
-                form.submit();
+    function change_status_item(dishCategoryId) {
+
+        var button = document.querySelector('.change-status-btn[data-id="' + dishCategoryId + '"]');    
+        // Toggle button class after confirmation
+        if (button) {
+            if (button.classList.contains('on')) {
+            alert(11);
+                button.classList.remove('on');
+                button.classList.add('off');
+            } else {
+                alert(22);
+                button.classList.remove('off');
+                button.classList.add('on');
             }
-        });
+        }
+
+                
+        // Swal.fire({
+        //     title: 'تنبيه',
+        //     text: 'هل انت متاكد من انك تريد ان تحذف هذا الدور',
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonText: 'نعم, احذف',
+        //     cancelButtonText: 'إلغاء',
+        //     confirmButtonColor: '#3085d6'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
+        //         edit_status_url = edit_status_url.replace('id', dishCategoryId);
+
+        //         const element = document.querySelector('#nn'+ dishCategoryId);
+        //         if (element) {
+        //             element.addEventListener("click", () => {
+        //                 // Do things
+        //                 alert(111111);
+        //             }, false);
+        //         } else {
+        //             console.warn("Element with id nn" + dishCategoryId + " not found.");
+        //         }
+
+                
+
+        //         // Make the AJAX request or redirect to the URL (depending on your application)
+        //         fetch(edit_status_url)
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 // Handle response if needed, or update the button's state as needed
+        //                 console.log(data);
+        //             })
+        //             .catch(error => console.error('Error:', error));
+
+
+
+        //     }
+        // });
     }
+
+
 </script>
