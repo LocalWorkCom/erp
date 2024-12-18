@@ -68,7 +68,7 @@ Route::get('/error/403', function () {
 
 Route::middleware(['auth:admin'])->get('dashboard', function () {
     return view('dashboard.index');
-})->name('dashboard.home');
+})->name('dashboard.home')->middleware('role_or_permission:view dashboard');
 
 
 Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
@@ -83,8 +83,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     // product_sizes
     Route::get('/products/size/list/{productId}', [ProductController::class, 'size'])
-    ->name('products.sizes.list')
-    ->middleware('role_or_permission:view product_sizes');
+        ->name('products.sizes.list')
+        ->middleware('role_or_permission:view product_sizes');
 
     Route::post('product/{id}/sizes/save', [ProductController::class, 'saveSizes'])
         ->name('product.sizes.save')
@@ -92,8 +92,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     // product_colors
     Route::get('/products/color/list/{productId}', [ProductController::class, 'color'])
-    ->name('products.colors.list')
-    ->middleware('role_or_permission:view product_colors');
+        ->name('products.colors.list')
+        ->middleware('role_or_permission:view product_colors');
 
     Route::post('product/{id}/colors/save', [ProductController::class, 'saveColors'])
         ->name('product.colors.save')
@@ -108,7 +108,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete')->middleware('role_or_permission:delete products');
 
-
         // Route::get('units', [ProductUnitController::class, 'index']);
         // Route::post('unit/store', [ProductUnitController::class, 'store']);
         // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -122,6 +121,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         // Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
         // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
+
     });
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view products');
@@ -133,12 +133,13 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete')->middleware('role_or_permission:delete categories');
     });
+
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list')->middleware('role_or_permission:view countries');
     Route::group(['prefix' => 'country'], function () {
         Route::any('/get', [CountryController::class, 'show'])->name('country.show')->middleware('role_or_permission:view countries');
         Route::post('store', [CountryController::class, 'store'])->name('country.store')->middleware('role_or_permission:create countries');
-        Route::post('update/{id}', [CountryController::class, 'update'])->name('country.update')->middleware('role_or_permission:update countries');
-        Route::get('delete/{id}', [CountryController::class, 'delete'])->name('country.delete')->middleware('role_or_permission:delete countries');
+        Route::put('update/{id}', [CountryController::class, 'update'])->name('country.update')->middleware('role_or_permission:update countries');
+        Route::delete('delete/{id}', [CountryController::class, 'destroy'])->name('country.delete')->middleware('role_or_permission:delete countries');
     });
 
     Route::get('/units', [UnitController::class, 'index'])->name('units.list')->middleware('role_or_permission:view units');
@@ -283,6 +284,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [TermsAndConditionsController::class, 'show'])->name('term.show')->middleware('role_or_permission:view terms');
         Route::get('edit/{id}', [TermsAndConditionsController::class, 'edit'])->name('term.edit')->middleware('role_or_permission:update terms');
         Route::put('update/{id}', [TermsAndConditionsController::class, 'update'])->name('term.update')->middleware('role_or_permission:update terms');
+        Route::delete('delete/{id}', [TermsAndConditionsController::class, 'destroy'])->name('term.delete')->middleware('role_or_permission:delete terms');
     });
 
     Route::get('/privacies', [PrivacyPolicyController::class, 'index'])->name('privacies.list')->middleware('role_or_permission:view privacies');
@@ -292,6 +294,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [PrivacyPolicyController::class, 'show'])->name('privacy.show')->middleware('role_or_permission:view privacies');
         Route::get('edit/{id}', [PrivacyPolicyController::class, 'edit'])->name('privacy.edit')->middleware('role_or_permission:update privacies');
         Route::put('update/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy.update')->middleware('role_or_permission:update privacies');
+        Route::delete('delete/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy.delete')->middleware('role_or_permission:delete privacies');
     });
 
     Route::get('/returns', [ReturnPolicyController::class, 'index'])->name('returns.list')->middleware('role_or_permission:view returns');
@@ -301,6 +304,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('show/{id}', [ReturnPolicyController::class, 'show'])->name('return.show')->middleware('role_or_permission:view returns');
         Route::get('edit/{id}', [ReturnPolicyController::class, 'edit'])->name('return.edit')->middleware('role_or_permission:update returns');
         Route::put('update/{id}', [ReturnPolicyController::class, 'update'])->name('return.update')->middleware('role_or_permission:update returns');
+        Route::delete('delete/{id}', [ReturnPolicyController::class, 'destroy'])->name('return.delete')->middleware('role_or_permission:delete returns');
     });
 
     Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.list')->middleware('role_or_permission:view faqs');
@@ -361,7 +365,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     //roles routes
-
     Route::prefix('/addon-categories')->group(function () {
         Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
         Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
@@ -373,9 +376,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
     });
 
-
     //roles routws
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view roles');
     Route::group(['prefix' => 'role'], function () {
         Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view roles');
         Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create roles');
@@ -396,10 +398,10 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('delete/{id}', [PermissionController::class, 'destroy'])->name('permission.delete')->middleware('role_or_permission:delete permissions');
     });
 
-
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.change.item');
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
     Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
@@ -423,6 +425,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [PurchaseController::class, 'update'])->name('purchase.update')->middleware('role_or_permission:update purchase_invoices');
         Route::delete('delete/{id}', [PurchaseController::class, 'destroy'])->name('purchase.delete')->middleware('role_or_permission:delete purchase_invoices');
         Route::get('print/{id}', [PurchaseController::class, 'print'])->name('purchase.print'); //->middleware('role_or_permission:print purchase_invoices');
+        Route::get('invoice/{id}', [PurchaseController::class, 'showInvoice'])->name('purchase.showInvoice'); //->middleware('role_or_permission:print purchase_invoices');
     });
 
     Route::prefix('/dishes')->group(function () {
@@ -456,5 +459,4 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
-
 });

@@ -68,7 +68,7 @@ class ProductController extends Controller
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Brands = Brand::hydrate($responseData['data']);
-
+// dd($Brands);
         $response  = $this->unitService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Units = Unit::hydrate($responseData['data']);

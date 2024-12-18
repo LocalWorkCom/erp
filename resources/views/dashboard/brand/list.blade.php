@@ -20,7 +20,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('brands.list') }}'">@lang('brand.Brands')</a>
                     </li>
                 </ol>
             </nav>
@@ -70,14 +71,8 @@
                                         <tr>
                                             {{-- @dd( $brand) --}}
                                             <td>{{ $brand->id }}</td>
-                                            <td>
-                                                @if ($brand->logo_path)
-                                                    <img src="{{ BaseUrl() . '/' . $brand->logo_path }}" alt=""
-                                                        width="100" height="100">
-                                                @else
-                                                    <p class="form-text">@lang('category.none')</p>
-                                                @endif
-                                            </td>
+                                            <td><img src="{{ url($brand->logo_path) }}" alt="" width="100"
+                                                    height="100"></td>
                                             <td>{{ $brand->name_ar }}</td>
                                             <td>{{ $brand->name_en }}</td>
                                             <td>{{ $brand->description_ar }}</td>
@@ -95,15 +90,24 @@
                                                     @lang('brand.edit') <i class="ri-edit-line"></i>
                                                 </a>
 
+                                                <form class="d-inline" id="delete-form-{{ $brand->id }}"
+                                                    action="{{ route('brand.delete', $brand->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item('{{ $brand->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
                                                 <!-- Delete Button -->
-                                                <form class="d-inline" action="{{ route('brand.delete', $brand->id) }}"
+                                                {{-- <form class="d-inline" action="{{ route('brand.delete', $brand->id) }}"
                                                     method="POST" onsubmit="return confirmDelete()">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger-light btn-wave">
                                                         @lang('brand.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
 
                                             </td>
                                         </tr>
@@ -143,5 +147,21 @@
 <script>
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

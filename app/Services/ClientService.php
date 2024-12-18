@@ -37,7 +37,7 @@ class ClientService
             return RespondWithBadRequest($lang, 5);
         }
         $user = new User();
-        $user->name = $data['first_name'] . ' ' . $data['last_name'];
+        $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = Hash::make('123');
         $user->country_id = $data['country_id'];
@@ -47,8 +47,6 @@ class ClientService
 
         $clientDetail = new ClientDetail();
         $clientDetail->user_id = $user->id;
-        $clientDetail->first_name = $data['first_name'];
-        $clientDetail->last_name = $data['last_name'];
         if (isset($data['image'])) {
             UploadFile('images/clients', 'image', $clientDetail,  $data['image']);
         }
@@ -77,16 +75,14 @@ class ClientService
             return RespondWithBadRequest($lang, 5);
         }
         $user = User::findOrFail($id);
-        $user->name = isset($data['first_name']) && isset($data['last_name']) ? $data['first_name'] . ' ' . $data['last_name'] : $user->name;
+        $user->name = $data['name'] ?? $user->name;
         $user->email = $data['email'] ?? $user->email;
         // $user->password = isset($data['password']) ? Hash::make($data['password']) : $user->password;
-        $user->country_id = $data['country_id'] ?? $user->country_id;
+        // $user->country_id = $data['country_id'] ?? $user->country_id;
         $user->phone = $data['phone'] ?? $user->phone;
         $user->save();
 
         $clientDetail = ClientDetail::where('user_id', $id)->first();
-        $clientDetail->first_name = $data['first_name'] ?? $clientDetail->first_name;
-        $clientDetail->last_name = $data['last_name'] ?? $clientDetail->last_name;
         if (isset($data['image'])) {
             if ($clientDetail->image) {
                 Storage::delete('images/clients/' . $clientDetail->image);

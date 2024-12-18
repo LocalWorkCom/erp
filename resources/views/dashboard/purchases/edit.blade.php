@@ -57,18 +57,18 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="date" class="form-label">@lang('purchase.date')</label>
                                         <input type="date" class="form-control" id="date" name="date"
-                                            value="{{ $purchase->Date }}" required>
+                                            value="{{ $purchase->Date }}">
                                     </div>
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="invoice_number" class="form-label">@lang('purchase.invoiceNumber')</label>
                                         <input type="text" class="form-control" id="invoice_number" name="invoice_number"
-                                            value="{{ $purchase->invoice_number }}" required>
+                                            value="{{ $purchase->invoice_number }}">
                                     </div>
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="vendor_id" class="form-label">@lang('purchase.vendor')</label>
-                                        <select name="vendor_id" class="form-control js-example-basic-single" required>
+                                        <select name="vendor_id" class="form-control select2" required>
                                             <option value="" disabled>@lang('purchase.chooseVendor')</option>
                                             @foreach ($vendors as $vendor)
                                                 <option value="{{ $vendor->id }}"
@@ -81,7 +81,7 @@
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="type" class="form-label">@lang('purchase.type')</label>
-                                        <select name="type" class="form-control js-example-basic-single" required>
+                                        <select name="type" class="form-control select2" required>
                                             <option value="0" {{ $purchase->type == 0 ? 'selected' : '' }}>
                                                 @lang('purchase.purchase')
                                             </option>
@@ -93,7 +93,7 @@
 
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="store_id" class="form-label">@lang('purchase.store')</label>
-                                        <select name="store_id" class="form-control js-example-basic-single" required>
+                                        <select name="store_id" class="form-control select2" required>
                                             <option value="" disabled>@lang('purchase.chooseStore')</option>
                                             @foreach ($stores as $store)
                                                 <option value="{{ $store->id }}"
@@ -116,7 +116,7 @@
                                             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                                 <label class="form-label">@lang('purchase.category')</label>
                                                 <select name="products[{{ $index }}][category_id]"
-                                                    class="form-control js-example-basic-single" required>
+                                                    class="form-control select2" required>
                                                     @foreach ($categories as $category)
                                                         <option value="{{ $category->id }}"
                                                             {{ $detail->category_id == $category->id ? 'selected' : '' }}>
@@ -128,7 +128,7 @@
                                             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                                 <label class="form-label">@lang('purchase.product')</label>
                                                 <select name="products[{{ $index }}][product_id]"
-                                                    class="form-control js-example-basic-single" required>
+                                                    class="form-control select2" required>
                                                     @foreach ($products as $product)
                                                         <option value="{{ $product->id }}"
                                                             {{ $detail->product_id == $product->id ? 'selected' : '' }}>
@@ -140,7 +140,7 @@
                                             <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
                                                 <label class="form-label">@lang('purchase.unit')</label>
                                                 <select name="products[{{ $index }}][unit_id]"
-                                                    class="form-control js-example-basic-single" required>
+                                                    class="form-control select2" required>
                                                     @foreach ($units as $unit)
                                                         <option value="{{ $unit->id }}"
                                                             {{ $detail->unit_id == $unit->id ? 'selected' : '' }}>
@@ -183,11 +183,3 @@
     </div>
 @endsection
 
-@section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.js-example-basic-single').select2();
-        });
-    </script>
-@endsection

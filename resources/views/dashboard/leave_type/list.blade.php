@@ -14,8 +14,8 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{route('dashboard.home')}}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item"><a href="#">@lang('leave_type.Leaves')</a></li>                    
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="#">@lang('leave_type.Leaves')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('leave_type.LeaveType')</li>
                 </ol>
             </nav>
@@ -29,30 +29,31 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header"
-                             style="
+                            style="
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">
                                 @lang('leave_type.LeaveType')</div>
 
                             <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
+                                data-bs-target="#exampleModal">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('leave_type.AddLeaveType')
                             </button>
 
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="{{ route('leave-type.store') }}" method="POST" class="needs-validation"
-                                              novalidate>
+                                        <form action="{{ route('leave-type.store') }}" method="POST"
+                                            class="needs-validation" novalidate>
                                             @csrf
                                             @if ($errors->any())
                                                 @foreach ($errors->all() as $error)
                                                     <div class="alert alert-solid-danger alert-dismissible fade show">
                                                         {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close">
                                                             <i class="bi bi-x"></i>
                                                         </button>
                                                     </div>
@@ -61,15 +62,15 @@
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">@lang('leave_type.AddLeaveType')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                               class="form-label">@lang('leave_type.ArabicName')</label>
+                                                            class="form-label">@lang('leave_type.ArabicName')</label>
                                                         <input type="text" class="form-control"
-                                                               placeholder="@lang('leave_type.ArabicName')" name="name_ar" required>
+                                                            placeholder="@lang('leave_type.ArabicName')" name="name_ar" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -79,9 +80,9 @@
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                         <label for="input-placeholder"
-                                                               class="form-label">@lang('leave_type.EnglishName')</label>
+                                                            class="form-label">@lang('leave_type.EnglishName')</label>
                                                         <input type="text" class="form-control"
-                                                               placeholder="@lang('leave_type.EnglishName')" name="name_en" required>
+                                                            placeholder="@lang('leave_type.EnglishName')" name="name_en" required>
                                                         <div class="valid-feedback">
                                                             @lang('validation.Correct')
                                                         </div>
@@ -93,26 +94,29 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal">@lang('modal.close')</button>
+                                                    data-bs-dismiss="modal">@lang('modal.close')</button>
                                                 <button type="submit"
-                                                        class="btn btn-outline-primary">@lang('modal.save')</button>
+                                                    class="btn btn-outline-primary">@lang('modal.save')</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form id="edit-floor-form" action="" method="POST" class="needs-validation" novalidate>
+                                        <form id="edit-floor-form" action="" method="POST" class="needs-validation"
+                                            novalidate>
                                             @csrf
                                             @method('PUT')
                                             @if ($errors->any())
                                                 @foreach ($errors->all() as $error)
                                                     <div class="alert alert-solid-danger alert-dismissible fade show">
                                                         {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close">
                                                             <i class="bi bi-x"></i>
                                                         </button>
                                                     </div>
@@ -120,35 +124,44 @@
                                             @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('leave_type.EditFloor')</h6>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-ar" class="form-label">@lang('leave_type.ArabicName')</label>
-                                                        <input type="text" id="edit-name-ar" class="form-control" name="name_ar" required>
+                                                        <label for="edit-name-ar"
+                                                            class="form-label">@lang('leave_type.ArabicName')</label>
+                                                        <input type="text" id="edit-name-ar" class="form-control"
+                                                            name="name_ar" required>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-en" class="form-label">@lang('leave_type.EnglishName')</label>
-                                                        <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
+                                                        <label for="edit-name-en"
+                                                            class="form-label">@lang('leave_type.EnglishName')</label>
+                                                        <input type="text" id="edit-name-en" class="form-control"
+                                                            name="name_en" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                <button type="submit" class="btn btn-outline-primary">@lang('modal.save')</button>
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal">@lang('modal.close')</button>
+                                                <button type="submit"
+                                                    class="btn btn-outline-primary">@lang('modal.save')</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h6 class="modal-title" id="showModalLabel">@lang('leave_type.ShowFloor')</h6>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row gy-4">
@@ -163,7 +176,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
                                         </div>
                                     </div>
                                 </div>
@@ -180,24 +194,25 @@
                                     </button>
                                 </div>
                             @endif
-                                @if ($errors->any())
-                                    @foreach ($errors->all() as $error)
-                                        <div class="alert alert-solid-danger alert-dismissible fade show">
-                                            {{ $error }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
-                                <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
-                                <tr>
-                                    <th scope="col">@lang('leave_type.ID')</th>
-                                    <th scope="col">@lang('leave_type.ArabicName')</th>
-                                    <th scope="col">@lang('leave_type.EnglishName')</th>
-                                    <th scope="col">@lang('category.Actions')</th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">@lang('leave_type.ID')</th>
+                                        <th scope="col">@lang('leave_type.ArabicName')</th>
+                                        <th scope="col">@lang('leave_type.EnglishName')</th>
+                                        <th scope="col">@lang('category.Actions')</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($LeaveType as $k_leave_type=>$leave_type)
@@ -215,32 +230,34 @@
                                                 @lang('category.show') <i class="ri-eye-line"></i>
                                             </a>
 
-                                            <!-- Edit Button -->
-                                            <button type="button"
+                                                <!-- Edit Button -->
+                                                <button type="button"
                                                     class="btn btn-orange-light btn-wave edit-floor-btn"
-                                                    data-id="{{ $leave_type->id }}"
-                                                    data-bs-toggle="modal"
+                                                    data-id="{{ $leave_type->id }}" data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
-                                                @lang('category.edit') <i class="ri-edit-line"></i>
-                                            </button>
-
-                                            <form class="d-inline" id="delete-form-{{ $leave_type->id }}" action="{{ route('leave-type.delete', $leave_type->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" onclick="delete_item('{{ $leave_type->id }}')" class="btn btn-danger-light btn-wave">
-                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </button>
-                                            </form>
 
-                                        </td>
+                                                <form class="d-inline" id="delete-form-{{ $leave_type->id }}"
+                                                    action="{{ route('leave-type.delete', $leave_type->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item('{{ $leave_type->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
 
-                                    </tr>
-                                @endforeach
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
 
                                 </tbody>
                             </table>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -276,16 +293,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $('.edit-floor-btn').on('click', function() {
-            var leaveTypeId = this.getAttribute('data-id');  
+            var leaveTypeId = this.getAttribute('data-id');
             var get_url = "{{ route('leave-type.show', 'id') }}";
             var edit_url = "{{ route('leave-type.update', 'id') }}";
             get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details
             $.ajax({
-                url: get_url, 
+                url: get_url,
                 type: 'GET',
                 success: function(data) {
                     // Populate the modal with the data
@@ -306,17 +323,17 @@
         });
 
         $('.show-floor-btn').on('click', function() {
-            var leaveTypeId = this.getAttribute('data-id');   
+            var leaveTypeId = this.getAttribute('data-id');
             var get_url = "{{ route('leave-type.show', 'id') }}";
             get_url = get_url.replace('id', leaveTypeId);
 
             // AJAX request to fetch user details
             $.ajax({
-                url: get_url, 
+                url: get_url,
                 type: 'GET',
-                success: function(data) {  
+                success: function(data) {
                     console.log(data);
-                                      
+
                     // Populate the modal with the data
                     $('#show-name-ar').text(data.name_ar);
                     $('#show-name-en').text(data.name_en);

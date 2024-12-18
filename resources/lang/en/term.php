@@ -28,4 +28,7 @@ return [
     'AddFAQ'=>'Add FAQ',//
     'EditFAQ'=>'Edit FAQ',//
     'ShowFAQ'=>'Show FAQ',//
+    'active' => 'Is Active',//
+    'Active' => 'Active',//
+    'Inactive' => 'Inactive',//
 ];

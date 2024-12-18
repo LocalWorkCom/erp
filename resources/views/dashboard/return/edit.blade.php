@@ -41,6 +41,21 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="row gy-4">
+                                    <div class="col-xl-12">
+                                        <p class="mb-2 text-muted">@lang('term.active')</p>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="active" value="1"
+                                                   class="form-check-input" {{ $return->active ? 'checked' : '' }}
+                                                   required>
+                                            <label class="form-check-label">@lang('category.yes')</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="active" value="0"
+                                                   class="form-check-input" {{ !$return->active ? 'checked' : '' }}
+                                                   required>
+                                            <label class="form-check-label">@lang('category.no')</label>
+                                        </div>
+                                    </div>
                                     <!-- Name Fields -->
                                     <div class="col-xl-6">
                                         <label for="name_ar" class="form-label">@lang('term.ArabicName')</label>

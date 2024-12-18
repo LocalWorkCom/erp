@@ -414,7 +414,7 @@ return array (
   'view terms' => 'view terms',
   'create terms' => 'create terms',
   'update terms' => 'update terms',
-  'delete terms' => 'Delete terms',
+  'delete terms' => 'delete terms',
   'dashboard' => 'Dashboard',
   'actionbacklogs' => 'Actionbacklogs',
   'advance_requests' => 'Advance_requests',
@@ -543,4 +543,6 @@ return array (
   'view faqs' => 'view faqs',
   'update faqs' => 'update faqs',
   'delete faqs' => 'delete faqs',
+  'delete returns' => 'delete returns',
+  'delete privacies' => 'delete privacies',
 );
