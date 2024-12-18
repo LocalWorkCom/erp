@@ -1416,6 +1416,32 @@ a:hover {
     background-color: #DFDFDF4D;
     border-radius: 10px;
 }
+/* contact-us page  */
+.contact-us img{
+    width: 20rem;
+}
+.custom-border {
+    position: relative;
+  }
+  
+  .custom-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 50%;   
+    height: 2px;       
+    background-color: red;
+    transform: translateX(-50%);
+  }
+.payment-way{
+    border: 1px solid #DFDFDF;
+    padding:10px;
+    border-radius: 10px;
+    box-shadow:rgba(149, 157, 165, 0.2) 0px 2px 9px;
+
+}
+  
 /* responsive */
 @media(max-width: 1024px) {}
 
