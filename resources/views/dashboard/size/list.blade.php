@@ -281,13 +281,22 @@
                                             </button>
                                 
                                             <!-- Delete Button -->
-                                            <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                            <form class="d-inline" id="delete-form-{{ $sizes->id }}"
+                                                action="{{ route('size.delete', $sizes->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="delete_item('{{ $sizes->id }}')"
+                                                    class="btn btn-danger-light btn-wave">
+                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </form>
+                                            {{-- <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -373,5 +382,20 @@
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

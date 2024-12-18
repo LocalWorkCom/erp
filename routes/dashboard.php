@@ -108,7 +108,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [ProductController::class, 'update'])->name('product.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('product.delete')->middleware('role_or_permission:delete products');
 
-
         // Route::get('units', [ProductUnitController::class, 'index']);
         // Route::post('unit/store', [ProductUnitController::class, 'store']);
         // Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
@@ -122,6 +121,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         // Route::post('color/update/{id}', [ProductColorController::class, 'update']);
         // Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
         // Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
+
     });
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view products');
@@ -133,6 +133,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update')->middleware('role_or_permission:update products');
         Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete')->middleware('role_or_permission:delete categories');
     });
+
     Route::get('/countries', [CountryController::class, 'index'])->name('countries.list')->middleware('role_or_permission:view countries');
     Route::group(['prefix' => 'country'], function () {
         Route::any('/get', [CountryController::class, 'show'])->name('country.show')->middleware('role_or_permission:view countries');
@@ -178,6 +179,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
             Route::put('update/{id}', [BranchMenuCategoryController::class, 'update'])->name('branch.categories.update')->middleware('role_or_permission:update branch_menu_categories');
             Route::delete('delete/{id}', [BranchMenuCategoryController::class, 'delete'])->name('branch.categories.delete')->middleware('role_or_permission:delete branch_menu_categories');
             Route::get('showAll/{branch_id}', [BranchMenuCategoryController::class, 'show_branch'])->name('branch.categories.show.all')->middleware('role_or_permission:view branch_menu_categories');
+            Route::get('changeStatus/{id}', [BranchMenuCategoryController::class, 'change_status'])->name('branch.categories.changeStatus')->middleware('role_or_permission:update branch_menu_categories');
         });
     });
 
@@ -364,7 +366,6 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     //roles routes
-
     Route::prefix('/addon-categories')->group(function () {
         Route::get('/', [AddonCategoryController::class, 'index'])->name('dashboard.addon_categories.index');
         Route::get('/create', [AddonCategoryController::class, 'create'])->name('dashboard.addon_categories.create');
@@ -376,9 +377,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('dashboard.addon_categories.restore');
     });
 
-
     //roles routws
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view gifts');
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.list')->middleware('role_or_permission:view roles');
     Route::group(['prefix' => 'role'], function () {
         Route::get('/show/{id}', [RoleController::class, 'show'])->name('role.show')->middleware('role_or_permission:view roles');
         Route::get('/create', [RoleController::class, 'create'])->name('role.create')->middleware('role_or_permission:create roles');
@@ -399,10 +399,10 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('delete/{id}', [PermissionController::class, 'destroy'])->name('permission.delete')->middleware('role_or_permission:delete permissions');
     });
 
-
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
+    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.change.item');
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
     Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 

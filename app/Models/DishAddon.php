@@ -14,6 +14,10 @@ class DishAddon extends Model
         'dish_id',
         'addon_id',
         'quantity',
+        'price',
+        'addon_category_id', 
+        'min_addons',        
+        'max_addons',   
     ];
 
     protected $hidden = [
@@ -32,5 +36,9 @@ class DishAddon extends Model
     public function addons()
     {
         return $this->belongsTo(Recipe::class, 'addon_id');
+    }
+    public function category()
+    {
+        return $this->belongsTo(AddonCategory::class, 'addon_category_id');
     }
 }

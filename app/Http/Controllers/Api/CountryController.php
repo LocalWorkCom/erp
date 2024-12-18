@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\User;
+use App\Services\CountryService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -13,21 +14,63 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CountryController extends Controller
-{
+{ protected $countryService;
+    protected $checkToken;  // Set to true or false based on your need
+
+
+    public function __construct(CountryService $countryService)
+    {
+        $this->countryService = $countryService;
+        $this->checkToken = false;
+    }
+
     public function index(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+
+        $response = $this->countryService->index($request, $this->checkToken);
+
+        $responseData = $response->original;
+
+        $countries = $responseData['data'];
+        $countries = $countries->map(function ($country) use ($lang) {
+                        return [
+                            'id' => $country->id,
+                            'name' => $lang == 'en' ? $country->name_en : $country->name_ar,
+                            'phone_code' => $country->phone_code,
+                            'currency' => $lang == 'en' ? $country->currency_en : $country->currency_ar,
+                        ];
+                    });
+
+        return ResponseWithSuccessData($lang, $countries, 1);
+    }
+    public function getCountriesRegister(Request $request)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            if (!CheckToken()) {
-                return RespondWithBadRequest($lang, 5);
-            }
-            $countries = Country::where('deleted_at',null)->get();
+
+            $response = $this->countryService->index($request, $this->checkToken);
+
+            $responseData = $response->original;
+
+            $countries = $responseData['data'];
+            $countries = $countries->map(function ($country) use ($lang) {
+                            return [
+                                'image' => $country->flag ?? null,
+                                'phone_code' => $country->phone_code,
+                                'length' =>  $country->length ?? 10,
+                            ];
+                        });
 
             return ResponseWithSuccessData($lang, $countries, 1);
+
+            // Return the success response with the countries data
         } catch (\Exception $e) {
+            // Return error response in case of exception
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function store(Request $request)
     {

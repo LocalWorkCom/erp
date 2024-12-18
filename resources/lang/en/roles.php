@@ -23,4 +23,8 @@ return [
     'delete_error' => 'This permission is assigned to one or more roles and cannot be deleted.',
     'permission_already_exists' => 'The permission ":name" already exists.',
     'permission_created' => 'Permission ":name" created successfully.',
+    'title' => '403 - Forbidden',
+    'oops' => 'Oops 😢, The page you are looking for is not available for you.',
+    'description' => 'We are sorry for the inconvenience. The page you are trying to access, you don\'t have permission to view.',
+    'back_to_home' => 'BACK TO HOME',
 ];

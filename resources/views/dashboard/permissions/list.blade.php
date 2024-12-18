@@ -14,7 +14,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('roles.permissions')</li>
                 </ol>
             </nav>
@@ -28,13 +28,15 @@
                     <div class="card custom-card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">@lang('roles.permissions')</div>
-                            <div class="card-header">
-                                <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
-                                    <i class="fe fe-plus label-btn-icon me-2"></i>
-                                    @lang('roles.AddPer')
-                                </button>
-                            </div>
+                            @can('create permissions')
+                                <div class="card-header">
+                                    <button type="button" class="btn btn-primary label-btn" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
+                                        <i class="fe fe-plus label-btn-icon me-2"></i>
+                                        @lang('roles.AddPer')
+                                    </button>
+                                </div>
+                            @endcan
                         </div>
                         <div class="card-body">
                             @if (session('message'))
@@ -46,13 +48,13 @@
                                 </div>
                             @endif
                             @if (session('error'))
-                            <div class="alert alert-solid-danger alert-dismissible fade show">
-                                {{ session('error') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    <i class="bi bi-x"></i>
-                                </button>
-                            </div>
-                        @endif
+                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
 
                             <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
@@ -68,20 +70,23 @@
                                             <td>{{ $permission->id }}</td>
                                             <td>{{ __('permissions.' . $permission->name) }}</td>
                                             <td>
-                                                @can('')
+                                                @can('update permissions')
+                                                    <!-- Edit Button -->
+                                                    <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
+                                                        data-id="{{ $permission->id }}" data-bs-toggle="modal"
+                                                        data-bs-target="#editModal">
+                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                                                    </button>
                                                 @endcan
-                                                <!-- Edit Button -->
-                                                <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
-                                                    data-id="{{ $permission->id }}" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
-                                                </button>
 
-                                                <!-- Delete Button -->
-                                                <button type="button" onclick="delete_item({{ $permission->id }})"
-                                                    class="btn btn-danger-light btn-wave">
-                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                </button>
+                                                @can('delete permissions')
+                                                    <!-- Delete Button -->
+                                                    <button type="button" onclick="delete_item({{ $permission->id }})"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                @endcan
+
                                             </td>
                                         </tr>
 
@@ -187,7 +192,7 @@
                                                                     <input type="text" id="edit-id"
                                                                         class="form-control" name="id" hidden>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
+                                                                    <div class="invalid-feedback">@lang('validation.ArabicName')</div>
                                                                 </div>
 
                                                                 <!-- English Name Input -->
@@ -197,7 +202,7 @@
                                                                     <input type="text" id="edit-name-en"
                                                                         class="form-control" name="name_en" required>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
+                                                                    <div class="invalid-feedback">@lang('validation.EnglishName')</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -220,8 +225,6 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 @section('scripts')

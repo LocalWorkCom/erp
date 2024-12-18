@@ -14,7 +14,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('roles.roles')</li>
                 </ol>
             </nav>
@@ -28,13 +28,14 @@
                     <div class="card custom-card">
                         <div class="card-header d-flex justify-content-between">
                             <div class="card-title">@lang('roles.roles')</div>
-                            <div class="card-header">
-
-                                <a href="{{ route('role.create') }}" type="button" class="btn btn-primary label-btn">
-                                    <i class="fe fe-plus label-btn-icon me-2"></i>
-                                    @lang('roles.Add')
-                                </a>
-                            </div>
+                            @can('create roles')
+                                <div class="card-header">
+                                    <a href="{{ route('role.create') }}" type="button" class="btn btn-primary label-btn">
+                                        <i class="fe fe-plus label-btn-icon me-2"></i>
+                                        @lang('roles.Add')
+                                    </a>
+                                </div>
+                            @endcan
                         </div>
                         <div class="card-body">
                             @if (session('message'))
@@ -60,7 +61,6 @@
                                     <tr>
                                         <th scope="col">@lang('roles.Id')</th>
                                         <th scope="col">@lang('roles.name')</th>
-                                        {{-- <th scope="col">@lang('roles.guard')</th> --}}
                                         <th scope="col">@lang('roles.permission')</th>
                                         <th scope="col">@lang('roles.Actions')</th>
                                     </tr>
@@ -70,7 +70,6 @@
                                         <tr>
                                             <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
-                                            {{-- <td>{{ $role->guard_name }}</td> --}}
                                             <td>
                                                 @foreach ($role->permissions->take(10) as $permission)
                                                     {{ __("permissions.{$permission->name}") }}{{ !$loop->last && $loop->iteration % 4 != 0 ? ' - ' : '' }}
@@ -85,28 +84,33 @@
                                             </td>
 
                                             <td>
-                                                <!-- Show Button -->
-                                                <a href="{{ route('role.show', $role->id) }}"
-                                                    class="btn btn-info-light btn-wave show-category">
-                                                    @lang('category.show') <i class="ri-eye-line"></i>
-                                                </a>
+                                                @can('view roles')
+                                                    <!-- Show Button -->
+                                                    <a href="{{ route('role.show', $role->id) }}"
+                                                        class="btn btn-info-light btn-wave show-category">
+                                                        @lang('category.show') <i class="ri-eye-line"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('update roles')
+                                                    <!-- Edit Button -->
+                                                    <a href="{{ route('role.edit', $role->id) }}"
+                                                        class="btn btn-orange-light btn-wave">
+                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('delete roles')
+                                                    <!-- Delete Button -->
+                                                    <form class="d-inline" id="delete-form-{{ $role->id }}"
+                                                        action="{{ route('role.delete', $role->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" onclick="delete_item({{ $role->id }})"
+                                                            class="btn btn-danger-light btn-wave">
+                                                            @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
 
-                                                <!-- Edit Button -->
-                                                <a href="{{ route('role.edit', $role->id) }}"
-                                                    class="btn btn-orange-light btn-wave">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
-                                                </a>
-
-                                                <!-- Delete Button -->
-                                                <form class="d-inline" id="delete-form-{{ $role->id }}"
-                                                    action="{{ route('role.delete', $role->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" onclick="delete_item({{ $role->id }})"
-                                                        class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
