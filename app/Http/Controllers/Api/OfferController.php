@@ -43,22 +43,23 @@ class OfferController extends Controller
             'image_en' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_active' => 'required|in:0,1',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ]);
         if ($request->hasFile('image_ar')) {
-            $file=$request->file('image_ar');
+            $file = $request->file('image_ar');
             $newFileName = 'image_ar_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images_ar', $newFileName, 'public');
-            $data['image_ar'] = $path;
+            $file->move(public_path('images/offers/ar'), $newFileName);
+            $data['image_ar'] = 'images/offers/ar/' . $newFileName;
         }
+
         if ($request->hasFile('image_en')) {
-            $file=$request->file('image_en');
+            $file = $request->file('image_en');
             $newFileName = 'image_en_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images_en', $newFileName, 'public');
-            $data['image_en'] = $path;
+            $file->move(public_path('images/offers/en'), $newFileName);
+            $data['image_en'] = 'images/offers/en/' . $newFileName;
         }
-        $id == null ?$data['created_by'] =Auth::guard('api')->user()->id
-            : $data['modified_by'] =Auth::guard('api')->user()->id;
+        $id == null ?$data['created_by'] =Auth::guard('api')->user()->id??1
+            : $data['modified_by'] =Auth::guard('api')->user()->id??1;
 
         $offer = Offer::updateOrCreate(['id' => $id], $data);
 
@@ -88,7 +89,7 @@ class OfferController extends Controller
         if (!$data) {
             return RespondWithBadRequestData($this->lang, 2);
         }
-        $data->deleted_by = Auth::guard('api')->user()->id;
+        $data->deleted_by = Auth::guard('api')->user()->id ?? 1;
         $data->save();
         $data->delete();
 
