@@ -21,30 +21,26 @@ class AuthController extends Controller
         App::setLocale($lang);
 
         $validator = Validator::make($request->all(), [
-            "first_name" => "required|string",
-            "last_name" => "required|string",
+            "name" => "required|string",
             "email" => "required|email|unique:users",
             'country_id' => 'required|exists:countries,id',
             "password" => "required",
             'phone' => 'required|unique:users,phone',
-            "city" => "required|string",
-            "state" => "required|string",
-            "postal_code" => "nullable|string",
             "date_of_birth" => "nullable|date",
-            "address" => "required|string",
+            // "city" => "nullable|string",
+            // "state" => "required|string",
+            // "postal_code" => "nullable|string",
+            // "address" => "required|string",
 
         ]);
 
         if ($validator->fails()) {
-            return respondError('Validation Error.',400, $validator->errors());
-
-
-            // return RespondWithBadRequestWithData($validator->errors());
+            return respondError('Validation Error.', 400, $validator->errors());
         }
 
         //  Create User
         $user = new User();
-        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->flag = 'client';
         $user->phone = $request->phone;
@@ -57,19 +53,17 @@ class AuthController extends Controller
         // Create Client Details
         $clientDetail = new ClientDetail();
         $clientDetail->user_id = $user->id;
-        $clientDetail->first_name = $request->first_name;
-        $clientDetail->last_name = $request->last_name;
         $clientDetail->date_of_birth = $request->date_of_birth;
         $clientDetail->save();
 
         // Create Client Address
-        $clientAddress = new ClientAddress();
-        $clientAddress->user_id = $user->id;
-        $clientAddress->address = $request->address;
-        $clientAddress->city = $request->city;
-        $clientAddress->state = $request->state;
-        $clientAddress->postal_code = $request->postal_code ?? null;
-        $clientAddress->save();
+        // $clientAddress = new ClientAddress();
+        // $clientAddress->user_id = $user->id;
+        // $clientAddress->address = $request->address;
+        // $clientAddress->city = $request->city;
+        // $clientAddress->state = $request->state;
+        // $clientAddress->postal_code = $request->postal_code ?? null;
+        // $clientAddress->save();
 
 
 
@@ -80,32 +74,37 @@ class AuthController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            App::setLocale($lang);  // Set the locale based on the header
+            App::setLocale($lang); // Set the locale based on the header
+
             $messages = [
-                'email.required' => 'البريد الالكتروني مطلوب.',
-                'email.exists' => 'بيانات الاعتماد غير صحيحة.',
+                'email_or_phone.required' => 'البريد الإلكتروني أو رقم الهاتف مطلوب.',
                 'password.required' => 'كلمة المرور مطلوبة.',
+                'email_or_phone.exists' => 'البريد الإلكتروني أو رقم الهاتف غير موجود.',
             ];
-        
+
             // Validate the request
             $validator = Validator::make($request->all(), [
-                "email" => "required|email|exists:users,email",
+                "email_or_phone" => "required",
                 "password" => "required"
             ], $messages);
 
             if ($validator->fails()) {
-                return respondError('Validation Error.',400, $validator->errors());
-
-
-                // return RespondWithBadRequestWithData($validator->errors());
+                return respondError('Validation Error.', 400, $validator->errors());
             }
 
-            // Attempt to authenticate the user
-            if (Auth::attempt([
-                "email" => $request->email,
-                "password" => $request->password
-            ])) {
+            // Determine whether input is email or phone
+            $credentials = [];
 
+            if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
+                $credentials['email'] = $request->email_or_phone;
+            } else {
+                $credentials['phone'] = $request->email_or_phone;
+            }
+
+            $credentials['password'] = $request->password;
+
+            // Attempt to authenticate the user
+            if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
                 $token = $user->createToken("myToken")->accessToken;
@@ -117,14 +116,12 @@ class AuthController extends Controller
 
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
-                return respondError('Password Error',  403,[
-                    'crediential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
+                return respondError('Password Error', 403, [
+                    'credential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
                 ]);
-
-                // return RespondWithBadRequest($lang, 13);
             }
         } catch (\Exception $e) {
-            return RespondWithBadRequest($lang, 14);
+            return respondError('An error occurred.', 500, ['error' => $e->getMessage()]);
         }
     }
 
