@@ -245,7 +245,7 @@ function UploadFile($path, $image, $model, $request)
 
     // Generate the asset path and remove the leading slash if exists
     $filePath = asset($path) . '/' . $filename;
-    $filePath = ltrim($filePath, '/'); // Remove the first slash if present
+    $filePath = url($filePath, '/'); // Remove the first slash if present
 
     // Save the file path to the model
     $model->$image = $filePath;
@@ -673,11 +673,11 @@ function getNearestBranch($userLat, $userLon)
             'id',
             'name',
             'address',
-            DB::raw("latitude, longitude, 
-                (6371 * acos(cos(radians($userLat)) 
-                * cos(radians(latitude)) 
-                * cos(radians(longitude) - radians($userLon)) 
-                + sin(radians($userLat)) 
+            DB::raw("latitude, longitude,
+                (6371 * acos(cos(radians($userLat))
+                * cos(radians(latitude))
+                * cos(radians(longitude) - radians($userLon))
+                + sin(radians($userLat))
                 * sin(radians(latitude)))) AS distance")
         )
         ->orderBy('distance', 'asc')
@@ -692,10 +692,10 @@ function scopeNearest($IDBranch, $latitude, $longitude)
     return DeliverySetting::where('branch_id', $IDBranch)
         ->select('*', DB::raw("
                 (6371 * acos(
-                    cos(radians($latitude)) * 
-                    cos(radians(latitude)) * 
-                    cos(radians(longitude) - radians($longitude)) + 
-                    sin(radians($latitude)) * 
+                    cos(radians($latitude)) *
+                    cos(radians(latitude)) *
+                    cos(radians(longitude) - radians($longitude)) +
+                    sin(radians($latitude)) *
                     sin(radians(latitude))
                 )) AS distance
             "))
@@ -888,7 +888,7 @@ function AddAddons($branch_id)
                 ]
             );
         }
-    } 
+    }
 }
 
 function AddSizes($branch_id)

@@ -1,48 +1,49 @@
 <?php
 
-use App\Http\Controllers\Auth\ForgetPasswordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Dashboard\DepartmentController;
-use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\ClientController;
-use App\Http\Controllers\Dashboard\BranchController;
-use App\Http\Controllers\Dashboard\BrandController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\ColorController;
-use App\Http\Controllers\Dashboard\CountryController;
-use App\Http\Controllers\Dashboard\CouponController;
-use App\Http\Controllers\Dashboard\FAQController;
-use App\Http\Controllers\Dashboard\FloorController;
-use App\Http\Controllers\Dashboard\FloorPartitionController;
-use App\Http\Controllers\Dashboard\GiftController;
-use App\Http\Controllers\Dashboard\LogoController;
-use App\Http\Controllers\Dashboard\PositionController;
-use App\Http\Controllers\Dashboard\PrivacyPolicyController;
-use App\Http\Controllers\Dashboard\ProductController;
-use App\Http\Controllers\Dashboard\ReturnPolicyController;
-use App\Http\Controllers\Dashboard\SizeController;
-use App\Http\Controllers\Dashboard\SliderController;
-use App\Http\Controllers\Dashboard\TableController;
-use App\Http\Controllers\Dashboard\TermsAndConditionsController;
-use App\Http\Controllers\Dashboard\UnitController;
-use App\Http\Controllers\Dashboard\DishCategoryController;
-use App\Http\Controllers\Dashboard\RecipeController;
-use App\Http\Controllers\Dashboard\AddonCategoryController;
-use App\Http\Controllers\Dashboard\DishController;
-use App\Http\Controllers\Dashboard\AddonController;
-use App\Http\Controllers\Dashboard\CuisineController;
-
-use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
-use App\Http\Controllers\Dashboard\LeaveTypeController;
-use App\Http\Controllers\Dashboard\LeaveSettingController;
-
-use App\Http\Controllers\Dashboard\OrderController;
-use App\Http\Controllers\Dashboard\PermissionController;
-use App\Http\Controllers\Dashboard\PurchaseController;
-use App\Http\Controllers\Dashboard\RoleController;
-use App\Http\Controllers\Dashboard\VendorController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\FAQController;
+use App\Http\Controllers\Dashboard\DishController;
+use App\Http\Controllers\Dashboard\GiftController;
+use App\Http\Controllers\Dashboard\LogoController;
+use App\Http\Controllers\Dashboard\RoleController;
+use App\Http\Controllers\Dashboard\SizeController;
+use App\Http\Controllers\Dashboard\UnitController;
+use App\Http\Controllers\Dashboard\AddonController;
+use App\Http\Controllers\Dashboard\BrandController;
+use App\Http\Controllers\Dashboard\ColorController;
+use App\Http\Controllers\Dashboard\FloorController;
+use App\Http\Controllers\Dashboard\OrderController;
+use App\Http\Controllers\Dashboard\TableController;
+use App\Http\Controllers\Dashboard\BranchController;
+use App\Http\Controllers\Dashboard\ClientController;
+use App\Http\Controllers\Dashboard\CouponController;
+use App\Http\Controllers\Dashboard\RecipeController;
+use App\Http\Controllers\Dashboard\SliderController;
+use App\Http\Controllers\Dashboard\VendorController;
+use App\Http\Controllers\Dashboard\CountryController;
+use App\Http\Controllers\Dashboard\CuisineController;
+use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\DiscountController;
+use App\Http\Controllers\Dashboard\EmployeeController;
+use App\Http\Controllers\Dashboard\PositionController;
+use App\Http\Controllers\Dashboard\PurchaseController;
+use App\Http\Controllers\Auth\ForgetPasswordController;
+
+use App\Http\Controllers\Dashboard\LeaveTypeController;
+use App\Http\Controllers\Dashboard\DepartmentController;
+use App\Http\Controllers\Dashboard\PermissionController;
+
+use App\Http\Controllers\Dashboard\DishCategoryController;
+use App\Http\Controllers\Dashboard\LeaveSettingController;
+use App\Http\Controllers\Dashboard\ReturnPolicyController;
+use App\Http\Controllers\Dashboard\AddonCategoryController;
+use App\Http\Controllers\Dashboard\PrivacyPolicyController;
+use App\Http\Controllers\Dashboard\FloorPartitionController;
+use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
+use App\Http\Controllers\Dashboard\TermsAndConditionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -242,6 +243,17 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [CouponController::class, 'delete'])->name('coupon.delete')->middleware('role_or_permission:delete coupons');
     });
 
+
+    Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.list')->middleware('role_or_permission:view discounts');
+    Route::group(['prefix' => 'discount'], function () {
+        Route::get('create', [DiscountController::class, 'create'])->name('discount.create')->middleware('role_or_permission:create discounts');
+        Route::post('store', [DiscountController::class, 'store'])->name('discount.store')->middleware('role_or_permission:create discounts');
+        Route::get('show/{id}', [DiscountController::class, 'show'])->name('discount.show')->middleware('role_or_permission:view discounts');
+        Route::get('edit/{id}', [DiscountController::class, 'edit'])->name('discount.edit')->middleware('role_or_permission:update discounts');
+        Route::put('update/{id}', [DiscountController::class, 'update'])->name('discount.update')->middleware('role_or_permission:update discounts');
+        Route::delete('delete/{id}', [DiscountController::class, 'delete'])->name('discount.delete')->middleware('role_or_permission:delete discounts');
+    });
+
     Route::get('/gifts', [GiftController::class, 'index'])->name('gifts.list')->middleware('role_or_permission:view gifts');
     Route::group(['prefix' => 'gift'], function () {
         Route::post('store', [GiftController::class, 'store'])->name('gift.store')->middleware('role_or_permission:create gifts');
@@ -263,6 +275,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/logos', [LogoController::class, 'index'])->name('logos.list')->middleware('role_or_permission:view logos');
     Route::group(['prefix' => 'logo'], function () {
         Route::post('store', [LogoController::class, 'store'])->name('logo.store')->middleware('role_or_permission:create logos');
+        Route::get('show/{id}', [LogoController::class, 'show'])->name('logo.show')->middleware('role_or_permission:view logos');
         Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update')->middleware('role_or_permission:update logos');
         Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete')->middleware('role_or_permission:delete logos');
     });
@@ -401,7 +414,11 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
-    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.change.item');
+    Route::post('/order-addon/change', [OrderController::class, 'changeAddonStatus'])->name('order.addon.change');
+    Route::get('/order/download/{id}', [OrderController::class, 'downloadOrder'])->name('order.download');
+
+    Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.detail.change');
+
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
     Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
 
