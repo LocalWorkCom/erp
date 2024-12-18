@@ -15,6 +15,9 @@ class DishSize extends Model
         'size_name_en',
         'size_name_ar',
         'price',
+        'addon_category_id', 
+        'min_addons',   
+        'max_addons',  
     ];
 
     /**
