@@ -24,4 +24,8 @@ return [
     'delete_error' => 'Failed to delete the country.',
     'not_found' => 'Country not found.',
     'country_in_use' => 'This country is currently in use and cannot be deleted.',
+  'phonecode'=>'Phone Code',
+    'length'=>'Length',
+    'flag'=>'Flag',
+
 ];
