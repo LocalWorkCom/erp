@@ -378,10 +378,10 @@
                                             </button>
 
                                             <!-- Delete Button -->
-                                            <form class="d-inline" action="{{ route('floor.delete', $floors->id) }}" method="POST" onsubmit="return confirmDelete()">
+                                            <form class="d-inline" id="delete-form-{{ $floors->id }}" action="{{ route('floor.delete', $floors->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger-light btn-wave">
+                                                <button type="button" onclick="delete_item({{ $floors->id }})" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form>
@@ -441,6 +441,7 @@
 @endsection
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     $(document).ready(function(){
@@ -531,5 +532,22 @@
 
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
+    }
+
+    function delete_item(id) {
+        Swal.fire({
+            title: 'تنبيه',
+            text: 'هل انت متاكد من انك تريد ان تحذف هذا الدور',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم, احذف',
+            cancelButtonText: 'إلغاء',
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
     }
 </script>

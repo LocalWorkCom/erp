@@ -76,8 +76,8 @@ class LeaveTypeService
                 return RespondWithBadRequestWithData($validateData->errors());
             }
 
-            $leave_type = LeaveType::find($id);
-            if (!$leave_type) {
+            $check_leave_type = LeaveType::find($id);
+            if (!$check_leave_type) {
                 return  RespondWithBadRequestNotExist();
             }
 
