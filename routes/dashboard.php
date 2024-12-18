@@ -16,6 +16,8 @@ use App\Http\Controllers\Dashboard\FloorController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\LogoController;
+use App\Http\Controllers\Dashboard\OfferController;
+use App\Http\Controllers\Dashboard\OfferDetailController;
 use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\PrivacyPolicyController;
 use App\Http\Controllers\Dashboard\ProductController;
@@ -316,6 +318,26 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [FAQController::class, 'edit'])->name('faq.edit')->middleware('role_or_permission:update faqs');
         Route::put('update/{id}', [FAQController::class, 'update'])->name('faq.update')->middleware('role_or_permission:update faqs');
         Route::delete('delete/{id}', [FAQController::class, 'destroy'])->name('faq.delete')->middleware('role_or_permission:delete faqs');
+    });
+
+    Route::get('/offers', [OfferController::class, 'index'])->name('offers.list')->middleware('role_or_permission:view offers');
+    Route::group(['prefix' => 'offer'], function () {
+        Route::get('create', [OfferController::class, 'create'])->name('offer.create')->middleware('role_or_permission:create offers');
+        Route::post('store', [OfferController::class, 'store'])->name('offer.store')->middleware('role_or_permission:create offers');
+        Route::get('show/{id}', [OfferController::class, 'show'])->name('offer.show')->middleware('role_or_permission:view offers');
+        Route::get('edit/{id}', [OfferController::class, 'edit'])->name('offer.edit')->middleware('role_or_permission:update offers');
+        Route::put('update/{id}', [OfferController::class, 'update'])->name('offer.update')->middleware('role_or_permission:update offers');
+        Route::delete('delete/{id}', [OfferController::class, 'destroy'])->name('offer.delete')->middleware('role_or_permission:delete offers');
+    });
+
+    Route::get('/offerDetails', [OfferDetailController::class, 'index'])->name('offerDetails.list')->middleware('role_or_permission:view offerDetails');
+    Route::group(['prefix' => 'offerDetail'], function () {
+        Route::get('create', [OfferDetailController::class, 'create'])->name('offerDetail.create')->middleware('role_or_permission:create offerDetails');
+        Route::post('store', [OfferDetailController::class, 'store'])->name('offerDetail.store')->middleware('role_or_permission:create offerDetails');
+        Route::get('show/{id}', [OfferDetailController::class, 'show'])->name('offerDetail.show')->middleware('role_or_permission:view offerDetails');
+        Route::get('edit/{id}', [OfferDetailController::class, 'edit'])->name('offerDetail.edit')->middleware('role_or_permission:update offerDetails');
+        Route::put('update/{id}', [OfferDetailController::class, 'update'])->name('offerDetail.update')->middleware('role_or_permission:update offerDetails');
+        Route::delete('delete/{id}', [OfferDetailController::class, 'destroy'])->name('offerDetail.delete')->middleware('role_or_permission:delete offerDetails');
     });
 
     //HR

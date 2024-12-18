@@ -46,6 +46,7 @@ return [
     'Coupon' => 'Coupon',
     'Discount' => 'Discount',
     'Offers' => 'Offers',
+    'OfferDetails' => 'Offer Details',
     'Gifts' => 'Gifts',
     'lolaityPoint' => 'lolaityPoint',
     'Transactions' => 'Transactions',
