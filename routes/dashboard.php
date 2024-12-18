@@ -261,6 +261,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::get('/logos', [LogoController::class, 'index'])->name('logos.list')->middleware('role_or_permission:view logos');
     Route::group(['prefix' => 'logo'], function () {
         Route::post('store', [LogoController::class, 'store'])->name('logo.store')->middleware('role_or_permission:create logos');
+        Route::get('show/{id}', [LogoController::class, 'show'])->name('logo.show')->middleware('role_or_permission:view logos');
         Route::put('update/{id}', [LogoController::class, 'update'])->name('logo.update')->middleware('role_or_permission:update logos');
         Route::delete('delete/{id}', [LogoController::class, 'destroy'])->name('logo.delete')->middleware('role_or_permission:delete logos');
     });

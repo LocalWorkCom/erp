@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
+use App\Http\Controllers\Api\StaticPageController;
 use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\ApiCodeController;
@@ -419,17 +420,17 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::post('/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
     });
     Route::prefix('dish-categories')->group(function () {
-        Route::get('/', [DishCategoryController::class, 'index'])->name('dish_categories.index'); 
-        Route::get('/create', [DishCategoryController::class, 'create'])->name('dish_categories.create'); 
-        Route::post('/', [DishCategoryController::class, 'store'])->name('dish_categories.store'); 
-        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dish_categories.edit'); 
-        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update'); 
-        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete'); 
-        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore'); 
+        Route::get('/', [DishCategoryController::class, 'index'])->name('dish_categories.index');
+        Route::get('/create', [DishCategoryController::class, 'create'])->name('dish_categories.create');
+        Route::post('/', [DishCategoryController::class, 'store'])->name('dish_categories.store');
+        Route::get('/{id}/edit', [DishCategoryController::class, 'edit'])->name('dish_categories.edit');
+        Route::put('/{id}', [DishCategoryController::class, 'update'])->name('dish_categories.update');
+        Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete');
+        Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
 
     });
-    
+
 
     // Gifts
     Route::group(['prefix' => 'gifts'], function () {
@@ -773,3 +774,5 @@ Route::prefix('addon-categories')->group(function () {
     Route::delete('/{id}', [AddonCategoryController::class, 'destroy'])->name('api.addon_categories.destroy');
     Route::post('/{id}/restore', [AddonCategoryController::class, 'restore'])->name('api.addon_categories.restore');
 });
+
+Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
