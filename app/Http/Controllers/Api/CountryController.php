@@ -56,8 +56,7 @@ class CountryController extends Controller
             $countries = $responseData['data'];
             $countries = $countries->map(function ($country) use ($lang) {
                             return [
-                                'id' => $country->id,
-                                'flag' => $country->flag ?? null,
+                                'image' => $country->flag ?? null,
                                 'phone_code' => $country->phone_code,
                                 'length' =>  $country->length ?? 10,
                             ];
