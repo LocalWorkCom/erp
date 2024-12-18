@@ -39,36 +39,37 @@ class CountryController extends Controller
                 'name' => $lang == 'en' ? $country->name_en : $country->name_ar,
                 'phone_code' => $country->phone_code,
                 'currency' => $lang == 'en' ? $country->currency_en : $country->currency_ar,
+                'image' => $country->flag ?? null,
+                'length' =>  $country->length ?? 10,
             ];
         });
 
         return ResponseWithSuccessData($lang, $countries, 1);
     }
-    public function getCountriesRegister(Request $request)
-    {
-        try {
-            $lang = $request->header('lang', 'ar');
+    // public function getCountriesRegister(Request $request)
+    // {
+    //     try {
+    //         $lang = $request->header('lang', 'ar');
 
-            $response = $this->countryService->index($request, $this->checkToken);
+    //         $response = $this->countryService->index($request, $this->checkToken);
 
-            $responseData = $response->original;
+    //         $responseData = $response->original;
 
-            $countries = $responseData['data'];
-            $countries = $countries->map(function ($country) use ($lang) {
-                return [
-                    'id' => $country->id ,
-                    'image' => $country->flag ?? null,
-                    'phone_code' => $country->phone_code,
-                    'length' =>  $country->length ?? 10,
-                ];
-            });
+    //         $countries = $responseData['data'];
+    //         $countries = $countries->map(function ($country) use ($lang) {
+    //             return [
+    //                 'id' => $country->id,
+    //                 'image' => $country->flag ?? null,
+    //                 'phone_code' => $country->phone_code,
+    //                 'length' =>  $country->length ?? 10,
+    //             ];
+    //         });
 
-            return ResponseWithSuccessData($lang, $countries, 1);
-
-        } catch (\Exception $e) {
-            return RespondWithBadRequestData($lang, 2);
-        }
-    }
+    //         return ResponseWithSuccessData($lang, $countries, 1);
+    //     } catch (\Exception $e) {
+    //         return RespondWithBadRequestData($lang, 2);
+    //     }
+    // }
 
 
     // public function store(Request $request)

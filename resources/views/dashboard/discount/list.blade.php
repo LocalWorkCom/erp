@@ -10,7 +10,7 @@
 @section('content')
     <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('coupon.Coupons')</h4>
+        <h4 class="fw-medium mb-0">@lang('discount.Discounts')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
@@ -21,7 +21,7 @@
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
                         <a href="javascript:void(0);"
-                            onclick="window.location.href='{{ route('coupons.list') }}'">@lang('coupon.Coupons')</a>
+                            onclick="window.location.href='{{ route('discounts.list') }}'">@lang('discount.Discounts')</a>
                     </li>
                 </ol>
             </nav>
@@ -37,11 +37,11 @@
                             style="
                         display: flex;
                         justify-content: space-between;">
-                            <div class="card-title">@lang('coupon.Coupons')</div>
+                            <div class="card-title">@lang('discount.Discounts')</div>
                             <button type="button" class="btn btn-primary label-btn"
-                                onclick="window.location.href='{{ route('coupon.create') }}'">
+                                onclick="window.location.href='{{ route('discount.create') }}'">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
-                                @lang('coupon.AddCoupon')
+                                @lang('discount.AddDiscount')
                             </button>
 
 
@@ -59,57 +59,46 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('category.ID')</th>
-                                        <th scope="col">@lang('coupon.Code')</th>
-                                        <th scope="col">@lang('coupon.Type')</th>
-                                        <th scope="col">@lang('coupon.Value')</th>
-                                        <th scope="col">@lang('coupon.MinimumSpend')</th>
-                                        <th scope="col">@lang('coupon.UsageLimit')</th>
-                                        <th scope="col">@lang('coupon.StartDate')</th>
-                                        <th scope="col">@lang('coupon.EndDate')</th>
-                                        <th scope="col">@lang('coupon.IsActive')</th>
+                                        <th scope="col">@lang('discount.NameAr')</th>
+                                        <th scope="col">@lang('discount.NameEn')</th>
+                                        <th scope="col">@lang('discount.Type')</th>
+                                        <th scope="col">@lang('discount.Value')</th>
+                                        <th scope="col">@lang('discount.StartDate')</th>
+                                        <th scope="col">@lang('discount.EndDate')</th>
+                                        <th scope="col">@lang('discount.IsActive')</th>
                                         <th scope="col">@lang('category.Actions')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($coupons as $coupon)
+                                    @foreach ($discounts as $discount)
                                         <tr>
-                                            <td>{{ $coupon->id }}</td>
-                                            <td>{{ $coupon->code }}</td>
-                                            <td>@lang('coupon.' . ucfirst($coupon->type))</td>
-                                            <td>{{ $coupon->value }}</td>
-                                            <td>{{ $coupon->minimum_spend ?? '-' }}</td>
-                                            <td>{{ $coupon->usage_limit ?? '-' }}</td>
-                                            <td>{{ $coupon->start_date ? \Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d H:i') : '-' }}
+                                            <td>{{ $discount->id }}</td>
+                                            <td>{{ $discount->name_ar }}</td>
+                                            <td>{{ $discount->name_en }}</td>
+                                            <td>@lang('discount.' . ucfirst($discount->type))</td>
+                                            <td>{{ $discount->value }}</td>
+                                            <td>{{ $discount->start_date ? \Carbon\Carbon::parse($discount->start_date)->format('Y-m-d H:i') : '-' }}
                                             </td>
-                                            <td>{{ $coupon->end_date ? \Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d H:i') : '-' }}
+                                            <td>{{ $discount->end_date ? \Carbon\Carbon::parse($discount->end_date)->format('Y-m-d H:i') : '-' }}
                                             </td>
 
                                             <td>
-                                                <span class="badge {{ $coupon->is_active ? 'bg-success' : 'bg-danger' }}">
-                                                    {{ $coupon->is_active ? __('coupon.Active') : __('coupon.Inactive') }}
+                                                <span class="badge {{ $discount->is_active ? 'bg-success' : 'bg-danger' }}">
+                                                    {{ $discount->is_active ? __('discount.Active') : __('discount.Inactive') }}
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('coupon.show', $coupon->id) }}"
+                                                <a href="{{ route('discount.show', $discount->id) }}"
                                                     class="btn btn-info-light btn-wave">@lang('category.show') <i
                                                         class="ri-eye-line"></i></a>
-                                                <a href="{{ route('coupon.edit', $coupon->id) }}"
+                                                <a href="{{ route('discount.edit', $discount->id) }}"
                                                     class="btn btn-orange-light btn-wave">@lang('category.edit') <i
                                                         class="ri-edit-line"></i></a>
-                                                {{-- <form class="d-inline" action="{{ route('coupon.delete', $coupon->id) }}"
-                                                    method="POST" onsubmit="return confirmDelete()">
+                                                <form class="d-inline" id="delete-form-{{ $discount->id }}"
+                                                    action="{{ route('discount.delete', $discount->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger-light btn-wave">@lang('category.delete') <i
-                                                            class="ri-delete-bin-line"></i></button>
-                                                </form> --}}
-
-                                                <form class="d-inline" id="delete-form-{{ $coupon->id }}"
-                                                    action="{{ route('coupon.delete', $coupon->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" onclick="delete_item('{{ $coupon->id }}')"
+                                                    <button type="button" onclick="delete_item('{{ $discount->id }}')"
                                                         class="btn btn-danger-light btn-wave">
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>

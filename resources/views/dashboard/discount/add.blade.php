@@ -7,17 +7,17 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('coupon.AddCoupon')</h4>
+        <h4 class="fw-medium mb-0">@lang('discount.AddDiscount')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('coupons.list') }}'">
-                            @lang('coupon.Coupons')
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('discounts.list') }}'">
+                            @lang('discount.Discounts')
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="{{ route('coupon.create') }}">@lang('coupon.AddCoupon')</a>
+                        <a href="{{ route('discount.create') }}">@lang('discount.AddDiscount')</a>
                     </li>
                 </ol>
             </nav>
@@ -30,7 +30,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('coupon.AddCoupon')</div>
+                            <div class="card-title">@lang('discount.AddDiscount')</div>
                         </div>
                         <div class="card-body">
                             @if ($errors->any())
@@ -43,45 +43,35 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form method="POST" action="{{ route('coupon.store') }}" class="needs-validation" novalidate>
+                            <form method="POST" action="{{ route('discount.store') }}" class="needs-validation" novalidate>
                                 @csrf
                                 <div class="row gy-4">
-                                    <!-- Coupon Code -->
+                                    <!-- Discount name_ar -->
                                     <div class="col-xl-6">
-                                        <label for="code" class="form-label">@lang('coupon.Code')</label>
-                                        <input type="text" name="code" id="code" class="form-control"
-                                            placeholder="@lang('coupon.Code')" required>
-                                        <div class="invalid-feedback">@lang('validation.Entercode')</div>
+                                        <label for="name_ar" class="form-label">@lang('discount.NameAr')</label>
+                                        <input type="text" name="name_ar" id="name_ar" class="form-control"
+                                            placeholder="@lang('discount.NameAr')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterNameAr')</div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <label for="name_er" class="form-label">@lang('discount.NameEn')</label>
+                                        <input type="text" name="name_en" id="name_en" class="form-control"
+                                            placeholder="@lang('discount.NameEn')" required>
+                                        <div class="invalid-feedback">@lang('validation.EnterNameEn')</div>
                                     </div>
 
                                     <!-- Discount Value -->
                                     <div class="col-xl-6">
-                                        <label for="value" class="form-label">@lang('coupon.Value')</label>
-                                        <input type="number" step="0.01" name="value" id="value"
-                                            class="form-control" placeholder="@lang('coupon.Value')" required>
+                                        <label for="value" class="form-label">@lang('discount.Value')</label>
+                                        <input type="number" name="value" id="value"
+                                            class="form-control" placeholder="@lang('discount.Value')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterDiscountValue')</div>
-                                    </div>
-
-
-                                    <!-- Minimum Spend -->
-                                    <div class="col-xl-6">
-                                        <label for="minimum_spend" class="form-label">@lang('coupon.MinimumSpend')</label>
-                                        <input type="number" step="0.01" name="minimum_spend" id="minimum_spend"
-                                            class="form-control" placeholder="@lang('coupon.MinimumSpend')" required>
-                                        <div class="invalid-feedback">@lang('validation.EnterMinimumSpend')</div>
-                                    </div>
-
-                                    <!-- Usage Limit -->
-                                    <div class="col-xl-6">
-                                        <label for="usage_limit" class="form-label">@lang('coupon.UsageLimit')</label>
-                                        <input type="number" name="usage_limit" id="usage_limit" class="form-control"
-                                            placeholder="@lang('coupon.UsageLimit')" required>
-                                        <div class="invalid-feedback">@lang('validation.EnterUsageLimit')</div>
                                     </div>
 
                                     <!-- Start Date -->
                                     <div class="col-xl-6">
-                                        <label for="start_date" class="form-label">@lang('coupon.StartDate')</label>
+                                        <label for="start_date" class="form-label">@lang('discount.StartDate')</label>
                                         <input type="datetime-local" name="start_date" id="start_date" class="form-control"
                                             required>
                                         <div class="invalid-feedback">@lang('validation.EnterStartDate')</div>
@@ -89,7 +79,7 @@
 
                                     <!-- End Date -->
                                     <div class="col-xl-6">
-                                        <label for="end_date" class="form-label">@lang('coupon.EndDate')</label>
+                                        <label for="end_date" class="form-label">@lang('discount.EndDate')</label>
                                         <input type="datetime-local" name="end_date" id="end_date" class="form-control"
                                             required>
                                         <div class="invalid-feedback">@lang('validation.EnterEndDate')</div>
@@ -97,31 +87,31 @@
 
                                     <!-- Discount Type -->
                                     <div class="col-xl-6">
-                                        <p class="mb-2 text-muted">@lang('coupon.Type')</p>
+                                        <p class="mb-2 text-muted">@lang('discount.Type')</p>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="type" value="percentage" class="form-check-input"
                                                 checked required>
-                                            <label class="form-check-label">@lang('coupon.Percentage')</label>
+                                            <label class="form-check-label">@lang('discount.Percentage')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="type" value="fixed" class="form-check-input"
                                                 required>
-                                            <label class="form-check-label">@lang('coupon.Fixed')</label>
+                                            <label class="form-check-label">@lang('discount.Fixed')</label>
                                         </div>
                                     </div>
 
                                     <!-- Is Active -->
                                     <div class="col-xl-6">
-                                        <p class="mb-2 text-muted">@lang('coupon.IsActive')</p>
+                                        <p class="mb-2 text-muted">@lang('discount.IsActive')</p>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="is_active" value="1"
                                                 class="form-check-input" checked required>
-                                            <label class="form-check-label">@lang('coupon.Active')</label>
+                                            <label class="form-check-label">@lang('discount.Active')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input type="radio" name="is_active" value="0"
                                                 class="form-check-input" required>
-                                            <label class="form-check-label">@lang('coupon.Inactive')</label>
+                                            <label class="form-check-label">@lang('discount.Inactive')</label>
                                         </div>
                                     </div>
 

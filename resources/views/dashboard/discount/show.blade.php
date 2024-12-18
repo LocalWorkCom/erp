@@ -7,17 +7,17 @@
 
 @section('content')
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('coupon.ShowCoupon')</h4>
+        <h4 class="fw-medium mb-0">@lang('discount.ShowDiscount')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('coupons.list') }}'">
-                            @lang('coupon.Coupons')
+                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('discounts.list') }}'">
+                            @lang('discount.Discounts')
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="{{ route('coupon.show', ['id' => $id]) }}">@lang('coupon.ShowCoupon')</a>
+                        <a href="{{ route('discount.show', ['id' => $id]) }}">@lang('discount.ShowDiscount')</a>
                     </li>
                 </ol>
                 
@@ -33,58 +33,52 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-header">
-                            <div class="card-title">@lang('coupon.ShowCoupon')</div>
+                            <div class="card-title">@lang('discount.ShowDiscount')</div>
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
-                                <!-- Coupon Code -->
+                                <!-- Discount NameAr -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.Code')</label>
-                                    <p class="form-text">{{ $coupon->code }}</p>
+                                    <label class="form-label">@lang('discount.NameAr')</label>
+                                    <p class="form-text">{{ $discount->name_ar }}</p>
+                                </div>
+
+                                <!-- Discount NameEn -->
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <label class="form-label">@lang('discount.NameEn')</label>
+                                    <p class="form-text">{{ $discount->name_en }}</p>
                                 </div>
 
                                 <!-- Discount Value -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.Value')</label>
-                                    <p class="form-text">{{ $coupon->value }}</p>
-                                </div>
-
-                                <!-- Minimum Spend -->
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.MinimumSpend')</label>
-                                    <p class="form-text">{{ $coupon->minimum_spend ?? __('category.none') }}</p>
-                                </div>
-
-                                <!-- Usage Limit -->
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.UsageLimit')</label>
-                                    <p class="form-text">{{ $coupon->usage_limit ?? __('category.none') }}</p>
+                                    <label class="form-label">@lang('discount.Value')</label>
+                                    <p class="form-text">{{ $discount->value }}</p>
                                 </div>
 
                                 <!-- Start Date -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.StartDate')</label>
-                                    <p class="form-text">{{ $coupon->start_date ? \Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d H:i') : __('category.none') }}</p>
+                                    <label class="form-label">@lang('discount.StartDate')</label>
+                                    <p class="form-text">{{ $discount->start_date ? \Carbon\Carbon::parse($discount->start_date)->format('Y-m-d H:i') : __('category.none') }}</p>
                                 </div>
 
                                 <!-- End Date -->
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('coupon.EndDate')</label>
-                                    <p class="form-text">{{ $coupon->end_date ? \Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d H:i') : __('category.none') }}</p>
+                                    <label class="form-label">@lang('discount.EndDate')</label>
+                                    <p class="form-text">{{ $discount->end_date ? \Carbon\Carbon::parse($discount->end_date)->format('Y-m-d H:i') : __('category.none') }}</p>
                                 </div>
 
                                 <!-- Discount Type -->
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('coupon.Type')</label>
+                                    <label class="form-label">@lang('discount.Type')</label>
                                     <p class="form-text">
-                                        {{ $coupon->type == 'percentage' ? __('coupon.Percentage') : __('coupon.Fixed') }}
+                                        {{ $discount->type == 'percentage' ? __('discount.Percentage') : __('discount.Fixed') }}
                                     </p>
                                 </div>
 
                                 <!-- Is Active -->
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('coupon.IsActive')</label>
-                                    <p class="form-text">{{ $coupon->is_active ? __('coupon.Active') : __('coupon.Inactive') }}</p>
+                                    <label class="form-label">@lang('discount.IsActive')</label>
+                                    <p class="form-text">{{ $discount->is_active ? __('discount.Active') : __('discount.Inactive') }}</p>
                                 </div>
                             </div>
                         </div>

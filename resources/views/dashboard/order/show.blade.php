@@ -25,9 +25,30 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <div class="card-title">
                                 <h4> @lang('order.order_details')</h4>
+
+                            </div>
+                            <div class="btn-group" role="group"> <button id="btnGroupVerticalDrop4" type="button"
+                                    class="btn btn-primary dropdown-toggle show" data-bs-toggle="dropdown"
+                                    aria-expanded="true"> تغيير الحالة
+                                </button>
+
+                                <ul class="dropdown-menu show" aria-labelledby="btnGroupVerticalDrop4"
+                                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 39px);"
+                                    data-popper-placement="bottom-start">
+                                    @foreach ($order['next_status'] as $status)
+                                        <li>
+                                            <a onclick="ChangeOrder('{{ $order->id }}', '{{ $status }}')"
+                                                class="dropdown-item">
+                                                @lang('order.' . $status)
+                                                <i class="ri-{{ $status }}-line"></i>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
                             </div>
                         </div>
                         <div class="card-body">
@@ -125,11 +146,11 @@
                                     <thead>
                                         <tr>
                                             <th>@lang('order.dish')</th>
+                                            <th>@lang('order.quantity')</th>
+                                            <th>@lang('order.total_price')</th>
                                             <th>@lang('order.total_before_tax')</th>
                                             <th>@lang('order.tax')</th>
                                             <th>@lang('order.total_after_tax')</th>
-                                            <th>@lang('order.total_price')</th>
-                                            <th>@lang('order.quantity')</th>
                                             <th>@lang('order.status')</th>
                                             <th>@lang('order.note')</th>
                                             <th>@lang('order.actions')</th> <!-- New column for actions -->
@@ -139,41 +160,48 @@
                                         @foreach ($order['details'] as $detail)
                                             <tr>
                                                 <td>{{ $detail->dish->name_ar }}</td>
+                                                <td>{{ $detail->quantity }}</td>
+                                                <td>{{ $detail->total }}</td>
                                                 <td>{{ $detail->price_befor_tax }}</td>
                                                 <td>{{ $detail->tax_value }}</td>
                                                 <td>{{ $detail->price_after_tax }}</td>
-                                                <td>{{ $detail->total }}</td>
-                                                <td>{{ $detail->quantity }}</td>
-                                                <td>@lang('order.' . strtolower($detail->status))</td>
+                                                <td>
+                                                    <p class="form-text"> <span class="badge bg-warning-transparent">
+                                                            @lang('order.' . strtolower($detail->status))</span></p>
+                                                </td>
                                                 <td>{{ $detail->note }}</td>
                                                 <td>
-                                                    <a href="javascript:void(0)" 
-                                                       onclick="ChangeItemOrder('{{ $detail->id }}', 'cancel')"
-                                                       class="dropdown-item">
-                                                        @lang('order.cancel')
-                                                    </a>
-                                                    <a href="javascript:void(0)" 
-                                                       onclick="ChangeItemOrder('{{ $detail->id }}', 'refund')"
-                                                       class="dropdown-item">
-                                                        @lang('order.refund')
-                                                    </a>
+                                                    @if ($detail->status != 'cancel')
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <button type="button"
+                                                                onclick="ChangeItemOrder('{{ $detail->id }}', 'cancel')"
+                                                                class="btn btn-danger btn-sm d-flex align-items-center">
+                                                                <i class="ri-close-circle-line me-1"></i> @lang('order.cancel')
+                                                            </button>
+
+                                                        </div>
+                                                    @endif
                                                 </td>
-                                                
+
+
+
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
 
 
-                                <h4>@lang('order.order_details')</h4>
+                                <h4>@lang('order.order_addons')</h4>
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th>@lang('order.name')</th>
-                                            <th>@lang('order.price')</th>
                                             <th>@lang('order.quantity')</th>
+                                            <th>@lang('order.price')</th>
                                             <th>@lang('order.total_before_tax')</th>
+                                            <th>@lang('order.tax_value')</th>
                                             <th>@lang('order.total_after_tax')</th>
+                                            <th>@lang('order.status')</th>
                                             <th>@lang('order.actions')</th> <!-- New column for actions -->
 
                                         </tr>
@@ -185,20 +213,30 @@
                                                 <td>{{ $addon->price }}</td>
                                                 <td>{{ $addon->quantity }}</td>
                                                 <td>{{ $addon->price_before_tax }}</td>
+                                                <td>{{ getSetting('tax_percentage') * $addon->price_before_tax }}
+                                                </td>
                                                 <td>{{ $addon->price_after_tax }}</td>
                                                 <td>
-                                                    <a href="javascript:void(0)" 
-                                                       onclick="ChangeItemOrder('{{ $addon->id }}', 'cancel')"
-                                                       class="dropdown-item">
-                                                        @lang('order.cancel')
-                                                    </a>
-                                                    <a href="javascript:void(0)" 
-                                                       onclick="ChangeItemOrder('{{ $addon->id }}', 'refund')"
-                                                       class="dropdown-item">
-                                                        @lang('order.refund')
-                                                    </a>
+                                                    <p class="form-text"> <span class="badge bg-warning-transparent">
+                                                            @lang('order.' . strtolower($addon->status))</span></p>
                                                 </td>
-                                                
+                                                <td>
+                                                    @if ($addon->status != 'cancel')
+                                                        <div class="d-flex gap-2 align-items-center">
+                                                            <button type="button"
+                                                                onclick="ChangeAddonOrder('{{ $addon->id }}', 'cancel')"
+                                                                class="btn btn-danger btn-sm d-flex align-items-center">
+                                                                <i class="ri-close-circle-line me-1"></i>
+                                                                @lang('order.cancel')
+                                                            </button>
+
+                                                        </div>
+                                                    @endif
+
+
+
+                                                </td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -275,6 +313,48 @@
     <!-- SELECT2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        function ChangeAddonOrder(order_addon_id, status) {
+            Swal.fire({
+                title: '@lang('order.confirm_action')',
+                text: '@lang('order.are_you_sure')',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@lang('order.yes_proceed')',
+                cancelButtonText: '@lang('order.no_cancel')'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Call the AJAX route
+                    $.ajax({
+                        url: '{{ route('order.addon.change') }}',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            order_addon_id: order_addon_id,
+                            status: status
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                '@lang('order.success')',
+                                "response.message",
+                                'success'
+                            );
+                            // Optionally reload the page or update the UI
+                            location.reload();
+                        },
+                        error: function(error) {
+                            Swal.fire(
+                                '@lang('order.error')',
+                                error.responseJSON.message,
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+
         function ChangeItemOrder(order_detail_id, status) {
             Swal.fire({
                 title: '@lang('order.confirm_action')',
@@ -289,7 +369,7 @@
                 if (result.isConfirmed) {
                     // Call the AJAX route
                     $.ajax({
-                        url: '{{ route('order.change.item') }}',
+                        url: '{{ route('order.detail.change') }}',
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
