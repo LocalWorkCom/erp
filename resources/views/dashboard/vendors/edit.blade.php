@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('vendor.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control">
+                                        <select name="country_id" class="select2 form-control">
                                             <option value="" disabled>@lang('vendor.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}"

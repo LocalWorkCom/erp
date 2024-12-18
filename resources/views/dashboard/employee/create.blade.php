@@ -110,7 +110,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="gender" class="form-label">@lang('employee.gender')</label>
-                                        <select class="js-example-basic-single form-control" id="gender" name="gender">
+                                        <select class="select2 form-control" id="gender" name="gender">
                                             <option value="" selected disabled>@lang('employee.selectGender')</option>
                                             <option value="male">@lang('employee.male')</option>
                                             <option value="female">@lang('employee.female')</option>
@@ -135,7 +135,7 @@
                                     </div>
                                     {{-- <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control" required>
+                                        <select name="country_id" class="select2 form-control" required>
                                             <option value="" disabled>@lang('employee.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}">
@@ -170,7 +170,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="marital_status" class="form-label">@lang('employee.maritalStatus')</label>
-                                        <select class="js-example-basic-single form-control" id="marital_status"
+                                        <select class="select2 form-control" id="marital_status"
                                             name="marital_status">
                                             <option value="" selected disabled>@lang('employee.selectMaritalStatus')</option>
                                             <option value="Married">@lang('employee.married')</option>
@@ -187,7 +187,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="blood_group" class="form-label">@lang('employee.bloodGroup')</label>
-                                        <select class="js-example-basic-single form-control" id="blood_group"
+                                        <select class="select2 form-control" id="blood_group"
                                             name="blood_group">
                                             <option value="" selected disabled>@lang('employee.selectBloodGroup')</option>
                                             <option value="A+">A+</option>
@@ -246,7 +246,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.nationality')</p>
-                                        <select name="nationality_id" class="js-example-basic-single form-control">
+                                        <select name="nationality_id" class="select2 form-control">
                                             <option value="" selected disabled>@lang('employee.selectNationality')</option>
                                             @foreach ($nationalities as $nationality)
                                                 <option value="{{ $nationality->id }}">
@@ -258,7 +258,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.department')</p>
-                                        <select name="department_id" class="js-example-basic-single form-control">
+                                        <select name="department_id" class="select2 form-control">
                                             <option value="" selected disabled>@lang('employee.selectDepartment')</option>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}">
@@ -270,7 +270,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.position')</p>
-                                        <select name="position_id" class="js-example-basic-single form-control">
+                                        <select name="position_id" class="select2 form-control">
                                             <option value="" selected disabled>@lang('employee.selectPosition')</option>
                                             @foreach ($positions as $position)
                                                 <option value="{{ $position->id }}">
@@ -282,7 +282,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('employee.supervisor')</p>
-                                        <select name="supervisor_id" class="js-example-basic-single form-control">
+                                        <select name="supervisor_id" class="select2 form-control">
                                             <option value="" disabled selected>@lang('employee.selectSupervisor')</option>
                                             @foreach ($supervisors as $supervisor)
                                                 <option value="{{ $supervisor->id }}">
@@ -351,8 +351,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="employment_type" class="form-label">@lang('employee.employmentType')</label>
-                                        <select class="js-example-basic-single form-control" id="employment_type"
-                                            name="employment_type">
+                                        <select class="select2 form-control" id="employment_type" name="employment_type">
                                             <option value="" selected disabled>@lang('employee.selectEmploymentType')</option>
                                             <option value="Part-Time">@lang('employee.partTime')</option>
                                             <option value="Full-Time">@lang('employee.fullTime')</option>

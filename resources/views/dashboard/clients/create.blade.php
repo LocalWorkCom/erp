@@ -97,9 +97,9 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label for="date_of_birth" class="form-label">@lang('client.dateOfBirth')</label>
+                                        <label for="date_of_birth" class="form-label">@lang('client.dob')</label>
                                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                            value="{{ old('date_of_birth') }}" placeholder="@lang('client.dateOfBirth')">
+                                            value="{{ old('date_of_birth') }}" placeholder="@lang('client.dob')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.country')</p>
-                                        <select name="country_id" class="js-example-basic-single form-control" required>
+                                        <select name="country_id" class="select2 form-control" required>
                                             <option value="" disabled>@lang('client.chooseCountry')</option>
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->id }}">
