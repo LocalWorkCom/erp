@@ -26,7 +26,7 @@ class StaticPageResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $title,
-            'description' => $description,
+            'description' => strip_tags($description),
         ];
     }
 }
