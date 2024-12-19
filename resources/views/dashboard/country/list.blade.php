@@ -392,7 +392,7 @@
                                             <td>{{ $country->currency_ar }}</td>
                                             <td>{{ $country->currency_en }}</td>
                                             <td>{{ $country->currency_code }}</td>
-                                            <td> <img src="{{ $country->flag }}"> </td>
+                                            <td> <img src="{{ $country->flag }}" width="50px"> </td>
                                             <td>
                                                 @can('view countries')
                                                     <!-- Show Button -->
