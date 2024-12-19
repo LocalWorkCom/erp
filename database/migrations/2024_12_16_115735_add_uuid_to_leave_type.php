@@ -29,17 +29,17 @@ return new class extends Migration
         });
 
         Schema::table('leave_settings', function (Blueprint $table) {
-            $table->char('leave_type_id', 36)->null()->change();
+            $table->char('leave_type_id', 36)->nullable()->change();
             $table->foreign('leave_type_id')->references('id')->on('leave_types')->onUpdate('cascade');
         }); 
 
         Schema::table('leave_nationals', function (Blueprint $table) {
-            $table->char('leave_type_id', 36)->null()->change();
+            $table->char('leave_type_id', 36)->nullable()->change();
             $table->foreign('leave_type_id')->references('id')->on('leave_types')->onUpdate('cascade');
         }); 
 
         Schema::table('leave_requests', function (Blueprint $table) {
-            $table->char('leave_type_id', 36)->null()->change();
+            $table->char('leave_type_id', 36)->nullable()->change();
             $table->foreign('leave_type_id')->references('id')->on('leave_types')->onUpdate('cascade');
         }); 
 
