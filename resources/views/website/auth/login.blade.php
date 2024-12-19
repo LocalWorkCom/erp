@@ -7,18 +7,21 @@
                         </div>
 
                         <div class="col-md-7 right-side p-3">
-                            <h2 class="main-color fw-bold">مرحبا بك!</h2>
-                            <h5>تسجيل الدخول لتستمتع بتجربة طلب معدة خصيصا لك </h5>
+                            <h2 class="main-color fw-bold"> @lang('auth.welcome')</h2>
+                            <h5>تسجيل الدخول لتستمتع بتجربة طلب معدة خصيصا لك @lang('auth.getlogin')</h5>
 
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" id="phoneInput"
-                                    placeholder="ادخل رقم الهاتف ,مثال01029063398">
+                                    placeholder="ادخل رقم الهاتف ,مثال  @lang('auth.phoneplace') 01029063398" >
                                 <button class="country-dropdown me-2" data-bs-toggle="dropdown"
                                     aria-expanded="false"><small> +02</small> <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/egypt.png') }}"
                                         alt=""></button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"> +02 <img
-                                                src="{{ asset('front/AlKout-Resturant/SiteAssets/images/egypt.png') }}" alt=""></a></li>
+                                    @foreach (GetCountries() as $country)
+                                    <li><a class="dropdown-item" href="#"> {{ $country->phone_code }} <img
+                                        src="{{ $country->flag }}" alt=""></a></li>
+                                    @endforeach
+
                                 </ul>
                             </div>
 
