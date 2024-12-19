@@ -27,7 +27,6 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => "required|email|unique:users",
-            'country_id' => 'nullable|exists:countries,id',
             'country_code' => 'required|string',
             "password" => "required",
             'phone' => [
@@ -150,10 +149,9 @@ class AuthController extends Controller
             ->exists();
 
         if (!$userExists) {
-            return respondError($messages["phone.exists"],403,[
-                "phone" => [$messages["phone.exists"]]
-            ]);
+            return respondError('Validation Error.', 400, $messages["phone.exists"]);
         }
+
 
         return response()->json([
             'status' => true,
@@ -196,9 +194,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return respondError($messages["phone.exists"],403,[
-                "phone" => [$messages["phone.exists"]]
-            ]);
+            return respondError('Validation Error.', 400, $messages["phone.exists"]);
         }
 
         // Check if the new password is the same as the old one
