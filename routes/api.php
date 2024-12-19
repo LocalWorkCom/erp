@@ -102,7 +102,7 @@ use App\Http\Controllers\API\ClientAddressController;
 //     return $request->user();
 // });
 
-Route::post("register", [AuthController::class, "register"]);
+Route::post("register", [AuthController::class, "register"])->name('register');
 Route::post("login", [AuthController::class, "login"])->name('login');
 Route::post('/verify-phone', [AuthController::class, 'verifyPhone']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
