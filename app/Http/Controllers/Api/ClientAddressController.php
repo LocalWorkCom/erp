@@ -64,11 +64,18 @@ class ClientAddressController extends Controller
             $user = Auth::user();
 
             $validator = Validator::make($request->all(), [
-                "address" => "required|string",
-                "city" => "required|string",
-                "state" => "required|string",
-                "postal_code" => "nullable|string",
-                "is_default" => "nullable|integer"
+                'address' => 'required|string',
+                'city' => 'required|string',
+                'state' => 'required|string',
+                'postal_code' => 'nullable|string',
+                'is_default' => 'nullable|integer',
+                'address_type' => 'nullabel|in:apartment,villa,office',
+                'building' => 'nullable',
+                'floor_number' => 'nullable|integre',
+                'apartment_number' => 'nullable|integer',
+                'notes' => 'nullable|string',
+                'country_code' => 'nullable|string',
+                'address_phone' => 'nullable|string'
             ]);
 
             if ($validator->fails()) {
@@ -80,8 +87,15 @@ class ClientAddressController extends Controller
             $clientAddress->address = $request->address;
             $clientAddress->city = $request->city;
             $clientAddress->state = $request->state;
-            $clientAddress->postal_code = $request->postal_code ?? null;
-            $clientAddress->is_default = $request->is_default ?? 0;
+            $clientAddress->address_type = $request->address_type;
+            $clientAddress->building = $request->building;
+            $clientAddress->floor_number = $request->floor_number;
+            $clientAddress->apartment_number = $request->apartment_number;
+            $clientAddress->notes = $request->notes;
+            $clientAddress->country_code = $request->country_code ?? $user->country_code;
+            $clientAddress->address_phone = $request->address_phone ?? $user->phone;
+            $clientAddress->postal_code = $request->postal_code;
+            $clientAddress->is_default = $request->is_default;
 
             $clientAddress->save();
 
@@ -98,11 +112,18 @@ class ClientAddressController extends Controller
             $lang = $request->header('lang', 'ar');
 
             $request->validate([
-                "address" => "nullable|string",
-                "city" => "nullable|string",
-                "state" => "nullable|string",
-                "postal_code" => "nullable|string",
-                "is_default" => "nullable|integer"
+                'address' => 'nullable|string',
+                'city' => 'nullable|string',
+                'state' => 'nullable|string',
+                'postal_code' => 'nullable|string',
+                'is_default' => 'nullable|integer',
+                'address_type' => 'nullabel|in:apartment,villa,office',
+                'building' => 'nullable',
+                'floor_number' => 'nullable|integre',
+                'apartment_number' => 'nullable|integer',
+                'notes' => 'nullable|string',
+                'country_code' => 'nullable|string',
+                'address_phone' => 'nullable|string'
             ]);
 
             $clientAddress = ClientAddress::findOrFail($id);
@@ -111,6 +132,13 @@ class ClientAddressController extends Controller
             $clientAddress->state = $request->state ?? $clientAddress->state;
             $clientAddress->postal_code = $request->postal_code ?? $clientAddress->postal_code;
             $clientAddress->is_default = $request->is_default ?? $clientAddress->is_default;
+            $clientAddress->state = $request->address_type;
+            $clientAddress->state = $request->building;
+            $clientAddress->state = $request->floor_number;
+            $clientAddress->state = $request->apartment_number;
+            $clientAddress->state = $request->notes;
+            $clientAddress->country_code = $request->country_code ?? $clientAddress->country_code;
+            $clientAddress->address_phone = $request->address_phone ?? $clientAddress->address_phone;
 
             $clientAddress->save();
 
