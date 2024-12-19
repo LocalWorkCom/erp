@@ -64,8 +64,26 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="ms-auto mt-md-0 mt-2 d-flex justify-content-end">
-                            <button class="btn btn-secondary me-2" onclick="printInvoice()">Print<i
-                                    class="ri-printer-line ms-1 align-middle d-inline-flex"></i></button>
+                            <div class="dropdown me-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="printDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Print Options
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="printDropdown">
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="printReceipt('customer_delivery_print')">Customer Receipt
+                                            (Delivery)</a></li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="printReceipt('customer_dinein_print')">Customer Receipt (Dine In)</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="printReceipt('customer_takeaway_print')">Customer Receipt
+                                            (Takeaway)</a></li>
+                                    <li><a class="dropdown-item" href="#"
+                                            onclick="printReceipt('delivery_print')">Delivery
+                                            Receipt</a></li>
+                                </ul>
+                            </div>
                             <button class="btn btn-primary">
                                 <a href="{{ route('order.download', $order->id) }}"target="_blank">
                                     Save As PDF<i class="ri-file-pdf-line ms-1 align-middle d-inline-flex"></i>
@@ -76,7 +94,7 @@
                         <div class="card custom-card printable-area mt-4">
                             <div class="card-header d-md-flex d-block">
                                 <div>
-                                    <img src="{{ asset('build/assets/images/brand-logos/desktop.png') }}" alt="Logo"
+                                    <img src="{{ asset('build/assets/images/brand-logos/favicon.ico') }}" alt="Logo"
                                         class="invoice-logo">
                                 </div>
                                 <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
@@ -192,56 +210,16 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        function printInvoice() {
-            const printableArea = document.querySelector('.printable-area');
+        function printReceipt(type) {
+            const orderId = {{ $order->id }};
+            const baseUrl = @json(route('order.print', ['id' => ':id', 'type' => ':type']));
+            const url = baseUrl.replace(':id', orderId).replace(':type', type);
 
-            if (printableArea) {
-                const printWindow = window.open('', '', 'width=800,height=600');
-
-                printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Print Invoice</title>
-                 
-                    <style>
-                        @media print {
-                            body {
-                                font-family: Arial, sans-serif;
-                                color: #000;
-                                background: #fff;
-                                margin: 0;
-                            }
-                            .printable-area {
-                                width: 100%;
-                                padding: 20px;
-                            }
-                            .page-header-breadcrumb, .card-footer, .btn {
-                                display: none;
-                            }
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                            }
-                            table th, table td {
-                                border: 1px solid #ddd;
-                                padding: 8px;
-                                text-align: left;
-                            }
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${printableArea.innerHTML}
-                </body>
-            </html>
-        `);
-
-                printWindow.document.close();
+            const printWindow = window.open(url, '_blank');
+            if (printWindow) {
                 printWindow.focus();
-                printWindow.print();
-                printWindow.close();
             } else {
-                console.error('Printable area not found.');
+                alert('Failed to open the print window. Please check your pop-up blocker settings.');
             }
         }
     </script>

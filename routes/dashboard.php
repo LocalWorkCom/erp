@@ -420,7 +420,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.detail.change');
 
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
-    Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
+    Route::get('/order/invoice/{id}', [OrderController::class, 'showInvoice'])->name('order.invoice');
+    Route::get('/order/print/{id}/{type}', [OrderController::class, 'printReceipt'])->name('order.print');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
