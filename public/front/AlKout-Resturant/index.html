@@ -70,7 +70,7 @@
               <a class="nav-link" href="shop.html">قائمة الطعام</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">تواصل معنا</a>
+              <a class="nav-link" href="./contact-us.html">تواصل معنا</a>
             </li>
 
             <li class="nav-item">
@@ -118,7 +118,7 @@
   <main>
     <section class="location-pop-up">
       <div id="modal" class="modal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header border-0">
               <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -127,8 +127,8 @@
               <h2>السماح للموقع بتحديد موقعك؟</h2>
             </div>
             <div class="modal-footer d-flex flex-column border-0">
-              <button type="button" class="btn" data-bs-dismiss="modal">سماح</button>
-              <button type="button" class="btn reversed main-color">حدد على الخريطة </button>
+              <button type="button" class="btn w-100" data-bs-dismiss="modal">سماح</button>
+              <button type="button" class="btn w-100 reversed main-color">حدد على الخريطة </button>
             </div>
           </div>
         </div>
@@ -532,9 +532,9 @@
               <p class="text-center">
                 <small>
                   <span class="text-muted">عند انشاء حساب انت توافق علي</span>
-                  <a href="#" class="main-color text-decoration-underline" aria-label="سياسة الخصوصية والشروط والأحكام">
-                    سياسة الخصوصية و الشروط و الاحكام
-                  </a>
+                 
+                    <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و  <a class="main-color text-decoration-underline" href="./policy.html">  الشروط و الاحكام</a>
+            
                 </small>
               </p>
             </div>
@@ -711,17 +711,17 @@
                       عيش مع نصف دجاجه يقدم مع معبوج أخضر ومعبوج أحمر ودقوس او مرق باميه
                     </small>
                     <h4 class="fw-bold"> 300 ج . م</h4>
-                    <div class="qty mt-3 justify-content-center">
-                      <span class="pro-dec">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
+                    <div class="qty mt-3 d-flex justify-content-center align-items-center">
+                      <span class="pro-dec me-3" onclick="decreaseQuantity()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                       </span>
-                      <span class="num">
-                          3
+                      <span class="num fs-4" id="quantity">1</span>
+                      <span class="pro-inc ms-3" onclick="increaseQuantity()">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
                       </span>
-                      <span class="pro-inc">
-                          <i class="fa fa-plus" aria-hidden="true"></i>
-                      </span>
-                  </div>
+                    </div>
+                   
+                                        
                   </figcaption>
                 </figure>
               </div>

@@ -2,23 +2,24 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Models\ProductLimit;
-use App\Models\ProductImage;
-use App\Models\ProductTransaction;
-use App\Models\Category;
+use App\Models\Unit;
 use App\Models\Brand;
-use App\Models\ProductColor;
+use App\Models\Store;
+use App\Models\Product;
+use App\Models\Category;
 use App\Models\ProductSize;
 use App\Models\ProductUnit;
-use App\Models\Store;
+use App\Models\ProductColor;
+use App\Models\ProductImage;
+use App\Models\ProductLimit;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
+use App\Models\ProductTransaction;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\App;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Models\Unit;
 
 class ProductService
 {
@@ -474,12 +475,29 @@ class ProductService
     public function saveProductSizes(Request $request, $productId)
     {
         // Validate the sizes
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'sizes.*.size_id' => 'required|exists:sizes,id',
-            'sizes.*.code_size' => 'required|string|unique:product_sizes,code_size',
+            // 'sizes.*.code_size' => 'required|string|unique:product_sizes,code_size',
             'product_size_id' => 'nullable|array',  // Ensure product_size_id is an array if passed
-        ]);
+               'sizes.*.code_size' => [
+                    'required',
+                    'string',
+                    Rule::unique('product_sizes', 'code_size')->where(function ($query) {
+                        return $query->whereNull('deleted_at'); // Ignore soft-deleted records
+                    }),
+                ],
+            ]);
 
+            if ($validator->fails()) {
+                // Check for unique code error specifically
+                if ($validator->errors()->has('code_size')) {
+                    return CustomRespondWithBadRequest('Duplicate code_size are submitted.');
+                }
+    
+                // Return other validation errors
+                return RespondWithBadRequestData($this->lang, $validator->errors());
+            }
+    
         $product_size_ids = $request->product_size_id; // This is an array of product size IDs, or null if creating new sizes
 
         // Get all the existing product sizes for the given product

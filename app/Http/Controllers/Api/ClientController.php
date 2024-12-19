@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -37,9 +38,20 @@ class ClientController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string',
-            "email" => "nullable|email|unique:users,email," . $user->id,
-            "phone" => "nullable|string|unique:users,phone," . $user->id,
-            'city' => 'nullable|string',
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('users')->ignore($user->id, 'id'),
+            ],
+            'country_code' => 'nullable|string',
+            'country_id' => 'nullable|exists:countries,id',
+            'phone' => [
+                'nullable',
+                'string',
+                Rule::unique('users')->ignore($user->id, 'id')->where(function ($query) use ($request) {
+                    return $query->where('country_code', $request->country_code);
+                }),
+            ],
             'date_of_birth' => 'nullable|date',
         ]);
 

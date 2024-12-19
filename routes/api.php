@@ -86,8 +86,7 @@ use App\Http\Controllers\Api\BioTimeController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\EmployeeDeviceController;
 use App\Http\Controllers\Api\AddonCategoryController;
-
-
+use App\Http\Controllers\API\ClientAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -254,6 +253,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get("client/orders", [ClientController::class, "listOrders"]);
         Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
         Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+    });
+
+    Route::group(['prefix' => 'address'], function () {
+        Route::get("/", [ClientAddressController::class, "index"]);
+        Route::get("show/{id}", [ClientAddressController::class, "show"]);
+        Route::post('store', [ClientAddressController::class, 'store']);
+        Route::put('update/{id}', [ClientAddressController::class, 'update']);
+        Route::delete('delete/{id}', [ClientAddressController::class, 'destroy']);
+        Route::post('restore/{id}', [ClientAddressController::class, 'restore']);
     });
 
 

@@ -235,7 +235,22 @@ z
 
 
 // ********************************************* 
-
+//  product quantity 
+let quantity = 1;
+function increaseQuantity() {
+  quantity++;
+  updateQuantityDisplay();
+}
+function decreaseQuantity() {
+  if (quantity > 0) {
+    quantity--;
+    updateQuantityDisplay();
+  }
+}
+function updateQuantityDisplay() {
+  document.getElementById('quantity').textContent = quantity;
+}
+// ************************************************** 
 // eye password hide and show 
 const passwordInput = document.getElementById('passwordInput');
 const togglePasswordButton = document.getElementById('togglePassword');

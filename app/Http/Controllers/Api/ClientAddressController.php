@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ClientAddressController extends Controller
 {
@@ -15,20 +17,37 @@ class ClientAddressController extends Controller
             $lang = $request->header('lang', 'ar');
             $withTrashed = $request->query('withTrashed', false);
 
-            $addresses = $withTrashed ? ClientAddress::withTrashed()->get() : ClientAddress::all();
+            $user = Auth::user();
+
+            if (!$user) {
+                return RespondWithBadRequestData($lang, 3);
+            }
+
+            $addresses = $withTrashed
+                ? ClientAddress::where('user_id', $user->id)->withTrashed()->get()
+                : ClientAddress::where('user_id', $user->id)->get();
 
             return ResponseWithSuccessData($lang, $addresses, 1);
         } catch (\Exception $e) {
-            Log::error('Error fetching brands: ' . $e->getMessage());
+            Log::error('Error fetching addresses: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function show(Request $request, $id)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $address = ClientAddress::withTrashed()->findOrFail($id);
+            $user = Auth::user();
+
+            if (!$user) {
+                return RespondWithBadRequestData($lang, 3);
+            }
+
+            $address = ClientAddress::where('user_id', $user->id)
+                ->withTrashed()
+                ->findOrFail($id);
 
             return ResponseWithSuccessData($lang, $address, 1);
         } catch (\Exception $e) {
@@ -37,46 +56,36 @@ class ClientAddressController extends Controller
         }
     }
 
+
     public function store(Request $request)
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
+            $user = Auth::user();
 
-            $request->validate([
-                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
-                'description_ar' => 'nullable|string',
-                'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+            $validator = Validator::make($request->all(), [
+                "address" => "required|string",
+                "city" => "required|string",
+                "state" => "required|string",
+                "postal_code" => "nullable|string",
+                "is_default" => "nullable|integer"
             ]);
 
-            $brandData = [
-                'name_ar' => $request->name_ar,
-                'name_en' => $request->name_en,
-                'description_ar' => $request->description_ar,
-                'description_en' => $request->description_en,
-                'is_active' => $request->is_active,
-                'created_by' => auth()->id(),
-            ];
-
-            if ($request->hasFile('logo')) {
-                $logoPath = $request->file('logo')->store('brands', 'public');
-                $brandData['logo_path'] = $logoPath;
+            if ($validator->fails()) {
+                return respondError('Validation Error.', 400, $validator->errors());
             }
-            // Create Client Address
-            // $clientAddress = new ClientAddress();
-            // $clientAddress->user_id = $user->id;
-            // $clientAddress->address = $request->address;
-            // $clientAddress->city = $request->city;
-            // $clientAddress->state = $request->state;
-            // $clientAddress->postal_code = $request->postal_code ?? null;
-            // $clientAddress->save();
 
-            $brand = Brand::create($brandData);
+            $clientAddress = new ClientAddress();
+            $clientAddress->user_id = $user->id;
+            $clientAddress->address = $request->address;
+            $clientAddress->city = $request->city;
+            $clientAddress->state = $request->state;
+            $clientAddress->postal_code = $request->postal_code ?? null;
+            $clientAddress->is_default = $request->is_default ?? 0;
 
-            return ResponseWithSuccessData($lang, $brand, 1);
+            $clientAddress->save();
+
+            return ResponseWithSuccessData($lang, $clientAddress, 1);
         } catch (\Exception $e) {
             Log::error('Error creating brand: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
@@ -87,41 +96,27 @@ class ClientAddressController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $request->merge(['is_active' => filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN)]);
 
             $request->validate([
-                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
-                'description_ar' => 'nullable|string',
-                'description_en' => 'nullable|string',
-                'is_active' => 'required|boolean',
-                'logo' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+                "address" => "nullable|string",
+                "city" => "nullable|string",
+                "state" => "nullable|string",
+                "postal_code" => "nullable|string",
+                "is_default" => "nullable|integer"
             ]);
 
-            $brand = Brand::findOrFail($id);
+            $clientAddress = ClientAddress::findOrFail($id);
+            $clientAddress->address = $request->address ?? $clientAddress->address;
+            $clientAddress->city = $request->city ?? $clientAddress->city;
+            $clientAddress->state = $request->state ?? $clientAddress->state;
+            $clientAddress->postal_code = $request->postal_code ?? $clientAddress->postal_code;
+            $clientAddress->is_default = $request->is_default ?? $clientAddress->is_default;
 
-            $brandData = [
-                'name_ar' => $request->name_ar,
-                'name_en' => $request->name_en,
-                'description_ar' => $request->description_ar,
-                'description_en' => $request->description_en,
-                'is_active' => $request->is_active,
-                'modified_by' => auth()->id(),
-            ];
+            $clientAddress->save();
 
-            if ($request->hasFile('logo')) {
-                if ($brand->logo_path && Storage::exists($brand->logo_path)) {
-                    Storage::delete($brand->logo_path);
-                }
-                $logoPath = $request->file('logo')->store('brands', 'public');
-                $brandData['logo_path'] = $logoPath;
-            }
-
-            $brand->update($brandData);
-
-            return ResponseWithSuccessData($lang, $brand, 1);
+            return ResponseWithSuccessData($lang, $clientAddress, 1);
         } catch (\Exception $e) {
-            Log::error('Error updating brand: ' . $e->getMessage());
+            Log::error('Error updating Address: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
@@ -130,13 +125,13 @@ class ClientAddressController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $brand = Brand::findOrFail($id);
-            $brand->update(['deleted_by' => auth()->id()]);
-            $brand->delete();
+            $address = ClientAddress::findOrFail($id);
+            $address->update(['deleted_by' => auth()->id()]);
+            $address->delete();
 
             return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
-            Log::error('Error deleting brand: ' . $e->getMessage());
+            Log::error('Error deleting address: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
@@ -145,10 +140,10 @@ class ClientAddressController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            $brand = Brand::withTrashed()->findOrFail($id);
-            $brand->restore();
+            $address = ClientAddress::withTrashed()->findOrFail($id);
+            $address->restore();
 
-            return ResponseWithSuccessData($lang, $brand, 1);
+            return ResponseWithSuccessData($lang, $address, 1);
         } catch (\Exception $e) {
             Log::error('Error restoring brand: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);

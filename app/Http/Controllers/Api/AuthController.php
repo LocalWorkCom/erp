@@ -10,11 +10,11 @@ use App\Models\Otp;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
-use Kreait\Firebase\Auth;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -26,10 +26,16 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => "required|email|unique:users",
-            'country_id' => 'required|exists:countries,id',
+            'country_id' => 'nullable|exists:countries,id',
             'country_code' => 'required|string',
             "password" => "required",
-            'phone' => 'required|unique:users,phone',
+            'phone' => [
+                'required',
+                'string',
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('country_code', $request->country_code);
+                }),
+            ],
             "date_of_birth" => "nullable|date",
 
         ]);
@@ -38,7 +44,6 @@ class AuthController extends Controller
             return respondError('Validation Error.', 400, $validator->errors());
         }
 
-        //  Create User
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -51,7 +56,6 @@ class AuthController extends Controller
 
         event(new UserRegistered($user));
 
-        // Create Client Details
         $clientDetail = new ClientDetail();
         $clientDetail->user_id = $user->id;
         $clientDetail->date_of_birth = $request->date_of_birth;
@@ -63,7 +67,7 @@ class AuthController extends Controller
     {
         try {
             $lang = $request->header('lang', 'ar');
-            App::setLocale($lang); // Set the locale based on the header
+            App::setLocale($lang);
 
             $messages = [
                 'email_or_phone.required' => 'البريد الإلكتروني أو رقم الهاتف مطلوب.',
@@ -71,7 +75,6 @@ class AuthController extends Controller
                 'email_or_phone.exists' => 'البريد الإلكتروني أو رقم الهاتف غير موجود.',
             ];
 
-            // Validate the request
             $validator = Validator::make($request->all(), [
                 "email_or_phone" => "required",
                 "password" => "required"
@@ -92,7 +95,6 @@ class AuthController extends Controller
 
             $credentials['password'] = $request->password;
 
-            // Attempt to authenticate the user
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
@@ -100,7 +102,7 @@ class AuthController extends Controller
 
                 $data = [
                     "access_token" => $token,
-                    'data' => $user
+                    'user' => $user
                 ];
 
                 return ResponseWithSuccessData($lang, $data, 12);
@@ -121,23 +123,37 @@ class AuthController extends Controller
 
         $messages = [
             "phone.required" => "رقم الهاتف مطلوب.",
-            "phone.exists" => "رقم الهاتف غير مسجل.",
+            "country_code.required" => "رمز البلد مطلوب.",
+            "phone.exists" => "رقم الهاتف مع رمز البلد غير مسجل.",
         ];
 
         $validator = Validator::make($request->all(), [
-            "phone" => "required|exists:users,phone",
+            "phone" => "required",
+            "country_code" => "required",
         ], $messages);
 
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
 
+        $userExists = User::where('phone', $request->phone)
+            ->where('country_code', $request->country_code)
+            ->exists();
+
+        if (!$userExists) {
+            return respondError($lang, "رقم الهاتف مع رمز البلد غير مسجل.");
+        }
+
         return response()->json([
             'status' => true,
             'message' => __('Phone verified successfully.'),
-            'data' => ['phone' => $request->phone],
+            'data' => [
+                'phone' => $request->phone,
+                'country_code' => $request->country_code,
+            ],
         ], 200);
     }
+
 
     public function resetPassword(Request $request)
     {
@@ -146,14 +162,16 @@ class AuthController extends Controller
 
         $messages = [
             "phone.required" => "رقم الهاتف مطلوب.",
-            "phone.exists" => "رقم الهاتف غير مسجل.",
+            "country_code.required" => "رمز البلد مطلوب.",
+            "phone.exists" => "رقم الهاتف مع رمز البلد غير مسجل.",
             "password.required" => "كلمة المرور الجديدة مطلوبة.",
             "password_confirm.required" => "تأكيد كلمة المرور مطلوب.",
             "password_confirm.same" => "تأكيد كلمة المرور يجب أن يطابق كلمة المرور الجديدة.",
         ];
 
         $validator = Validator::make($request->all(), [
-            "phone" => "required|exists:users,phone",
+            "phone" => "required",
+            "country_code" => "required",
             "password" => "required",
             "password_confirm" => "required|same:password",
         ], $messages);
@@ -162,7 +180,13 @@ class AuthController extends Controller
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        $user = User::where('phone', $request->phone)->first();
+        $user = User::where('phone', $request->phone)
+            ->where('country_code', $request->country_code)
+            ->first();
+
+        if (!$user) {
+            return respondError($lang, "رقم الهاتف مع رمز البلد غير مسجل.");
+        }
 
         // Check if the new password is the same as the old one
         if (Hash::check($request->password, $user->password)) {
@@ -174,7 +198,7 @@ class AuthController extends Controller
 
         $token = $user->createToken("MyApp")->accessToken;
 
-        $userData = $user->only(['id', 'name', 'email', 'phone']);
+        $userData = $user->only(['id', 'name', 'email', 'country_code', 'phone']);
         $success = [
             "token" => $token,
             "user" => $userData,
@@ -182,6 +206,8 @@ class AuthController extends Controller
 
         return ResponseWithSuccessData($lang, $success, 15);
     }
+
+
 
 
 

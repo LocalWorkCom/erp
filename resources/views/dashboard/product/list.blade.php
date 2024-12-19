@@ -81,11 +81,11 @@
                                                     width="100" height="100"></td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
-                                            <td>{{ $product->mainUnit->name_en }}</td>
-                                            <td>{{ $product->mainUnit->name_ar }}</td>
+                                            <td>{{ $product->mainUnit ? $product->mainUnit->name_en : 'N/A' }}</td>
+                                            <td>{{ $product->mainUnit ? $product->mainUnit->name_ar : 'N/A' }}</td>
                                             <td>@lang('product.' . ucfirst($product->type))</td>
-                                            <td>{{ $product->Category->name_en }}</td>
-                                            <td>{{ $product->Category->name_ar }}</td>
+                                            <td>{{ $product->Category ? $product->Category->name_en : 'N/A' }}</td>
+                                            <td>{{ $product->Category ? $product->Category->name_ar : 'N/A' }}</td>
                                             <td>{{ $product->barcode }}</td>
                                             <td>{{ $product->sku }}</td>
                                             @php
