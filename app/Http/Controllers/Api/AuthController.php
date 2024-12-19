@@ -142,7 +142,7 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+             return respondError('Validation Error.', 400, $validator->errors());
         }
 
         $userExists = User::where('phone', $request->phone)
@@ -150,7 +150,7 @@ class AuthController extends Controller
             ->exists();
 
         if (!$userExists) {
-            return RespondWithBadRequestWithData([
+            return respondError($messages["phone.exists"],403,[
                 "phone" => [$messages["phone.exists"]]
             ]);
         }
@@ -188,7 +188,7 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return respondError('Validation Error.', 400, $validator->errors());
         }
 
         $user = User::where('phone', $request->phone)
@@ -196,7 +196,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return RespondWithBadRequestWithData([
+            return respondError($messages["phone.exists"],403,[
                 "phone" => [$messages["phone.exists"]]
             ]);
         }
