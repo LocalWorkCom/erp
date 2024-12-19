@@ -23,38 +23,40 @@
   <section class="intro">
     <div class="container py-sm-5 py-4">
       <div class=" py-5 owl-slider owl-carousel owl-theme">
-        <div class="item">
-          <div class="row m-0 justify-content-center align-items-center">
-            <div class="col-md-6">
-              <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>
-              <p class="slide-text my-5 ">
-                يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك
-              </p>
-              <a href="#" class="btn">اطلب الان</a>
-            </div>
-            <div class="col-md-6">
-              <figure class="intro-img">
-                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/intro-plate.png') }}" alt="">
-              </figure>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="row m-0 justify-content-center align-items-center">
-            <div class="col-md-6">
-              <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>
-              <p class="slide-text my-5 ">
-                يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك
-              </p>
-              <a href="#" class="btn">اطلب الان</a>
-            </div>
-            <div class="col-md-6">
-              <figure class="intro-img">
-                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/intro-plate.png') }}" alt="">
-              </figure>
-            </div>
-          </div>
-        </div>
+          @foreach($sliders as $slider)
+              <div class="item">
+                  <div class="row m-0 justify-content-center align-items-center">
+                      <div class="col-md-6">
+                          <h1 class="slide-title">{{$slider->name_ar}}</h1>
+                          <p class="slide-text my-5 ">
+                              {{$slider->description_ar}}
+                          </p>
+                          <a href="#" class="btn">اطلب الان</a>
+                      </div>
+                      <div class="col-md-6">
+                          <figure class="intro-img">
+                              <img src="{{ asset($slider->image) }}" alt="">
+                          </figure>
+                      </div>
+                  </div>
+              </div>
+          @endforeach
+{{--        <div class="item">--}}
+{{--          <div class="row m-0 justify-content-center align-items-center">--}}
+{{--            <div class="col-md-6">--}}
+{{--              <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>--}}
+{{--              <p class="slide-text my-5 ">--}}
+{{--                يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك--}}
+{{--              </p>--}}
+{{--              <a href="#" class="btn">اطلب الان</a>--}}
+{{--            </div>--}}
+{{--            <div class="col-md-6">--}}
+{{--              <figure class="intro-img">--}}
+{{--                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/intro-plate.png') }}" alt="">--}}
+{{--              </figure>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+{{--        </div>--}}
       </div>
     </div>
     <!-- <div class="intro-curve"></div>
@@ -65,7 +67,7 @@
         <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
         <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
       </div> -->
-    </div>
+{{--    </div>--}}
   </section>
   <section class="categories pt-5">
     <div class="container px-0 py-sm-5 py-4">
@@ -144,51 +146,53 @@
   <section class="offers">
     <div class="container py-sm-5 py-4">
       <div class="row mx-0">
-        <div class="col-md-4">
-          <div class="item one row mx-0 p-4" data-aos="zoom-in">
-            <div class="col-md-5">
-              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate1.png') }}" alt="">
-            </div>
-            <div class="col-md-7">
-              <h2 class="main-color fw-bold "> خصم 20%</h2>
-              <h5 class="text-white pb-4">كبسة عربى بالفراخ</h5>
-              <a href="#" class="btn white">
-                <h4 class="fw-bold">اطلب الان</h4>
-              </a>
-            </div>
+          @foreach($discounts as $discount)
+              <div class="col-md-4">
+                  <div class="item one row mx-0 p-4" data-aos="zoom-in">
+                      <div class="col-md-5">
+                          <img class="offer-img" src="{{ asset($discount->dish->image) }}" alt="">
+                      </div>
+                      <div class="col-md-7">
+                          <h2 class="main-color fw-bold ">  خصم {{$discount->discount->type == 'percentage'?'%':'جنيه' }}{{ (int) $discount->discount->value }}</h2>
+                          <h5 class="text-white pb-4">{{$discount->dish->name_ar}}</h5>
+                          <a href="#" class="btn white">
+                              <h4 class="fw-bold">اطلب الان</h4>
+                          </a>
+                      </div>
 
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="item two row mx-0 p-4" data-aos="zoom-in">
-            <div class="col-md-5">
-              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-2.png') }}" alt="">
-            </div>
-            <div class="col-md-7">
-              <h2 class="text-white fw-bold"> خصم 30%</h2>
-              <h5 class="text-white pb-4"> زبيق مقلي</h5>
-              <a href="#" class="btn white">
-                <h4 class="fw-bold">اطلب الان</h4>
-              </a>
-            </div>
+                  </div>
+              </div>
+          @endforeach
+{{--        <div class="col-md-4">--}}
+{{--          <div class="item two row mx-0 p-4" data-aos="zoom-in">--}}
+{{--            <div class="col-md-5">--}}
+{{--              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-2.png') }}" alt="">--}}
+{{--            </div>--}}
+{{--            <div class="col-md-7">--}}
+{{--              <h2 class="text-white fw-bold"> خصم 30%</h2>--}}
+{{--              <h5 class="text-white pb-4"> زبيق مقلي</h5>--}}
+{{--              <a href="#" class="btn white">--}}
+{{--                <h4 class="fw-bold">اطلب الان</h4>--}}
+{{--              </a>--}}
+{{--            </div>--}}
 
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="item three row mx-0 p-4" data-aos="zoom-in">
-            <div class="col-md-5">
-              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-3.png') }}" alt="">
-            </div>
-            <div class="col-md-7">
-              <h2 class="main-color fw-bold "> خصم 25%</h2>
-              <h5 class="pb-4"> وجبه كفته كبير</h5>
-              <a href="#" class="btn ">
-                <h4 class="fw-bold">اطلب الان</h4>
-              </a>
-            </div>
+{{--          </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-md-4">--}}
+{{--          <div class="item three row mx-0 p-4" data-aos="zoom-in">--}}
+{{--            <div class="col-md-5">--}}
+{{--              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-3.png') }}" alt="">--}}
+{{--            </div>--}}
+{{--            <div class="col-md-7">--}}
+{{--              <h2 class="main-color fw-bold "> خصم 25%</h2>--}}
+{{--              <h5 class="pb-4"> وجبه كفته كبير</h5>--}}
+{{--              <a href="#" class="btn ">--}}
+{{--                <h4 class="fw-bold">اطلب الان</h4>--}}
+{{--              </a>--}}
+{{--            </div>--}}
 
-          </div>
-        </div>
+{{--          </div>--}}
+{{--        </div>--}}
       </div>
 
   </section>

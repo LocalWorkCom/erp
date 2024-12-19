@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Website\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Session;
 |
 */
 
-Route::get('/', function () {
-    return view('website.landing');
-})->name('home');
+//Route::get('/', function () {
+//    return view('website.landing');
+//})->name('home');
+
+Route::get('/', [HomeController::class, 'index'])->name('home');

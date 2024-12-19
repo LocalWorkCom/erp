@@ -17,17 +17,16 @@ class OfferDetailService
     public function __construct(Request $request)
     {
         $this->lang = $request->header('lang', 'ar');
-        if (!CheckToken()) {
-            return RespondWithBadRequest($this->lang, 5);
-        }
+
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        $details = OfferDetail::with('offer')->get();
+        $details = OfferDetail::where('offer_id',$id)->get();
+//        dd($details);
         return ResponseWithSuccessData($this->lang, OfferDetailResource::collection($details), 1);
     }
 

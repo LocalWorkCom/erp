@@ -95,6 +95,10 @@
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
+
+                                                <a href="{{ route('offerDetails.list', $offer->id) }}" class="btn btn-outline-teal btn-wave">
+                                                    @lang('offer.AddDetails') <i class="ri-add-box-line"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -133,19 +137,14 @@
 @endsection
 
 <script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
-
     function delete_item(id) {
         Swal.fire({
-            title: 'تنبيه',
-            text: 'هل انت متاكد من انك تريد ان تحذف هذا الفرع',
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'نعم, احذف',
-            cancelButtonText: 'إلغاء',
-            confirmButtonColor: '#3085d6'
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
         }).then((result) => {
             if (result.isConfirmed) {
                 var form = document.getElementById('delete-form-' + id);

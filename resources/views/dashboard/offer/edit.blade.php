@@ -40,10 +40,25 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form method="POST" action="{{ route('offer.update', $offer->id) }}" class="needs-validation" novalidate>
+                            <form method="POST" action="{{ route('offer.update', $offer->id) }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 @method('PUT') <!-- Use PUT or PATCH for updates -->
                                 <div class="row gy-4">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label class="form-label">@lang('offer.Active')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="is_active" value="1"
+                                                    {{ old('is_active', $offer->is_active) == 1 ? 'checked' : '' }}>
+                                                <label class="form-check-label">@lang('category.yes')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="is_active" value="0"
+                                                    {{ old('is_active', $offer->is_active) == 0 ? 'checked' : '' }}>
+                                                <label class="form-check-label">@lang('category.no')</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Arabic Name -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.ArabicName')</label>
@@ -64,7 +79,74 @@
                                         </div>
                                     </div>
 
-{{--                                    <!-- Country -->--}}
+                                    <!-- Arabic Desc -->
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.ArabicDescription')</label>
+                                        <textarea class="form-control" name="description_ar" placeholder="@lang('offer.ArabicDescription')" required>{{ old('description_ar', $offer->description_ar) }}</textarea>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterArabicDesc')
+                                        </div>
+                                    </div>
+
+                                    <!-- English Desc -->
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.EnglishDescription')</label>
+                                        <textarea class="form-control" name="description_en" placeholder="@lang('offer.EnglishDescription')" required>{{ old('description_en', $offer->description_en) }}</textarea>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterEnglishDesc')
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label class="form-label">@lang('offer.StartDate')</label>
+                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') ?? $offer->start_date }}">
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label class="form-label">@lang('offer.EndDate')</label>
+                                        <input type="date" class="form-control" name="end_date" value="{{ old('end_date') ?? $offer->end_date }}">
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="image_ar" class="form-label">@lang('offer.ImageAr')</label>
+
+                                        <!-- Show the current image -->
+                                        @if($offer->image_ar)
+                                            <div class="mb-2">
+                                                <img src="{{ asset($offer->image_ar) }}" alt="Current Image" class="img-thumbnail" style="max-height: 150px; max-width: 150px;">
+                                            </div>
+                                        @endif
+
+                                        <!-- File input for new upload -->
+                                        <input class="form-control" type="file" id="image_ar" name="image_ar">
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterImage')
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="image_en" class="form-label">@lang('offer.ImageEn')</label>
+
+                                        <!-- Show the current image -->
+                                        @if($offer->image_en)
+                                            <div class="mb-2">
+                                                <img src="{{ asset($offer->image_en) }}" alt="Current Image" class="img-thumbnail" style="max-height: 150px;">
+                                            </div>
+                                        @endif
+
+                                        <!-- File input for new upload -->
+                                        <input class="form-control" type="file" id="image_en" name="image_en">
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterImage')
+                                        </div>
+                                    </div>
+
+                                    {{--                                    <!-- Country -->--}}
 {{--                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">--}}
 {{--                                        <label class="form-label">@lang('offer.Country')</label>--}}
 {{--                                        <select class="form-control select2" name="country_id" required>--}}

@@ -522,24 +522,14 @@
                             <li class="slide side-menu__label1">
                                 <a href="javascript:void(0)">@lang('sidebar.Offers && Discounts') </a>
                             </li>
-                            <li class="slide has-sub">
-                                <a href="javascript:void(0);" class="side-menu__item">
-                                    <span class="side-menu__label">@lang('sidebar.Offers')</span>
-                                    <i class="fe fe-chevron-right side-menu__angle"></i></a>
-                                <ul class="slide-menu child2">
-                                    @can('view offers')
-                                        <li class="slide">
-                                            <a href="{{ route('offers.list') }}" class="side-menu__item"><span class="side-menu__label">@lang('sidebar.Offers')</span>
-                                            </a>
-                                        </li>
-                                        <li class="slide">
-                                            <a href="{{ route('offerDetails.list') }}" class="side-menu__item"><span class="side-menu__label">@lang('sidebar.OfferDetails')</span>
-                                            </a>
-                                        </li>
-                                    @endcan
+                            @can('view offers')
+                                <li class="slide">
+                                    <a href="{{ route('offers.list') }}" class="side-menu__item">
+                                        <span class="side-menu__label">@lang('sidebar.Offers') </span>
+                                    </a>
+                                </li>
+                            @endcan
 
-                                </ul>
-                            </li>
                             @can('view coupons')
                                 <li class="slide">
                                     <a href="{{ route('coupons.list') }}" class="side-menu__item">

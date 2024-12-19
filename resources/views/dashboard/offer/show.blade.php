@@ -30,49 +30,49 @@
                         </div>
                         <div class="card-body">
                             <div class="row gy-4">
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <label class="form-label">@lang('offer.ArabicName')</label>
+                                    <p class="form-text">{{ $offer->is_active == 0 ? __('category.no') : __('category.yes')  }}</p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('offer.ArabicName')</label>
                                     <p class="form-text">{{ $offer->name_ar }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('offer.EnglishName')</label>
                                     <p class="form-text">{{ $offer->name_en }}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.ArabicAddress')</label>
-                                    <p class="form-text">{{ $offer->address_ar == null ? __('category.none') :  $offer->address_ar}}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.ArabicDesc')</label>
+                                    <p class="form-text">{{ $offer->description_ar == null ? __('category.none') :  $offer->description_ar}}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.EnglishAddress')</label>
-                                    <p class="form-text">{{ $offer->address_en == null ? __('category.none') :  $offer->address_en}}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.EnglishDesc')</label>
+                                    <p class="form-text">{{ $offer->description_en == null ? __('category.none') :  $offer->description_en}}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.Latitude')</label>
-                                    <p class="form-text">{{ $offer->latitute == null ? __('category.none') :  $offer->latitute}}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.StartDate')</label>
+                                    <p class="form-text">{{ $offer->start_date == null ? __('category.none') :  $offer->start_date}}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.Longitude')</label>
-                                    <p class="form-text">{{ $offer->longitute == null ? __('category.none') :  $offer->longitute}}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.EndDate')</label>
+                                    <p class="form-text">{{ $offer->end_date == null ? __('category.none') :  $offer->end_date}}</p>
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.Phone')</label>
-                                    <p class="form-text">{{ $offer->phone == null ? __('category.none') : $offer->phone }}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.ImageAr')</label>
+                                    @if($offer->image_ar)
+                                        <div class="mb-2">
+                                            <img src="{{ asset($offer->image_ar) }}" alt="Current Image" class="img-thumbnail" style="max-height: 150px;">
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.Email')</label>
-                                    <p class="form-text">{{ $offer->email == null ? __('category.none') : $offer->email }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.ManagerName')</label>
-                                    <p class="form-text">{{ $offer->manager_name == null ? __('category.none') : $offer->manager_name }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.OpeningHour')</label>
-                                    <p class="form-text">{{ $offer->opening_hour == null ? __('category.none') : $offer->opening_hour }}</p>
-                                </div>
-                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                    <label class="form-label">@lang('offer.ClosingHour')</label>
-                                    <p class="form-text">{{ $offer->closing_hour == null ? __('category.none') : $offer->closing_hour }}</p>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.ImageEn')</label>
+                                    @if($offer->image_en)
+                                        <div class="mb-2">
+                                            <img src="{{ asset($offer->image_en) }}" alt="Current Image" class="img-thumbnail" style="max-height: 150px;">
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

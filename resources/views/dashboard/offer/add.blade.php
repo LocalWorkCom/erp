@@ -42,9 +42,23 @@
                                     </div>
                                 @endforeach
                             @endif
-                            <form method="POST" action="{{ route('offer.store') }}" class="needs-validation" novalidate>
+                            <form method="POST" action="{{ route('offer.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="row gy-4">
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label class="form-label">@lang('offer.Active')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="is_active" value="1" checked>
+                                                <label class="form-check-label">@lang('category.yes')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="is_active" value="0">
+                                                <label class="form-check-label">@lang('category.no')</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Arabic Name -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.ArabicName')</label>
@@ -92,30 +106,17 @@
 {{--                                    </div>--}}
 
                                     <!-- Opening and Closing Hours -->
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.StartDate')</label>
                                         <input type="date" class="form-control" name="start_date" value="{{ old('start_date') }}">
                                     </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.EndDate')</label>
                                         <input type="date" class="form-control" name="end_date" value="{{ old('start_date') }}">
                                     </div>
 
-                                    <!-- Has Kids Area -->
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                        <label class="form-label">@lang('offer.Active')</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_active" value="1" checked>
-                                            <label class="form-check-label">@lang('category.yes')</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_active" value="0">
-                                            <label class="form-check-label">@lang('category.no')</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                        <label for="input-file" class="form-label">@lang('category.Image')</label>
+                                        <label for="input-file" class="form-label">@lang('offer.ImageAr')</label>
                                         <input class="form-control" type="file" id="image" name="image_ar" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -125,8 +126,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                        <label for="input-file" class="form-label">@lang('category.Image')</label>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="input-file" class="form-label">@lang('offer.ImageEn')</label>
                                         <input class="form-control" type="file" id="image" name="image_en" required>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
