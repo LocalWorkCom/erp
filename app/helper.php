@@ -245,7 +245,7 @@ function UploadFile($path, $image, $model, $request)
 
     // Generate the asset path and remove the leading slash if exists
     $filePath = asset($path) . '/' . $filename;
-    $filePath = url($filePath, '/'); // Remove the first slash if present
+    $filePath = url($filePath); // Remove the first slash if present
 
     // Save the file path to the model
     $model->$image = $filePath;
@@ -823,13 +823,17 @@ function GetCurrencyCodes()
     $Currencies = Country::select('currency_code', 'id')->get();
     return $Currencies;
 }
-
+function GetCountries()
+{
+    $countries = Country::select('phone_code', 'id','flag')->get();
+    return $countries;
+}
 function AddBranchMenu($branch_id)
 {
     $add_dish_categories = AddDishCategories($branch_id);
     $add_dishes = AddDishes($branch_id);
     $add_addons = AddAddons($branch_id);
-    $add_sizes = AddSizes($branch_id);   
+    $add_sizes = AddSizes($branch_id);
 }
 
 function AddDishCategories($branch_id)
@@ -855,11 +859,11 @@ function AddDishes($branch_id)
                 ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
                 [
                     'dish_category_id' => $get_dish->category_id,
-                    'branch_menu_category_id' => $get_branch_menu_category->id, 
-                    'cuisine_id' => $get_dish->cuisine_id, 
-                    'price' => $get_dish->price, 
-                    'has_size' => $get_dish->has_sizes, 
-                    'has_addon' => $get_dish->has_addon, 
+                    'branch_menu_category_id' => $get_branch_menu_category->id,
+                    'cuisine_id' => $get_dish->cuisine_id,
+                    'price' => $get_dish->price,
+                    'has_size' => $get_dish->has_sizes,
+                    'has_addon' => $get_dish->has_addon,
                     'is_active' => 1,
                     'created_by' => auth()->user()->id
                 ]
@@ -879,10 +883,10 @@ function AddAddons($branch_id)
                 ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
                 [
                     'addon_category_id' => $get_addon->addon_category_id,
-                    'quantity' => $get_addon->quantity, 
-                    'price' => $get_addon->price, 
-                    'min_addons' => $get_addon->min_addons, 
-                    'max_addons' => $get_addon->max_addons, 
+                    'quantity' => $get_addon->quantity,
+                    'price' => $get_addon->price,
+                    'min_addons' => $get_addon->min_addons,
+                    'max_addons' => $get_addon->max_addons,
                     'is_active' => 1,
                     'created_by' => auth()->user()->id
                 ]
@@ -900,14 +904,14 @@ function AddSizes($branch_id)
             $branch_menu_category = BranchMenuSize::firstOrCreate(
                 ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
                 [
-                    'price' => $get_size->price, 
-                    'default_size' => $get_size->default_size, 
+                    'price' => $get_size->price,
+                    'default_size' => $get_size->default_size,
                     'is_active' => 1,
                     'created_by' => auth()->user()->id
                 ]
             );
         }
-    } 
+    }
 }
 
 function respondError($error, $code, $errorMessages = [])
@@ -924,6 +928,7 @@ function respondError($error, $code, $errorMessages = [])
         'status' => false,
         'message' => $error,
         'data' => null,
+        'errorData'=>null
     ];
 
 
@@ -933,4 +938,14 @@ function respondError($error, $code, $errorMessages = [])
 
 
     return response()->json($response, $code1);
+}
+ function getMostDishesOrdered($limit = 5)
+{
+    return Dish::select('dishes.id', 'dishes.name')
+        ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+        ->groupBy('dishes.id', 'dishes.name_ar')
+        ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->limit($limit)
+        ->get();
 }

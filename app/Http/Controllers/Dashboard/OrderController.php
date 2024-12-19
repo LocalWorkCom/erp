@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -75,17 +76,32 @@ class OrderController extends Controller
     }
     public function changeStatus(Request $request)
     {
-        $order_tracking = new  OrderTracking;
-        $order_tracking->order_id = $request->order_id;
-        $order_tracking->order_status = $request->status;
-        $order_tracking->created_by = Auth::guard('admin')->user()->id;
-        $order_tracking->time = date('H:i a');
-        $order_tracking->save();
-        if ($request->status == 'completed' || $request->status == 'cancelled' || $request->status == 'in_progress') {
+        $cancel_time = getSetting('time_cancellation');
+        $order = Order::find($request->order_id);
+        $minutesDifference = $order->created_at->diffInMinutes(Carbon::now());
 
-            $order = Order::find($request->order_id);
-            $order->status = $request->status;
-            $order->save();
+        if ($request->status == 'cancelled') {
+            if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id)) {
+                $order_tracking = new  OrderTracking;
+                $order_tracking->order_id = $request->order_id;
+                $order_tracking->order_status = $request->status;
+                $order_tracking->created_by = Auth::guard('admin')->user()->id;
+                $order_tracking->time = date('H:i a');
+                $order_tracking->save();
+                $order->status = $request->status;
+                $order->save();
+            }
+        } else {
+            if ($request->status == 'completed' || $request->status == 'in_progress') {
+                $order_tracking = new  OrderTracking;
+                $order_tracking->order_id = $request->order_id;
+                $order_tracking->order_status = $request->status;
+                $order_tracking->created_by = Auth::guard('admin')->user()->id;
+                $order_tracking->time = date('H:i a');
+                $order_tracking->save();
+                $order->status = $request->status;
+                $order->save();
+            }
         }
         return true;
     }
@@ -159,19 +175,20 @@ class OrderController extends Controller
         $URL = URL::to('/');
         $order['qr'] = QrCode::format('png')->size(80)->errorCorrection('H')->generate(route('order.change.status', $order->id));
         $order['qr'] = base64_encode($order['qr']);  // base64 encoding the PNG image
-        
+
         // Generate QR code as a string (SVG format)
         // $order['site_logo'] = $URL . '/build/assets/images/brand-logos/desktop.png';
         $order['site_logo'] = asset('build/assets/images/brand-logos/desktop.png');
 
         // Load the PDF view with the order and QR code
         $pdf = Pdf::loadView('dashboard.order.pdf', compact('order'));
-    
+        return $pdf->download($order->order_number . '.pdf');
+
         // Stream the generated PDF (you can also download it using download() method)
-        return $pdf->stream();
+        // return $pdf->stream();
     }
-    
-    
+
+
     // public function downloadOrder($id)
     // {
     //     $lang = App::getLocale(); // Get the current locale

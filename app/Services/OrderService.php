@@ -53,17 +53,17 @@ class OrderService
     {
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
-        if (Auth::guard('api')->user()->flag == 0) {
-            return RespondWithBadRequest($lang, 5);
-        } else {
-            $UserType =  CheckUserType();
-            $client_id = Auth::guard('api')->user()->id;
-            if ($UserType != '') {
-                $unknown_user = User::where('flag', $UserType)->first()->id;
-                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
-            }
-            $created_by = Auth::guard('api')->user()->id;
+        // if (Auth::guard('api')->user()->flag == 0) {
+        //     return RespondWithBadRequest($lang, 5);
+        // } else {
+        $UserType =  CheckUserType();
+        $client_id = Auth::guard('api')->user()->id;
+        if ($UserType != '') {
+            $unknown_user = User::where('flag', $UserType)->first()->id;
+            $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
         }
+        $created_by = Auth::guard('api')->user()->id;
+        // }
         $discount = null;
         $total_price_befor_tax = 0;
         $total_addon_price_befor_tax = 0;
@@ -83,8 +83,8 @@ class OrderService
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|in:Takeaway,Online,InResturant,Delivery,CallCenter',  // Enforce enum-like values
             'note' => 'nullable|string', // Optional but must be a string
-            'use_point' => 'nullable|integer', // Optional but must be a string
-            'delivery_fees' => 'nullable|numeric', // Must be a number
+            // 'use_point' => 'nullable|integer', // Optional but must be a string
+            // 'delivery_fees' => 'nullable|numeric', // Must be a number
             'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
             'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
             'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
@@ -377,43 +377,43 @@ class OrderService
 
         return ResponseWithSuccessData($lang, $order, 1);
     }
-    public function cancel_order(Request $request, $checkToken)
-    {
+    // public function cancel_order(Request $request, $checkToken)
+    // {
 
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
-        if (Auth::guard('api')->user()->flag == 0) {
-            return RespondWithBadRequest($lang, 5);
-        } else {
-            $UserType =  CheckUserType();
-            $client_id = Auth::guard('api')->user()->id;
-            if ($UserType != '') {
-                $unknown_user = User::where('flag', $UserType)->first()->id;
-                $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
-            }
-            $created_by = Auth::guard('api')->user()->id;
-        }
-        $cancel_time = getSetting('time_cancellation');
+    //     $lang = $request->header('lang', 'ar');
+    //     App::setLocale($lang);
+    //     if (Auth::guard('api')->user()->flag == 0) {
+    //         return RespondWithBadRequest($lang, 5);
+    //     } else {
+    //         $UserType =  CheckUserType();
+    //         $client_id = Auth::guard('api')->user()->id;
+    //         if ($UserType != '') {
+    //             $unknown_user = User::where('flag', $UserType)->first()->id;
+    //             $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
+    //         }
+    //         $created_by = Auth::guard('api')->user()->id;
+    //     }
+    //     $cancel_time = getSetting('time_cancellation');
 
-        $validator = Validator::make($request->all(), [
-            'order_id' => 'required|exists:orders,id', // Optional but must exist in the 'coupons' table
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'order_id' => 'required|exists:orders,id', // Optional but must exist in the 'coupons' table
+    //     ]);
 
-        if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
-        }
+    //     if ($validator->fails()) {
+    //         return RespondWithBadRequestWithData($validator->errors());
+    //     }
 
-        $order = Order::find($request->order_id);
-        $minutesDifference = $order->created_at->diffInMinutes(Carbon::now());
+    //     $order = Order::find($request->order_id);
+    //     $minutesDifference = $order->created_at->diffInMinutes(Carbon::now());
 
-        if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id) && $created_by == $order->created_by) {
-            $order->status = 'cancelled';
-            $order->save();
-        } else {
-            return RespondWithBadRequest($lang, 34);
-        }
-        return RespondWithSuccessRequest($lang, 1);
-    }
+    //     if ($cancel_time < $minutesDifference && !CheckOrderPaid($order->order_id) && $created_by == $order->created_by) {
+    //         $order->status = 'cancelled';
+    //         $order->save();
+    //     } else {
+    //         return RespondWithBadRequest($lang, 34);
+    //     }
+    //     return RespondWithSuccessRequest($lang, 1);
+    // }
     public function getNextStatus($status)
     {
         $next_status = array();
@@ -434,6 +434,4 @@ class OrderService
         }
         return $next_status;
     }
-    
 }
-
