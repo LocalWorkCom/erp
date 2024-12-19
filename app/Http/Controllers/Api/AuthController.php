@@ -6,6 +6,7 @@ use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
 use App\Models\ClientDetail;
+use App\Models\Country;
 use App\Models\Otp;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,12 +45,20 @@ class AuthController extends Controller
             return respondError('Validation Error.', 400, $validator->errors());
         }
 
+        $country = Country::where('phone_code', $request->country_code)->first();
+
+        if (!$country) {
+            return respondError('Invalid country code.', 400, [
+                'country_code' => ['Country code does not exist in the database.']
+            ]);
+        }
+
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->flag = 'client';
         $user->phone = $request->phone;
-        $user->country_id = $request->country_id;
+        $user->country_id = $country->id;
         $user->country_code = $request->country_code;
         $user->password = Hash::make($request->password);
         $user->save();
@@ -141,7 +150,9 @@ class AuthController extends Controller
             ->exists();
 
         if (!$userExists) {
-            return respondError($lang, "رقم الهاتف مع رمز البلد غير مسجل.");
+            return RespondWithBadRequestWithData([
+                "phone" => [$messages["phone.exists"]]
+            ]);
         }
 
         return response()->json([
@@ -185,7 +196,9 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return respondError($lang, "رقم الهاتف مع رمز البلد غير مسجل.");
+            return RespondWithBadRequestWithData([
+                "phone" => [$messages["phone.exists"]]
+            ]);
         }
 
         // Check if the new password is the same as the old one
@@ -206,11 +219,6 @@ class AuthController extends Controller
 
         return ResponseWithSuccessData($lang, $success, 15);
     }
-
-
-
-
-
 
     // private function verifyPhone($phone, $otpInput)
     // {
