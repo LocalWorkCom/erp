@@ -14,6 +14,30 @@ return new class extends Migration
         Schema::table('branches', function (Blueprint $table) {
             $table->dropForeign(['country_id']);
         });
+
+        Schema::table('vendors', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
+        });
+
+        Schema::table('leave_settings', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
+        });
+
+        Schema::table('leave_nationals', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
+        });
+
+        Schema::table('store_transaction_details', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['currency_code']);
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['country_id']);
+        });
     
         Schema::table('countries', function (Blueprint $table) {
             $table->dropPrimary();
@@ -21,7 +45,37 @@ return new class extends Migration
         });
     
         Schema::table('branches', function (Blueprint $table) {
-            $table->char('country_id', 36)->change();
+            $table->char('country_id', 36)->null()->change();
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('vendors', function (Blueprint $table) {
+            $table->char('country_id', 36)->null()->change();
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('leave_nationals', function (Blueprint $table) {
+            $table->char('country_id', 36)->null()->change();
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('leave_settings', function (Blueprint $table) {
+            $table->char('country_id', 36)->null()->change();
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('store_transaction_details', function (Blueprint $table) {
+            $table->char('country_id', 36)->null()->change();
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->char('currency_code', 36)->null()->change();
+            $table->foreign('currency_code')->references('id')->on('countries')->onUpdate('cascade');
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->char('country_id', 36)->null()->change();
             $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
         });
     }
