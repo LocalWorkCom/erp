@@ -522,6 +522,14 @@
                             <li class="slide side-menu__label1">
                                 <a href="javascript:void(0)">@lang('sidebar.Offers && Discounts') </a>
                             </li>
+                            @can('view offers')
+                                <li class="slide">
+                                    <a href="{{ route('offers.list') }}" class="side-menu__item">
+                                        <span class="side-menu__label">@lang('sidebar.Offers') </span>
+                                    </a>
+                                </li>
+                            @endcan
+
                             @can('view coupons')
                                 <li class="slide">
                                     <a href="{{ route('coupons.list') }}" class="side-menu__item">
@@ -534,14 +542,6 @@
                                 <li class="slide">
                                     <a href="{{ route('discounts.list') }}" class="side-menu__item">
                                         <span class="side-menu__label">@lang('sidebar.Discount') </span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view offers')
-                                <li class="slide">
-                                    <a href="{{ url('Offers') }}" class="side-menu__item">
-                                        <span class="side-menu__label">@lang('sidebar.Offers') </span>
                                     </a>
                                 </li>
                             @endcan

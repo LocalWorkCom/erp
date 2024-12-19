@@ -142,16 +142,15 @@
 
             // Toggle Dish/Offer dropdown
             $('input[name="flag"]').change(function () {
-            const selected = $(this).val();
-            if (selected === 'dish') {
-            $('#dishDropdown').removeClass('d-none').find('select').prop('required', true);
-            $('#offerDropdown').addClass('d-none').find('select').prop('required', false);
-        } else if (selected === 'offer') {
-            $('#offerDropdown').removeClass('d-none').find('select').prop('required', true);
-            $('#dishDropdown').addClass('d-none').find('select').prop('required', false);
-        }
-            $('#nameDescriptionOptions, #imageOptions').removeClass('d-none');
-        });
+                const selected = $(this).val();
+                if (selected === 'dish') {
+                    $('#dishDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+                    $('#offerDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                } else if (selected === 'offer') {
+                    $('#offerDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+                    $('#dishDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                }
+            });
 
             // Toggle New/Existing Names and Descriptions
             $('input[name="name_option"]').change(function () {

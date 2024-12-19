@@ -29,62 +29,26 @@
 
                                 <p class="h4 fw-semibold mb-2 text-center">@lang('auth.signin')</p>
                                 <p class="mb-4 text-muted op-7 fw-normal text-center">@lang('auth.welcome') </p>
-                                <form method="POST" action="{{ route('dashboard.submitlogin') }}"
-                                    class="needs-validation">
+                                <form method="POST" action="{{ route('dashboard.submitlogin') }}">
                                     @csrf
                                     <div class="row gy-3">
-                                        <!-- Email Input -->
                                         <div class="col-xl-12">
-                                            <label for="signin-username"
-                                                class="form-label text-default">@lang('auth.email')</label>
-                                            <input type="text"
-                                                class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                                id="signin-username" name="email" placeholder="@lang('auth.email')"
-                                                value="{{ old('email') }}">
-                                            <div class="invalid-feedback">
-                                                @error('email')
-                                                    {{ $message }}
-                                                @enderror
-                                            </div>
+                                            <label for="signin-username" class="form-label text-default">@lang('auth.email')</label>
+                                            <input type="text" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}">
+                                            @error('email')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-xl-12">
+                                            <label for="signin-password" class="form-label text-default">@lang('auth.passplace')</label>
+                                            <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password">
+                                            @error('password')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
-                                        <!-- Password Input -->
-                                        <div class="col-xl-12 mb-2">
-                                            <label for="signin-password"
-                                                class="form-label text-default d-block">@lang('auth.password')
-                                                <a href="{{ route('dashboard.password.request') }}"
-                                                    class="float-end text-primary">@lang('auth.forgetPass')</a>
-                                            </label>
-                                            <div class="input-group">
-                                                <input type="password"
-                                                    class="form-control form-control-lg @error('password') is-invalid @enderror"
-                                                    id="signin-password" name="password" placeholder="@lang('auth.password')">
-                                                <button class="btn btn-light bg-transparent" type="button"
-                                                    onclick="togglePasswordVisibility('signin-password', this)">
-                                                    <i class="ri-eye-off-line align-middle"></i>
-                                                </button>
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                @error('password')
-                                                    {{ $message }}
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-                                        <!-- Remember Me Checkbox -->
-                                        {{-- <div class="col-xl-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
-                                                <label class="form-check-label text-muted fw-normal" for="rememberMe">
-                                                    @lang('auth.remember')                                                </label>
-                                            </div>
-                                        </div> --}}
-
-                                        <!-- Submit Button -->
-                                        <div class="col-xl-12 d-grid mt-2">
-                                            <button type="submit"
-                                                class="btn btn-lg btn-primary">@lang('auth.signin')</button>
+                                        <div class="col-xl-12 d-flex justify-content-between">
+                                            <button type="submit" class="btn btn-primary text-center w-100 btn-lg">@lang('auth.login')</button>
                                         </div>
                                     </div>
                                 </form>
