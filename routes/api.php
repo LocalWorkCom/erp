@@ -86,8 +86,7 @@ use App\Http\Controllers\Api\BioTimeController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\EmployeeDeviceController;
 use App\Http\Controllers\Api\AddonCategoryController;
-
-
+use App\Http\Controllers\API\ClientAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,8 +104,8 @@ use App\Http\Controllers\Api\AddonCategoryController;
 
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"])->name('login');
-Route::post("resetpassword", [AuthController::class, "reset_password"]);
-
+Route::post('/verify-phone', [AuthController::class, 'verifyPhone']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 //admin
 Route::group(['middleware' => ['auth:admin', 'admin']], function () {
 
@@ -147,99 +146,99 @@ Route::group(['middleware' => ['auth:admin', 'admin']], function () {
 // });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //Country
- Route::group(['prefix' => 'country'], function () {
+//Country
+Route::group(['prefix' => 'country'], function () {
     Route::any('/', [CountryController::class, 'index']);
-    Route::any('/country-code', [CountryController::class, 'getCountriesRegister']);
-    Route::any('/add', [CountryController::class, 'store']);
+    // Route::any('/country-code', [CountryController::class, 'getCountriesRegister']);
+    // Route::any('/add', action: [CountryController::class, 'store']);
     Route::any('/get', [CountryController::class, 'show']);
-    Route::any('/edit', [CountryController::class, 'update']);
-    Route::any('/delete', [CountryController::class, 'destroy']);
+    // Route::any('/edit', [CountryController::class, 'update']);
+    // Route::any('/delete', [CountryController::class, 'destroy']);
 });
 //end Country
 
-    //Color
-    Route::group(['prefix' => 'color'], function () {
-        Route::any('/', [ColorController::class, 'index']);
-        Route::any('/add', [ColorController::class, 'store']);
-        Route::any('/get', [ColorController::class, 'show']);
-        Route::any('/edit', [ColorController::class, 'update']);
-        Route::any('/delete', [ColorController::class, 'destroy']);
-    });
-    //end color
-    //Size
-    Route::group(['prefix' => 'size'], function () {
-        Route::any('/', [SizeController::class, 'index']);
-        Route::any('/add', [SizeController::class, 'store']);
-        Route::any('/get', [SizeController::class, 'show']);
-        Route::any('/edit', [SizeController::class, 'update']);
-        Route::any('/delete', [SizeController::class, 'destroy']);
-    });
-    //end Size
+//Color
+Route::group(['prefix' => 'color'], function () {
+    Route::any('/', [ColorController::class, 'index']);
+    Route::any('/add', [ColorController::class, 'store']);
+    Route::any('/get', [ColorController::class, 'show']);
+    Route::any('/edit', [ColorController::class, 'update']);
+    Route::any('/delete', [ColorController::class, 'destroy']);
+});
+//end color
+//Size
+Route::group(['prefix' => 'size'], function () {
+    Route::any('/', [SizeController::class, 'index']);
+    Route::any('/add', [SizeController::class, 'store']);
+    Route::any('/get', [SizeController::class, 'show']);
+    Route::any('/edit', [SizeController::class, 'update']);
+    Route::any('/delete', [SizeController::class, 'destroy']);
+});
+//end Size
 
 
-    Route::group(['prefix' => 'category'], function () {
-        Route::get('/', [CategoryController::class, 'index']);
-        Route::post('store', [CategoryController::class, 'store']);
-        Route::post('update/{id}', [CategoryController::class, 'update']);
-        Route::get('delete/{id}', [CategoryController::class, 'delete']);
-        Route::get('{id}/inventory', [CategoryInventoryController::class, 'getInventory']);
-    });
+Route::group(['prefix' => 'category'], function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::post('store', [CategoryController::class, 'store']);
+    Route::post('update/{id}', [CategoryController::class, 'update']);
+    Route::get('delete/{id}', [CategoryController::class, 'delete']);
+    Route::get('{id}/inventory', [CategoryInventoryController::class, 'getInventory']);
+});
 
-    Route::group(['prefix' => 'product'], function () {
-        Route::get('/', [ProductController::class, 'index']);
-        Route::post('store', [ProductController::class, 'store']);
-        Route::post('update/{id}', [ProductController::class, 'update']);
-        Route::get('delete/{id}', [ProductController::class, 'delete']);
-        Route::get('units', [ProductUnitController::class, 'index']);
-        Route::post('unit/store', [ProductUnitController::class, 'store']);
-        Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
-        Route::get('unit/delete/{id}', [ProductUnitController::class, 'delete']);
-        Route::get('sizes', [ProductSizeController::class, 'index']);
-        Route::post('size/store', [ProductSizeController::class, 'store']);
-        Route::post('size/update/{id}', [ProductSizeController::class, 'update']);
-        Route::get('size/delete/{id}', [ProductSizeController::class, 'delete']);
-        Route::get('colors', [ProductColorController::class, 'index']);
-        Route::post('color/store', [ProductColorController::class, 'store']);
-        Route::post('color/update/{id}', [ProductColorController::class, 'update']);
-        Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
-        Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
-    });
-    Route::group(['prefix' => 'unit'], function () {
-        Route::get('/', [UnitController::class, 'index']);
-        Route::post('store', [UnitController::class, 'store']);
-        Route::post('update', [UnitController::class, 'update']);
-        Route::get('delete/{id}', [UnitController::class, 'delete']);
-    });
-     //  branches
-     Route::group(['prefix' => 'branches'], function () {
-        Route::get('branchList', [BranchController::class, 'index']);
-        Route::get('showBranch/{id}', [BranchController::class, 'show']);
-        Route::post('addBranch', [BranchController::class, 'store']);
-        Route::put('updateBranch/{id}', [BranchController::class, 'update']);
-        Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
-        Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
-    });
-     // Discounts
-     Route::group(['prefix' => 'discounts'], function () {
-        Route::get('discountList', [DiscountController::class, 'index']);
-        Route::get('showDiscount/{id}', [DiscountController::class, 'show']);
-        Route::post('addDiscount', [DiscountController::class, 'store']);
-        Route::put('updateDiscount/{id}', [DiscountController::class, 'update']);
-        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']);
-        Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']);
-    });
+Route::group(['prefix' => 'product'], function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::post('store', [ProductController::class, 'store']);
+    Route::post('update/{id}', [ProductController::class, 'update']);
+    Route::get('delete/{id}', [ProductController::class, 'delete']);
+    Route::get('units', [ProductUnitController::class, 'index']);
+    Route::post('unit/store', [ProductUnitController::class, 'store']);
+    Route::post('unit/update/{id}', [ProductUnitController::class, 'update']);
+    Route::get('unit/delete/{id}', [ProductUnitController::class, 'delete']);
+    Route::get('sizes', [ProductSizeController::class, 'index']);
+    Route::post('size/store', [ProductSizeController::class, 'store']);
+    Route::post('size/update/{id}', [ProductSizeController::class, 'update']);
+    Route::get('size/delete/{id}', [ProductSizeController::class, 'delete']);
+    Route::get('colors', [ProductColorController::class, 'index']);
+    Route::post('color/store', [ProductColorController::class, 'store']);
+    Route::post('color/update/{id}', [ProductColorController::class, 'update']);
+    Route::get('color/delete/{id}', [ProductColorController::class, 'delete']);
+    Route::get('{id}/inventory', [ProductInventoryController::class, 'getInventory']);
+});
+Route::group(['prefix' => 'unit'], function () {
+    Route::get('/', [UnitController::class, 'index']);
+    Route::post('store', [UnitController::class, 'store']);
+    Route::post('update', [UnitController::class, 'update']);
+    Route::get('delete/{id}', [UnitController::class, 'delete']);
+});
+//  branches
+Route::group(['prefix' => 'branches'], function () {
+    Route::get('branchList', [BranchController::class, 'index']);
+    Route::get('showBranch/{id}', [BranchController::class, 'show']);
+    Route::post('addBranch', [BranchController::class, 'store']);
+    Route::put('updateBranch/{id}', [BranchController::class, 'update']);
+    Route::delete('deleteBranch/{id}', [BranchController::class, 'destroy']);
+    Route::post('restoreBranch/{id}', [BranchController::class, 'restore']);
+});
+// Discounts
+Route::group(['prefix' => 'discounts'], function () {
+    Route::get('discountList', [DiscountController::class, 'index']);
+    Route::get('showDiscount/{id}', [DiscountController::class, 'show']);
+    Route::post('addDiscount', [DiscountController::class, 'store']);
+    Route::put('updateDiscount/{id}', [DiscountController::class, 'update']);
+    Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy']);
+    Route::post('restoreDiscount/{id}', [DiscountController::class, 'restore']);
+});
 
-    // Coupons
-    Route::group(['prefix' => 'coupons'], function () {
-        Route::get('couponList', [CouponController::class, 'index']);
-        Route::get('showCoupon/{id}', [CouponController::class, 'show']);
-        Route::post('addCoupon', [CouponController::class, 'store']);
-        Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
-        Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
-        Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
-        Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
-    });
+// Coupons
+Route::group(['prefix' => 'coupons'], function () {
+    Route::get('couponList', [CouponController::class, 'index']);
+    Route::get('showCoupon/{id}', [CouponController::class, 'show']);
+    Route::post('addCoupon', [CouponController::class, 'store']);
+    Route::put('updateCoupon/{id}', [CouponController::class, 'update']);
+    Route::delete('deleteCoupon/{id}', [CouponController::class, 'destroy']);
+    Route::post('restoreCoupon/{id}', [CouponController::class, 'restore']);
+    Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
+});
 
 
 //api(both)
@@ -254,6 +253,15 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::get("client/orders", [ClientController::class, "listOrders"]);
         Route::post('client/orders/reorder/{orderId}', [ClientController::class, 'reorder']);
         Route::get('client/orders/track/{orderId}', [ClientController::class, 'trackOrder']);
+    });
+
+    Route::group(['prefix' => 'address'], function () {
+        Route::get("/", [ClientAddressController::class, "index"]);
+        Route::get("show/{id}", [ClientAddressController::class, "show"]);
+        Route::post('store', [ClientAddressController::class, 'store']);
+        Route::put('update/{id}', [ClientAddressController::class, 'update']);
+        Route::delete('delete/{id}', [ClientAddressController::class, 'destroy']);
+        Route::post('restore/{id}', [ClientAddressController::class, 'restore']);
     });
 
 
@@ -431,7 +439,6 @@ Route::group(["middleware" => ["auth:api"]], function () {
         Route::delete('/{id}', [DishCategoryController::class, 'delete'])->name('dish_categories.delete');
         Route::post('/restore/{id}', [DishCategoryController::class, 'restore'])->name('dish_categories.restore');
         Route::get('/show/{id}', [DishCategoryController::class, 'show'])->name('dish_categories.show');
-
     });
 
 
@@ -779,4 +786,3 @@ Route::prefix('addon-categories')->group(function () {
 });
 
 Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
-

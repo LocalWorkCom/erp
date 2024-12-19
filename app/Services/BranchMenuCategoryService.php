@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BranchMenuCategoryService
 {
@@ -22,6 +23,17 @@ class BranchMenuCategoryService
     {
         try {
             $branch_menu_categories = BranchMenuCategory::with(['branches', 'children', 'dish_categories'])->get();
+            return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
+        } catch (\Exception $e) {
+            Log::error('Error fetching branches: ' . $e->getMessage());
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+    }
+
+    public function branch($id)
+    {
+        try {
+            $branch_menu_categories = BranchMenuCategory::where('branch_id', $id)->with(['branches', 'children', 'dish_categories'])->get();
             return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
@@ -73,10 +85,9 @@ class BranchMenuCategoryService
 
             $user_id =  Auth::guard('admin')->user()->id;
             $branch_menu_category = BranchMenuCategory::findOrFail($id);
-            $floor = Floor::findOrFail($id);
             $branch_menu_category->is_active = $request->is_active;
-            $floor->modified_by = $user_id;
-            $floor->save();
+            $branch_menu_category->modified_by = $user_id;
+            $branch_menu_category->save();
 
             return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
         } catch (\Exception $e) {
@@ -92,11 +103,15 @@ class BranchMenuCategoryService
     {
         try {
             $user_id =  Auth::guard('admin')->user()->id;
+            $active = 1;
             $branch_menu_category = BranchMenuCategory::findOrFail($id);
-            $branch_menu_category->is_active = $id;
+            if($branch_menu_category->is_active == 1){
+                $active = 0;
+            }
+            $branch_menu_category->is_active = $active;
             $branch_menu_category->modified_by = $user_id;
             $branch_menu_category->save();
-            return ResponseWithSuccessData($this->lang, null, 1);
+            return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting branch menu category: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);

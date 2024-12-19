@@ -540,7 +540,7 @@
 
                             @can('view discounts')
                                 <li class="slide">
-                                    <a href="{{ url('Discount') }}" class="side-menu__item">
+                                    <a href="{{ route('discounts.list') }}" class="side-menu__item">
                                         <span class="side-menu__label">@lang('sidebar.Discount') </span>
                                     </a>
                                 </li>

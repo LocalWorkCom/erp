@@ -87,6 +87,21 @@
                                         <label for="image" class="form-label">@lang('dishes.Image')</label>
                                         <input type="file" class="form-control" id="image" name="image">
                                     </div>
+<!-- Recipes for Dishes Without Sizes -->
+<div id="dish-recipes-section" class="col-xl-12 d-none">
+    <h5 class="mb-3">@lang('dishes.DishRecipes')</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@lang('dishes.Recipe')</th>
+                <th>@lang('dishes.Quantity')</th>
+                <th>@lang('dishes.Actions')</th>
+            </tr>
+        </thead>
+        <tbody id="dish-recipes-table"></tbody>
+    </table>
+    <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
+</div>
 
                                     <div class="col-xl-6">
                                         <label for="has_sizes" class="form-label">@lang('dishes.HasSizes')</label>
@@ -95,13 +110,14 @@
                                             <option value="1">@lang('dishes.Yes')</option>
                                         </select>
                                     </div>
+
                                     <div class="col-xl-6">
-                                    <label for="has_addon" class="form-label">@lang('dishes.HasAddon')</label>
-                                    <select name="has_addon" id="has_addon" class="form-control select2" required>
-                                        <option value="0">@lang('dishes.No')</option>
-                                        <option value="1">@lang('dishes.Yes')</option>
-                                    </select>
-                                </div>
+                                        <label for="has_addon" class="form-label">@lang('dishes.HasAddon')</label>
+                                        <select name="has_addon" id="has_addon" class="form-control select2" required>
+                                            <option value="0">@lang('dishes.No')</option>
+                                            <option value="1">@lang('dishes.Yes')</option>
+                                        </select>
+                                    </div>
 
                                     <div class="col-xl-6">
                                         <label for="is_active" class="form-label">@lang('dishes.IsActive')</label>
@@ -125,60 +141,17 @@
                                                     <th>@lang('dishes.Actions')</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="dish-sizes-table">
-                                                <!-- Dynamic Rows -->
-                                            </tbody>
+                                            <tbody id="dish-sizes-table"></tbody>
                                         </table>
                                         <button type="button" id="add-dish-size" class="btn btn-success btn-sm">@lang('dishes.AddSize')</button>
                                     </div>
 
                                     <!-- Dish Addons -->
-                                    <div class="col-xl-12">
-                                      
-                                            <div id="addon-categories-section" class="d-none">
-                                            <h5 class="mb-3">@lang('dishes.DishAddons')</h5>
-                                            <div class="addon-category mt-4">
-                                                <div class="row gy-2">
-                                                    <div class="col-xl-4">
-                                                        <label for="addon_category" class="form-label">@lang('dishes.AddonCategory')</label>
-                                                        <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2 addon-category" required>
-                                                            @foreach ($addonCategories as $category)
-                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-xl-4">
-                                                        <label for="min_addons" class="form-label">@lang('dishes.MinAddons')</label>
-                                                        <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>
-                                                    </div>
-                                                    <div class="col-xl-4">
-                                                        <label for="max_addons" class="form-label">@lang('dishes.MaxAddons')</label>
-                                                        <input type="number" name="addon_categories[${addonCategoryIndex}][max_addons]" class="form-control" min="0">
-                                                    </div>
-                                                </div>
-                                                <div class="mt-3">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>@lang('dishes.Addon')</th>
-                                                                <th>@lang('dishes.Quantity')</th>
-                                                                <th>@lang('dishes.Price')</th>
-                                                                <th>@lang('dishes.Actions')</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="addons-table-${addonCategoryIndex}">
-                                                            <!-- Dynamic Rows -->
-                                                        </tbody>
-                                                    </table>
-                                                    <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="${addonCategoryIndex}">@lang('dishes.AddAddon')</button>
-                                                </div>
-                                                <button type="button" class="btn btn-danger btn-sm mt-3 remove-addon-category">@lang('dishes.RemoveAddonCategory')</button>
-                                            </div>
-
-                                           
-                                            <button type="button" class="btn btn-primary btn-sm mt-3 add-addon-category">@lang('dishes.AddAddonCategory')</button>
-                                        </div>
-                                        </div>
+                                    <div id="dish-addons-section" class="col-xl-12 d-none">
+                                        <h5 class="mb-3">@lang('dishes.DishAddons')</h5>
+                                        <div id="addon-categories-section"></div>
+                                        <button type="button" class="btn btn-primary btn-sm mt-3 add-addon-category">@lang('dishes.AddAddonCategory')</button>
+                                    </div>
 
                                     <!-- Submit -->
                                     <div class="col-xl-12">
@@ -193,124 +166,152 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function () {
     $('.select2').select2();
 
-    // Toggle sizes section
-    $('#has_sizes').on('change', function () {
-        if ($(this).val() == 1) {
+    // Function to toggle visibility based on `has_sizes` value
+    function toggleSections() {
+        if ($('#has_sizes').val() == 1) {
             $('#dish-sizes-section').removeClass('d-none');
+            $('#price-section').addClass('d-none');
+            $('#dish-recipes-section').addClass('d-none');
         } else {
             $('#dish-sizes-section').addClass('d-none');
+            $('#price-section').removeClass('d-none');
+            $('#dish-recipes-section').removeClass('d-none');
         }
-    });
-    $('#has_sizes').on('change', function () {
-    if ($(this).val() == 1) {
-        $('#dish-sizes-section').removeClass('d-none');
-
-        $('#price-section').addClass('d-none');
-        $('#price').val(''); 
-    } else {
-        $('#dish-sizes-section').addClass('d-none');
-
-        $('#price-section').removeClass('d-none');
     }
-});
-    // Dish Sizes
+
+    // Initialize section visibility on page load
+    toggleSections();
+
+    // Toggle visibility when `has_sizes` value changes
+    $('#has_sizes').on('change', toggleSections);
+
+    // Add Dish Size Row
     let sizeIndex = 0;
     $('#add-dish-size').on('click', function () {
         $('#dish-sizes-table').append(`
-        <tr>
-    <td><input type="text" name="sizes[${sizeIndex}][size_name_ar]" class="form-control" required></td>
-    <td><input type="text" name="sizes[${sizeIndex}][size_name_en]" class="form-control" required></td>
-    <td><input type="number" name="sizes[${sizeIndex}][price]" class="form-control" step="0.01" required></td>
-    <td>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@lang('dishes.Recipe')</th>
-                    <th>@lang('dishes.Quantity')</th>
-                    <th>@lang('dishes.Actions')</th>
-                </tr>
-            </thead>
-            <tbody id="recipes-table-${sizeIndex}">
-                <tr>
-                    <td>
-                        <select name="sizes[${sizeIndex}][recipes][0][recipe_id]" class="form-control select2" required>
-                            @foreach ($recipes as $recipe)
-                                <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td><input type="number" name="sizes[${sizeIndex}][recipes][0][quantity]" class="form-control" step="0.01" required></td>
-                    <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-sm btn-success add-recipe" data-size-index="${sizeIndex}">@lang('dishes.AddRecipe')</button>
-    </td>
-    <td><input type="radio" name="default_size" value="${sizeIndex}" class="form-check-input"></td>
-    <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
-</tr>
+            <tr>
+                <td><input type="text" name="sizes[${sizeIndex}][size_name_ar]" class="form-control" required></td>
+                <td><input type="text" name="sizes[${sizeIndex}][size_name_en]" class="form-control" required></td>
+                <td><input type="number" name="sizes[${sizeIndex}][price]" class="form-control" step="0.01" required></td>
+                <td>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>@lang('dishes.Recipe')</th>
+                                <th>@lang('dishes.Quantity')</th>
+                                <th>@lang('dishes.Actions')</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recipes-table-${sizeIndex}"></tbody>
+                    </table>
+                    <button type="button" class="btn btn-sm btn-success add-recipe" data-size-index="${sizeIndex}">@lang('dishes.AddRecipe')</button>
+                </td>
+                <td><input type="radio" name="default_size" value="${sizeIndex}" class="form-check-input"></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
+            </tr>
         `);
         sizeIndex++;
         $('.select2').select2();
     });
 
-    // Dish Addons
-    let addonCategoryIndex = 0;
+    // Add Recipe Row for Dish Size
+    $(document).on('click', '.add-recipe', function () {
+        let sizeIndex = $(this).data('size-index');
+        let recipeIndex = $(`#recipes-table-${sizeIndex} tr`).length;
 
-// Add Addon Category
-// Add Addon Category
-$('.add-addon-category').on('click', function () {
-    addonCategoryIndex++;
-    $('#addon-categories-section').append(`
-        <div class="addon-category mt-4">
-            <div class="row gy-2">
-                <div class="col-xl-4">
-                    <label for="addon_category" class="form-label">@lang('dishes.AddonCategory')</label>
-                    <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2 addon-category" required>
-                        @foreach ($addonCategories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+        $(`#recipes-table-${sizeIndex}`).append(`
+            <tr>
+                <td>
+                    <select name="sizes[${sizeIndex}][recipes][${recipeIndex}][recipe_id]" class="form-control select2" required>
+                        @foreach ($recipes as $recipe)
+                            <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
                         @endforeach
                     </select>
+                </td>
+                <td><input type="number" name="sizes[${sizeIndex}][recipes][${recipeIndex}][quantity]" class="form-control" step="0.01" required></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
+            </tr>
+        `);
+
+        $('.select2').select2();
+    });
+
+    // Add Recipe Row for Dishes Without Sizes
+    let recipeIndex = 0;
+    $('#add-dish-recipe').on('click', function () {
+        $('#dish-recipes-table').append(`
+            <tr>
+                <td>
+                    <select name="details[${recipeIndex}][recipe_id]" class="form-control select2" required>
+                        @foreach ($recipes as $recipe)
+                            <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="details[${recipeIndex}][quantity]" class="form-control" step="0.01" required>
+                </td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
+            </tr>
+        `);
+        recipeIndex++;
+        $('.select2').select2();
+    });
+
+    // Add Addon Category
+    let addonCategoryIndex = 0;
+    $('.add-addon-category').on('click', function () {
+        addonCategoryIndex++;
+        $('#addon-categories-section').append(`
+            <div class="addon-category mt-4">
+                <div class="row gy-2">
+                   <div class="col-xl-4">
+                        <label>@lang('dishes.AddonCategory')</label>
+                        <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2" required>
+                            @foreach ($addonCategories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name_en }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <label>@lang('dishes.MinAddons')</label>
+                        <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>
+                    </div>
+                    <div class="col-xl-4">
+                        <label>@lang('dishes.MaxAddons')</label>
+                        <input type="number" name="addon_categories[${addonCategoryIndex}][max_addons]" class="form-control" min="0" required>
+                    </div>
                 </div>
-                <div class="col-xl-4">
-                    <label for="min_addons" class="form-label">@lang('dishes.MinAddons')</label>
-                    <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>
-                </div>
-                <div class="col-xl-4">
-                    <label for="max_addons" class="form-label">@lang('dishes.MaxAddons')</label>
-                    <input type="number" name="addon_categories[${addonCategoryIndex}][max_addons]" class="form-control" min="0">
+                <div class="mt-3">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>@lang('dishes.Addon')</th>
+                                <th>@lang('dishes.Quantity')</th>
+                                <th>@lang('dishes.Price')</th>
+                                <th>@lang('dishes.Actions')</th>
+                            </tr>
+                        </thead>
+                        <tbody id="addons-table-${addonCategoryIndex}"></tbody>
+                    </table>
+                    <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="${addonCategoryIndex}">@lang('dishes.AddAddon')</button>
+                    <button type="button" class="btn btn-danger btn-sm remove-addon-category">@lang('dishes.RemoveAddonCategory')</button>
                 </div>
             </div>
-            <div class="mt-3">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>@lang('dishes.Addon')</th>
-                            <th>@lang('dishes.Quantity')</th>
-                            <th>@lang('dishes.Price')</th>
-                            <th>@lang('dishes.Actions')</th>
-                        </tr>
-                    </thead>
-                    <tbody id="addons-table-${addonCategoryIndex}">
-                        <!-- Dynamic Rows -->
-                    </tbody>
-                </table>
-                <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="${addonCategoryIndex}">@lang('dishes.AddAddon')</button>
-            </div>
-            <button type="button" class="btn btn-danger btn-sm mt-3 remove-addon-category">@lang('dishes.RemoveAddonCategory')</button>
-        </div>
-    `);
-    $('.select2').select2();
-});
-// Add Addon Row
-$(document).on('click', '.add-addon', function () {
+        `);
+
+        $('.select2').select2();
+    });
+
+    // Add Addon Row
+    $(document).on('click', '.add-addon', function () {
         let categoryIndex = $(this).data('category-index');
         let addonIndex = $(`#addons-table-${categoryIndex} tr`).length;
 
@@ -328,58 +329,28 @@ $(document).on('click', '.add-addon', function () {
                 <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
             </tr>
         `);
+
         $('.select2').select2();
     });
-
 
     // Remove Row
     $(document).on('click', '.remove-row', function () {
         $(this).closest('tr').remove();
     });
-    $(document).on('change', 'input[name="default_size"]', function () {
-        $('input[name="default_size"]').not(this).prop('checked', false);
+
+    // Remove Addon Category
+    $(document).on('click', '.remove-addon-category', function () {
+        $(this).closest('.addon-category').remove();
     });
-    $(document).on('click', '.add-recipe', function () {
-    let sizeIndex = $(this).data('size-index');
-    let recipeIndex = $(`#recipes-table-${sizeIndex} tr`).length;
 
-    $(`#recipes-table-${sizeIndex}`).append(`
-        <tr>
-            <td>
-                <select name="sizes[${sizeIndex}][recipes][${recipeIndex}][recipe_id]" class="form-control select2" required>
-                    @foreach ($recipes as $recipe)
-                        <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
-                    @endforeach
-                </select>
-            </td>
-            <td><input type="number" name="sizes[${sizeIndex}][recipes][${recipeIndex}][quantity]" class="form-control" step="0.01" required></td>
-            <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
-        </tr>
-    `);
-
-    $('.select2').select2();
-});
-$(document).on('change', 'input[name$="[min_addons]"], input[name$="[max_addons]"]', function () {
-    let $row = $(this).closest('.row');
-    let minAddons = parseInt($row.find('input[name$="[min_addons]"]').val()) || 0;
-    let maxAddons = parseInt($row.find('input[name$="[max_addons]"]').val()) || 0;
-
-    if (minAddons > maxAddons) {
-        alert(messages.minMaxValidation);
-        $(this).val('');
-    }
-});
-$(document).on('click', '.remove-addon-category', function () {
-    $(this).closest('.addon-category').remove();
-});
-
-$('#has_addon').on('change', function () {
-    if ($(this).val() == 1) {
-        $('#addon-categories-section').removeClass('d-none');
-    } else {
-        $('#addon-categories-section').addClass('d-none');
-    }
-});
+    // Toggle Addons Section
+    $('#has_addon').on('change', function () {
+        if ($(this).val() == 1) {
+            $('#dish-addons-section').removeClass('d-none');
+        } else {
+            $('#dish-addons-section').addClass('d-none');
+        }
+    });
 });
 </script>
 @endsection

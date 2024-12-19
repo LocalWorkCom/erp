@@ -10,6 +10,19 @@ class BranchMenuCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'dish_category_id',
+        'parent_id',
+        'branch_id',
+        'is_active',
+        'created_by',
+        'modified_by',
+        'deleted_by',
+        'deleted_at',
+        'created_at',
+        'updated_at',
+    ];
+
     public function branches()
     {
         return $this->belongsTo(Branch::class, 'branch_id');

@@ -5,73 +5,66 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
-use App\Services\FloorService;
+use App\Services\BranchMenuCategoryService;
 use Illuminate\Http\Request;
 
 class BranchMenuCategoryController extends Controller
 {
-    protected $floorService;
+    protected $branchMenuCategoryService;
 
-    public function __construct(FloorService $floorService)
+    public function __construct(BranchMenuCategoryService $branchMenuCategoryService)
     {
-        $this->floorService = $floorService;
+        $this->branchMenuCategoryService = $branchMenuCategoryService;
     }
 
     public function index(Request $request)
     {
-        $response = $this->floorService->index($request);
+        return $request;
+        $response = $this->branchMenuCategoryService->index($request);
         $responseData = $response->original;
-        $Floors = $responseData['data'];
+        $branch_menu_categories = $responseData['data'];
         $branches = Branch::all();
-        //return view('dashboard.floor.list', compact('Floors', 'branches'));
+        return view('dashboard.branch.branch_menu_category.list', compact('branch_menu_categories', 'branches'));
     }
 
     public function show($id)
     {
-        $response = $this->floorService->show($id);
+        $response = $this->branchMenuCategoryService->show($id);
         $responseData = $response->original;
-        return $Floors = $responseData['data'];
+        return $branch_menu_category = $responseData['data'];
     }
 
     public function store(Request $request)
     {
-//        dd($request->all());
-        $response = $this->floorService->add($request);
-        $responseData = $response->original;
-//        dd($responseData);
-        if (!$responseData['status'] && isset($responseData['data'])) {
-            $validationErrors = $responseData['data'];
-            return redirect()->route('floors.list')->withErrors($validationErrors)->withInput();
-        }
-        $message= $responseData['message'];
-        return redirect()->route('floors.list')->with('message',$message);
+        //
     }
 
     public function update(Request $request, $id)
     {
-        $response = $this->floorService->edit($request, $id);
+        $response = $this->branchMenuCategoryService->edit($request, $id);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect()->route('floors.list')->withErrors($validationErrors)->withInput();
+            return redirect()->route('branch.categories.list')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect()->route('floors.list')->with('message',$message);
+        return redirect()->route('branch.categories.list')->with('message',$message);
     }
-    public function delete(Request $request, $id)
+    public function change_status(Request $request, $id)
     {
-        $response = $this->floorService->delete($request, $id);
+        $response = $this->branchMenuCategoryService->change_status($id);
         $responseData = $response->original;
-        $message= $responseData['message'];
-        return redirect()->route('floors.list')->with('message',$message);
+        return $branch_menu_category = $responseData['data'];
+        // $message= $responseData['message'];
+        // return redirect()->route('branch.categories.list')->with('message',$message);
     }
 
     public function show_branch($branch_id)
     {
-        $response = $this->floorService->branch($branch_id);
+        $response = $this->branchMenuCategoryService->branch($branch_id);
         $responseData = $response->original;
-        $Floors = $responseData['data'];
+        $branch_menu_categories = $responseData['data'];
         $branches = Branch::all();
-        return view('dashboard.floor.list', compact('Floors', 'branches'));
+        return view('dashboard.branch.branch_menu_category.list', compact('branch_menu_categories', 'branches'));
     }
 }
