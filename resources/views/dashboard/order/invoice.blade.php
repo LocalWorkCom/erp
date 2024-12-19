@@ -191,36 +191,29 @@
                                     </table>
                                 </div>
                             </div>
-
-                            <!-- Footer -->
-                            <div class="card-footer text-end">
-                                <button class="btn btn-success">Download <i
-                                        class="ri-download-2-line ms-1 align-middle"></i></button>
-                            </div>
                         </div>
                     </div>
                 </div>
+                <!--End::row-1 -->
             </div>
-            <!--End::row-1 -->
         </div>
-    </div>
-    <!-- END APP CONTENT -->
-@endsection
+        <!-- END APP CONTENT -->
+    @endsection
 
-@section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-        function printReceipt(type) {
-            const orderId = {{ $order->id }};
-            const baseUrl = @json(route('order.print', ['id' => ':id', 'type' => ':type']));
-            const url = baseUrl.replace(':id', orderId).replace(':type', type);
+    @section('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script>
+            function printReceipt(type) {
+                const orderId = {{ $order->id }};
+                const baseUrl = @json(route('order.print', ['id' => ':id', 'type' => ':type']));
+                const url = baseUrl.replace(':id', orderId).replace(':type', type);
 
-            const printWindow = window.open(url, '_blank');
-            if (printWindow) {
-                printWindow.focus();
-            } else {
-                alert('Failed to open the print window. Please check your pop-up blocker settings.');
+                const printWindow = window.open(url, '_blank');
+                if (printWindow) {
+                    printWindow.focus();
+                } else {
+                    alert('Failed to open the print window. Please check your pop-up blocker settings.');
+                }
             }
-        }
-    </script>
-@endsection
+        </script>
+    @endsection
