@@ -155,9 +155,11 @@
                 if ($(this).val() === 'dish') {
                     $('#dishDropdown').removeClass('d-none');
                     $('#offerDropdown').addClass('d-none');
+                    $('#offer_id').val(null).trigger('change'); // Clear Offer dropdown
                 } else {
                     $('#offerDropdown').removeClass('d-none');
                     $('#dishDropdown').addClass('d-none');
+                    $('#dish_id').val(null).trigger('change'); // Clear Dish dropdown
                 }
             }).trigger('change');
         });
