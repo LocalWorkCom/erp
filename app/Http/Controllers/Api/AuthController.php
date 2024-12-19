@@ -92,16 +92,25 @@ class AuthController extends Controller
                 return respondError('Validation Error.', 400, $validator->errors());
             }
 
-            // Determine whether input is email or phone
-            $credentials = [];
+            $isEmail = filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL);
+            $user = $isEmail
+                ? User::where('email', $request->email_or_phone)->first()
+                : User::where('phone', $request->email_or_phone)->first();
 
-            if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
-                $credentials['email'] = $request->email_or_phone;
-            } else {
-                $credentials['phone'] = $request->email_or_phone;
+            if (!$user) {
+                $errorMessage = $isEmail
+                    ? __('البريد الإلكتروني غير موجود.')
+                    : __('رقم الهاتف غير موجود.');
+
+                return respondError('User Not Found.', 404, [
+                    'email_or_phone' => [$errorMessage]
+                ]);
             }
 
-            $credentials['password'] = $request->password;
+            // Determine whether input is email or phone
+            $credentials = $isEmail
+                ? ['email' => $request->email_or_phone, 'password' => $request->password]
+                : ['phone' => $request->email_or_phone, 'password' => $request->password];
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
@@ -116,7 +125,7 @@ class AuthController extends Controller
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
                 return respondError('Password Error', 403, [
-                    'credential' => ['كلمة المرور لا تتطابق مع سجلاتنا']
+                    'credential' => [__('كلمة المرور لا تتطابق مع سجلاتنا')]
                 ]);
             }
         } catch (\Exception $e) {
@@ -141,7 +150,7 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-             return respondError('Validation Error.', 400, $validator->errors());
+            return respondError('Validation Error.', 400, $validator->errors());
         }
 
 
