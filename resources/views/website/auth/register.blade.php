@@ -3,7 +3,8 @@
         @csrf
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
-                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="Logo" height="110">
+                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="Logo"
+                    height="110">
             </div>
 
             <div class="col-md-7 right-side p-3">
@@ -13,7 +14,7 @@
                 <!-- Name -->
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" id="nameInput"
-                        placeholder=" @lang('auth.nameweb') "  required>
+                        placeholder=" @lang('auth.nameweb') " required>
                 </div>
 
                 <!-- Phone and Country Code -->
@@ -60,7 +61,7 @@
                 <!-- Password -->
                 <div class="input-group position-relative mb-3">
                     <input type="password" name="password" class="form-control" id="passwordInput"
-                        placeholder=" @lang('auth.passweb') "   required>
+                        placeholder=" @lang('auth.passweb') " required>
                     <button class="input-group-eye position-absolute" type="button" id="togglePassword">
                         <i class="fas fa-eye" id="eyeIcon"></i>
                     </button>
@@ -68,14 +69,15 @@
 
                 <!-- Date of Birth -->
                 <div class="input-group mb-3">
-                    <input type="date" name="date_of_birth" class="form-control" id="dobInput" placeholder="@lang('auth.date') ">
+                    <input type="date" name="date_of_birth" class="form-control" id="dobInput"
+                        placeholder="@lang('auth.date') ">
                 </div>
 
-                <button type="submit" class="btn py-3 mb-2 w-100" >@lang('auth.newuser')</button>
+                <button type="submit" class="btn py-3 mb-2 w-100">@lang('auth.newuser')</button>
 
                 <p class="text-center">
                     <small>
-                      @lang('auth.isexist')
+                        @lang('auth.isexist')
                         <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
                             aria-label="@lang('auth.login')">@lang('auth.login')</a>
                     </small>
@@ -83,17 +85,22 @@
 
                 <p class="text-center">
                     <small>
+
                         <span class="text-muted">@lang('auth.police')</span>
-                        <a href="#" class="main-color text-decoration-underline"
-                            aria-label="@lang('auth.policeweb') ">
-                           @lang('auth.policeweb')
+                        <a href="{{ route('privacy') }}" class="main-color text-decoration-underline" aria-label="@lang('auth.privacyweb') ">
+                            @lang('auth.privacyweb')
+                        </a> 
+                        <a href="{{ route('terms') }}" class="main-color text-decoration-underline" aria-label="@lang('auth.policeweb') ">
+                            @lang('auth.policeweb')
                         </a>
+
                     </small>
                 </p>
             </div>
 
             <div class="col-md-5 login-background">
-                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/login-chef-backgound.png') }}" alt="">
+                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/login-chef-backgound.png') }}"
+                    alt="">
             </div>
         </div>
     </form>

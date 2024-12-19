@@ -38,8 +38,8 @@
                     </ul>
 
                     <!-- Hidden Input for Country Code -->
-                    <input type="hidden" name="country_code" id="countryCodeInput"
-                        value="{{ old('country_code', '+02') }}">
+                    <input type="hidden" name="phone_code" id="countryCodeInput"
+                        value="{{ old('phone_code', '+02') }}">
 
                     @error('phone')
                         <span class="text-danger">{{ $message }}</span>
@@ -115,41 +115,41 @@
     });
 </script>
 <script>
-    // Submit the login form via AJAX
-    $('form').on('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission
+  $('form').on('submit', function(e) {
+    e.preventDefault(); // Prevent the default form submission
 
-        // Get form data
-        var formData = new FormData(this);
+    // Get form data
+    var formData = new FormData(this);
 
-        // Send the AJAX request
-        $.ajax({
-            url: "{{ route('website.login') }}",  // Route for login
-            method: "POST",
-            data: formData,
-            processData: false,  // Don't process the data
-            contentType: false,  // Don't set content-type, let jQuery handle it
-            success: function(response) {
-                // if (response.success) {
-                //     // If the login is successful, redirect to the dashboard
-                //     window.location.href = response.redirect_url; // Redirect to dashboard
-                // }
-            },
-            error: function(xhr) {
-                // If validation errors occur
-                var errors = xhr.responseJSON.errors;
-
-                // Reset previous error messages
-                $('.is-invalid').removeClass('is-invalid');
-                $('.text-danger').remove();
-
-                // Loop through errors and display them on the respective input fields
-                $.each(errors, function(field, messages) {
-                    var inputField = $('input[name="' + field + '"]');
-                    inputField.addClass('is-invalid');  // Add class to show the error
-                    inputField.after('<span class="text-danger">' + messages[0] + '</span>'); // Display error message
-                });
+    // Send the AJAX request
+    $.ajax({
+        url: "{{ route('website.login') }}",  // Route for login
+        method: "POST",
+        data: formData,
+        processData: false,  // Don't process the data
+        contentType: false,  // Don't set content-type, let jQuery handle it
+        success: function(response) {
+            if (response.status) {
+                // Redirect to the appropriate page
+                window.location.href = response.redirect_url; // Redirect based on role
             }
-        });
+        },
+        error: function(xhr) {
+            // If validation errors occur
+            var errors = xhr.responseJSON.errors;
+
+            // Reset previous error messages
+            $('.is-invalid').removeClass('is-invalid');
+            $('.text-danger').remove();
+
+            // Loop through errors and display them on the respective input fields
+            $.each(errors, function(field, messages) {
+                var inputField = $('input[name="' + field + '"]');
+                inputField.addClass('is-invalid');  // Add class to show the error
+                inputField.after('<span class="text-danger">' + messages[0] + '</span>'); // Display error message
+            });
+        }
     });
+});
+
 </script>

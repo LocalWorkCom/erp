@@ -46,6 +46,7 @@ return[
     'Coupon' => 'قسيمه الشراء',
     'Discount' => 'الخصم',
     'Offers' => 'العروض',
+    'OfferDetails' => 'تفاصيل العروض',
     'Gifts' => 'الهدايا',
     'lolaityPoint' => 'النقاط',
     'Transactions' => 'المعاملات',
