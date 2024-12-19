@@ -144,6 +144,7 @@ class AuthController extends Controller
              return respondError('Validation Error.', 400, $validator->errors());
         }
 
+
         $userExists = User::where('phone', $request->phone)
             ->where('country_code', $request->country_code)
             ->exists();
