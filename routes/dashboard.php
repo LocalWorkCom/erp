@@ -35,11 +35,9 @@ use App\Http\Controllers\Dashboard\DiscountController;
 use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
-
 use App\Http\Controllers\Dashboard\LeaveTypeController;
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\PermissionController;
-
 use App\Http\Controllers\Dashboard\DishCategoryController;
 use App\Http\Controllers\Dashboard\LeaveSettingController;
 use App\Http\Controllers\Dashboard\AddonCategoryController;
