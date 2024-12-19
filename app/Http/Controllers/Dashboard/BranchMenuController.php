@@ -8,7 +8,7 @@ use App\Models\Country;
 use App\Services\BranchMenuCategoryService;
 use Illuminate\Http\Request;
 
-class BranchMenuCategoryController extends Controller
+class BranchMenuController extends Controller
 {
     protected $branchMenuCategoryService;
 
