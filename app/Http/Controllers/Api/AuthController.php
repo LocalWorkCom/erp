@@ -10,10 +10,11 @@ use App\Models\Otp;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
+use Kreait\Firebase\Auth;
 
 class AuthController extends Controller
 {

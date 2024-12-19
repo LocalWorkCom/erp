@@ -778,4 +778,3 @@ Route::prefix('addon-categories')->group(function () {
 });
 
 Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
-
