@@ -68,6 +68,14 @@
         <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
       </div> -->
 {{--    </div>--}}
+      <div class="container overflow-plates ">
+          <div class="d-flex justify-content-between">
+
+              <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/overflow-left.png') }}" class="small-img right" data-aos="zoom-in" />
+              <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/overflow-plate.png') }}" class="big-img" data-aos="zoom-in" />
+              <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/overflow-right.png') }}" class="small-img left" data-aos="zoom-in" />
+          </div>
+      </div>
   </section>
   <section class="categories pt-5">
     <div class="container px-0 py-sm-5 py-4">

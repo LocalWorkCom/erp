@@ -30,11 +30,9 @@ use App\Http\Controllers\Dashboard\SliderController;
 use App\Http\Controllers\Dashboard\VendorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\CuisineController;
-use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DiscountController;
 use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 
@@ -44,9 +42,7 @@ use App\Http\Controllers\Dashboard\PermissionController;
 
 use App\Http\Controllers\Dashboard\DishCategoryController;
 use App\Http\Controllers\Dashboard\LeaveSettingController;
-use App\Http\Controllers\Dashboard\ReturnPolicyController;
 use App\Http\Controllers\Dashboard\AddonCategoryController;
-use App\Http\Controllers\Dashboard\PrivacyPolicyController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
 use App\Http\Controllers\Dashboard\TermsAndConditionsController;
