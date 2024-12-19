@@ -102,7 +102,7 @@ class AuthController extends Controller
 
                 $data = [
                     "access_token" => $token,
-                    'data' => $user
+                    'user' => $user
                 ];
 
                 return ResponseWithSuccessData($lang, $data, 12);
