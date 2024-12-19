@@ -24,6 +24,10 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
+        $messages = [
+            'country_code.exists' => 'كود الدولة غير موجود.',
+        ];
+
         $validator = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => "required|email|unique:users",
@@ -47,9 +51,7 @@ class AuthController extends Controller
         $country = Country::where('phone_code', $request->country_code)->first();
 
         if (!$country) {
-            return respondError('Invalid country code.', 400, [
-                'country_code' => ['Country code does not exist in the database.']
-            ]);
+            return respondError('Invalid country code.', 400, [$messages["country_code.exists"]]);
         }
 
         $user = new User();
@@ -149,20 +151,15 @@ class AuthController extends Controller
             ->exists();
 
         if (!$userExists) {
-            return respondError('Validation Error.', 400, $messages["phone.exists"]);
+            return respondError('Validation Error.', 400, [$messages["phone.exists"]]);
         }
 
-
-        return response()->json([
-            'status' => true,
-            'message' => __('Phone verified successfully.'),
-            'data' => [
-                'phone' => $request->phone,
-                'country_code' => $request->country_code,
-            ],
-        ], 200);
+        $data = [
+            'phone' => $request->phone,
+            'country_code' => $request->country_code,
+        ];
+        return ResponseWithSuccessData($lang, $data, 35);
     }
-
 
     public function resetPassword(Request $request)
     {
@@ -194,12 +191,14 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return respondError('Validation Error.', 400, $messages["phone.exists"]);
+            return respondError('Validation Error.', 400, [$messages["phone.exists"]]);
         }
 
         // Check if the new password is the same as the old one
         if (Hash::check($request->password, $user->password)) {
-            return RespondWithBadRequest($lang, 3);
+            return respondError('Password Error', 403, [
+                'password' => ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية']
+            ]);
         }
 
         $user->password = Hash::make($request->password);
