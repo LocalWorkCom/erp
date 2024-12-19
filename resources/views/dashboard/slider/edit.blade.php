@@ -150,14 +150,20 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            // Toggle visibility for dish/offer dropdowns
+            // Toggle visibility and disable the unselected dropdown
             $('input[name="flag"]').on('change', function () {
-                if ($(this).val() === 'dish') {
+                const selectedFlag = $(this).val();
+
+                if (selectedFlag === 'dish') {
                     $('#dishDropdown').removeClass('d-none');
+                    $('#dish_id').prop('disabled', false); // Enable dish dropdown
                     $('#offerDropdown').addClass('d-none');
-                } else {
+                    $('#offer_id').prop('disabled', true); // Disable offer dropdown
+                } else if (selectedFlag === 'offer') {
                     $('#offerDropdown').removeClass('d-none');
+                    $('#offer_id').prop('disabled', false); // Enable offer dropdown
                     $('#dishDropdown').addClass('d-none');
+                    $('#dish_id').prop('disabled', true); // Disable dish dropdown
                 }
             }).trigger('change');
         });

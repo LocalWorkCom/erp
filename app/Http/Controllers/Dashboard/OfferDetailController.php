@@ -115,15 +115,15 @@ class OfferDetailController extends Controller
 
         switch ($offerType) {
             case 'dishes':
-                $types = Dish::all();  // Assuming you have a Dish model for dishes
+                $types = Dish::where('deleted_at',null)->get();  // Assuming you have a Dish model for dishes
                 break;
 
             case 'addons':
-                $types = DishAddon::all();  // Assuming you have a DishAddon model for addons
+                $types = DishAddon::where('deleted_at',null)->get();  // Assuming you have a DishAddon model for addons
                 break;
 
             case 'products':
-                $types = Product::all();  // Assuming you have a Product model for products
+                $types = Product::where('deleted_at',null)->get();  // Assuming you have a Product model for products
                 break;
 
             default:

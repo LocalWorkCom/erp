@@ -32,6 +32,34 @@ class OfferDetail extends Model
 
     public function offer()
     {
-        return $this->belongsTo(Offer::class,'offer_id','id');
+        return $this->belongsTo(Offer::class,'offer_id','id')->where('deleted_at',null);
     }
+
+    public function getTypeName($lang)
+    {
+        switch ($this->offer_type) {
+            case 'dishes':
+                return optional(Dish::find($this->type_id))->{"name_{$lang}"} ?? null;
+
+            case 'addons':
+                return optional(Recipe::where('type', 2)->find($this->type_id))->{"name_{$lang}"} ?? null;
+
+            case 'products':
+                return optional(Product::find($this->type_id))->{"name_{$lang}"} ?? null;
+
+            default:
+                return null;
+        }
+    }
+
+    public function getOfferTypeName($lang)
+    {
+        return match ($this->offer_type) {
+            'dishes' => $lang === 'en' ? 'dishes' : 'الأطباق',
+            'addons' => $lang === 'en' ? 'addons' : 'الإضافات',
+            'products' => $lang === 'en' ? 'products' : 'المنتجات',
+            default => null,
+        };
+    }
+
 }

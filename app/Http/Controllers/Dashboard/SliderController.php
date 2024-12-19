@@ -95,8 +95,8 @@ class SliderController extends Controller
         $slider->description_ar = $data['description_ar'];
         $slider->description_en = $data['description_en'];
         $slider->flag = $data['flag'];
-        $slider->dish_id = $data['dish_id'];
-        $slider->offer_id = $data['offer_id'];
+        $slider->dish_id = $data['dish_id']??null;
+        $slider->offer_id = $data['offer_id']??null;
         $slider->modified_by = auth()->id() ?? 1;
         if ($request->hasFile('image')) {
             $image = $request->file('image');

@@ -28,8 +28,8 @@ class SliderFormRequest extends FormRequest
             'description_en' => 'nullable|string',
             'image' => 'nullable',
             'flag'=>'required',
-            'dish_id' => 'required_if:flag,dish|nullable|exists:dishes,id',
-            'offer_id' => 'required_if:flag,offer|nullable|exists:offers,id',
+            'dish_id' => 'filled|exists:dishes,id',
+            'offer_id' => 'filled|exists:offers,id',
         ];
     }
 }
