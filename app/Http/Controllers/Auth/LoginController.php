@@ -17,68 +17,36 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Check if it's a web login (by phone + country code) or dashboard login (by email)
-        if ($request->is('dashboard/*')) {
-            // For dashboard login, only email and password are required
-            $credentials = $request->validate([
-                'email' => 'required|email',  // Email is required for dashboard login
-                'password' => 'required|string',  // Password is required
-            ]);
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-            // Find user by email
-            $user = User::where('email', $credentials['email'])->first();
-        } else {
-            // For website login, both phone and country_code are required
-            $credentials = $request->validate([
-                'phone' => 'required|string', // Phone is required for website login
-                'country_code' => 'required|string', // Country code is required for phone login
-                'password' => 'required|string',  // Password is required
-            ]);
+        $user = User::where('email', $credentials['email'])->first();
 
-            // Find user by phone and country code
-            $user = User::where('phone', $credentials['phone'])
-                        ->where('country_code', $credentials['country_code'])
-                        ->first();
-        }
-
-        // Check if the user exists
-        if (!$user) {
+        // Check if the user exists and is flagged as an admin
+        if (!$user || $user->flag != 'admin') {
             return back()->withErrors([
-                'login' => __('auth.user_not_found'),  // Customize error message if user is not found
-            ])->onlyInput('email', 'phone');
+                'email' => __('auth.only_admin'),  // Use lang helper to get the message
+            ])->onlyInput('email');
         }
 
-        // Check if the password is correct
+        // Verify the password
         if (!Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors([
-                'login' => __('auth.invalid_credentials'),  // Invalid credentials message
-            ])->onlyInput('email', 'phone');
+                'email' => __('auth.invalid_credentials'),  // Use lang helper for invalid credentials message
+            ])->onlyInput('email');
         }
 
-        // Check the user's flag (admin or client)
-        if ($user->flag == 'admin') {
-            // If the user is an admin, log them in and redirect to the admin dashboard
-            Auth::login($user);
-            $request->session()->regenerate();  // Regenerate the session to prevent session fixation attacks
-            return redirect()->route('dashboard.home');  // Redirect to the admin dashboard
-        }
+        // Log the user in using Laravel's Auth system
+        Auth::login($user);
 
-        // Check if the user is a client
-        if ($user->flag == 'client') {
-            // If the user is a client, log them in and redirect to the client dashboard
-            Auth::login($user);
-            $request->session()->regenerate();  // Regenerate the session
-            return redirect()->route('home');  // Redirect to the client dashboard
-        }
+        // Regenerate the session to prevent session fixation attacks
+        $request->session()->regenerate();
 
-        // If the user has an unknown flag, return an error
-        return back()->withErrors([
-            'login' => __('auth.unknown_flag'),  // Customize this error message if needed
-        ])->onlyInput('email', 'phone');
+        // Redirect to the dashboard
+        return redirect()->intended('dashboard');
     }
-
-
-
 
 
     public function logout(Request $request)

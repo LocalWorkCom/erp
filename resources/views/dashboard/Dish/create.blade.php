@@ -271,14 +271,15 @@ $(document).ready(function () {
         $('#addon-categories-section').append(`
             <div class="addon-category mt-4">
                 <div class="row gy-2">
-                    <div class="col-xl-4">
+                   <div class="col-xl-4">
                         <label>@lang('dishes.AddonCategory')</label>
                         <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2" required>
                             @foreach ($addonCategories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name_en }}</option>
                             @endforeach
                         </select>
                     </div>
+
                     <div class="col-xl-4">
                         <label>@lang('dishes.MinAddons')</label>
                         <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>

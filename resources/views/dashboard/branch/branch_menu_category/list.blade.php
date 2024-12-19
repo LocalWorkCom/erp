@@ -179,9 +179,9 @@
                                                 @lang('category.show') <i class="ri-eye-line"></i>
                                             </a>
 
-                                                <button style="border: none;" id="nn_{{ $branch_menu_category->id }}" onclick="change_status_item({{ $branch_menu_category->id }})" class="toggle {{ ($branch_menu_category->is_active == 1) ? 'on' : 'off' }} mb-3 change-status-btn" data-id="{{ $branch_menu_category->id }}"> 
-                                                    <span></span>
-                                                </button>
+                                            <button type="button" id="branch_menu_category_activation_{{ $branch_menu_category->id }}" onclick="change_status_item({{ $branch_menu_category->id }})" class="btn btn-danger-light btn-wave">
+                                            {{ ($branch_menu_category->is_active == 0) ? __('branch_menu_category.Active') : __('branch_menu_category.NotActive') }}
+                                            </button>
 
 
                                             <?php /*
@@ -336,61 +336,57 @@
         return confirm("@lang('validation.DeleteConfirm')");
     }
 
+    // function change_status_item(dishCategoryId) {
+    //     //var button = document.querySelector('.change-status-btn[data-id="' + dishCategoryId + '"]');    
+    //     var button = document.querySelector('.change-status-btn_' + dishCategoryId); 
+    //     console.log(button);
+           
+    //     if (button) {
+    //         if (button.classList.contains('on')) {
+    //         alert(11);
+    //             button.removeClass('on');
+    //             //button.classList.add('off');
+    //         } else {
+    //             alert(22);
+    //             button.removeClass('off');
+    //             //button.classList.add('on');
+    //         }
+    //     }
+    // }
+
     function change_status_item(dishCategoryId) {
-
-        var button = document.querySelector('.change-status-btn[data-id="' + dishCategoryId + '"]');    
-        // Toggle button class after confirmation
-        if (button) {
-            if (button.classList.contains('on')) {
-            alert(11);
-                button.classList.remove('on');
-                button.classList.add('off');
-            } else {
-                alert(22);
-                button.classList.remove('off');
-                button.classList.add('on');
+        var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
+        edit_status_url = edit_status_url.replace('id', dishCategoryId);   
+        Swal.fire({
+            title: 'تنبيه',
+            text: 'هل انت متاكد من انك تريد ان تغيير حالة هذا التصنيف',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم, غير',
+            cancelButtonText: 'إلغاء',
+            confirmButtonColor: '#3085d6'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
+                edit_status_url = edit_status_url.replace('id', dishCategoryId);
+                $.ajax({
+                    url: edit_status_url, 
+                    type: 'GET',
+                    success: function(data) {
+                        if(data.is_active == 1){
+                            $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.Active')}}');
+                            $('#branch_menu_category_activation_'+dishCategoryId).text('{{ __('branch_menu_category.NotActive')}}');
+                        }else{
+                            $('#branch_menu_category_status_'+dishCategoryId).text('{{ __('branch_menu_category.NotActive')}}');
+                            $('#branch_menu_category_activation_'+dishCategoryId).text('{{ __('branch_menu_category.Active')}}');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error: ' + error);
+                    }
+                });
             }
-        }
-
-                
-        // Swal.fire({
-        //     title: 'تنبيه',
-        //     text: 'هل انت متاكد من انك تريد ان تحذف هذا الدور',
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonText: 'نعم, احذف',
-        //     cancelButtonText: 'إلغاء',
-        //     confirmButtonColor: '#3085d6'
-        // }).then((result) => {
-        //     if (result.isConfirmed) {
-        //         var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
-        //         edit_status_url = edit_status_url.replace('id', dishCategoryId);
-
-        //         const element = document.querySelector('#nn'+ dishCategoryId);
-        //         if (element) {
-        //             element.addEventListener("click", () => {
-        //                 // Do things
-        //                 alert(111111);
-        //             }, false);
-        //         } else {
-        //             console.warn("Element with id nn" + dishCategoryId + " not found.");
-        //         }
-
-                
-
-        //         // Make the AJAX request or redirect to the URL (depending on your application)
-        //         fetch(edit_status_url)
-        //             .then(response => response.json())
-        //             .then(data => {
-        //                 // Handle response if needed, or update the button's state as needed
-        //                 console.log(data);
-        //             })
-        //             .catch(error => console.error('Error:', error));
-
-
-
-        //     }
-        // });
+        });
     }
 
 
