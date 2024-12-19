@@ -141,7 +141,7 @@ class AuthController extends Controller
         ], $messages);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return respondError('Validation Error.', 400, $validator->errors());
         }
 
         $userExists = User::where('phone', $request->phone)
