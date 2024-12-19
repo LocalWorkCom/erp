@@ -928,6 +928,7 @@ function respondError($error, $code, $errorMessages = [])
         'status' => false,
         'message' => $error,
         'data' => null,
+        'errorData'=>null
     ];
 
 
