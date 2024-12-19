@@ -115,29 +115,29 @@ class DishService
                     }
                 }
     
-                // Handle addons
-                if ($dish->has_addon && isset($data['addon_categories'])) {
+                if (isset($data['addon_categories'])) {
                     foreach ($data['addon_categories'] as $addonCategory) {
                         foreach ($addonCategory['addons'] as $addon) {
+                            Log::info('Processing Addon', [
+                                'addon_id' => $addon['addon_id'],
+                                'quantity' => $addon['quantity'],
+                                'price' => $addon['price'],
+                                'addon_category_id' => $addonCategory['addon_category_id'],
+                            ]);
+                
                             DishAddon::create([
                                 'dish_id' => $dish->id,
-                                'addon_id' => $addon['addon_id'],
+                                'addon_id' => $addon['addon_id'], // Refers to recipes.id
                                 'quantity' => $addon['quantity'],
                                 'price' => $addon['price'],
                                 'addon_category_id' => $addonCategory['addon_category_id'],
                                 'min_addons' => $addonCategory['min_addons'],
                                 'max_addons' => $addonCategory['max_addons'],
                             ]);
-                            Log::info('Dish Addon Added', [
-                                'dish_id' => $dish->id,
-                                'addon_id' => $addon['addon_id'],
-                                'quantity' => $addon['quantity'],
-                                'price' => $addon['price'],
-                                'addon_category_id' => $addonCategory['addon_category_id'],
-                            ]);
                         }
                     }
                 }
+                
     
                 Log::info('Dish Creation Completed Successfully', ['dish_id' => $dish->id]);
                 return $dish;
@@ -179,7 +179,7 @@ class DishService
             'sizes.*.recipes.*.quantity' => 'required_if:has_sizes,1|numeric|min:0',
             'addon_categories.*.min_addons' => 'nullable|integer|min:0|lte:addon_categories.*.max_addons',
             'addon_categories.*.max_addons' => 'nullable|integer|min:0',
-            'addon_categories.*.addons.*.addon_id' => 'required_if:has_addon,1|integer|exists:addons,id',
+            'addon_categories.*.addons.*.addon_id' => 'required_if:has_addon,1|integer',
             'addon_categories.*.addons.*.quantity' => 'required_if:has_addon,1|numeric|min:0',
             'addon_categories.*.addons.*.price' => 'required_if:has_addon,1|numeric|min:0',
         ])->validate();
