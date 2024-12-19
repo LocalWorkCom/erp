@@ -24,15 +24,11 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
-        $messages = [
-            'country_code.exists' => 'كود الدولة غير موجود.',
-        ];
-
         $validator = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => "required|email|unique:users",
             'country_code' => 'required|string',
-            "password" => "required",
+            "password" => "required|min:6",
             'phone' => [
                 'required',
                 'string',
@@ -51,7 +47,9 @@ class AuthController extends Controller
         $country = Country::where('phone_code', $request->country_code)->first();
 
         if (!$country) {
-            return respondError('Invalid country code.', 400, [$messages["country_code.exists"]]);
+            return respondError('Invalid country code.', 400, [
+                'credential' => ['كود الدولة غير صالح.']
+            ]);
         }
 
         $user = new User();
@@ -151,7 +149,11 @@ class AuthController extends Controller
             ->exists();
 
         if (!$userExists) {
-            return respondError('Validation Error.', 400, [$messages["phone.exists"]]);
+            return respondError(
+                'Validation Error.',
+                400,
+                ['phone' => ['رقم الهاتف مع رمز البلد غير مسجل.']]
+            );
         }
 
         $data = [
@@ -191,7 +193,11 @@ class AuthController extends Controller
             ->first();
 
         if (!$user) {
-            return respondError('Validation Error.', 400, [$messages["phone.exists"]]);
+            return respondError(
+                'Validation Error.',
+                400,
+                ['password' => ['رقم الهاتف مع رمز البلد غير مسجل']]
+            );
         }
 
         // Check if the new password is the same as the old one
