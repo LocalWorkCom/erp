@@ -22,7 +22,7 @@ class Dish extends Model
         'price',
         'image',
         'is_active',
-        'has_size',
+        'has_sizes',
         'has_addon',
         'created_by',
         'modified_by',
