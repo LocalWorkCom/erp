@@ -22,10 +22,10 @@
                         </a>
                     </li>
                     <li class="nav-item active" aria-current="page">
-                        <a class="nav-link" href="index.html">الرئيسية</a>
+                        <a class="nav-link" href="{{ route('home') }}">الرئيسية</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">قائمة الطعام</a>
+                        <a class="nav-link" href="{{ route('menu') }}">قائمة الطعام</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">تواصل معنا</a>
@@ -50,7 +50,6 @@
                     </li>
                     @auth('web')
                         @if (auth()->user()->flag == 'client')
-
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,15 +72,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            @else
-                             <li class="nav-item">
-                                <a class="nav-link btn align-items-center" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
-                                    <i class="fas fa-user-circle"></i>
-                                    <span>@lang('auth.login')</span>
-                                </a>
-                            </li>
-                            @endif
                         @else
                             <li class="nav-item">
                                 <a class="nav-link btn align-items-center" data-bs-toggle="modal"
@@ -90,7 +80,15 @@
                                     <span>@lang('auth.login')</span>
                                 </a>
                             </li>
-                        @endauth
+                        @endif
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-user-circle"></i>
+                                <span>@lang('auth.login')</span>
+                            </a>
+                        </li>
+                    @endauth
 
 
 

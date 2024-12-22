@@ -19,10 +19,24 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
         $popularDishes = getMostDishesOrdered(5);
-        $menuCategories = BranchMenuCategory::with('dish_categories')->get();
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('is_active', true)->get();
         return view(
             'website.landing',
             compact(['sliders', 'discounts', 'popularDishes', 'menuCategories'])
+        );
+    }
+
+    public function showMenu()
+    {
+        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
+            $query->where('is_active', true);
+        }, 'dish_categories.dishes' => function ($query) {
+            $query->where('is_active', true);
+        }])->get();
+        return view(
+            'website.menu',
+            compact(['menuCategories'])
         );
     }
 
