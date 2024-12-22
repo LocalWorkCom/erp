@@ -114,7 +114,7 @@
                                                             class="form-label">@lang('country.code')</label>
                                                         <input type="text" id="add-code" class="form-control"
                                                             name="code" value="{{ old('code') }}" required
-                                                            placeholder="@lang('country.Code')">
+                                                            placeholder="@lang('country.code')">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnterCode')</div>
                                                     </div>
@@ -266,10 +266,13 @@
                                                         <label for="edit-flag"
                                                             class="form-label">@lang('country.flag')</label>
                                                         <input type="file" id="edit-flag" class="form-control"
-                                                            name="flag" required placeholder="@lang('country.flag')">
+                                                            name="flag" placeholder="@lang('country.flag')">
+                                                        <img id="edit-flag-image" src="" alt="Current Flag"
+                                                            width="50px" style="display: none;">
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.flag')</div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -479,48 +482,83 @@
         @endif
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const editButtons = document.querySelectorAll('.edit-country-btn');
-            const editForm = document.getElementById('edit-country-form');
-            const nameArInput = document.getElementById('edit-name-ar');
-            const nameEnInput = document.getElementById('edit-name-en');
-            const CodeInput = document.getElementById('edit-code');
-            const currencyEnInput = document.getElementById('edit-currency-en');
-            const currencyCodeInput = document.getElementById('edit-currency-code');
-            const currencyArInput = document.getElementById('edit-currency-ar');
-            const phoneCodeInput = document.getElementById('edit-phone-code');
-            const lengthInput = document.getElementById('edit-length');
-            const flagInput = document.getElementById('edit-flag');
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get country details from data attributes
-                    const countryId = this.getAttribute('data-id');
-                    const nameAr = this.getAttribute('data-name-ar');
-                    const nameEn = this.getAttribute('data-name-en');
-                    const Code = this.getAttribute('data-code');
-                    const currencyEn = this.getAttribute('data-currency-en');
-                    const currencyAr = this.getAttribute('data-currency-ar');
-                    const currencyCode = this.getAttribute('data-currency-code');
-                    const phone_code = this.getAttribute('data-phone-code');
-                    const length = this.getAttribute('data-length');
-                    const flag = this.getAttribute('data-flag');
-                    const routeTemplate = this.getAttribute('data-route');
-                    // Set form action URL dynamically
-                    const updateRoute = routeTemplate.replace(':id', countryId);
-                    editForm.action = updateRoute;
-                    // Populate the modal fields
-                    nameArInput.value = nameAr;
-                    nameEnInput.value = nameEn;
-                    CodeInput.value = Code;
-                    currencyArInput.value = currencyAr;
-                    currencyEnInput.value = currencyEn;
-                    currencyCodeInput.value = currencyCode;
-                    phoneCodeInput.value = phone_code;
-                    lengthInput.value = length;
-                    flagInput.value = flag;
-                });
-            });
+          // Get the file input and image elements
+    const flagInput = document.getElementById('edit-flag');
+    const flagImage = document.getElementById('edit-flag-image');
+
+    // Listen for changes on the file input
+    flagInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        // If a file is selected
+        if (file) {
+            const reader = new FileReader();
+
+            // When the file is read, update the image source
+            reader.onload = function(e) {
+                flagImage.src = e.target.result; // Set the image src to the selected file
+                flagImage.style.display = 'block'; // Ensure the image is visible
+            };
+
+            // Read the selected file as a Data URL (base64 string)
+            reader.readAsDataURL(file);
+        }
+    });
+       document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-country-btn');
+    const editForm = document.getElementById('edit-country-form');
+    const nameArInput = document.getElementById('edit-name-ar');
+    const nameEnInput = document.getElementById('edit-name-en');
+    const codeInput = document.getElementById('edit-code');
+    const currencyEnInput = document.getElementById('edit-currency-en');
+    const currencyCodeInput = document.getElementById('edit-currency-code');
+    const currencyArInput = document.getElementById('edit-currency-ar');
+    const phoneCodeInput = document.getElementById('edit-phone-code');
+    const lengthInput = document.getElementById('edit-length');
+    const flagInput = document.getElementById('edit-flag');
+    const flagImage = document.getElementById('edit-flag-image');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get country details from data attributes
+            const countryId = this.getAttribute('data-id');
+            const nameAr = this.getAttribute('data-name-ar');
+            const nameEn = this.getAttribute('data-name-en');
+            const code = this.getAttribute('data-code');
+            const currencyEn = this.getAttribute('data-currency-en');
+            const currencyAr = this.getAttribute('data-currency-ar');
+            const currencyCode = this.getAttribute('data-currency-code');
+            const phoneCode = this.getAttribute('data-phone-code');
+            const length = this.getAttribute('data-length');
+            const flag = this.getAttribute('data-flag');
+            const routeTemplate = this.getAttribute('data-route');
+
+            // Set form action URL dynamically
+            const updateRoute = routeTemplate.replace(':id', countryId);
+            editForm.action = updateRoute;
+
+            // Populate the modal fields
+            nameArInput.value = nameAr;
+            nameEnInput.value = nameEn;
+            codeInput.value = code;
+            currencyArInput.value = currencyAr;
+            currencyEnInput.value = currencyEn;
+            currencyCodeInput.value = currencyCode;
+            phoneCodeInput.value = phoneCode;
+            lengthInput.value = length;
+            flagInput.value = ''; // Clear the file input
+
+            // Display the current flag image if available
+            if (flag) {
+                flagImage.src = flag; // Set the image source to the flag URL
+                flagImage.style.display = 'block'; // Show the image
+            } else {
+                flagImage.style.display = 'none'; // Hide the image if no flag
+            }
         });
+    });
+});
+
 
         document.addEventListener('DOMContentLoaded', function() {
             const showButtons = document.querySelectorAll('.show-country-btn');
@@ -611,5 +649,20 @@
                 }
             });
         }
+    </script>
+    <script>
+        // Add event listener for the form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // Get all input fields
+            const inputs = document.querySelectorAll(
+                'input[type="text"], input[type="file"], input[type="password"]');
+
+            // Loop through each input field to trim spaces
+            inputs.forEach(input => {
+                if (input.value) {
+                    input.value = input.value.trim(); // Trim spaces from the value
+                }
+            });
+        });
     </script>
 @endsection
