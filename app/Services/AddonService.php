@@ -13,7 +13,6 @@ class AddonService
 {
     public function index($withTrashed = false)
     {
-        Log::info('Fetching addons (type 2)', ['withTrashed' => $withTrashed]);
 
         $query = Recipe::where('type', 2)->with(['ingredients.product', 'images']);
         
