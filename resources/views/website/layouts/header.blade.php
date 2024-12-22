@@ -48,46 +48,50 @@
                         @endif
 
                     </li>
-                    @if (auth()->check() && Auth::user()->type === 'client')
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle"></i>
-                                <span>{{ Auth::user()->name }}</span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('website.profile.view') }}">
-                                        <i class="fas fa-user"></i> @lang('auth.profile')
-                                    </a>
-                                </li>
-                                <li>
-                                    <form method="POST" action="{{ route('website.logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            @lang('auth.logout')
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @elseif(auth()->check())
-                        <li class="nav-item">
-                            <a class="nav-link btn align-items-center" data-bs-toggle="modal"
-                                data-bs-target="#loginModal">
-                                <i class="fas fa-user-circle"></i>
-                                <span>@lang('auth.login')</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link btn align-items-center" data-bs-toggle="modal"
-                                data-bs-target="#loginModal">
-                                <i class="fas fa-user-circle"></i>
-                                <span>@lang('auth.login')</span>
-                            </a>
-                        </li>
-                    @endif
+                    @auth('web')
+                        @if (auth()->user()->flag == 'client')
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>{{ auth()->user()->name }}</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('website.profile.view') }}">
+                                            <i class="fas fa-user"></i> @lang('auth.profile')
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="{{ route('website.logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                @lang('auth.logout')
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                            @else
+                             <li class="nav-item">
+                                <a class="nav-link btn align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>@lang('auth.login')</span>
+                                </a>
+                            </li>
+                            @endif
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link btn align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>@lang('auth.login')</span>
+                                </a>
+                            </li>
+                        @endauth
+
 
 
 
