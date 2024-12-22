@@ -1,5 +1,5 @@
 <div class="modal-body login d-none px-4" id="loginBody">
-    <form method="POST" action="{{ route('website.login') }}">
+    <form method="POST" id="loginForm" action="{{ route('website.login') }}">
         @csrf
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
@@ -13,9 +13,12 @@
 
                 <!-- Phone Input -->
                 <div class="input-group mb-3">
-                    <!-- Phone Input -->
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                        id="phoneInput" placeholder="@lang('auth.phoneplace')" value="{{ old('phone') }}" required>
+                    <input type="text" class="form-control @error('email_or_phone') is-invalid @enderror"
+                        name="email_or_phone" id="phoneInput" placeholder="@lang('auth.phoneplace')"
+                        value="{{ old('email_or_phone') }}" required>
+                    @error('email_or_phone')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
 
                     <!-- Country Code Dropdown -->
                     <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,10 +41,10 @@
                     </ul>
 
                     <!-- Hidden Input for Country Code -->
-                    <input type="hidden" name="phone_code" id="countryCodeInput"
-                        value="{{ old('phone_code', '+02') }}">
+                    <input type="text" name="country_code" id="countryCodeInput"
+                        value="{{ old('country_code', '+02') }}">
 
-                    @error('phone')
+                    @error('country_code')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
@@ -98,58 +101,60 @@
         </div>
     </form>
 </div>
+
 <script>
-    // Handle the country selection from the dropdown
-    document.querySelectorAll('.country-item').forEach(item => {
-        item.addEventListener('click', function() {
-            var countryCode = this.getAttribute('data-country-code');
-            var countryFlag = this.getAttribute('data-country-flag');
+$(document).ready(function() {
+    $('#loginForm').on('submit', function(event) {
+        event.preventDefault();
 
-            // Update the country code and flag display
-            document.getElementById('selected-country-code').innerText = countryCode;
-            document.getElementById('countryCodeInput').value = countryCode;
+        // Get form data
+        var formData = $(this).serialize();
 
-            // Optional: Update the flag displayed on the button
-            document.querySelector('.country-dropdown img').src = countryFlag;
+        // Send the AJAX request
+        $.ajax({
+            url: '{{ route('website.login') }}',
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Show success message inside the modal
+                    $('#loginBody').html(`
+                        <div class="text-center">
+                            <h3>Login successful!</h3>
+                            <p>Welcome, ${response.data.user.name}!</p>
+                            <button class="btn btn-primary" onclick="window.location.href='/home'">Go to Dashboard</button>
+                        </div>
+                    `);
+
+                    // Optionally, set a delay before redirecting to home
+                    setTimeout(function() {
+                        window.location.href = '/';  // Adjust the redirect path as needed
+                    }, 2000);  // Redirect after 2 seconds (optional)
+                }
+            },
+            error: function(response) {
+                var errors = response.responseJSON.errors;
+
+                if (response.status === 400 || response.status === 403) {
+                    // Handle validation errors
+                    var errorMessages = '';
+                    $.each(errors, function(key, value) {
+                        errorMessages += value.join("\n") + "\n";
+                    });
+
+                    // Display the error messages inside the modal
+                    $('#loginBody').prepend(`
+                        <div class="alert alert-danger">
+                            ${errorMessages}
+                        </div>
+                    `);
+                } else {
+                    alert('An unexpected error occurred!');
+                }
+            }
         });
     });
-</script>
-<script>
-  $('form').on('submit', function(e) {
-    e.preventDefault(); // Prevent the default form submission
-
-    // Get form data
-    var formData = new FormData(this);
-
-    // Send the AJAX request
-    $.ajax({
-        url: "{{ route('website.login') }}",  // Route for login
-        method: "POST",
-        data: formData,
-        processData: false,  // Don't process the data
-        contentType: false,  // Don't set content-type, let jQuery handle it
-        success: function(response) {
-            if (response.status) {
-                // Redirect to the appropriate page
-                window.location.href = response.redirect_url; // Redirect based on role
-            }
-        },
-        error: function(xhr) {
-            // If validation errors occur
-            var errors = xhr.responseJSON.errors;
-
-            // Reset previous error messages
-            $('.is-invalid').removeClass('is-invalid');
-            $('.text-danger').remove();
-
-            // Loop through errors and display them on the respective input fields
-            $.each(errors, function(field, messages) {
-                var inputField = $('input[name="' + field + '"]');
-                inputField.addClass('is-invalid');  // Add class to show the error
-                inputField.after('<span class="text-danger">' + messages[0] + '</span>'); // Display error message
-            });
-        }
-    });
 });
+
 
 </script>
