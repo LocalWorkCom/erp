@@ -45,61 +45,35 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $rules = [
-            'phone' => 'required|string',
-            'phone_code' => 'required|string',
-            'password' => 'required|string',
-        ];
+        $credentials = $request->validate([
+            'email_or_phone' => 'required',
+            'password' => 'required',
+        ]);
 
-        // Validate the request
-        $validator = Validator::make($request->all(), $rules);
+        // Find the user by email
+        $user = User::where('phone', $credentials['email_or_phone'])->first();
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            // Handle validation errors
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Proceed if validation passes
-        $credentials = $validator->validated();
-
-        // Debugging information (optional)
-
-        // Check if the user exists with the full phone number and check if the user is a client
-        $user = User::where('phone', $credentials['phone'])
-        ->where('country_code', $credentials['phone_code'])
-        ->first();
-        dd($user,$credentials['phone_code'] ,)
-        // Check if user exists and if user flag is 'client'
-        if (!$user || $user->flag != 'client') {
-
-            return response()->json([
-                'errors' => [
-                    'phone' => [__('auth.only_client')] // Custom message for client login only
-                ]
-            ], 422);
+        // Check if the user exists and ensure the user is not an admin
+        if (!$user || $user->flag == 'phone') {
+            return back()->withErrors([
+                'email_or_phone' => __('auth.only_client'),  // Add language key for client-only access
+            ])->onlyInput('email_or_phone');
         }
 
         // Verify the password
         if (!Hash::check($credentials['password'], $user->password)) {
-            return response()->json([
-                'errors' => [
-                    'password' => [__('auth.invalid_credentials')] // Message for invalid credentials
-                ]
-            ], 422);
+            return back()->withErrors([
+                'email_or_phone' => __('auth.invalid_credentials'),
+            ])->onlyInput('email_or_phone');
         }
 
-        // Log the user in using Laravel's Auth system
-        Auth::login($user);
+        // Log the client in using the default web guard (or a specific client guard if configured)
+        Auth::guard('web')->login($user);
 
-        // Regenerate the session to prevent session fixation attacks
+        // Regenerate session to prevent session fixation attacks
         $request->session()->regenerate();
 
-        // Respond with a success message and redirect URL
+        // Redirect to the client dashboard or home page
         return redirect()->route('home');
     }
     public function logout()
