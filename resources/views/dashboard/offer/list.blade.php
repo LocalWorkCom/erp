@@ -97,7 +97,7 @@
                                                 </form>
 
                                                 <a href="{{ route('offerDetails.list', $offer->id) }}" class="btn btn-outline-teal btn-wave">
-                                                    @lang('offer.AddDetails') <i class="ri-add-box-line"></i>
+                                                    @lang('offer.Details') <i class="ri-add-box-line"></i>
                                                 </a>
                                             </td>
                                         </tr>

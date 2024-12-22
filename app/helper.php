@@ -26,7 +26,9 @@ use App\Models\Dish;
 use App\Models\DishAddon;
 use App\Models\DishSize;
 use App\Models\Menu;
+
 use App\Models\BranchMenuCategory;
+use App\Models\BranchMenu;
 use App\Models\BranchMenuAddon;
 use App\Models\BranchMenuSize;
 
@@ -825,7 +827,7 @@ function GetCurrencyCodes()
 }
 function GetCountries()
 {
-    $countries = Country::select('phone_code', 'id','flag')->get();
+    $countries = Country::select('phone_code', 'id', 'flag')->get();
     return $countries;
 }
 function AddBranchMenu($branch_id)
@@ -839,8 +841,8 @@ function AddBranchMenu($branch_id)
 function AddDishCategories($branch_id)
 {
     $get_dish_categories = DishCategory::all();
-    if($get_dish_categories){
-        foreach($get_dish_categories as $get_dish_category) {
+    if ($get_dish_categories) {
+        foreach ($get_dish_categories as $get_dish_category) {
             $branch_menu_category = BranchMenuCategory::firstOrCreate(
                 ['dish_category_id' => $get_dish_category->id, 'branch_id' => $branch_id, 'parent_id' => $get_dish_category->parent_id],
                 ['is_active' => 1, 'created_by' => auth()->user()->id]
@@ -852,10 +854,10 @@ function AddDishCategories($branch_id)
 function AddDishes($branch_id)
 {
     $get_dishes = Dish::all();
-    if($get_dishes){
-        foreach($get_dishes as $get_dish) {
+    if ($get_dishes) {
+        foreach ($get_dishes as $get_dish) {
             $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
-            $branch_menu_category = Menu::firstOrCreate(
+            $branch_menu_category = BranchMenu::firstOrCreate(
                 ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
                 [
                     'dish_category_id' => $get_dish->category_id,
@@ -875,12 +877,12 @@ function AddDishes($branch_id)
 function AddAddons($branch_id)
 {
     $get_addons = DishAddon::all();
-    if($get_addons){
-        foreach($get_addons as $get_addon) {
+    if ($get_addons) {
+        foreach ($get_addons as $get_addon) {
 
-            $menu = Menu::where('dish_id', $get_addon->dish_id)->first();
+            $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_category = BranchMenuAddon::firstOrCreate(
-                ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
+                ['branch_menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
                 [
                     'addon_category_id' => $get_addon->addon_category_id,
                     'quantity' => $get_addon->quantity,
@@ -898,11 +900,11 @@ function AddAddons($branch_id)
 function AddSizes($branch_id)
 {
     $get_sizes = DishSize::all();
-    if($get_sizes){
-        foreach($get_sizes as $get_size) {
-            $menu = Menu::where('dish_id', $get_size->dish_id)->first();
+    if ($get_sizes) {
+        foreach ($get_sizes as $get_size) {
+            $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
             $branch_menu_category = BranchMenuSize::firstOrCreate(
-                ['menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
+                ['branch_menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
                 [
                     'price' => $get_size->price,
                     'default_size' => $get_size->default_size,
@@ -928,7 +930,7 @@ function respondError($error, $code, $errorMessages = [])
         'status' => false,
         'message' => $error,
         'data' => null,
-        'errorData'=>null
+        'errorData' => null
     ];
 
 
@@ -939,9 +941,9 @@ function respondError($error, $code, $errorMessages = [])
 
     return response()->json($response, $code1);
 }
- function getMostDishesOrdered($limit = 5)
+function getMostDishesOrdered($limit = 5)
 {
-    return Dish::select('dishes.id', 'dishes.name')
+    return Dish::select('dishes.*')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')

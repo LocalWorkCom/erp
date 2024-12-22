@@ -69,9 +69,9 @@ class ClientAddressController extends Controller
                 'state' => 'required|string',
                 'postal_code' => 'nullable|string',
                 'is_default' => 'nullable|integer',
-                'address_type' => 'nullabel|in:apartment,villa,office',
+                'address_type' => 'nullable|in:apartment,villa,office',
                 'building' => 'nullable',
-                'floor_number' => 'nullable|integre',
+                'floor_number' => 'nullable|integer',
                 'apartment_number' => 'nullable|integer',
                 'notes' => 'nullable|string',
                 'country_code' => 'nullable|string',
@@ -101,8 +101,8 @@ class ClientAddressController extends Controller
 
             return ResponseWithSuccessData($lang, $clientAddress, 1);
         } catch (\Exception $e) {
-            Log::error('Error creating brand: ' . $e->getMessage());
-            return RespondWithBadRequestData($lang, 2);
+            Log::error('Error creating address: ' . $e->getMessage());
+            return respondError($e->getMessage(), 2);
         }
     }
 
@@ -117,9 +117,9 @@ class ClientAddressController extends Controller
                 'state' => 'nullable|string',
                 'postal_code' => 'nullable|string',
                 'is_default' => 'nullable|integer',
-                'address_type' => 'nullabel|in:apartment,villa,office',
-                'building' => 'nullable',
-                'floor_number' => 'nullable|integre',
+                'address_type' => 'nullable|in:apartment,villa,office',
+                'building' => 'nullable|string',
+                'floor_number' => 'nullable|integer',
                 'apartment_number' => 'nullable|integer',
                 'notes' => 'nullable|string',
                 'country_code' => 'nullable|string',

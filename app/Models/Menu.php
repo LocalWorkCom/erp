@@ -10,8 +10,6 @@ class Menu extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'menu';
-
     protected $fillable = [
         'branch_id',
         'dish_id',
