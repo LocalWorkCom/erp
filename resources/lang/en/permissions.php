@@ -545,6 +545,7 @@ return array (
   'delete faqs' => 'delete faqs',
   'delete returns' => 'delete returns',
   'delete privacies' => 'delete privacies',
+<<<<<<< HEAD
   'view branch_menus' => 'view branch_menus',
   'create branch_menus' => 'create branch_menus',
   'update branch_menus' => 'update branch_menus',
@@ -557,4 +558,11 @@ return array (
   'create branch_menu_sizes' => 'create branch_menu_sizes',
   'update branch_menu_sizes' => 'update branch_menu_sizes',
   'delete branch_menu_sizes' => 'delete branch_menu_sizes',
+=======
+  'view discount_dishes' => 'view discount_dishes',
+  'view offerDetails' => 'view offerDetails',
+  'create offerDetails' => 'create offerDetails',
+  'update offerDetails' => 'update offerDetails',
+  'delete offerDetails' => 'delete offerDetails',
+>>>>>>> 11e1e3f605d59463f7d32c0d792073ea087390a6
 );

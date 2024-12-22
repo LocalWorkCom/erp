@@ -1,103 +1,148 @@
 @extends('layouts.master')
 
 @section('styles')
-    <!-- Add any specific styles here -->
+    <!-- DATA-TABLES CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
 @endsection
 
 @section('content')
+    <!-- PAGE HEADER -->
     <div class="d-sm-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-        <h4 class="fw-medium mb-0">@lang('offer.Offer Details')</h4>
+        <h4 class="fw-medium mb-0">@lang('offer.OfferDetails')</h4>
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);"
-                           onclick="window.location.href='{{ route('offers.list') }}'">@lang('offer.Offers')</a>
-                    </li>
+                    <li class="breadcrumb-item"><a href="{{route('dashboard.home')}}">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="" onclick="window.location.href='{{ route('offers.list') }}'">@lang('offer.Offers')</a></li>
                 </ol>
             </nav>
         </div>
     </div>
-
     <div class="main-content app-content">
         <div class="container-fluid">
+            <!-- Start:: row-4 -->
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header">
-                            <div class="card-title">@lang('offer.Offer Details')</div>
+                        <div class="card-header"
+                            style="
+                        display: flex;
+                        justify-content: space-between;">
+                            <div class="card-title">
+                                @lang('offer.OfferDetails')</div>
+
+                            <a href="{{ route('offerDetail.create', $id) }}" type="button" class="btn btn-primary label-btn">
+                                <i class="fe fe-plus label-btn-icon me-2"></i>
+                                @lang('offer.AddOfferDetails')
+                            </a>
                         </div>
                         <div class="card-body">
-                            @if ($errors->any())
-                                <div class="alert alert-solid-danger alert-dismissible fade show">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                            @if (session('message'))
+                                <div class="alert alert-solid-info alert-dismissible fade show">
+                                    {{ session('message') }}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                         <i class="bi bi-x"></i>
                                     </button>
                                 </div>
                             @endif
-
-                            <form action="{{ route('offerDetails.save', $offer->id) }}" method="POST">
-                                @csrf
-                                <div class="col-xl-12">
-                                    <table class="table table-bordered">
-                                        <thead>
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">@lang('category.ID')</th>
+                                        <th scope="col">@lang('offer.Type')</th>
+                                        <th scope="col">@lang('offer.TypeName')</th>
+                                        <th scope="col">@lang('offer.Count')</th>
+                                        <th scope="col">@lang('offer.Discount')</th>
+                                        <th scope="col">@lang('category.Actions')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($offerDetails as $detail)
                                         <tr>
-                                            <th>@lang('offer.OfferType')</th>
-                                            <th>@lang('offer.TypeName')</th>
-                                            <th>@lang('offer.Count')</th>
-                                            <th>@lang('offer.Discount')</th>
-                                            <th>@lang('offer.Actions')</th>
+                                            {{-- @dd( $detail) --}}
+                                            <td>{{ $detail->id }}</td>
+                                            <td>{{ $detail->offer_type }}</td>
+                                            <td>
+                                                @if ($detail->offer_type == 'dishes')
+                                                    {{ $detail->dish->name ?? 'N/A' }}  <!-- Fetch name from dishes table -->
+                                                @elseif ($detail->offer_type == 'addons')
+                                                    {{ $detail->addon->name ?? 'N/A' }}  <!-- Fetch name from addons table -->
+                                                @elseif ($detail->offer_type == 'products')
+                                                    {{ $detail->product->name ?? 'N/A' }}  <!-- Fetch name from products table -->
+                                                @else
+                                                    {{ 'Unknown Type' }}  <!-- Default message if no type matches -->
+                                                @endif
+                                            </td>
+                                            <td>{{ $detail->count }}</td>
+                                            <td>{{ $detail->discount }} %</td>
+                                            <td>
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('offerDetail.edit', $detail->id) }}" class="btn btn-orange-light btn-wave">
+                                                    @lang('category.edit') <i class="ri-edit-line"></i>
+                                                </a>
+
+                                                <!-- Delete Button -->
+                                                <form class="d-inline" id="delete-form-{{ $detail->id }}" action="{{ route('offerDetail.delete', $detail->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item({{ $detail->id }})" class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                         </tr>
-                                        </thead>
-                                        <tbody id="offer-details-table" data-detail-count="{{ count($details) }}">
-                                        @foreach ($details as $index => $offerDetail)
-                                            <tr>
-                                                <td>
-                                                    <select name="details[{{ $index }}][offer_type]" class="form-control offer-type-select" required>
-                                                        <option value="dishes" {{ $offerDetail->offer_type == 'dishes' ? 'selected' : '' }}>@lang('offer.Dishes')</option>
-                                                        <option value="addons" {{ $offerDetail->offer_type == 'addons' ? 'selected' : '' }}>@lang('offer.Addons')</option>
-                                                        <option value="products" {{ $offerDetail->offer_type == 'products' ? 'selected' : '' }}>@lang('offer.Products')</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select name="details[{{ $index }}][type_id]" class="form-control type-id-select" required>
-                                                        <option value="{{ $offerDetail->type_id }}" selected>{{ $offerDetail->type->name ?? '' }}</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="details[{{ $index }}][count]" class="form-control" value="{{ $offerDetail->count }}" required>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="details[{{ $index }}][discount]" class="form-control" value="{{ $offerDetail->discount }}" required>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm remove-detail">@lang('offer.Remove')</button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <button type="button" id="add-detail" class="btn btn-success btn-sm">@lang('offer.Add Detail')</button>
-                                <button type="submit" class="btn btn-primary mt-3">@lang('offer.Save')</button>
-                            </form>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- End:: row-4 -->
+
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <script>
-    </script>
+    <!-- JQUERY CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+
+    <!-- DATA-TABLES CDN -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- INTERNAL DATADABLES JS -->
+    @vite('resources/assets/js/datatables.js')
 @endsection
+
+<script>
+    function delete_item(id) {
+        Swal.fire({
+            title: @json(__('validation.Alert')),
+            text: @json(__('validation.DeleteConfirm')),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: @json(__('validation.Delete')),
+            cancelButtonText: @json(__('validation.Cancel')),
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('delete-form-' + id);
+                form.submit();
+            }
+        });
+    }
+</script>
+

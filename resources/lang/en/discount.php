@@ -16,4 +16,9 @@ return [
     'ShowDiscount'=>'ShowDiscount',//
     'NameAr'=>'NameAr',
     'NameEn'=>'NameEn',
+    'AddDishes' =>'AddDishes',
+    'Discount Dish' =>'Discount Dish',
+    'Actions' =>'Actions',
+    'dish' =>'dish',
+    'Save' =>'Save',
 ];

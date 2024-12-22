@@ -20,7 +20,12 @@ class CuisineController extends Controller
         $cuisines = $this->cuisineService->index();
         return view('dashboard.cuisines.index', compact('cuisines'));
     }
-
+    public function show($id)
+    {
+        $cuisine = $this->cuisineService->show($id);
+        return view('dashboard.cuisines.show', compact('cuisine'));
+    }
+    
     public function create()
     {
         return view('dashboard.cuisines.create');
@@ -34,7 +39,7 @@ class CuisineController extends Controller
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'is_active' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
         ]);
 
         $this->cuisineService->store($data, $request->file('image'));
@@ -56,7 +61,7 @@ class CuisineController extends Controller
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'is_active' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:5000',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg',
         ]);
 
         $this->cuisineService->update($id, $data, $request->file('image'));
