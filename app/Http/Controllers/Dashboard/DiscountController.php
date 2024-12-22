@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
+use App\Models\Dish;
 use App\Services\DiscountService;
 use Illuminate\Http\Request;
 
@@ -97,5 +98,50 @@ class DiscountController extends Controller
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/discounts')->with('message',$message);
+    }
+
+    public function dish(Request $request, $discountId)
+    {
+        $response = $this->discountService->listDish($request, $this->checkToken);
+        $responseData = json_decode($response->getContent(), true);
+        $discount = Discount::with('discount_dishes')->findOrFail($discountId); // Load discount with dishes
+        $dishes = Dish::all();  // Retrieve all dishes
+
+        foreach ($discount->dishes as $dish) {
+            if ($dish->pivot) {
+                $dishId = $dish->pivot->dish_id ?? null;
+            }
+        }
+
+        return view('dashboard.discount.dish.list', compact('discount', 'dishes'));
+    }
+
+    public function saveDishes(Request $request, $discountId)
+    {
+        // Call the service method to save the units
+        $response = $this->discountService->saveDiscountDish($request, $discountId);
+
+        // Ensure the response is in the expected format
+        $responseData = $response->original ?? [];
+
+        // Check if the response has a 'status' key
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // If 'data' key exists, handle validation errors
+            if (isset($responseData['data'])) {
+                $validationErrors = $responseData['data'];
+                return redirect()->back()->withErrors($validationErrors)->withInput();
+            } else {
+                // dd(0);
+                return redirect()->back()->withErrors($responseData['message'])->withInput();
+            }
+
+            // If no 'data' key is present, handle it gracefully
+        }
+
+        // Success message
+        $message = $responseData['message'] ?? __('Operation completed successfully.');
+
+        // Redirect with success message
+        return redirect()->route('discounts.list', ['id' => $discountId])->with('message', $message);
     }
 }

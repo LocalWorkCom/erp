@@ -545,4 +545,5 @@ return array (
   'delete faqs' => 'delete faqs',
   'delete returns' => 'delete returns',
   'delete privacies' => 'delete privacies',
+  'view discount_dishes' => 'view discount_dishes',
 );

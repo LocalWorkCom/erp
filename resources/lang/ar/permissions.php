@@ -549,4 +549,5 @@ return array (
   'delete faqs' => 'حذف اسئلة متكررة',
   'delete returns' => 'حذف سياسة الاسترجاع',
   'delete privacies' => 'حذف سياسة الخصوصية',
+  'view discount_dishes' => 'عرض خصم الاطباق',
 );
