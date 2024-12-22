@@ -101,15 +101,16 @@
         </div>
     </form>
 </div>
-
+@section('scripts')
 <script>
 $(document).ready(function() {
+    //debugger;
     $('#loginForm').on('submit', function(event) {
         event.preventDefault();
 
         // Get form data
         var formData = $(this).serialize();
-
+       // debugger;
         // Send the AJAX request
         $.ajax({
             url: '{{ route('website.login') }}',
@@ -158,3 +159,4 @@ $(document).ready(function() {
 
 
 </script>
+@endsection
