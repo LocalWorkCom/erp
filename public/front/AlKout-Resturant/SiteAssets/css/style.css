@@ -1496,9 +1496,6 @@ a:hover {
     font-size: 1.2rem;
     color: #6c757d;
 }
-<<<<<<< HEAD
-
-=======
 .search-group{
     display: flex;
     align-items: center;
@@ -1512,7 +1509,6 @@ a:hover {
 .search-icon {
 
 }
->>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
 .position-relative .form-select {
     padding-left: 2.5rem;
 }
@@ -1575,26 +1571,16 @@ input::placeholder {
 .delivery-modal .main-pills .nav-link {
     color: #fe0000;
     background-color: transparent;
-<<<<<<< HEAD
-    border: 2px solid #FE0000;
-    border-radius: 0.75rem;
-    padding-inline: 2.25rem;
-=======
     border: 1px solid #FE0000;
     border-radius: 0.75rem;
     padding: 0.25rem 2.25rem;
->>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
 }
 
 .delivery-modal .main-pills .nav-link.active,
 .delivery-modal .main-pills .show>.nav-link {
     color: #fff;
     background-color: #FE0000;
-<<<<<<< HEAD
-    border: 2px solid transparent;
-=======
     border: 1px solid transparent;
->>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
 }
 
 .delivery-modal .main-pills .nav-link.active .icon,
@@ -1603,8 +1589,6 @@ input::placeholder {
 
 }
 
-<<<<<<< HEAD
-=======
 .delivery-modal .delivery-places .nav-link {
     background-color: transparent;
     color: #999;
@@ -1634,7 +1618,6 @@ input::placeholder {
     bottom: 0;
 }
 
->>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
 /* responsive */
 @media(max-width: 1024px) {}
 
