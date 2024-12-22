@@ -54,7 +54,6 @@
                                         <th>@lang('addons.ID')</th>
                                         <th>@lang('addons.NameArabic')</th>
                                         <th>@lang('addons.NameEnglish')</th>
-                                        <!-- <th>@lang('addons.Price')</th> -->
                                         <th>@lang('addons.Actions')</th>
                                     </tr>
                                 </thead>
@@ -64,7 +63,6 @@
                                             <td>{{ $addon->id }}</td>
                                             <td>{{ $addon->name_ar }}</td>
                                             <td>{{ $addon->name_en }}</td>
-                                            <!-- <td>{{ $addon->price }}</td> -->
                                             <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.addons.show', $addon->id) }}" class="btn btn-info-light">
@@ -75,13 +73,9 @@
                                                     @lang('addons.Edit') <i class="ri-edit-line"></i>
                                                 </a>
                                                 <!-- Delete -->
-                                                <form action="{{ route('dashboard.addons.destroy', $addon->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('addons.DeleteConfirm')');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('addons.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="btn btn-danger-light" onclick="deleteAddon({{ $addon->id }})">
+                                                    @lang('addons.Delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                                 <!-- Restore -->
                                                 @if ($addon->trashed())
                                                     <form action="{{ route('dashboard.addons.restore', $addon->id) }}" method="POST" class="d-inline">
@@ -119,13 +113,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
-@endsection
 
-<script>
-    function confirmDelete() {
-        return confirm("@lang('addons.DeleteConfirm')");
-    }
-</script>
+    <script>
+        function deleteAddon(id) {
+            Swal.fire({
+                title: "@lang('addons.Warning')",
+                text: "@lang('addons.DeleteConfirm')",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "@lang('addons.YesDelete')",
+                cancelButtonText: "@lang('addons.CancelDelete')",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form programmatically
+                    $.ajax({
+                        url: '{{ route('dashboard.addons.destroy', '') }}/' + id,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                "@lang('addons.Deleted')",
+                                "@lang('addons.DeleteSuccess')",
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload the page to reflect changes
+                            });
+                        },
+                        error: function(error) {
+                            Swal.fire(
+                                "@lang('addons.Error')",
+                                "@lang('addons.DeleteFailed')",
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+@endsection

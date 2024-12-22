@@ -22,4 +22,10 @@ return [
     'EditAddonCategory' => 'Edit Addon Category',
     'EnterNameArabic' => 'Please enter the Arabic name.',
     'EnterNameEnglish' => 'Please enter the English name.',
+    'Warning' => 'Are you sure?',
+    'DeleteMsg' => 'You won\'t be able to revert this!',
+    'YesDelete' => 'Yes, delete it!',
+    'CancelDelete' => 'Cancel',
+    'Deleted' => 'Deleted!',
+    'DeletedSuccessfully' => 'The addon category has been deleted successfully.',
 ];
