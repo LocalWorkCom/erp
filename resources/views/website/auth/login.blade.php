@@ -61,7 +61,7 @@
                     @enderror
                 </div>
 
-                <a href="./forget-pass.html">
+                <a id="showforgetLink">
                     <small>@lang('auth.forgetpass')</small>
                 </a>
 
@@ -73,7 +73,7 @@
 
                 <div class="d-flex justify-content-center gap-lg-3">
                     <a class="social-media-btn d-flex align-items-center" href="#">
-                        <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                        <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/facebook-icon.png') }}"
                             alt="Facebook" class="ms-2" height="20">
                         <span>@lang('auth.facebook')</span>
                     </a>
