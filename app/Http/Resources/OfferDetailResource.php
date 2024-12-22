@@ -32,7 +32,6 @@ class OfferDetailResource extends JsonResource
             'type_id' => $this->type_id,
             'type_name' => $this->getTypeName($lang),
             'count' => $this->count,
-            'discount' => $this->discount,
         ];
     }
 }

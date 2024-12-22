@@ -15,7 +15,7 @@
             <nav>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{route('dashboard.home')}}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="" onclick="window.location.href='{{ route('offers.list') }}'">@lang('offer.Offers')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('offers.list') }}" onclick="window.location.href='{{ route('offers.list') }}'">@lang('offer.Offers')</a></li>
                 </ol>
             </nav>
         </div>
@@ -54,7 +54,6 @@
                                         <th scope="col">@lang('offer.Type')</th>
                                         <th scope="col">@lang('offer.TypeName')</th>
                                         <th scope="col">@lang('offer.Count')</th>
-                                        <th scope="col">@lang('offer.Discount')</th>
                                         <th scope="col">@lang('category.Actions')</th>
                                     </tr>
                                 </thead>
@@ -76,7 +75,6 @@
                                                 @endif
                                             </td>
                                             <td>{{ $detail->count }}</td>
-                                            <td>{{ $detail->discount }} %</td>
                                             <td>
                                                 <!-- Edit Button -->
                                                 <a href="{{ route('offerDetail.edit', $detail->id) }}" class="btn btn-orange-light btn-wave">
