@@ -255,14 +255,19 @@ function updateQuantityDisplay() {
 const passwordInput = document.getElementById('passwordInput');
 const togglePasswordButton = document.getElementById('togglePassword');
 const eyeIcon = document.getElementById('eyeIcon');
+
 togglePasswordButton.addEventListener('click', function () {
+  // Toggle the type attribute of the password input
   passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+
+  // Toggle the eye icon class
   eyeIcon.classList.toggle('fa-eye');
   eyeIcon.classList.toggle('fa-eye-slash');
 });
-//  *********************** 
 
-// login and register modal 
+//  ********* 
+
+// login and register modal ***************************
 
   document.getElementById('showLoginLink').addEventListener('click', function (e) {
     e.preventDefault();
@@ -275,7 +280,36 @@ togglePasswordButton.addEventListener('click', function () {
     document.getElementById('loginBody').classList.add('d-none');
     document.getElementById('registerBody').classList.remove('d-none');
   });
-// ******************************* 
+  document.getElementById('showforgetLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    document.getElementById('loginBody').classList.add('d-none'); 
+    document.getElementById('forgetBody').classList.remove('d-none'); 
+});
+document.getElementById('sendForgetButton').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('forgetBody').classList.add('d-none');
+  document.getElementById('otpBody').classList.remove('d-none');
+});
+document.getElementById('sendForgetButton').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('forgetBody').classList.add('d-none');
+  document.getElementById('otpBody').classList.remove('d-none');
+});
+
+document.getElementById('sendOtpButton').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  document.getElementById('otpBody').classList.add('d-none');
+  document.getElementById('otpDoneBody').classList.remove('d-none');
+  setTimeout(function() {
+    document.getElementById('otpDoneBody').classList.add('d-none');
+    document.getElementById('resetBody').classList.remove('d-none');
+  }, 5000); 
+});
+
+
+
+// end login functions **********************
  
 // rate-stars 
 document.addEventListener('DOMContentLoaded', function () {
