@@ -48,13 +48,14 @@
                         @endif
 
                     </li>
-                    @auth('web')
-                        @if (auth()->user()->flag == 'client')
+                    {{-- {{ dd(Auth::check()) }} --}}
+                    @auth('client')
+                        @if (Auth::guard('client')->user()->flag == 'client')
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle"></i>
-                                    <span>{{ auth()->user()->name }}</span>
+                                    <span>{{ Auth::guard('client')->user()->name }}</span>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                     <li>

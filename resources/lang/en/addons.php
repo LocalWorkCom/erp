@@ -37,4 +37,5 @@ return [
     'Edit' => 'Edit',
     'Delete' => 'Delete',
     'Restore' => 'Restore',
+    
 ];

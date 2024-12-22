@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Session;
 Route::post('/site/register', [AuthController::class, 'Register'])->name('website.register');
 Route::post('/site/login', [AuthController::class, 'login'])->name('website.login');
 Route::get('/site/profile', [AuthController::class, 'view'])->name('website.profile.view');
-Route::middleware(['auth', 'client'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
+Route::middleware(['auth:client'])->group(function () {
+    Route::post( '/logout', [AuthController::class, 'logout'])->name('website.logout');
 });
 //Route::get('/', function () {
 //    return view('website.landing');

@@ -57,11 +57,11 @@
                                 <div class="col-xl-6">
                                     <label class="form-label">@lang('cuisines.Image')</label>
                                     @if ($cuisine->image_path)
-                                        <img src="{{ asset('storage/' . $cuisine->image_path) }}" alt="@lang('cuisines.CuisineImage')" class="img-fluid rounded" style="max-width: 150px;">
-                                    @else
-                                        <p class="form-text">@lang('cuisines.NoImage')</p>
+                               
+                                        <img src="{{ asset($cuisine->image_path) }}" alt="@lang('cuisines.NoImage')" class="img-fluid rounded" style="max-width: 150px;">
                                     @endif
                                 </div>
+
                             </div>
                         </div>
                     </div>

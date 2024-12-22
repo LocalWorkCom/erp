@@ -86,7 +86,7 @@ return [
     'ArabicCurrency' => ' Enter Arabic Currency',
     'EnglishCurrency' => ' Enter English Currency',
     'CurrencyCode' => 'Enter Currency Code',
-    'phonecode' => 'Enter phone code',
+    'phone_code' => 'Enter phone code',
     'flag' => 'Select flag country',
     'length' => 'Enter length phone',
 

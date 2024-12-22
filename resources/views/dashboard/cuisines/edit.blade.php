@@ -63,7 +63,7 @@
                                         <label for="image" class="form-label">@lang('cuisines.Image')</label>
                                         <input type="file" class="form-control" id="image" name="image">
                                         @if ($cuisine->image_path)
-                                            <img src="{{ asset('storage/' . $cuisine->image_path) }}" alt="@lang('cuisines.CuisineImage')" class="img-fluid mt-2" style="max-width: 150px;">
+                                            <img src="{{ asset($cuisine->image_path) }}" alt="@lang('cuisines.CuisineImage')" class="img-fluid mt-2" style="max-width: 150px;">
                                         @endif
                                     </div>
 
