@@ -74,7 +74,11 @@ return [
     'AddonCategories'=>'Addon Categories',
     'roles' => 'Roles',
     'permissions' => 'Permissions',
-    'branchMenuCategory' => 'Branch Menu Category',
     'VacationSettings' => 'Vacation Settings',
+    'branchMenus' => ' Branch Menus ',
+    'branchMenuCategory' => 'Branch Menu Category',
+    'branchMenu' => 'Branch Menu',
+    'branchMenuAddon' => 'Branch Menu Addon',
+    'branchMenuSize' => 'Branch Menu Size',
 
 ];
