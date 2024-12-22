@@ -16,9 +16,9 @@ class HomeController extends Controller
     public function index()
     {
         $sliders = Slider::all();
-        $discounts = DishDiscount::with(['dish','discount'])->get();
-//        dd($discounts);
-        return view('website.landing', compact(['sliders', 'discounts']));
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        $popularDishes = getMostDishesOrdered(5);
+        return view('website.landing', compact(['sliders', 'discounts', 'popularDishes']));
     }
 
     /**
