@@ -82,13 +82,13 @@
                                     <!-- Description Arabic -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.ArabicDescription')</label>
-                                        <textarea class="form-control" name="description_ar" rows="2">{{ old('description_ar') }}</textarea>
+                                        <textarea class="form-control" name="description_ar" rows="2" required>{{ old('description_ar') }}</textarea>
                                     </div>
 
                                     <!-- Description English -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.EnglishDescription')</label>
-                                        <textarea class="form-control" name="description_en" rows="2">{{ old('description_en') }}</textarea>
+                                        <textarea class="form-control" name="description_en" rows="2" required>{{ old('description_en') }}</textarea>
                                     </div>
 
 {{--                                    <!-- Country -->--}}
@@ -108,11 +108,11 @@
                                     <!-- Opening and Closing Hours -->
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.StartDate')</label>
-                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') }}">
+                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') }}" required>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.EndDate')</label>
-                                        <input type="date" class="form-control" name="end_date" value="{{ old('start_date') }}">
+                                        <input type="date" class="form-control" name="end_date" value="{{ old('start_date') }}" required>
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">

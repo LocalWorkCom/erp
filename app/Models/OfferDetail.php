@@ -62,4 +62,16 @@ class OfferDetail extends Model
         };
     }
 
+    public function dish()
+    {
+        return $this->belongsTo(Dish::class,'type_id','id')->where('deleted_at',null);
+    }
+    public function addon()
+    {
+        return $this->belongsTo(Recipe::class,'type_id','id')->where('type',2)->where('deleted_at',null);
+    }public function product()
+    {
+        return $this->belongsTo(Product::class,'type_id','id')->where('type','complete')->where('deleted_at',null);
+    }
+
 }

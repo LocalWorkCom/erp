@@ -9,6 +9,7 @@ use App\Models\DishAddon;
 use App\Models\Offer;
 use App\Models\OfferDetail;
 use App\Models\Product;
+use App\Models\Recipe;
 use App\Services\OfferDetailService;
 use Illuminate\Http\Request;
 
@@ -25,13 +26,13 @@ class OfferDetailController extends Controller
      */
     public function index($id)
     {
-        $offer = Offer::findOrFail($id);
-        $details = OfferDetail::where('offer_id', $id)->get();
+        $response = $this->offerDetailService->index($id);
 
-        return view('dashboard.offer.detail.list', [
-            'offer' => $offer,
-            'details' => OfferDetailResource::collection($details),
-        ]);
+        $responseData = $response->original;
+
+        $offerDetails = $responseData['data'];
+
+        return view('dashboard.offer.detail.list', compact('offerDetails','id'));
     }
 
     /**
@@ -39,7 +40,16 @@ class OfferDetailController extends Controller
      */
     public function create()
     {
-        return view('dashboard.offer.detail.add');
+//        $currentUrl = url()->current(); // Gets the current URL without number
+//        $fullUrl = url()->full();
+//        dd($fullUrl);
+        $queryString = request()->getQueryString();
+        preg_match('/\d+/', $queryString, $matches);
+        $id = isset($matches[0]) ? $matches[0] : null;
+        $dishes = Dish::where('deleted_at',null)->get();
+        $products = Product::where('type','complete')->where('deleted_at',null)->get();
+        $addons = Recipe::where('type', 2)->where('deleted_at',null)->get();
+        return view('dashboard.offer.detail.add', compact('id', 'dishes', 'products', 'addons'));
     }
 
     /**
@@ -56,7 +66,8 @@ class OfferDetailController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect()->route('offers.detail.list')->with('message',$message);
+        $offerId=$responseData['data']->offer_id;
+        return redirect()->route('offerDetails.list', ['id' => $offerId])->with('message',$message);
     }
 
     /**
@@ -79,8 +90,11 @@ class OfferDetailController extends Controller
      */
     public function edit(string $id)
     {
-        $offer = OfferDetail::findOrFail($id);
-        return view('dashboard.offer.detail.edit', compact('offer'));
+        $offerDetail = OfferDetail::findOrFail($id);
+        $dishes = Dish::where('deleted_at',null)->get();
+        $products = Product::where('type','complete')->where('deleted_at',null)->get();
+        $addons = Recipe::where('type', 2)->where('deleted_at',null)->get();
+        return view('dashboard.offer.detail.edit', compact('offerDetail', 'dishes', 'products', 'addons'));
     }
 
     /**
@@ -88,6 +102,11 @@ class OfferDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $response= $this->offerDetailService->show($id);
+        $responseData = $response->original;
+        $offerDetail = $responseData['data'];
+        $offerId = $offerDetail->offer_id;
+
         $response = $this->offerDetailService->save($request, $id);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
@@ -95,7 +114,7 @@ class OfferDetailController extends Controller
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect()->route('offers.detail.list')->with('message',$message);
+        return redirect()->route('offerDetails.list', ['id' => $offerId])->with('message',$message);
     }
 
     /**
@@ -103,35 +122,17 @@ class OfferDetailController extends Controller
      */
     public function destroy(string $id)
     {
-        $response = $this->offerDetailService->destroy($id);
+        $response= $this->offerDetailService->show($id);
         $responseData = $response->original;
-        $message= $responseData['message'];
-        return redirect()->route('offers.detail.list')->with('message',$message);
-    }
+        $offerDetail = $responseData['data'];
+        $offerId = $offerDetail->offer_id;
 
-    public function getOfferTypes(Request $request)
-    {
-        $offerType = $request->input('offer_type');
+        $response = $this->offerDetailService->destroy($id);
 
-        switch ($offerType) {
-            case 'dishes':
-                $types = Dish::where('deleted_at',null)->get();  // Assuming you have a Dish model for dishes
-                break;
+        $responseData = $response->original;
+        $message = $responseData['message'];
 
-            case 'addons':
-                $types = DishAddon::where('deleted_at',null)->get();  // Assuming you have a DishAddon model for addons
-                break;
-
-            case 'products':
-                $types = Product::where('deleted_at',null)->get();  // Assuming you have a Product model for products
-                break;
-
-            default:
-                $types = [];  // Return an empty array if no valid type is provided
-                break;
-        }
-
-        // Return the types as JSON for the AJAX request
-        return response()->json($types);
+        return redirect()->route('offerDetails.list', ['id' => $offerId])
+            ->with('message', $message);
     }
 }
