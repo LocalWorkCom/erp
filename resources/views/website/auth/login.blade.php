@@ -61,7 +61,7 @@
                     @enderror
                 </div>
 
-                <a href="./forget-pass.html">
+                <a id="showforgetLink">
                     <small>@lang('auth.forgetpass')</small>
                 </a>
 
