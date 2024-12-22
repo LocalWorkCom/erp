@@ -80,12 +80,13 @@ class AuthController extends Controller
             $messages = [
                 'email_or_phone.required' => 'البريد الإلكتروني أو رقم الهاتف مطلوب.',
                 'password.required' => 'كلمة المرور مطلوبة.',
-                'email_or_phone.exists' => 'البريد الإلكتروني أو رقم الهاتف غير موجود.',
+                'country_code.required_if' => 'رمز البلد مطلوب عند تسجيل الدخول باستخدام رقم الهاتف.',
             ];
 
             $validator = Validator::make($request->all(), [
                 "email_or_phone" => "required",
-                "password" => "required"
+                "password" => "required",
+                "country_code" => "required_if:email_or_phone," . ($this->isPhone($request->email_or_phone) ? $request->email_or_phone : ''),
             ], $messages);
 
             if ($validator->fails()) {
@@ -95,22 +96,23 @@ class AuthController extends Controller
             $isEmail = filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL);
             $user = $isEmail
                 ? User::where('email', $request->email_or_phone)->first()
-                : User::where('phone', $request->email_or_phone)->first();
+                : User::where('phone', $request->email_or_phone)
+                ->where('country_code', $request->country_code)
+                ->first();
 
             if (!$user) {
                 $errorMessage = $isEmail
                     ? __('البريد الإلكتروني غير موجود.')
-                    : __('رقم الهاتف غير موجود.');
+                    : __('رقم الهاتف مع رمز البلد غير موجود.');
 
                 return respondError('User Not Found.', 404, [
                     'email_or_phone' => [$errorMessage]
                 ]);
             }
 
-            // Determine whether input is email or phone
             $credentials = $isEmail
                 ? ['email' => $request->email_or_phone, 'password' => $request->password]
-                : ['phone' => $request->email_or_phone, 'password' => $request->password];
+                : ['phone' => $request->email_or_phone, 'password' => $request->password, 'country_code' => $request->country_code];
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
@@ -275,5 +277,10 @@ class AuthController extends Controller
         App::setLocale($lang);
         auth()->user()->token()->revoke();
         return ResponseWithSuccessData($lang, null, 16);
+    }
+
+    private function isPhone($input)
+    {
+        return preg_match('/^\+?[0-9]+$/', $input) && !filter_var($input, FILTER_VALIDATE_EMAIL);
     }
 }

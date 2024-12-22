@@ -51,9 +51,7 @@
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label class="form-label">@lang('offer.OfferType')</label>
                                         <select class="form-control" name="offer_type" id="offer_type" required>
-                                            <option value="dishes">@lang('offer.Dish')</option>
-                                            <option value="addons">@lang('offer.Addon')</option>
-                                            <option value="products">@lang('offer.Product')</option>
+                                            <option value="dishes" selected>@lang('offer.Dish')</option>
                                         </select>
                                     </div>
 
@@ -66,20 +64,11 @@
                                     </div>
 
                                     <!-- Count -->
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label class="form-label">@lang('offer.Count')</label>
                                         <input type="number" class="form-control" name="count" value="{{ old('count') }}" required>
                                         <div class="invalid-feedback">
                                             @lang('validation.EnterCount')
-                                        </div>
-                                    </div>
-
-                                    <!-- Discount -->
-                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                        <label class="form-label">@lang('offer.Discount')</label>
-                                        <input type="number" class="form-control" name="discount" value="{{ old('discount') }}" required>
-                                        <div class="invalid-feedback">
-                                            @lang('validation.EnterDiscount')
                                         </div>
                                     </div>
 

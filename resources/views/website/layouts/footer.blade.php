@@ -35,15 +35,15 @@
                         <li><a href="#"> القائمة الرئيسية</a></li>
                         <li><a href="#">العروض</a></li>
                         <li><a href="#">فروعنا</a></li>
-                        <li><a href="#">الشروط والاحكام</a></li>
+                        <li><a href="{{route('terms')}}">الشروط والاحكام</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3" data-aos="zoom-in">
                     <h4 class="footer-title">المساعدة</h4>
                     <ul class="list-unstyled px-0 pt-4">
                         <li><a href="#"> خدمة العملاء </a></li>
-                        <li><a href="#">سياسة الاسترجاع</a></li>
-                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="{{route('return')}}">سياسة الاسترجاع</a></li>
+                        <li><a href="{{route('privacy')}}">سياسة الخصوصية</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3" data-aos="zoom-in">
