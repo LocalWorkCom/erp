@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -25,6 +25,7 @@ Route::middleware(['auth:client'])->group(function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/return', [HomeController::class, 'return'])->name('return');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');

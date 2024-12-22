@@ -47,8 +47,22 @@ class OfferController extends Controller
     public function save(Request $request, string $id = null)
     {
         $data = $request->validate([
+            'branch_id' => 'required',
             'name_ar' => 'required|string',
             'name_en' => 'required|string',
+            'discount_type' => 'required|string|in:fixed,percentage',
+            'discount_value' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->discount_type === 'percentage' && $value > 100) {
+                        if ($this->lang == 'en'){
+                            $fail('The discount value must not exceed 100 percentage.');
+                        }
+                        $fail('قيمة الخصم لا يجب ان تتعدى نسبة 100');
+                    }
+                },
+            ],
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'image_ar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

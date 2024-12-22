@@ -44,6 +44,9 @@ use App\Http\Controllers\Dashboard\AddonCategoryController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
 use App\Http\Controllers\Dashboard\TermsAndConditionsController;
+use App\Http\Controllers\Dashboard\BranchMenuController;
+use App\Http\Controllers\Dashboard\BranchMenuAddonController;
+use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -181,6 +184,36 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
             Route::delete('delete/{id}', [BranchMenuCategoryController::class, 'delete'])->name('branch.categories.delete')->middleware('role_or_permission:delete branch_menu_categories');
             Route::get('showAll/{branch_id}', [BranchMenuCategoryController::class, 'show_branch'])->name('branch.categories.show.all')->middleware('role_or_permission:view branch_menu_categories');
             Route::get('changeStatus/{id}', [BranchMenuCategoryController::class, 'change_status'])->name('branch.categories.changeStatus')->middleware('role_or_permission:update branch_menu_categories');
+        });
+
+        Route::get('/menus', [BranchMenuController ::class, 'index'])->name('branch.menus.list')->middleware('role_or_permission:view branch_menus');
+        Route::group(['prefix' => 'menus'], function () {
+            Route::post('store', [BranchMenuController ::class, 'store'])->name('branch.menus.store')->middleware('role_or_permission:create branch_menus');
+            Route::get('show/{id}', [BranchMenuController ::class, 'show'])->name('branch.menus.show')->middleware('role_or_permission:view branch_menus');
+            Route::put('update/{id}', [BranchMenuController ::class, 'update'])->name('branch.menus.update')->middleware('role_or_permission:update branch_menus');
+            Route::delete('delete/{id}', [BranchMenuController ::class, 'delete'])->name('branch.menus.delete')->middleware('role_or_permission:delete branch_menus');
+            Route::get('showAll/{branch_id}', [BranchMenuController ::class, 'show_branch'])->name('branch.menus.show.all')->middleware('role_or_permission:view branch_menus');
+            Route::get('changeStatus/{id}', [BranchMenuController ::class, 'change_status'])->name('branch.menus.changeStatus')->middleware('role_or_permission:update branch_menus');
+        });
+
+        Route::get('/menu/addons', [BranchMenuAddonController::class, 'index'])->name('branch.menu.addons.list')->middleware('role_or_permission:view branch_menu_addons');
+        Route::group(['prefix' => 'menu.addons'], function () {
+            Route::post('store', [BranchMenuAddonController::class, 'store'])->name('branch.menu.addons.store')->middleware('role_or_permission:create branch_menu_addons');
+            Route::get('show/{id}', [BranchMenuAddonController::class, 'show'])->name('branch.menu.addons.show')->middleware('role_or_permission:view branch_menu_addons');
+            Route::put('update/{id}', [BranchMenuAddonController::class, 'update'])->name('branch.menu.addons.update')->middleware('role_or_permission:update branch_menu_addons');
+            Route::delete('delete/{id}', [BranchMenuAddonController::class, 'delete'])->name('branch.menu.addons.delete')->middleware('role_or_permission:delete branch_menu_addons');
+            Route::get('showAll/{branch_id}', [BranchMenuAddonController::class, 'show_branch'])->name('branch.menu.addons.show.all')->middleware('role_or_permission:view branch_menu_addons');
+            Route::get('changeStatus/{id}', [BranchMenuAddonController::class, 'change_status'])->name('branch.menu.addons.changeStatus')->middleware('role_or_permission:update branch_menu_addons');
+        });
+
+        Route::get('/menu/sizes', [BranchMenuSizeController::class, 'index'])->name('branch.menu.sizes.list')->middleware('role_or_permission:view branch_menu_sizes');
+        Route::group(['prefix' => 'menu.sizes'], function () {
+            Route::post('store', [BranchMenuSizeController::class, 'store'])->name('branch.menu.sizes.store')->middleware('role_or_permission:create branch_menu_sizes');
+            Route::get('show/{id}', [BranchMenuSizeController::class, 'show'])->name('branch.menu.sizes.show')->middleware('role_or_permission:view branch_menu_sizes');
+            Route::put('update/{id}', [BranchMenuSizeController::class, 'update'])->name('branch.menu.sizes.update')->middleware('role_or_permission:update branch_menu_sizes');
+            Route::delete('delete/{id}', [BranchMenuSizeController::class, 'delete'])->name('branch.menu.sizes.delete')->middleware('role_or_permission:delete branch_menu_sizes');
+            Route::get('showAll/{branch_id}', [BranchMenuSizeController::class, 'show_branch'])->name('branch.menu.sizes.show.all')->middleware('role_or_permission:view branch_menu_sizes');
+            Route::get('changeStatus/{id}', [BranchMenuSizeController::class, 'change_status'])->name('branch.menu.sizes.changeStatus')->middleware('role_or_permission:update branch_menu_sizes');
         });
     });
 
@@ -442,6 +475,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
+    Route::get('/order/store', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/order/add', [OrderController::class, 'create'])->name('order.add');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
     Route::post('/order-addon/change', [OrderController::class, 'changeAddonStatus'])->name('order.addon.change');

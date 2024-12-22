@@ -74,7 +74,6 @@ class OfferDetailService
                 },
             ],
             'count' => 'required|numeric',
-            'discount' => 'required|numeric|min:0|max:100',
         ]);
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id??1
             : $data['modified_by'] =Auth::guard('api')->user()->id??1;

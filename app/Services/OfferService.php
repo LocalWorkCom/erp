@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\OfferResource;
+use App\Models\Branch;
 use App\Models\Offer;
 use App\Models\OfferDetail;
 use Illuminate\Support\Facades\Auth;
@@ -31,10 +32,25 @@ class OfferService
      */
     public function save(Request $request, string $id = null)
     {
-//        dd($request->all());
         $data = $request->validate([
+            'branch_selection' => 'required|in:all,specific',
+            'branches' => 'required_if:branch_selection,specific|array',
+            'branches.*' => 'exists:branches,id',
             'name_ar' => 'required|string',
             'name_en' => 'required|string',
+            'discount_type' => 'required|string|in:fixed,percentage',
+            'discount_value' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->discount_type === 'percentage' && $value > 100) {
+                        if ($this->lang == 'en') {
+                            $fail('The discount value must not exceed 100 percentage.');
+                        }
+                        $fail('قيمة الخصم لا يجب ان تتعدى نسبة 100');
+                    }
+                },
+            ],
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'image_ar' => 'nullable|max:2048',
@@ -43,23 +59,38 @@ class OfferService
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
+
+        // Handle Arabic image upload
         if ($request->hasFile('image_ar')) {
-//            dd(true);
             $file = $request->file('image_ar');
             $newFileName = 'image_ar_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/ar'), $newFileName);
             $data['image_ar'] = 'images/offers/ar/' . $newFileName;
         }
 
+        // Handle English image upload
         if ($request->hasFile('image_en')) {
             $file = $request->file('image_en');
             $newFileName = 'image_en_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/en'), $newFileName);
             $data['image_en'] = 'images/offers/en/' . $newFileName;
         }
-        $id == null ?$data['created_by'] =Auth::guard('api')->user()->id??1
-            : $data['modified_by'] =Auth::guard('api')->user()->id??1;
 
+        // Determine created_by or modified_by
+        $id === null
+            ? $data['created_by'] = Auth::guard('api')->user()->id ?? 1
+            : $data['modified_by'] = Auth::guard('api')->user()->id ?? 1;
+
+        // Handle branch logic
+        if ($request->branch_selection === 'all') {
+            // Save branch_id as -1 for all branches
+            $data['branch_id'] = '-1';
+        } else {
+            // Save branch IDs as a comma-separated string
+            $data['branch_id'] = implode(',', $request->branches);
+        }
+
+        // Save the offer
         $offer = Offer::updateOrCreate(['id' => $id], $data);
 
         return ResponseWithSuccessData($this->lang, OfferResource::make($offer), 1);
@@ -70,12 +101,20 @@ class OfferService
      */
     public function show(string $id)
     {
-        $data = Offer::find($id);
+        $offer = Offer::find($id);
 
-        if (!$data) {
+        if (!$offer) {
             return RespondWithBadRequestData($this->lang, 2);
         }
-        return ResponseWithSuccessData($this->lang, OfferResource::make($data), 1);
+
+        // Retrieve branches from the `branches` table using the comma-separated `branch_id`
+        $branchIds = explode(',', $offer->branch_id); // Assuming branch_id is stored as a comma-separated string
+        $branches = Branch::whereIn('id', $branchIds)->get();
+
+        return ResponseWithSuccessData($this->lang, [
+            'offer' => $offer,
+            'branches' => $branches
+        ], 1);
     }
 
     /**

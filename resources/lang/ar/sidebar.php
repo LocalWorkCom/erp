@@ -74,8 +74,12 @@ return[
     'AddonCategories'=>'فئات الاضافات',
     'roles' => 'المهام',
     'permissions' => 'الصلاحيات',
-    'branchMenuCategory' => 'تصنيف الاطباق للفرع',
     'VacationSettings' => 'اعدادات الاجازات',
+    'branchMenus' => ' اطباق الفروع ',
+    'branchMenuCategory' => 'تصنيف الاطباق للفرع',
+    'branchMenu' => 'قائمة الاطباق للفروع',
+    'branchMenuAddon' => 'اضافات الاطباق للفروع',
+    'branchMenuSize' => 'احجام الاطباق للفروع',
     'Addons'=>'الاضافات',
 
 ];
