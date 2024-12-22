@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use App\Models\Offer;
 use App\Services\OfferService;
 use Illuminate\Http\Request;
@@ -25,8 +26,10 @@ class OfferController extends Controller
         $responseData = $response->original;
 
         $offers = $responseData['data'];
+        $branches = Branch::get();
+
 //        dd($offers);
-        return view('dashboard.offer.list', compact('offers'));
+        return view('dashboard.offer.list', compact('offers', 'branches'));
     }
 
     /**
@@ -34,7 +37,8 @@ class OfferController extends Controller
      */
     public function create()
     {
-        return view('dashboard.offer.add');
+        $branches = Branch::get();
+        return view('dashboard.offer.add', compact('branches'));
     }
 
     /**
@@ -42,6 +46,7 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $response = $this->offerService->save($request);
         $responseData = $response->original;
 //        dd($responseData);
@@ -62,10 +67,11 @@ class OfferController extends Controller
 
         $responseData = $response->original;
 
-        $offer = $responseData['data'];
-//        dd($offer->country->name_ar);
+        $offer = $responseData['data']['offer'];
+        $branches = $responseData['data']['branches'];
+//        dd($offer);
 
-        return view('dashboard.offer.show', compact('offer'));
+        return view('dashboard.offer.show', compact('offer', 'branches'));
     }
 
     /**
@@ -74,7 +80,9 @@ class OfferController extends Controller
     public function edit(string $id)
     {
         $offer = Offer::findOrFail($id);
-        return view('dashboard.offer.edit', compact('offer'));
+        $branches = Branch::all(); // Assuming you fetch all branches
+        $selectedBranches = explode(',', $offer->branch_id);
+        return view('dashboard.offer.edit', compact('offer', 'branches', 'selectedBranches'));
     }
 
     /**

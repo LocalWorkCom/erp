@@ -45,7 +45,6 @@
                             <form method="POST" action="{{ route('offer.store') }}" class="needs-validation" enctype="multipart/form-data" novalidate>
                                 @csrf
                                 <div class="row gy-4">
-
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                         <label class="form-label">@lang('offer.Active')</label>
                                         <div class="d-flex">
@@ -57,6 +56,56 @@
                                                 <input class="form-check-input" type="radio" name="is_active" value="0">
                                                 <label class="form-check-label">@lang('category.no')</label>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label class="form-label">@lang('offer.BranchSelection')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="branch_selection" id="allBranches" value="all" checked>
+                                                <label class="form-check-label" for="allBranches">@lang('offer.AllBranches')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="branch_selection" id="specificBranches" value="specific">
+                                                <label class="form-check-label" for="specificBranches">@lang('offer.SpecificBranches')</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Checklist for Specific Branches -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3" id="branchChecklist" style="display: none;">
+                                        <label class="form-label">@lang('offer.SelectBranches')</label>
+                                        <div class="form-check">
+                                            @foreach($branches as $branch)
+                                                <div>
+                                                    <input class="form-check-input" type="checkbox" name="branches[]" id="branch_{{ $branch->id }}" value="{{ $branch->id }}">
+                                                    <label class="form-check-label" for="branch_{{ $branch->id }}">
+                                                        {{ $branch->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.DiscountType')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="discount_type" value="fixed" checked>
+                                                <label class="form-check-label">@lang('offer.fixed')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="discount_type" value="percentage">
+                                                <label class="form-check-label">@lang('offer.percentage')</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.DiscountValue')</label>
+                                        <input type="text" class="form-control" name="discount_value" value="{{ old('discount_value') }}"
+                                               placeholder="@lang('offer.DiscountValue')" required>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterDiscountValue')
                                         </div>
                                     </div>
                                     <!-- Arabic Name -->
@@ -176,6 +225,23 @@
     <script>
         $(document).ready(function () {
             $('.select2').select2();
+        });
+         document.addEventListener('DOMContentLoaded', function () {
+            const allBranchesRadio = document.getElementById('allBranches');
+            const specificBranchesRadio = document.getElementById('specificBranches');
+            const branchChecklist = document.getElementById('branchChecklist');
+
+            allBranchesRadio.addEventListener('change', function () {
+            if (this.checked) {
+            branchChecklist.style.display = 'none';
+        }
+        });
+
+            specificBranchesRadio.addEventListener('change', function () {
+            if (this.checked) {
+            branchChecklist.style.display = 'block';
+        }
+        });
         });
     </script>
 @endsection

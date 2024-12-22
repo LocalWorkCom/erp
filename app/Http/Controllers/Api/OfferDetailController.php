@@ -41,7 +41,7 @@ class OfferDetailController extends Controller
     {
         $data = $request->validate([
             'offer_id' => 'required|numeric|exists:offers,id',
-            'offer_type' => 'required|string|in:dishes,products,addons',
+            'offer_type' => 'required|string|in:dishes',
             'type_id' => [
                 'required',
                 'numeric',
@@ -75,7 +75,6 @@ class OfferDetailController extends Controller
                 },
             ],
             'count' => 'required|numeric',
-            'discount' => 'required|numeric|min:0|max:100',
         ]);
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id??1
             : $data['modified_by'] =Auth::guard('api')->user()->id??1;
