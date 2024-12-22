@@ -487,14 +487,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
-
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
-        Route::get('/{id}', [CuisineController::class, 'show'])->name('dashboard.cuisines.show');
-        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
+        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create'); 
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
+        Route::get('/{id}', [CuisineController::class, 'show'])->name('dashboard.cuisines.show'); 
         Route::get('/{id}/edit', [CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
         Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
+    
 });

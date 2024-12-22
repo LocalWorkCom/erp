@@ -28,4 +28,9 @@ return [
     'CuisineDetails' => 'تفاصيل المطبخ',
     'NoDescription' => 'لا يوجد وصف',
     'CuisineImage' => 'صورة المطبخ',
+    'Save' => 'حفظ',
+    'View' => 'عرض',
+    'Edit' => 'تعديل',
+    'Delete' => 'حذف',
+    'Restore' => 'استعادة',
 ];
