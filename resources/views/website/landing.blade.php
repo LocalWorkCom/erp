@@ -60,13 +60,13 @@
             </div>
         </div>
         <!-- <div class="intro-curve"></div>
-                        <div class="container">
-                          <div class="overflow-plates d-flex justify-content-between">
+                            <div class="container">
+                              <div class="overflow-plates d-flex justify-content-between">
 
-                            <img src="SiteAssets/images/overflow-left.png" class="img-fluid" />
-                            <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
-                            <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
-                          </div> -->
+                                <img src="SiteAssets/images/overflow-left.png" class="img-fluid" />
+                                <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
+                                <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
+                              </div> -->
         {{--    </div> --}}
         <div class="container overflow-plates ">
             <div class="d-flex justify-content-between">
@@ -92,67 +92,23 @@
                 </div>
             </div>
             <div class="categories-slider owl-carousel owl-theme">
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate1.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5>اطباق رئيسية</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate2.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5>اطباق جانبية</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate3.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5> مقبلات</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate4.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5> اطباق سلطات</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate5.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5> مشروبات</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                    <a href="#">
-                        <figure class="category-img m-0">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/plate1.png') }}" alt="">
-                            <figcaption class="pt-4">
-                                <h5>اطباق رئيسية</h5>
-                            </figcaption>
-                        </figure>
-                    </a>
-                </div>
+                @foreach ($menuCategories as $menuCategory)
+                    @if ($menuCategory->is_active && $menuCategory->dish_categories && $menuCategory->dish_categories->is_active)
+                        <div class="item mb-4 category position-relative" data-aos="zoom-in">
+                            <a href="#">
+                                <figure class="category-img m-0">
+                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'default-category.png') }}"
+                                        alt="{{ $menuCategory->dish_categories->name_ar }}">
+                                    <figcaption class="pt-4">
+                                        <h5>{{ $menuCategory->dish_categories->name_ar }}</h5>
+                                    </figcaption>
+                                </figure>
+                            </a>
+                        </div>
+                    @endif
+                @endforeach
             </div>
+
     </section>
     <section class="offers">
         <div class="container py-sm-5 py-4">

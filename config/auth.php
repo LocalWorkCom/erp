@@ -48,10 +48,10 @@ return [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
-        // 'client' => [
-        //     'driver' => 'passport',
-        //     'provider' => 'users',
-        // ],
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
     ],
 
     /*
@@ -79,7 +79,11 @@ return [
 
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class, 
+            'model' => App\Models\User::class,
+        ],
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
     ],
 
