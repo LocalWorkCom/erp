@@ -1,0 +1,128 @@
+<?php
+
+namespace App\Http\Controllers\Website;
+
+use App\Http\Controllers\Controller;
+use App\Events\UserRegistered;
+use App\Models\ClientDetail;
+use App\Models\Country;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string",
+            "email" => "required|email|unique:users",
+            'country_code' => 'required|string',
+            "password" => "required|min:6",
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^[0-9]+$/', // Ensures only numbers are allowed
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('country_code', $request->country_code);
+                }),
+            ],
+            "date_of_birth" => "nullable|date",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $country = Country::where('phone_code', $request->country_code)->first();
+
+        if (!$country) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['country_code' => [__('Invalid country code.')]],
+            ], 422);
+        }
+
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->flag = 'client';
+        $user->phone = $request->phone;
+        $user->country_id = $country->id;
+        $user->country_code = $request->country_code;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        event(new UserRegistered($user));
+
+        $clientDetail = new ClientDetail();
+        $clientDetail->user_id = $user->id;
+        $clientDetail->date_of_birth = $request->date_of_birth;
+        $clientDetail->save();
+
+        Auth::guard('client')->login($user);
+        Auth::setUser($user);
+
+        $request->session()->regenerate();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Registration successful!'),
+        ]);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email_or_phone' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('phone', $credentials['email_or_phone'])->first();
+
+        if (!$user || $user->flag != 'client') {
+            return back()->withErrors([
+                'email_or_phone' => __('auth.only_admin'),
+            ])->onlyInput('email_or_phone');
+        }
+
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors([
+                'email_or_phone' => __('auth.invalid_credentials'),
+            ])->onlyInput('email_or_phone');
+        }
+
+        Auth::guard('client')->login($user);
+        Auth::setUser($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('home');
+    }
+    public function logout(Request $request)
+    {
+        // Logout the client guard
+        Auth::guard('client')->logout();
+
+        // Invalidate the session to clear all data
+        $request->session()->invalidate();
+
+        // Regenerate the CSRF token for security
+        $request->session()->regenerateToken();
+
+        // Redirect to the login page or another appropriate route
+        return redirect()->route('home');
+    }
+}
