@@ -82,4 +82,15 @@ class Discount extends Model
     {
         return $this->belongsToMany(Dish::class, 'dish_discount');
     }
+    public function dishDiscounts()
+    {
+         return $this->hasMany(DishDiscount::class);
+     } 
+ 
+    public function discount_dishes()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_discount')
+            ->withPivot('dish_id') // Include all necessary pivot fields
+            ->withTimestamps(); // Optional: if your pivot table has timestamps
+    }
 }

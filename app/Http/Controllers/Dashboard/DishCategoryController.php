@@ -40,20 +40,21 @@ class DishCategoryController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            $data = $request->all();
-            $data['created_by'] = auth()->id();
+{
+    try {
+        $data = $request->all();
+        $data['created_by'] = auth()->id();
 
-            $this->dishCategoryService->store($data, $request->file('image'));
+        $this->dishCategoryService->store($data, $request->file('image'));
 
-            return redirect()->route('dashboard.dish_categories.index')->with('success', 'Dish category created successfully.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred while creating the dish category.');
-        }
+        return redirect()->route('dashboard.dish-categories.index')->with('success', 'Dish category created successfully.');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return redirect()->back()->withErrors($e->errors())->withInput();
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'An error occurred while creating the dish category.');
     }
+}
+
     public function edit($id)
     {
         try {
@@ -72,17 +73,21 @@ class DishCategoryController extends Controller
         try {
             $data = $request->all();
             $data['modified_by'] = auth()->id();
-
+    
+    
             $this->dishCategoryService->update($id, $data, $request->file('image'));
-
-            return redirect()->route('dashboard.dish_categories.index')->with('success', 'Dish category updated successfully.');
+    
+            return redirect()->route('dashboard.dish-categories.index')->with('success', 'Dish category updated successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Error on Dish Category Update', ['errors' => $e->errors()]);
+    
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
+    
             return redirect()->back()->with('error', 'An error occurred while updating the dish category.');
         }
     }
-
+    
     public function delete($id)
     {
 

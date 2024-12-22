@@ -16,4 +16,11 @@ return [
     'ShowDiscount'=>'عرض خصم',//
     'NameAr'=>'الاسم بالعربي',
     'NameEn'=>'الاسم بالانجليزي',
+    'AddDishes' =>'اضافه طبق',
+    'Discount Dish' =>'اضافه اطباق للخصم',
+    'Actions' =>'العمليات',
+    'dish' =>'طبق',
+    'Save' =>'حفظ',
+    'Remove' =>'حذف',
+
 ];

@@ -57,11 +57,11 @@
                                 <div class="col-xl-6">
                                     <label class="form-label">@lang('cuisines.Image')</label>
                                     @if ($cuisine->image_path)
-                                        <img src="{{ asset('storage/' . $cuisine->image_path) }}" alt="@lang('cuisines.CuisineImage')" class="img-fluid rounded" style="max-width: 150px;">
-                                    @else
-                                        <p class="form-text">@lang('cuisines.NoImage')</p>
+                               
+                                        <img src="{{ asset($cuisine->image_path) }}" alt="@lang('cuisines.NoImage')" class="img-fluid rounded" style="max-width: 150px;">
                                     @endif
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -74,5 +74,9 @@
 @endsection
 
 @section('scripts')
-    <!-- ADD CUSTOM SCRIPTS IF NECESSARY -->
+    <!-- JQUERY CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+
+    <!-- SELECT2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endsection

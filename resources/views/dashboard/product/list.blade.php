@@ -130,7 +130,7 @@
                                                 </button> --}}
 
                                                 <!-- Dropdown Menu -->
-                                                <select class="form-select d-inline" style="width: auto;"
+                                                <select class="form-select d-inline btn-outline-teal" style="width: auto;"
                                                     onchange="navigateOption(this.value, {{ $product->id }})">
                                                     <option value="">{{ __('product.options') }}</option>
 

@@ -94,19 +94,19 @@
 
                                     <div class="col-xl-6">
                                         <label for="code" class="form-label">@lang('slider.ArabicDescription')</label>
-                                        <textarea type="text" name="description_ar" id="code" class="form-control" placeholder="@lang('slider.ArabicDescription')"></textarea>
-                                        <div class="invalid-feedback">@lang('validation.EnterArabicDescription')</div>
+                                        <textarea type="text" name="description_ar" id="code" class="form-control" placeholder="@lang('slider.ArabicDescription')" required></textarea>
+                                        <div class="invalid-feedback">@lang('validation.EnterArabicDesc')</div>
                                     </div>
 
                                     <div class="col-xl-6">
                                         <label for="value" class="form-label">@lang('slider.EnglishDescription')</label>
-                                            <textarea type="text" name="description_en" id="value" class="form-control" placeholder="@lang('slider.EnglishDescription')"></textarea>
-                                        <div class="invalid-feedback">@lang('validation.EnterEnglishDescription')</div>
+                                            <textarea type="text" name="description_en" id="value" class="form-control" placeholder="@lang('slider.EnglishDescription')" required></textarea>
+                                        <div class="invalid-feedback">@lang('validation.EnterEnglishDesc')</div>
                                     </div>
 
                                     <div class="col-xl-12">
                                         <label for="image" class="form-label">@lang('slider.Image')</label>
-                                        <input type="file" name="image" id="image" class="form-control" placeholder="@lang('slider.Image')">
+                                        <input type="file" name="image" id="image" class="form-control" placeholder="@lang('slider.Image')" required>
                                         <div class="form-text">@lang('slider.ImageNote')</div>
                                         <div class="invalid-feedback">@lang('validation.EnterImage')</div>
                                     </div>
@@ -142,16 +142,15 @@
 
             // Toggle Dish/Offer dropdown
             $('input[name="flag"]').change(function () {
-            const selected = $(this).val();
-            if (selected === 'dish') {
-            $('#dishDropdown').removeClass('d-none').find('select').prop('required', true);
-            $('#offerDropdown').addClass('d-none').find('select').prop('required', false);
-        } else if (selected === 'offer') {
-            $('#offerDropdown').removeClass('d-none').find('select').prop('required', true);
-            $('#dishDropdown').addClass('d-none').find('select').prop('required', false);
-        }
-            $('#nameDescriptionOptions, #imageOptions').removeClass('d-none');
-        });
+                const selected = $(this).val();
+                if (selected === 'dish') {
+                    $('#dishDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+                    $('#offerDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                } else if (selected === 'offer') {
+                    $('#offerDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+                    $('#dishDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                }
+            });
 
             // Toggle New/Existing Names and Descriptions
             $('input[name="name_option"]').change(function () {

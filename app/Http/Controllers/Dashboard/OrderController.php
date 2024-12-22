@@ -128,7 +128,7 @@ class OrderController extends Controller
         // return true;
 
     }
-    public function printOrder($id)
+    public function showInvoice($id)
     {
         $lang = App::getLocale(); // Get the current locale
 
@@ -138,8 +138,27 @@ class OrderController extends Controller
 
         $order = $responseData['data'];
 
-        return view('dashboard.order.print', compact('order'));
+        return view('dashboard.order.invoice', compact('order'));
     }
+
+    public function printReceipt($id, $type)
+    {
+        $order = Order::with(['orderDetails.dish', 'orderAddons.Addon.addons', 'client', 'address'])->findOrFail($id);
+
+        switch ($type) {
+            case 'customer_delivery_print':
+                return view('dashboard.order.customer_delivery_print', compact('order'));
+            case 'customer_dinein_print':
+                return view('dashboard.order.customer_dinein_print', compact('order'));
+            case 'customer_takeaway_print':
+                return view('dashboard.order.customer_takeaway_print', compact('order'));
+            case 'delivery_print':
+                return view('dashboard.order.delivery_print', compact('order'));
+            default:
+                abort(404, 'Invalid print type');
+        }
+    }
+
 
     public function changeItemStatus(Request $request)
     {

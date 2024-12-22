@@ -212,7 +212,7 @@ $(document).ready(function () {
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl);
   });
-z
+
   //Advance Tabs
   $(".next").click(function () {
       const nextTabLinkEl = $(".nav-tabs .active")

@@ -46,6 +46,7 @@ return[
     'Coupon' => 'قسيمه الشراء',
     'Discount' => 'الخصم',
     'Offers' => 'العروض',
+    'OfferDetails' => 'تفاصيل العروض',
     'Gifts' => 'الهدايا',
     'lolaityPoint' => 'النقاط',
     'Transactions' => 'المعاملات',
@@ -75,5 +76,6 @@ return[
     'permissions' => 'الصلاحيات',
     'branchMenuCategory' => 'تصنيف الاطباق للفرع',
     'VacationSettings' => 'اعدادات الاجازات',
+    'Addons'=>'الاضافات',
 
 ];

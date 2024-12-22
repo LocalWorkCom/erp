@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->char('country_id', 36)->change();
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
+            // $table->char('country_id', 36)->nullable()->change();
+            // $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade');
         });
     }
 

@@ -46,6 +46,7 @@ return [
     'Coupon' => 'Coupon',
     'Discount' => 'Discount',
     'Offers' => 'Offers',
+    'OfferDetails' => 'Offer Details',
     'Gifts' => 'Gifts',
     'lolaityPoint' => 'lolaityPoint',
     'Transactions' => 'Transactions',
@@ -75,5 +76,6 @@ return [
     'permissions' => 'Permissions',
     'branchMenuCategory' => 'Branch Menu Category',
     'VacationSettings' => 'Vacation Settings',
+    'Addons'=>'Addons',
 
 ];

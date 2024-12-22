@@ -22,10 +22,10 @@
                         </a>
                     </li>
                     <li class="nav-item active" aria-current="page">
-                        <a class="nav-link" href="index.html">الرئيسية</a>
+                        <a class="nav-link" href="{{ route('home') }}">الرئيسية</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">قائمة الطعام</a>
+                        <a class="nav-link" href="{{ route('menu') }}">قائمة الطعام</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">تواصل معنا</a>
@@ -37,24 +37,62 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        @if (session('locale') == 'ar' )
-                        <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                            En
-                        </a>
+                        @if (session('locale') == 'ar')
+                            <a class="nav-link" href="{{ route('set-locale', 'en') }}">
+                                En
+                            </a>
                         @else
-                        <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                            Ar
-                        </a>
+                            <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
+                                Ar
+                            </a>
                         @endif
 
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn align-items-center" data-bs-toggle="modal"
-                            data-bs-target="#loginModal">
-                            <i class="fas fa-user-circle"></i>
-                            <span>تسجيل الدخول</span>
-                        </a>
-                    </li>
+                    {{-- {{ dd(Auth::check()) }} --}}
+                    @auth('client')
+                        @if (Auth::guard('client')->user()->flag == 'client')
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>{{ Auth::guard('client')->user()->name }}</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('website.profile.view') }}">
+                                            <i class="fas fa-user"></i> @lang('auth.profile')
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form method="POST" action="{{ route('website.logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                @lang('auth.logout')
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link btn align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>@lang('auth.login')</span>
+                                </a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-user-circle"></i>
+                                <span>@lang('auth.login')</span>
+                            </a>
+                        </li>
+                    @endauth
+
+
+
 
 
                 </ul>
