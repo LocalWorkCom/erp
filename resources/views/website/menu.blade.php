@@ -23,7 +23,7 @@
                                 role="tab" aria-controls="pills-{{ $menuCategory->id }}"
                                 aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
                                 <div class="category-button">
-                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'default-category.png') }}"
+                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
                                         alt="{{ $menuCategory->dish_categories->name_ar }}" />
                                     <p class="me-3 mb-0">{{ $menuCategory->dish_categories->name_ar }}</p>
                                 </div>
@@ -31,10 +31,10 @@
                         </li>
                     @endif
                 @endforeach
-
                 <li class="nav-item" role="presentation">
-                    <form>
-                        <input class="form-control py-2" type="search" placeholder="ابحث في القائمة" aria-label="Search">
+                    <form id="searchForm">
+                        <input id="searchInput" class="form-control py-2" type="search" placeholder="ابحث في القائمة"
+                            aria-label="Search">
                     </form>
                 </li>
             </ul>
@@ -54,11 +54,12 @@
                             role="tabpanel" aria-labelledby="pills-{{ $menuCategory->id }}-tab">
                             <div class="row mx-0">
                                 @foreach ($menuCategory->dish_categories->dishes as $dish)
-                                    <div class="col-md-4 mb-4" data-aos="zoom-in">
+                                    <div class="col-md-4 mb-4 dish-card" data-dish-name="{{ $dish->name_ar }}"
+                                        data-aos="zoom-in">
                                         <div class="plate">
                                             <a href="#">
                                                 <figure class="plate-img m-0">
-                                                    <img src="{{ asset($dish->image ?? 'default-dish.png') }}"
+                                                    <img src="{{ asset($dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
                                                         alt="{{ $dish->name_ar }}">
                                                 </figure>
                                             </a>
@@ -137,3 +138,23 @@
         </div>
     </section>
 @endsection
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const dishCards = document.querySelectorAll('.dish-card');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase();
+
+            dishCards.forEach(function(card) {
+                const dishName = card.getAttribute('data-dish-name').toLowerCase();
+
+                if (dishName.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>

@@ -1,7 +1,7 @@
 <header class="fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container">
-            <a class="navbar-service" href="index.html">
+        <div class="container second-header">
+            <a class="navbar-service" href="{{ route('home') }}">
                 <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}">
             </a>
             <button class="navbar-toggler" type="button" onclick="openNav()">

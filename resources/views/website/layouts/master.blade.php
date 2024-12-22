@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ session('direction', 'ltr') }}" >
+<html lang="{{ app()->getLocale() }}" dir="{{ session('direction', 'rtl') }}">
 
 <head>
     <meta charset="UTF-8" />
@@ -18,15 +18,19 @@
     <link rel="shortcut icon" href="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}" sizes="25x25" />
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/css/all.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/css/all.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.css') }}">
 
     <!-- Owl Carousel -->
-    <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css') }}" />
 
     <!-- include Gallery (lightbox) plugin -->
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/lightbox/css/lightbox.min.css') }}" />
@@ -165,7 +169,7 @@
       $(".owl-prev > span").html('<i class="fas fa-arrow-right"></i>');
       $(".owl-next > span").html('<i class="fas fa-arrow-left"></i>');
   </script> -->
-  @stack('scripts')
+    @stack('scripts')
 </body>
 
 </html>
