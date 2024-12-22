@@ -33,4 +33,10 @@ return [
     'Edit' => 'تعديل',
     'Delete' => 'حذف',
     'Restore' => 'استعادة',
+    'Warning' => 'هل أنت متأكد؟',
+    'DeleteMsg' => 'لن تتمكن من التراجع عن هذا الإجراء!',
+    'YesDelete' => 'نعم، احذفه!',
+    'CancelDelete' => 'إلغاء',
+    'Deleted' => 'تم الحذف!',
+    'DeletedSuccessfully' => 'تم حذف المطبخ بنجاح.',
 ];

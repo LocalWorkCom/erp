@@ -14,7 +14,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard.recipes.index') }}">@lang('sidebar.Main')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('recipes.Recipes')</li>
                 </ol>
             </nav>
@@ -55,7 +55,6 @@
                                         <th>@lang('recipes.NameArabic')</th>
                                         <th>@lang('recipes.NameEnglish')</th>
                                         <th>@lang('recipes.Type')</th>
-                                        <!-- <th>@lang('recipes.Price')</th> -->
                                         <th>@lang('recipes.Actions')</th>
                                     </tr>
                                 </thead>
@@ -74,7 +73,6 @@
                                                     @lang('recipes.UnknownType')
                                                 @endif
                                             </td>
-                                            <!-- <td>{{ $recipe->price }}</td> -->
                                             <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.recipes.show', $recipe->id) }}" class="btn btn-info-light">
@@ -85,22 +83,9 @@
                                                     @lang('recipes.Edit') <i class="ri-edit-line"></i>
                                                 </a>
                                                 <!-- Delete -->
-                                                <form action="{{ route('dashboard.recipes.delete', $recipe->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('recipes.DeleteConfirm')');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('recipes.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
-                                                <!-- Restore -->
-                                                @if ($recipe->trashed())
-                                                    <form action="{{ route('dashboard.recipes.restore', $recipe->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-success-light">
-                                                            @lang('recipes.Restore') <i class="ri-refresh-line"></i>
-                                                        </button>
-                                                    </form>
-                                                @endif
+                                                <button type="button" class="btn btn-danger-light" onclick="deleteRecipe({{ $recipe->id }})">
+                                                    @lang('recipes.Delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -116,10 +101,7 @@
 @endsection
 
 @section('scripts')
-    <!-- JQUERY CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
-
-    <!-- DATA-TABLES CDN -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
@@ -128,14 +110,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
-@endsection
 
-<script>
-    function confirmDelete() {
-        return confirm("@lang('recipes.DeleteConfirm')");
-    }
-</script>
+    <script>
+        function deleteRecipe(id) {
+            Swal.fire({
+                title: "@lang('recipes.Warning')",
+                text: "@lang('recipes.DeleteConfirm')",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "@lang('recipes.YesDelete')",
+                cancelButtonText: "@lang('recipes.CancelDelete')",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{ route('dashboard.recipes.delete', '') }}/' + id,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function() {
+                            Swal.fire(
+                                "@lang('recipes.Deleted')",
+                                "@lang('recipes.DeleteSuccess')",
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function() {
+                            Swal.fire(
+                                "@lang('recipes.Error')",
+                                "@lang('recipes.DeleteFailed')",
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+@endsection
