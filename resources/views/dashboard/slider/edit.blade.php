@@ -103,12 +103,12 @@
                                     <!-- Description Fields -->
                                     <div class="col-xl-6">
                                         <label for="description_ar" class="form-label">@lang('slider.ArabicDescription')</label>
-                                        <textarea name="description_ar" id="description_ar" class="form-control">{{ old('description_ar', $slider->description_ar) }}</textarea>
+                                        <textarea name="description_ar" id="description_ar" class="form-control" required>{{ old('description_ar', $slider->description_ar) }}</textarea>
                                     </div>
 
                                     <div class="col-xl-6">
                                         <label for="description_en" class="form-label">@lang('slider.EnglishDescription')</label>
-                                        <textarea name="description_en" id="description_en" class="form-control">{{ old('description_en', $slider->description_en) }}</textarea>
+                                        <textarea name="description_en" id="description_en" class="form-control" required>{{ old('description_en', $slider->description_en) }}</textarea>
                                     </div>
 
                                     <!-- Image Upload -->

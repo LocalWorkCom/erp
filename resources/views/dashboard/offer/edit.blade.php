@@ -11,7 +11,7 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{route('offers.list')}}">@lang('offer.Offeres')</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('offers.list')}}">@lang('offer.Offers')</a></li>
                     <li class="breadcrumb-item active" aria-current="page">@lang('offer.EditOffer')</li>
                 </ol>
             </nav>
@@ -99,11 +99,11 @@
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.StartDate')</label>
-                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') ?? $offer->start_date }}">
+                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') ?? $offer->start_date }}" required>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('offer.EndDate')</label>
-                                        <input type="date" class="form-control" name="end_date" value="{{ old('end_date') ?? $offer->end_date }}">
+                                        <input type="date" class="form-control" name="end_date" value="{{ old('end_date') ?? $offer->end_date }}" required>
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
