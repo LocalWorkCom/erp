@@ -37,6 +37,11 @@ class BranchMenu extends Model
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
+    public function branchCategories()
+    {
+        return $this->belongsTo(DishCategory::class, 'branch_id');
+    }
+
     public function dish()
     {
         return $this->belongsTo(Dish::class, 'dish_id');
