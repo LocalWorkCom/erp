@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 |--------------------------------------------------------------------------
 |
 */
+
 Route::post('/site/register', [AuthController::class, 'Register'])->name('website.register');
 Route::post('/site/login', [AuthController::class, 'login'])->name('website.login');
 Route::get('/site/profile', [AuthController::class, 'view'])->name('website.profile.view');
@@ -25,4 +26,4 @@ Route::middleware(['auth:client'])->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
-
+Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
