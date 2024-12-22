@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
+use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\Slider;
@@ -18,7 +20,33 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
         $popularDishes = getMostDishesOrdered(5);
-        return view('website.landing', compact(['sliders', 'discounts', 'popularDishes']));
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('is_active', true)->get();
+        return view(
+            'website.landing',
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories'])
+        );
+    }
+
+    public function showMenu()
+    {
+        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
+            $query->where('is_active', true);
+        }, 'dish_categories.dishes' => function ($query) {
+            $query->where('is_active', true);
+        }])->get();
+        return view(
+            'website.menu',
+            compact(['menuCategories'])
+        );
+    }
+    public function contactUs()
+    {
+        $branches = Branch::all();
+        return view(
+            'website.contact-us',
+            compact(['branches'])
+        );
     }
 
     /**

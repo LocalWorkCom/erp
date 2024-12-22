@@ -22,37 +22,55 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
-        $validator = Validator::make($request->all(), [
-            "name" => "required|string",
-            "email" => "required|email|unique:users",
-            'country_code' => 'required|string',
-            "password" => "required|min:6",
-            'phone' => [
-                'required',
-                'string',
-                'regex:/^[0-9]+$/', // Ensures only numbers are allowed
-                Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('country_code', $request->country_code);
-                }),
-            ],
-            "date_of_birth" => "nullable|date",
-        ]);
+        $lang = $request->header('lang', 'ar'); // Default to Arabic if no 'lang' header is provided
+    App::setLocale($lang);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+    // Validation rules
+    $validator = Validator::make($request->all(), [
+        "name" => "required|string",
+        "email" => "required|email|unique:users",
+        'country_code' => 'required|string',
+        "password" => "required|min:6",
+        'phone' => [
+            'required',
+            'string',
+            'regex:/^[0-9]+$/', // Ensures only numbers are allowed
+            Rule::unique('users')->where(function ($query) use ($request) {
+                return $query->where('country_code', $request->country_code);
+            }),
+        ],
+        "date_of_birth" => "nullable|date",
+    ], [
+        // Custom messages for validation errors (localized)
+        'name.required' => __('validation.required', ['attribute' => __('auth.nameweb')]),
+        'email.required' => __('validation.required', ['attribute' => __('auth.emailweb')]),
+        'email.unique' => __('validation.unique', ['attribute' => __('auth.emailweb')]),
+        'country_code.required' => __('validation.required', ['attribute' => __('auth.country_code')]),
+        'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
+        'password.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
+        'phone.required' => __('validation.required', ['attribute' => __('auth.phoneplace')]),
+        'phone.regex' => __('validation.regex', ['attribute' => __('auth.phoneplace')]),
+        'phone.unique' => __('validation.unique', ['attribute' => __('auth.phoneplace')]),
+        'date_of_birth.date' => __('validation.date', ['attribute' => __('auth.date')]),
+    ]);
 
-        $country = Country::where('phone_code', $request->country_code)->first();
+    // If validation fails, return a localized error response
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
-        if (!$country) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => ['country_code' => [__('Invalid country code.')]],
-            ], 422);
-        }
+    // Check if the country code is valid
+    $country = Country::where('phone_code', $request->country_code)->first();
+
+    if (!$country) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => ['country_code' => [__('validation.phone_code',['attribute' => __('auth.phone_code')])]], // Localized message
+        ], 422);
+    }
 
 
         $user = new User();

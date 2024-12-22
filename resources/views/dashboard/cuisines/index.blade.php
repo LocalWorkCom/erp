@@ -76,33 +76,32 @@
                                                 @endif
                                             </td>
                                             <td>
-    <!-- Show -->
-    <a href="{{ route('dashboard.cuisines.show', $cuisine->id) }}" class="btn btn-info-light">
-        @lang('cuisines.Show') <i class="ri-eye-line"></i>
-    </a>
-    <!-- Edit -->
-    <a href="{{ route('dashboard.cuisines.edit', $cuisine->id) }}" class="btn btn-orange-light">
-        @lang('cuisines.Edit') <i class="ri-edit-line"></i>
-    </a>
-    <!-- Delete -->
-    <form action="{{ route('dashboard.cuisines.destroy', $cuisine->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('cuisines.DeleteConfirm')');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger-light">
-            @lang('cuisines.Delete') <i class="ri-delete-bin-line"></i>
-        </button>
-    </form>
-    <!-- Restore -->
-    @if ($cuisine->trashed())
-        <form action="{{ route('dashboard.cuisines.restore', $cuisine->id) }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-success-light">
-                @lang('cuisines.Restore') <i class="ri-refresh-line"></i>
-            </button>
-        </form>
-    @endif
-</td>
-
+                                                <!-- Show -->
+                                                <a href="{{ route('dashboard.cuisines.show', $cuisine->id) }}" class="btn btn-info-light">
+                                                    @lang('cuisines.Show') <i class="ri-eye-line"></i>
+                                                </a>
+                                                <!-- Edit -->
+                                                <a href="{{ route('dashboard.cuisines.edit', $cuisine->id) }}" class="btn btn-orange-light">
+                                                    @lang('cuisines.Edit') <i class="ri-edit-line"></i>
+                                                </a>
+                                                <!-- Delete -->
+                                                <form id="delete-form-{{ $cuisine->id }}" action="{{ route('dashboard.cuisines.destroy', $cuisine->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item({{ $cuisine->id }})" class="btn btn-danger-light">
+                                                        @lang('cuisines.Delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
+                                                <!-- Restore -->
+                                                @if ($cuisine->trashed())
+                                                    <form action="{{ route('dashboard.cuisines.restore', $cuisine->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-success-light">
+                                                            @lang('cuisines.Restore') <i class="ri-refresh-line"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -129,8 +128,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- INTERNAL DATADABLES JS -->
+    <!-- INTERNAL DATATABLES JS -->
     @vite('resources/assets/js/datatables.js')
+
+    <script>
+        function delete_item(id) {
+            Swal.fire({
+                title: "@lang('cuisines.Warning')",
+                text: "@lang('cuisines.DeleteMsg')",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "@lang('cuisines.YesDelete')",
+                cancelButtonText: "@lang('cuisines.CancelDelete')",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var form = document.getElementById('delete-form-' + id);
+                    form.submit();
+                }
+            });
+        }
+    </script>
 @endsection

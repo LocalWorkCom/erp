@@ -39,4 +39,11 @@ return [
     'Delete' => 'Delete',
     'Restore' => 'Restore',
     'DeleteConfirm' => 'Are you sure you want to delete this recipe?',
+    'Warning' => 'Are you sure?',
+'DeleteConfirm' => 'This action cannot be undone. Do you want to proceed?',
+'YesDelete' => 'Yes, Delete!',
+'CancelDelete' => 'Cancel',
+'Deleted' => 'Deleted!',
+'DeleteSuccess' => 'The recipe has been deleted successfully.',
+'DeleteFailed' => 'Failed to delete the recipe. Please try again.',
 ];

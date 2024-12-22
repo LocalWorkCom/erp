@@ -37,5 +37,13 @@ return [
     'Edit' => 'Edit',
     'Delete' => 'Delete',
     'Restore' => 'Restore',
+    'Warning' => 'Are you sure?',
+    'DeleteConfirm' => 'This action cannot be undone. Do you want to proceed?',
+    'YesDelete' => 'Yes, Delete!',
+    'CancelDelete' => 'Cancel',
+    'Deleted' => 'Deleted!',
+    'DeleteSuccess' => 'The addon has been deleted successfully.',
+    'DeleteFailed' => 'Failed to delete the addon. Please try again.',
+
     
 ];
