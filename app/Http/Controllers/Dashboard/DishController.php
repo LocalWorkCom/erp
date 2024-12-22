@@ -50,9 +50,18 @@ class DishController extends Controller
 
     public function show($id)
     {
-        $dish = $this->dishService->show($id);
-        return view('dashboard.dish.show', compact('dish'));
+        try {
+            $dish = $this->dishService->show($id);
+    
+            Log::info('Dish Data Fetched Successfully', ['dish' => $dish]);
+    
+            return view('dashboard.dish.show', compact('dish'));
+        } catch (\Exception $e) {
+            Log::error('Error Fetching Dish Data', ['error' => $e->getMessage()]);
+            return redirect()->route('dashboard.dishes.index')->with('error', __('dishes.DishNotFound'));
+        }
     }
+    
 
     public function create()
     {

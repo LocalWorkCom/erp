@@ -43,7 +43,7 @@
                             </tr>
                             <tr>
                                 <th>@lang('dishes.Category')</th>
-                                <td>{{ $dish->category->name ?? '-' }}</td>
+                                <td>{{ $dish->dishCategory->name ?? '-' }}</td>
                             </tr>
                             <tr>
                                 <th>@lang('dishes.Cuisine')</th>
@@ -74,24 +74,25 @@
                                     <p>@lang('dishes.Price'): {{ $size->price }}</p>
                                     <p>@lang('dishes.DefaultSize'): {{ $size->default_size ? __('dishes.Yes') : __('dishes.No') }}</p>
                                     @if ($size->details->isNotEmpty())
-                                        <h6>@lang('dishes.RecipesForSize')</h6>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>@lang('dishes.Recipe')</th>
-                                                    <th>@lang('dishes.Quantity')</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($size->details as $detail)
-                                                    <tr>
-                                                        <td>{{ $detail->recipe->name }}</td>
-                                                        <td>{{ $detail->quantity }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    @endif
+    <h6>@lang('dishes.RecipesForSize')</h6>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>@lang('dishes.Recipe')</th>
+                <th>@lang('dishes.Quantity')</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($size->details as $detail)
+                <tr>
+                    <td>{{ $detail->recipe ? $detail->recipe->name : __('dishes.RecipeNotFound') }}</td>
+                    <td>{{ $detail->quantity }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endif
+
                                 </div>
                             @endforeach
                         @endif
@@ -117,35 +118,42 @@
                             </table>
                         @endif
 
-                        <!-- Dish Addons and Categories -->
-                        @if ($dish->has_addon)
-                            <h5 class="mt-4">@lang('dishes.DishAddons')</h5>
-                            @foreach ($dish->addons->groupBy('addon_category_id') as $addonCategoryId => $addons)
-                                <div class="mt-3">
-                                    <h6>@lang('dishes.AddonCategory'): {{ $addons->first()->category->name_en ?? '-' }}</h6>
-                                    <p>@lang('dishes.MinAddons'): {{ $addons->first()->min_addons }}</p>
-                                    <p>@lang('dishes.MaxAddons'): {{ $addons->first()->max_addons }}</p>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('dishes.Addon')</th>
-                                                <th>@lang('dishes.Quantity')</th>
-                                                <th>@lang('dishes.Price')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($addons as $addon)
-                                                <tr>
-                                                    <td>{{ $addon->addons->name }}</td>
-                                                    <td>{{ $addon->quantity }}</td>
-                                                    <td>{{ $addon->price }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endforeach
-                        @endif
+                     <!-- Dish Addons and Categories -->
+@if ($dish->has_addon)
+    <h5 class="mt-4">@lang('dishes.DishAddons')</h5>
+    @foreach ($dish->addons->groupBy('addon_category_id') as $addonCategoryId => $addons)
+        @php
+            $addonCategory = $addons->first()->category ?? null;
+        @endphp
+        <div class="mt-3">
+            @if ($addonCategory)
+                <h6>@lang('dishes.AddonCategory'): {{ $addonCategory->name_en }}</h6>
+                <p>@lang('dishes.MinAddons'): {{ $addons->first()->min_addons }}</p>
+                <p>@lang('dishes.MaxAddons'): {{ $addons->first()->max_addons }}</p>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>@lang('dishes.Addon')</th>
+                            <th>@lang('dishes.Quantity')</th>
+                            <th>@lang('dishes.Price')</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($addons as $addon)
+                            <tr>
+                                <td>{{ $addon->addon->name ?? __('dishes.NoAddon') }}</td>
+                                <td>{{ $addon->quantity }}</td>
+                                <td>{{ $addon->price }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+                <p>@lang('dishes.NoAddonsForCategory')</p>
+            @endif
+        </div>
+    @endforeach
+@endif
 
                         <!-- Back Button -->
                         <div class="mt-4">

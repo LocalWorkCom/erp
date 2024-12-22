@@ -57,7 +57,7 @@
                                         <th>@lang('dishes.NameEnglish')</th>
                                         <th>@lang('dishes.Category')</th>
                                         <th>@lang('dishes.Cuisine')</th>
-                                        <th>@lang('dishes.Price')</th>
+                                        <!-- <th>@lang('dishes.Price')</th> -->
                                         <th>@lang('dishes.IsActive')</th>
                                         <th>@lang('dishes.HasSizes')</th>
                                         <th>@lang('dishes.Actions')</th>
@@ -78,7 +78,7 @@
                                             <td>{{ $dish->name_en }}</td>
                                             <td>{{ $dish->category->name_en ?? __('dishes.NoCategory') }}</td>
                                             <td>{{ $dish->cuisine->name_en ?? __('dishes.NoCuisine') }}</td>
-                                            <td>{{ $dish->price }}</td>
+                                            <!-- <td>{{ $dish->price }}</td> -->
                                             <td>
                                                 @if ($dish->is_active)
                                                     <span class="badge bg-success">@lang('dishes.Active')</span>
