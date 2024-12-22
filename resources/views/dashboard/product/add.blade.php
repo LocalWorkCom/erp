@@ -105,7 +105,7 @@
                                         <select name="currency_code" id="currency_code" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseCurrency')</option>
                                             @foreach ($Currencies as $index => $Currency)
-                                                <option value="{{ $index }}">{{ $Currency }}</option>
+                                                <option value="{{ $Currency['id'] }}">{{ $Currency['code'] }}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCurrency')</div>

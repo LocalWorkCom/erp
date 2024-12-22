@@ -86,9 +86,11 @@ class ProductController extends Controller
         foreach ($Countries as $country) {
             // Check if currency_code exists and add it to the array
             if (isset($country->currency_code)) {
-                $Currencies[] = $country->currency_code;
+                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
             }
         }
+
+        //return $Currencies;
 
         // $Stores = Store::all();
 
