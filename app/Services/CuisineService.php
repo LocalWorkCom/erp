@@ -20,16 +20,26 @@ class CuisineService
     }
 
     public function store($data, $image = null)
-    {
+{
+    try {
         if ($image) {
-            $imagePath = $image->store('cuisines', 'public');
-            $data['image_path'] = $imagePath;
+            $destinationPath = 'images/cuisines';
+
+            $imageName = time() . '_' . $image->getClientOriginalName();
+
+            $image->move(public_path($destinationPath), $imageName);
+
+            $data['image_path'] = $destinationPath . '/' . $imageName;
         }
 
         $data['created_by'] = auth()->id();
 
         return Cuisine::create($data);
+    } catch (\Exception $e) {
+        Log::error('Error storing cuisine', ['error' => $e->getMessage()]);
+        throw $e;
     }
+}
 
     public function update($id, $data, $image = null)
     {

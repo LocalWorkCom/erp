@@ -21,6 +21,16 @@ class AddonController extends Controller
         return view('dashboard.addons.index', compact('addons'));
     }
 
+    public function show($id)
+    {
+        try {
+            $addon = $this->addonService->show($id);
+            return view('dashboard.addons.show', compact('addon'));
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.addons.index')->with('error', 'Failed to load addon details.');
+        }
+    }
+
     public function create()
     {
         $products = $this->addonService->getAllProducts();

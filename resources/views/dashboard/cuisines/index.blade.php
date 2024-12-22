@@ -70,34 +70,39 @@
                                             </td>
                                             <td>
                                                 @if ($cuisine->image_path)
-                                                    <img src="{{ asset('storage/' . $cuisine->image_path) }}" alt="Cuisine Image" width="50" height="50" class="img-thumbnail">
+                                                    <img src="{{ asset($cuisine->image_path) }}" alt="Cuisine Image" width="50" height="50" class="img-thumbnail">
                                                 @else
                                                     @lang('cuisines.NoImage')
                                                 @endif
                                             </td>
                                             <td>
-                                                <!-- Show -->
-                                                <a href="{{ route('dashboard.cuisines.edit', $cuisine->id) }}" class="btn btn-orange-light">
-                                                    @lang('cuisines.Edit') <i class="ri-edit-line"></i>
-                                                </a>
-                                                <!-- Delete -->
-                                                <form action="{{ route('dashboard.cuisines.destroy', $cuisine->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('cuisines.DeleteConfirm')');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('cuisines.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
-                                                <!-- Restore -->
-                                                @if ($cuisine->trashed())
-                                                    <form action="{{ route('dashboard.cuisines.restore', $cuisine->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-success-light">
-                                                            @lang('cuisines.Restore') <i class="ri-refresh-line"></i>
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </td>
+    <!-- Show -->
+    <a href="{{ route('dashboard.cuisines.show', $cuisine->id) }}" class="btn btn-info-light">
+        @lang('cuisines.Show') <i class="ri-eye-line"></i>
+    </a>
+    <!-- Edit -->
+    <a href="{{ route('dashboard.cuisines.edit', $cuisine->id) }}" class="btn btn-orange-light">
+        @lang('cuisines.Edit') <i class="ri-edit-line"></i>
+    </a>
+    <!-- Delete -->
+    <form action="{{ route('dashboard.cuisines.destroy', $cuisine->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('cuisines.DeleteConfirm')');">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger-light">
+            @lang('cuisines.Delete') <i class="ri-delete-bin-line"></i>
+        </button>
+    </form>
+    <!-- Restore -->
+    @if ($cuisine->trashed())
+        <form action="{{ route('dashboard.cuisines.restore', $cuisine->id) }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-success-light">
+                @lang('cuisines.Restore') <i class="ri-refresh-line"></i>
+            </button>
+        </form>
+    @endif
+</td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
