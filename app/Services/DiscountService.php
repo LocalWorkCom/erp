@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\Discount;
+use App\Models\DishDiscount;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -74,8 +75,8 @@ class DiscountService
             if ($validator->fails()) {
                 // Check for unique code error specifically
                 // if ($validator->errors()->has('code')) {
-                    //     return CustomRespondWithBadRequest('Duplicate code are submitted.');
-                    // }
+                //     return CustomRespondWithBadRequest('Duplicate code are submitted.');
+                // }
                 // Return other validation errors
                 return RespondWithBadRequestData($this->lang, $validator->errors());
             }
@@ -109,7 +110,7 @@ class DiscountService
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
-    
+
     public function update(Request $request, $id)
     {
         try {
@@ -150,13 +151,13 @@ class DiscountService
 
             if (!empty($validatedData['branches'])) {
                 $discount->branches()->sync($validatedData['branches']);
-            }else {
+            } else {
                 $discount->branches()->detach();
             }
 
             if (!empty($validatedData['dishes'])) {
                 $discount->dishes()->sync($validatedData['dishes']);
-            }else {
+            } else {
                 $discount->dishes()->detach();
             }
             return ResponseWithSuccessData($this->lang, $discount, 1);
@@ -192,4 +193,87 @@ class DiscountService
         }
     }
 
+    // product color
+    public function listDish($discountId, $checkToken)
+    {
+        $discounts = Discount::with(['discountDishes.dish' => function ($query) {
+            $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'dishes' table
+        }])->findOrFail($discountId);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($this->lang, 5);
+        }
+
+        return ResponseWithSuccessData($this->lang, $discounts, 1);
+    }
+
+    public function saveDiscountDish(Request $request, $discountId)
+    {
+        // Validate the input
+        $validated = $request->validate([
+            'discount_dishes.*.dish_id' => 'required|exists:dishes,id',
+            'discount_dish_id' => 'nullable|array',
+            'discount_dish_id.*' => 'nullable|integer|exists:dish_discount,id',
+        ]);
+    
+        // Ensure discount_dish_id is always an array, even if not provided
+        $discountDishIds = $request->discount_dish_id ?? [];
+    
+        // Ensure discount_dishes is always an array, even if not provided
+        $discountDishes = $request->discount_dishes ?? [];
+    
+        // Fetch current discount dishes
+        $existingDiscountDishes = DishDiscount::where('discount_id', $discountId)->get();
+    
+        // Collect submitted dish IDs
+        $submittedDishIds = collect($discountDishes)->pluck('dish_id')->toArray();
+    
+        // Check for duplicates among submitted dishes
+        if (count($submittedDishIds) !== count(array_unique($submittedDishIds))) {
+            return CustomRespondWithBadRequest('Duplicate dishes are submitted.');
+        }
+    
+        // Delete dishes that are not in the submitted discount_dish_ids
+        foreach ($existingDiscountDishes as $existingDish) {
+            if (!in_array($existingDish->id, $discountDishIds)) {
+                $existingDish->delete();
+            }
+        }
+    
+        // Save or update dishes
+        foreach ($discountDishes as $index => $discountDish) {
+            $dishId = (int) $discountDish['dish_id'];
+            $discountDishId = $discountDishIds[$index] ?? null;
+    
+            // Check if the same dish already exists for this discount
+            $existingDish = DishDiscount::where('discount_id', $discountId)
+                ->where('dish_id', $dishId)
+                ->where('id', '!=', $discountDishId)
+                ->exists();
+    
+            if ($existingDish) {
+                return CustomRespondWithBadRequest(
+                    'The dish with ID ' . $dishId . ' already exists for this discount.'
+                );
+            }
+    
+            if ($discountDishId) {
+                // Update existing dish
+                DishDiscount::updateOrCreate(
+                    ['id' => $discountDishId],
+                    ['dish_id' => $dishId, 'discount_id' => $discountId]
+                );
+            } else {
+                // Create new dish
+                DishDiscount::create([
+                    'dish_id' => $dishId,
+                    'discount_id' => $discountId,
+                    'created_by' => Auth::guard('admin')->id(),
+                ]);
+            }
+        }
+    
+        // Return success response
+        return RespondWithSuccessRequest($this->lang, 1);
+    }
+    
 }

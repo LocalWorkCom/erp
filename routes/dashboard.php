@@ -254,6 +254,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [DiscountController::class, 'delete'])->name('discount.delete')->middleware('role_or_permission:delete discounts');
     });
 
+      // discount_dish
+    Route::get('/discounts/dish/list/{discountId}', [DiscountController::class, 'dish'])
+      ->name('discounts.dishes.list')
+      ->middleware('role_or_permission:view discount_dishes');
+
+    Route::post('discount/{id}/dishes/save', [DiscountController::class, 'saveDishes'])
+      ->name('discount.dishes.save')
+      ->middleware('role_or_permission:view discount_dishes');
+
+
     Route::get('/gifts', [GiftController::class, 'index'])->name('gifts.list')->middleware('role_or_permission:view gifts');
     Route::group(['prefix' => 'gift'], function () {
         Route::post('store', [GiftController::class, 'store'])->name('gift.store')->middleware('role_or_permission:create gifts');
