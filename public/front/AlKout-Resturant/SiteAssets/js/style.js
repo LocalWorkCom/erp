@@ -320,7 +320,19 @@ document.addEventListener('DOMContentLoaded', function () {
 // Close the cart when clicking outside (on the blur overlay)
 document.getElementById("blur-overlay").addEventListener("click", closeCart);
 
+function showFirstPhase() {
+  document.querySelector('.third-phase').classList.add('d-none');
+  document.querySelector('.first-phase').classList.remove('d-none');
+}
+function showSecondPhase() {
+  document.querySelector('.first-phase').classList.add('d-none');
+  document.querySelector('.second-phase').classList.remove('d-none');
+}
 
+function showThirdPhase() {
+  document.querySelector('.second-phase').classList.add('d-none');
+  document.querySelector('.third-phase').classList.remove('d-none');
+}
 
 
 
