@@ -28,7 +28,7 @@
                         <a class="nav-link" href="{{ route('menu') }}">قائمة الطعام</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">تواصل معنا</a>
+                        <a class="nav-link" href="{{ route('contactUs') }}">تواصل معنا</a>
                     </li>
 
                     <li class="nav-item">
