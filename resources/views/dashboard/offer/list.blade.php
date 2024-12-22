@@ -55,6 +55,9 @@
                                         <th scope="col">@lang('offer.ImageEn')</th>
                                         <th scope="col">@lang('offer.ArabicName')</th>
                                         <th scope="col">@lang('offer.EnglishName')</th>
+                                        <th scope="col">@lang('offer.BranchSelection')</th>
+                                        <th scope="col">@lang('offer.DiscountType')</th>
+                                        <th scope="col">@lang('offer.Discount')</th>
                                         <th scope="col">@lang('offer.Active')</th>
                                         <th scope="col">@lang('category.Actions')</th>
                                     </tr>
@@ -70,6 +73,15 @@
                                                      width="100" height="100"></td>
                                             <td>{{ $offer->name_ar }}</td>
                                             <td>{{ $offer->name_en }}</td>
+                                            <td>
+                                                @if (app()->getLocale() == 'en')
+                                                    {{ $offer->branch_id == -1 ? 'All branches' : 'Specific' }}
+                                                @else
+                                                    {{ $offer->branch_id == -1 ? 'كل الفروع' : 'محددة' }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $offer->discount_type }}</td>
+                                            <td>{{ $offer->discount_value }}</td>
                                             <td>
                                             <span class="badge {{ $offer->is_active ? 'bg-success' : 'bg-danger' }}">
                                                 {{ $offer->is_active ? __('term.Active') : __('term.Inactive') }}
