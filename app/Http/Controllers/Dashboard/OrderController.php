@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\BranchMenu;
 use App\Models\Country;
+use App\Models\Dish;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
 use App\Models\OrderTracking;
+use App\Models\Table;
+use App\Services\BranchService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -23,13 +27,16 @@ class OrderController extends Controller
     protected $orderService;
     protected $lang;
     protected $checkToken;  // Set to true or false based on your need
+    protected $branchService;
 
 
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderService $orderService,BranchService $branchService)
     {
         $this->orderService = $orderService;
         $this->lang =  app()->getLocale();
         $this->checkToken = false;
+        $this->branchService = $branchService;
+
     }
 
     public function index(Request $request)
@@ -39,14 +46,18 @@ class OrderController extends Controller
         $responseData = $response->original;
 
         $orders = $responseData['data'];
+        
         //        dd($branches);
         return view('dashboard.order.list', compact('orders'));
     }
 
     public function create()
     {
-        $countries = Country::all();
-        return view('dashboard.order.add', compact('countries'));
+        $branches =  Branch::with(['country', 'creator', 'deleter','floors'])->get();
+        $tables = Table::where('branch_id', getDefaultBranch())->all();
+        $menu =BranchMenu::where('branch_id', getDefaultBranch())->all();
+
+        return view('dashboard.order.add', compact('branches'));
     }
     public function store(Request $request)
     {

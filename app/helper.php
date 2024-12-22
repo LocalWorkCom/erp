@@ -6,6 +6,7 @@ use App\Models\ApICode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\Branch;
 use App\Models\ClientDetail;
 use App\Models\Coupon;
 use App\Models\DeliverySetting;
@@ -31,7 +32,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\BranchMenu;
 use App\Models\BranchMenuAddon;
 use App\Models\BranchMenuSize;
-
+use App\Models\Offer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -488,6 +489,7 @@ function CheckCouponValid($id, $amount)
     }
     return false;
 }
+
 function GetCouponId($code)
 {
     $coupon = Coupon::where('code', $code)->first();
@@ -827,7 +829,7 @@ function GetCurrencyCodes()
 }
 function GetCountries()
 {
-    $countries = Country::select('phone_code', 'id','flag')->get();
+    $countries = Country::select('phone_code', 'id', 'flag')->get();
     return $countries;
 }
 function AddBranchMenu($branch_id)
@@ -841,8 +843,8 @@ function AddBranchMenu($branch_id)
 function AddDishCategories($branch_id)
 {
     $get_dish_categories = DishCategory::all();
-    if($get_dish_categories){
-        foreach($get_dish_categories as $get_dish_category) {
+    if ($get_dish_categories) {
+        foreach ($get_dish_categories as $get_dish_category) {
             $branch_menu_category = BranchMenuCategory::firstOrCreate(
                 ['dish_category_id' => $get_dish_category->id, 'branch_id' => $branch_id, 'parent_id' => $get_dish_category->parent_id],
                 ['is_active' => 1, 'created_by' => auth()->user()->id]
@@ -854,8 +856,8 @@ function AddDishCategories($branch_id)
 function AddDishes($branch_id)
 {
     $get_dishes = Dish::all();
-    if($get_dishes){
-        foreach($get_dishes as $get_dish) {
+    if ($get_dishes) {
+        foreach ($get_dishes as $get_dish) {
             $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
             $branch_menu_category = BranchMenu::firstOrCreate(
                 ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
@@ -877,8 +879,8 @@ function AddDishes($branch_id)
 function AddAddons($branch_id)
 {
     $get_addons = DishAddon::all();
-    if($get_addons){
-        foreach($get_addons as $get_addon) {
+    if ($get_addons) {
+        foreach ($get_addons as $get_addon) {
 
             $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_category = BranchMenuAddon::firstOrCreate(
@@ -900,8 +902,8 @@ function AddAddons($branch_id)
 function AddSizes($branch_id)
 {
     $get_sizes = DishSize::all();
-    if($get_sizes){
-        foreach($get_sizes as $get_size) {
+    if ($get_sizes) {
+        foreach ($get_sizes as $get_size) {
             $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
             $branch_menu_category = BranchMenuSize::firstOrCreate(
                 ['branch_menu_id' => $menu->id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
@@ -914,6 +916,10 @@ function AddSizes($branch_id)
             );
         }
     }
+}
+function getDefaultBranch()
+{
+    return Branch::where('is_default', 1)->first()->id;
 }
 
 function respondError($error, $code, $errorMessages = [])
@@ -930,7 +936,7 @@ function respondError($error, $code, $errorMessages = [])
         'status' => false,
         'message' => $error,
         'data' => null,
-        'errorData'=>null
+        'errorData' => null
     ];
 
 
@@ -941,7 +947,7 @@ function respondError($error, $code, $errorMessages = [])
 
     return response()->json($response, $code1);
 }
- function getMostDishesOrdered($limit = 5)
+function getMostDishesOrdered($limit = 5)
 {
     return Dish::select('dishes.id', 'dishes.name')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
@@ -951,3 +957,19 @@ function respondError($error, $code, $errorMessages = [])
         ->limit($limit)
         ->get();
 }
+// function checkItemOffer($item_id, $item_type)
+// {
+//     $offer = Offer::leftJoin('offer_details', 'offer_details.offer_id', 'offers.id')->where('type_id', $item_id)
+//         ->where('offer_type', $item_type)
+//         ->where('is_active', 1)
+//         ->whereDate('start_date', '<=', now())
+//         ->whereDate('end_date', '>=', now())
+//         ->first();
+//     return $offer;
+// }
+// function applyOffer($item_id, $item_type, $offer_id)
+// {
+//     $offer = Offer::find($offer_id);
+//     if ($offer) {
+//     }
+// }

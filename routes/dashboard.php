@@ -431,6 +431,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.list');
+    Route::get('/order/store', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/order/add', [OrderController::class, 'create'])->name('order.add');
     Route::get('/order/show/{id}', [OrderController::class, 'show'])->name('order.show');
     Route::post('/order/change', [OrderController::class, 'changeStatus'])->name('order.change');
     Route::post('/order-addon/change', [OrderController::class, 'changeAddonStatus'])->name('order.addon.change');
