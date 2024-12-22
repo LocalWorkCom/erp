@@ -10,7 +10,7 @@ class DishCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ['name', 'description','name_site', 'description_site']; 
+    protected $appends = ['name', 'description', 'name_site', 'description_site'];
 
     protected $fillable = [
         'name_en',
@@ -88,5 +88,10 @@ class DishCategory extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function dishes()
+    {
+        return $this->hasMany(Dish::class, 'category_id');
     }
 }
