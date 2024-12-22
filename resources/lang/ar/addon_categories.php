@@ -22,4 +22,10 @@ return [
     'DescriptionEnglish' => 'الوصف (بالإنجليزية)',
     'EnterNameArabic' => 'يرجى إدخال الاسم بالعربية.',
     'EnterNameEnglish' => 'يرجى إدخال الاسم بالإنجليزية.',
+    'Warning' => 'هل أنت متأكد؟',
+    'DeleteMsg' => 'لن تتمكن من التراجع عن هذا الإجراء!',
+    'YesDelete' => 'نعم، احذفه!',
+    'CancelDelete' => 'إلغاء',
+    'Deleted' => 'تم الحذف!',
+    'DeletedSuccessfully' => 'تم حذف فئة الإضافة بنجاح.',
 ];
