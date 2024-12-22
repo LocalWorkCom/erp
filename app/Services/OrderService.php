@@ -3,11 +3,15 @@
 
 namespace App\Services;
 
+use App\Models\BranchMenu;
+use App\Models\BranchMenuAddon;
 use App\Models\ClientAddress;
 use App\Models\Dish;
 use App\Models\DishAddon;
 use App\Models\Gift;
 use App\Models\Menu;
+use App\Models\Offer;
+use App\Models\OfferDetail;
 use App\Models\Order;
 use App\Models\OrderAddon;
 use App\Models\OrderDetail;
@@ -80,6 +84,8 @@ class OrderService
         $coupon_application = getSetting('coupon_application');
         $service_fees = getSetting('service_fees');
         $redeem_total = 0;
+        $total_offer_price_befor_tax = 0;
+
         DB::beginTransaction();
 
         try {
@@ -160,7 +166,6 @@ class OrderService
                 $status = 'pending'; //takeaway
             }
             // if (!CheckExistOrder($client_id)) {
-
             //order
             $Order = new Order();
             $Order->date = date('Y-m-d');
@@ -187,7 +192,7 @@ class OrderService
 
                 foreach ($DataOrderDetails as $DataOrderDetail) {
                     //need to get price from menu table updated _________________________________________________________
-                    $Dish = Menu::where('dish_id', $DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
+                    $Dish = BranchMenu::where('dish_id', $DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
                     if ($Dish) {
                         $total = $Dish->price;
                     }
@@ -205,13 +210,45 @@ class OrderService
                     $OrderDetails->save();
                 }
             }
+            if ($request->IDOffer) {
+                $offer = Offer::find($request->IDOffer);
+                if ($offer->is_active) {
+
+                    $offer_details = OfferDetail::where('IDOffer')->get();
+                    foreach ($offer_details as $offer_detail) {
+                        $Dish = BranchMenu::where('dish_id', $offer_detail->type_id)->where('branch_id', $request->branch_id)->first();
+                        if ($Dish) {
+                            $total = $Dish->price;
+                        }
+                        if ($offer->discount_type == 'fixed') {
+                            $total = 0;
+                        } else {
+                            $total = $total - ($total * $offer->discount_value);
+                            $total_offer_price_befor_tax += $total;
+                        }
+                        $OrderDetails = new OrderDetail();
+                        $OrderDetails->order_id = $Order->id;
+                        $OrderDetails->dish_id = $offer_detail->type_id;
+                        $OrderDetails->offer_id = $offer_detail->offer_id;
+                        $OrderDetails->quantity = $offer_detail->count;
+                        $OrderDetails->total = $total; // price for 1 unit 
+                        $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total * $offer_detail->count, $tax_percentage, $tax_application) : $total * $offer_detail->count;
+                        $OrderDetails->tax_value = CalculateTax($tax_percentage, $total * $offer_detail->count);
+                        $OrderDetails->note =  null;
+                        $OrderDetails->created_by = $created_by;
+                        $total_product_price_after_tax = $tax_application == 0 ? applyTax($total * $offer_detail->count, $tax_percentage, $tax_application) * $offer_detail->count : $total * $offer_detail->count;
+                        $OrderDetails->price_after_tax = $total_product_price_after_tax;
+                        $OrderDetails->save();
+                    }
+                }
+            }
 
             if ($DataAddons->count()) {
 
                 foreach ($DataAddons as $DataAddon) {
-                    $addon = DishAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
+                    $addon = BranchMenuAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
                     if ($addon) {
-                        $price = $addon->recipe->price;
+                        $price = $addon->price;
 
                         $OrderAddons = new OrderAddon();
                         $OrderAddons->order_id = $Order->id;
@@ -253,8 +290,8 @@ class OrderService
             $total_addon_price_befor_tax = array_sum(
                 array_map(
                     function ($addon) {
-                        $data = DishAddon::with('addon')->where('dish_addons.id', $addon['dish_addon_id'])->first();
-                        return $data->recipe['price'] * $addon['quantity'];
+                        $data = BranchMenuAddon::with('addon')->where('dish_addons.id', $addon['dish_addon_id'])->first();
+                        return $data->price * $addon['quantity'];
                     },
                     $DataAddons
                 )
@@ -264,13 +301,13 @@ class OrderService
             $total_price_befor_tax = $total_price_befor_tax2 = array_sum(
                 array_map(
                     function ($detail) {
-                        $Dish = Dish::find($detail['dish_id']);
+                        $Dish = BranchMenu::where('dush_id', $detail['dish_id'])->where('branch_id', $detail['branch_id'])->first();
 
                         return $Dish['price'] * $detail['quantity'];
                     },
                     $DataOrderDetails
                 )
-            ) + $total_addon_price_befor_tax;
+            ) + $total_addon_price_befor_tax + $total_offer_price_befor_tax;
 
 
             if ($coupon && CheckCouponValid($coupon->id, $total_price_befor_tax)) {

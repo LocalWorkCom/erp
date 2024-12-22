@@ -240,6 +240,8 @@ Route::group(['prefix' => 'coupons'], function () {
     Route::get('validateCoupon/{id}', [CouponController::class, 'isCouponValid']);
 });
 
+Route::post('check-coupon', [CouponController::class, 'isCouponValid']);
+
 
 //api(both)
 Route::group(["middleware" => ["auth:api"]], function () {

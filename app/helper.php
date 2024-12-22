@@ -6,6 +6,7 @@ use App\Models\ApICode;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ActionBackLog;
+use App\Models\Branch;
 use App\Models\ClientDetail;
 use App\Models\Coupon;
 use App\Models\DeliverySetting;
@@ -31,7 +32,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\BranchMenu;
 use App\Models\BranchMenuAddon;
 use App\Models\BranchMenuSize;
-
+use App\Models\Offer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
@@ -488,6 +489,7 @@ function CheckCouponValid($id, $amount)
     }
     return false;
 }
+
 function GetCouponId($code)
 {
     $coupon = Coupon::where('code', $code)->first();
@@ -915,6 +917,10 @@ function AddSizes($branch_id)
         }
     }
 }
+function getDefaultBranch()
+{
+    return Branch::where('is_default', 1)->first()->id;
+}
 
 function respondError($error, $code, $errorMessages = [])
 {
@@ -951,3 +957,19 @@ function getMostDishesOrdered($limit = 5)
         ->limit($limit)
         ->get();
 }
+// function checkItemOffer($item_id, $item_type)
+// {
+//     $offer = Offer::leftJoin('offer_details', 'offer_details.offer_id', 'offers.id')->where('type_id', $item_id)
+//         ->where('offer_type', $item_type)
+//         ->where('is_active', 1)
+//         ->whereDate('start_date', '<=', now())
+//         ->whereDate('end_date', '>=', now())
+//         ->first();
+//     return $offer;
+// }
+// function applyOffer($item_id, $item_type, $offer_id)
+// {
+//     $offer = Offer::find($offer_id);
+//     if ($offer) {
+//     }
+// }
