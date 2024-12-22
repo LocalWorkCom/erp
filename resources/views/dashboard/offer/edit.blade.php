@@ -59,6 +59,64 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Branch Selection -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <label class="form-label">@lang('offer.BranchSelection')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="branch_selection" id="allBranches" value="all"
+                                                    {{ $offer->branch_id == '-1' ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="allBranches">@lang('offer.AllBranches')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="branch_selection" id="specificBranches" value="specific"
+                                                    {{ $offer->branch_id != '-1' ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="specificBranches">@lang('offer.SpecificBranches')</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Checklist for Specific Branches -->
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" id="branchChecklist" style="{{ $offer->branch_id == '-1' ? 'display: none;' : '' }}">
+                                        <label class="form-label">@lang('offer.SelectBranches')</label>
+                                        <div class="form-check">
+                                            @foreach($branches as $branch)
+                                                <div>
+                                                    <input class="form-check-input" type="checkbox" name="branches[]" id="branch_{{ $branch->id }}"
+                                                           value="{{ $branch->id }}" {{ in_array($branch->id, $selectedBranches) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="branch_{{ $branch->id }}">
+                                                        {{ $branch->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <!-- Discount Type -->
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.DiscountType')</label>
+                                        <div class="d-flex">
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="discount_type" value="fixed"
+                                                    {{ $offer->discount_type == 'fixed' ? 'checked' : '' }}>
+                                                <label class="form-check-label">@lang('offer.fixed')</label>
+                                            </div>
+                                            <div class="form-check me-4">
+                                                <input class="form-check-input" type="radio" name="discount_type" value="percentage"
+                                                    {{ $offer->discount_type == 'percentage' ? 'checked' : '' }}>
+                                                <label class="form-check-label">@lang('offer.percentage')</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Discount Value -->
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label class="form-label">@lang('offer.DiscountValue')</label>
+                                        <input type="text" class="form-control" name="discount_value" value="{{ $offer->discount_value }}"
+                                               placeholder="@lang('offer.DiscountValue')" required>
+                                    </div>
+
                                     <!-- Arabic Name -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.ArabicName')</label>
@@ -223,5 +281,26 @@
         $(document).ready(function () {
             $('.select2').select2();
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const allBranchesRadio = document.getElementById('allBranches');
+            const specificBranchesRadio = document.getElementById('specificBranches');
+            const branchChecklist = document.getElementById('branchChecklist');
+            const spaceHolder = document.getElementById('spaceHolder');
+
+            allBranchesRadio.addEventListener('change', function () {
+                if (this.checked) {
+                    branchChecklist.style.display = 'none';
+                    spaceHolder.style.display = 'block';
+                }
+            });
+
+            specificBranchesRadio.addEventListener('change', function () {
+                if (this.checked) {
+                    branchChecklist.style.display = 'block';
+                    spaceHolder.style.display = 'none';
+                }
+            });
+        });
+
     </script>
 @endsection
