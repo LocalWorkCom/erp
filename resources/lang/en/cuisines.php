@@ -28,4 +28,10 @@ return [
     'CuisineDetails' => 'Cuisine Details',
     'NoDescription' => 'No description available',
     'CuisineImage' => 'Cuisine Image',
+    'Save' => 'Save',
+    'View' => 'View',
+    'Show' =>'Show',
+    'Edit' => 'Edit',
+    'Delete' => 'Delete',
+    'Restore' => 'Restore',
 ];
