@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
@@ -37,6 +38,14 @@ class HomeController extends Controller
         return view(
             'website.menu',
             compact(['menuCategories'])
+        );
+    }
+    public function contactUs()
+    {
+        $branches = Branch::all();
+        return view(
+            'website.contact-us',
+            compact(['branches'])
         );
     }
 

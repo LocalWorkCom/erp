@@ -50,8 +50,8 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  
-                'branches.*' => 'integer|exists:branches,id', 
+                'branches' => 'nullable|array',
+                'branches.*' => 'integer|exists:branches,id',
             ]);
 
             $coupon = Coupon::create([
@@ -91,7 +91,7 @@ class CouponController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  
+                'branches' => 'nullable|array',
                 'branches.*' => 'integer|exists:branches,id',
             ]);
 
@@ -112,7 +112,7 @@ class CouponController extends Controller
             if (!empty($validatedData['branches'])) {
                 $coupon->branches()->sync($validatedData['branches']);
             } else {
-                $coupon->branches()->detach();  
+                $coupon->branches()->detach();
             }
 
             return ResponseWithSuccessData($lang, $coupon, 1);
@@ -185,44 +185,45 @@ class CouponController extends Controller
     /**
      * Check if the coupon is still valid based on usage and date.
      */
-    public function isCouponValid(Request $request, $id)
+    public function isCouponValid(Request $request)
     {
+        $code = $request->code;
+        $amount = $request->amount;
         try {
             $lang = $request->header('lang', 'en');
-            $branchId = $request->input('branch_id');  
-    
-            $coupon = Coupon::with('branches')->findOrFail($id); // Load the coupon with its branches
-    
-            // Check if the coupon has expired or is fully used
-            if (!$coupon->is_active || ($coupon->usage_limit && $coupon->count_usage >= $coupon->usage_limit)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Coupon is no longer valid.',
-                ], 400);
-            }
-    
-            if ($branchId) {
-                $validBranches = $coupon->branches->pluck('id')->toArray();
-    
-                if (!in_array($branchId, $validBranches)) {
+            // $branchId = $request->input('branch_id');  
+
+            $coupon = GetCouponId($code);
+            if ($coupon) {
+                $valid = CheckCouponValid($coupon->id, $amount);
+                if ($valid) {
+
+                    $amount_after_coupon =  applyCoupon($amount, $coupon);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Coupon is valid.',
+                        'data' => $amount_after_coupon
+                    ], 200);
+                } else {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Coupon is not valid for this branch.',
-                    ], 400);
+                        'message' => 'Coupon is no longer valid.',
+                    ], 200);
                 }
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Coupon is valid.',
+                ]);
             }
-    
-            return response()->json([
-                 'success' => true,
-                'message' => 'Coupon is valid.',
-            ]);
+
+          
+
         } catch (\Exception $e) {
-            Log::error('Error checking coupon validity: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error checking coupon validity.',
             ], 500);
         }
     }
-    
 }

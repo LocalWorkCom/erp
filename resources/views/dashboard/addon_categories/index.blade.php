@@ -77,13 +77,13 @@
                                                     @lang('addon_categories.Edit') <i class="ri-edit-line"></i>
                                                 </a>
                                                 <!-- Delete -->
-                                                <form action="{{ route('dashboard.addon_categories.destroy', $addonCategory->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('addon_categories.DeleteConfirm')');">
+                                                <form id="delete-form-{{ $addonCategory->id }}" action="{{ route('dashboard.addon_categories.destroy', $addonCategory->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('addon_categories.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
                                                 </form>
+                                                <button type="button" class="btn btn-danger-light" onclick="confirmDelete({{ $addonCategory->id }})">
+                                                    @lang('addon_categories.Delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                                 <!-- Restore -->
                                                 @if ($addonCategory->trashed())
                                                     <form action="{{ route('dashboard.addon_categories.restore', $addonCategory->id) }}" method="POST" class="d-inline">
@@ -108,7 +108,6 @@
         </div>
     </div>
 @endsection
-
 @section('scripts')
     <!-- JQUERY CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
@@ -123,13 +122,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
-@endsection
 
-<script>
-    function confirmDelete() {
-        return confirm("@lang('addon_categories.DeleteConfirm')");
-    }
-</script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "@lang('addon_categories.Warning')",
+                text: "@lang('addon_categories.DeleteMsg')",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "@lang('addon_categories.YesDelete')",
+                cancelButtonText: "@lang('addon_categories.CancelDelete')",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
+@endsection

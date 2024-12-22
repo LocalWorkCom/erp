@@ -34,4 +34,10 @@ return [
     'Edit' => 'Edit',
     'Delete' => 'Delete',
     'Restore' => 'Restore',
+    'Warning' => 'Are you sure?',
+    'DeleteMsg' => 'You won\'t be able to revert this!',
+    'YesDelete' => 'Yes, delete it!',
+    'CancelDelete' => 'Cancel',
+    'Deleted' => 'Deleted!',
+    'DeletedSuccessfully' => 'The cuisine has been deleted successfully.',
 ];

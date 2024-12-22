@@ -10,7 +10,7 @@ class Dish extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ['name', 'description']; 
+    protected $appends = ['name', 'description','name_site', 'description_site']; 
 
     protected $fillable = [
         'name_en',
@@ -50,6 +50,16 @@ class Dish extends Model
     public function getDescriptionAttribute()
     {
         return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
+    }
+
+    public function getNameSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->name_en : $this->name_ar;
+    }
+
+    public function getAddressSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->address_en : $this->address_ar;
     }
 
     // Relationships
