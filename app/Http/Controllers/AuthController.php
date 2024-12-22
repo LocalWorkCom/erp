@@ -50,38 +50,39 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Find the user by email
         $user = User::where('phone', $credentials['email_or_phone'])->first();
 
-        // Check if the user exists and ensure the user is not an admin
-        if (!$user || $user->flag == 'phone') {
+        if (!$user || $user->flag != 'client') {
             return back()->withErrors([
-                'email_or_phone' => __('auth.only_client'),  // Add language key for client-only access
+                'email_or_phone' => __('auth.only_admin'),
             ])->onlyInput('email_or_phone');
         }
 
-        // Verify the password
         if (!Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors([
                 'email_or_phone' => __('auth.invalid_credentials'),
             ])->onlyInput('email_or_phone');
         }
 
-        // Log the client in using the default web guard (or a specific client guard if configured)
-        Auth::guard('web')->login($user);
+        Auth::guard('client')->login($user);
+        Auth::setUser($user);
 
-        // Regenerate session to prevent session fixation attacks
         $request->session()->regenerate();
 
-        // Redirect to the client dashboard or home page
         return redirect()->route('home');
     }
-    public function logout()
+    public function logout(Request $request)
     {
-        // Log the user out
-        Auth::logout();
+        // Logout the client guard
+        Auth::guard('client')->logout();
 
-        // Redirect to the homepage or login page
-        return redirect()->route('website.home')->with('success', __('You have been logged out successfully.'));
+        // Invalidate the session to clear all data
+        $request->session()->invalidate();
+
+        // Regenerate the CSRF token for security
+        $request->session()->regenerateToken();
+
+        // Redirect to the login page or another appropriate route
+        return redirect()->route('home');
     }
 }

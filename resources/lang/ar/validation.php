@@ -81,6 +81,14 @@ return [
     'DataExist' => 'موجود بالفعل',
     'DataExistMessage' => 'موجود بالفعل',
     'attributes' => [
+
+        'EnterCode' => 'أدخل كود الدوله',
+        'ArabicCurrency' => 'أدخل العمله بالعربيه',
+        'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
+        'CurrencyCode' => 'أدخل كود العمله',
+        'phone_code' => 'أدخل كود الهاتف',
+        'flag' => 'يرجى تحميل علم الدوله',
+        'length' => 'أدخل عدد أرقام الهاتف',
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
         'name' => 'الاسم',
@@ -189,16 +197,9 @@ return [
     'EnterUsageLimit' => 'يجب ادخال حد الاستخدام',
     'EnterStartDate' => 'يجب ادخال تاريخ البدء',
     'EnterEndDate' => 'يجب ادخال تاريخ الانتهاء',
-    'DeleteConfirm'=> 'هل انت متأكد من حذف هذا العنصر؟',
+    'DeleteConfirm' => 'هل انت متأكد من حذف هذا العنصر؟',
     'EnterLeaveType' => 'يجب اختيار انواع الاجازات',
     'EnterMinmum' => 'يجب ادخال الحد الادنى',
     'EnterMaxmum' => 'يجب ادخال الحد الاقصى',
 
-    'EnterCode' => 'أدخل كود الدوله',
-    'ArabicCurrency' => 'أدخل العمله بالعربيه',
-    'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
-    'CurrencyCode' => 'أدخل كود العمله',
-    'phonecode' => 'أدخل كود الهاتف',
-    'flag' => 'يرجى تحميل علم الدوله',
-    'length' => 'أدخل عدد أرقام الهاتف',
 ];
