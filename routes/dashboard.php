@@ -7,6 +7,12 @@ use App\Http\Controllers\Dashboard\FAQController;
 use App\Http\Controllers\Dashboard\DishController;
 use App\Http\Controllers\Dashboard\GiftController;
 use App\Http\Controllers\Dashboard\LogoController;
+use App\Http\Controllers\Dashboard\OfferController;
+use App\Http\Controllers\Dashboard\OfferDetailController;
+use App\Http\Controllers\Dashboard\PositionController;
+use App\Http\Controllers\Dashboard\PrivacyPolicyController;
+use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\ReturnPolicyController;
 use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\Dashboard\SizeController;
 use App\Http\Controllers\Dashboard\UnitController;
@@ -24,23 +30,17 @@ use App\Http\Controllers\Dashboard\SliderController;
 use App\Http\Controllers\Dashboard\VendorController;
 use App\Http\Controllers\Dashboard\CountryController;
 use App\Http\Controllers\Dashboard\CuisineController;
-use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DiscountController;
 use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\PurchaseController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
-
 use App\Http\Controllers\Dashboard\LeaveTypeController;
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\PermissionController;
-
 use App\Http\Controllers\Dashboard\DishCategoryController;
 use App\Http\Controllers\Dashboard\LeaveSettingController;
-use App\Http\Controllers\Dashboard\ReturnPolicyController;
 use App\Http\Controllers\Dashboard\AddonCategoryController;
-use App\Http\Controllers\Dashboard\PrivacyPolicyController;
 use App\Http\Controllers\Dashboard\FloorPartitionController;
 use App\Http\Controllers\Dashboard\BranchMenuCategoryController;
 use App\Http\Controllers\Dashboard\TermsAndConditionsController;
@@ -254,6 +254,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [DiscountController::class, 'delete'])->name('discount.delete')->middleware('role_or_permission:delete discounts');
     });
 
+      // discount_dish
+    Route::get('/discounts/dish/list/{discountId}', [DiscountController::class, 'dish'])
+      ->name('discounts.dishes.list')
+      ->middleware('role_or_permission:view discount_dishes');
+
+    Route::post('discount/{id}/dishes/save', [DiscountController::class, 'saveDishes'])
+      ->name('discount.dishes.save')
+      ->middleware('role_or_permission:view discount_dishes');
+
+
     Route::get('/gifts', [GiftController::class, 'index'])->name('gifts.list')->middleware('role_or_permission:view gifts');
     Route::group(['prefix' => 'gift'], function () {
         Route::post('store', [GiftController::class, 'store'])->name('gift.store')->middleware('role_or_permission:create gifts');
@@ -328,6 +338,26 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('edit/{id}', [FAQController::class, 'edit'])->name('faq.edit')->middleware('role_or_permission:update faqs');
         Route::put('update/{id}', [FAQController::class, 'update'])->name('faq.update')->middleware('role_or_permission:update faqs');
         Route::delete('delete/{id}', [FAQController::class, 'destroy'])->name('faq.delete')->middleware('role_or_permission:delete faqs');
+    });
+
+    Route::get('/offers', [OfferController::class, 'index'])->name('offers.list')->middleware('role_or_permission:view offers');
+    Route::group(['prefix' => 'offer'], function () {
+        Route::get('create', [OfferController::class, 'create'])->name('offer.create')->middleware('role_or_permission:create offers');
+        Route::post('store', [OfferController::class, 'store'])->name('offer.store')->middleware('role_or_permission:create offers');
+        Route::get('show/{id}', [OfferController::class, 'show'])->name('offer.show')->middleware('role_or_permission:view offers');
+        Route::get('edit/{id}', [OfferController::class, 'edit'])->name('offer.edit')->middleware('role_or_permission:update offers');
+        Route::put('update/{id}', [OfferController::class, 'update'])->name('offer.update')->middleware('role_or_permission:update offers');
+        Route::delete('delete/{id}', [OfferController::class, 'destroy'])->name('offer.delete')->middleware('role_or_permission:delete offers');
+    });
+
+    Route::get('/offer-details/{id}', [OfferDetailController::class, 'index'])->name('offerDetails.list')->middleware('role_or_permission:view offerDetails');
+    Route::group(['prefix' => 'offer-detail'], function () {
+        Route::get('create', [OfferDetailController::class, 'create'])->name('offerDetail.create')->middleware('role_or_permission:create offerDetails');
+        Route::post('store', [OfferDetailController::class, 'store'])->name('offerDetail.store')->middleware('role_or_permission:create offerDetails');
+        Route::get('show/{id}', [OfferDetailController::class, 'show'])->name('offerDetail.show')->middleware('role_or_permission:view offerDetails');
+        Route::get('edit/{id}', [OfferDetailController::class, 'edit'])->name('offerDetail.edit')->middleware('role_or_permission:update offerDetails');
+        Route::put('update/{id}', [OfferDetailController::class, 'update'])->name('offerDetail.update')->middleware('role_or_permission:update offerDetails');
+        Route::delete('delete/{id}', [OfferDetailController::class, 'destroy'])->name('offerDetail.delete')->middleware('role_or_permission:delete offerDetails');
     });
 
     //HR
@@ -420,7 +450,8 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::post('/order-detail/change', [OrderController::class, 'changeItemStatus'])->name('order.detail.change');
 
     Route::post('/order/change-status/{id}', [OrderController::class, 'changeStatusQr'])->name('order.change.status');
-    Route::get('/order/print/{id}', [OrderController::class, 'printOrder'])->name('order.print');
+    Route::get('/order/invoice/{id}', [OrderController::class, 'showInvoice'])->name('order.invoice');
+    Route::get('/order/print/{id}/{type}', [OrderController::class, 'printReceipt'])->name('order.print');
 
     //Purchases
     Route::get('/vendors', [VendorController::class, 'index'])->name('vendors.index')->middleware('role_or_permission:view vendors');
@@ -467,13 +498,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/cuisines')->group(function () {
-
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
-        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
+        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create'); 
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
+        Route::get('/{id}', [CuisineController::class, 'show'])->name('dashboard.cuisines.show'); 
         Route::get('/{id}/edit', [CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
         Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
+    
 });

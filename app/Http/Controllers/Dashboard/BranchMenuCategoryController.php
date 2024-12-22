@@ -19,7 +19,6 @@ class BranchMenuCategoryController extends Controller
 
     public function index(Request $request)
     {
-        return $request;
         $response = $this->branchMenuCategoryService->index($request);
         $responseData = $response->original;
         $branch_menu_categories = $responseData['data'];

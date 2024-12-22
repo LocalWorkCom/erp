@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-
 use App\Models\Dish;
 use App\Models\DishSize;
 use App\Models\DishDetail;
@@ -127,7 +126,7 @@ class DishService
                 
                             DishAddon::create([
                                 'dish_id' => $dish->id,
-                                'addon_id' => $addon['addon_id'], // Refers to recipes.id
+                                'addon_id' => $addon['addon_id'], 
                                 'quantity' => $addon['quantity'],
                                 'price' => $addon['price'],
                                 'addon_category_id' => $addonCategory['addon_category_id'],
@@ -188,26 +187,133 @@ class DishService
 
     
 
-    public function update($id, $data)
-    {
-        $dish = Dish::findOrFail($id);
+    public function update(Request $request, $id)
+{
+    try {
+        return DB::transaction(function () use ($request, $id) {
+            try {
+                // Log the initial request
+                Log::info('Starting Dish Update', ['dish_id' => $id, 'data' => $request->all()]);
+                
+                // Fetch the existing dish
+                $dish = Dish::findOrFail($id);
 
-        $dish->update([
-            'name_en' => $data['name_en'],
-            'name_ar' => $data['name_ar'],
-            'description_en' => $data['description_en'] ?? null,
-            'description_ar' => $data['description_ar'] ?? null,
-            'category_id' => $data['category_id'],
-            'cuisine_id' => $data['cuisine_id'],
-            'price' => $data['price'] ?? 0,
-            'image' => $data['image'] ?? $dish->image,
-            'is_active' => $data['is_active'] ?? 1,
-            'has_sizes' => $data['has_sizes'] ?? 0,
-            'modified_by' => auth()->id(),
-        ]);
+                // Validate incoming data
+                $validatedData = $this->validateDishData($request->all());
+                Log::info('Validated Data', ['validated_data' => $validatedData]);
 
-        return $dish;
+                // Process the image
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $imagePath = 'images/dishes/' . $image->getClientOriginalName();
+                    $image->move(public_path('images/dishes'), $image->getClientOriginalName());
+                    $validatedData['image'] = $imagePath;
+                    Log::info('Image Uploaded', ['path' => $imagePath]);
+                }
+
+                // Update dish details
+                $validatedData['modified_by'] = auth()->id();
+                $dish->update($validatedData);
+                Log::info('Dish Updated', ['dish_id' => $dish->id]);
+
+                // Process sizes
+                if (isset($request->sizes)) {
+                    Log::info('Processing Sizes', ['dish_id' => $dish->id, 'sizes' => $request->sizes]);
+
+                    // Delete existing sizes
+                    $dish->sizes()->delete();
+
+                    foreach ($request->sizes as $sizeIndex => $size) {
+                        $dishSize = DishSize::create([
+                            'dish_id' => $dish->id,
+                            'size_name_en' => $size['size_name_en'],
+                            'size_name_ar' => $size['size_name_ar'],
+                            'price' => $size['price'],
+                            'default_size' => isset($request->default_size) && $request->default_size == $sizeIndex,
+                        ]);
+                        Log::info('Dish Size Created', ['dish_size_id' => $dishSize->id]);
+
+                        // Process size recipes
+                        if (isset($size['recipes'])) {
+                            foreach ($size['recipes'] as $recipe) {
+                                DishDetail::create([
+                                    'dish_id' => $dish->id,
+                                    'dish_size_id' => $dishSize->id,
+                                    'recipe_id' => $recipe['recipe_id'],
+                                    'quantity' => $recipe['quantity'],
+                                ]);
+                                Log::info('Dish Recipe Added', [
+                                    'dish_id' => $dish->id,
+                                    'dish_size_id' => $dishSize->id,
+                                    'recipe_id' => $recipe['recipe_id'],
+                                    'quantity' => $recipe['quantity'],
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                // Process recipes for dishes without sizes
+                if (!$dish->has_sizes && isset($request->details)) {
+                    $dish->details()->delete(); // Delete existing details
+
+                    foreach ($request->details as $detail) {
+                        DishDetail::create([
+                            'dish_id' => $dish->id,
+                            'dish_size_id' => null,
+                            'recipe_id' => $detail['recipe_id'],
+                            'quantity' => $detail['quantity'],
+                        ]);
+                        Log::info('Dish Recipe Added', [
+                            'dish_id' => $dish->id,
+                            'recipe_id' => $detail['recipe_id'],
+                            'quantity' => $detail['quantity'],
+                        ]);
+                    }
+                }
+
+                // Process addon categories and addons
+                if (isset($request->addon_categories)) {
+                    Log::info('Processing Addon Categories', ['dish_id' => $dish->id, 'addon_categories' => $request->addon_categories]);
+
+                    $dish->addons()->delete(); // Delete existing addons
+
+                    foreach ($request->addon_categories as $addonCategory) {
+                        foreach ($addonCategory['addons'] as $addon) {
+                            DishAddon::create([
+                                'dish_id' => $dish->id,
+                                'addon_id' => $addon['addon_id'],
+                                'quantity' => $addon['quantity'],
+                                'price' => $addon['price'],
+                                'addon_category_id' => $addonCategory['addon_category_id'],
+                                'min_addons' => $addonCategory['min_addons'],
+                                'max_addons' => $addonCategory['max_addons'],
+                            ]);
+                            Log::info('Dish Addon Added', [
+                                'dish_id' => $dish->id,
+                                'addon_id' => $addon['addon_id'],
+                                'quantity' => $addon['quantity'],
+                                'price' => $addon['price'],
+                                'addon_category_id' => $addonCategory['addon_category_id'],
+                            ]);
+                        }
+                    }
+                }
+
+                Log::info('Dish Update Completed Successfully', ['dish_id' => $dish->id]);
+                return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishUpdated'));
+
+            } catch (\Exception $e) {
+                Log::error('Dish Update Failed', ['error' => $e->getMessage()]);
+                throw $e;
+            }
+        });
+    } catch (\Exception $e) {
+        Log::error('Transaction Failed', ['error' => $e->getMessage()]);
+        return redirect()->back()->with('error', __('dishes.DishUpdateFailed'));
     }
+}
+
 
     public function delete($id)
     {

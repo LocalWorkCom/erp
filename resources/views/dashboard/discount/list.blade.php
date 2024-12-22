@@ -83,7 +83,8 @@
                                             </td>
 
                                             <td>
-                                                <span class="badge {{ $discount->is_active ? 'bg-success' : 'bg-danger' }}">
+                                                <span
+                                                    class="badge {{ $discount->is_active ? 'bg-success' : 'bg-danger' }}">
                                                     {{ $discount->is_active ? __('discount.Active') : __('discount.Inactive') }}
                                                 </span>
                                             </td>
@@ -103,6 +104,13 @@
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
+                                                @can('view discount_dishes')
+                                                    <a href="{{ url('dashboard/discounts/dish/list') }}/{{ $discount->id }}"
+                                                        class="btn btn-outline-teal btn-wave">
+                                                        @lang('discount.AddDishes') <i class="ri-add-box-line"></i>
+                                                    </a>
+                                                @endcan
+
                                             </td>
                                         </tr>
                                     @endforeach

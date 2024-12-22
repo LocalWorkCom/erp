@@ -16,6 +16,7 @@ class Recipe extends Model
         'name_ar',
         'description_en',
         'description_ar',
+        'meal_type',
         'type', // 1 for recipe, 2 for addon
         // 'price',
         'is_active',
@@ -27,6 +28,7 @@ class Recipe extends Model
     protected $hidden = [
         'name_en',
         'name_ar',
+        'meal_type',
         'description_en',
         'description_ar',
         'created_by',

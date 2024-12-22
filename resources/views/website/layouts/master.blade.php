@@ -165,7 +165,7 @@
       $(".owl-prev > span").html('<i class="fas fa-arrow-right"></i>');
       $(".owl-next > span").html('<i class="fas fa-arrow-left"></i>');
   </script> -->
-
+  @stack('scripts')
 </body>
 
 </html>

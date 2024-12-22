@@ -103,12 +103,12 @@
                                     <!-- Description Fields -->
                                     <div class="col-xl-6">
                                         <label for="description_ar" class="form-label">@lang('slider.ArabicDescription')</label>
-                                        <textarea name="description_ar" id="description_ar" class="form-control">{{ old('description_ar', $slider->description_ar) }}</textarea>
+                                        <textarea name="description_ar" id="description_ar" class="form-control" required>{{ old('description_ar', $slider->description_ar) }}</textarea>
                                     </div>
 
                                     <div class="col-xl-6">
                                         <label for="description_en" class="form-label">@lang('slider.EnglishDescription')</label>
-                                        <textarea name="description_en" id="description_en" class="form-control">{{ old('description_en', $slider->description_en) }}</textarea>
+                                        <textarea name="description_en" id="description_en" class="form-control" required>{{ old('description_en', $slider->description_en) }}</textarea>
                                     </div>
 
                                     <!-- Image Upload -->
@@ -150,14 +150,20 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            // Toggle visibility for dish/offer dropdowns
+            // Toggle visibility and disable the unselected dropdown
             $('input[name="flag"]').on('change', function () {
-                if ($(this).val() === 'dish') {
+                const selectedFlag = $(this).val();
+
+                if (selectedFlag === 'dish') {
                     $('#dishDropdown').removeClass('d-none');
+                    $('#dish_id').prop('disabled', false); // Enable dish dropdown
                     $('#offerDropdown').addClass('d-none');
-                } else {
+                    $('#offer_id').prop('disabled', true); // Disable offer dropdown
+                } else if (selectedFlag === 'offer') {
                     $('#offerDropdown').removeClass('d-none');
+                    $('#offer_id').prop('disabled', false); // Enable offer dropdown
                     $('#dishDropdown').addClass('d-none');
+                    $('#dish_id').prop('disabled', true); // Disable dish dropdown
                 }
             }).trigger('change');
         });

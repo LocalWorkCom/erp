@@ -11,7 +11,7 @@ class BranchMenuSize extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'menu_id',
+        'branch_menu_id',
         'branch_id',
         'dish_size_id',
         'price',

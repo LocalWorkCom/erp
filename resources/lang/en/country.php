@@ -11,7 +11,7 @@ return [
     'ArabicCurrency' => 'Currency Arabic',
     'EnglishCurrency' => 'Currency English',
     'CurrencyCode' => 'Currency Code',
-    'Code' => 'Code',
+    'code' => 'Code',
     'Actions' => 'Actions',
     'Show' => 'show',
     'Edit' => 'edit',
