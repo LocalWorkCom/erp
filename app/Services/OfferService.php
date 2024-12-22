@@ -22,7 +22,7 @@ class OfferService
      */
     public function index()
     {
-        $offers = Offer::with('details')->get();
+        $offers = Offer::with('details')->where('is_active',1)->get();
         return ResponseWithSuccessData($this->lang, OfferResource::collection($offers), 1);
     }
 

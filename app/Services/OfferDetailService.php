@@ -7,6 +7,7 @@ use App\Models\Dish;
 use App\Models\DishAddon;
 use App\Models\OfferDetail;
 use App\Models\Product;
+use App\Models\Recipe;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,9 @@ class OfferDetailService
      */
     public function index($id)
     {
-        $details = OfferDetail::where('offer_id',$id)->get();
+        $details = OfferDetail::where('offer_id',$id)
+            ->with(['dish', 'addon', 'product'])
+            ->get();
 //        dd($details);
         return ResponseWithSuccessData($this->lang, OfferDetailResource::collection($details), 1);
     }
@@ -59,7 +62,7 @@ class OfferDetailService
                             break;
 
                         case 'addons':
-                            if (!DishAddon::where('addon_id', $value)->exists()) {
+                            if (!Recipe::where('type',2)->where('id', $value)->exists()) {
                                 $this->lang == 'ar'? $fail('كود الإضافة غير موجود')
                                     : $fail('The selected type_id is invalid for addons.');
                             }
