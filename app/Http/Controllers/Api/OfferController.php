@@ -7,6 +7,7 @@ use App\Http\Resources\OfferResource;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isEmpty;
 
 class OfferController extends Controller
 {
@@ -25,8 +26,19 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('details')->get();
-        return ResponseWithSuccessData($this->lang, OfferResource::collection($offers), 1);
+        $offers = Offer::with('details')->whereHas('details')->get() ?? collect();
+
+
+        $filteredOffers = $offers->filter(function ($offer) {
+            return $offer->details->every(function ($detail) {
+                return !is_null($detail->getTypeName($this->lang));
+            });
+        });
+
+        if(!$filteredOffers->isEmpty()){
+            return ResponseWithSuccessData($this->lang, OfferResource::collection($filteredOffers), 1);
+        }
+        return RespondWithBadRequestData($this->lang, 2);
     }
 
     /**
@@ -71,12 +83,17 @@ class OfferController extends Controller
      */
     public function show(string $id)
     {
-        $data = Offer::find($id);
+        $offer = Offer::with('details')->whereHas('details')->find($id) ?? collect();
 
-        if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+        $filteredOffer = $offer->filter(function ($offer) {
+            return $offer->details->every(function ($detail) {
+                return !is_null($detail->getTypeName($this->lang));
+            });
+        });
+        if (!$filteredOffer->isEmpty()) {
+            return ResponseWithSuccessData($this->lang, OfferResource::make($filteredOffer), 1);
         }
-        return ResponseWithSuccessData($this->lang, OfferResource::make($data), 1);
+        return RespondWithBadRequestData($this->lang, 2);
     }
 
     /**

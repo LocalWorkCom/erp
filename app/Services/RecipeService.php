@@ -13,11 +13,10 @@ use Illuminate\Support\Facades\Storage;
 class RecipeService
 {
     public function index($withTrashed = false)
-    {
-        return $withTrashed
-            ? Recipe::withTrashed()->with(['ingredients.product', 'images'])->get()
-            : Recipe::with(['ingredients.product', 'images'])->get();
-    }
+{
+    $query = Recipe::onlyRecipes()->with(['ingredients.product', 'images']);
+    return $withTrashed ? $query->withTrashed()->get() : $query->get();
+}
 
     public function show($id)
     {
@@ -38,63 +37,71 @@ class RecipeService
     {
         \Log::info('Starting recipe creation', ['data' => $data]);
     
-        $recipe = Recipe::create([
-            'name_ar' => $data['name_ar'],
-            'name_en' => $data['name_en'],
-            'description_ar' => $data['description_ar'] ?? null,
-            'description_en' => $data['description_en'] ?? null,
-            'type' => $data['type'],
-            // 'price' => $data['price'],
-            'is_active' => $data['is_active'],
-            'created_by' => auth()->id(),
-        ]);
+        return \DB::transaction(function () use ($data, $images) {
+            $recipe = Recipe::create([
+                'name_ar' => $data['name_ar'],
+                'name_en' => $data['name_en'],
+                'description_ar' => $data['description_ar'] ?? null,
+                'description_en' => $data['description_en'] ?? null,
+                'type' => 1, 
+                'is_active' => $data['is_active'],
+                'created_by' => auth()->id(),
+            ]);
     
-        \Log::info('Recipe created', ['recipe_id' => $recipe->id]);
+            \Log::info('Recipe created', ['recipe_id' => $recipe->id]);
     
-        foreach ($data['ingredients'] as $ingredientData) {
-            try {
-                \Log::info('Adding ingredient', ['recipe_id' => $recipe->id, 'ingredient_data' => $ingredientData]);
+          
+            if (isset($data['ingredients']) && is_array($data['ingredients'])) {
+                foreach ($data['ingredients'] as $ingredientData) {
+                    try {
+                        \Log::info('Adding ingredient', ['recipe_id' => $recipe->id, 'ingredient_data' => $ingredientData]);
     
-                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+                        $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
     
-                Ingredient::create([
-                    'recipe_id' => $recipe->id,
-                    'product_id' => $ingredientData['product_id'],
-                    'product_unit_id' => $productUnit->id,
-                    'quantity' => $ingredientData['quantity'],
-                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
-                ]);
+                        Ingredient::create([
+                            'recipe_id' => $recipe->id,
+                            'product_id' => $ingredientData['product_id'],
+                            'product_unit_id' => $productUnit->id,
+                            'quantity' => $ingredientData['quantity'],
+                            'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
+                        ]);
     
-                \Log::info('Ingredient added', ['recipe_id' => $recipe->id, 'ingredient_data' => $ingredientData]);
-            } catch (\Exception $e) {
-                \Log::error('Failed to add ingredient', [
-                    'recipe_id' => $recipe->id,
-                    'ingredient_data' => $ingredientData,
-                    'message' => $e->getMessage(),
-                ]);
+                        \Log::info('Ingredient added', ['recipe_id' => $recipe->id, 'ingredient_data' => $ingredientData]);
+                    } catch (\Exception $e) {
+                        \Log::error('Failed to add ingredient', [
+                            'recipe_id' => $recipe->id,
+                            'ingredient_data' => $ingredientData,
+                            'message' => $e->getMessage(),
+                        ]);
     
-                throw $e; 
+                        throw $e;
+                    }
+                }
+            } else {
+                \Log::warning('No ingredients provided for the recipe', ['recipe_id' => $recipe->id]);
             }
-        }
     
-        if ($images) {
-            foreach ($images as $image) {
-                $imagePath = 'images/recipes/' . $image->getClientOriginalName();
-                $image->move(public_path('images/recipes'), $image->getClientOriginalName());
+            if ($images) {
+                foreach ($images as $image) {
+                    $imageName = uniqid() . '_' . $image->getClientOriginalName();
+                    $imagePath = 'images/recipes/' . $imageName;
+                    $image->move(public_path('images/recipes'), $imageName);
     
-                \Log::info('New image uploaded', ['path' => $imagePath]);
+                    \Log::info('New image uploaded', ['path' => $imagePath]);
     
-                RecipeImage::create([
-                    'recipe_id' => $recipe->id,
-                    'image_path' => $imagePath,
-                ]);
+                    RecipeImage::create([
+                        'recipe_id' => $recipe->id,
+                        'image_path' => $imagePath,
+                    ]);
+                }
             }
-        }
     
-        return $recipe;
+            return $recipe;
+        });
     }
     
 
+    
 
     public function update($id, $data, $images)
     {
@@ -108,57 +115,63 @@ class RecipeService
             'description_ar' => $data['description_ar'] ?? null,
             'description_en' => $data['description_en'] ?? null,
             'type' => $data['type'],
-            // 'price' => $data['price'],
             'is_active' => $data['is_active'],
             'modified_by' => auth()->id(),
         ]);
     
         \Log::info('Recipe details updated', ['recipe_id' => $recipe->id]);
     
-        // Update Ingredients
-        Ingredient::where('recipe_id', $recipe->id)->delete();
+        Ingredient::where('recipe_id', $recipe->id)->delete(); 
         foreach ($data['ingredients'] as $ingredientData) {
-            $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
+            try {
+                $productUnit = ProductUnit::where('product_id', $ingredientData['product_id'])->firstOrFail();
     
-            Ingredient::create([
-                'recipe_id' => $recipe->id,
-                'product_id' => $ingredientData['product_id'],
-                'product_unit_id' => $productUnit->id,
-                'quantity' => $ingredientData['quantity'],
-                'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
-            ]);
-        }
+                Ingredient::create([
+                    'recipe_id' => $recipe->id,
+                    'product_id' => $ingredientData['product_id'],
+                    'product_unit_id' => $productUnit->id,
+                    'quantity' => $ingredientData['quantity'],
+                    'loss_percent' => $ingredientData['loss_percent'] ?? 0.00,
+                ]);
     
-        \Log::info('Ingredients updated', ['recipe_id' => $recipe->id]);
-    
-    
-     
-       if ($images) {
-        foreach ($recipe->images as $image) {
-            $oldImagePath = public_path($image->image_path);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
+                \Log::info('Ingredient updated', [
+                    'recipe_id' => $recipe->id,
+                    'ingredient_data' => $ingredientData,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Failed to update ingredient', [
+                    'recipe_id' => $recipe->id,
+                    'ingredient_data' => $ingredientData,
+                    'message' => $e->getMessage(),
+                ]);
+                throw $e;
             }
-            $image->delete();
         }
-
-        foreach ($images as $image) {
-            $imagePath = 'images/recipes/' . $image->getClientOriginalName();
-            $image->move(public_path('images/recipes'), $image->getClientOriginalName());
-
-            \Log::info('New image uploaded', ['path' => $imagePath]);
-
-            RecipeImage::create([
-                'recipe_id' => $recipe->id,
-                'image_path' => $imagePath,
-            ]);
+    
+        if ($images) {
+            foreach ($recipe->images as $image) {
+                $oldImagePath = public_path($image->image_path);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+                $image->delete();
+            }
+    
+            foreach ($images as $image) {
+                $imagePath = 'images/recipes/' . $image->getClientOriginalName();
+                $image->move(public_path('images/recipes'), $image->getClientOriginalName());
+    
+                RecipeImage::create([
+                    'recipe_id' => $recipe->id,
+                    'image_path' => $imagePath,
+                ]);
+            }
         }
-    }
-
+    
+        \Log::info('Recipe images updated', ['recipe_id' => $recipe->id]);
     
         return $recipe;
     }
-    
 
     public function delete($id)
     {
