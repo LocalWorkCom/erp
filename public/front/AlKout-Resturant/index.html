@@ -129,7 +129,6 @@
         </div>
       </div>
     </section>
-
     <section class="intro">
       <div class="container py-sm-5 py-4">
         <div class=" py-5 owl-slider owl-carousel owl-theme">
@@ -250,7 +249,6 @@
           </div>
         </div>
     </section>
-
     <section class="offers">
       <div class="container py-sm-5 py-4">
         <div class="row mx-0">
@@ -302,7 +300,6 @@
         </div>
 
     </section>
-
     <section class="plates">
       <div class="container py-sm-5 py-4">
         <h2 class="fw-bold" data-aos="fade-down"> اشهر اطباقنا</h2>
@@ -338,7 +335,6 @@
         </div>
       </div>
     </section>
-
     <section class="info">
       <div class="container py-sm-5 py-4">
         <div class="row m-0 justify-content-cennter align-items-center">
@@ -358,7 +354,6 @@
       </div>
 
     </section>
-
     <section class="apps">
       <div class="container pt-sm-5 pt-4">
         <div class="row m-0 justify-content-cennter align-items-center text-center">
@@ -470,12 +465,151 @@
   </footer>
   <!-- modals -->
 
+<<<<<<< HEAD
 <!-- login modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header border-0">
         <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+=======
+  <!-- login modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- body-register  -->
+        <div class="modal-body register px-4" id="registerBody">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+            </div>
+
+            <div class="col-md-7 right-side p-3">
+              <h2 class="main-color fw-bold">مرحبا بك!</h2>
+              <h5> يمكنك انشاء حساب بكل سهولة</h5>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
+                <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"> +02 <img
+                    src="./SiteAssets/images/egypt.png" alt=""></button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"> <small> +02</small> <img src="./SiteAssets/images/egypt.png"
+                        alt=""></a></li>
+                </ul>
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" id="emailInput"
+                  placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
+              </div>
+
+              <div class="input-group position-relative mb-3">
+                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
+                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                  <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+
+              <button type="submit" class="btn py-3 mb-2 w-100">انشاء حساب</button>
+
+              <p class="text-center">
+                <small>
+                  هل لديك حساب بالفعل؟
+                  <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
+                    aria-label="تسجيل الدخول">تسجيل دخول</a>
+                </small>
+              </p>
+
+              <p class="text-center">
+                <small>
+                  <span class="text-muted">عند انشاء حساب انت توافق علي</span>
+
+                  <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و <a
+                    class="main-color text-decoration-underline" href="./policy.html"> الشروط و الاحكام</a>
+
+                </small>
+              </p>
+            </div>
+
+            <div class="col-md-5 login-background">
+              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+            </div>
+          </div>
+        </div>
+        <!-- body-login  -->
+        <div class="modal-body login d-none px-4" id="loginBody">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+            </div>
+
+            <div class="col-md-7 right-side p-3">
+              <h2 class="main-color fw-bold">مرحبا بك!</h2>
+              <h5>تسجيل الدخول لتستمتع بتجربة طلب معدة خصيصا لك </h5>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="phoneInput
+                " placeholder="ادخل رقم الهاتف ,مثال01029063398">
+                <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"><small>
+                    +02</small> <img src="./SiteAssets/images/egypt.png" alt=""></button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"> +02 <img src="./SiteAssets/images/egypt.png" alt=""></a></li>
+                </ul>
+              </div>
+
+              <div class="input-group position-relative mb-3">
+                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور الجديدة">
+                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                  <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+
+              <a href="./forget-pass.html"> <small> هل نسيت كلمة المرور؟ </small></a>
+
+              <button type="submit" class="btn py-3 my-2 w-100"> تسجيل الدخول</button>
+
+              <p class="text-center">
+                <small>
+                  تسجيل الدخول باستخدام شبكات التواصل
+
+                </small>
+              </p>
+
+              <div class="d-flex justify-content-center gap-lg-3">
+                <a class="social-media-btn d-flex align-items-center " href="#">
+                  <img src="./SiteAssets/images/facebook-icon.png" alt="Facebook" class="ms-2" height="20">
+                  <span>فيس بوك</span>
+                </a>
+
+                <a class="social-media-btn d-flex align-items-center " href="#">
+                  <img src="./SiteAssets/images/google-icon.png" alt="Google" class="ms-2" height="20">
+                  <span>جوجل</span>
+                </a>
+              </div>
+              <p class="text-center">
+                <small>
+                  <span class="text-dark"> مستخدم جديد؟ </span>
+                  <a href="#" class="main-color text-decoration-underline" id="showRegisterLink"
+                    aria-label="تسجيل حساب">تسجيل حساب</a>
+
+                </small>
+              </p>
+            </div>
+
+            <div class="col-md-5 login-background">
+              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+            </div>
+          </div>
+        </div>
+
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
       </div>
       <!-- body-register  -->
       <div class="modal-body register px-4" id="registerBody">
@@ -722,8 +856,12 @@
       
     </div>
   </div>
+<<<<<<< HEAD
 </div>
 <!-- end login modal -->
+=======
+  <!-- end login modal -->
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
   <!-- product details modal -->
   <div class="modal fade" tabindex="-1" id="productModal" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -777,9 +915,9 @@
                   <form>
                     <div class="form-check">
                       <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option1" value="option1">
+                        <input class="form-check-input" type="checkbox" name="options" id="option11" value="option11">
 
-                        <label class="form-check-label" for="option1">
+                        <label class="form-check-label" for="option11">
                           دقوس </label>
                       </div>
                       <span>100 ج.م</span>
@@ -787,8 +925,8 @@
                     </div>
                     <div class="form-check">
                       <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option2" value="option2">
-                        <label class="form-check-label" for="option2">
+                        <input class="form-check-input" type="checkbox" name="options" id="option22" value="option22">
+                        <label class="form-check-label" for="option22">
                           جمبري
                         </label>
                       </div>
@@ -796,8 +934,8 @@
                     </div>
                     <div class="form-check">
                       <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option3" value="option3">
-                        <label class="form-check-label" for="option3">
+                        <input class="form-check-input" type="checkbox" name="options" id="option33" value="option33">
+                        <label class="form-check-label" for="option33">
                           رز
                         </label>
                       </div>
@@ -865,7 +1003,12 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header border-0">
+<<<<<<< HEAD
           <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+=======
+          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"
+            onclick="showFirstPhase()"></button>
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
         </div>
         <div class="modal-body">
           <h3 class="text-center fw-bold mb-4"> ابدأ طلبك الان </h3>
@@ -894,6 +1037,52 @@
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-delivery" role="tabpanel"
               aria-labelledby="pills-delivery-tab">
+<<<<<<< HEAD
+=======
+              <div class="first-phase">
+                <h5 class="fw-bold">
+                  تحديد موقع التوصيل
+                </h5>
+
+                <div class="search-group ">
+
+                  <span class="search-icon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <input type="text" class="form-control" placeholder="ابحث عن الموقع" />
+              
+         
+              </div>
+
+              <div class="map position-relative my-3">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.025253043487!2d31.22420217605614!3d30.064810617604635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145841cef6b62cc1%3A0x31bc8779f7ab8dd5!2z2YXYt9i52YUg2KfZhNmD2YjYqg!5e0!3m2!1sen!2seg!4v1734860419141!5m2!1sen!2seg"
+                  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="notes">
+                  <small> تسجيل الدخول لاستخدام عناوينك المحفوظة</small>
+                  <button class="btn"> تسجيل الدخول</button>
+                </div>
+              </div>
+              <div class="tab-footer justify-content-between d-flex align-items-center">
+                <div>
+                  <h6 class="fw-bold">
+                    موقع التوصيل
+                  </h6>
+                  <p>
+                    <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                    مصدق الدقى و المهندسين وجيزه
+                  </p>
+                </div>
+                <button class="btn reversed main-color fw-bold" type="button">
+                  تعديل
+                </button>
+                <button type="submit" class="btn" onclick="showSecondPhase()">تأكيد العنوان</button>
+              </div>
+            </div>
+            <div class="second-phase d-none">
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
               <h6 class="fw-bold">
                 موقع التوصيل
               </h6>
@@ -906,6 +1095,7 @@
                   تعديل
                 </button>
               </div>
+<<<<<<< HEAD
               <h6 class="fw-bold">
                 أكمل موقع التوصيل
               </h6>
@@ -921,6 +1111,32 @@
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-work-tab" data-bs-toggle="pill" data-bs-target="#pills-work"
                     type="button" role="tab" aria-controls="pills-work" aria-selected="false">مكتب</button>
+=======
+              <h6 class="fw-bold mb-3">
+                أكمل موقع التوصيل
+              </h6>
+              <ul class="delivery-places nav nav-pills px-0 mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active rounded-pill" id="pills-home-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                    aria-selected="true">
+                    <i class="fas fa-city"></i> شقة
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link rounded-pill" id="pills-villa-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-villa" type="button" role="tab" aria-controls="pills-villa"
+                    aria-selected="false">
+                    <i class="fas fa-home"></i> فيلا
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link rounded-pill" id="pills-work-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-work" type="button" role="tab" aria-controls="pills-work"
+                    aria-selected="false">
+                    <i class="fas fa-building"></i> مكتب
+                  </button>
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
                 </li>
               </ul>
               <div class="tab-content" id="pills-tabContent">
@@ -933,12 +1149,19 @@
                       <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
                     </div>
                     <div class="mb-3">
+<<<<<<< HEAD
                       <input type="text" class="form-control" 
                       placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
                     </div>
                     <div class="mb-3">
                       <input type="text" class="form-control" 
                       placeholder="علامة مميزة (اختيارى)">
+=======
+                      <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
                     </div>
                     <div class="mb-3">
                       <div class="input-group">
@@ -961,12 +1184,19 @@
                       <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
                     </div>
                     <div class="mb-3">
+<<<<<<< HEAD
                       <input type="text" class="form-control" 
                       placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
                     </div>
                     <div class="mb-3">
                       <input type="text" class="form-control" 
                       placeholder="علامة مميزة (اختيارى)">
+=======
+                      <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
                     </div>
                     <div class="mb-3">
                       <div class="input-group">
@@ -989,12 +1219,19 @@
                       <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
                     </div>
                     <div class="mb-3">
+<<<<<<< HEAD
                       <input type="text" class="form-control" 
                       placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
                     </div>
                     <div class="mb-3">
                       <input type="text" class="form-control" 
                       placeholder="علامة مميزة (اختيارى)">
+=======
+                      <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
                     </div>
                     <div class="mb-3">
                       <div class="input-group">
@@ -1009,6 +1246,7 @@
                   </form>
                 </div>
               </div>
+<<<<<<< HEAD
 
             </div>
             <div class="tab-pane fade" id="pills-takeaway" role="tabpanel" aria-labelledby="pills-takeaway-tab">...
@@ -1018,11 +1256,46 @@
         <div class="modal-footer">
           <button type="submit" class="btn">حفظ العنوان</button>
 
+=======
+              <div class="tab-footer justify-content-end d-flex">
+                <button type="submit" class="btn" onclick="showThirdPhase()">حفظ العنوان</button>
+              </div>
+            </div>
+            <div class="third-phase d-none">
+              <div>
+                <h6 class="fw-bold">
+                  موقع التوصيل
+                </h6>
+                <div class="d-flex justify-content-between">
+                  <p>
+                    <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                    مصدق الدقى و المهندسين وجيزه
+                  </p>
+                  <button class="btn reversed main-color fw-bold" type="button">
+                    تعديل
+                  </button>
+                </div>
+
+                <p class="text-muted">
+                  121 مصدق , الدور 2 , شقة 12 ,رقم الهاتف: 01029061189 ,علامة مميزة: امام ماركت الصفا
+                </p>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="pills-takeaway" role="tabpanel" aria-labelledby="pills-takeaway-tab">
+            ...
+          </div>
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
         </div>
       </div>
     </div>
   </div>
+<<<<<<< HEAD
   <!-- end delivery details modal -->
+=======
+  </div>  <!-- end delivery details modal -->
+>>>>>>> 798b6b834135f186d13ada3440b2f1c0ed6f2077
   <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
   <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js"></script>
   <script src="SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js"></script>

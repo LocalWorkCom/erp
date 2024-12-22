@@ -75,14 +75,11 @@ return[
     'roles' => 'المهام',
     'permissions' => 'الصلاحيات',
     'VacationSettings' => 'اعدادات الاجازات',
-<<<<<<< HEAD
     'branchMenus' => ' اطباق الفروع ',
     'branchMenuCategory' => 'تصنيف الاطباق للفرع',
     'branchMenu' => 'قائمة الاطباق للفروع',
     'branchMenuAddon' => 'اضافات الاطباق للفروع',
     'branchMenuSize' => 'احجام الاطباق للفروع',
-=======
     'Addons'=>'الاضافات',
->>>>>>> 11e1e3f605d59463f7d32c0d792073ea087390a6
 
 ];
