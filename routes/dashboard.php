@@ -512,7 +512,7 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::prefix('/dishes')->group(function () {
-        Route::get('/', [DishController::class, 'index'])->name('dashboard.dishes.index');
+        Route::get('/', [DishController::class, 'index'])->name('dashboard.dishes.index')->middleware('role_or_permission:view dishes');
         Route::get('/create', [DishController::class, 'create'])->name('dashboard.dishes.create');
         Route::post('/', [DishController::class, 'store'])->name('dashboard.dishes.store');
         Route::get('/{id}', [DishController::class, 'show'])->name('dashboard.dishes.show');

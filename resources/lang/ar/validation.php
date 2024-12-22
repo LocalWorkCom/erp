@@ -80,6 +80,8 @@ return [
     'price' => ':attribute مطلوب',
     'DataExist' => 'موجود بالفعل',
     'DataExistMessage' => 'موجود بالفعل',
+    'regex' => 'صيغة :attribute غير صحيحة.',
+    'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'attributes' => [
 
         'EnterCode' => 'أدخل كود الدوله',

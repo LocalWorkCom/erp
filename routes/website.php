@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;

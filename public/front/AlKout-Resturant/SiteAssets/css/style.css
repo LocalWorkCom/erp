@@ -1617,7 +1617,28 @@ input::placeholder {
     width: 100%;
     bottom: 0;
 }
-
+/* searc input design  */
+.search-form {
+    position: relative;
+  }
+  
+  .search-input {
+    padding-left: 40px; 
+  }
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #afa8a8;
+    font-size: 17px;
+    pointer-events: none;
+}
+.border-red{
+border: 1px solid #fe0000;
+border-radius: 20px;
+padding: 10px;
+}
 /* responsive */
 @media(max-width: 1024px) {}
 

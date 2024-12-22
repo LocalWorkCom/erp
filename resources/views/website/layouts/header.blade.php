@@ -1,7 +1,7 @@
 <header class="fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container">
-            <a class="navbar-service" href="index.html">
+        <div class="container second-header">
+            <a class="navbar-service" href="{{ route('home') }}">
                 <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}">
             </a>
             <button class="navbar-toggler" type="button" onclick="openNav()">
@@ -51,7 +51,146 @@
                     {{-- {{ dd(Auth::check()) }} --}}
                     @auth('client')
                         @if (Auth::guard('client')->user()->flag == 'client')
-                            <li class="nav-item dropdown">
+                            <li class="nav-item">
+                                <a class="nav-link  align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#profileModal"><i class="fas fa-user-circle main-color"></i>
+                                    <span>{{ Auth::guard('client')->user()->name }} </span>
+                                </a>
+                            </li>
+                            <div class="modal fade" tabindex="-1" id="profileModal" aria-labelledby="profileModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered ">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0">
+                                            <button type="button" class="btn btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div
+                                                class="d-flex justify-content-between align-items-start border-bottom pb-2">
+                                                <div>
+                                                    <h5 class="fw-bold mb-3">
+                                                        <i class="fas fa-user-circle main-color"></i>
+                                                        <span>سارة عامر </span>
+                                                    </h5>
+                                                    <small class="text-muted" dir="ltr">
+                                                        <img src="SiteAssets/images/egypt.png" alt="" />
+                                                        <span>+20-1029061193</span>
+                                                    </small>
+                                                    <small class="text-muted d-block">
+                                                        saamer2019@gmail.com
+                                                    </small>
+                                                </div>
+                                                <button class="btn reversed main-color" type="button">تعديل الملف الشخصى
+                                                </button>
+                                            </div>
+                                            <ul class="profile-list list-unstyled px-0 pt-4">
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-clipboard-list main-color ms-2"></i>
+                                                            الطلبات السابقة
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-map-marked-alt main-color ms-2"></i>
+                                                            تتبع الطلب
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="addresses.html">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                                            عناوينى
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-star main-color ms-2"></i>
+                                                            قيم تجربتك
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="favourites.html">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-heart main-color ms-2"></i>
+                                                            مفضلاتى
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-bell main-color ms-2"></i>
+                                                            اشعارات التسويق
+                                                        </h6>
+                                                    </a>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            id="flexSwitchCheckDefault">
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <a href="questions.html">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-file-alt main-color ms-2"></i>
+                                                            الاسئلة المتكررة
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="policy.html">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-file-alt main-color ms-2"></i>
+                                                            الشروط والاحكام
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="privacy.html">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-clipboard-list main-color ms-2"></i>
+                                                            سياسة الخصوصيه
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-headset main-color ms-2"></i>
+                                                            الدعم
+                                                        </h6>
+                                                    </a>
+                                                    <img src="SiteAssets/images/logos_whatsapp-icon.png" />
+                                                </li>
+                                                <li>
+                                                    <a href="">
+                                                        <h6 class="fw-bold">
+                                                            <i class="fas fa-sign-out-alt main-color ms-2"></i>
+                                                            <form method="POST" action="{{ route('website.logout') }}">
+                                                                @csrf
+                                                                <button type="submit" class="dropdown-item">
+                                                                    @lang('auth.logout')
+                                                                </button>
+                                                            </form>
+
+                                                        </h6>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <li class="nav-item dropdown">
+
                                 <a class="nav-link dropdown-toggle btn align-items-center" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-circle"></i>
@@ -72,7 +211,7 @@
                                         </form>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         @else
                             <li class="nav-item">
                                 <a class="nav-link btn align-items-center" data-bs-toggle="modal"
@@ -84,7 +223,8 @@
                         @endif
                     @else
                         <li class="nav-item">
-                            <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <a class="nav-link btn align-items-center" data-bs-toggle="modal"
+                                data-bs-target="#loginModal">
                                 <i class="fas fa-user-circle"></i>
                                 <span>@lang('auth.login')</span>
                             </a>

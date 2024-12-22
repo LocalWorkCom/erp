@@ -21,12 +21,26 @@ class DishService
     }
 
     public function show($id)
-    {
-        return Dish::withTrashed()
-            ->with(['dishCategory', 'cuisine', 'sizes', 'details.recipe', 'addons'])
-            ->findOrFail($id);
-    }
+{
+    try {
+        $dish = Dish::with([
+            'dishCategory', 
+            'cuisine',
+            'sizes.details.recipe',
+            'details.recipe',
+            'addons.addons',
+        ])->findOrFail($id);
 
+        Log::info('Dish Retrieved', ['dish' => $dish]);
+
+        return $dish;
+    } catch (\Exception $e) {
+        Log::error('Error Retrieving Dish', ['error' => $e->getMessage()]);
+        throw $e;
+    }
+}
+
+    
 
     public function store($data, $image)
     {
