@@ -105,4 +105,10 @@ class Dish extends Model
     {
         return $this->hasMany(DishDetail::class, 'dish_id');
     }
+    public function dishAddonsDetails()
+    {
+        return $this->hasMany(DishAddon::class, 'dish_id');
+    }
+
+    
 }

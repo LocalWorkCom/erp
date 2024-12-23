@@ -8,6 +8,7 @@ use App\Models\DishAddon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 
 
@@ -28,7 +29,9 @@ class DishService
             'cuisine',
             'sizes.details.recipe',
             'details.recipe',
-            'addons.addons',
+           
+         'dishAddonsDetails.category', 
+        'dishAddonsDetails.addon',   
         ])->findOrFail($id);
 
         Log::info('Dish Retrieved', ['dish' => $dish]);
@@ -140,7 +143,7 @@ class DishService
                 
                             DishAddon::create([
                                 'dish_id' => $dish->id,
-                                'addon_id' => $addon['addon_id'], 
+                                'addon_id' => $addon['addon_id'],
                                 'quantity' => $addon['quantity'],
                                 'price' => $addon['price'],
                                 'addon_category_id' => $addonCategory['addon_category_id'],
@@ -151,7 +154,6 @@ class DishService
                     }
                 }
                 
-    
                 Log::info('Dish Creation Completed Successfully', ['dish_id' => $dish->id]);
                 return $dish;
     
@@ -202,33 +204,33 @@ class DishService
     
 
     public function update(Request $request, $id)
-{
-    try {
-        return DB::transaction(function () use ($request, $id) {
-            try {
-                // Log the initial request
-                Log::info('Starting Dish Update', ['dish_id' => $id, 'data' => $request->all()]);
-                
-                // Fetch the existing dish
-                $dish = Dish::findOrFail($id);
-
-                // Validate incoming data
-                $validatedData = $this->validateDishData($request->all());
-                Log::info('Validated Data', ['validated_data' => $validatedData]);
-
-                // Process the image
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $imagePath = 'images/dishes/' . $image->getClientOriginalName();
-                    $image->move(public_path('images/dishes'), $image->getClientOriginalName());
-                    $validatedData['image'] = $imagePath;
-                    Log::info('Image Uploaded', ['path' => $imagePath]);
-                }
-
-                // Update dish details
-                $validatedData['modified_by'] = auth()->id();
-                $dish->update($validatedData);
-                Log::info('Dish Updated', ['dish_id' => $dish->id]);
+    {
+        try {
+            return DB::transaction(function () use ($request, $id) {
+                try {
+                    // Log the initial request
+                    Log::info('Starting Dish Update', ['dish_id' => $id, 'data' => $request->all()]);
+    
+                    // Fetch the existing dish
+                    $dish = Dish::findOrFail($id);
+    
+                    // Validate incoming data
+                    $validatedData = $this->validateDishData($request->all());
+                    Log::info('Validated Data', ['validated_data' => $validatedData]);
+    
+                    // Process the image
+                    if ($request->hasFile('image')) {
+                        $image = $request->file('image');
+                        $imagePath = 'images/dishes/' . $image->getClientOriginalName();
+                        $image->move(public_path('images/dishes'), $image->getClientOriginalName());
+                        $validatedData['image'] = $imagePath;
+                        Log::info('Image Uploaded', ['path' => $imagePath]);
+                    }
+    
+                    // Update dish details
+                    $validatedData['modified_by'] = auth()->id();
+                    $dish->update($validatedData);
+                    Log::info('Dish Updated', ['dish_id' => $dish->id]);
 
                 // Process sizes
                 if (isset($request->sizes)) {
@@ -286,12 +288,12 @@ class DishService
                     }
                 }
 
-                // Process addon categories and addons
                 if (isset($request->addon_categories)) {
                     Log::info('Processing Addon Categories', ['dish_id' => $dish->id, 'addon_categories' => $request->addon_categories]);
-
-                    $dish->addons()->delete(); // Delete existing addons
-
+                
+                    // Delete existing addons
+                    DishAddon::where('dish_id', $dish->id)->delete();
+                
                     foreach ($request->addon_categories as $addonCategory) {
                         foreach ($addonCategory['addons'] as $addon) {
                             DishAddon::create([
@@ -313,9 +315,10 @@ class DishService
                         }
                     }
                 }
+                
 
                 Log::info('Dish Update Completed Successfully', ['dish_id' => $dish->id]);
-                return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishUpdated'));
+                return true;
 
             } catch (\Exception $e) {
                 Log::error('Dish Update Failed', ['error' => $e->getMessage()]);
@@ -324,8 +327,9 @@ class DishService
         });
     } catch (\Exception $e) {
         Log::error('Transaction Failed', ['error' => $e->getMessage()]);
-        return redirect()->back()->with('error', __('dishes.DishUpdateFailed'));
+        throw $e;
     }
+
 }
 
 

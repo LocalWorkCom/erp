@@ -24,6 +24,16 @@ return [
 'locationaccess' => 'Location Access',
 'access' => 'Access',
 'onmap' => 'On Map',
+'startorder' => 'Start your order now',
+'delivery' => 'Delivery',
+'recive' => 'Receive',
+'accesLocation' => 'Set delivery location',
+'search' => 'Search for the location',
+'saveaddress' => 'Login to use your saved addresses',
+'deliverylocation' => 'Delivery location',
+'edit' => 'Edit',
+'confirmeaddress' => 'Confirm address',
+
 
 
 ]
