@@ -57,6 +57,14 @@
                                     <textarea class="form-control" id="description_en" name="description_en">{{ $dish->description_en }}</textarea>
                                 </div>
                                 <div class="col-xl-6">
+    <label for="is_active" class="form-label">@lang('dishes.IsActive')</label>
+    <select name="is_active" id="is_active" class="form-control select2" required>
+        <option value="1" {{ $dish->is_active == 1 ? 'selected' : '' }}>@lang('dishes.Active')</option>
+        <option value="0" {{ $dish->is_active == 0 ? 'selected' : '' }}>@lang('dishes.Inactive')</option>
+    </select>
+</div>
+
+                                <div class="col-xl-6">
                                     <label for="is_active" class="form-label">@lang('dishes.IsActive')</label>
                                     <select name="is_active" id="is_active" class="form-control select2" required>
                                         <option value="1" {{ $dish->is_active == 1 ? 'selected' : '' }}>@lang('dishes.Active')</option>
