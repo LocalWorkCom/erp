@@ -166,7 +166,6 @@ class AuthController extends Controller
     }
     public function resetPassword(Request $request)
     {
-       // dd($request->all());
         // Validate input
         $request->validate([
             'phone' => 'required', // Validate phone number
@@ -182,10 +181,15 @@ class AuthController extends Controller
                 'message' => __('auth.phone_not_found'),
             ], 404);
         }
-
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('auth.password_same_as_previous'),
+            ], 422); // Password can't be the same as the previous one
+        }
         // Update the user's password
         $user->update([
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
         ]);
         Auth::guard('client')->login($user);
         Auth::setUser($user);
