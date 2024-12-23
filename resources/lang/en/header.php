@@ -21,6 +21,10 @@ return [
 'support' => 'Support',
 'logout' => 'Logout',
 'branches' => 'Branches',
+'locationaccess' => 'Location Access',
+'access' => 'Access',
+'onmap' => 'On Map',
+
 
 ]
 ;

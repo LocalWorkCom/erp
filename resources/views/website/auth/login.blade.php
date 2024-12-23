@@ -104,12 +104,9 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            //debugger;
             $('#loginForm').on('submit', function(event) {
                 event.preventDefault();
-                // Get form data
                 var formData = $(this).serialize();
-                // Send the AJAX request
                 $.ajax({
                     url: '{{ route('website.login') }}',
                     method: 'POST',

@@ -126,7 +126,7 @@
 
                 <!-- Error message -->
                 <div id="passwordError" class="text-danger d-none">
-                    @lang('auth.password_mismatch') <!-- Ensure this key exists in your language files -->
+                    @lang('auth.password_mismatch')
                 </div>
                 <input type="hidden" name="phone" id="hidden-phone">
 
@@ -147,16 +147,10 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Handle the "forget password" form submission
         $('#forgetBody form').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            // Get form data
+            event.preventDefault();
             var formData = $(this).serialize();
-
-            // Clear any previous error messages
             $('#phoneError').hide().text('');
-
             // Send the AJAX request for phone validation
             $.ajax({
                 url: '{{ route('check.phone') }}',
@@ -164,74 +158,44 @@
                 data: formData,
                 success: function(response) {
                     if (response.status === 'success') {
-                        // Show resetBody and hide forgetBody
                         $('#forgetBody').addClass('d-none');
                         $('#resetBody').removeClass('d-none');
-                        // Append the phone number to the hidden input in the reset form
                         $('#hidden-phone').prop('value', response.phone);
                     }
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;
-
                     if (response.status === 400 || response.status === 422) {
-                        // Handle validation errors
                         var errorMessages = '';
                         $.each(errors, function(key, value) {
                             errorMessages += value.join("\n") + "\n";
                         });
-
-                        // Display the error messages
                         $('#phoneforgetError').show().text(errorMessages);
                     } else {
-                        alert('An unexpected error occurred!');
                     }
                 }
             });
         });
 
-        // Handle reset password form submission
         $('#resetForm').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            // Get the password and confirm password values
+            event.preventDefault();
             var password = $('#passwordInput').val();
             var confirmPassword = $('#passwordInput2').val();
-
-            // Check if passwords match
             if (password !== confirmPassword) {
-                // If passwords don't match, display the error message and stop form submission
-                $('#passwordError').removeClass('d-none'); // Show the error message
+                $('#passwordError').removeClass('d-none');
             }
-
-            // If passwords match, hide the error message (in case it was previously shown)
-            $('#passwordError').addClass('d-none'); // Hide the error message
-
-            // Serialize form data
+            $('#passwordError').addClass('d-none');
             var formData = $(this).serialize();
-
-            // Clear previous error messages
             $('.alert-danger').remove();
-
-            // Send AJAX request to reset the password
             $.ajax({
                 url: '{{ route('reset.password') }}',
                 method: 'POST',
                 data: formData,
                 success: function(response) {
                     if (response.status === 'success') {
-                        // Show success message
-                        $('#resetBody').html(`
-                        <div class="text-center">
-                            <h3>${response.message}</h3>
-                            <button class="btn btn-primary" onclick="window.location.href='/login'">
-                                @lang('auth.login')
-                            </button>
-                        </div>
-                    `);
                         setTimeout(function() {
                             window.location.href = '{{ route('home') }}';
-                        }, 2000); // Redirect after 2 seconds
+                        }, 300);
                     }
                 },
                 error: function(response) {
@@ -243,20 +207,16 @@
                         $.each(errors, function(key, value) {
                             errorMessages += `<p>${value[0]}</p>`;
                         });
-                        $('#passwordError').removeClass('d-none'); // Show the error message
-
-                        // Append errors to the form
+                        $('#passwordError').removeClass('d-none');
                         $('#resetForm').prepend(`
                         <div class="alert alert-danger">${errorMessages}</div>
                     `);
                     } else {
-                        alert('An unexpected error occurred!');
                     }
                 }
             });
         });
     });
-
 
     $('#togglePassword, #togglePassword2').on('click', function() {
         var input = $(this).siblings('input');
