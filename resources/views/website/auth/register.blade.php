@@ -122,25 +122,18 @@
         document.querySelectorAll('.country-item').forEach(item => {
             item.addEventListener('click', function(event) {
                 event.preventDefault();
-
-                // Update selected country code and flag
                 const selectedCode = this.getAttribute('data-country-code');
                 const selectedFlag = this.getAttribute('data-country-flag');
                 document.getElementById('selected-country-code').textContent = selectedCode;
                 document.getElementById('selected-flag').src = selectedFlag;
-
-                // Update hidden input value
                 document.getElementById('countryCodeInput').value = selectedCode;
             });
         });
 
         document.getElementById('Register').addEventListener('submit', function(event) {
             event.preventDefault();
-
             const form = event.target;
             const formData = new FormData(form);
-
-            // Clear previous errors
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
             form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
 

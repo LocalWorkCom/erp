@@ -33,16 +33,14 @@
                         </div>
                         <div class="card-body">
                             @if ($errors->any())
-                                <div class="alert alert-solid-danger alert-dismissible fade show">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
                             @endif
 
                             <form action="{{ route('product.colors.save', $product->id) }}" method="POST">
@@ -172,4 +170,3 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 @endsection
-

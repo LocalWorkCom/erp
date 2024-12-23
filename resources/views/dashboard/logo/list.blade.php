@@ -255,9 +255,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($logos as $logo)
+                                @php $rowNumber = 1; @endphp
+                                @foreach ($logos as $logo)
                                         <tr>
-                                            <td>{{ $logo->id }}</td>
+{{--                                            <td>{{ $logo->id }}</td>--}}
+                                            <td>{{ $rowNumber++  }}</td>
                                             <td><img src="{{ url($logo->image) }}" alt="" width="100"
                                                     height="100"></td>
                                             <td>{{ $logo->name_ar }}</td>
