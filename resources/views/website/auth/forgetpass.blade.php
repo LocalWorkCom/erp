@@ -184,7 +184,6 @@
                         // Display the error messages
                         $('#phoneforgetError').show().text(errorMessages);
                     } else {
-                        alert('An unexpected error occurred!');
                     }
                 }
             });
@@ -220,18 +219,9 @@
                 data: formData,
                 success: function(response) {
                     if (response.status === 'success') {
-                        // Show success message
-                        $('#resetBody').html(`
-                        <div class="text-center">
-                            <h3>${response.message}</h3>
-                            <button class="btn btn-primary" onclick="window.location.href='/login'">
-                                @lang('auth.login')
-                            </button>
-                        </div>
-                    `);
                         setTimeout(function() {
                             window.location.href = '{{ route('home') }}';
-                        }, 2000); // Redirect after 2 seconds
+                        }, 300); // Redirect after 2 seconds
                     }
                 },
                 error: function(response) {
@@ -250,7 +240,6 @@
                         <div class="alert alert-danger">${errorMessages}</div>
                     `);
                     } else {
-                        alert('An unexpected error occurred!');
                     }
                 }
             });
