@@ -12,7 +12,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <button class="btn white fw-bold d-flex justify-content-between" data-bs-toggle="modal"
-                            data-bs-target="#deliveryModal">
+                                data-bs-target="#deliveryModal">
                                 <span><i class="fas fa-map-marker-alt ms-2"></i>
                                     @lang('header.deliveryTo')
                                 </span>
