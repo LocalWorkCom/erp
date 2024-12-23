@@ -22,9 +22,6 @@ Route::middleware(['auth:client'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
 });
-//Route::get('/', function () {
-//    return view('website.landing');
-//})->name('home');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
