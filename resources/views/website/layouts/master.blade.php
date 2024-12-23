@@ -67,6 +67,55 @@
         </div>
     </div>
     <!-- end login modal -->
+
+    <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form class="d-flex mb-1 position-relative search-form">
+                        <input id="branchSearch" class="form-control search-input" type="search"
+                            placeholder="ابحث عن الفرع المناسب لك" aria-label="Search">
+                        <i class="fas fa-search search-icon"></i>
+                    </form>
+
+                    <div id="branchList">
+                        @foreach ($branches as $branch)
+                            @php
+                                try {
+                                    $currentTime = \Carbon\Carbon::now();
+                                    $openingTime = \Carbon\Carbon::parse($branch->opening_hour);
+                                    $closingTime = \Carbon\Carbon::parse($branch->closing_hour);
+                                    $isOpen = $currentTime->between($openingTime, $closingTime);
+                                } catch (\Exception $e) {
+                                    $isOpen = false;
+                                    $openingTime = $closingTime = null;
+                                }
+                            @endphp
+                            <div class="location border-bottom mb-1 branch-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="fw-bold mt-2 branch-name">
+                                        <i class="fas fa-map-marker-alt main-color mx-2"></i>{{ $branch->name }}
+                                    </h6>
+                                    <span class="badge {{ $isOpen ? 'text-success' : 'text-muted' }} mt-2">
+                                        {{ $isOpen ? 'مفتوح' : 'مغلق' }}
+                                    </span>
+                                </div>
+                                <p class="text-muted mx-2 branch-address">{{ $branch->address }}</p>
+                                <p class="main-color fw-bold">
+                                    <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-no-modal"> استخدم موقعى </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('website.delivery')
     @include('website.location')
 
@@ -87,6 +136,27 @@
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.js') }}"></script>
     <script>
         AOS.init();
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('branchSearch');
+            const branchItems = document.querySelectorAll('.branch-item');
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+
+                branchItems.forEach((item) => {
+                    const name = item.querySelector('.branch-name').textContent.toLowerCase();
+                    const address = item.querySelector('.branch-address').textContent.toLowerCase();
+
+                    if (name.includes(query) || address.includes(query)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
     </script>
     <!--
   <script>

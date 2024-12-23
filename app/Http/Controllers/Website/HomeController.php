@@ -37,6 +37,7 @@ class HomeController extends Controller
 
     public function showMenu()
     {
+        $branches = Branch::all();
         $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
             $query->where('is_active', true);
         }, 'dish_categories.dishes' => function ($query) {
@@ -44,7 +45,7 @@ class HomeController extends Controller
         }])->get();
         return view(
             'website.menu',
-            compact(['menuCategories'])
+            compact(['menuCategories', 'branches'])
         );
     }
     public function contactUs()

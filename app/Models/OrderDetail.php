@@ -49,6 +49,10 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
+    public function Offer()
+    {
+        return $this->belongsTo(Offer::class, 'offer_id');
+    }
     public function Unit()
     {
         return $this->belongsTo(Unit::class, 'unit_id');
