@@ -33,5 +33,13 @@ return [
 'deliverylocation' => ' موقع التوصيل',
 'edit' => 'تعديل',
 'confirmeaddress' => 'تأكيد العنوان',
+'privacy' => 'الخصوصية',
+'policy' => 'السياسة',
+
+
+
+
+
+
 ]
 ;
