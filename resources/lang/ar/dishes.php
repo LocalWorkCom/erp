@@ -69,4 +69,12 @@ return [
     'NoCuisine' => 'لا توجد مطبخ',
     'DishSizes' => 'أحجام الطبق',
     'DishCreated' => 'تم إنشاء الطبق بنجاح.',
+    'Noaddon'=>'لا يوجد اضافات',
+    'DeleteConfirmTitle' => 'هل أنت متأكد؟',
+    'DeleteConfirmMessage' => 'لا يمكن التراجع عن هذا الإجراء. هل تريد حذف هذه الوجبة؟',
+    'ConfirmDelete' => 'نعم، احذفها!',
+    'Cancel' => 'إلغاء',
+    'SelectBranches' => 'اختر الفروع',
+    'AllBranches' => 'جميع الفروع',
+    
 ];

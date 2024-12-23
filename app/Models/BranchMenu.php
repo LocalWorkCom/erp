@@ -14,12 +14,8 @@ class BranchMenu extends Model
         'branch_id',
         'dish_id',
         'price',
-        'dish_category_id',
         'branch_menu_category_id',
         'is_active',
-        'cuisine_id',
-        'has_size',
-        'has_addon',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -32,14 +28,14 @@ class BranchMenu extends Model
     ];
 
     // Relationships
-    public function branch()
+    public function branches()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function branchCategories()
+    public function branchMenuCategories()
     {
-        return $this->belongsTo(DishCategory::class, 'branch_id');
+        return $this->belongsTo(BranchMenuCategory::class, 'branch_menu_category_id');
     }
 
     public function dish()

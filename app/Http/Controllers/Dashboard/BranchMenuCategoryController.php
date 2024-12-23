@@ -49,13 +49,12 @@ class BranchMenuCategoryController extends Controller
         $message= $responseData['message'];
         return redirect()->route('branch.categories.list')->with('message',$message);
     }
+    
     public function change_status(Request $request, $id)
     {
         $response = $this->branchMenuCategoryService->change_status($id);
         $responseData = $response->original;
         return $branch_menu_category = $responseData['data'];
-        // $message= $responseData['message'];
-        // return redirect()->route('branch.categories.list')->with('message',$message);
     }
 
     public function show_branch($branch_id)

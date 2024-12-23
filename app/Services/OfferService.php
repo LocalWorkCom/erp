@@ -23,19 +23,19 @@ class OfferService
      */
     public function index()
     {
-        $offers = Offer::with('details')->where('is_active',1)->get();
+        $offers = Offer::with('details')->get();
         return ResponseWithSuccessData($this->lang, OfferResource::collection($offers), 1);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function save(Request $request, string $id = null)
+    public function save(Request $request, $id = null)
     {
         $data = $request->validate([
-            'branch_selection' => 'required|in:all,specific',
-            'branches' => 'required_if:branch_selection,specific|array',
-            'branches.*' => 'exists:branches,id',
+            'branch_selection' => 'required|in:all,specific',  // Validation for the branch selection
+            'branches' => 'required_if:branch_selection,specific|array',  // Validation for branches (if specific is selected)
+            'branches.*' => 'exists:branches,id',  // Ensure each branch ID exists in the branches table
             'name_ar' => 'required|string',
             'name_en' => 'required|string',
             'discount_type' => 'required|string|in:fixed,percentage',
@@ -51,8 +51,8 @@ class OfferService
                     }
                 },
             ],
-            'description_ar' => 'nullable|string',
-            'description_en' => 'nullable|string',
+            'description_ar' => 'required|string',
+            'description_en' => 'required|string',
             'image_ar' => 'nullable|max:2048',
             'image_en' => 'nullable|max:2048',
             'is_active' => 'required|in:0,1',

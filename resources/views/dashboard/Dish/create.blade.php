@@ -82,6 +82,15 @@
                                         <label for="price" class="form-label">@lang('dishes.Price')</label>
                                         <input type="number" class="form-control" id="price" name="price" step="0.01">
                                     </div>
+                                    <div class="col-xl-12">
+                                        <label for="branches" class="form-label">@lang('dishes.SelectBranches')</label>
+                                        <select name="branches[]" id="branches" class="form-control select2" multiple>
+                                            <option value="all">@lang('dishes.AllBranches')</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="col-xl-6">
                                         <label for="image" class="form-label">@lang('dishes.Image')</label>

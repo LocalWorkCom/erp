@@ -37,4 +37,7 @@ return [
     'Activation' => 'التفعيل',
     'Active' => 'مفعل',
     'NotActive' => 'غير مفعل',
+    'Price' => 'السعر',
+    'EditBranchMenu' => 'تعديل طبق الفرع',
+
 ];

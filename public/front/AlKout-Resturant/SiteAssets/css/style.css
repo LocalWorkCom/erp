@@ -840,10 +840,11 @@ body.no-scroll {
     font-size: 1.5rem;
 }
 
-.info .btn {
-    padding: 1rem 4.75rem;
-    font-size: 1.75rem;
+.info .btn-lg {
+    padding: 1rem 2.75rem;
+    font-size: 1.5rem;
 }
+
 
 /* ****************************************************************************************** */
 /* apps section */
@@ -887,8 +888,8 @@ footer {
 footer .footer-curve {
     background: #BF0000;
     color: #fff;
-    mask: radial-gradient(80% 98px at TOP, #0000 98%, #000);
-    height: 125px;
+    mask: radial-gradient(55% 45px at TOP, #0000 98%, #000);
+    height: 65px;
     position: relative;
     top: 0;
     z-index: -1;
@@ -931,7 +932,7 @@ footer .icon {
     align-items: center;
     margin: 0;
     position: absolute;
-    top: 0;
+    top: -15%;
     overflow: hidden;
 }
 
