@@ -152,14 +152,51 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
+                                            @php $temp_offer = 0; @endphp
                                             @foreach ($order['details'] as $detail)
-                                                <tr>
-                                                    <td>{{ $detail->dish->name_ar . ' | ' . $detail->dish->name_en }}</td>
-                                                    <td>{{ $detail->quantity }}</td>
-                                                    <td>${{ $detail->price_befor_tax }}</td>
-                                                    <td>${{ $detail->total }}</td>
-                                                </tr>
+                                                @if ($detail->offer_id && $detail->offer_id != $temp_offer)
+                                                    {{-- Display Offer Header --}}
+                                                    @php $temp_offer = $detail->offer_id; @endphp
+                                                    <tr> {{-- Offer row colored --}}
+                                                        <td>عرض {{ $detail->offer->name_ar }}</td>
+                                                        <td></td>
+                                                        @if ($detail->offer->discount_type == 'fixed')
+                                                            <td>${{ $detail->offer->discount_value }}</td>
+                                                        @else
+                                                            <td>${{ $detail->total }}</td>
+                                                        @endif
+                                                        @if ($detail->offer->discount_type == 'fixed')
+                                                            <td>${{ $detail->offer->discount_value }}</td>
+                                                        @else
+                                                            <td>${{ $detail->price_after_tax }}</td>
+                                                        @endif
+                                                    </tr>
+                                                    {{-- Display Offer Details --}}
+                                                    @foreach ($detail->offer->details as $offer_detail)
+                                                        <tr> {{-- Offer details row colored --}}
+                                                            <td> {{ $offer_detail->dish->name_ar }}</td>
+                                                            <td>{{ $offer_detail->count }}</td>
+                                                            <td>{{ $detail->offer->discount_type == 'fixed' ? '$0' : $detail->total }}
+                                                            </td>
+
+                                                            <td>${{ $detail->price_after_tax }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @elseif (!$detail->offer_id)
+                                                    {{-- Display Individual Dish Details --}}
+                                                    <tr class="table-default"> {{-- Default styling for individual dishes --}}
+                                                        <td>{{ $detail->dish->name_ar . ' | ' . $detail->dish->name_en }}
+                                                        </td>
+                                                        <td>{{ $detail->quantity }}</td>
+                                                        <td>${{ $detail->price_befor_tax }}</td>
+                                                        <td>${{ $detail->total }}</td>
+
+                                                    </tr>
+                                                @endif
                                             @endforeach
+
+
                                             @foreach ($order['addons'] as $addon)
                                                 <tr>
                                                     <td>{{ $addon->Addon->addons->name_ar }}</td>
@@ -176,7 +213,7 @@
                                             <tr>
                                                 <td colspan="3" class="text-end fw-semibold">Tax
                                                     ({{ getSetting('tax_percentage') }}%):</td>
-                                                <td>${{ $order->tax_value }}</td>
+                                                <td>{{ $order->tax_value }}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end fw-semibold">Fees:</td>
