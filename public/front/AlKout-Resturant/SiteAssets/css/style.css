@@ -1639,6 +1639,8 @@ border: 1px solid #fe0000;
 border-radius: 20px;
 padding: 10px;
 }
+
+
 /* responsive */
 @media(max-width: 1024px) {}
 
