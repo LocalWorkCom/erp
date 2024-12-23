@@ -1669,6 +1669,8 @@ input::placeholder {
 .dropdown-toggle::after {
     margin-right: .55em;
 }
+
+
 /* responsive */
 @media(max-width: 1024px) {}
 

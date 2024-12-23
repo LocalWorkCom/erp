@@ -22,18 +22,22 @@ class HomeController extends Controller
     public function index()
     {
         $sliders = Slider::all();
-        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        $branches = Branch::all();
+        $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
+        $discounts = $lastThreeDiscounts->reverse()->take(3);
+        $discounts = $discounts->reverse();
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('is_active', true)->get();
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches'])
         );
     }
 
     public function showMenu()
     {
+        $branches = Branch::all();
         $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
             $query->where('is_active', true);
         }, 'dish_categories.dishes' => function ($query) {
@@ -41,7 +45,7 @@ class HomeController extends Controller
         }])->get();
         return view(
             'website.menu',
-            compact(['menuCategories'])
+            compact(['menuCategories', 'branches'])
         );
     }
     public function contactUs()
@@ -71,7 +75,5 @@ class HomeController extends Controller
         $terms = StaticPageResource::collection(TermsAndCondition::all());
         $termsArray = $terms->toArray(request());
         return view('website.terms', compact('termsArray'));
-
     }
-
 }
