@@ -70,6 +70,41 @@ $(document).ready(function () {
       // }
     }
   });
+  $('.offers-slider').owlCarousel({
+    items: 3,
+    loop: true,
+    dots: true,
+    nav: true,
+    margin: 25,
+    pagination: false,
+    autoplay: true,
+    autoplaySpeed: 1000,
+    autoplayTimeout: 3000,
+    rtl: true,
+    responsive: {
+      0: {
+        items: 1,
+        nav: true,
+        dots: false
+      },
+
+      600: {
+        items: 2,
+        nav: true
+      },
+
+      900: {
+        items: 3,
+        nav: true
+      },
+
+      // 1200: {
+      //   items: 5,
+      //   nav: true
+      // }
+    }
+  });
+  
   $('.plates-slider').owlCarousel({
     items: 4,
     loop: false,
