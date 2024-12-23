@@ -13,29 +13,30 @@
                         <a class="nav-link" href="#">
                             <button class="btn white fw-bold d-flex justify-content-between">
                                 <span><i class="fas fa-map-marker-alt ms-2"></i>
-                                  @lang('header.deliveryTo')
+                                    @lang('header.deliveryTo')
                                 </span>
                                 <span class="select-sm">
-                                     @lang('header.choose')
+                                    @lang('header.choose')
                                 </span>
                             </button>
                         </a>
                     </li>
-                    <li class="nav-item active" aria-current="page">
-                        <a class="nav-link" href="{{ route('home') }}">
+                    <li class="nav-item {{ Request::routeIs('home') ? 'active' : '' }}" aria-current="page">
+                        <a class="nav-link " href="{{ route('home') }}">
                             @lang('header.home')
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#branchesModal">  @lang('header.branches')</a>
-                      </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('menu') }}">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#branchesModal">
+                            @lang('header.branches')</a>
+                    </li>
+                    <li class="nav-item {{ Request::routeIs('menu') ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('menu') }}">
                             @lang('header.menu')
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('contactUs') }}">
+                    <li class="nav-item {{ Request::routeIs('contactUs') ? 'active' : '' }}">
+                        <a class="nav-link " href="{{ route('contactUs') }}">
                             @lang('header.contactUs')
                         </a>
                     </li>
@@ -48,12 +49,12 @@
                     <li class="nav-item">
                         @if (session('locale') == 'ar')
                             <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                                                             @lang('header.en')
+                                @lang('header.en')
 
                             </a>
                         @else
                             <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                                                          @lang('header.ar')
+                                @lang('header.ar')
 
                             </a>
                         @endif
@@ -94,23 +95,25 @@
         <div id="sidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="overlay-content">
-                <a href="#">  @lang('header.home') </a>
-                <a href="#">  @lang('header.menue') </a>
-                <a href="#">  @lang('header.contactUs') </a>
+                <a href="#"> @lang('header.home') </a>
+                <a href="#"> @lang('header.menue') </a>
+                <a href="#"> @lang('header.contactUs') </a>
                 <a href="#"> <i class="fas fa-shopping-cart"></i>
                 </a>
-                <a href="#"> @if (session('locale') == 'ar')
-                    <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                                                 @lang('header.en')
+                <a href="#">
+                    @if (session('locale') == 'ar')
+                        <a class="nav-link" href="{{ route('set-locale', 'en') }}">
+                            @lang('header.en')
 
-                    </a>
-                @else
-                    <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                        @lang('header.ar')
+                        </a>
+                    @else
+                        <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
+                            @lang('header.ar')
 
-                    </a>
-                @endif</a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">   @lang('header.login')
+                        </a>
+                    @endif
+                </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"> @lang('header.login')
                 </a>
             </div>
         </div>
