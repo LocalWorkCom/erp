@@ -57,6 +57,14 @@
                                     <textarea class="form-control" id="description_en" name="description_en">{{ $dish->description_en }}</textarea>
                                 </div>
                                 <div class="col-xl-6">
+                                    <label for="is_active" class="form-label">@lang('dishes.IsActive')</label>
+                                    <select name="is_active" id="is_active" class="form-control select2" required>
+                                        <option value="1" {{ $dish->is_active == 1 ? 'selected' : '' }}>@lang('dishes.Active')</option>
+                                        <option value="0" {{ $dish->is_active == 0 ? 'selected' : '' }}>@lang('dishes.Inactive')</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-xl-6">
                                     <label for="category_id" class="form-label">@lang('dishes.Category')</label>
                                     <select name="category_id" class="form-control select2" required>
                                         @foreach ($categories as $category)
@@ -171,12 +179,9 @@
                                 <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
                             </div>
                             <!-- Dish Addons -->
-                        
-<!-- Dish Addons -->
-<div id="dish-addons-section" class="col-xl-12 {{ $dish->has_addon ? '' : 'd-none' }}">
-    <h5 class="mb-3">@lang('dishes.DishAddons')</h5>
-    <div id="addon-categories-section">
-        @foreach ($dish->addons->groupBy('addon_category_id') as $addonCategoryIndex => $addons)
+                            <div id="addon-categories-section">
+    @if (!empty($dish->dishAddonsDetails) && $dish->dishAddonsDetails->isNotEmpty())
+        @foreach ($dish->dishAddonsDetails->groupBy('addon_category_id') as $addonCategoryIndex => $addons)
             @php
                 $addonCategory = $addons->first();
             @endphp
@@ -214,32 +219,36 @@
                             </tr>
                         </thead>
                         <tbody id="addons-table-{{ $addonCategoryIndex }}">
-                            @foreach ($addons as $addonIndex => $addon)
-                                <tr>
-                                    <td>
-                                        <select name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][addon_id]"
-                                            class="form-control select2" required>
-                                            @foreach ($addons as $availableAddon)
-                                                <option value="{{ $availableAddon->id }}" {{ $addon->addon_id == $availableAddon->id ? 'selected' : '' }}>
-                                                    {{ $availableAddon->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][quantity]"
-                                            class="form-control" value="{{ $addon->quantity }}" step="0.01" required>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][price]"
-                                            class="form-control" value="{{ $addon->price }}" step="0.01" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+    @if (isset($addons) && $addons->isNotEmpty())
+        @foreach ($addons as $addonIndex => $addon)
+            <tr>
+                <td>
+                    <select name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][addon_id]"
+                        class="form-control select2" required>
+                        @foreach ($allAddons as $availableAddon)
+                            <option value="{{ $availableAddon->id }}"
+                                {{ isset($addon->addon_id) && $addon->addon_id == $availableAddon->id ? 'selected' : '' }}>
+                                {{ $availableAddon->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][quantity]"
+                        class="form-control" value="{{ $addon->quantity ?? '' }}" step="0.01" required>
+                </td>
+                <td>
+                    <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][price]"
+                        class="form-control" value="{{ $addon->price ?? '' }}" step="0.01" required>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
+                </td>
+            </tr>
+        @endforeach
+    @endif
+</tbody>
+
                     </table>
                     <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="{{ $addonCategoryIndex }}">
                         @lang('dishes.AddAddon')
@@ -248,7 +257,9 @@
                 </div>
             </div>
         @endforeach
-    </div>
+    @else
+        <p>@lang('dishes.NoAddons')</p>
+    @endif
 </div>
 
 
