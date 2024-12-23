@@ -117,7 +117,7 @@
         </div>
     </form>
 </div>
-@section('scripts')
+@push('scripts')
     <script>
         document.querySelectorAll('.country-item').forEach(item => {
             item.addEventListener('click', function(event) {
@@ -182,4 +182,4 @@
                 });
         });
     </script>
-@endsection
+@endpush
