@@ -59,9 +59,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php $rowNumber = 1; @endphp
                                 @foreach ($privacies as $privacy)
                                     <tr>
-                                        <td>{{ $privacy->id }}</td>
+{{--                                        <td>{{ $privacy->id }}</td>--}}
+                                        <td>{{ $rowNumber++  }}</td>
                                         <td>
                                             <span class="badge {{ $privacy->active ? 'bg-success' : 'bg-danger' }}">
                                                 {{ $privacy->active ? __('term.Active') : __('term.Inactive') }}

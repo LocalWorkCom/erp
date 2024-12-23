@@ -35,38 +35,24 @@
                             </div>
                             <div class="col-md-6">
                                 <figure class="intro-img">
-                                    <img src="{{ asset($slider->image) }}" alt="">
+                                    <img src="{{ asset($slider->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
+                                        alt="">
                                 </figure>
                             </div>
                         </div>
                     </div>
                 @endforeach
-                {{--        <div class="item"> --}}
-                {{--          <div class="row m-0 justify-content-center align-items-center"> --}}
-                {{--            <div class="col-md-6"> --}}
-                {{--              <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1> --}}
-                {{--              <p class="slide-text my-5 "> --}}
-                {{--                يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك --}}
-                {{--              </p> --}}
-                {{--              <a href="#" class="btn">اطلب الان</a> --}}
-                {{--            </div> --}}
-                {{--            <div class="col-md-6"> --}}
-                {{--              <figure class="intro-img"> --}}
-                {{--                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/intro-plate.png') }}" alt=""> --}}
-                {{--              </figure> --}}
-                {{--            </div> --}}
-                {{--          </div> --}}
-                {{--        </div> --}}
+              
             </div>
         </div>
         <!-- <div class="intro-curve"></div>
-                            <div class="container">
-                              <div class="overflow-plates d-flex justify-content-between">
+                                        <div class="container">
+                                          <div class="overflow-plates d-flex justify-content-between">
 
-                                <img src="SiteAssets/images/overflow-left.png" class="img-fluid" />
-                                <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
-                                <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
-                              </div> -->
+                                            <img src="SiteAssets/images/overflow-left.png" class="img-fluid" />
+                                            <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
+                                            <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
+                                          </div> -->
         {{--    </div> --}}
         <div class="container overflow-plates ">
             <div class="d-flex justify-content-between">
@@ -97,7 +83,7 @@
                         <div class="item mb-4 category position-relative" data-aos="zoom-in">
                             <a href="#">
                                 <figure class="category-img m-0">
-                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'default-category.png') }}"
+                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
                                         alt="{{ $menuCategory->dish_categories->name_ar }}">
                                     <figcaption class="pt-4">
                                         <h5>{{ $menuCategory->dish_categories->name_ar }}</h5>
@@ -117,7 +103,9 @@
                     <div class="col-md-4">
                         <div class="item one row mx-0 p-4" data-aos="zoom-in">
                             <div class="col-md-5">
-                                <img class="offer-img" src="{{ asset($discount->dish->image) }}" alt="">
+                                <img class="offer-img"
+                                    src="{{ asset($discount->dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
+                                    alt="">
                             </div>
                             <div class="col-md-7">
                                 <h2 class="main-color fw-bold "> خصم
@@ -132,38 +120,7 @@
                         </div>
                     </div>
                 @endforeach
-                {{--        <div class="col-md-4"> --}}
-                {{--          <div class="item two row mx-0 p-4" data-aos="zoom-in"> --}}
-                {{--            <div class="col-md-5"> --}}
-                {{--              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-2.png') }}" alt=""> --}}
-                {{--            </div> --}}
-                {{--            <div class="col-md-7"> --}}
-                {{--              <h2 class="text-white fw-bold"> خصم 30%</h2> --}}
-                {{--              <h5 class="text-white pb-4"> زبيق مقلي</h5> --}}
-                {{--              <a href="#" class="btn white"> --}}
-                {{--                <h4 class="fw-bold">اطلب الان</h4> --}}
-                {{--              </a> --}}
-                {{--            </div> --}}
-
-                {{--          </div> --}}
-                {{--        </div> --}}
-                {{--        <div class="col-md-4"> --}}
-                {{--          <div class="item three row mx-0 p-4" data-aos="zoom-in"> --}}
-                {{--            <div class="col-md-5"> --}}
-                {{--              <img class="offer-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offer-3.png') }}" alt=""> --}}
-                {{--            </div> --}}
-                {{--            <div class="col-md-7"> --}}
-                {{--              <h2 class="main-color fw-bold "> خصم 25%</h2> --}}
-                {{--              <h5 class="pb-4"> وجبه كفته كبير</h5> --}}
-                {{--              <a href="#" class="btn "> --}}
-                {{--                <h4 class="fw-bold">اطلب الان</h4> --}}
-                {{--              </a> --}}
-                {{--            </div> --}}
-
-                {{--          </div> --}}
-                {{--        </div> --}}
             </div>
-
     </section>
 
     <section class="plates">
@@ -178,7 +135,7 @@
                         <div class="plate">
                             <a href="#">
                                 <figure class="plate-img m-0">
-                                    <img src="{{ asset($dish->image) }}" alt="{{ $dish->name_ar }}">
+                                    <img src="{{ asset($dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}" alt="{{ $dish->name_ar }}">
                                 </figure>
                             </a>
                             <div class="fav">

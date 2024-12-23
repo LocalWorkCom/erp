@@ -139,7 +139,7 @@
                                     </div>
 
                                     <!-- Has Kids Area -->
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                         <label class="form-label">@lang('branch.HasKidsArea')</label>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="has_kids_area" value="1" checked>
@@ -152,7 +152,7 @@
                                     </div>
 
                                     <!-- Is Delivery -->
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                         <label class="form-label">@lang('branch.IsDelivery')</label>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="is_delivery" value="1" checked>
@@ -160,6 +160,19 @@
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="is_delivery" value="0">
+                                            <label class="form-check-label">@lang('category.no')</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Is default -->
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                                        <label class="form-label">@lang('branch.IsDefault')</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="is_default" value="1">
+                                            <label class="form-check-label">@lang('category.yes')</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="is_default" value="0" checked>
                                             <label class="form-check-label">@lang('category.no')</label>
                                         </div>
                                     </div>

@@ -28,6 +28,7 @@ class Branch extends Model
         'closing_hour',
         'has_kids_area',
         'is_delivery',
+        'is_default',
         'created_by',
         'modified_by',
         'deleted_by'

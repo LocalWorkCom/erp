@@ -22,5 +22,6 @@ return[
     'IsDelivery' => 'يوجد توصيل',
     'SelectCountry' => 'اختر دولة',
     'SelectEmployee' => 'اختر مدير',
+    'IsDefault' => 'الفرع الرئيسى',
 
 ];
