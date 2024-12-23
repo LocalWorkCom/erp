@@ -22,7 +22,8 @@ class HomeController extends Controller
     public function index()
     {
         $sliders = Slider::all();
-        $lastThreeDiscounts= DishDiscount::with(['dish', 'discount'])->get();
+        $branches = Branch::all();
+        $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
         $discounts = $lastThreeDiscounts->reverse()->take(3);
         $discounts = $discounts->reverse();
         $popularDishes = getMostDishesOrdered(5);
@@ -30,7 +31,7 @@ class HomeController extends Controller
             ->where('is_active', true)->get();
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches'])
         );
     }
 
@@ -73,7 +74,5 @@ class HomeController extends Controller
         $terms = StaticPageResource::collection(TermsAndCondition::all());
         $termsArray = $terms->toArray(request());
         return view('website.terms', compact('termsArray'));
-
     }
-
 }
