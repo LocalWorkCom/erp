@@ -21,40 +21,55 @@
 
 @push('scripts')
     <script>
-        < script >
-            document.addEventListener('DOMContentLoaded', function() {
-                // Handle "Access Location" button click
-                document.getElementById('accessLocationBtn').addEventListener('click', function() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                            // Get the user's latitude and longitude
-                            var latitude = position.coords.latitude;
-                            var longitude = position.coords.longitude;
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle "Access Location" button click
+        document.getElementById('accessLocationBtn').addEventListener('click', function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    // Get the user's latitude and longitude
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
 
-                            // Optionally, send these coordinates to the server or do something with them
-                            console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
+                    // Optionally, send these coordinates to the server or do something with them
+                    console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
 
-                            // Close the modal after accessing location
-                            $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
-                        }, function(error) {
-                            alert('Geolocation access denied or failed.');
-                        });
-                    } else {
-                        alert('Geolocation is not supported by this browser.');
+                    // Close the modal after accessing location
+                    $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
+                }, function (error) {
+                    // Log the error code and message for debugging
+                    console.error('Geolocation error:', error);
+
+                    // Provide user-friendly error message
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            alert('You have denied the location request. Please enable location permissions.');
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            alert('Location information is unavailable.');
+                            break;
+                        case error.TIMEOUT:
+                            alert('The request to get your location timed out.');
+                            break;
+                        default:
+                            alert('An unknown error occurred while accessing your location.');
+                            break;
                     }
                 });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        });
 
-                // Handle "On Map" button click (this will open a map)
-                document.getElementById('onMapBtn').addEventListener('click', function() {
-                    // You can open a map in a new window or a modal. Here, I use a new window with Google Maps.
-                    var mapUrl = 'https://www.google.com/maps?q=0,0&z=2'; // Default zoom to world view
-                    window.open(mapUrl, '_blank'); // Open map in a new tab
+        // Handle "On Map" button click (this will open a map)
+        document.getElementById('onMapBtn').addEventListener('click', function () {
+            // You can open a map in a new window or a modal. Here, I use a new window with Google Maps.
+            var mapUrl = 'https://www.google.com/maps?q=0,0&z=2'; // Default zoom to world view
+            window.open(mapUrl, '_blank'); // Open map in a new tab
 
-                    // Close the modal after opening the map
-                    $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
-                });
-            });
-    </script>
+            // Close the modal after opening the map
+            $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
+        });
+    });
 
     </script>
 @endpush
