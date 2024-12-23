@@ -23,54 +23,54 @@ class AuthController extends Controller
         App::setLocale($lang);
 
         $lang = $request->header('lang', 'ar'); // Default to Arabic if no 'lang' header is provided
-    App::setLocale($lang);
+        App::setLocale($lang);
 
-    // Validation rules
-    $validator = Validator::make($request->all(), [
-        "name" => "required|string",
-        "email" => "required|email|unique:users",
-        'country_code' => 'required|string',
-        "password" => "required|min:6",
-        'phone' => [
-            'required',
-            'string',
-            'regex:/^[0-9]+$/', // Ensures only numbers are allowed
-            Rule::unique('users')->where(function ($query) use ($request) {
-                return $query->where('country_code', $request->country_code);
-            }),
-        ],
-        "date_of_birth" => "nullable|date",
-    ], [
-        // Custom messages for validation errors (localized)
-        'name.required' => __('validation.required', ['attribute' => __('auth.nameweb')]),
-        'email.required' => __('validation.required', ['attribute' => __('auth.emailweb')]),
-        'email.unique' => __('validation.unique', ['attribute' => __('auth.emailweb')]),
-        'country_code.required' => __('validation.required', ['attribute' => __('auth.country_code')]),
-        'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
-        'password.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
-        'phone.required' => __('validation.required', ['attribute' => __('auth.phoneplace')]),
-        'phone.regex' => __('validation.regex', ['attribute' => __('auth.phoneplace')]),
-        'phone.unique' => __('validation.unique', ['attribute' => __('auth.phoneplace')]),
-        'date_of_birth.date' => __('validation.date', ['attribute' => __('auth.date')]),
-    ]);
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string",
+            "email" => "required|email|unique:users",
+            'country_code' => 'required|string',
+            "password" => "required|min:6",
+            'phone' => [
+                'required',
+                'string',
+                'regex:/^[0-9]+$/', // Ensures only numbers are allowed
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('country_code', $request->country_code);
+                }),
+            ],
+            "date_of_birth" => "nullable|date",
+        ], [
+            // Custom messages for validation errors (localized)
+            'name.required' => __('validation.required', ['attribute' => __('auth.nameweb')]),
+            'email.required' => __('validation.required', ['attribute' => __('auth.emailweb')]),
+            'email.unique' => __('validation.unique', ['attribute' => __('auth.emailweb')]),
+            'country_code.required' => __('validation.required', ['attribute' => __('auth.country_code')]),
+            'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'password.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
+            'phone.required' => __('validation.required', ['attribute' => __('auth.phoneplace')]),
+            'phone.regex' => __('validation.regex', ['attribute' => __('auth.phoneplace')]),
+            'phone.unique' => __('validation.unique', ['attribute' => __('auth.phoneplace')]),
+            'date_of_birth.date' => __('validation.date', ['attribute' => __('auth.date')]),
+        ]);
 
-    // If validation fails, return a localized error response
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 'error',
-            'errors' => $validator->errors()
-        ], 422);
-    }
+        // If validation fails, return a localized error response
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
-    // Check if the country code is valid
-    $country = Country::where('phone_code', $request->country_code)->first();
+        // Check if the country code is valid
+        $country = Country::where('phone_code', $request->country_code)->first();
 
-    if (!$country) {
-        return response()->json([
-            'status' => 'error',
-            'errors' => ['country_code' => [__('validation.phone_code',['attribute' => __('auth.phone_code')])]], // Localized message
-        ], 422);
-    }
+        if (!$country) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['country_code' => [__('validation.phone_code', ['attribute' => __('auth.phone_code')])]], // Localized message
+            ], 422);
+        }
 
 
         $user = new User();
@@ -142,5 +142,58 @@ class AuthController extends Controller
 
         // Redirect to the login page or another appropriate route
         return redirect()->route('home');
+    }
+
+    public function checkPhone(Request $request)
+    {
+        $request->validate([
+            'phoneforget' => 'required|regex:/^01[0-9]{9}$/', // Example validation for Egyptian phone numbers
+        ]);
+
+        // Simulate checking phone number
+        $phoneExists = User::where('phone', $request->phoneforget)->exists();
+
+        if ($phoneExists) {
+            return response()->json(['status' => 'success', 'phone' => $request->phoneforget]);
+        }
+
+        return response()->json([
+            'errors' => [
+                'phoneforget' => [__('auth.phone_not_found')]
+            ],
+            'phone' => $request->phoneforget
+        ], 422);
+    }
+    public function resetPassword(Request $request)
+    {
+       // dd($request->all());
+        // Validate input
+        $request->validate([
+            'phone' => 'required', // Validate phone number
+            'password' => 'required|min:6|confirmed', // Password confirmation
+        ]);
+
+        // Find user by phone number
+        $user = User::where('phone', $request->phone)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('auth.phone_not_found'),
+            ], 404);
+        }
+
+        // Update the user's password
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+        Auth::guard('client')->login($user);
+        Auth::setUser($user);
+
+        $request->session()->regenerate();
+        return response()->json([
+            'status' => 'success',
+            'message' => __('auth.password_reset_success'),
+        ]);
     }
 }

@@ -25,7 +25,9 @@
                     <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
                         id="phoneInput" placeholder="@lang('auth.phoneplace')" value="{{ old('phone') }}" required>
                     <div id="phoneError" class="error-message text-danger"></div>
-                    <input type="text" name="country_code" id="countryCodeInput" class="form-control @error('country_code') is-invalid @enderror"  value="{{ old('country_code') }}">
+                    <input type="text" name="country_code" id="countryCodeInput"
+                        class="form-control @error('country_code') is-invalid @enderror"
+                        value="{{ old('country_code') }}">
                     <div id="country_codeError" class="error-message text-danger"></div>
                     <!-- Country Code Dropdown -->
                     <div class="input-group mb-3">
@@ -81,7 +83,7 @@
 
                 </div>
 
-                <button type="submit" class="btn py-3 mb-2 w-100">@lang('auth.newuser')</button>
+                <button type="submit" class="btn py-3 mb-2 w-100">@lang('auth.signup')</button>
 
                 <p class="text-center">
                     <small>
@@ -115,69 +117,69 @@
         </div>
     </form>
 </div>
-<script>
-    document.querySelectorAll('.country-item').forEach(item => {
-        item.addEventListener('click', function(event) {
+@section('scripts')
+    <script>
+        document.querySelectorAll('.country-item').forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Update selected country code and flag
+                const selectedCode = this.getAttribute('data-country-code');
+                const selectedFlag = this.getAttribute('data-country-flag');
+                document.getElementById('selected-country-code').textContent = selectedCode;
+                document.getElementById('selected-flag').src = selectedFlag;
+
+                // Update hidden input value
+                document.getElementById('countryCodeInput').value = selectedCode;
+            });
+        });
+
+        document.getElementById('Register').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Update selected country code and flag
-            const selectedCode = this.getAttribute('data-country-code');
-            const selectedFlag = this.getAttribute('data-country-flag');
-            document.getElementById('selected-country-code').textContent = selectedCode;
-            document.getElementById('selected-flag').src = selectedFlag;
+            const form = event.target;
+            const formData = new FormData(form);
 
-            // Update hidden input value
-            document.getElementById('countryCodeInput').value = selectedCode;
-        });
-    });
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
 
-    document.getElementById('Register').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const form = event.target;
-        const formData = new FormData(form);
-
-        // Clear previous errors
-        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-        form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-
-        fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json',
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => Promise.reject(data));
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    alert(data.message);
-                    window.location.href = "{{ route('home') }}"; // Redirect to dashboard
-                }
-            })
-            .catch(error => {
-                if (error.errors) {
-                    for (const [field, messages] of Object.entries(error.errors)) {
-                        const errorElement = document.getElementById(`${field}Error`);
-                        const inputElement = document.querySelector(`[name="${field}"]`);
-
-                        if (errorElement) {
-                            errorElement.textContent = messages.join(', ');
-                        }
-
-                        if (inputElement) {
-                            inputElement.classList.add('is-invalid');
-                        }
+            fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => Promise.reject(data));
                     }
-                } else {
-                    console.error('Unexpected error:', error);
-                }
-            });
-    });
-</script>
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = "{{ route('home') }}";
+                    }
+                })
+                .catch(error => {
+                    if (error.errors) {
+                        for (const [field, messages] of Object.entries(error.errors)) {
+                            const errorElement = document.getElementById(`${field}Error`);
+                            const inputElement = document.querySelector(`[name="${field}"]`);
+
+                            if (errorElement) {
+                                errorElement.textContent = messages.join(', ');
+                            }
+
+                            if (inputElement) {
+                                inputElement.classList.add('is-invalid');
+                            }
+                        }
+                    } else {
+                    }
+                });
+        });
+    </script>
+@endsection

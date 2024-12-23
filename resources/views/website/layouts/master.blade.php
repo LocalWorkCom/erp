@@ -63,8 +63,6 @@
                 @include('website.auth.login')
                 @include('website.auth.register')
                 @include('website.auth.forgetpass')
-
-
             </div>
         </div>
     </div>

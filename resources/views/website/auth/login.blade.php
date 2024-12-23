@@ -102,61 +102,45 @@
     </form>
 </div>
 @section('scripts')
-<script>
-$(document).ready(function() {
-    //debugger;
-    $('#loginForm').on('submit', function(event) {
-        event.preventDefault();
+    <script>
+        $(document).ready(function() {
+            //debugger;
+            $('#loginForm').on('submit', function(event) {
+                event.preventDefault();
+                // Get form data
+                var formData = $(this).serialize();
+                // Send the AJAX request
+                $.ajax({
+                    url: '{{ route('website.login') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            setTimeout(function() {
+                                window.location.href =
+                                    '/';
+                            }, 300);
+                        }
+                    },
+                    error: function(response) {
+                        var errors = response.responseJSON.errors;
 
-        // Get form data
-        var formData = $(this).serialize();
-       // debugger;
-        // Send the AJAX request
-        $.ajax({
-            url: '{{ route('website.login') }}',
-            method: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.status === 'success') {
-                    // Show success message inside the modal
-                    $('#loginBody').html(`
-                        <div class="text-center">
-                            <h3>Login successful!</h3>
-                            <p>Welcome, ${response.data.user.name}!</p>
-                            <button class="btn btn-primary" onclick="window.location.href='/home'">Go to Dashboard</button>
-                        </div>
-                    `);
+                        if (response.status === 400 || response.status === 403) {
+                            // Handle validation errors
+                            var errorMessages = '';
+                            $.each(errors, function(key, value) {
+                                errorMessages += value.join("\n") + "\n";
+                            });
 
-                    // Optionally, set a delay before redirecting to home
-                    setTimeout(function() {
-                        window.location.href = '/';  // Adjust the redirect path as needed
-                    }, 2000);  // Redirect after 2 seconds (optional)
-                }
-            },
-            error: function(response) {
-                var errors = response.responseJSON.errors;
-
-                if (response.status === 400 || response.status === 403) {
-                    // Handle validation errors
-                    var errorMessages = '';
-                    $.each(errors, function(key, value) {
-                        errorMessages += value.join("\n") + "\n";
-                    });
-
-                    // Display the error messages inside the modal
-                    $('#loginBody').prepend(`
+                            $('#loginBody').prepend(`
                         <div class="alert alert-danger">
                             ${errorMessages}
                         </div>
                     `);
-                } else {
-                    alert('An unexpected error occurred!');
-                }
-            }
+                        } else {}
+                    }
+                });
+            });
         });
-    });
-});
-
-
-</script>
+    </script>
 @endsection
