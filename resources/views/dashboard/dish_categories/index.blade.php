@@ -42,7 +42,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             @endif
-                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            <table class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>@lang('dishes.ID')</th>
