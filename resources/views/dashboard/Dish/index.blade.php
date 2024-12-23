@@ -57,9 +57,9 @@
                                         <th>@lang('dishes.NameEnglish')</th>
                                         <th>@lang('dishes.Category')</th>
                                         <th>@lang('dishes.Cuisine')</th>
-                                        <!-- <th>@lang('dishes.Price')</th> -->
                                         <th>@lang('dishes.IsActive')</th>
                                         <th>@lang('dishes.HasSizes')</th>
+                                        <th>@lang('dishes.HasAddon')</th>
                                         <th>@lang('dishes.Actions')</th>
                                     </tr>
                                 </thead>
@@ -78,7 +78,6 @@
                                             <td>{{ $dish->name_en }}</td>
                                             <td>{{ $dish->category->name_en ?? __('dishes.NoCategory') }}</td>
                                             <td>{{ $dish->cuisine->name_en ?? __('dishes.NoCuisine') }}</td>
-                                            <!-- <td>{{ $dish->price }}</td> -->
                                             <td>
                                                 @if ($dish->is_active)
                                                     <span class="badge bg-success">@lang('dishes.Active')</span>
@@ -94,6 +93,13 @@
                                                 @endif
                                             </td>
                                             <td>
+                                                @if ($dish->has_addon)
+                                                    <span class="badge bg-info">@lang('dishes.HasAddon')</span>
+                                                @else
+                                                    <span class="badge bg-secondary">@lang('dishes.Noaddon')</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 <!-- Show -->
                                                 <a href="{{ route('dashboard.dishes.show', $dish->id) }}" class="btn btn-info-light">
                                                     @lang('dishes.View') <i class="ri-eye-line"></i>
@@ -103,57 +109,47 @@
                                                     @lang('dishes.Edit') <i class="ri-edit-line"></i>
                                                 </a>
                                                 <!-- Delete -->
-                                                <form action="{{ route('dashboard.dishes.destroy', $dish->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('dishes.DeleteConfirm')');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('dishes.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
-                                                <!-- Restore -->
-                                                @if ($dish->trashed())
-                                                    <form action="{{ route('dashboard.dishes.restore', $dish->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-success-light">
-                                                            @lang('dishes.Restore') <i class="ri-refresh-line"></i>
-                                                        </button>
-                                                    </form>
-                                                @endif
+                                                <button type="button" class="btn btn-danger-light delete-dish-btn" data-id="{{ $dish->id }}">
+                                                    @lang('dishes.Delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <form id="delete-dish-form" action="" method="POST" style="display:none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End:: row -->
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <!-- JQUERY CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
-
-    <!-- DATA-TABLES CDN -->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- INTERNAL DATADABLES JS -->
-    @vite('resources/assets/js/datatables.js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).on('click', '.delete-dish-btn', function () {
+            const dishId = $(this).data('id');
+            Swal.fire({
+                title: "@lang('dishes.DeleteConfirmTitle')",
+                text: "@lang('dishes.DeleteConfirmMessage')",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "@lang('dishes.ConfirmDelete')",
+                cancelButtonText: "@lang('dishes.Cancel')",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = $('#delete-dish-form');
+                    form.attr('action', `/dashboard/dishes/${dishId}`);
+                    form.submit();
+                }
+            });
+        });
+    </script>
 @endsection
-
-<script>
-    function confirmDelete() {
-        return confirm("@lang('dishes.DeleteConfirm')");
-    }
-</script>
