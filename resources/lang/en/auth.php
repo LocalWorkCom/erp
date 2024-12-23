@@ -22,7 +22,7 @@ return [
     'google' => 'google',
     'facebook' => 'facebook',
     'loginsocial' => 'Login using social media',
-    'passplace' => 'Enter new password',
+    'passplace' => 'Enter password',
     'forgetpass' => 'Forget Password',
     'login' => 'Login',
     'phoneplace' => 'Enter your phone number, for example 01029063398',
