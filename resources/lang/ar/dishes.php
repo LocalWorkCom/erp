@@ -74,4 +74,7 @@ return [
     'DeleteConfirmMessage' => 'لا يمكن التراجع عن هذا الإجراء. هل تريد حذف هذه الوجبة؟',
     'ConfirmDelete' => 'نعم، احذفها!',
     'Cancel' => 'إلغاء',
+    'SelectBranches' => 'اختر الفروع',
+    'AllBranches' => 'جميع الفروع',
+    
 ];

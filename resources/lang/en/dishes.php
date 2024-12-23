@@ -74,6 +74,8 @@ return [
     'DeleteConfirmMessage' => 'This action cannot be undone. Do you want to delete this dish?',
     'ConfirmDelete' => 'Yes, delete it!',
     'Cancel' => 'Cancel',
+    'SelectBranches' => 'Select Branches',
+    'AllBranches' => 'All Branches',
     
 ];
 
