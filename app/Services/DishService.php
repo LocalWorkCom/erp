@@ -28,7 +28,9 @@ class DishService
             'cuisine',
             'sizes.details.recipe',
             'details.recipe',
-            'addons.addons',
+           
+         'dishAddonsDetails.category', 
+        'dishAddonsDetails.addon',   
         ])->findOrFail($id);
 
         Log::info('Dish Retrieved', ['dish' => $dish]);

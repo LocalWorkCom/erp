@@ -37,6 +37,10 @@ class DishAddon extends Model
     {
         return $this->belongsTo(Recipe::class, 'addon_id');
     }
+    public function addon()
+{
+    return $this->belongsTo(Recipe::class, 'addon_id');
+}
     public function category()
     {
         return $this->belongsTo(AddonCategory::class, 'addon_category_id');
