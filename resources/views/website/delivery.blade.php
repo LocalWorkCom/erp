@@ -15,7 +15,8 @@
                               data-bs-target="#pills-delivery" type="button" role="tab"
                               aria-controls="pills-delivery" aria-selected="true">
                               <div class="icon">
-                                  <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/delivery-icon.png') }}" alt="" />
+                                  <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/delivery-icon.png') }}"
+                                      alt="" />
                               </div>
                               <h6 class="me-2"> @lang('header.delivery')</h6>
                           </button>
@@ -25,7 +26,8 @@
                               data-bs-target="#pills-takeaway" type="button" role="tab"
                               aria-controls="pills-takeaway" aria-selected="false">
                               <div class="icon">
-                                  <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/takeaway-icon.png') }}" alt="" />
+                                  <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/takeaway-icon.png') }}"
+                                      alt="" />
                               </div>
                               <h6 class="me-2"> @lang('header.recive')</h6>
                           </button>
@@ -42,8 +44,7 @@
                                   <span class="search-icon">
                                       <i class="fas fa-search"></i>
                                   </span>
-                                  <input type="text" class="form-control"
-                                      placeholder=" @lang('header.search') " />
+                                  <input type="text" class="form-control" placeholder=" @lang('header.search') " />
                               </div>
                               <div class="map position-relative my-3">
                                   <iframe
@@ -51,10 +52,13 @@
                                       width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                                       referrerpolicy="no-referrer-when-downgrade">
                                   </iframe>
-                                  <div class="notes">
-                                      <small>@lang('header.saveaddress')</small>
-                                      <button class="btn">@lang('header.login')</button>
-                                  </div>
+                                  @guest('client')
+                                      <div class="notes">
+                                          <small>@lang('header.saveaddress')</small>
+                                          <button class="btn" data-bs-toggle="modal"
+                                              data-bs-target="#loginModal">@lang('header.login')</button>
+                                      </div>
+                                  @endguest
                               </div>
                               <div class="tab-footer justify-content-between d-flex align-items-center">
                                   <div>

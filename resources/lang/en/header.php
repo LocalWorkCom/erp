@@ -33,7 +33,8 @@ return [
 'deliverylocation' => 'Delivery location',
 'edit' => 'Edit',
 'confirmeaddress' => 'Confirm address',
-
+'privacy'=>'Privacy',
+'policy'=>'Policy',
 
 
 ]
