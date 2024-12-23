@@ -66,19 +66,19 @@
             </div>
         </div>
     </div>
+    <!-- end login modal -->
+
     <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <!-- Search Form -->
                     <form class="d-flex mb-1 position-relative search-form">
                         <input id="branchSearch" class="form-control search-input" type="search"
                             placeholder="ابحث عن الفرع المناسب لك" aria-label="Search">
                         <i class="fas fa-search search-icon"></i>
                     </form>
 
-                    <!-- Branch Locations -->
                     <div id="branchList">
                         @foreach ($branches as $branch)
                             @php
@@ -108,8 +108,6 @@
                             </div>
                         @endforeach
                     </div>
-
-                    <!-- Use My Location Button -->
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-no-modal"> استخدم موقعى </button>
                     </div>
@@ -117,7 +115,7 @@
             </div>
         </div>
     </div>
-    <!-- end login modal -->
+
     @include('website.delivery')
     @include('website.location')
 
