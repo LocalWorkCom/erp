@@ -182,7 +182,7 @@ return [
     'EnterOffer' => 'يجب اختيار عرض',
     'EnterArabicName' => 'يجب ادخال الاسم بالعربي',
     'EnterEnglishName' => 'يجب ادخال الاسم بالانجليزي',
-    'EnterHexaCode' => 'يجب ادخال المود بالهكسا ',
+    'EnterHexaCode' => 'يجب ادخال الكود بالهكسا ',
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterArabicQue' => 'يجب ادخال السؤال بالعربي',

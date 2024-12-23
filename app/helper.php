@@ -472,13 +472,12 @@ function RespondWithBadRequestDataExist()
 
 function CheckExistColumnValue($table, $column, $value)
 {
-
-    $exist = DB::table($table)->where($column, $value)->exists();
-    if ($exist) {
-        return true;
-    }
-    return false;
+    return DB::table($table)
+        ->where($column, $value)
+        ->whereNull('deleted_at') // Ensures only active records are checked
+        ->exists();
 }
+
 
 function CheckCouponValid($id, $amount)
 {
