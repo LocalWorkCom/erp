@@ -90,7 +90,7 @@ class HomeController extends Controller
     public function addFavorite(Request $request)
     {
         if (!Auth::guard('client')->check()) {
-            return redirect()->back()->with('error', 'You need to log in to favorite a dish.');
+            return redirect()->back()->with('error', 'يجب تسجيل الدخول لإضافة الطبق إلى المفضلة.');
         }
 
         $user = Auth::guard('client')->user();
@@ -108,7 +108,7 @@ class HomeController extends Controller
                 ->where('dish_id', $dishId)
                 ->delete();
 
-            return redirect()->back()->with('success', 'Dish removed from favorites.');
+            return redirect()->back()->with('success', 'تم إزالة الطبق من المفضلة.');
         } else {
             // Add to favorites
             DB::table('user_favorite_dishes')->insert([
@@ -118,7 +118,7 @@ class HomeController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return redirect()->back()->with('success', 'Dish added to favorites.');
+            return redirect()->back()->with('success', 'تم إضافة الطبق إلى المفضلة.');
         }
     }
 }
