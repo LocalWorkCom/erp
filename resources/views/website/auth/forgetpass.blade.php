@@ -126,7 +126,7 @@
 
                 <!-- Error message -->
                 <div id="passwordError" class="text-danger d-none">
-                    @lang('auth.password_mismatch')
+                    @lang('auth.password_mismatch') <!-- Ensure this key exists in your language files -->
                 </div>
                 <input type="hidden" name="phone" id="hidden-phone">
 
@@ -143,117 +143,132 @@
     </form>
 </div>
 
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            // Handle the "forget password" form submission
-            $('#forgetBody form').on('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        // Handle the "forget password" form submission
+        $('#forgetBody form').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
 
-                // Get form data
-                var formData = $(this).serialize();
+            // Get form data
+            var formData = $(this).serialize();
 
-                // Clear any previous error messages
-                $('#phoneError').hide().text('');
+            // Clear any previous error messages
+            $('#phoneError').hide().text('');
 
-                // Send the AJAX request for phone validation
-                $.ajax({
-                    url: '{{ route('check.phone') }}',
-                    method: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            // Show resetBody and hide forgetBody
-                            $('#forgetBody').addClass('d-none');
-                            $('#resetBody').removeClass('d-none');
-                            // Append the phone number to the hidden input in the reset form
-                            $('#hidden-phone').prop('value', response.phone);
-                        }
-                    },
-                    error: function(response) {
-                        var errors = response.responseJSON.errors;
-
-                        if (response.status === 400 || response.status === 422) {
-                            // Handle validation errors
-                            var errorMessages = '';
-                            $.each(errors, function(key, value) {
-                                errorMessages += value.join("\n") + "\n";
-                            });
-
-                            // Display the error messages
-                            $('#phoneforgetError').show().text(errorMessages);
-                        } else {}
+            // Send the AJAX request for phone validation
+            $.ajax({
+                url: '{{ route('check.phone') }}',
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Show resetBody and hide forgetBody
+                        $('#forgetBody').addClass('d-none');
+                        $('#resetBody').removeClass('d-none');
+                        // Append the phone number to the hidden input in the reset form
+                        $('#hidden-phone').prop('value', response.phone);
                     }
-                });
-            });
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
 
-            // Handle reset password form submission
-            $('#resetForm').on('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
+                    if (response.status === 400 || response.status === 422) {
+                        // Handle validation errors
+                        var errorMessages = '';
+                        $.each(errors, function(key, value) {
+                            errorMessages += value.join("\n") + "\n";
+                        });
 
-                // Get the password and confirm password values
-                var password = $('#passwordInput').val();
-                var confirmPassword = $('#passwordInput2').val();
-
-                // Check if passwords match
-                if (password !== confirmPassword) {
-                    // If passwords don't match, display the error message and stop form submission
-                    $('#passwordError').removeClass('d-none'); // Show the error message
+                        // Display the error messages
+                        $('#phoneforgetError').show().text(errorMessages);
+                    } else {
+                        alert('An unexpected error occurred!');
+                    }
                 }
+            });
+        });
 
-                // If passwords match, hide the error message (in case it was previously shown)
-                $('#passwordError').addClass('d-none'); // Hide the error message
+        // Handle reset password form submission
+        $('#resetForm').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
 
-                // Serialize form data
-                var formData = $(this).serialize();
+            // Get the password and confirm password values
+            var password = $('#passwordInput').val();
+            var confirmPassword = $('#passwordInput2').val();
 
-                // Clear previous error messages
-                $('.alert-danger').remove();
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                // If passwords don't match, display the error message and stop form submission
+                $('#passwordError').removeClass('d-none'); // Show the error message
+            }
 
-                // Send AJAX request to reset the password
-                $.ajax({
-                    url: '{{ route('reset.password') }}',
-                    method: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            setTimeout(function() {
-                                window.location.href = '{{ route('home') }}';
-                            }, 300);
-                        }
-                    },
-                    error: function(response) {
-                        if (response.status === 422) {
-                            // Display validation errors
-                            var errors = response.responseJSON.errors;
-                            var errorMessages = '';
+            // If passwords match, hide the error message (in case it was previously shown)
+            $('#passwordError').addClass('d-none'); // Hide the error message
 
-                            $.each(errors, function(key, value) {
-                                errorMessages += `<p>${value[0]}</p>`;
-                            });
-                            $('#passwordError').removeClass('d-none');
+            // Serialize form data
+            var formData = $(this).serialize();
 
-                            // Append errors to the form
-                            $('#resetForm').prepend(`
+            // Clear previous error messages
+            $('.alert-danger').remove();
+
+            // Send AJAX request to reset the password
+            $.ajax({
+                url: '{{ route('reset.password') }}',
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Show success message
+                        $('#resetBody').html(`
+                        <div class="text-center">
+                            <h3>${response.message}</h3>
+                            <button class="btn btn-primary" onclick="window.location.href='/login'">
+                                @lang('auth.login')
+                            </button>
+                        </div>
+                    `);
+                        setTimeout(function() {
+                            window.location.href = '{{ route('home') }}';
+                        }, 2000); // Redirect after 2 seconds
+                    }
+                },
+                error: function(response) {
+                    if (response.status === 422) {
+                        // Display validation errors
+                        var errors = response.responseJSON.errors;
+                        var errorMessages = '';
+
+                        $.each(errors, function(key, value) {
+                            errorMessages += `<p>${value[0]}</p>`;
+                        });
+                        $('#passwordError').removeClass('d-none'); // Show the error message
+
+                        // Append errors to the form
+                        $('#resetForm').prepend(`
                         <div class="alert alert-danger">${errorMessages}</div>
                     `);
-                        } else {}
+                    } else {
+                        alert('An unexpected error occurred!');
                     }
-                });
+                }
             });
         });
+    });
 
 
-        $('#togglePassword, #togglePassword2').on('click', function() {
-            var input = $(this).siblings('input');
-            var icon = $(this).find('i');
-            if (input.attr('type') === 'password') {
-                input.attr('type', 'text');
-                icon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                input.attr('type', 'password');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
-    </script>
-@endsection
+    $('#togglePassword, #togglePassword2').on('click', function() {
+        var input = $(this).siblings('input');
+        var icon = $(this).find('i');
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+</script>
+@endpush
+

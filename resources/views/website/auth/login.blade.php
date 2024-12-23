@@ -101,7 +101,7 @@
         </div>
     </form>
 </div>
-@section('scripts')
+@push('scripts')
     <script>
         $(document).ready(function() {
             //debugger;
@@ -143,4 +143,4 @@
             });
         });
     </script>
-@endsection
+@endpush
