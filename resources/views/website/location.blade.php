@@ -29,22 +29,19 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Handle "Access Location" button click
             document.getElementById('accessLocationBtn').addEventListener('click', function() {
+                $('#modal').modal('hide');
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
                         // Get the user's latitude and longitude
                         var latitude = position.coords.latitude;
                         var longitude = position.coords.longitude;
-
                         // Save latitude and longitude in cookies
                         setCookie('latitude', latitude,
                         7); // 7 is the number of days the cookie will last
                         setCookie('longitude', longitude, 7);
-
                         // Optionally, you can log or do something with the coordinates
                         console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
 
-                        // Close the modal after accessing location
-                        $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
                     }, function(error) {
                         // Log the error code and message for debugging
                         console.error('Geolocation error:', error);
@@ -71,14 +68,10 @@
                 }
             });
 
-            // Handle "On Map" button click (this will open a map)
             document.getElementById('onMapBtn').addEventListener('click', function() {
-                // You can open a map in a new window or a modal. Here, I use a new window with Google Maps.
-                var mapUrl = 'https://www.google.com/maps?q=0,0&z=2'; // Default zoom to world view
-                window.open(mapUrl, '_blank'); // Open map in a new tab
-
-                // Close the modal after opening the map
-                $('#modal').modal('hide'); // This requires jQuery and Bootstrap modal
+                var mapUrl = 'https://www.google.com/maps?q=0,0&z=2';
+                window.open(mapUrl, '_blank');
+                $('#modal').modal('hide');
             });
 
             // Function to use the coordinates from cookies in another function
