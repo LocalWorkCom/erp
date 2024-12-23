@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'Menus' => 'Menus',
+    'MenuAddon' => 'Branch Menu Addons',
     'Category' => 'Dish Category',
-    'ShowCategory' => 'Show Dish Category',
-    'EditCategory' => 'Edit Dish Category',
+    'ShowAddon' => 'Show Dish Addon',
+    'EditAddon' => 'Edit Dish Addon',
     'AddCategory' => 'Add Dish Category',
     'ShowPartition' => 'Show Partition',
     'EditPartition' => 'Edit Partition',
@@ -33,11 +33,12 @@ return [
     'ChooseBranch' => 'Choose Branch',
     'ChooseFloor' => 'Choose Floor',
     'ChoosePartition' => 'Choose Partition',
-    'DishesCategory' => 'Dishes Category',
+    'AddonCategory' => 'Addons Category',
     'Category' => 'Category',
     'Activation' => 'Activation',
     'Active' => 'Active',
     'NotActive' => 'Not Active',
     'Price' => 'Price',
     'EditBranchMenu' => 'Edit Branch Menu',
+    'DishAddon' => 'Dish Addon',
 ];

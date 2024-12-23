@@ -78,8 +78,9 @@ return [
     'branchMenus' => ' Branch Menus ',
     'branchMenuCategory' => 'Branch Menu Category',
     'branchMenu' => 'Branch Menu',
-    'branchMenuAddon' => 'Branch Menu Addon',
+    'branchMenuAddon' => 'Branch Menu Addons',
     'branchMenuSize' => 'Branch Menu Size',
+    'branchMenuCategoryAddon' => 'branch Menu Category Addons',
     'Addons'=>'Addons',
 
 ];

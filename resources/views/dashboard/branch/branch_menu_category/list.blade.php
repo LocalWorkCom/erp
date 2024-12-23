@@ -77,8 +77,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="is_active" id="edit-not-active" value="2">
-                                                            <label class="form-check-label" for="not-active">
+                                                            <input class="form-check-input" type="radio" name="is_active" id="edit-not-active" value="0">                                                            <label class="form-check-label" for="not-active">
                                                                 @lang('branch_menu_category.NotActive')
                                                             </label>
                                                         </div>

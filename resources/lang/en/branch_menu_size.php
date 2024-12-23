@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'Menus' => 'Menus',
+    'DishSizes' => 'Dish Sizes',
+    'DishSize' => 'Dish Size',
     'Category' => 'Dish Category',
     'ShowCategory' => 'Show Dish Category',
-    'EditCategory' => 'Edit Dish Category',
+    'EditSize' => 'Edit Dish Size',
     'AddCategory' => 'Add Dish Category',
     'ShowPartition' => 'Show Partition',
     'EditPartition' => 'Edit Partition',

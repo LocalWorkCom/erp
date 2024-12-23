@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'Menus' => 'الاطباق',
+    'Categories' => 'تصنيفات اضافات الاطباق',
+    'Tables' => 'الطاولات',
+    'Partitions' => 'مناطق الادوار',
+    'Partition' => 'منطقة تصنيف الاطباق',
     'Category' => 'تصنيف الاطباق',
     'ShowCategory' => 'عرض تصنيف الاطباق',
     'EditCategory' => 'تعديل تصنيف الاطباق',
@@ -37,7 +40,4 @@ return [
     'Activation' => 'التفعيل',
     'Active' => 'مفعل',
     'NotActive' => 'غير مفعل',
-    'Price' => 'السعر',
-    'EditBranchMenu' => 'تعديل طبق الفرع',
-
 ];

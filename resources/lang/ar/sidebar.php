@@ -80,6 +80,7 @@ return[
     'branchMenu' => 'قائمة الاطباق للفروع',
     'branchMenuAddon' => 'اضافات الاطباق للفروع',
     'branchMenuSize' => 'احجام الاطباق للفروع',
+    'branchMenuCategoryAddon' => 'تصنيف اضافات الاطباق للفروع',
     'Addons'=>'الاضافات',
 
 ];

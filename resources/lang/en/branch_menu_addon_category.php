@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'Menus' => 'Menus',
+    'Categories' => 'Addons Category Dishes',
+    'Tables' => 'Tables',
+    'Partitions' => 'Partitions',
+    'Partition' => 'Partition',
     'Category' => 'Dish Category',
     'ShowCategory' => 'Show Dish Category',
     'EditCategory' => 'Edit Dish Category',
@@ -38,6 +41,4 @@ return [
     'Activation' => 'Activation',
     'Active' => 'Active',
     'NotActive' => 'Not Active',
-    'Price' => 'Price',
-    'EditBranchMenu' => 'Edit Branch Menu',
 ];

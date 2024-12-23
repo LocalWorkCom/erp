@@ -549,7 +549,6 @@ return array (
   'delete faqs' => 'حذف اسئلة متكررة',
   'delete returns' => 'حذف سياسة الاسترجاع',
   'delete privacies' => 'حذف سياسة الخصوصية',
-<<<<<<< HEAD
   'view branch_menus' => 'عرض قائمة طعام الفرع',
   'create branch_menus' => 'اضف قائمة طعام الفرع',
   'update branch_menus' => 'تعديل قائمة طعام الفرع',
@@ -562,11 +561,9 @@ return array (
   'create branch_menu_sizes' => 'اضف احجام قائمة طعام الفرع',
   'update branch_menu_sizes' => 'تعديل احجام قائمة طعام الفرع',
   'delete branch_menu_sizes' => 'حذف احجام قائمة طعام الفرع',
-=======
   'view discount_dishes' => 'عرض خصم الاطباق',
   'view offerDetails' => 'تفاصيل العرض',
   'create offerDetails' => 'اضافة تفاصيل العرض',
   'update offerDetails' => 'تعديل تفاصيل العرض',
   'delete offerDetails' => 'حذف تفاصيل العرض',
->>>>>>> 11e1e3f605d59463f7d32c0d792073ea087390a6
 );

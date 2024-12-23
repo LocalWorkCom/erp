@@ -57,9 +57,9 @@ class Dish extends Model
         return app()->getLocale() === 'en' ? $this->name_en : $this->name_ar;
     }
 
-    public function getAddressSiteAttribute()
+    public function getDescriptionSiteAttribute()
     {
-        return app()->getLocale() === 'en' ? $this->address_en : $this->address_ar;
+        return app()->getLocale() === 'en' ? $this->description_en : $this->description_ar;
     }
 
     // Relationships

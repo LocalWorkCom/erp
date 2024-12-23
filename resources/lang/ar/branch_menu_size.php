@@ -1,10 +1,11 @@
 <?php
 
 return [
-    'Menus' => 'الاطباق',
+    'DishSizes' => 'احجام الاطباق',
+    'DishSize' => 'حجم الطبق',
     'Category' => 'تصنيف الاطباق',
     'ShowCategory' => 'عرض تصنيف الاطباق',
-    'EditCategory' => 'تعديل تصنيف الاطباق',
+    'EditSize' => 'تعديل حجم طبق',
     'AddCategory' => 'اضافة دور',
     'ShowPartition' => 'عرض المنطقة',
     'EditPartition' => 'تعديل المنطقة',

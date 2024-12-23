@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'Menus' => 'الاطباق',
+    'MenuAddon' => 'اضافات الاطباق للفروع',
     'Category' => 'تصنيف الاطباق',
-    'ShowCategory' => 'عرض تصنيف الاطباق',
-    'EditCategory' => 'تعديل تصنيف الاطباق',
+    'ShowAddon' => 'عرض اضافات الاطباق',
+    'EditAddon' => 'تعديل اضافات الاطباق',
     'AddCategory' => 'اضافة دور',
     'ShowPartition' => 'عرض المنطقة',
     'EditPartition' => 'تعديل المنطقة',
@@ -32,12 +32,13 @@ return [
     'Both' => 'يوجد النوعين',
     'ChooseBranch' => 'اختر الفرع',
     'ChooseFloor' => 'اختر تصنيف الاطباق',
-    'DishesCategory' => 'تصنيف الاطباق',
+    'AddonCategory' => 'تصنيف الاضافات',
     'Category' => 'تصنيف',
     'Activation' => 'التفعيل',
     'Active' => 'مفعل',
     'NotActive' => 'غير مفعل',
     'Price' => 'السعر',
     'EditBranchMenu' => 'تعديل طبق الفرع',
+    'DishAddon' => 'اضافة الطبق',
 
 ];

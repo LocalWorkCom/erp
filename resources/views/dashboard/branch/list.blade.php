@@ -97,6 +97,30 @@
                                                 <a href="{{ route('branch.categories.show.all', $branch->id) }}" class="btn btn-orange-light btn-wave">
                                                 {{ __('floor.DishesCategory') }} <i class="ri-show-line"></i>
                                                 </a>
+
+                                                <select class="form-select d-inline btn-outline-teal" style="width: auto;"
+                                                    onchange="showBranchRalates(this.value, {{ $branch->id }})">
+                                                    <option></option>
+                                                    @can('view branch_menu_categories')
+                                                    <option value="categories">@lang('branch.categories')</option>
+                                                    @endcan
+
+                                                    @can('view branch_menus')
+                                                    <option value="menus">@lang('branch.menus')</option>
+                                                    @endcan
+
+                                                    @can('view branch_menu_category_addons')
+                                                    <option value="addonsCategories">@lang('branch.addonsCategories')</option>
+                                                    @endcan
+
+                                                    @can('view branch_menu_addons')
+                                                    <option value="addons">@lang('branch.addons')</option>
+                                                    @endcan
+
+                                                    @can('view branch_menu_sizes')
+                                                    <option value="sizes">@lang('branch.sizes')</option>
+                                                    @endcan
+                                                </select>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -135,6 +159,20 @@
 @endsection
 
 <script>
+    function showBranchRalates(relates, branchId) {
+        if (relates) {
+            const routes = {
+                categories: "{{ url('dashboard/branch/categories/showAll') }}/" + branchId,
+                menus: "{{ url('dashboard/branch/menus/showAll') }}/" + branchId,
+                addonsCategories: "{{ url('dashboard/branch/menu/addon/category/showAll') }}/" + branchId,
+                addons: "{{ url('dashboard/branch/menu/addons/showAll') }}/" + branchId,
+                sizes: "{{ url('dashboard/branch/menu/sizes/showAll') }}/" + branchId
+            };
+            console.log("Redirecting to: ", routes[relates]); // Debugging output
+            window.location.href = routes[relates];
+        }
+    }
+
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
     }

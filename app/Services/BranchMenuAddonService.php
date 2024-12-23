@@ -4,13 +4,14 @@ namespace App\Services;
 
 use App\Models\Branch;
 use App\Models\BranchMenuCategory;
+use App\Models\BranchMenuAddon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class BranchMenuCategoryService
+class BranchMenuAddonService
 {
     private $lang;
     public function __construct()
@@ -22,8 +23,8 @@ class BranchMenuCategoryService
     public function index(Request $request)
     {
         try {
-            $branch_menu_categories = BranchMenuCategory::with(['branches', 'dish_categories'])->get();
-            return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
+            $branch_menu_addons = BranchMenuAddon::with(['branches', 'dishes', 'dishAddons.addons', 'branchMenuAddonCategories.addonCategories'])->get();
+            return ResponseWithSuccessData($this->lang, $branch_menu_addons, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
@@ -33,8 +34,8 @@ class BranchMenuCategoryService
     public function branch($id)
     {
         try {
-            $branch_menu_categories = BranchMenuCategory::where('branch_id', $id)->with(['branches', 'dish_categories'])->get();
-            return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
+            $branch_menu_addons = BranchMenuAddon::where('branch_id', $id)->with(['branches', 'dishes', 'dishAddons.addons', 'branchMenuAddonCategories.addonCategories'])->get();
+            return ResponseWithSuccessData($this->lang, $branch_menu_addons, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
@@ -55,8 +56,8 @@ class BranchMenuCategoryService
     public function show($id)
     {
         try {
-            $branch_menu_category = BranchMenuCategory::with(['branches', 'dish_categories'])->findOrFail($id);
-            return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
+            $branch_menu_addon = BranchMenuAddon::with(['branches', 'dishes', 'dishAddons.addons', 'branchMenuAddonCategories.addonCategories'])->findOrFail($id);
+            return ResponseWithSuccessData($this->lang, $branch_menu_addon, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branch: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
@@ -71,6 +72,7 @@ class BranchMenuCategoryService
         try {
             // Validation
             $validator = Validator::make($request->all(), [
+                'price' => 'required|numeric',
                 'is_active' => 'required|integer'
             ]);
 
@@ -78,20 +80,21 @@ class BranchMenuCategoryService
                 return RespondWithBadRequestWithData($validator->errors());
             }
 
-            $check_branch_menu_category = BranchMenuCategory::find($id);
+            $check_branch_menu_category = BranchMenuAddon::find($id);
             if (!$check_branch_menu_category) {
                 return  RespondWithBadRequestNotExist();
             }
 
             $user_id =  Auth::guard('admin')->user()->id;
-            $branch_menu_category = BranchMenuCategory::findOrFail($id);
+            $branch_menu_category = BranchMenuAddon::findOrFail($id);
+            $branch_menu_category->price = $request->price;
             $branch_menu_category->is_active = $request->is_active;
             $branch_menu_category->modified_by = $user_id;
             $branch_menu_category->save();
 
             return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
         } catch (\Exception $e) {
-            Log::error('Error updating branch menu category: ' . $e->getMessage());
+            Log::error('Error updating branch menu addon: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
@@ -104,16 +107,16 @@ class BranchMenuCategoryService
         try {
             $user_id =  Auth::guard('admin')->user()->id;
             $active = 1;
-            $branch_menu_category = BranchMenuCategory::findOrFail($id);
-            if($branch_menu_category->is_active == 1){
+            $branch_menu = BranchMenuAddon::findOrFail($id);
+            if($branch_menu->is_active == 1){
                 $active = 0;
             }
-            $branch_menu_category->is_active = $active;
-            $branch_menu_category->modified_by = $user_id;
-            $branch_menu_category->save();
-            return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
+            $branch_menu->is_active = $active;
+            $branch_menu->modified_by = $user_id;
+            $branch_menu->save();
+            return ResponseWithSuccessData($this->lang, $branch_menu, 1);
         } catch (\Exception $e) {
-            Log::error('Error deleting branch menu category: ' . $e->getMessage());
+            Log::error('Error deleting branch menu addon: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
         }
     }
