@@ -11,7 +11,8 @@
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <button class="btn white fw-bold d-flex justify-content-between">
+                            <button class="btn white fw-bold d-flex justify-content-between" data-bs-toggle="modal"
+                            data-bs-target="#deliveryModal">
                                 <span><i class="fas fa-map-marker-alt ms-2"></i>
                                     @lang('header.deliveryTo')
                                 </span>

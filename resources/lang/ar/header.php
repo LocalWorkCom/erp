@@ -24,6 +24,14 @@ return [
 'locationaccess' => 'السماح للموقع بتحديد موقعك؟ ',
 'access' => 'سماح',
 'onmap' => 'حدد على الخريطة ',
-
+'startorder' => ' ابدأ طلبك الان ',
+'delivery' => 'التوصيل',
+'recive' => 'الإستلام',
+'accesLocation' => ' تحديد موقع التوصيل',
+'search' => 'ابحث عن الموقع',
+'saveaddress' => ' تسجيل الدخول لاستخدام عناوينك المحفوظة ',
+'deliverylocation' => ' موقع التوصيل',
+'edit' => 'تعديل',
+'confirmeaddress' => 'تأكيد العنوان',
 ]
 ;
