@@ -1063,8 +1063,8 @@ footer .icon {
     color: #808080;
     display: block;
     cursor: pointer;
-    z-index: 10; 
-  }
+    z-index: 10;
+}
 
 input::placeholder {
     font-size: 13px;
@@ -1496,14 +1496,16 @@ a:hover {
     font-size: 1.2rem;
     color: #6c757d;
 }
-.search-group{
+
+.search-group {
     display: flex;
     align-items: center;
     border: 1px solid #ced4da;
     padding: 0 0.75rem;
     border-radius: 10px !important;
 }
-.search-group .form-control{
+
+.search-group .form-control {
     border: none;
 }
 
@@ -1615,15 +1617,17 @@ input::placeholder {
     width: 100%;
     bottom: 0;
 }
+
 /* searc input design  */
 .search-form {
     position: relative;
-  }
-  
-  .search-input {
-    padding-left: 40px; 
-  }
-  .search-icon {
+}
+
+.search-input {
+    padding-left: 40px;
+}
+
+.search-icon {
     position: absolute;
     top: 50%;
     left: 15px;
@@ -1632,10 +1636,38 @@ input::placeholder {
     font-size: 17px;
     pointer-events: none;
 }
-.border-red{
-border: 1px solid #fe0000;
-border-radius: 20px;
-padding: 10px;
+
+.border-red {
+    border: 1px solid #fe0000;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.flag-icon {
+    width: 20px;
+    height: 14px;
+    margin-right: 8px;
+}
+
+.bootstrap-select .dropdown-toggle:focus,
+.bootstrap-select>select.mobile-device:focus+.dropdown-toggle {
+    outline: none!important;
+}
+
+.bootstrap-select .dropdown-toggle .filter-option {
+    direction: ltr;
+}
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
+    width: auto;
+}
+.bs-searchbox .form-control{
+    padding: .375rem .75rem;
+}
+.bootstrap-select .dropdown-menu.inner {
+    direction: ltr;
+}
+.dropdown-toggle::after {
+    margin-right: .55em;
 }
 /* responsive */
 @media(max-width: 1024px) {}
