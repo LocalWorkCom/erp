@@ -5,30 +5,30 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Country;
-use App\Services\BranchMenuCategoryService;
+use App\Services\BranchMenuService;
 use Illuminate\Http\Request;
 
 class BranchMenuController extends Controller
 {
-    protected $branchMenuCategoryService;
+    protected $branchMenuService;
 
-    public function __construct(BranchMenuCategoryService $branchMenuCategoryService)
+    public function __construct(BranchMenuService $branchMenuService)
     {
-        $this->branchMenuCategoryService = $branchMenuCategoryService;
+        $this->branchMenuService = $branchMenuService;
     }
 
     public function index(Request $request)
     {
-        $response = $this->branchMenuCategoryService->index($request);
+        $response = $this->branchMenuService->index($request);
         $responseData = $response->original;
         $branch_menu_categories = $responseData['data'];
         $branches = Branch::all();
-        return view('dashboard.branch.branch_menu_category.list', compact('branch_menu_categories', 'branches'));
+        return view('dashboard.branch.branch_menu.list', compact('branch_menu_categories', 'branches'));
     }
 
     public function show($id)
     {
-        $response = $this->branchMenuCategoryService->show($id);
+        $response = $this->branchMenuService->show($id);
         $responseData = $response->original;
         return $branch_menu_category = $responseData['data'];
     }
@@ -40,7 +40,7 @@ class BranchMenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = $this->branchMenuCategoryService->edit($request, $id);
+        $response = $this->branchMenuService->edit($request, $id);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
@@ -51,7 +51,7 @@ class BranchMenuController extends Controller
     }
     public function change_status(Request $request, $id)
     {
-        $response = $this->branchMenuCategoryService->change_status($id);
+        $response = $this->branchMenuService->change_status($id);
         $responseData = $response->original;
         return $branch_menu_category = $responseData['data'];
         // $message= $responseData['message'];
@@ -60,10 +60,10 @@ class BranchMenuController extends Controller
 
     public function show_branch($branch_id)
     {
-        $response = $this->branchMenuCategoryService->branch($branch_id);
+        $response = $this->branchMenuService->branch($branch_id);
         $responseData = $response->original;
         $branch_menu_categories = $responseData['data'];
         $branches = Branch::all();
-        return view('dashboard.branch.branch_menu_category.list', compact('branch_menu_categories', 'branches'));
+        return view('dashboard.branch.branch_menu.list', compact('branch_menu_categories', 'branches'));
     }
 }

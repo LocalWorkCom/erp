@@ -3,9 +3,15 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StaticPageResource;
+use App\Models\Branch;
+use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
+use App\Models\PrivacyPolicy;
+use App\Models\ReturnPolicy;
 use App\Models\Slider;
+use App\Models\TermsAndCondition;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -18,54 +24,54 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
         $popularDishes = getMostDishesOrdered(5);
-        return view('website.landing', compact(['sliders', 'discounts', 'popularDishes']));
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('is_active', true)->get();
+        return view(
+            'website.landing',
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories'])
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function showMenu()
     {
-        //
+        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
+            $query->where('is_active', true);
+        }, 'dish_categories.dishes' => function ($query) {
+            $query->where('is_active', true);
+        }])->get();
+        return view(
+            'website.menu',
+            compact(['menuCategories'])
+        );
+    }
+    public function contactUs()
+    {
+        $branches = Branch::all();
+        return view(
+            'website.contact-us',
+            compact(['branches'])
+        );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function privacy()
     {
-        //
+        $privacies = StaticPageResource::collection(PrivacyPolicy::all());
+        $privaciesArray = $privacies->toArray(request());
+        return view('website.privacy', compact('privaciesArray'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function return()
     {
-        //
+        $returns = StaticPageResource::collection(ReturnPolicy::all());
+        $returnsArray = $returns->toArray(request());
+        return view('website.return', compact('returnsArray'));
+    }
+    public function terms()
+    {
+        $terms = StaticPageResource::collection(TermsAndCondition::all());
+        $termsArray = $terms->toArray(request());
+        return view('website.terms', compact('termsArray'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

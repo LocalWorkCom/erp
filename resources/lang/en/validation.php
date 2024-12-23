@@ -2,6 +2,7 @@
 return [
     //add here the attributes of validation to translated
     'attributes' => [
+
         'email' => 'email address',
         'password' => 'password',
         'name' => 'name',
@@ -48,7 +49,8 @@ return [
         'boolean' => 'The :attribute field must be true or false.',
 
     ],
-
+    'regex' => 'The :attribute format is invalid.',
+    'date' => ':attribute must be a valid date.',
     'required' => 'The :attribute field is required.',
     'email' => 'The :attribute must be a valid email address.',
     'name' => 'The :attribute field is required.',
@@ -86,7 +88,7 @@ return [
     'ArabicCurrency' => ' Enter Arabic Currency',
     'EnglishCurrency' => ' Enter English Currency',
     'CurrencyCode' => 'Enter Currency Code',
-    'phonecode' => 'Enter phone code',
+    'phone_code' => 'Enter phone code',
     'flag' => 'Select flag country',
     'length' => 'Enter length phone',
 

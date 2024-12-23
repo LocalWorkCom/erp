@@ -87,21 +87,21 @@
                                         <label for="image" class="form-label">@lang('dishes.Image')</label>
                                         <input type="file" class="form-control" id="image" name="image">
                                     </div>
-<!-- Recipes for Dishes Without Sizes -->
-<div id="dish-recipes-section" class="col-xl-12 d-none">
-    <h5 class="mb-3">@lang('dishes.DishRecipes')</h5>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>@lang('dishes.Recipe')</th>
-                <th>@lang('dishes.Quantity')</th>
-                <th>@lang('dishes.Actions')</th>
-            </tr>
-        </thead>
-        <tbody id="dish-recipes-table"></tbody>
-    </table>
-    <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
-</div>
+                                    <!-- Recipes for Dishes Without Sizes -->
+                                    <div id="dish-recipes-section" class="col-xl-12 d-none">
+                                        <h5 class="mb-3">@lang('dishes.DishRecipes')</h5>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>@lang('dishes.Recipe')</th>
+                                                    <th>@lang('dishes.Quantity')</th>
+                                                    <th>@lang('dishes.Actions')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="dish-recipes-table"></tbody>
+                                        </table>
+                                        <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
+                                    </div>
 
                                     <div class="col-xl-6">
                                         <label for="has_sizes" class="form-label">@lang('dishes.HasSizes')</label>

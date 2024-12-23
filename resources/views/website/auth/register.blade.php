@@ -25,8 +25,8 @@
                     <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
                         id="phoneInput" placeholder="@lang('auth.phoneplace')" value="{{ old('phone') }}" required>
                     <div id="phoneError" class="error-message text-danger"></div>
-                    <input type="text" name="country_code" id="countryCodeInput"
-                    value="{{ old('country_code', '+02') }}">
+                    <input type="text" name="country_code" id="countryCodeInput" class="form-control @error('country_code') is-invalid @enderror"  value="{{ old('country_code') }}">
+                    <div id="country_codeError" class="error-message text-danger"></div>
                     <!-- Country Code Dropdown -->
                     <div class="input-group mb-3">
                         <!-- Display Selected Country Code -->
@@ -52,9 +52,6 @@
                             @endforeach
                         </ul>
                     </div>
-                    @error('country_code')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
                 </div>
 
                 <!-- Email -->
@@ -134,7 +131,6 @@
         });
     });
 
-
     document.getElementById('Register').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -162,36 +158,26 @@
             .then(data => {
                 if (data.status === 'success') {
                     alert(data.message);
-                    window.location.reload(); // Reload on success
+                    window.location.href = "{{ route('home') }}"; // Redirect to dashboard
                 }
             })
             .catch(error => {
-    if (error.errors) {
-        for (const [field, messages] of Object.entries(error.errors)) {
-            const errorElement = document.getElementById(`${field}Error`);
-            const inputElement = document.querySelector(`[name="${field}"]`);
+                if (error.errors) {
+                    for (const [field, messages] of Object.entries(error.errors)) {
+                        const errorElement = document.getElementById(`${field}Error`);
+                        const inputElement = document.querySelector(`[name="${field}"]`);
 
-            if (errorElement) {
-                errorElement.textContent = messages.join(', ');
-            }
+                        if (errorElement) {
+                            errorElement.textContent = messages.join(', ');
+                        }
 
-            if (inputElement) {
-                inputElement.classList.add('is-invalid');
-            }
-
-            // Special handling for country_code
-            if (field === 'country_code') {
-                const countryCodeErrorElement = document.getElementById('countryCodeInput').parentNode.querySelector('.error-message');
-                if (countryCodeErrorElement) {
-                    countryCodeErrorElement.textContent = messages.join(', ');
+                        if (inputElement) {
+                            inputElement.classList.add('is-invalid');
+                        }
+                    }
+                } else {
+                    console.error('Unexpected error:', error);
                 }
-            }
-        }
-    } else {
-        console.error('Unexpected error:', error);
-        alert('An unexpected error occurred. Please try again later.');
-    }
-});
-
+            });
     });
 </script>

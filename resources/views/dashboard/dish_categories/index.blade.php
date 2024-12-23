@@ -57,11 +57,12 @@
                                         <tr>
                                             <td>{{ $category->id }}</td>
                                             <td>
-                                            <img src="{{ asset($category->image_path) }}" alt="Category Image" width="100" height="100">                                            </td>
+                                                <img src="{{ asset($category->image_path) }}" alt="Category Image" width="100" height="100">
+                                            </td>
                                             <td>{{ $category->name_ar }}</td>
                                             <td>{{ $category->name_en }}</td>
                                             <td>
-                                                  <!-- Show -->
+                                                <!-- Show -->
                                                 <a href="{{ route('dashboard.dish-categories.show', $category->id) }}" class="btn btn-info-light">
                                                     @lang('dishes.View') <i class="ri-eye-line"></i>
                                                 </a>
@@ -70,13 +71,9 @@
                                                     @lang('dishes.Edit') <i class="ri-edit-line"></i>
                                                 </a>
                                                 <!-- Delete -->
-                                                <form action="{{ route('dashboard.dish-categories.delete', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('@lang('validation.DeleteConfirm')');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger-light">
-                                                        @lang('dishes.Delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="btn btn-danger-light" onclick="deleteCategory({{ $category->id }})">
+                                                    @lang('dishes.Delete') <i class="ri-delete-bin-line"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -105,13 +102,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
-@endsection
 
-<script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
-</script>
+    <script>
+        function deleteCategory(id) {
+            Swal.fire({
+                title: "@lang('dishes.Warning')",
+                text: "@lang('dishes.DeleteConfirm')",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "@lang('dishes.YesDelete')",
+                cancelButtonText: "@lang('dishes.CancelDelete')",
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form programmatically
+                    $.ajax({
+                        url: '{{ route('dashboard.dish-categories.delete', '') }}/' + id,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                "@lang('dishes.Deleted')",
+                                "@lang('dishes.DeleteSuccess')",
+                                'success'
+                            ).then(() => {
+                                location.reload(); // Reload the page to reflect changes
+                            });
+                        },
+                        error: function(error) {
+                            Swal.fire(
+                                "@lang('dishes.Error')",
+                                "@lang('dishes.DeleteFailed')",
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+@endsection

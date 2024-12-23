@@ -33,7 +33,7 @@ class BranchController extends Controller
     public function create()
     {
         $countries = Country::all();
-        $employees = Employee::all();
+        $employees = Employee::get();
         return view('dashboard.branch.add', compact('countries', 'employees'));
     }
     public function store(Request $request)
@@ -64,7 +64,7 @@ class BranchController extends Controller
     {
         $branch = Branch::findOrFail($id);
         $countries = Country::all();
-        $employees = Employee::all();
+        $employees = Employee::get();
         return view('dashboard.branch.edit', compact('branch', 'countries', 'employees'));
     }
 

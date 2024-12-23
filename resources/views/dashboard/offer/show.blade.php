@@ -34,6 +34,32 @@
                                     <label class="form-label">@lang('offer.ArabicName')</label>
                                     <p class="form-text">{{ $offer->is_active == 0 ? __('category.no') : __('category.yes')  }}</p>
                                 </div>
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <label class="form-label">@lang('offer.Branches')</label>
+                                    @if ($offer->branch_id == -1)
+                                        <p class="form-text">@lang('offer.AllBranches')</p>
+                                    @else
+                                        @if ($branches && $branches->isNotEmpty())
+                                            <ul class="form-text">
+                                                @foreach ($branches as $branch)
+                                                    <li>{{ $branch->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <p class="form-text">@lang('category.none')</p>
+                                        @endif
+                                    @endif
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.DiscountType')</label>
+                                    <p class="form-text">
+                                        {{ __('offer.' . $offer->discount_type) }}
+                                    </p>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label">@lang('offer.DiscountValue')</label>
+                                    <p class="form-text">{{ $offer->discount_value }}</p>
+                                </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('offer.ArabicName')</label>
                                     <p class="form-text">{{ $offer->name_ar }}</p>

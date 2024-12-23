@@ -64,6 +64,7 @@ return [
     "sub_total" => "الاجمالي",
     "tax_value" => "قيمة الضريبة",
     "fees" => "الرسوم والخدمة",
-    "order_addons" => "الاضافات"
+    "order_addons" => "الاضافات",
+    "add_order" => "اضافة طلب جديد"
 
 ];
