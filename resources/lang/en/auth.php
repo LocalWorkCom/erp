@@ -59,5 +59,6 @@ return [
     'forgetpass' => 'Forgot your password?',
     'phone_not_found' => 'The phone number is not registered in our system.',
     'password_mismatch' => 'The passwords do not match.',
+'password_same_as_previous' => 'The new password cannot be the same as the previous one.',
 
 ];
