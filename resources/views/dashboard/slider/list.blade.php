@@ -61,9 +61,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php $rowNumber = 1; @endphp
                                 @foreach ($sliders as $slider)
                                     <tr>
-                                        <td>{{ $slider->id }}</td>
+{{--                                        <td>{{ $slider->id }}</td>--}}
+                                        <td>{{ $rowNumber++  }}</td>
                                         <td><img src="{{ url($slider->image) }}" alt=""
                                                  width="100" height="100"></td>
                                         <td>{{ $slider->name_ar }}</td>
