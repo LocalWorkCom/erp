@@ -187,24 +187,24 @@
                                 <button type="button" id="add-dish-recipe" class="btn btn-success btn-sm">@lang('dishes.AddRecipe')</button>
                             </div>
                             <!-- Dish Addons -->
-                            <div id="addon-categories-section">
-    @if (!empty($dish->dishAddonsDetails) && $dish->dishAddonsDetails->isNotEmpty())
-        @foreach ($dish->dishAddonsDetails->groupBy('addon_category_id') as $addonCategoryIndex => $addons)
-            @php
-                $addonCategory = $addons->first();
-            @endphp
-            <div class="addon-category mt-4">
-                <div class="row gy-2">
-                    <div class="col-xl-4">
-                        <label>@lang('dishes.AddonCategory')</label>
-                        <select name="addon_categories[{{ $addonCategoryIndex }}][addon_category_id]" class="form-control select2" required>
-                            @foreach ($addonCategories as $category)
-                                <option value="{{ $category->id }}" {{ $addonCategory->addon_category_id == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name_en }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+ <div id="addon-categories-section">
+                            @if (!empty($dish->dishAddonsDetails) && $dish->dishAddonsDetails->isNotEmpty())
+                                @foreach ($dish->dishAddonsDetails->groupBy('addon_category_id') as $addonCategoryIndex => $addons)
+                                    @php
+                                        $addonCategory = $addons->first();
+                                    @endphp
+                        <div class="addon-category mt-4">
+                            <div class="row gy-2">
+                                <div class="col-xl-4">
+                                    <label>@lang('dishes.AddonCategory')</label>
+                                    <select name="addon_categories[{{ $addonCategoryIndex }}][addon_category_id]" class="form-control select2" required>
+                                        @foreach ($addonCategories as $category)
+                                            <option value="{{ $category->id }}" {{ $addonCategory->addon_category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name_en }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                     <div class="col-xl-4">
                         <label>@lang('dishes.MinAddons')</label>
                         <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][min_addons]" class="form-control"
@@ -227,35 +227,35 @@
                             </tr>
                         </thead>
                         <tbody id="addons-table-{{ $addonCategoryIndex }}">
-    @if (isset($addons) && $addons->isNotEmpty())
-        @foreach ($addons as $addonIndex => $addon)
-            <tr>
-                <td>
-                    <select name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][addon_id]"
-                        class="form-control select2" required>
-                        @foreach ($allAddons as $availableAddon)
-                            <option value="{{ $availableAddon->id }}"
-                                {{ isset($addon->addon_id) && $addon->addon_id == $availableAddon->id ? 'selected' : '' }}>
-                                {{ $availableAddon->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][quantity]"
-                        class="form-control" value="{{ $addon->quantity ?? '' }}" step="0.01" required>
-                </td>
-                <td>
-                    <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][price]"
-                        class="form-control" value="{{ $addon->price ?? '' }}" step="0.01" required>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
-                </td>
-            </tr>
-        @endforeach
-    @endif
-</tbody>
+                            @if (isset($addons) && $addons->isNotEmpty())
+                                @foreach ($addons as $addonIndex => $addon)
+                                    <tr>
+                                        <td>
+                                            <select name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][addon_id]"
+                                                class="form-control select2" required>
+                                                @foreach ($allAddons as $availableAddon)
+                                                    <option value="{{ $availableAddon->id }}"
+                                                        {{ isset($addon->addon_id) && $addon->addon_id == $availableAddon->id ? 'selected' : '' }}>
+                                                        {{ $availableAddon->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][quantity]"
+                                                class="form-control" value="{{ $addon->quantity ?? '' }}" step="0.01" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="addon_categories[{{ $addonCategoryIndex }}][addons][{{ $addonIndex }}][price]"
+                                                class="form-control" value="{{ $addon->price ?? '' }}" step="0.01" required>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
 
                     </table>
                     <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="{{ $addonCategoryIndex }}">
@@ -269,6 +269,7 @@
         <p>@lang('dishes.NoAddons')</p>
     @endif
 </div>
+<button type="button" class="btn btn-primary btn-sm mt-3 add-addon-category">@lang('dishes.AddAddonCategory')</button>
 
 
 
@@ -388,73 +389,72 @@ $(document).ready(function () {
         $('.select2').select2();
     });
 
-    // Add Addon Category
-    $('.add-addon-category').on('click', function () {
-        addonCategoryIndex++;
-        $('#addon-categories-section').append(`
-            <div class="addon-category mt-4">
-                <div class="row gy-2">
-                    <div class="col-xl-4">
-                        <label>@lang('dishes.AddonCategory')</label>
-                        <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2" required>
-                            @foreach ($addonCategories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-xl-4">
-                        <label>@lang('dishes.MinAddons')</label>
-                        <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>
-                    </div>
-                    <div class="col-xl-4">
-                        <label>@lang('dishes.MaxAddons')</label>
-                        <input type="number" name="addon_categories[${addonCategoryIndex}][max_addons]" class="form-control" min="0" required>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>@lang('dishes.Addon')</th>
-                                <th>@lang('dishes.Quantity')</th>
-                                <th>@lang('dishes.Price')</th>
-                                <th>@lang('dishes.Actions')</th>
-                            </tr>
-                        </thead>
-                        <tbody id="addons-table-${addonCategoryIndex}"></tbody>
-                    </table>
-                    <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="${addonCategoryIndex}">@lang('dishes.AddAddon')</button>
-                    <button type="button" class="btn btn-danger btn-sm remove-addon-category">@lang('dishes.RemoveAddonCategory')</button>
-                </div>
-            </div>
-        `);
+    $(document).on('click', '.add-addon-category', function () {
+    let addonCategoryIndex = $('#addon-categories-section .addon-category').length; // Calculate index dynamically
 
-        $('.select2').select2();
-    });
-
-    // Add Addon Row
-    $(document).on('click', '.add-addon', function () {
-        let categoryIndex = $(this).data('category-index');
-        let addonIndex = $(`#addons-table-${categoryIndex} tr`).length;
-        let addonCategoryIndex = {{ count($dish->addons->groupBy('addon_category_id')) }};
-
-        $(`#addons-table-${categoryIndex}`).append(`
-            <tr>
-                <td>
-                    <select name="addon_categories[${categoryIndex}][addons][${addonIndex}][addon_id]" class="form-control select2" required>
-                        @foreach ($addons as $addon)
-                            <option value="{{ $addon->id }}">{{ $addon->name }}</option>
+    $('#addon-categories-section').append(`
+        <div class="addon-category mt-4">
+            <div class="row gy-2">
+                <div class="col-xl-4">
+                    <label>@lang('dishes.AddonCategory')</label>
+                    <select name="addon_categories[${addonCategoryIndex}][addon_category_id]" class="form-control select2" required>
+                        @foreach ($addonCategories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name_en }}</option>
                         @endforeach
                     </select>
-                </td>
-                <td><input type="number" name="addon_categories[${categoryIndex}][addons][${addonIndex}][quantity]" class="form-control" step="0.01" required></td>
-                <td><input type="number" name="addon_categories[${categoryIndex}][addons][${addonIndex}][price]" class="form-control" step="0.01" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
-            </tr>
-        `);
+                </div>
+                <div class="col-xl-4">
+                    <label>@lang('dishes.MinAddons')</label>
+                    <input type="number" name="addon_categories[${addonCategoryIndex}][min_addons]" class="form-control" min="0" required>
+                </div>
+                <div class="col-xl-4">
+                    <label>@lang('dishes.MaxAddons')</label>
+                    <input type="number" name="addon_categories[${addonCategoryIndex}][max_addons]" class="form-control" min="0" required>
+                </div>
+            </div>
+            <div class="mt-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>@lang('dishes.Addon')</th>
+                            <th>@lang('dishes.Quantity')</th>
+                            <th>@lang('dishes.Price')</th>
+                            <th>@lang('dishes.Actions')</th>
+                        </tr>
+                    </thead>
+                    <tbody id="addons-table-${addonCategoryIndex}"></tbody>
+                </table>
+                <button type="button" class="btn btn-success btn-sm add-addon" data-category-index="${addonCategoryIndex}">@lang('dishes.AddAddon')</button>
+                <button type="button" class="btn btn-danger btn-sm remove-addon-category">@lang('dishes.RemoveAddonCategory')</button>
+            </div>
+        </div>
+    `);
 
-        $('.select2').select2();
-    });
+    $('.select2').select2();
+});
+
+// Add Addon Row Dynamically
+$(document).on('click', '.add-addon', function () {
+    let categoryIndex = $(this).data('category-index');
+    let addonIndex = $(`#addons-table-${categoryIndex} tr`).length;
+
+    $(`#addons-table-${categoryIndex}`).append(`
+        <tr>
+            <td>
+                <select name="addon_categories[${categoryIndex}][addons][${addonIndex}][addon_id]" class="form-control select2" required>
+                    @foreach ($allAddons as $addon)
+                        <option value="{{ $addon->id }}">{{ $addon->name }}</option>
+                    @endforeach
+                </select>
+            </td>
+            <td><input type="number" name="addon_categories[${categoryIndex}][addons][${addonIndex}][quantity]" class="form-control" step="0.01" required></td>
+            <td><input type="number" name="addon_categories[${categoryIndex}][addons][${addonIndex}][price]" class="form-control" step="0.01" required></td>
+            <td><button type="button" class="btn btn-danger btn-sm remove-row">@lang('dishes.Remove')</button></td>
+        </tr>
+    `);
+
+    $('.select2').select2();
+});
 
     // Remove Row
     $(document).on('click', '.remove-row', function () {
@@ -468,12 +468,17 @@ $(document).ready(function () {
 
     // Toggle Addons Section
     $('#has_addon').on('change', function () {
-        if ($(this).val() == 1) {
-            $('#dish-addons-section').removeClass('d-none');
-        } else {
-            $('#dish-addons-section').addClass('d-none');
+    if ($(this).val() == 1) {
+        $('#dish-addons-section').removeClass('d-none');
+        if ($('#addon-categories-section').children().length === 0) {
+            $('.add-addon-category').trigger('click'); 
         }
-    });
+    } else {
+        $('#dish-addons-section').addClass('d-none');
+        $('#addon-categories-section').empty(); 
+    }
+});
+
 });
 </script>
 @endsection
