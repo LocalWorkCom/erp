@@ -56,7 +56,10 @@ return [
     "cancelled" => "Cancelled",
     "order_trackings" => "Order Tracking",
     "billing_to" => "Billing To",
-    "fees" => "fees"
+    "fees" => "fees",
+    "print" => "print",
+    "dish" => "dish",
+    "order_addons" => "اضافات الطلب"
 
 
 ];
