@@ -63,10 +63,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($offers as $offer)
+                                @php $rowNumber = 1; @endphp
+                                @foreach ($offers as $offer)
                                         <tr>
                                             {{-- @dd( $offer) --}}
-                                            <td>{{ $offer->id }}</td>
+{{--                                            <td>{{ $offer->id }}</td>--}}
+                                            <td>{{ $rowNumber++  }}</td>
                                             <td><img src="{{ BaseUrl() . '/' . $offer->image_ar }}" alt=""
                                                      width="100" height="100"></td>
                                             <td><img src="{{ BaseUrl() . '/' . $offer->image_en }}" alt=""
@@ -80,7 +82,13 @@
                                                     {{ $offer->branch_id == -1 ? 'كل الفروع' : 'محددة' }}
                                                 @endif
                                             </td>
-                                            <td>{{ $offer->discount_type }}</td>
+                                            <td>
+                                                @if (app()->getLocale() == 'en')
+                                                    {{ $offer->discount_type == 'percentage' ? 'percentage' : 'fixed' }}
+                                                @else
+                                                    {{ $offer->discount_type == 'percentage' ? 'نسبة مئوية' : 'نسبة ثابتة' }}
+                                                @endif
+                                            </td>
                                             <td>{{ $offer->discount_value }}</td>
                                             <td>
                                             <span class="badge {{ $offer->is_active ? 'bg-success' : 'bg-danger' }}">

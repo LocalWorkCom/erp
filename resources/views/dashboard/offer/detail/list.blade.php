@@ -58,20 +58,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php $rowNumber = 1; @endphp
                                     @foreach ($offerDetails as $detail)
                                         <tr>
                                             {{-- @dd( $detail) --}}
-                                            <td>{{ $detail->id }}</td>
-                                            <td>{{ $detail->offer_type }}</td>
+{{--                                            <td>{{ $detail->id }}</td>--}}
+                                            <td>{{ $rowNumber++  }}</td>
                                             <td>
                                                 @if ($detail->offer_type == 'dishes')
-                                                    {{ $detail->dish->name ?? 'N/A' }}  <!-- Fetch name from dishes table -->
+                                                    {{ __('offer.Dish') ?? __('category.none') }}  <!-- Fetch name from dishes table -->
                                                 @elseif ($detail->offer_type == 'addons')
-                                                    {{ $detail->addon->name ?? 'N/A' }}  <!-- Fetch name from addons table -->
+                                                    {{ __('offer.Addon') ?? __('category.none') }}  <!-- Fetch name from addons table -->
                                                 @elseif ($detail->offer_type == 'products')
-                                                    {{ $detail->product->name ?? 'N/A' }}  <!-- Fetch name from products table -->
+                                                    {{ __('offer.Product') ?? __('category.none') }}  <!-- Fetch name from products table -->
                                                 @else
-                                                    {{ 'Unknown Type' }}  <!-- Default message if no type matches -->
+                                                    {{ __('category.none') }}  <!-- Default message if no type matches -->
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($detail->offer_type == 'dishes')
+                                                    {{ app()->getLocale() == 'en' ? $detail->dish->name_en :  $detail->dish->name_ar }}  <!-- Fetch name from dishes table -->
+                                                @elseif ($detail->offer_type == 'addons')
+                                                    {{ app()->getLocale() == 'en' ? $detail->dish->name_en :  $detail->dish->name_ar}}  <!-- Fetch name from addons table -->
+                                                @elseif ($detail->offer_type == 'products')
+                                                    {{ app()->getLocale() == 'en' ? $detail->dish->name_en :  $detail->dish->name_ar }}  <!-- Fetch name from products table -->
+                                                @else
+                                                    {{ __('category.none') }}  <!-- Default message if no type matches -->
                                                 @endif
                                             </td>
                                             <td>{{ $detail->count }}</td>

@@ -65,7 +65,7 @@ return[
     'leaveNationals' => 'leaveNationals',
     'leaveSetting' => 'leaveSetting',
     'website' => 'الموقع',
-    'Logo' => 'اللوجو',
+    'Logo' => 'الشعار',
     'Slider' => 'السلايدر',
     'Terms' => 'الشروط والاحكام',
     'Privacy' => 'سياسة الخصوصية',

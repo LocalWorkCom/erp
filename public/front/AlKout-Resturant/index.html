@@ -19,8 +19,9 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="SiteAssets/bootstrap-5.1.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="SiteAssets/fontawesome-free-5.15.4-web/css/all.min.css">
-
   <link rel="stylesheet" href="SiteAssets/css/animate.min.css">
   <link rel="stylesheet" href="SiteAssets/aos-master/dist/aos.css">
 
@@ -87,18 +88,18 @@
                 En
               </a>
             </li>
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
                 <i class="fas fa-user-circle"></i>
                 <span>تسجيل الدخول</span>
               </a>
-            </li> -->
-            <li class="nav-item">
+            </li>
+            <!-- <li class="nav-item">
               <a class="nav-link  align-items-center" data-bs-toggle="modal" data-bs-target="#profileModal"><i
                   class="fas fa-user-circle main-color"></i>
                 <span>سارة عامر </span>
               </a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -260,7 +261,98 @@
     </section>
     <section class="offers">
       <div class="container py-sm-5 py-4">
-        <div class="row mx-0">
+        <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
+          <div class="section-btn">
+            <span class="ms-2">عرض الكل</span>
+            <span class="icon">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+          </div>
+        </div>
+        <div class="offers-slider owl-carousel owl-theme">
+          <div class="item mb-4 category position-relative" data-aos="zoom-in">
+            <div class="item one row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/plate1.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="main-color fw-bold "> خصم 20%</h2>
+                <h5 class="text-white pb-4">كبسة عربى بالفراخ</h5>
+                <button type="button" class="btn white" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+          </div>
+            <div class="item two row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/offer-2.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="text-white fw-bold"> خصم 30%</h2>
+                <h5 class="text-white pb-4"> زبيق مقلي</h5>
+                <button type="button" class="btn white" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+            <div class="item three row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/offer-3.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="main-color fw-bold "> خصم 25%</h2>
+                <h5 class="pb-4"> وجبه كفته كبير</h5>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+            <div class="item two row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/offer-2.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="text-white fw-bold"> خصم 30%</h2>
+                <h5 class="text-white pb-4"> زبيق مقلي</h5>
+                <button type="button" class="btn white" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+            <div class="item one row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/plate1.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="main-color fw-bold "> خصم 20%</h2>
+                <h5 class="text-white pb-4">كبسة عربى بالفراخ</h5>
+                <button type="button" class="btn white" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+            <div class="item three row mx-0 p-4" data-aos="zoom-in">
+              <div class="col-md-5">
+                <img class="offer-img" src="SiteAssets/images/offer-3.png" alt="">
+              </div>
+              <div class="col-md-7">
+                <h2 class="main-color fw-bold "> خصم 25%</h2>
+                <h5 class="pb-4"> وجبه كفته كبير</h5>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#productModal">
+                  <h4 class="fw-bold">اطلب الان</h4>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row mx-0">
           <div class="col-md-4">
             <div class="item one row mx-0 p-4" data-aos="zoom-in">
               <div class="col-md-5">
@@ -306,7 +398,7 @@
 
             </div>
           </div>
-        </div>
+        </div> -->
 
     </section>
     <section class="plates">
@@ -428,7 +520,7 @@
                 <span class="icon ms-2">
                   <i class="fas fa-phone"></i>
                 </span>
-                <a >
+                <a>
                   010265899887
                 </a>
               </li>
@@ -436,7 +528,7 @@
                 <span class="icon ms-2">
                   <i class="fas fa-phone"></i>
                 </span>
-                <a >
+                <a>
                   010265899887
                 </a>
               </li>
@@ -447,7 +539,7 @@
             <ul class="list-unstyled px-0 pt-4">
               <li><a href="shop.html"> القائمة الرئيسية</a></li>
               <li><a data-bs-toggle="modal" data-bs-target="#productModal">العروض</a></li>
-              <li><a  data-bs-toggle="modal" data-bs-target="#branchesModal">فروعنا</a></li>
+              <li><a data-bs-toggle="modal" data-bs-target="#branchesModal">فروعنا</a></li>
               <li><a href="policy.html">الشروط والاحكام</a></li>
             </ul>
           </div>
@@ -498,12 +590,14 @@
 
               <div class="input-group mb-3">
                 <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
-                <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"> +02 <img
-                    src="./SiteAssets/images/egypt.png" alt=""></button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"> <small> +02</small> <img src="./SiteAssets/images/egypt.png"
-                        alt=""></a></li>
-                </ul>
+                <select id="country-select" class="selectpicker me-2" data-live-search="true">
+                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
+                  </option>
+                </select>
               </div>
 
               <div class="input-group mb-3">
@@ -561,11 +655,14 @@
 
               <div class="input-group mb-3">
                 <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
-                <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false"><small>
-                    +02</small> <img src="./SiteAssets/images/egypt.png" alt=""></button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"> +02 <img src="./SiteAssets/images/egypt.png" alt=""></a></li>
-                </ul>
+                <select id="country-select" class="selectpicker me-2" data-live-search="true">
+                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
+                  </option>
+                </select>
               </div>
 
               <div class="input-group position-relative mb-3">
@@ -627,14 +724,14 @@
               <div class="input-group py-md-4 py-sm-2">
                 <input type="text" class="form-control py-2" id="phoneInput"
                   placeholder="ادخل رقم الهاتف ,مثال01029063398">
-                <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false">
-                  <small>+02</small>
-                  <img src="./SiteAssets/images/egypt.png" alt="">
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#"> <small> +02</small> <img src="./SiteAssets/images/egypt.png"
-                        alt=""></a></li>
-                </ul>
+                <select id="country-select" class="selectpicker me-2" data-live-search="true">
+                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
+                  </option>
+                </select>
               </div>
               <button type="submit" class="btn w-100" id="sendForgetButton">ارسال</button>
             </div>
@@ -832,7 +929,7 @@
                     <h4 class="fw-bold"> 300 ج . م</h4>
                     <div class="qty mt-3 d-flex justify-content-center align-items-center">
                       <span class="pro-dec me-3" onclick="decreaseQuantity()">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <i class="fa fa-minus" aria-hidden="true"></i>
                       </span>
                       <span class="num fs-4" id="quantity">1</span>
                       <span class="pro-inc ms-3" onclick="increaseQuantity()">
@@ -1193,63 +1290,63 @@
               </div> -->
             </div>
             <div class="tab-pane fade" id="pills-takeaway" role="tabpanel" aria-labelledby="pills-takeaway-tab">
-             
-            <div class="bg-dark-gray  py-2">
-              <h5 class="text-dark fw-bold text-center">ما هو المطعم الذى تريد الاستلام منه؟</h5>
-            </div>
-               <div class="d-flex justify-content-end my-2">
-                  <button class="btn btn-no-modal"> استخدم موقعى </button>
-                </div> 
-                 <div class="my-2">
-              <h5 class="text-dark fw-bold"> موقع الاستلام</h5>
-              <form class="d-flex mb-1 position-relative search-form">
-                <input class="form-control search-input" type="search" placeholder="ابحث عن الفرع المناسب لك"
-                  aria-label="Search">
-                <i class="fas fa-search search-icon"></i>
-              </form>
-            </div>
-   
-                <div class="location border-bottom mb-1">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="fw-bold mt-2">
-                      <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
-                    </h6>
-                    <span class="badge text-success mt-2">مفتوح</span>
-                  </div>
-                  <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
-                  <p class="main-color fw-bold">
-                    <i class="fas fa-phone mx-2"></i>0123698745269
-                  </p>
-                </div>
-                <div class="location mb-1">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="fw-bold mt-2">
-                      <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
-                    </h6>
-                    <span class="badge text-muted mt-2">مغلق</span>
-                  </div>
-                  <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
-                  <p class="main-color fw-bold">
-                    <i class="fas fa-phone mx-2"></i>0123698745269
-                  </p>
-                </div>
 
-                <div class="location border-red mb-1">
-                  <div class="d-flex justify-content-between">
-                    <h6 class="fw-bold mt-2">
-                      <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
-                    </h6>
-                    <span class="badge text-success mt-2">مفتوح</span>
-                  </div>
-                  <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
-                  <p class="main-color fw-bold">
-                    <i class="fas fa-phone mx-2"></i>0123698745269
-                  </p>
+              <div class="bg-dark-gray  py-2">
+                <h5 class="text-dark fw-bold text-center">ما هو المطعم الذى تريد الاستلام منه؟</h5>
+              </div>
+              <div class="d-flex justify-content-end my-2">
+                <button class="btn btn-no-modal"> استخدم موقعى </button>
+              </div>
+              <div class="my-2">
+                <h5 class="text-dark fw-bold"> موقع الاستلام</h5>
+                <form class="d-flex mb-1 position-relative search-form">
+                  <input class="form-control search-input" type="search" placeholder="ابحث عن الفرع المناسب لك"
+                    aria-label="Search">
+                  <i class="fas fa-search search-icon"></i>
+                </form>
+              </div>
+
+              <div class="location border-bottom mb-1">
+                <div class="d-flex justify-content-between">
+                  <h6 class="fw-bold mt-2">
+                    <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
+                  </h6>
+                  <span class="badge text-success mt-2">مفتوح</span>
                 </div>
-                <div class="d-flex justify-content-end my-2">
-                  <button class="btn">  ابدأ طلبك </button>
-                </div> 
-           
+                <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
+                <p class="main-color fw-bold">
+                  <i class="fas fa-phone mx-2"></i>0123698745269
+                </p>
+              </div>
+              <div class="location mb-1">
+                <div class="d-flex justify-content-between">
+                  <h6 class="fw-bold mt-2">
+                    <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
+                  </h6>
+                  <span class="badge text-muted mt-2">مغلق</span>
+                </div>
+                <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
+                <p class="main-color fw-bold">
+                  <i class="fas fa-phone mx-2"></i>0123698745269
+                </p>
+              </div>
+
+              <div class="location border-red mb-1">
+                <div class="d-flex justify-content-between">
+                  <h6 class="fw-bold mt-2">
+                    <i class="fas fa-map-marker-alt main-color mx-2"></i>فرع المهندسين ممشى اهل مصر
+                  </h6>
+                  <span class="badge text-success mt-2">مفتوح</span>
+                </div>
+                <p class="text-muted mx-2">12 ممشى اهل مصر12 بجوار كريو كافيه</p>
+                <p class="main-color fw-bold">
+                  <i class="fas fa-phone mx-2"></i>0123698745269
+                </p>
+              </div>
+              <div class="d-flex justify-content-end my-2">
+                <button class="btn"> ابدأ طلبك </button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -1427,14 +1524,12 @@
       </div>
     </div>
   </div>
-  <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
-  <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js"></script>
-  <script src="SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js"></script>
 
-  <!-- Main js -->
-  <script src="./SiteAssets/js/style.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+  <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
+  <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.bundle.js"></script>
+  <script src="SiteAssets/bootstrap-5.1.3/dist/umd/popper.min.js"></script>
+  <script src="SiteAssets/js/bootstarp-select.js"></script>
+  <script src="SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js"></script>
 
   <!-- include Gallery (lightbox) plugin js-->
   <script src="SiteAssets/lightbox/js/lightbox.min.js"></script>
@@ -1446,6 +1541,14 @@
     AOS.init();
   </script>
 
+  <!-- Main js -->
+  <script src="./SiteAssets/js/style.js"></script>
+  <script>
+    // Initialize the Bootstrap Select plugin
+    $(document).ready(function () {
+      $('.selectpicker').selectpicker();
+    });
+  </script>
 </body>
 
 </html>

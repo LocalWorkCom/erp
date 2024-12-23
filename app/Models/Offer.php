@@ -39,7 +39,7 @@ class Offer extends Model
 
     public function details()
     {
-        return $this->hasMany(OfferDetail::class,'offer_id','id')->where('deleted_at',null);
+        return $this->hasMany(OfferDetail::class,'offer_id','id');
     }
     public function branch()
     {

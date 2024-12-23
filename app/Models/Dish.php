@@ -10,7 +10,7 @@ class Dish extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ['name', 'description','name_site', 'description_site']; 
+    protected $appends = ['name', 'description','name_site', 'description_site'];
 
     protected $fillable = [
         'name_en',
@@ -48,6 +48,11 @@ class Dish extends Model
     }
 
     public function getDescriptionAttribute()
+    {
+        return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
+    }
+
+    public function getDescriptionSiteAttribute()
     {
         return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
     }
@@ -100,4 +105,10 @@ class Dish extends Model
     {
         return $this->hasMany(DishDetail::class, 'dish_id');
     }
+    public function dishAddonsDetails()
+    {
+        return $this->hasMany(DishAddon::class, 'dish_id');
+    }
+
+    
 }

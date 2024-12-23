@@ -1,5 +1,11 @@
 <?php
 return [
+    'branches' => [
+        'required_if' => 'حقل الفروع مطلوب عند تحديد "اختر" في اختيار الفرع.',
+    ],
+    'end_date' => [
+        'after_or_equal' => 'يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء.',
+    ],
     'required' => ' :attribute مطلوب.',
     'email' => 'يجب أن يكون :attribute عنوان بريد إلكتروني صالحًا.',
     'unique' => 'عفوا  :attribute مأخوذ مسبقا',
@@ -156,6 +162,13 @@ return [
         'value_redeem' => 'الحد الاقصى لنسبه خصم النقاط',
         'branch_id' => 'الفرع',
         'point_redeem' => 'نسبه تقيم النقطه للخصم',
+        'discount_value' => 'قيمة الخصم',
+        'count' => 'الكمية',
+        'image_ar' => 'الصورة بالعربي',
+        'image_en' => 'الصورة بالانجليزي',
+        'branches' => 'الفروع',
+        'branches.*' => 'فرع',
+        'type_id'=>'اسم النوع'
 
     ],
 
@@ -182,7 +195,7 @@ return [
     'EnterOffer' => 'يجب اختيار عرض',
     'EnterArabicName' => 'يجب ادخال الاسم بالعربي',
     'EnterEnglishName' => 'يجب ادخال الاسم بالانجليزي',
-    'EnterHexaCode' => 'يجب ادخال المود بالهكسا ',
+    'EnterHexaCode' => 'يجب ادخال الكود بالهكسا ',
     'EnterArabicDesc' => 'يجب ادخال الوصف بالعربي',
     'EnterEnglishDesc' => 'يجب ادخال الوصف بالانجليزي',
     'EnterArabicQue' => 'يجب ادخال السؤال بالعربي',

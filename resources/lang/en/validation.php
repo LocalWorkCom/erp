@@ -91,6 +91,11 @@ return [
     'phone_code' => 'Enter phone code',
     'flag' => 'Select flag country',
     'length' => 'Enter length phone',
+    'image_ar' => 'الصورة بالعربي',
+    'image_en' => 'الصورة بالانجليزي',
+    'branches' => 'branches',
+    'branches.*' => 'branch',
+    'type_id'=>'Type Name',
 
     //web
     'Correct' =>  'Looks good!',

@@ -70,6 +70,41 @@ $(document).ready(function () {
       // }
     }
   });
+  $('.offers-slider').owlCarousel({
+    items: 3,
+    loop: true,
+    dots: true,
+    nav: true,
+    margin: 25,
+    pagination: false,
+    autoplay: true,
+    autoplaySpeed: 1000,
+    autoplayTimeout: 3000,
+    rtl: true,
+    responsive: {
+      0: {
+        items: 1,
+        nav: true,
+        dots: false
+      },
+
+      600: {
+        items: 2,
+        nav: true
+      },
+
+      900: {
+        items: 3,
+        nav: true
+      },
+
+      // 1200: {
+      //   items: 5,
+      //   nav: true
+      // }
+    }
+  });
+  
   $('.plates-slider').owlCarousel({
     items: 4,
     loop: false,
@@ -310,7 +345,32 @@ document.getElementById('sendOtpButton').addEventListener('click', function (e) 
 
 
 // end login functions **********************
- 
+
+// counter function 
+ document.addEventListener("DOMContentLoaded", () => {
+    const sideCartPlates = document.querySelectorAll(".sideCart-plate");
+
+    sideCartPlates.forEach((plate, index) => {
+        const plus = plate.querySelector(".inc.plus"),
+            minus = plate.querySelector(".dec.minus"),
+            num = plate.querySelector(".num");
+        // Increment functionality
+        plus.addEventListener("click", () => {
+            let value = parseInt(num.innerText, 10);
+            value++;
+            num.innerText = value;
+        });
+        // Decrement functionality
+        minus.addEventListener("click", () => {
+            let value = parseInt(num.innerText, 10);
+            if (value > 1) {
+                value--;
+                num.innerText = value;
+            }
+        });
+    });
+});
+
 // rate-stars 
 document.addEventListener('DOMContentLoaded', function () {
   const stars = document.querySelectorAll('.star');

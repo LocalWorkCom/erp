@@ -195,6 +195,7 @@ function ResponseWithSuccessData($lang, $data, $code)
     );
     $response_code = 200;
     $response = Response::json($response_array, $response_code);
+
     return $response;
 }
 
@@ -472,13 +473,12 @@ function RespondWithBadRequestDataExist()
 
 function CheckExistColumnValue($table, $column, $value)
 {
-
-    $exist = DB::table($table)->where($column, $value)->exists();
-    if ($exist) {
-        return true;
-    }
-    return false;
+    return DB::table($table)
+        ->where($column, $value)
+        ->whereNull('deleted_at') // Ensures only active records are checked
+        ->exists();
 }
+
 
 function CheckCouponValid($id, $amount)
 {
@@ -981,19 +981,8 @@ function getMostDishesOrdered($limit = 5)
         ->limit($limit)
         ->get();
 }
-// function checkItemOffer($item_id, $item_type)
-// {
-//     $offer = Offer::leftJoin('offer_details', 'offer_details.offer_id', 'offers.id')->where('type_id', $item_id)
-//         ->where('offer_type', $item_type)
-//         ->where('is_active', 1)
-//         ->whereDate('start_date', '<=', now())
-//         ->whereDate('end_date', '>=', now())
-//         ->first();
-//     return $offer;
-// }
-// function applyOffer($item_id, $item_type, $offer_id)
-// {
-//     $offer = Offer::find($offer_id);
-//     if ($offer) {
-//     }
-// }
+
+function checkOfferUsed($id)
+{
+    return Order::where('IDOffer', $id)->exists();
+}

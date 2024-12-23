@@ -55,7 +55,7 @@
                                     </button>
                                 </div>
                             @endif
-                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            <table class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('product.ID')</th>
