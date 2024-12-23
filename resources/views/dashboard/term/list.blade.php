@@ -59,9 +59,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php $rowNumber = 1; @endphp
                                 @foreach ($terms as $term)
                                     <tr>
-                                        <td>{{ $term->id }}</td>
+{{--                                        <td>{{ $term->id }}</td>--}}
+                                        <td>{{ $rowNumber++  }}</td>
                                         <td>
                                             <span class="badge {{ $term->active ? 'bg-success' : 'bg-danger' }}">
                                                 {{ $term->active ? __('term.Active') : __('term.Inactive') }}
