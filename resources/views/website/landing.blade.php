@@ -1,24 +1,7 @@
 @extends('website.layouts.master')
 
 @section('content')
-    <section class="location-pop-up">
-        <div id="modal" class="modal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <h2>السماح للموقع بتحديد موقعك؟</h2>
-                    </div>
-                    <div class="modal-footer d-flex flex-column border-0">
-                        <button type="button" class="btn" data-bs-dismiss="modal">سماح</button>
-                        <button type="button" class="btn reversed main-color">حدد على الخريطة </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+   
     <section class="intro">
         <div class="container py-sm-5 py-4">
             <div class=" py-5 owl-slider owl-carousel owl-theme">
