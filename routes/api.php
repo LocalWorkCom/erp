@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PenaltyReasonController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
+use App\Http\Controllers\Api\RateController;
 use App\Http\Controllers\Api\StaticPageController;
 use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
@@ -788,3 +789,13 @@ Route::prefix('addon-categories')->group(function () {
 });
 
 Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
+
+//Rates
+Route::group(['prefix' => 'rates'], function () {
+    Route::get('/', [RateController::class, 'index']);
+    Route::post('/store', [RateController::class, 'save']);
+    Route::get('/show/{id}', [RateController::class, 'show']);
+    Route::put('/update/{id}', [RateController::class, 'save']);
+    Route::delete('/delete/{id}', [RateController::class, 'destroy']);
+    Route::post('/restore/{id}', [RateController::class, 'restore']);
+});
