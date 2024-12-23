@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'Logos' => 'اللوجوهات',
-    'ShowLogo' => 'عرض اللوجو',
-    'EditLogo' => 'تعديل اللوجو',
-    'AddLogo' => 'اضافة لوجو',
+    'Logos' => 'الشعارات',
+    'ShowLogo' => 'عرض الشعار',
+    'EditLogo' => 'تعديل الشعار',
+    'AddLogo' => 'اضافة شعار',
     'ArabicName' => 'الاسم بالعربي',
     'EnglishName' => 'الاسم بالانجليزي',
     'Image' => 'الصورة',

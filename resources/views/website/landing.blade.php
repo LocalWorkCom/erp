@@ -19,7 +19,6 @@
             </div>
         </div>
     </section>
-
     <section class="intro">
         <div class="container py-sm-5 py-4">
             <div class=" py-5 owl-slider owl-carousel owl-theme">
@@ -42,18 +41,10 @@
                         </div>
                     </div>
                 @endforeach
-              
+
             </div>
         </div>
-        <!-- <div class="intro-curve"></div>
-                                        <div class="container">
-                                          <div class="overflow-plates d-flex justify-content-between">
 
-                                            <img src="SiteAssets/images/overflow-left.png" class="img-fluid" />
-                                            <img src="SiteAssets/images/overflow-plate.png"class="img-fluid" />
-                                            <img src="SiteAssets/images/overflow-right.png"class="img-fluid" />
-                                          </div> -->
-        {{--    </div> --}}
         <div class="container overflow-plates ">
             <div class="d-flex justify-content-between">
 
@@ -135,7 +126,8 @@
                         <div class="plate">
                             <a href="#">
                                 <figure class="plate-img m-0">
-                                    <img src="{{ asset($dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}" alt="{{ $dish->name_ar }}">
+                                    <img src="{{ asset($dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
+                                        alt="{{ $dish->name_ar }}">
                                 </figure>
                             </a>
                             <div class="fav">

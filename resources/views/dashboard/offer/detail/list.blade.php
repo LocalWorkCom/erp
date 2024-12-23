@@ -58,10 +58,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php $rowNumber = 1; @endphp
                                     @foreach ($offerDetails as $detail)
                                         <tr>
                                             {{-- @dd( $detail) --}}
-                                            <td>{{ $detail->id }}</td>
+{{--                                            <td>{{ $detail->id }}</td>--}}
+                                            <td>{{ $rowNumber++  }}</td>
                                             <td>{{ $detail->offer_type }}</td>
                                             <td>
                                                 @if ($detail->offer_type == 'dishes')
