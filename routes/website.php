@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +14,12 @@ use Illuminate\Support\Facades\Session;
 
 Route::post('/site/register', [AuthController::class, 'Register'])->name('website.register');
 Route::post('/site/login', [AuthController::class, 'login'])->name('website.login');
-Route::get('/site/profile', [AuthController::class, 'view'])->name('website.profile.view');
+Route::post('/site/check-phone', [AuthController::class, 'checkPhone'])->name('check.phone');
+Route::post('/site/reset-password', [AuthController::class, 'resetPassword'])->name('reset.password');
+
 Route::middleware(['auth:client'])->group(function () {
+    Route::get('/site/profile', [AuthController::class, 'view'])->name('website.profile.view');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
 });
 //Route::get('/', function () {
