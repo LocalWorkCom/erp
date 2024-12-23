@@ -67,6 +67,9 @@
         </div>
     </div>
     <!-- end login modal -->
+    @include('website.delivery')
+    @include('website.location')
+
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
