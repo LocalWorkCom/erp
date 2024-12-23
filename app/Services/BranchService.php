@@ -50,7 +50,8 @@ class BranchService
             'address_ar' => 'nullable|string',
             'latitute' => 'nullable|string', // Matches the database
             'longitute' => 'nullable|string', // Matches the database
-            'country_id' => 'required|integer|exists:countries,id',
+            //'country_id' => 'required|integer|exists:countries,id',
+            'country_id' => 'required|exists:countries,id',
             'employee_id' => 'integer|exists:employees,id',
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
@@ -59,6 +60,7 @@ class BranchService
             'closing_hour' => 'nullable',
             'has_kids_area' => 'required|boolean',
             'is_delivery' => 'required|boolean',
+            'is_default' => 'required|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -85,10 +87,20 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
+                'is_default' => $request->is_default,
                 'created_by' => $user_id,
             ]);
 
             AddBranchMenu($branch->id);
+
+            if($request->is_default == 1){
+                $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $branch->id)->first();
+                if($check_branch_default){
+                    $check_branch_default->is_default = 0;
+                    $check_branch_default->save();
+                }
+            }
+            
             return ResponseWithSuccessData($this->lang, $branch, 1);
         // } catch (\Exception $e) {
         //     Log::error('Error creating branch: ' . $e->getMessage());
@@ -125,7 +137,8 @@ class BranchService
             'address_ar' => 'nullable|string',
             'latitute' => 'nullable|string', // Matches the database
             'longitute' => 'nullable|string', // Matches the database
-            'country_id' => 'required|integer|exists:countries,id',
+            //'country_id' => 'required|integer|exists:countries,id',
+            'country_id' => 'required|exists:countries,id',
             'employee_id' => 'integer|exists:employees,id', 
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
@@ -134,6 +147,7 @@ class BranchService
             'closing_hour' => 'nullable',
             'has_kids_area' => 'required|boolean',
             'is_delivery' => 'required|boolean',
+            'is_default' => 'required|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -160,8 +174,18 @@ class BranchService
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
                 'is_delivery' => $request->is_delivery,
+                'is_default' => $request->is_default,
                 'modified_by' => $user_id,
             ]);
+
+            if($request->is_default == 1){
+                $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $id)->first();
+                if($check_branch_default){
+                    $check_branch_default->is_default = 0;
+                    $check_branch_default->save();
+                }
+            }
+
             return ResponseWithSuccessData($this->lang, $branch, 1);
         } catch (\Exception $e) {
             Log::error('Error updating branch: ' . $e->getMessage());

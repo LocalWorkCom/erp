@@ -43,7 +43,12 @@ class LogoController extends Controller
         $logo->name_ar = $data['name_ar'];
         $logo->name_en = $data['name_en'];
         $logo->created_by = auth()->id() ?? 1 ;
-        $image = $request->file('image');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+        }else{
+            app()->getLocale() == 'en' ? $error = 'Please choose an image' : $error = 'يجب اضافة صورة';
+            return redirect('dashboard/logos')->withErrors($error);
+        }
 //        dd($image);
         UploadFile('images/logos', 'image', $logo, $image);
         $logo->save();

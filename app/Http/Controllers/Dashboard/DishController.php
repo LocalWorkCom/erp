@@ -8,6 +8,7 @@ use App\Services\AddonCategoryService;
 use App\Services\AddonService;
 use App\Services\CuisineService;
 use App\Services\RecipeService;
+use App\Models\Dish;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -95,34 +96,33 @@ class DishController extends Controller
     
     public function edit($id)
     {
-        $dish = $this->dishService->show($id); 
-        $categories = $this->dishCategoryService->index(); 
+        $dish = Dish::with(['dishAddonsDetails.category', 'dishAddonsDetails.addons'])->findOrFail($id);
+        $categories = $this->dishCategoryService->index();
         $cuisines = $this->cuisineService->index();
-        $recipes = $this->recipeService->index(); 
-        $addons = $this->addonService->index(); 
+        $recipes = $this->recipeService->index();
+        $allAddons = $this->addonService->index(); 
         $addonCategories = $this->addonCategoryService->index();
-      
-
-        return view('dashboard.dish.edit', compact('dish', 'categories', 'cuisines', 'recipes', 'addons', 'addonCategories'));
+        $addons = $dish->addons ?? collect(); 
+    
+        return view('dashboard.dish.edit', compact('dish', 'categories', 'cuisines', 'recipes', 'allAddons', 'addonCategories', 'addons'));
     }
     
-
+    
+    
+    
     public function update(Request $request, $id)
     {
         try {
-            $this->dishService->update($request->all(), $id);
-    
+            $this->dishService->update($request, $id);
             return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishUpdated'));
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Dish Update Validation Failed', ['errors' => $e->errors()]);
-    
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            Log::error('Dish Update Failed', ['error' => $e->getMessage()]);
-    
+            \Log::error('Dish update failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', __('dishes.DishUpdateFailed'));
         }
     }
+    
     
     public function destroy($id)
     {

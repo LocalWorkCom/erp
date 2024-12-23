@@ -11,14 +11,12 @@ class BranchMenuAddon extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'branch_menu_id',
+        'dish_id',
         'branch_id',
         'dish_addon_id',
         'addon_category_id',
+        'branch_menu_addon_category_id',
         'price',
-        'quantity',
-        'min_addons',
-        'max_addons',
         'is_active',
         'created_by',
         'modified_by',

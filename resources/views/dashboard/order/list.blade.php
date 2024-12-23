@@ -31,11 +31,11 @@
                         display: flex;
                         justify-content: space-between;">
                             <div class="card-title">@lang('order.orders')</div>
-                            <button type="button" class="btn btn-primary label-btn"
+                            {{-- <button type="button" class="btn btn-primary label-btn"
                                 onclick="window.location.href='{{ route('order.add') }}'">
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('order.AddOrder')
-                            </button>
+                            </button> --}}
 
 
                         </div>

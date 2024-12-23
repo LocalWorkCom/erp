@@ -55,7 +55,7 @@
                                     </button>
                                 </div>
                             @endif
-                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                            <table class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('category.ID')</th>
@@ -104,13 +104,14 @@
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
-                                                @can('view discount_dishes')
-                                                    <a href="{{ url('dashboard/discounts/dish/list') }}/{{ $discount->id }}"
-                                                        class="btn btn-outline-teal btn-wave">
-                                                        @lang('discount.AddDishes') <i class="ri-add-box-line"></i>
-                                                    </a>
-                                                @endcan
-
+                                                @if($discount->is_active == 1)
+                                                    @can('view discount_dishes')
+                                                        <a href="{{ url('dashboard/discounts/dish/list') }}/{{ $discount->id }}"
+                                                           class="btn btn-outline-teal btn-wave">
+                                                            @lang('discount.AddDishes') <i class="ri-add-box-line"></i>
+                                                        </a>
+                                                    @endcan
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

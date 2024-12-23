@@ -21,4 +21,5 @@ return [
     'IsDelivery' => 'Has Delivery',
     'SelectCountry' => 'Select Country',
     'SelectEmployee' => 'Select Employee',
+    'IsDefault' => 'Main Branch',
 ];

@@ -157,36 +157,87 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php $temp_offer = 0; @endphp
                                         @foreach ($order['details'] as $detail)
-                                            <tr>
-                                                <td>{{ $detail->dish->name_ar }}</td>
-                                                <td>{{ $detail->quantity }}</td>
-                                                <td>{{ $detail->total }}</td>
-                                                <td>{{ $detail->price_befor_tax }}</td>
-                                                <td>{{ $detail->tax_value }}</td>
-                                                <td>{{ $detail->price_after_tax }}</td>
-                                                <td>
-                                                    <p class="form-text"> <span class="badge bg-warning-transparent">
-                                                            @lang('order.' . strtolower($detail->status))</span></p>
-                                                </td>
-                                                <td>{{ $detail->note }}</td>
-                                                <td>
-                                                    @if ($detail->status != 'cancel')
+                                            @if ($detail->offer_id && $detail->offer_id != $temp_offer)
+                                                {{-- Display Offer Header --}}
+                                                @php $temp_offer = $detail->offer_id; @endphp
+                                                <tr> {{-- Offer row colored --}}
+                                                    <td>عرض {{ $detail->offer->name_ar }}</td>
+                                                    <td></td>
+                                                    @if ($detail->offer->discount_type == 'fixed')
+                                                        <td>{{ $detail->offer->discount_value }}</td>
+                                                    @else
+                                                        <td>{{ $detail->total }}</td>
+                                                    @endif
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <p class="form-text">
+                                                            <span class="badge bg-warning-transparent">
+                                                                @lang('order.' . strtolower($detail->status))
+                                                            </span>
+                                                        </p>
+                                                    </td>
+                                                    <td>{{ $detail->note }}</td>
+                                                    <td>  @if ($detail->status != 'cancel')
                                                         <div class="d-flex gap-2 align-items-center">
                                                             <button type="button"
                                                                 onclick="ChangeItemOrder('{{ $detail->id }}', 'cancel')"
                                                                 class="btn btn-danger btn-sm d-flex align-items-center">
-                                                                <i class="ri-close-circle-line me-1"></i> @lang('order.cancel')
+                                                                <i class="ri-close-circle-line me-1"></i>@lang('order.cancel')
                                                             </button>
-
                                                         </div>
-                                                    @endif
-                                                </td>
-
-
-
-                                            </tr>
+                                                    @endif</td>
+                                                </tr>
+                                        
+                                                {{-- Display Offer Details --}}
+                                                @foreach ($detail->offer->details as $offer_detail)
+                                                    <tr> {{-- Offer details row colored --}}
+                                                        <td> {{ $offer_detail->dish->name_ar }}</td>
+                                                        <td>{{ $offer_detail->count }}</td>
+                                                        <td>{{ $detail->offer->discount_type == 'fixed' ? 0 : $detail->total }}</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                @endforeach
+                                            @elseif (!$detail->offer_id)
+                                                {{-- Display Individual Dish Details --}}
+                                                <tr class="table-default"> {{-- Default styling for individual dishes --}}
+                                                    <td>{{ $detail->dish->name_ar }}</td>
+                                                    <td>{{ $detail->quantity }}</td>
+                                                    <td>{{ $detail->total }}</td>
+                                                    <td>{{ $detail->price_befor_tax }}</td>
+                                                    <td>{{ $detail->tax_value }}</td>
+                                                    <td>{{ $detail->price_after_tax }}</td>
+                                                    <td>
+                                                        <p class="form-text">
+                                                            <span class="badge bg-warning-transparent">
+                                                                @lang('order.' . strtolower($detail->status))
+                                                            </span>
+                                                        </p>
+                                                    </td>
+                                                    <td>{{ $detail->note }}</td>
+                                                    <td>
+                                                        @if ($detail->status != 'cancel')
+                                                            <div class="d-flex gap-2 align-items-center">
+                                                                <button type="button"
+                                                                    onclick="ChangeItemOrder('{{ $detail->id }}', 'cancel')"
+                                                                    class="btn btn-danger btn-sm d-flex align-items-center">
+                                                                    <i class="ri-close-circle-line me-1"></i>@lang('order.cancel')
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
+                                        
                                     </tbody>
                                 </table>
 

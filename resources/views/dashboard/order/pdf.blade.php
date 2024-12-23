@@ -11,20 +11,27 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #fff;
+            background-color: #f8f9fa;
+            color: #333;
         }
 
         .invoice-container {
             width: 100%;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         .invoice-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .invoice-header img {
@@ -32,19 +39,22 @@
         }
 
         .invoice-header .title {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
-            color: #333;
+            color: #007bff;
         }
 
         .invoice-header .order-number {
-            font-size: 16px;
-            color: #007bff;
+            font-size: 18px;
+            color: #555;
         }
 
         /* Billing Information */
         .billing-info {
             margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
         .billing-info p {
@@ -53,6 +63,7 @@
 
         .billing-info .fw-bold {
             font-weight: bold;
+            color: #333;
         }
 
         /* Table Styles */
@@ -64,24 +75,37 @@
 
         .invoice-table th,
         .invoice-table td {
-            padding: 8px;
+            padding: 12px;
             text-align: left;
             border: 1px solid #ddd;
         }
 
         .invoice-table th {
-            background-color: #f8f9fa;
+            background-color: #007bff;
+            color: #fff;
             font-weight: bold;
         }
 
         .invoice-table .total-row td {
             font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        .invoice-table .text-success {
+            color: #28a745;
         }
 
         /* Footer */
         .invoice-footer {
             text-align: right;
             margin-top: 20px;
+        }
+
+        /* QR Code */
+        .qr-code {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
         }
 
         /* PDF Export Styles */
@@ -93,15 +117,10 @@
             }
 
             .invoice-container {
-                padding: 10px;
-                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
             }
 
-            .invoice-footer button {
-                display: none;
-            }
-
-            /* Hide elements that are not needed in the printed version */
             .print-hide {
                 display: none;
             }
@@ -114,8 +133,7 @@
         <!-- Invoice Header -->
         <div class="invoice-header">
             <div>
-                <!-- Logo -->
-                <img src="{{ $order->site_logo }}" class="invoice-logo">
+                <img src="{{ $order->site_logo }}" alt="Company Logo">
             </div>
             <div class="title">
                 SALES INVOICE: <span class="order-number">{{ $order->order_number }}</span>
@@ -124,18 +142,15 @@
 
         <!-- Billing Information -->
         <div class="billing-info">
-            <div class="col-xl-4 col-lg-4 col-md-6">
+            <div>
                 <p class="fw-bold">Billing To:</p>
                 <p>{{ $order->client->name }}</p>
                 <p>{{ $order->client->phone }}</p>
                 <p>{{ $order->client->email }}</p>
                 <p>{{ $order->address->city }} - {{ $order->address->address }}</p>
             </div>
-
-            <!-- QR Code for Order Status Change -->
-            <div class="col-xl-4 col-lg-4 col-md-6 ms-auto mt-sm-0 mt-3">
+            <div class="qr-code">
                 <img src="data:image/png;base64,{{ $order['qr'] }}" alt="QR Code">
-
             </div>
         </div>
 
@@ -159,13 +174,48 @@
                 </tr>
             </thead>
             <tbody>
+             
+                @php $temp_offer = 0; @endphp
                 @foreach ($order['details'] as $detail)
-                    <tr>
-                        <td>{{ $detail->dish->name_ar . ' | ' . $detail->dish->name_en }}</td>
-                        <td>{{ $detail->quantity }}</td>
-                        <td>${{ $detail->price_befor_tax }}</td>
-                        <td>${{ $detail->total }}</td>
-                    </tr>
+                    @if ($detail->offer_id && $detail->offer_id != $temp_offer)
+                        {{-- Display Offer Header --}}
+                        @php $temp_offer = $detail->offer_id; @endphp
+                        <tr> {{-- Offer row colored --}}
+                            <td>عرض {{ $detail->offer->name_ar }}</td>
+                            <td></td>
+                            @if ($detail->offer->discount_type == 'fixed')
+                                <td>${{ $detail->offer->discount_value }}</td>
+                            @else
+                                <td>${{ $detail->total }}</td>
+                            @endif
+                            @if ($detail->offer->discount_type == 'fixed')
+                                <td>${{ $detail->offer->discount_value }}</td>
+                            @else
+                                <td>${{ $detail->price_after_tax }}</td>
+                            @endif
+                        </tr>
+                        {{-- Display Offer Details --}}
+                        @foreach ($detail->offer->details as $offer_detail)
+                            <tr> {{-- Offer details row colored --}}
+                                <td> {{ $offer_detail->dish->name_ar }}</td>
+                                <td>{{ $offer_detail->count }}</td>
+                                <td>{{ $detail->offer->discount_type == 'fixed' ? '$0' : $detail->total }}
+                                </td>
+
+                                <td>${{ $detail->price_after_tax }}</td>
+                            </tr>
+                        @endforeach
+                    @elseif (!$detail->offer_id)
+                        {{-- Display Individual Dish Details --}}
+                        <tr class="table-default"> {{-- Default styling for individual dishes --}}
+                            <td>{{ $detail->dish->name_ar . ' | ' . $detail->dish->name_en }}
+                            </td>
+                            <td>{{ $detail->quantity }}</td>
+                            <td>${{ $detail->price_befor_tax }}</td>
+                            <td>${{ $detail->total }}</td>
+
+                        </tr>
+                    @endif
                 @endforeach
                 @foreach ($order['addons'] as $addon)
                     <tr>
@@ -194,8 +244,6 @@
                 </tr>
             </tbody>
         </table>
-
-      
     </div>
 </body>
 
