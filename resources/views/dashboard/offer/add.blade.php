@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('offer.DiscountValue')</label>
-                                        <input type="text" class="form-control" name="discount_value" value="{{ old('discount_value') }}"
+                                        <input type="number" class="form-control" name="discount_value" value="{{ old('discount_value') }}"
                                                placeholder="@lang('offer.DiscountValue')" required>
                                         <div class="invalid-feedback">
                                             @lang('validation.EnterDiscountValue')

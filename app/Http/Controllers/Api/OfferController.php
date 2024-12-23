@@ -26,7 +26,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::with('details')->whereHas('details')->get() ?? collect();
+        $offers = Offer::with('details')->whereHas('details')->where('is_active',1)->get() ?? collect();
 
 
         $filteredOffers = $offers->filter(function ($offer) {
@@ -97,7 +97,7 @@ class OfferController extends Controller
      */
     public function show(string $id)
     {
-        $offer = Offer::with('details')->whereHas('details')->find($id) ?? collect();
+        $offer = Offer::with('details')->whereHas('details')->where('is_active',1)->find($id) ?? collect();
 
         $filteredOffer = $offer->filter(function ($offer) {
             return $offer->details->every(function ($detail) {

@@ -69,11 +69,11 @@
                                     <p class="form-text">{{ $offer->name_en }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('offer.ArabicDesc')</label>
+                                    <label class="form-label">@lang('offer.ArabicDescription')</label>
                                     <p class="form-text">{{ $offer->description_ar == null ? __('category.none') :  $offer->description_ar}}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <label class="form-label">@lang('offer.EnglishDesc')</label>
+                                    <label class="form-label">@lang('offer.EnglishDescription')</label>
                                     <p class="form-text">{{ $offer->description_en == null ? __('category.none') :  $offer->description_en}}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">

@@ -24,4 +24,14 @@ class BranchMenuAddonCategory extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function branches()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    public function addonCategories()
+    {
+        return $this->belongsTo(AddonCategory::class, 'addon_category_id');
+    }
 }

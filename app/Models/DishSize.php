@@ -10,6 +10,8 @@ class DishSize extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $appends = ['name_site']; 
+
     protected $fillable = [
         'dish_id',
         'size_name_en',
@@ -18,6 +20,11 @@ class DishSize extends Model
         'default_size'
        
     ];
+
+    public function getNameSiteAttribute()
+    {
+        return app()->getLocale() === 'en' ? $this->size_name_en : $this->size_name_ar;
+    }
 
     /**
      * Get the dish associated with the size.

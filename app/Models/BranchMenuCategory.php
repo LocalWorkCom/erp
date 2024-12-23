@@ -33,8 +33,4 @@ class BranchMenuCategory extends Model
         return $this->belongsTo(DishCategory::class, 'dish_category_id');
     }
 
-    public function children()
-    {
-        return $this->hasMany(BranchMenuCategory::class, 'parent_id');
-    }
 }

@@ -35,11 +35,10 @@
                             <div class="card-title">
                                 @lang('branch_menu.Menus')</div>
 
-                            <?php /*
                             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form id="edit-floor-form" action="" method="POST" class="needs-validation" novalidate>
+                                        <form id="edit-menu-form" action="" method="POST" class="needs-validation" novalidate>
                                             @csrf
                                             @method('PUT')
                                             @if ($errors->any())
@@ -53,19 +52,14 @@
                                                 @endforeach
                                             @endif
                                             <div class="modal-header">
-                                                <h6 class="modal-title" id="editModalLabel">@lang('branch_menu.EditCategory')</h6>
+                                                <h6 class="modal-title" id="editModalLabel">@lang('branch_menu.EditBranchMenu')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row gy-4">
                                                     <div class="col-xl-12 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="branch" class="form-label">@lang('branch_menu.Branch')</label>
-                                                        <input type="text" id="edit-branch" class="form-control" name="branch" readonly>
-                                                    </div>
-
-                                                    <div class="col-xl-12 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="category" class="form-label">@lang('branch_menu.Category')</label>
-                                                        <input type="text" id="edit-category" class="form-control" name="category" readonly>
+                                                        <label for="branch" class="form-label">@lang('branch_menu.Price')</label>
+                                                        <input type="number" id="edit-price" class="form-control" name="price">
                                                     </div>
 
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
@@ -77,8 +71,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="is_active" id="edit-not-active" value="2">
-                                                            <label class="form-check-label" for="not-active">
+                                                            <input class="form-check-input" type="radio" name="is_active" id="edit-not-active" value="0">                                                            <label class="form-check-label" for="not-active">
                                                                 @lang('branch_menu.NotActive')
                                                             </label>
                                                         </div>
@@ -99,7 +92,6 @@
                                     </div>
                                 </div>
                             </div>
-                            */?>
 
                             <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -112,19 +104,23 @@
                                             <div class="row gy-4">
                                                 <div class="col-xl-12">
                                                     <label class="form-label">@lang('branch_menu.Branch')</label>
-                                                    <p id="show-branch" class="form-control-static"></p>
+                                                    <p id="show-menu-branch" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-xl-12">
                                                     <label class="form-label">@lang('branch_menu.Category')</label>
-                                                    <p id="show-dish-category" class="form-control-static"></p>
+                                                    <p id="show-menu-category" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-xl-12">
                                                     <label class="form-label">@lang('branch_menu.Dish')</label>
-                                                    <p id="show-dish-category" class="form-control-static"></p>
+                                                    <p id="show-menu-dish" class="form-control-static"></p>
+                                                </div>
+                                                <div class="col-xl-12">
+                                                    <label class="form-label">@lang('branch_menu.Price')</label>
+                                                    <p id="show-menu-price" class="form-control-static"></p>
                                                 </div>
                                                 <div class="col-xl-12">
                                                     <label class="form-label">@lang('branch_menu.Activation')</label>
-                                                    <p id="show-activation" class="form-control-static"></p>
+                                                    <p id="show-menu-activation" class="form-control-static"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +168,7 @@
                                     <tr>
                                         <td>{{ $branch_menu->id }}</td>
                                         <td>{{ ($branch_menu->branches) ? $branch_menu->branches->name_site : "" }}</td>
-                                        <td>{{ ($branch_menu->dish_categories) ? $branch_menu->dish_categories->name_site : "" }}</td>
+                                        <td>{{ ($branch_menu->branchMenuCategories) ? (($branch_menu->branchMenuCategories->dish_categories) ? $branch_menu->branchMenuCategories->dish_categories->name_site : "") : "" }}</td>
                                         <td>{{ ($branch_menu->dish) ? $branch_menu->dish->name_site : "" }}</td>
                                         <td id="branch_menu_status_{{ $branch_menu->id }}">
                                             @if(($branch_menu->is_active == 1))
@@ -184,37 +180,25 @@
                                         <td>
                                             <!-- Show Button -->
                                             <a href="javascript:void(0);"
-                                               class="btn btn-info-light btn-wave show-category-btn"
+                                               class="btn btn-info-light btn-wave show-menu-btn"
                                                data-id="{{ $branch_menu->id }}"
                                                data-bs-toggle="modal"
                                                data-bs-target="#showModal">
                                                 @lang('category.show') <i class="ri-eye-line"></i>
                                             </a>
 
-                                            <button type="button" id="branch_menu_activation_{{ $branch_menu->id }}" onclick="change_status_item({{ $branch_menu->id }})" class="btn btn-{{ ($branch_menu->is_active == 1) ? 'danger' : 'success' }}-light btn-wave">
-                                            {{ ($branch_menu->is_active == 0) ? __('branch_menu.Active') : __('branch_menu.NotActive') }}
-                                            </button>
-
-
-                                            <?php /*
                                             <!-- Edit Button -->
                                             <button type="button"
-                                                    class="btn btn-orange-light btn-wave edit-category-btn"
+                                                    class="btn btn-orange-light btn-wave edit-menu-btn"
                                                     data-id="{{ $branch_menu->id }}"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
                                                 @lang('category.edit') <i class="ri-edit-line"></i>
                                             </button>
-
-                                            <!-- Delete Button -->
-                                            <form class="d-inline" id="delete-form-{{ $branch_menu->id }}" action="{{ route('branch.categories.delete', $branch_menu->id) }}" method="POST" onsubmit="return confirmDelete()">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" onclick="delete_item({{ $branch_menu->id }})" class="btn btn-danger-light btn-wave">
-                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                </button>
-                                            </form>
-                                            */?>
+                                            
+                                            <button type="button" id="branch_menu_activation_{{ $branch_menu->id }}" onclick="change_status_item({{ $branch_menu->id }})" class="btn btn-{{ ($branch_menu->is_active == 1) ? 'danger' : 'success' }}-light btn-wave">
+                                            {{ ($branch_menu->is_active == 0) ? __('branch_menu.Active') : __('branch_menu.NotActive') }}
+                                            </button>
 
                                         </td>
 
@@ -261,11 +245,11 @@
 
 <script>
     $(document).ready(function(){
-        $('.edit-category-btn').on('click', function() {
-            var dishCategoryId = this.getAttribute('data-id');   
-            var get_url = "{{ route('branch.categories.show', 'id') }}";
-            var edit_url = "{{ route('branch.categories.update', 'id') }}";
-            get_url = get_url.replace('id', dishCategoryId);
+        $('.edit-menu-btn').on('click', function() {
+            var dishMenuId = this.getAttribute('data-id');   
+            var get_url = "{{ route('branch.menus.show', 'id') }}";
+            var edit_url = "{{ route('branch.menus.update', 'id') }}";
+            get_url = get_url.replace('id', dishMenuId);
 
             // AJAX request to fetch user details
             $.ajax({
@@ -273,8 +257,7 @@
                 type: 'GET',
                 success: function(data) {
                     // Populate the modal with the data
-                    $('#edit-branch').val(data.branches.name_site);
-                    $('#edit-category').val(data.dish_categories.name_site);
+                    $('#edit-price').val(data.price);
 
                     if(data.is_active == 1){
                         $('#edit-active').prop('checked', true);
@@ -282,8 +265,8 @@
                         $('#edit-not-active').prop('checked', true);
                     }
 
-                    edit_url = edit_url.replace('id', dishCategoryId);
-                    $('#edit-category-form').attr('action', edit_url);
+                    edit_url = edit_url.replace('id', dishMenuId);
+                    $('#edit-menu-form').attr('action', edit_url);
 
                     // Show the modal
                     $('#editModal').modal('show');
@@ -294,31 +277,10 @@
             });
         });
 
-        // $('.change-status-btn').on('click', function() {
-        //     var dishCategoryId = this.getAttribute('data-id'); 
-        //     var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
-        //     edit_status_url = edit_status_url.replace('id', dishCategoryId);
-        //     //AJAX request to fetch user details
-        //     $.ajax({
-        //         url: edit_status_url, 
-        //         type: 'GET',
-        //         success: function(data) {                    
-        //             if(data.is_active == 1){
-        //                 $('#branch_menu_status_'+dishCategoryId).text('{{ __('branch_menu.Active')}}');
-        //             }else{
-        //                 $('#branch_menu_status_'+dishCategoryId).text('{{ __('branch_menu.NotActive')}}');
-        //             }
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.log('Error: ' + error);
-        //         }
-        //     });
-        // });
-
-        $('.show-category-btn').on('click', function() {
-            var dishCategoryId = this.getAttribute('data-id');   
-            var get_url = "{{ route('branch.categories.show', 'id') }}";
-            get_url = get_url.replace('id', dishCategoryId);
+        $('.show-menu-btn').on('click', function() {
+            var dishMenuId = this.getAttribute('data-id');   
+            var get_url = "{{ route('branch.menus.show', 'id') }}";
+            get_url = get_url.replace('id', dishMenuId);
 
             // AJAX request to fetch user details
             $.ajax({
@@ -326,12 +288,15 @@
                 type: 'GET',
                 success: function(data) {                                        
                     // Populate the modal with the data
-                    $('#show-dish-category').text(data.dish_categories.name_site);
-                    $('#show-branch').text(data.branches.name_site);
+                    
+                    $('#show-menu-category').text(data.branch_menu_categories.dish_categories.name_site);
+                    $('#show-menu-branch').text(data.branches.name_site);
+                    $('#show-menu-dish').text(data.dish.name_site);
+                    $('#show-menu-price').text(data.price);
                     if(data.is_active == 1){
-                        $('#show-activation').text('{{ __('branch_menu.Active')}}');
+                        $('#show-menu-activation').text('{{ __('branch_menu.Active')}}');
                     }else{
-                        $('#show-activation').text('{{ __('branch_menu.NotActive')}}');
+                        $('#show-menu-activation').text('{{ __('branch_menu.NotActive')}}');
                     }
 
                     // Show the modal
@@ -348,27 +313,7 @@
         return confirm("@lang('validation.DeleteConfirm')");
     }
 
-    // function change_status_item(dishCategoryId) {
-    //     //var button = document.querySelector('.change-status-btn[data-id="' + dishCategoryId + '"]');    
-    //     var button = document.querySelector('.change-status-btn_' + dishCategoryId); 
-    //     console.log(button);
-           
-    //     if (button) {
-    //         if (button.classList.contains('on')) {
-    //         alert(11);
-    //             button.removeClass('on');
-    //             //button.classList.add('off');
-    //         } else {
-    //             alert(22);
-    //             button.removeClass('off');
-    //             //button.classList.add('on');
-    //         }
-    //     }
-    // }
-
-    function change_status_item(dishCategoryId) {
-        var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
-        edit_status_url = edit_status_url.replace('id', dishCategoryId);   
+    function change_status_item(dishMenuId) {
         Swal.fire({
             title: 'تنبيه',
             text: 'هل انت متاكد من انك تريد ان تغيير حالة هذا التصنيف',
@@ -379,18 +324,18 @@
             confirmButtonColor: '#3085d6'
         }).then((result) => {
             if (result.isConfirmed) {
-                var edit_status_url = "{{ route('branch.categories.changeStatus', 'id') }}"; 
-                edit_status_url = edit_status_url.replace('id', dishCategoryId);
+                var edit_status_url = "{{ route('branch.menus.changeStatus', 'id') }}"; 
+                edit_status_url = edit_status_url.replace('id', dishMenuId);
                 $.ajax({
                     url: edit_status_url, 
                     type: 'GET',
                     success: function(data) {
                         if(data.is_active == 1){
-                            $('#branch_menu_status_'+dishCategoryId).text('{{ __('branch_menu.Active')}}');
-                            $('#branch_menu_activation_'+dishCategoryId).text('{{ __('branch_menu.NotActive')}}');
+                            $('#branch_menu_status_'+dishMenuId).text('{{ __('branch_menu.Active')}}');
+                            $('#branch_menu_activation_'+dishMenuId).text('{{ __('branch_menu.NotActive')}}');
                         }else{
-                            $('#branch_menu_status_'+dishCategoryId).text('{{ __('branch_menu.NotActive')}}');
-                            $('#branch_menu_activation_'+dishCategoryId).text('{{ __('branch_menu.Active')}}');
+                            $('#branch_menu_status_'+dishMenuId).text('{{ __('branch_menu.NotActive')}}');
+                            $('#branch_menu_activation_'+dishMenuId).text('{{ __('branch_menu.Active')}}');
                         }
                     },
                     error: function(xhr, status, error) {

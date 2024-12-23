@@ -23,7 +23,7 @@ class BranchMenuService
     public function index(Request $request)
     {
         try {
-            $branch_menu_categories = BranchMenu::with(['branches', 'children', 'dish_categories'])->get();
+            $branch_menu_categories = BranchMenu::with(['branches', 'branchMenuCategories', 'dish'])->get();
             return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
@@ -34,7 +34,7 @@ class BranchMenuService
     public function branch($id)
     {
         try {
-            $branch_menu_categories = BranchMenuCategory::where('branch_id', $id)->with(['branches', 'children', 'dish_categories'])->get();
+            $branch_menu_categories = BranchMenu::where('branch_id', $id)->with(['branches', 'branchMenuCategories', 'dish'])->get();
             return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
@@ -56,8 +56,8 @@ class BranchMenuService
     public function show($id)
     {
         try {
-            $branch_menu_category = BranchMenuCategory::with(['branches', 'children', 'dish_categories'])->findOrFail($id);
-            return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
+            $branch_menu = BranchMenu::with(['branches', 'branchMenuCategories.dish_categories', 'dish'])->findOrFail($id);
+            return ResponseWithSuccessData($this->lang, $branch_menu, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branch: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
@@ -72,6 +72,7 @@ class BranchMenuService
         try {
             // Validation
             $validator = Validator::make($request->all(), [
+                'price' => 'required|numeric',
                 'is_active' => 'required|integer'
             ]);
 
@@ -79,13 +80,14 @@ class BranchMenuService
                 return RespondWithBadRequestWithData($validator->errors());
             }
 
-            $check_branch_menu_category = BranchMenuCategory::find($id);
+            $check_branch_menu_category = BranchMenu::find($id);
             if (!$check_branch_menu_category) {
                 return  RespondWithBadRequestNotExist();
             }
 
             $user_id =  Auth::guard('admin')->user()->id;
-            $branch_menu_category = BranchMenuCategory::findOrFail($id);
+            $branch_menu_category = BranchMenu::findOrFail($id);
+            $branch_menu_category->price = $request->price;
             $branch_menu_category->is_active = $request->is_active;
             $branch_menu_category->modified_by = $user_id;
             $branch_menu_category->save();
@@ -105,14 +107,14 @@ class BranchMenuService
         try {
             $user_id =  Auth::guard('admin')->user()->id;
             $active = 1;
-            $branch_menu_category = BranchMenuCategory::findOrFail($id);
-            if($branch_menu_category->is_active == 1){
+            $branch_menu = BranchMenu::findOrFail($id);
+            if($branch_menu->is_active == 1){
                 $active = 0;
             }
-            $branch_menu_category->is_active = $active;
-            $branch_menu_category->modified_by = $user_id;
-            $branch_menu_category->save();
-            return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
+            $branch_menu->is_active = $active;
+            $branch_menu->modified_by = $user_id;
+            $branch_menu->save();
+            return ResponseWithSuccessData($this->lang, $branch_menu, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting branch menu category: ' . $e->getMessage());
             return RespondWithBadRequestData($this->lang, 2);
