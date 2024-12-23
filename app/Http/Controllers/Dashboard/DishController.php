@@ -127,7 +127,7 @@ class DishController extends Controller
     public function destroy($id)
     {
         $this->dishService->delete($id);
-        return redirect()->route('dashboard.dish.index')->with('success', 'Dish deleted successfully.');
+        return redirect()->route('dashboard.dishes.index')->with('success', 'Dish deleted successfully.');
     }
 
     public function restore($id)
