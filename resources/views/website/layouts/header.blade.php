@@ -60,11 +60,11 @@
                     </li>
 
                     @auth('client')
-                        @if (header::guard('client')->user()->flag == 'client')
+                        @if (Auth::guard('client')->user()->flag == 'client')
                             <li class="nav-item">
                                 <a class="nav-link  align-items-center" data-bs-toggle="modal"
                                     data-bs-target="#profileModal"><i class="fas fa-user-circle main-color"></i>
-                                    <span>{{ header::guard('client')->user()->name }} </span>
+                                    <span>{{ Auth::guard('client')->user()->name }} </span>
                                 </a>
                             </li>
                         @else
