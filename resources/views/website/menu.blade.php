@@ -129,13 +129,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                <figcaption>
-                                    <h4>
-                                        لا توجد منتجات
-                                    </h4>
-                                </figcaption>
-                            </figure> -->
+                                        <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                                        <figcaption>
+                                            <h4>
+                                                لا توجد منتجات
+                                            </h4>
+                                        </figcaption>
+                                    </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">
@@ -207,6 +207,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const dishCards = document.querySelectorAll('.dish-card');
+
         searchInput.addEventListener('input', function() {
             const query = searchInput.value.toLowerCase();
 
