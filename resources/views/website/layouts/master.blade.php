@@ -25,7 +25,8 @@
 
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.css') }}">
-
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
     <!-- Owl Carousel -->
     <link rel="stylesheet"
         href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
@@ -125,13 +126,12 @@
     @include('website.location')
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
-
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/bootstarp-select.js') }}"></script>
     <!-- Main js -->
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/style.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
     <!-- include Gallery (lightbox) plugin js-->
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/lightbox/js/lightbox.min.js') }}"></script>
@@ -246,6 +246,24 @@
       $(".owl-prev > span").html('<i class="fas fa-arrow-right"></i>');
       $(".owl-next > span").html('<i class="fas fa-arrow-left"></i>');
   </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if the cookies for latitude and longitude are already set
+            if (!document.cookie.includes('latitude') || !document.cookie.includes('longitude')) {
+                // Request geolocation from the user
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // Set cookies for latitude and longitude
+                        document.cookie = `latitude=${position.coords.latitude}; path=/`;
+                        document.cookie = `longitude=${position.coords.longitude}; path=/`;
+                    },
+                    (error) => {
+                        console.warn('User denied location access or an error occurred:', error);
+                    }
+                );
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 

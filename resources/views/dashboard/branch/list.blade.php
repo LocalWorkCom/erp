@@ -68,7 +68,7 @@
                                             <td>{{ $branch->name_en }}</td>
                                             <td>{{ $branch->address_ar }}</td>
                                             <td>{{ $branch->address_en }}</td>
-                                            <td>{{ $branch->country->name_ar ." | ". $branch->country->name_en}}</td>
+                                            <td>{{ ($branch->country) ? $branch->country->name_ar ." | ". $branch->country->name_en : __('category.none')}}</td>
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="{{route('branch.show',$branch->id)}}"

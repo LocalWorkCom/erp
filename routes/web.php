@@ -15,6 +15,7 @@ Route::get('/set-locale/{locale}', function ($locale) {
     if (in_array($locale, config('app.available_locales'))) {
         session(['locale' => $locale]);
         Session::put('direction', $locale === 'ar' ? 'rtl' : 'ltr');
+        app()->setLocale($locale); // Immediately apply the locale for this request
     }
     return redirect()->back();
 })->name('set-locale');

@@ -67,7 +67,6 @@
                     @endif
                 @endforeach
             </div>
-
     </section>
     <section class="offers">
         <div class="container py-sm-5 py-4">
@@ -79,8 +78,8 @@
                     </span>
                 </a>
             </div>
-            
-            
+
+
             <div class="offers-slider owl-carousel owl-theme">
                 @foreach ($discounts as $discount)
                     <div class="item mb-4 category position-relative" data-aos="zoom-in">
@@ -105,7 +104,7 @@
             </div>
         </div>
     </section>
-    
+
 
 
     <section class="plates">
@@ -125,7 +124,13 @@
                                 </figure>
                             </a>
                             <div class="fav">
-                                <a href="#"><i class="far fa-heart"></i></a>
+                                <form action="{{ route('add.favorite') }}" method="POST" class="favorite-form">
+                                    @csrf
+                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                    <button type="submit" class="btn">
+                                        <i class="{{ in_array($dish->id, $userFavorites) ? 'fas' : 'far' }} fa-heart"></i>
+                                    </button>
+                                </form>
                             </div>
                             <div class="text-center pt-4">
                                 <h5>{{ $dish->name_ar }}</h5>

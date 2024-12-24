@@ -125,6 +125,7 @@ return [
     'EnterFlag' => 'Please choose something',
     'EnterDish' => 'Please choose a dish',
     'EnterOffer' => 'Please choose an offer',
+    'EnterHexaCode' => 'Please enter the Hexa Code',
     'EnterArabicName' => 'Please enter the Arabic name',
     'EnterEnglishName' => 'Please enter the English name',
     'EnterArabicDesc' => 'Please enter the Arabic description',
