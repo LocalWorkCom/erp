@@ -67,7 +67,6 @@
                     @endif
                 @endforeach
             </div>
-
     </section>
     <section class="offers">
         <div class="container py-sm-5 py-4">

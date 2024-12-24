@@ -677,10 +677,7 @@ function getNearestBranch($userLat, $userLon)
     $nearestBranch = DB::table('branches')
         ->select(
             'id',
-            'name',
-            'address',
-            DB::raw("latitude, longitude,
-                (6371 * acos(cos(radians($userLat))
+            DB::raw("(6371 * acos(cos(radians($userLat))
                 * cos(radians(latitude))
                 * cos(radians(longitude) - radians($userLon))
                 + sin(radians($userLat))
@@ -689,8 +686,9 @@ function getNearestBranch($userLat, $userLon)
         ->orderBy('distance', 'asc')
         ->first();
 
-    return $nearestBranch;
+    return $nearestBranch ? $nearestBranch->id : null;
 }
+
 
 
 function scopeNearest($IDBranch, $latitude, $longitude)
@@ -1044,11 +1042,13 @@ function AddSizes($branch_id)
 function getDefaultBranch()
 {
     $defaultBranch = Branch::where('is_default', 1)->first();
+
     if (!$defaultBranch) {
         throw new Exception('No default branch is set.');
     }
-    return $defaultBranch->id;
+    return $defaultBranch ? $defaultBranch->id : null;
 }
+
 
 function respondError($error, $code, $errorMessages = [])
 {
