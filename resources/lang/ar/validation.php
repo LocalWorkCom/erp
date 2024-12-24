@@ -82,6 +82,8 @@ return [
     'DataExistMessage' => 'موجود بالفعل',
     'regex' => 'صيغة :attribute غير صحيحة.',
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
+    'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
+    'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'attributes' => [
 
         'EnterCode' => 'أدخل كود الدوله',
@@ -104,6 +106,8 @@ return [
         'password_confirm' => 'تأكيد كلمه المرور',
         "name_ar" => "الأسم بالعربيه",
         "name_en" => "الأسم بالأنجليزيه",
+        "description_ar" => "الوصف بالعربيه",
+        "description_en" => "الوصف بالأنجليزيه",
         'currency_ar' => 'العمله بالعربى',
         'currency_en' => 'العمله بالأنجليزيه',
         'currency_code' => 'كود العمله',
@@ -162,7 +166,9 @@ return [
         'image_en' => 'الصورة بالانجليزي',
         'branches' => 'الفروع',
         'branches.*' => 'فرع',
-        'type_id'=>'اسم النوع'
+        'type_id'=>'اسم النوع',
+        'active'=>'الفعالية',
+        'value'=>'القيمة',
 
     ],
 
@@ -210,5 +216,6 @@ return [
     'EnterLeaveType' => 'يجب اختيار انواع الاجازات',
     'EnterMinmum' => 'يجب ادخال الحد الادنى',
     'EnterMaxmum' => 'يجب ادخال الحد الاقصى',
+    'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
 
 ];
