@@ -22,7 +22,7 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $sliders = Slider::all();
         $branches = Branch::all();
@@ -30,9 +30,22 @@ class HomeController extends Controller
         // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
         // $discounts = $lastThreeDiscounts->reverse()->take(3);
         // $discounts = $discounts->reverse();
+        $userLat = $request->cookie('latitude');
+        $userLon = $request->cookie('longitude');
+
+        $branchId = $userLat && $userLon
+            ? getNearestBranch($userLat, $userLon)
+            : getDefaultBranch();
+
+        if (!$branchId) {
+            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        }
+
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('is_active', true)->get();
+            ->where('branch_id', $branchId)
+            ->where('is_active', true)
+            ->get();
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
