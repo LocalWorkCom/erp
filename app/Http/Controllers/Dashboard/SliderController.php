@@ -34,7 +34,7 @@ class SliderController extends Controller
     public function create()
     {
         $dishes = Dish::all();
-        $offers = Offer::all();
+        $offers = Offer::where('is_active', 1)->get();
         return view('dashboard.slider.add', compact('dishes', 'offers'));
     }
 

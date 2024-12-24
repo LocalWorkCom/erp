@@ -13,6 +13,7 @@ class Rate extends Model
     protected $fillable = [
         'value',
         'note',
+        'active',
         'created_by',
         'modified_by',
         'deleted_by',
