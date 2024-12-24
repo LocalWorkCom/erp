@@ -870,15 +870,9 @@ function AddDishCategories($branch_ids, $dish_id)
 
 function AddDishes($branch_ids, $dish_id)
 {
-<<<<<<< HEAD
-    if($dish_id != 0){
-        $get_dishes = Dish::where('id', $dish_id)->get();
-    }else{
-=======
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->first();
     } else {
->>>>>>> 3434624622d6921b1d4a76cc66fe5f3a7209a899
         $get_dishes = Dish::get();
     }
     if ($get_dishes) {
@@ -928,17 +922,11 @@ function AddAddonCategories($branch_ids, $dish_id)
 
 function AddAddons($branch_ids, $dish_id)
 {
-<<<<<<< HEAD
-    if($dish_id != 0){
-        $get_addons = DishAddon::where('dish_id', $dish_id)->get();
-    }else{
-=======
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
         $addons = $get_dish->dishAddonsDetails->pluck('addon_id');
         $get_addons = DishAddon::whereIn('id', $addons)->get();
     } else {
->>>>>>> 3434624622d6921b1d4a76cc66fe5f3a7209a899
         $get_addons = DishAddon::get();
     }
 
