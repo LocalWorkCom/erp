@@ -119,6 +119,7 @@
             </div>
         </div>
     </div>
+    @include('website.user-modal')
 
     @include('website.delivery')
     @include('website.location')
