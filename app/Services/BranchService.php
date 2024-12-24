@@ -91,7 +91,8 @@ class BranchService
                 'created_by' => $user_id,
             ]);
 
-            AddBranchMenu($branch->id);
+            $branche_ids = [$branch->id];
+            AddBranchesMenu($branche_ids, $dish_id=0);
 
             if($request->is_default == 1){
                 $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $branch->id)->first();
