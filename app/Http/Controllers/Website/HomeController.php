@@ -22,19 +22,40 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $sliders = Slider::all();
         $branches = Branch::all();
-        $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
-        $discounts = $lastThreeDiscounts->reverse()->take(3);
-        $discounts = $discounts->reverse();
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
+        // $discounts = $lastThreeDiscounts->reverse()->take(3);
+        // $discounts = $discounts->reverse();
+        $userLat = $request->cookie('latitude');
+        $userLon = $request->cookie('longitude');
+
+        $branchId = $userLat && $userLon
+            ? getNearestBranch($userLat, $userLon)
+            : getDefaultBranch();
+
+        if (!$branchId) {
+            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        }
+
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('is_active', true)->get();
+            ->where('branch_id', $branchId)
+            ->where('is_active', true)
+            ->get();
+        $userFavorites = [];
+        if (Auth::guard('client')->check()) {
+            $userFavorites = DB::table('user_favorite_dishes')
+                ->where('user_id', Auth::guard('client')->id())
+                ->pluck('dish_id')
+                ->toArray();
+        }
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
         );
     }
 
@@ -90,7 +111,7 @@ class HomeController extends Controller
     public function addFavorite(Request $request)
     {
         if (!Auth::guard('client')->check()) {
-            return redirect()->back()->with('error', 'You need to log in to favorite a dish.');
+            return redirect()->back()->with('error', 'يجب تسجيل الدخول لإضافة الطبق إلى المفضلة.');
         }
 
         $user = Auth::guard('client')->user();
@@ -108,7 +129,7 @@ class HomeController extends Controller
                 ->where('dish_id', $dishId)
                 ->delete();
 
-            return redirect()->back()->with('success', 'Dish removed from favorites.');
+            return redirect()->back()->with('success', 'تم إزالة الطبق من المفضلة.');
         } else {
             // Add to favorites
             DB::table('user_favorite_dishes')->insert([
@@ -118,7 +139,28 @@ class HomeController extends Controller
                 'updated_at' => now(),
             ]);
 
-            return redirect()->back()->with('success', 'Dish added to favorites.');
+            return redirect()->back()->with('success', 'تم إضافة الطبق إلى المفضلة.');
         }
+    }
+
+    public function showFavorites()
+    {
+        $branches = Branch::all();
+        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
+            $query->where('is_active', true);
+        }, 'dish_categories.dishes' => function ($query) {
+            $query->where('is_active', true);
+        }])->get();
+        $userFavorites = [];
+        if (Auth::guard('client')->check()) {
+            $userFavorites = DB::table('user_favorite_dishes')
+                ->where('user_id', Auth::guard('client')->id())
+                ->pluck('dish_id')
+                ->toArray();
+        }
+        return view(
+            'website.favorites',
+            compact(['menuCategories', 'branches',  'userFavorites'])
+        );
     }
 }

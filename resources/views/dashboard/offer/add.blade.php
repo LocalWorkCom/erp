@@ -243,5 +243,28 @@
         }
         });
         });
+
+         //prevent spaces
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all input and textarea elements where spaces should not be allowed at the start
+            const inputs = document.querySelectorAll('input[type="text"], textarea');
+
+            // Add event listeners for each input/textarea
+            inputs.forEach(input => {
+                // On input, trim leading spaces
+                input.addEventListener('input', function () {
+                    if (this.value.startsWith(' ')) {
+                        this.value = this.value.trimStart();
+                    }
+                });
+
+                // Prevent spaces as the first character on keydown
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === ' ' && this.selectionStart === 0) {
+                        e.preventDefault(); // Block the space
+                    }
+                });
+            });
+        });
     </script>
 @endsection

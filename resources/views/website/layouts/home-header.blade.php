@@ -1,6 +1,6 @@
 <header class="fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container second-header">
+        <div class="container">
             <a class="navbar-service" href="{{ route('home') }}">
                 <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}">
             </a>
@@ -13,35 +13,23 @@
                         <a class="nav-link" href="#">
                             <button class="btn white fw-bold d-flex justify-content-between" data-bs-toggle="modal"
                                 data-bs-target="#deliveryModal">
-                                <span><i class="fas fa-map-marker-alt ms-2"></i>
-                                    @lang('header.deliveryTo')
-                                </span>
-                                <span class="select-sm">
-                                    @lang('header.choose')
-                                </span>
+                                <span><i class="fas fa-map-marker-alt ms-2 main-color"></i> ابدأ طلبك </span>
+                                <span class="select-sm"> اختر </span>
                             </button>
                         </a>
                     </li>
-                    <li class="nav-item {{ Request::routeIs('home') ? 'active' : '' }}" aria-current="page">
-                        <a class="nav-link " href="{{ route('home') }}">
-                            @lang('header.home')
-                        </a>
+                    <li class="nav-item active" aria-current="page">
+                        <a class="nav-link" href="{{ route('home') }}">الرئيسية</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#branchesModal">
-                            @lang('header.branches')</a>
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#branchesModal"> الفروع</a>
                     </li>
-                    <li class="nav-item {{ Request::routeIs('menu') ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('menu') }}">
-                            @lang('header.menu')
-                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('menu') }}">قائمة الطعام</a>
                     </li>
-                    <li class="nav-item {{ Request::routeIs('contactUs') ? 'active' : '' }}">
-                        <a class="nav-link " href="{{ route('contactUs') }}">
-                            @lang('header.contactUs')
-                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('contactUs') }}">تواصل معنا</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link cart-icon" href="#">
                             <i class="fas fa-shopping-cart"></i>
@@ -49,34 +37,27 @@
                     </li>
                     <li class="nav-item">
                         @if (session('locale') == 'ar')
-                            <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                                @lang('header.en')
-
-                            </a>
+                            <a class="nav-link" href="{{ route('set-locale', 'en') }}">En</a>
                         @else
-                            <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                                @lang('header.ar')
-
-                            </a>
+                            <a class="nav-link" href="{{ route('set-locale', 'ar') }}">Ar</a>
                         @endif
                     </li>
-
-                    @auth('client')
-                        @if (Auth::guard('client')->user()->flag == 'client')
-                            <li class="nav-item">
-                                <a class="nav-link  align-items-center" data-bs-toggle="modal"
-                                    data-bs-target="#profileModal"><i class="fas fa-user-circle main-color"></i>
-                                    <span>{{ Auth::guard('client')->user()->name }} </span>
-                                </a>
-                            </li>
-                        @else
-                            <li class="nav-item">
-                                <a class="nav-link btn align-items-center" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
-                                    <i class="fas fa-user-circle"></i>
-                                    <span>@lang('header.login')</span>
-                                </a>
-                            </li>
+                    <li class="nav-item">
+                        @auth('client')
+                            @if (Auth::guard('client')->user()->flag == 'client')
+                        <li class="nav-item">
+                            <a class="nav-link  align-items-center" data-bs-toggle="modal" data-bs-target="#profileModal"><i
+                                    class="fas fa-user-circle main-color"></i>
+                                <span>{{ Auth::guard('client')->user()->name }} </span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-user-circle"></i>
+                                <span>@lang('header.login')</span>
+                            </a>
+                        </li>
                         @endif
                     @else
                         <li class="nav-item">
@@ -86,42 +67,12 @@
                             </a>
                         </li>
                     @endauth
+                    </li>
                 </ul>
             </div>
-
-
         </div>
     </nav>
-    <div class="mobNav d-lg-none d-block ">
-        <div id="sidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <div class="overlay-content">
-                <a href="#"> @lang('header.home') </a>
-                <a href="#"> @lang('header.menue') </a>
-                <a href="#"> @lang('header.contactUs') </a>
-                <a href="#"> <i class="fas fa-shopping-cart"></i>
-                </a>
-                <a href="#">
-                    @if (session('locale') == 'ar')
-                        <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                            @lang('header.en')
-
-                        </a>
-                    @else
-                        <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                            @lang('header.ar')
-
-                        </a>
-                    @endif
-                </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"> @lang('header.login')
-                </a>
-            </div>
-        </div>
-    </div>
-
 </header>
-
 @auth('client')
     <!-- Profile modal -->
     <div class="modal fade" tabindex="-1" id="profileModal" aria-labelledby="profileModalLabel" aria-hidden="true">

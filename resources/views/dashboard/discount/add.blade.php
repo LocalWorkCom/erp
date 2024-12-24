@@ -64,10 +64,11 @@
                                     <!-- Discount Value -->
                                     <div class="col-xl-6">
                                         <label for="value" class="form-label">@lang('discount.Value')</label>
-                                        <input type="number" name="value" id="value"
-                                            class="form-control" placeholder="@lang('discount.Value')" required>
+                                        <input type="number" name="value" id="value" class="form-control"
+                                            placeholder="@lang('discount.Value')" min="0" required>
                                         <div class="invalid-feedback">@lang('validation.EnterDiscountValue')</div>
                                     </div>
+
 
                                     <!-- Start Date -->
                                     <div class="col-xl-6">
@@ -104,13 +105,13 @@
                                     <div class="col-xl-6">
                                         <p class="mb-2 text-muted">@lang('discount.IsActive')</p>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_active" value="1"
-                                                class="form-check-input" checked required>
+                                            <input type="radio" name="is_active" value="1" class="form-check-input"
+                                                checked required>
                                             <label class="form-check-label">@lang('discount.Active')</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input type="radio" name="is_active" value="0"
-                                                class="form-check-input" required>
+                                            <input type="radio" name="is_active" value="0" class="form-check-input"
+                                                required>
                                             <label class="form-check-label">@lang('discount.Inactive')</label>
                                         </div>
                                     </div>

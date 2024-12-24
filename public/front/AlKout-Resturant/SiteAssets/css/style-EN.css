@@ -1,6 +1,7 @@
 /**************** General style ************/
 html {
     scroll-behavior: smooth;
+    direction: ltr;
 }
 
 ::-webkit-scrollbar {
@@ -176,7 +177,7 @@ header.scroll .navbar-light .navbar-nav .active .nav-link {
     background-color: #FE0000;
     color: #fff;
     padding: 0 0.5rem;
-    margin-right: 1rem;
+    margin-left: 1rem;
     border-radius: 0.15rem;
 }
 
@@ -245,7 +246,7 @@ header.scroll .second-header {
     position: fixed;
     z-index: 1;
     top: 0;
-    left: 0;
+    right: 0;
     background-color: #111;
     /* Black*/
     overflow-x: hidden;
@@ -270,7 +271,7 @@ header.scroll .second-header {
 .sidenav .closebtn {
     position: absolute;
     top: 0;
-    right: 25px;
+    left: 25px;
     font-size: 36px;
     margin-left: 50px;
 }
@@ -281,7 +282,7 @@ header.scroll .second-header {
     position: fixed;
     z-index: 133333;
     top: 0;
-    right: 0;
+    left: 0;
     background-color: #fff;
     /* Black*/
     overflow-x: hidden;
@@ -323,7 +324,7 @@ header.scroll .second-header {
 .blur-overlay {
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     height: 100%;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
@@ -414,12 +415,12 @@ body.no-scroll {
 /* breadcrumb */
 
 .breadcrumb-item+.breadcrumb-item {
-    padding-right: .5rem;
+    padding-left: .5rem;
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
-    float: right;
-    padding-left: .5rem;
+    float: left;
+    padding-right: .5rem;
 }
 
 .breadcrumb-item.active {
@@ -700,7 +701,7 @@ body.no-scroll {
     content: "";
     position: absolute;
     top: -5%;
-    left: 5%;
+    r: 5%;
     height: 125%;
     width: 100%;
     background: url(../images/intro-plate-bg.png) left no-repeat;
@@ -840,11 +841,10 @@ body.no-scroll {
     font-size: 1.5rem;
 }
 
-.info .btn-lg {
-    padding: 1rem 2.75rem;
-    font-size: 1.5rem;
+.info .btn {
+    padding: 1rem 4.75rem;
+    font-size: 1.75rem;
 }
-
 
 /* ****************************************************************************************** */
 /* apps section */
@@ -862,14 +862,14 @@ body.no-scroll {
     color: white;
     padding-inline: 1rem;
     border-radius: 10px;
-    text-align: left;
-    margin-left: 1rem;
+    text-align: right;
+    margin-right: 1rem;
 }
 
 .app-store-btn .fa-apple,
 .google-play-btn .fa-google-play {
     font-size: 30px;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .apps-img {
@@ -888,8 +888,8 @@ footer {
 footer .footer-curve {
     background: #BF0000;
     color: #fff;
-    mask: radial-gradient(55% 45px at TOP, #0000 98%, #000);
-    height: 65px;
+    mask: radial-gradient(80% 98px at TOP, #0000 98%, #000);
+    height: 125px;
     position: relative;
     top: 0;
     z-index: -1;
@@ -932,7 +932,7 @@ footer .icon {
     align-items: center;
     margin: 0;
     position: absolute;
-    top: -15%;
+    top: 0;
     overflow: hidden;
 }
 
@@ -958,7 +958,7 @@ footer .icon {
     border-radius: 24px;
     background: #fff;
     box-shadow: 4px 4px 12px 0 #00000033;
-    margin-left: 1rem;
+    margin-right: 1rem;
     color: #000;
     font-weight: 700;
 }
@@ -1038,8 +1038,8 @@ footer .icon {
 
 .right-side {
     box-shadow: 0px 4px 12px 0px #0000001A;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     z-index: 1000;
 }
 
@@ -1056,7 +1056,7 @@ footer .icon {
 
 .input-group-eye {
     position: absolute;
-    left: 5px;
+    right: 5px;
     top: 50%;
     transform: translateY(-50%);
     background-color: transparent;
@@ -1136,13 +1136,13 @@ a:hover {
 .forget-pass .meat {
     position: absolute;
     top: 165px;
-    right: 0px;
+    left: 0px;
 }
 
 .forget-pass .spoon {
     position: absolute;
     bottom: 0px;
-    left: 0px;
+    right: 0px;
 }
 
 /* otp password styles  */
@@ -1241,7 +1241,7 @@ a:hover {
     overflow: hidden;
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
 }
 
 .emoji-wrapper:before,
@@ -1250,7 +1250,7 @@ a:hover {
     height: 15px;
     width: 100%;
     position: absolute;
-    left: 0;
+    right: 0;
     z-index: 1;
 }
 
@@ -1339,7 +1339,7 @@ a:hover {
 }
 
 .form-check {
-    padding-left: 0;
+    padding-right: 0;
     display: flex;
     justify-content: space-between;
     min-height: 2rem;
@@ -1347,7 +1347,7 @@ a:hover {
 
 .form-check .form-check-input {
     float: none;
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .form-check-input:checked {
@@ -1367,8 +1367,8 @@ a:hover {
 }
 
 .form-floating>label {
-    right: 0;
-    left: auto;
+    left: 0;
+    right: auto;
 }
 
 .product .product-img img {
@@ -1455,7 +1455,7 @@ a:hover {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
+    right: 50%;
     width: 50%;
     height: 2px;
     background-color: red;
@@ -1476,7 +1476,7 @@ a:hover {
     color: #000;
     padding: 0 0.5rem;
     font-weight: 700;
-    text-align: right;
+    text-align: left;
     border-radius: 0;
     border-right: 3px solid transparent;
 
@@ -1491,7 +1491,7 @@ a:hover {
 
 .form-icon {
     position: absolute;
-    left: 10px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 1.2rem;
@@ -1511,7 +1511,7 @@ a:hover {
 }
 
 .position-relative .form-select {
-    padding-left: 2.5rem;
+    padding-right: 2.5rem;
 }
 
 input::placeholder {
@@ -1536,7 +1536,7 @@ input::placeholder {
 }
 
 .dropdown-item {
-    text-align: right;
+    text-align: left;
 }
 
 .noAddress-img {
@@ -1594,7 +1594,7 @@ input::placeholder {
     background-color: transparent;
     color: #999;
     border: 1px solid #999;
-    margin-left: 0.75rem;
+    margin-right: 0.75rem;
 }
 
 .delivery-modal .delivery-places .nav-link.active,
@@ -1625,13 +1625,13 @@ input::placeholder {
 }
 
 .search-input {
-    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .search-icon {
     position: absolute;
     top: 50%;
-    left: 15px;
+    right: 15px;
     transform: translateY(-50%);
     color: #afa8a8;
     font-size: 17px;
@@ -1647,7 +1647,7 @@ input::placeholder {
 .flag-icon {
     width: 20px;
     height: 14px;
-    margin-right: 8px;
+    margin-left: 8px;
 }
 
 .bootstrap-select .dropdown-toggle:focus,
@@ -1656,7 +1656,7 @@ input::placeholder {
 }
 
 .bootstrap-select .dropdown-toggle .filter-option {
-    direction: ltr;
+    direction: rtl;
 }
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
     width: auto;
@@ -1665,21 +1665,15 @@ input::placeholder {
     padding: .375rem .75rem;
 }
 .bootstrap-select .dropdown-menu.inner {
-    direction: ltr;
+    direction: rtl;
 }
 .dropdown-toggle::after {
-    margin-right: .55em;
-}
-.location-modal img{
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
+    margin-left: .55em;
 }
 
+
 /* responsive */
-@media(max-width: 1024px) {
-    
-}
+@media(max-width: 1024px) {}
 
 @media(max-width: 992px) {}
 

@@ -43,7 +43,7 @@ class SizeService
 
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
-            'name_en' => 'string',
+            'name_en' => 'required|string',
             'category_id' => 'required|exists:categories,id', // Validate the category_id
         ]);
 
