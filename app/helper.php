@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderDetail;
 use App\Models\pointSystem;
 use Carbon\Carbon;
 use App\Models\ApICode;
@@ -1088,5 +1089,5 @@ function getMostDishesOrdered($limit = 5)
 
 function checkOfferUsed($id)
 {
-    return Order::where('IDOffer', $id)->exists();
+    return OrderDetail::where('offer_id', $id)->exists();
 }
