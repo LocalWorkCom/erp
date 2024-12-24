@@ -26,9 +26,10 @@ class HomeController extends Controller
     {
         $sliders = Slider::all();
         $branches = Branch::all();
-        $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
-        $discounts = $lastThreeDiscounts->reverse()->take(3);
-        $discounts = $discounts->reverse();
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
+        // $discounts = $lastThreeDiscounts->reverse()->take(3);
+        // $discounts = $discounts->reverse();
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('is_active', true)->get();
