@@ -1043,7 +1043,11 @@ function AddSizes($branch_id)
 }
 function getDefaultBranch()
 {
-    return Branch::where('is_default', 1)->first()->id;
+    $defaultBranch = Branch::where('is_default', 1)->first();
+    if (!$defaultBranch) {
+        throw new Exception('No default branch is set.');
+    }
+    return $defaultBranch->id;
 }
 
 function respondError($error, $code, $errorMessages = [])

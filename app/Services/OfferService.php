@@ -32,10 +32,26 @@ class OfferService
      */
     public function save(Request $request, $id = null)
     {
+        $messages = [];
+
+        if (app()->getLocale() == 'ar') {
+            $messages = [
+                'branches.required_if' => 'حقل الفروع مطلوب عند تحديد "اختر" في اختيار الفرع.',
+                'branches.*.exists' => 'الفرع المحدد غير موجود.',
+                'end_date.after_or_equal' => 'يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء.',
+            ];
+        } else {
+            $messages = [
+                'branches.required_if' => 'The branches field is required when the branch selection is specific.',
+                'branches.*.exists' => 'The selected branch does not exist.',
+                'end_date.after_or_equal' => 'The end date must be after or equal to the start date.',
+            ];
+        }
+
         $data = $request->validate([
-            'branch_selection' => 'required|in:all,specific',  // Validation for the branch selection
-            'branches' => 'required_if:branch_selection,specific|array',  // Validation for branches (if specific is selected)
-            'branches.*' => 'exists:branches,id',  // Ensure each branch ID exists in the branches table
+            'branch_selection' => 'required|in:all,specific',
+            'branches' => 'required_if:branch_selection,specific|array',
+            'branches.*' => 'exists:branches,id',
             'name_ar' => 'required|string',
             'name_en' => 'required|string',
             'discount_type' => 'required|string|in:fixed,percentage',
@@ -44,7 +60,7 @@ class OfferService
                 'numeric',
                 function ($attribute, $value, $fail) use ($request) {
                     if ($request->discount_type === 'percentage' && $value > 100) {
-                        if ($this->lang == 'en') {
+                        if (app()->getLocale() == 'en') {
                             $fail('The discount value must not exceed 100 percentage.');
                         }
                         $fail('قيمة الخصم لا يجب ان تتعدى نسبة 100');
@@ -58,7 +74,7 @@ class OfferService
             'is_active' => 'required|in:0,1',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        ], $messages);
 
         // Handle Arabic image upload
         if ($request->hasFile('image_ar')) {

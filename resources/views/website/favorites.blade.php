@@ -6,7 +6,7 @@
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">قائمة الطعام</li>
+                    <li class="breadcrumb-item active" aria-current="page">المفضلة</li>
                 </ol>
             </nav>
         </div>
@@ -27,9 +27,12 @@
                     {{ session('error') }}
                 </div>
             @endif
+
             <ul class="nav nav-pills mb-3 px-0 align-items-center" id="pills-tab" role="tablist">
                 @foreach ($menuCategories as $key => $menuCategory)
-                    @if ($menuCategory->dish_categories)
+                    @if (
+                        $menuCategory->dish_categories &&
+                            $menuCategory->dish_categories->dishes->whereIn('id', $userFavorites)->isNotEmpty())
                         <li class="nav-item" role="presentation">
                             <button class="nav-link {{ $key == 0 ? 'active' : '' }}" id="pills-{{ $menuCategory->id }}-tab"
                                 data-bs-toggle="pill" data-bs-target="#pills-{{ $menuCategory->id }}" type="button"
@@ -52,25 +55,15 @@
                 </li>
             </ul>
 
-            <div class="d-flex justify-content-end">
-                <select class="form-select form-select-lg mb-3 w-25" aria-label=".form-select-lg example">
-                    <option selected>ترتيب حسب </option>
-                    <option value="1">الاعلى تقييم</option>
-                    <option value="2">اضيف حديثا</option>
-                </select>
-            </div>
-
-
             <div class="tab-content pt-5" id="pills-tabContent">
                 @foreach ($menuCategories as $key => $menuCategory)
                     @if ($menuCategory->dish_categories)
                         <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="pills-{{ $menuCategory->id }}"
                             role="tabpanel" aria-labelledby="pills-{{ $menuCategory->id }}-tab">
                             <div class="row mx-0">
-                                @foreach ($menuCategory->dish_categories->dishes as $dish)
-                                    <div class="col-md-4 mb-4 dish-card {{ in_array($dish->id, $userFavorites) ? 'favorite' : '' }}"
-                                        data-dish-id="{{ $dish->id }}" data-dish-name="{{ $dish->name_ar }}"
-                                        data-aos="zoom-in">
+                                @foreach ($menuCategory->dish_categories->dishes->whereIn('id', $userFavorites) as $dish)
+                                    <div class="col-md-4 mb-4 dish-card" data-dish-id="{{ $dish->id }}"
+                                        data-dish-name="{{ $dish->name_ar }}" data-aos="zoom-in">
                                         <div class="plate">
                                             <a href="#">
                                                 <figure class="plate-img m-0">
@@ -84,8 +77,7 @@
                                                     @csrf
                                                     <input type="hidden" name="dish_id" value="{{ $dish->id }}">
                                                     <button type="submit" class="btn">
-                                                        <i
-                                                            class="{{ in_array($dish->id, $userFavorites) ? 'fas' : 'far' }} fa-heart"></i>
+                                                        <i class="fas fa-heart"></i>
                                                     </button>
                                                 </form>
                                             </div>
@@ -107,12 +99,16 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                @if ($menuCategory->dish_categories->dishes->whereIn('id', $userFavorites)->isEmpty())
+                                    <div class="col-12 text-center">
+                                        <p>لا توجد أطباق مفضلة في هذه الفئة.</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endif
                 @endforeach
             </div>
-
             <button type="button" class="btn cart-btn" onclick="openCart()">
                 <i class="fas fa-shopping-cart"></i>
             </button>
@@ -129,13 +125,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                        <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                        <figcaption>
-                                            <h4>
-                                                لا توجد منتجات
-                                            </h4>
-                                        </figcaption>
-                                    </figure> -->
+                            <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                            <figcaption>
+                                <h4>
+                                    لا توجد منتجات
+                                </h4>
+                            </figcaption>
+                        </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">

@@ -25,7 +25,8 @@
 
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.css') }}">
-
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
     <!-- Owl Carousel -->
     <link rel="stylesheet"
         href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
@@ -44,7 +45,11 @@
 
 <body>
 
-    @include('website.layouts.header')
+    @if (Request::routeIs('home'))
+        @include('website.layouts.home-header') {{-- Home Page Header --}}
+    @else
+        @include('website.layouts.header') {{-- Default Header --}}
+    @endif
 
     <main>
         @yield('content')
@@ -115,18 +120,18 @@
             </div>
         </div>
     </div>
+    @include('website.user-modal')
 
     @include('website.delivery')
     @include('website.location')
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
-
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/bootstarp-select.js') }}"></script>
     <!-- Main js -->
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/style.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
     <!-- include Gallery (lightbox) plugin js-->
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/lightbox/js/lightbox.min.js') }}"></script>
@@ -156,6 +161,21 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!document.cookie.includes('latitude') || !document.cookie.includes('longitude')) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        document.cookie = `latitude=${position.coords.latitude}; path=/`;
+                        document.cookie = `longitude=${position.coords.longitude}; path=/`;
+                    },
+                    (error) => {
+                        console.warn('User denied location access or an error occurred:', error);
+                    }
+                );
+            }
         });
     </script>
     <!--
