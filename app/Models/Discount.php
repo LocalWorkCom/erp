@@ -85,8 +85,8 @@ class Discount extends Model
     public function dishDiscounts()
     {
          return $this->hasMany(DishDiscount::class);
-     } 
- 
+     }
+
     public function discount_dishes()
     {
         return $this->belongsToMany(Dish::class, 'dish_discount')

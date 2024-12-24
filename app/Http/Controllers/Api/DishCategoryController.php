@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\BranchMenuCategory;
+use App\Models\DishCategory;
 use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -133,4 +135,63 @@ class DishCategoryController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+    public function menuDishes(Request $request){
+        $lang = $request->header('lang', 'ar');
+        $categoryId = $request->query('categoryId', 0);
+        $offers = $request->query('offers', 0);
+
+        // Validate inputs
+        if (!is_numeric($categoryId) || !in_array($offers, [0, 1])) {
+            return RespondWithBadRequestData($lang, 2, 'Invalid input values.');
+        }
+
+        // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
+        if ($categoryId > 0) {
+            $dishCategory = DishCategory::with(['dishes' => function ($query){
+                $query->where('is_active', true);
+            }])->where('id', $categoryId)->first();
+
+            if (!$dishCategory) {
+                return RespondWithBadRequestData($lang, 2, 'Category not found.');
+            }
+
+            // Translate category details
+            $dishCategory->translated_name = $lang === 'ar' ? $dishCategory->name : $dishCategory->name_site;
+            $dishCategory->translated_description = $lang === 'ar' ? $dishCategory->description : $dishCategory->description_site;
+
+            // Translate dish details
+            foreach ($dishCategory->dishes as $dish) {
+                $dish->translated_name = $lang === 'ar' ? $dish->name : $dish->name_site;
+                $dish->translated_description = $lang === 'ar' ? $dish->description : $dish->description_site;
+            }
+
+            return ResponseWithSuccessData($lang, $dishCategory, 1);
+        }
+
+        // Scenario 2: If offers = 1, fetch active offers with details
+        if ($offers == 1) {
+            $activeOffers = Offer::with('details')
+                ->whereHas('details')
+                ->where('is_active', 1)
+                ->get() ?? collect();
+
+            foreach ($activeOffers as $offer) {
+                $offer->translated_name = $lang === 'ar' ? $offer->name_ar : $offer->name_en;
+                $offer->translated_description = $lang === 'ar' ? $offer->description_ar : $offer->description_en;
+
+                // Optionally, translate details (if needed)
+                foreach ($offer->details as $detail) {
+                    $detail->translated_name = $lang === 'ar' ? $detail->name_ar : $detail->name_en;
+                }
+            }
+
+            return ResponseWithSuccessData($lang, $activeOffers, 1);
+        }
+
+        // Default fallback
+        return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
+    }
+
 }
+
+
