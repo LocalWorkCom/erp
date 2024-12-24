@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Website\AuthController;
+use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -30,3 +31,7 @@ Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add.favorite');
+
+
+
+Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');

@@ -1,4 +1,4 @@
-<section class="location-pop-up">
+{{-- <section class="location-pop-up">
     <div id="modal_access" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -16,7 +16,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 @push('scripts')
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer>

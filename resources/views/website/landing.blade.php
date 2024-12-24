@@ -79,8 +79,8 @@
                     </span>
                 </a>
             </div>
-            
-            
+
+
             <div class="offers-slider owl-carousel owl-theme">
                 @foreach ($discounts as $discount)
                     <div class="item mb-4 category position-relative" data-aos="zoom-in">
@@ -105,9 +105,6 @@
             </div>
         </div>
     </section>
-    
-
-
     <section class="plates">
         <div class="container py-sm-5 py-4">
             <h2 class="fw-bold" data-aos="fade-down">اشهر اطباقنا</h2>
@@ -134,7 +131,9 @@
                                     الاعلى تقييم
                                 </span>
                                 <div class="d-flex justify-content-between pt-4">
-                                    <button class="btn">+ أضف الي العربة</button>
+                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')">
+                                        + أضف الي العربة
+                                    </button>
                                     <span> {{ $dish->price }} ج . م</span>
                                 </div>
                             </div>
@@ -144,8 +143,6 @@
             </div>
         </div>
     </section>
-
-
     <section class="info">
         <div class="container py-sm-5 py-4">
             <div class="row m-0 justify-content-cennter align-items-center">
@@ -192,4 +189,39 @@
             </div>
         </div>
     </section>
+    @include('website.cart-modal')
+    <script>
+        //test
+        function fill_cart(id) {
+            // Define the URL of the route
+
+            // Make an AJAX GET request to the route
+            $.ajax({
+                url: "{{ route('cart.dish-detail') }}",
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for security
+                },
+                data: {
+                    'id': id
+                },
+                success: function(data) {
+                    // Process the response data (e.g., fill the modal with the dish details)
+                    console.log(data); // Debug: log data to console
+                    // Populate modal or cart UI as needed
+                    // Example: Display the dish name in the modal
+            $('#productModal').find('.product-details').html(`
+                //     <h4>${data.name}</h4>
+                //     <p>${data.description}</p>
+                //     <span>${data.price} ج.م</span>
+                // `);
+                    // $('#productModal').modal('show'); // Show the modal
+                },
+                error: function(xhr, status, error) {
+                    console.error('There was a problem with the AJAX request:', error);
+                    alert('Failed to retrieve dish details. Please try again.');
+                }
+            });
+        }
+    </script>
 @endsection
