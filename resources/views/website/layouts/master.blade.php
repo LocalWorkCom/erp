@@ -307,11 +307,11 @@
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
 
-                        // Set cookies
+                        // Set cookies with proper attributes
                         document.cookie =
-                        `latitude=${latitude}; path=/`;
+                            `latitude=${latitude}; path=/; domain=erp.test; SameSite=Lax; Secure; max-age=604800`;
                         document.cookie =
-                            `longitude=${longitude}; path=/`;
+                            `longitude=${longitude}; path=/; domain=erp.test; SameSite=Lax; Secure; max-age=604800`;
 
                         console.log(
                             `Latitude: ${latitude}, Longitude: ${longitude}`
@@ -325,6 +325,26 @@
                 );
             } else {
                 console.log('Cookies already set:', document.cookie);
+            }
+        });
+
+        $.ajax({
+            url: '/endpoint',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Latitude': getCookie('latitude'),
+                'Longitude': getCookie('longitude'),
+            },
+            data: {
+                latitude: getCookie('latitude'),
+                longitude: getCookie('longitude'),
+            },
+            success: function(response) {
+                console.log('Location sent successfully:', response);
+            },
+            error: function(error) {
+                console.error('Error sending location:', error);
             }
         });
     </script>
