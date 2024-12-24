@@ -119,7 +119,6 @@
             </div>
         </div>
     </div>
-  
 </header>
 @auth('client')
     <!-- Profile modal -->
