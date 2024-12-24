@@ -163,6 +163,21 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!document.cookie.includes('latitude') || !document.cookie.includes('longitude')) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        document.cookie = `latitude=${position.coords.latitude}; path=/`;
+                        document.cookie = `longitude=${position.coords.longitude}; path=/`;
+                    },
+                    (error) => {
+                        console.warn('User denied location access or an error occurred:', error);
+                    }
+                );
+            }
+        });
+    </script>
     <!--
   <script>
       $('.owl-slider').owlCarousel({
