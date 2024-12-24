@@ -1,7 +1,6 @@
 @extends('website.layouts.master')
 
 @section('content')
-   
     <section class="intro">
         <div class="container py-sm-5 py-4">
             <div class=" py-5 owl-slider owl-carousel owl-theme">
@@ -72,30 +71,42 @@
     </section>
     <section class="offers">
         <div class="container py-sm-5 py-4">
-            <div class="row mx-0">
+            <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
+                <a href="{{ route('menu') }}" class="section-btn text-decoration-none">
+                    <span class="ms-2">عرض الكل</span>
+                    <span class="icon">
+                        <i class="fas fa-arrow-left"></i>
+                    </span>
+                </a>
+            </div>
+            
+            
+            <div class="offers-slider owl-carousel owl-theme">
                 @foreach ($discounts as $discount)
-                    <div class="col-md-4">
-                        <div class="item one row mx-0 p-4" data-aos="zoom-in">
+                    <div class="item mb-4 category position-relative" data-aos="zoom-in">
+                        <div class="item three row mx-0 p-4" data-aos="zoom-in">
                             <div class="col-md-5">
                                 <img class="offer-img"
-                                    src="{{ asset($discount->dish->image ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
+                                    src="{{ asset($discount->dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
                                     alt="">
                             </div>
                             <div class="col-md-7">
-                                <h2 class="main-color fw-bold "> خصم
+                                <h2 class="main-color fw-bold">خصم
                                     {{ $discount->discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->discount->value }}
                                 </h2>
-                                <h5 class="text-white pb-4">{{ $discount->dish->name_ar }}</h5>
-                                <a href="#" class="btn white">
+                                <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
+                                <a href="#" class="btn ">
                                     <h4 class="fw-bold">اطلب الان</h4>
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 @endforeach
             </div>
+        </div>
     </section>
+    
+
 
     <section class="plates">
         <div class="container py-sm-5 py-4">
