@@ -33,7 +33,7 @@ class CouponController extends Controller
 
     public function index(Request $request)
     {
-        $response  = $this->couponService->index($request);
+        $response  = $this->couponService->index($request,$this->lang);
         $responseData = json_decode($response->getContent(), true);
         $coupons = Coupon::hydrate($responseData['data']);
 
@@ -47,7 +47,7 @@ class CouponController extends Controller
 
     public function store(Request $request)
     {
-        $response = $this->couponService->store($request, $this->checkToken);
+        $response = $this->couponService->store($request, $this->lang);
         $responseData = $response->original;
          // Check if the response has a 'status' key
          if (isset($responseData['status']) && !$responseData['status']) {
@@ -79,7 +79,7 @@ class CouponController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = $this->couponService->update($request, $id);
+        $response = $this->couponService->update($request, $id,$this->lang);
         $responseData = $response->original;
         if (isset($responseData['status']) && !$responseData['status']) {
             // If 'data' key exists, handle validation errors
@@ -103,7 +103,7 @@ class CouponController extends Controller
 
     public function delete(Request $request, $id)
     {
-        $response = $this->couponService->destroy($request, $id);
+        $response = $this->couponService->destroy($request, $id,$this->lang);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/coupons')->with('message',$message);
