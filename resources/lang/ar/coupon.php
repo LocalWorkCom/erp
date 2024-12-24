@@ -17,4 +17,6 @@ return [
     'AddCoupon'=>'اضافة كوبون',//
     'EditCoupon'=>'تعديل كوبون',//
     'ShowCoupon'=>'عرض كوبون',//
+    'duplicate_code'=>'  يرجي ادخال الكوبون بدون تكرار',
+    'code_required' =>'يرجي ادخال الكوبون',
 ];

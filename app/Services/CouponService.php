@@ -16,82 +16,94 @@ use Illuminate\Support\Facades\Validator;
 
 class CouponService
 {
-    private $lang;
-    public function __construct()
-    {
-        $this->lang = app()->getLocale();
-        app()->setLocale($this->lang);
-    }
 
-    public function index(Request $request)
-    {
-        try {
-            $coupons = Coupon::with('branches')->get();
-
-            return ResponseWithSuccessData($this->lang, $coupons, 1);
-        } catch (\Exception $e) {
-            Log::error('Error fetching coupons: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+        public function index(Request $request,$lang)
+        {
+            try {
+                $coupons = Coupon::with('branches')->get();
+                
+                return ResponseWithSuccessData($lang, $coupons, 1);
+            } catch (\Exception $e) {
+                Log::error('Error fetching coupons: ' . $e->getMessage());
+                return RespondWithBadRequestData($lang, 2);
+            }
         }
-    }
-
-    public function show(Request $request, $id)
-    {
-        try {
-            $coupon = Coupon::with('branches')->findOrFail($id);
-
-            return ResponseWithSuccessData($this->lang, $coupon, 1);
-        } catch (\Exception $e) {
-            Log::error('Error fetching coupon: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+        
+        public function show(Request $request, $id,$lang)
+        {
+            try {
+                $coupon = Coupon::with('branches')->findOrFail($id);
+                
+                return ResponseWithSuccessData($lang, $coupon, 1);
+            } catch (\Exception $e) {
+                Log::error('Error fetching coupon: ' . $e->getMessage());
+                return RespondWithBadRequestData($lang, 2);
+            }
         }
-    }
-    public function store(Request $request)
-    {
-        try {
-            // Define the validation rules
-            $validator = Validator::make($request->all(), [
-                'code' => [
-                    'required',
-                    'string',
-                    function ($attribute, $value, $fail) {
-                        $trimmedValue = trim($value);
-                        $exists = DB::table('coupons')
+        
+        public function store(Request $request,$lang)
+        {
+            
+            try {
+                // Define the validation rules
+                $validator = Validator::make($request->all(), [
+                    'code' => [
+                        'required',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $trimmedValue = trim($value);
+                            // Check only for active (non-deleted) coupon codes
+                            $exists = DB::table('coupons')
                             ->where('code', $trimmedValue)
                             ->whereNull('deleted_at')
                             ->exists();
-
-                        if ($exists) {
-                            $fail(__('The :attribute has already been taken.', ['attribute' => $attribute]));
-                        }
-                    },
-                ],
-                'type' => 'required|in:percentage,fixed',
-                'value' => 'required|numeric|min:0',
-                'minimum_spend' => 'nullable|numeric|min:0',
-                'usage_limit' => 'nullable|integer|min:1',
-                'start_date' => 'nullable|date',
-                'end_date' => 'nullable|date|after_or_equal:start_date',
-                'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',
-                'branches.*' => 'integer|exists:branches,id',
-            ]);
-
+                            
+                            if ($exists) {
+                                // dd(0)
+                                $fail(__('coupon.duplicate_code'));
+                            }
+                        },
+                    ],
+                    'type' => 'required|in:percentage,fixed',
+                    'value' => 'required|numeric|min:0',
+                    'minimum_spend' => 'nullable|numeric|min:0',
+                    'usage_limit' => 'nullable|integer|min:1',
+                    'start_date' => 'nullable|date',
+                    'end_date' => 'nullable|date|after_or_equal:start_date',
+                    'is_active' => 'required|boolean',
+                    'branches' => 'nullable|array',
+                    'branches.*' => 'integer|exists:branches,id',
+                ], [
+                    'code.required' => __('coupon.code_required'), // Use custom message for 'required'
+                ]);
 
             // Check if validation fails
             if ($validator->fails()) {
-                // Check for unique code error specifically
                 if ($validator->errors()->has('code')) {
-                    return CustomRespondWithBadRequest('Duplicate code are submitted.');
+                    // Get the first error for 'code'
+                    $error = $validator->errors()->first('code');
+                    // dd($error);
+                    // Check if the error is for duplication
+                    if ($error === __('coupon.duplicate_code')) {
+                        // dd('dd');
+                        return CustomRespondWithBadRequest(__('coupon.duplicate_code'));
+                    }
+                    // dd('00');
+                    // Otherwise, handle generic code error
+                    return CustomRespondWithBadRequest(__('coupon.code_required'));
                 }
-
-                // Return other validation errors
-                return RespondWithBadRequestData($this->lang, $validator->errors());
+                
+                // Handle other validation errors
+                return RespondWithBadRequestData($lang, $validator->errors());
             }
-
+            
+            
+            
             // Validation passed, proceed to create the coupon
             $validatedData = $validator->validated();
-
+            
+            // No need to check again for code uniqueness here, as it is handled in the validator
+            
             $coupon = Coupon::create([
                 'code' => $validatedData['code'],
                 'type' => $validatedData['type'],
@@ -104,19 +116,20 @@ class CouponService
                 'created_by' => Auth::guard('admin')->user()->id,
                 'count_usage' => 0,
             ]);
-
+            
             if (!empty($validatedData['branches'])) {
                 $coupon->branches()->attach($validatedData['branches']);
             }
-
-            return ResponseWithSuccessData($this->lang, $coupon, 1);
+            // dd($lang);
+            return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error creating coupon: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
-
-    public function update(Request $request, $id)
+    
+    
+    public function update(Request $request, $id,$lang)
     {
         try {
             $coupon = Coupon::findOrFail($id);
@@ -149,7 +162,7 @@ class CouponService
                 }
 
                 // Return other validation errors
-                return RespondWithBadRequestData($this->lang, $validator->errors());
+                return RespondWithBadRequestData($lang, $validator->errors());
             }
 
             // Validation passed, update the coupon
@@ -173,37 +186,37 @@ class CouponService
                 $coupon->branches()->detach();
             }
 
-            return ResponseWithSuccessData($this->lang, $coupon, 1);
+            return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error updating coupon: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id,$lang)
     {
         try {
             $coupon = Coupon::findOrFail($id);
             $coupon->delete();
 
-            return ResponseWithSuccessData($this->lang, null, 1);
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting coupon: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
-    public function restore(Request $request, $id)
+    public function restore(Request $request, $id,$lang)
     {
         try {
             $coupon = Coupon::withTrashed()->findOrFail($id);
             $coupon->restore();
 
-            return ResponseWithSuccessData($this->lang, $coupon, 1);
+            return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error restoring coupon: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
