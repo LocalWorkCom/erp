@@ -1049,7 +1049,30 @@ footer .icon {
     padding: 0.75rem;
 
 }
-
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #fe0000;
+    display: block;
+    transition: 0.3s;
+}
+.navbar-light .navbar-toggler {
+    color: rgb(116 29 29 / 55%);
+    border-color: rgb(230 22 22) !important;
+}
 .input-group input {
     border: 1px solid #DFDFDF;
 }
@@ -1673,13 +1696,111 @@ input::placeholder {
 
 
 /* responsive */
-@media(max-width: 1024px) {
-    
+@media(max-width: 1440px) {
+    .intro-img {
+        height: 310px;
+    }
+    .owl-slider img {
+        height: 275px;
+        margin-inline: 70px;
+    }
+    .big-img {
+        height: 220px !important;
+    }
+    .intro .container .small-img {
+        height: 190px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 120px;
+    }
+    .intro .overflow-plates {
+        bottom: 1%;
+        z-index: 9;
+    }
+    .info .info-img img {
+        height: 330px;
+    }
+    .apps-img {
+        height: 320px;
+    }
+    .code-input input {
+        width: 3.2rem;
+        height: 3rem;
+    }
+    .contact-us img {
+        width: 18rem;
+    }
+    footer .footer-curve {
+        background: #BF0000;
+        color: #fff;
+        mask: radial-gradient(55% 45px at TOP, #0000 98%, #000);
+        height: 39px;
+        position: relative;
+        top: 0;
+        z-index: -1;
+    }
 }
-
+@media(max-width:1200px) {
+    header .navbar-light .navbar-nav .nav-link {
+        font-size: 14px;
+        margin: 0px 0.50rem;
+    }
+    header .navbar .navbar-service img {
+        width: 170px;
+    }
+}
 @media(max-width: 992px) {}
 
-@media(max-width: 768px) {}
+@media(max-width: 772px) {
+    .apps-img {
+        height: 220px;
+    }
+    .footer-logo {
+        width: 100px;
+        height: 100px;
+        top: -10%;
+        right: 7px;
+    }
+    .app-store-btn .fa-apple, .google-play-btn .fa-google-play {
+        font-size: 25px;
+        margin-right: 55px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 1rem;
+        margin-left: 1rem;
+        margin-bottom: 15px;
+    }
+    footer .footer-curve {
+        height: 24px;
+        top: 0;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        height: 80px;
+    }
+    .big-img {
+        height: 160px !important;
+    }
+    .intro .container .small-img {
+        height: 125px;
+    }
+    .owl-slider img {
+        height: 225px;
+        margin-inline: 0px;
+    }
+    .intro-img {
+        height: 240px;
+    }
+    .info .info-img img {
+        height: 260px;
+    }
+}
 
 @media(max-width: 640px) {}
 
