@@ -41,7 +41,7 @@
     <link rel="stylesheet"
         href="{{ asset('front/AlKout-Resturant/SiteAssets/lightbox/css/lightbox.min.css') }}" />
     <!-- Main Style -->
-    @if (app()->getLocale() == ar)
+    @if (app()->getLocale() == 'ar')
         <link rel="stylesheet"
             href="{{ asset('front/AlKout-Resturant/SiteAssets/css/style.css') }}"
             type="text/css" />
@@ -300,20 +300,27 @@
   </script> -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (!document.cookie.includes('latitude') || !document.cookie.includes('longitude')) {
+            if (!document.cookie.includes('latitude') || !document.cookie
+                .includes('longitude')) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
 
                         // Set cookies
-                        document.cookie = `latitude=${latitude}; path=/`;
-                        document.cookie = `longitude=${longitude}; path=/`;
+                        document.cookie =
+                        `latitude=${latitude}; path=/`;
+                        document.cookie =
+                            `longitude=${longitude}; path=/`;
 
-                        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                        console.log(
+                            `Latitude: ${latitude}, Longitude: ${longitude}`
+                            );
                     },
                     (error) => {
-                        console.warn('User denied location access or an error occurred:', error);
+                        console.warn(
+                            'User denied location access or an error occurred:',
+                            error);
                     }
                 );
             } else {
