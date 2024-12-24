@@ -33,9 +33,16 @@ class HomeController extends Controller
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('is_active', true)->get();
+        $userFavorites = [];
+        if (Auth::guard('client')->check()) {
+            $userFavorites = DB::table('user_favorite_dishes')
+                ->where('user_id', Auth::guard('client')->id())
+                ->pluck('dish_id')
+                ->toArray();
+        }
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
         );
     }
 
@@ -121,5 +128,26 @@ class HomeController extends Controller
 
             return redirect()->back()->with('success', 'تم إضافة الطبق إلى المفضلة.');
         }
+    }
+
+    public function showFavorites()
+    {
+        $branches = Branch::all();
+        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
+            $query->where('is_active', true);
+        }, 'dish_categories.dishes' => function ($query) {
+            $query->where('is_active', true);
+        }])->get();
+        $userFavorites = [];
+        if (Auth::guard('client')->check()) {
+            $userFavorites = DB::table('user_favorite_dishes')
+                ->where('user_id', Auth::guard('client')->id())
+                ->pluck('dish_id')
+                ->toArray();
+        }
+        return view(
+            'website.favorites',
+            compact(['menuCategories', 'branches',  'userFavorites'])
+        );
     }
 }

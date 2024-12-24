@@ -30,3 +30,4 @@ Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add.favorite');
+Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
