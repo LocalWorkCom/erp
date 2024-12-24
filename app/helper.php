@@ -678,18 +678,22 @@ function getNearestBranch($userLat, $userLon)
     $nearestBranch = DB::table('branches')
         ->select(
             'id',
-            DB::raw("(6371 * acos(cos(radians($userLat))
-                * cos(radians(latitude))
-                * cos(radians(longitude) - radians($userLon))
+            'name_ar',
+            'address_ar',
+            DB::raw("latitute, longitute,
+                (6371 * acos(cos(radians($userLat))
+                * cos(radians(latitute))
+                * cos(radians(longitute) - radians($userLon))
                 + sin(radians($userLat))
-                * sin(radians(latitude)))) AS distance")
+                * sin(radians(latitute)))) AS distance")
         )
+        ->whereNotNull('latitute')
+        ->whereNotNull('longitute')
         ->orderBy('distance', 'asc')
         ->first();
 
-    return $nearestBranch ? $nearestBranch->id : null;
+    return $nearestBranch;
 }
-
 
 
 function scopeNearest($IDBranch, $latitude, $longitude)
@@ -845,15 +849,15 @@ function AddBranchesMenu($branch_ids, $dish_id)
 
 function AddDishCategories2($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->first();
         $get_dish_categories = DishCategory::where('id', $get_dish->category_id)->get();
-    }else{
+    } else {
         $get_dish_categories = DishCategory::get();
     }
     if ($get_dish_categories) {
         foreach ($get_dish_categories as $get_dish_category) {
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuCategory::firstOrCreate(
                     ['dish_category_id' => $get_dish_category->id, 'branch_id' => $branch_id],
                     ['is_active' => 1, 'created_by' => auth()->user()->id]
@@ -865,15 +869,15 @@ function AddDishCategories2($branch_ids, $dish_id)
 
 function AddDishes2($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->first();
-    }else{
+    } else {
         $get_dishes = Dish::get();
     }
     if ($get_dishes) {
         foreach ($get_dishes as $get_dish) {
             $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenu::firstOrCreate(
                     ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
                     [
@@ -892,17 +896,17 @@ function AddDishes2($branch_ids, $dish_id)
 
 function AddAddonCategories2($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
         $addon_categories = $get_dish->dishAddonsDetails->pluck('addon_category_id');
         $get_addon_categories = AddonCategory::whereIn('id', $addon_categories)->get();
-    }else{
+    } else {
         $get_addon_categories = AddonCategory::get();
     }
 
     if ($get_addon_categories) {
         foreach ($get_addon_categories as $get_addon_category) {
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_addon_category = BranchMenuAddonCategory::firstOrCreate(
                     ['branch_id' => $branch_id, 'addon_category_id' => $get_addon_category->id],
                     [
@@ -917,11 +921,11 @@ function AddAddonCategories2($branch_ids, $dish_id)
 
 function AddAddons2($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
         $addons = $get_dish->dishAddonsDetails->pluck('addon_id');
         $get_addons = DishAddon::whereIn('id', $addons)->get();
-    }else{
+    } else {
         $get_addons = DishAddon::get();
     }
 

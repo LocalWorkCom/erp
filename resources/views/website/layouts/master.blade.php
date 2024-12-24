@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.css') }}">
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
     <!-- Owl Carousel -->
     <link rel="stylesheet"
         href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
@@ -248,19 +248,24 @@
   </script> -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if the cookies for latitude and longitude are already set
             if (!document.cookie.includes('latitude') || !document.cookie.includes('longitude')) {
-                // Request geolocation from the user
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        // Set cookies for latitude and longitude
-                        document.cookie = `latitude=${position.coords.latitude}; path=/`;
-                        document.cookie = `longitude=${position.coords.longitude}; path=/`;
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Set cookies
+                        document.cookie = `latitude=${latitude}; path=/`;
+                        document.cookie = `longitude=${longitude}; path=/`;
+
+                        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
                     },
                     (error) => {
                         console.warn('User denied location access or an error occurred:', error);
                     }
                 );
+            } else {
+                console.log('Cookies already set:', document.cookie);
             }
         });
     </script>
