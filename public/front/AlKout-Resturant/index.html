@@ -121,8 +121,8 @@
 
   </header>
   <main>
-    <section class="location-pop-up">
-      <div id=" modal" class="modal" tabindex="-1">
+    <!-- <section class="location-pop-up">
+      <div id="modal" class="modal" tabindex="-1">
         <div class="modal-dialog modal-sm modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header border-0">
@@ -138,7 +138,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <section class="intro">
       <div class="container py-sm-5 py-4">
         <div class=" py-5 owl-slider owl-carousel owl-theme">
@@ -1622,7 +1622,25 @@
       </div>
     </div>
   </div>
-
+  <div class="location-modal modal fade" tabindex="-1" id="modal">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="SiteAssets/images/Vector.png" alt=""/>
+          <h4 class="mt-4">
+            عذرا لا نقوم بالتوصيل لهذة المنطقة برجاء تغير موقعك او الفرع   علما بانه سوف يؤثر علي سعر الفاتورة
+          </h4>
+        </div>
+        <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+          <button type="button" class="btn">تغيير الموقع</button>
+          <button type="button" class="btn reversed main-color">  تغيير الفرع </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
   <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.bundle.js"></script>
   <script src="SiteAssets/bootstrap-5.1.3/dist/umd/popper.min.js"></script>

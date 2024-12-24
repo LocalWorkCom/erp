@@ -1670,7 +1670,11 @@ input::placeholder {
 .dropdown-toggle::after {
     margin-right: .55em;
 }
-
+.location-modal img{
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
 
 /* responsive */
 @media(max-width: 1024px) {}
