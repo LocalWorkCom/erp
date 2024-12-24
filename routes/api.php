@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\DelayTimeController;
 use App\Http\Controllers\Api\FacebookAuthController;
 use App\Http\Controllers\Api\GoogleAuthController;
 use App\Http\Controllers\Api\HrReportController;
+use App\Http\Controllers\Api\MenuHomeController;
+use App\Http\Controllers\Api\MostPopularController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\OfferDetailController;
 use App\Http\Controllers\Api\PayrollController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductInventoryController;
 use App\Http\Controllers\Api\RateController;
+use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\StaticPageController;
 use App\Http\Controllers\Api\StoreInventoryController;
 use App\Http\Controllers\Api\UnitController;
@@ -789,6 +792,10 @@ Route::prefix('addon-categories')->group(function () {
 });
 
 Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
+Route::get('/popular', [MostPopularController::class, 'index'])->name('api.popular');
+Route::get('/slider', [SliderController::class, 'index'])->name('api.slider');
+Route::get('/menu', [MenuHomeController::class, 'index'])->name('api.menu');
+Route::get('/dish-menu', [DishCategoryController::class, 'menuDishes'])->name('api.dish.menu');
 
 //Rates
 Route::group(['prefix' => 'rates'], function () {
