@@ -46,17 +46,6 @@
                                         <form action="{{ route('color.store') }}" method="POST" class="needs-validation"
                                             novalidate>
                                             @csrf
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">@lang('color.AddColor')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -115,17 +104,7 @@
                                             novalidate>
                                             @csrf
                                             @method('PUT')
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('color.EditColor')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -225,6 +204,17 @@
                                 </div>
                             @endif
                             <table class="table table-bordered text-nowrap" style="width:100%">
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        <div class="alert alert-solid-danger alert-dismissible fade show">
+                                            {{ $error }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @endif
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('color.ID')</th>
@@ -371,6 +361,7 @@
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
     }
+
     function delete_item(id) {
         Swal.fire({
             title: @json(__('validation.Alert')),

@@ -52,16 +52,6 @@
                                         <form action="{{ route('size.store') }}" method="POST" class="needs-validation"
                                             novalidate>
                                             @csrf
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">@lang('size.AddSize')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -123,16 +113,6 @@
                                         <form id="edit-size-form" action="" method="POST" class="needs-validation" novalidate>
                                             @csrf
                                             @method('PUT')
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('size.EditSize')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -214,26 +194,27 @@
 
                         </div>
                         <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                            @endif
-                                @if ($errors->any())
-                                    @foreach ($errors->all() as $error)
-                        
-                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                            {{ $error }}
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                @endif
+                           
                                 <table class="table table-bordered text-nowrap" style="width:100%">
+                                    @if (session('message'))
+                                    <div class="alert alert-solid-info alert-dismissible fade show">
+                                        {{ session('message') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endif
+                                    @if ($errors->any())
+                                        @foreach ($errors->all() as $error)
+                            
+                                        <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                {{ $error }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                    <i class="bi bi-x"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('size.ID')</th>

@@ -61,7 +61,7 @@ class DiscountService
                 'name_ar' => 'required|string',
                 'name_en' => 'nullable|string',
                 'type' => 'required|in:percentage,fixed',
-                'value' => 'required|numeric',
+                'value' => 'required|numeric|min:0',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',

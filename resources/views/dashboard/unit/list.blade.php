@@ -45,17 +45,6 @@
                                         <form action="{{ route('unit.store') }}" method="POST" class="needs-validation"
                                             novalidate>
                                             @csrf
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel1">@lang('unit.AddUnit')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -107,17 +96,7 @@
                                             novalidate>
                                             @csrf
                                             @method('PUT')
-                                            @if ($errors->any())
-                                                @foreach ($errors->all() as $error)
-                                                    <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                        {{ $error }}
-                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                                            aria-label="Close">
-                                                            <i class="bi bi-x"></i>
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+                                            
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="editModalLabel">@lang('unit.EditUnit')</h6>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -192,7 +171,9 @@
 
                         </div>
                         <div class="card-body">
-                            @if (session('message'))
+                           
+                            <table class="table table-bordered text-nowrap" style="width:100%">
+                                @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
                                     {{ session('message') }}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -200,18 +181,17 @@
                                     </button>
                                 </div>
                             @endif
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                        
                                     <div class="alert alert-solid-danger alert-dismissible fade show">
-                                        {{ $error }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                            aria-label="Close">
-                                            <i class="bi bi-x"></i>
-                                        </button>
-                                    </div>
-                                @endforeach
-                            @endif
-                            <table class="table table-bordered text-nowrap" style="width:100%">
+                                            {{ $error }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @endif
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('unit.ID')</th>
