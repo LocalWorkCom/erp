@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        Log::info('Request Cookies:', $request->cookies->all());
         $sliders = Slider::all();
         $branches = Branch::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
@@ -32,13 +33,23 @@ class HomeController extends Controller
         // $discounts = $discounts->reverse();
         $userLat = $request->cookie('latitude');
         $userLon = $request->cookie('longitude');
-
-        $branchId = $userLat && $userLon
-            ? getNearestBranch($userLat, $userLon)
-            : getDefaultBranch();
-
-        if (!$branchId) {
-            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        if ($userLat && $userLon) {
+            Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
+        } else {
+            Log::warning('No coordinates found in cookies');
+        }
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
         }
 
         $popularDishes = getMostDishesOrdered(5);
@@ -46,7 +57,6 @@ class HomeController extends Controller
             ->where('branch_id', $branchId)
             ->where('is_active', true)
             ->get();
-
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -73,6 +83,7 @@ class HomeController extends Controller
         if (!$branchId) {
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
+        Log::info('Nearest Branch:', (array) $branchId);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)
             ->where('is_active', true)
