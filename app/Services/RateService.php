@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Services;
 
-use App\Http\Controllers\Controller;
+use App\Http\Resources\OfferResource;
 use App\Http\Resources\RateResource;
+use App\Models\Branch;
+use App\Models\Offer;
+use App\Models\OfferDetail;
 use App\Models\Rate;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-class RateController extends Controller
+class RateService
 {
     private $lang;
 
-    public function __construct(Request $request)
+    public function __construct()
     {
-        $this->lang = $request->header('lang', 'ar');
-        if (!CheckToken()) {
-            return RespondWithBadRequest($this->lang, 5);
-        }
+        $this->lang = app()->getLocale();
     }
 
     /**
@@ -25,7 +25,7 @@ class RateController extends Controller
      */
     public function index()
     {
-        $rates = Rate::where('active',1)->get();
+        $rates = Rate::get();
         return ResponseWithSuccessData($this->lang, RateResource::collection($rates), 1);
     }
 
@@ -36,7 +36,7 @@ class RateController extends Controller
     {
         $data = $request->validate([
             'value' => 'required|numeric|in:1,2,3,4,5',
-            'note' => 'nullable|string',
+            'note' => 'required|string',
             'active' => 'required|in:0,1',
         ]);
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id ?? 1
@@ -52,7 +52,7 @@ class RateController extends Controller
      */
     public function show(string $id)
     {
-        $data = Rate::where('active',1)->find($id);
+        $data = Rate::find($id);
 
         if (!$data) {
             return RespondWithBadRequestData($this->lang, 2);

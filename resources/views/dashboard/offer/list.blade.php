@@ -102,19 +102,30 @@
                                                     @lang('category.show') <i class="ri-eye-line"></i>
                                                 </a>
 
-                                                <!-- Edit Button -->
-                                                <a href="{{ route('offer.edit', $offer->id) }}" class="btn btn-orange-light btn-wave">
-                                                    @lang('category.edit') <i class="ri-edit-line"></i>
-                                                </a>
+                                                @if (!checkOfferUsed($offer->id))
+                                                    <!-- Show the Edit Button only if the offer has not been used -->
+                                                    <a href="{{ route('offer.edit', $offer->id) }}" class="btn btn-orange-light btn-wave">
+                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                                                    </a>
 
-                                                <!-- Delete Button -->
-                                                <form class="d-inline" id="delete-form-{{ $offer->id }}" action="{{ route('offer.delete', $offer->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" onclick="delete_item({{ $offer->id }})" class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    <!-- Delete Button -->
+                                                    <form class="d-inline" id="delete-form-{{ $offer->id }}" action="{{ route('offer.delete', $offer->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" onclick="delete_item({{ $offer->id }})" class="btn btn-danger-light btn-wave">
+                                                            @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <!-- Optionally, display a message or a disabled button -->
+                                                    <button class="btn btn-orange-light btn-wave" disabled>
+                                                        @lang('offer.noEdit') @lang('offer.used')
                                                     </button>
-                                                </form>
+                                                    <button class="btn btn-danger-light btn-wave" disabled>
+                                                        @lang('offer.noDelete') @lang('offer.used')
+                                                    </button>
+                                                @endif
+
 
                                                 <a href="{{ route('offerDetails.list', $offer->id) }}" class="btn btn-outline-teal btn-wave">
                                                     @lang('offer.Details') <i class="ri-add-box-line"></i>

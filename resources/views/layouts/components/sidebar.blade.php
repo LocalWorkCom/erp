@@ -749,6 +749,18 @@
                             </a>
                         </li>
                     @endcan
+
+                    @can('view rates')
+                        <li class="slide">
+                            <a href="{{ route('rates.list') }}" class="side-menu__item">
+                                <span class=" side-menu__icon">
+                                    <i class='bx bx-desktop'></i>
+                                </span>
+                                <span class="side-menu__label">@lang('sidebar.Rates')</span>
+                            </a>
+                        </li>
+                    @endcan
+
                     @can('view terms')
                         <li class="slide">
                             <a href="{{ route('terms.list') }}" class="side-menu__item">

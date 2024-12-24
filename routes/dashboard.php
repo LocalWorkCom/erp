@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\RateController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Auth\LoginController;
@@ -334,6 +335,14 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::delete('delete/{id}', [SliderController::class, 'destroy'])->name('slider.delete')->middleware('role_or_permission:delete sliders');
     });
 
+    Route::get('/rates', [RateController::class, 'index'])->name('rates.list')->middleware('role_or_permission:view rates');
+    Route::group(['prefix' => 'rate'], function () {
+        Route::post('store', [RateController::class, 'store'])->name('rate.store')->middleware('role_or_permission:create rates');
+        Route::get('show/{id}', [RateController::class, 'show'])->name('rate.show')->middleware('role_or_permission:view rates');
+        Route::put('update/{id}', [RateController::class, 'update'])->name('rate.update')->middleware('role_or_permission:update rates');
+        Route::delete('delete/{id}', [RateController::class, 'destroy'])->name('rate.delete')->middleware('role_or_permission:delete rates');
+    });
+
     Route::get('/terms', [TermsAndConditionsController::class, 'index'])->name('terms.list')->middleware('role_or_permission:view terms');
     Route::group(['prefix' => 'term'], function () {
         Route::get('create', [TermsAndConditionsController::class, 'create'])->name('term.create')->middleware('role_or_permission:create terms');
@@ -535,13 +544,13 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     Route::prefix('/cuisines')->group(function () {
         Route::get('/', [CuisineController::class, 'index'])->name('dashboard.cuisines.index');
-        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create'); 
+        Route::get('/create', [CuisineController::class, 'create'])->name('dashboard.cuisines.create');
         Route::post('/', [CuisineController::class, 'store'])->name('dashboard.cuisines.store');
-        Route::get('/{id}', [CuisineController::class, 'show'])->name('dashboard.cuisines.show'); 
+        Route::get('/{id}', [CuisineController::class, 'show'])->name('dashboard.cuisines.show');
         Route::get('/{id}/edit', [CuisineController::class, 'edit'])->name('dashboard.cuisines.edit');
         Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
     });
-    
+
 });
