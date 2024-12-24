@@ -60,14 +60,23 @@ class HomeController extends Controller
         );
     }
 
-    public function showMenu()
+    public function showMenu(Request $request)
     {
         $branches = Branch::all();
-        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
-            $query->where('is_active', true);
-        }, 'dish_categories.dishes' => function ($query) {
-            $query->where('is_active', true);
-        }])->get();
+        $userLat = $request->cookie('latitude');
+        $userLon = $request->cookie('longitude');
+
+        $branchId = $userLat && $userLon
+            ? getNearestBranch($userLat, $userLon)
+            : getDefaultBranch();
+
+        if (!$branchId) {
+            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        }
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('branch_id', $branchId)
+            ->where('is_active', true)
+            ->get();
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
