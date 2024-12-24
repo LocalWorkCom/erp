@@ -834,6 +834,16 @@ function GetCountries()
     $countries = Country::select('phone_code', 'id', 'flag')->get();
     return $countries;
 }
+
+function AddBranchesMenu($branch_ids, $dish_id)
+{
+    $add_dish_categories = AddDishCategories($branch_id);
+    $add_dishes = AddDishes($branch_id);
+    $add_addon_category = AddAddonCategories($branch_id);
+    $add_addons = AddAddons($branch_id);
+    $add_sizes = AddSizes($branch_id);
+}
+
 function AddBranchMenu($branch_id)
 {
     $add_dish_categories = AddDishCategories($branch_id);

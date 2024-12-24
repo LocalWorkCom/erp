@@ -30,7 +30,7 @@ class BranchMenuController extends Controller
     {
         $response = $this->branchMenuService->show($id);
         $responseData = $response->original;
-        return $branch_menu_category = $responseData['data'];
+        return $branch_menu = $responseData['data'];
     }
 
     public function store(Request $request)
@@ -40,22 +40,21 @@ class BranchMenuController extends Controller
 
     public function update(Request $request, $id)
     {
-        $response = $this->branchMenuService->edit($request, $id);
+        $response = $this->branchMenuService->update($request, $id);
         $responseData = $response->original;
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
-            return redirect()->route('branch.categories.list')->withErrors($validationErrors)->withInput();
+            return redirect()->route('branch.menus.list')->withErrors($validationErrors)->withInput();
         }
         $message= $responseData['message'];
-        return redirect()->route('branch.categories.list')->with('message',$message);
+        return redirect()->route('branch.menus.list')->with('message',$message);
     }
+
     public function change_status(Request $request, $id)
     {
         $response = $this->branchMenuService->change_status($id);
         $responseData = $response->original;
-        return $branch_menu_category = $responseData['data'];
-        // $message= $responseData['message'];
-        // return redirect()->route('branch.categories.list')->with('message',$message);
+        return $branch_menu = $responseData['data'];
     }
 
     public function show_branch($branch_id)

@@ -134,6 +134,13 @@
                                                 </li>
                                             @endcan
 
+                                            @can('view branch_menu_category_addons')
+                                                <li class="slide">
+                                                    <a href="{{ route('branch.menu.addon.categories.list') }}"
+                                                        class="side-menu__item">@lang('sidebar.branchMenuCategoryAddon') </a>
+                                                </li>
+                                            @endcan
+
                                             @can('view branch_menu_addons')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.menu.addons.list') }}"

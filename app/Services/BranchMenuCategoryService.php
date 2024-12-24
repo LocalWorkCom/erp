@@ -22,7 +22,7 @@ class BranchMenuCategoryService
     public function index(Request $request)
     {
         try {
-            $branch_menu_categories = BranchMenuCategory::with(['branches', 'children', 'dish_categories'])->get();
+            $branch_menu_categories = BranchMenuCategory::with(['branches', 'dish_categories'])->get();
             return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
@@ -33,7 +33,7 @@ class BranchMenuCategoryService
     public function branch($id)
     {
         try {
-            $branch_menu_categories = BranchMenuCategory::where('branch_id', $id)->with(['branches', 'children', 'dish_categories'])->get();
+            $branch_menu_categories = BranchMenuCategory::where('branch_id', $id)->with(['branches', 'dish_categories'])->get();
             return ResponseWithSuccessData($this->lang, $branch_menu_categories, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branches: ' . $e->getMessage());
@@ -55,7 +55,7 @@ class BranchMenuCategoryService
     public function show($id)
     {
         try {
-            $branch_menu_category = BranchMenuCategory::with(['branches', 'children', 'dish_categories'])->findOrFail($id);
+            $branch_menu_category = BranchMenuCategory::with(['branches', 'dish_categories'])->findOrFail($id);
             return ResponseWithSuccessData($this->lang, $branch_menu_category, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching branch: ' . $e->getMessage());

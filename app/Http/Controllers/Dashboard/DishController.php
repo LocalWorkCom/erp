@@ -8,6 +8,8 @@ use App\Services\AddonCategoryService;
 use App\Services\AddonService;
 use App\Services\CuisineService;
 use App\Services\RecipeService;
+use App\Models\Dish;
+use App\Models\Branch;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -70,9 +72,9 @@ class DishController extends Controller
         $addonCategories = $this->addonCategoryService->index(); 
         $cuisines = $this->cuisineService->index(); 
         $recipes = $this->recipeService->index(); 
-       
+        $branches = Branch::all(); 
 
-        return view('dashboard.dish.create', compact('categories', 'addons', 'addonCategories', 'cuisines', 'recipes'));
+        return view('dashboard.dish.create', compact('categories', 'addons', 'addonCategories', 'cuisines', 'recipes','branches'));
     }
     
     public function store(Request $request)
@@ -81,53 +83,71 @@ class DishController extends Controller
             $data = $request->all();
             $data['created_by'] = auth()->id(); 
     
-            $this->dishService->store($data, $request->file('image'));
+            $dish = $this->dishService->store($data, $request->file('image'));
+            Log::info('Dish created successfully', ['dish_id' => $dish->id]);
+    
+            $branches = $request->input('branches', []);
+            Log::info('Selected branches', ['branches' => $branches]);
+    
+            if (in_array('all', $branches)) {
+                $allBranchIds = Branch::pluck('id')->toArray();
+                Log::info('All branch IDs', ['all_branch_ids' => $allBranchIds]);
+    
+                // AddBranchMenu($dish->id, $allBranchIds);
+            } else {
+                Log::info('Specific branches for the dish', [
+                    'dish_id' => $dish->id,
+                    'branch_ids' => $branches,
+                ]);
+    
+                // AddBranchMenu($dish->id, $branches);
+            }
     
             return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishCreated'));
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            \Log::error('Dish creation failed', ['error' => $e->getMessage()]);
+            Log::error('Dish creation failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', __('dishes.DishCreationFailed'));
         }
     }
     
     
+    
     public function edit($id)
     {
-        $dish = $this->dishService->show($id); 
-        $categories = $this->dishCategoryService->index(); 
+        $dish = Dish::with(['dishAddonsDetails.category', 'dishAddonsDetails.addons'])->findOrFail($id);
+        $categories = $this->dishCategoryService->index();
         $cuisines = $this->cuisineService->index();
-        $recipes = $this->recipeService->index(); 
-        $addons = $this->addonService->index(); 
+        $recipes = $this->recipeService->index();
+        $allAddons = $this->addonService->index(); 
         $addonCategories = $this->addonCategoryService->index();
-      
-
-        return view('dashboard.dish.edit', compact('dish', 'categories', 'cuisines', 'recipes', 'addons', 'addonCategories'));
+        $addons = $dish->addons ?? collect(); 
+    
+        return view('dashboard.dish.edit', compact('dish', 'categories', 'cuisines', 'recipes', 'allAddons', 'addonCategories', 'addons'));
     }
     
-
+    
+    
+    
     public function update(Request $request, $id)
     {
         try {
-            $this->dishService->update($request->all(), $id);
-    
+            $this->dishService->update($request, $id);
             return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishUpdated'));
         } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Dish Update Validation Failed', ['errors' => $e->errors()]);
-    
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            Log::error('Dish Update Failed', ['error' => $e->getMessage()]);
-    
+            \Log::error('Dish update failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', __('dishes.DishUpdateFailed'));
         }
     }
     
+    
     public function destroy($id)
     {
         $this->dishService->delete($id);
-        return redirect()->route('dashboard.dish.index')->with('success', 'Dish deleted successfully.');
+        return redirect()->route('dashboard.dishes.index')->with('success', 'Dish deleted successfully.');
     }
 
     public function restore($id)

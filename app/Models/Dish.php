@@ -52,19 +52,14 @@ class Dish extends Model
         return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
     }
 
-    public function getDescriptionSiteAttribute()
-    {
-        return request()->header('lang', 'ar') === 'en' ? $this->description_en : $this->description_ar;
-    }
-
     public function getNameSiteAttribute()
     {
         return app()->getLocale() === 'en' ? $this->name_en : $this->name_ar;
     }
 
-    public function getAddressSiteAttribute()
+    public function getDescriptionSiteAttribute()
     {
-        return app()->getLocale() === 'en' ? $this->address_en : $this->address_ar;
+        return app()->getLocale() === 'en' ? $this->description_en : $this->description_ar;
     }
 
     // Relationships
@@ -105,4 +100,10 @@ class Dish extends Model
     {
         return $this->hasMany(DishDetail::class, 'dish_id');
     }
+    public function dishAddonsDetails()
+    {
+        return $this->hasMany(DishAddon::class, 'dish_id');
+    }
+
+    
 }

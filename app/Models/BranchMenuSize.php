@@ -28,4 +28,15 @@ class BranchMenuSize extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
+
+    public function dishSizes()
+    {
+        return $this->belongsTo(DishSize::class, 'dish_size_id');
+    }
+
+    public function dishes()
+    {
+        return $this->belongsTo(Dish::class, 'dish_id');
+    }
+
 }

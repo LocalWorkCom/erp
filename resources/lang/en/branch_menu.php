@@ -38,4 +38,6 @@ return [
     'Activation' => 'Activation',
     'Active' => 'Active',
     'NotActive' => 'Not Active',
+    'Price' => 'Price',
+    'EditBranchMenu' => 'Edit Branch Menu',
 ];
