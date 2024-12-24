@@ -168,11 +168,11 @@
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                         <label class="form-label">@lang('branch.IsDefault')</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_default" value="1">
+                                            <input class="form-check-input" type="radio" name="is_default" value="1" checked>
                                             <label class="form-check-label">@lang('category.yes')</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="is_default" value="0" checked>
+                                            <input class="form-check-input" type="radio" name="is_default" value="0">
                                             <label class="form-check-label">@lang('category.no')</label>
                                         </div>
                                     </div>
