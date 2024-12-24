@@ -25,14 +25,14 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $sliders = Slider::all();
+        $branches = Branch::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        $popularDishes = getMostDishesOrdered(5);
-
-        // Get user's location from cookies
+        // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
+        // $discounts = $lastThreeDiscounts->reverse()->take(3);
+        // $discounts = $discounts->reverse();
         $userLat = $request->cookie('latitude');
         $userLon = $request->cookie('longitude');
 
-        // Determine branch ID
         $branchId = $userLat && $userLon
             ? getNearestBranch($userLat, $userLon)
             : getDefaultBranch();
@@ -41,7 +41,7 @@ class HomeController extends Controller
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
 
-        // Get menu categories for the branch
+        $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)
             ->where('is_active', true)
@@ -54,13 +54,11 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
-
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'userFavorites'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
         );
     }
-
 
     public function showMenu()
     {
