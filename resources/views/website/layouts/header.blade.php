@@ -119,7 +119,7 @@
             </div>
         </div>
     </div>
-  
+
 </header>
 @auth('client')
     <!-- Profile modal -->
@@ -189,7 +189,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="favourites.html">
+                            <a href="{{ route('show.favorites') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-heart main-color ms-2"></i>
                                     @lang('header.favorite')
@@ -250,7 +250,8 @@
                         <li>
                             <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
                                 @csrf
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
+                                <a href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
                                     <h6 class="fw-bold">
                                         <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                         @lang('header.logout')
