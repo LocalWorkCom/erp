@@ -11,12 +11,10 @@ use Illuminate\Support\Facades\File;
 
 class RateController extends Controller
 {
-    protected $lang;
     protected $rateService;
 
     public function __construct(RateService $rateService)
     {
-        $this->lang =  app()->getLocale();
         $this->rateService = $rateService;
     }
     /**

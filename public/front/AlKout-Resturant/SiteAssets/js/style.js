@@ -237,6 +237,28 @@ function formatTime(time) {
   return time < 10 ? "0" + time : time;
 }
 
+  // logout modal
+  document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (event) {
+        event.preventDefault(); 
+
+        const profileModal = document.getElementById("profileModal");
+        const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+        if (profileModal) {
+          const profileInstance = bootstrap.Modal.getInstance(profileModal);
+          if (profileInstance) {
+            profileInstance.hide();
+          }
+        }
+        logoutModal.show();
+      });
+    }
+  });
+
 // wizard js 
 
 $(document).ready(function () {

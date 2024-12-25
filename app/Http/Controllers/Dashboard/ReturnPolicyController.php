@@ -9,12 +9,6 @@ use Illuminate\Http\Request;
 
 class ReturnPolicyController extends Controller
 {
-    protected $lang;
-
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -38,6 +32,7 @@ class ReturnPolicyController extends Controller
     public function store(StaticFormsRequest $request)
     {
 //        dd($request->all());
+        $lang = app()->getLocale();
         $data = $request->validated();
         $return = new ReturnPolicy();
         $return->name_ar = $data['name_ar'];
@@ -47,7 +42,7 @@ class ReturnPolicyController extends Controller
         $return->active = $data['active'];
         $return->created_by = auth()->id() ?? 1 ;
         $return->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/returns')->with('message',$message);
@@ -76,6 +71,7 @@ class ReturnPolicyController extends Controller
      */
     public function update(StaticFormsRequest $request, string $id)
     {
+        $lang = app()->getLocale();
         $data = $request->validated();
         $return = ReturnPolicy::findOrFail($id);
         $return->name_ar = $data['name_ar'];
@@ -85,7 +81,7 @@ class ReturnPolicyController extends Controller
         $return->active = $data['active'];
         $return->modified_by = auth()->id() ?? 1;
         $return->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/returns')->with('message', $message);
@@ -96,10 +92,11 @@ class ReturnPolicyController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
         $return = ReturnPolicy::findOrFail($id);
         $return->deleted_by = auth()->id() ?? 1;
         $return->delete();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/returns')->with('message', $message);
