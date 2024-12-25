@@ -20,7 +20,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        <a href="javascript:void(0);" onclick="window.location.href='{{ route('sizes.list') }}'">@lang('size.Sizes')</a>
+                        <a href="javascript:void(0);"
+                            onclick="window.location.href='{{ route('sizes.list') }}'">@lang('size.Sizes')</a>
                     </li>
 
                 </ol>
@@ -84,11 +85,82 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="category_id" class="form-label">@lang('size.Category')</label>
+                                                        <label for="category_id"
+                                                            class="form-label">@lang('size.Category')</label>
                                                         <select name="category_id" class="form-control" required>
                                                             <option value="">@lang('size.SelectCategory')</option>
                                                             @foreach ($categories as $category)
-                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                                <option value="{{ $category->id }}">
+                                                                    {{ app()->getLocale() == 'ar' ? $category->name_ar : $category->name_en }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterCategory')
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    data-bs-dismiss="modal">@lang('modal.close')</button>
+                                                <button type="submit"
+                                                    class="btn btn-outline-primary">@lang('modal.save')</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form id="edit-size-form" action="" method="POST" class="needs-validation"
+                                            novalidate>
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-header">
+                                                <h6 class="modal-title" id="editModalLabel">@lang('size.EditSize')</h6>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row gy-4">
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-name-ar"
+                                                            class="form-label">@lang('size.ArabicName')</label>
+                                                        <input type="text" id="edit-name-ar" class="form-control"
+                                                            name="name_ar" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterArabicName')
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-name-en"
+                                                            class="form-label">@lang('size.EnglishName')</label>
+                                                        <input type="text" id="edit-name-en" class="form-control"
+                                                            name="name_en" required>
+                                                        <div class="valid-feedback">
+                                                            @lang('validation.Correct')
+                                                        </div>
+                                                        <div class="invalid-feedback">
+                                                            @lang('validation.EnterEnglishName')
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                        <label for="edit-category-id"
+                                                            class="form-label">@lang('size.Category')</label>
+                                                        <select id="edit-category-id" name="category_id"
+                                                            class="form-control" required>
+                                                            <option value="">@lang('size.SelectCategory')</option>
+                                                            @foreach ($categories as $category)
+                                                                <option value="{{ $category->id }}">
+                                                                    {{ app()->getLocale() == 'ar' ? $category->name_ar : $category->name_en }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                         <div class="invalid-feedback">
@@ -107,66 +179,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <form id="edit-size-form" action="" method="POST" class="needs-validation" novalidate>
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-header">
-                                                <h6 class="modal-title" id="editModalLabel">@lang('size.EditSize')</h6>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row gy-4">
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-ar" class="form-label">@lang('size.ArabicName')</label>
-                                                        <input type="text" id="edit-name-ar" class="form-control" name="name_ar" required>
-                                                        <div class="valid-feedback">
-                                                            @lang('validation.Correct')
-                                                        </div>
-                                                        <div class="invalid-feedback">
-                                                            @lang('validation.EnterArabicName')
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-name-en" class="form-label">@lang('size.EnglishName')</label>
-                                                        <input type="text" id="edit-name-en" class="form-control" name="name_en" required>
-                                                        <div class="valid-feedback">
-                                                            @lang('validation.Correct')
-                                                        </div>
-                                                        <div class="invalid-feedback">
-                                                            @lang('validation.EnterEnglishName')
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                        <label for="edit-category-id" class="form-label">@lang('size.Category')</label>
-                                                        <select id="edit-category-id" name="category_id" class="form-control" required>
-                                                            <option value="">@lang('size.SelectCategory')</option>
-                                                            @foreach ($categories as $category)
-                                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="invalid-feedback">
-                                                            @lang('validation.EnterCategory')
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                <button type="submit" class="btn btn-outline-primary">@lang('modal.save')</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h6 class="modal-title" id="showModalLabel">@lang('size.ShowSize')</h6>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row gy-4">
@@ -186,7 +206,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
                                         </div>
                                     </div>
                                 </div>
@@ -194,27 +215,28 @@
 
                         </div>
                         <div class="card-body">
-                           
-                                <table class="table table-bordered text-nowrap" style="width:100%">
-                                    @if (session('message'))
+
+                            <table class="table table-bordered text-nowrap" style="width:100%">
+                                @if (session('message'))
                                     <div class="alert alert-solid-info alert-dismissible fade show">
                                         {{ session('message') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close">
                                             <i class="bi bi-x"></i>
                                         </button>
                                     </div>
                                 @endif
-                                    @if ($errors->any())
-                                        @foreach ($errors->all() as $error)
-                            
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
                                         <div class="alert alert-solid-danger alert-dismissible fade show">
-                                                {{ $error }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                                    <i class="bi bi-x"></i>
-                                                </button>
-                                            </div>
-                                        @endforeach
-                                    @endif
+                                            {{ $error }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @endif
                                 <thead>
                                     <tr>
                                         <th scope="col">@lang('size.ID')</th>
@@ -226,62 +248,57 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($Sizes as $sizes)
-                                    <tr>
-                                        <td>{{ $sizes->id }}</td>
-                                        <td>{{ $sizes->name_ar }}</td>
-                                        <td>{{ $sizes->name_en }}</td>
-                                        <td>
-                                            @if ($sizes->category)
-                                                {{ $sizes->category->name_ar . ' | ' . $sizes->category->name_en }}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <!-- Show Button -->
-                                            <a href="javascript:void(0);"
-                                               class="btn btn-info-light btn-wave show-size-btn"
-                                               data-id="{{ $sizes->id }}"
-                                               data-name-ar="{{ $sizes->name_ar }}"
-                                               data-name-en="{{ $sizes->name_en }}"
-                                               data-category-name="{{ $sizes->category ? $sizes->category->name_ar . ' | ' . $sizes->category->name_en : '' }}"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#showModal">
-                                                @lang('category.show') <i class="ri-eye-line"></i>
-                                            </a>
-                                
-                                            <!-- Edit Button -->
-                                            <button type="button"
-                                                    class="btn btn-orange-light btn-wave edit-size-btn"
-                                                    data-id="{{ $sizes->id }}"
-                                                    data-name-ar="{{ $sizes->name_ar }}"
+                                        <tr>
+                                            <td>{{ $sizes->id }}</td>
+                                            <td>{{ $sizes->name_ar }}</td>
+                                            <td>{{ $sizes->name_en }}</td>
+                                            <td>
+                                                @if ($sizes->category)
+                                                    {{ $sizes->category->name_ar . ' | ' . $sizes->category->name_en }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <!-- Show Button -->
+                                                <a href="javascript:void(0);"
+                                                    class="btn btn-info-light btn-wave show-size-btn"
+                                                    data-id="{{ $sizes->id }}" data-name-ar="{{ $sizes->name_ar }}"
+                                                    data-name-en="{{ $sizes->name_en }}"
+                                                    data-category-name="{{ $sizes->category ? $sizes->category->name_ar . ' | ' . $sizes->category->name_en : '' }}"
+                                                    data-bs-toggle="modal" data-bs-target="#showModal">
+                                                    @lang('category.show') <i class="ri-eye-line"></i>
+                                                </a>
+
+                                                <!-- Edit Button -->
+                                                <button type="button" class="btn btn-orange-light btn-wave edit-size-btn"
+                                                    data-id="{{ $sizes->id }}" data-name-ar="{{ $sizes->name_ar }}"
                                                     data-name-en="{{ $sizes->name_en }}"
                                                     data-category-id="{{ $sizes->category ? $sizes->category->id : '' }}"
-                                                    data-route="{{ route('size.update', ':id') }}"
-                                                    data-bs-toggle="modal"
+                                                    data-route="{{ route('size.update', ':id') }}" data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
-                                                @lang('category.edit') <i class="ri-edit-line"></i>
-                                            </button>
-                                
-                                            <!-- Delete Button -->
-                                            <form class="d-inline" id="delete-form-{{ $sizes->id }}"
-                                                action="{{ route('size.delete', $sizes->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" onclick="delete_item('{{ $sizes->id }}')"
-                                                    class="btn btn-danger-light btn-wave">
-                                                    @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    @lang('category.edit') <i class="ri-edit-line"></i>
                                                 </button>
-                                            </form>
-                                            {{-- <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
+
+                                                <!-- Delete Button -->
+                                                <form class="d-inline" id="delete-form-{{ $sizes->id }}"
+                                                    action="{{ route('size.delete', $sizes->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="delete_item('{{ $sizes->id }}')"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </form>
+                                                {{-- <form class="d-inline" action="{{ route('size.delete', $sizes->id) }}" method="POST" onsubmit="return confirmDelete()">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger-light btn-wave">
                                                     @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                 </button>
                                             </form> --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -316,7 +333,7 @@
     @vite('resources/assets/js/modal.js')
 @endsection
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const editButtons = document.querySelectorAll('.edit-size-btn');
         const editForm = document.getElementById('edit-size-form');
         const nameArInput = document.getElementById('edit-name-ar');
@@ -324,11 +341,12 @@
         const categorySelect = document.getElementById('edit-category-id');
 
         editButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const sizeId = this.getAttribute('data-id');
                 const nameAr = this.getAttribute('data-name-ar');
                 const nameEn = this.getAttribute('data-name-en');
-                const categoryId = this.getAttribute('data-category-id'); // This will now be the actual category ID
+                const categoryId = this.getAttribute(
+                'data-category-id'); // This will now be the actual category ID
                 const routeTemplate = this.getAttribute('data-route');
 
                 const updateRoute = routeTemplate.replace(':id', sizeId);
@@ -341,17 +359,18 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const showButtons = document.querySelectorAll('.show-size-btn');
         const nameArElement = document.getElementById('show-name-ar');
         const nameEnElement = document.getElementById('show-name-en');
         const categoryElement = document.getElementById('show-category'); // Added line for category
 
         showButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const nameAr = this.getAttribute('data-name-ar');
                 const nameEn = this.getAttribute('data-name-en');
-                const categoryName = this.getAttribute('data-category-name'); // Added line for category name
+                const categoryName = this.getAttribute(
+                'data-category-name'); // Added line for category name
 
                 nameArElement.textContent = nameAr;
                 nameEnElement.textContent = nameEn;
@@ -364,6 +383,7 @@
     function confirmDelete() {
         return confirm("@lang('validation.DeleteConfirm')");
     }
+
     function delete_item(id) {
         Swal.fire({
             title: @json(__('validation.Alert')),

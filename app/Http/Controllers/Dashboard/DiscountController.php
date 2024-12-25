@@ -53,6 +53,7 @@ class DiscountController extends Controller
                 $validationErrors = $responseData['data'];
                 return redirect()->back()->withErrors($validationErrors)->withInput();
             } else {
+                // dd(0);
                 return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
 
