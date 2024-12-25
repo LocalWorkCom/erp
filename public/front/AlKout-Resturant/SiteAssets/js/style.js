@@ -493,6 +493,17 @@ function showThirdPhase() {
   document.querySelector('.second-phase').classList.add('d-none');
   document.querySelector('.third-phase').classList.remove('d-none');
 }
+function showAddPhase() {
+  document.querySelector('.fourth-phase').classList.add('d-none');
+  document.querySelector('.add-phase').classList.remove('d-none');
+}
 
-
+function showAddPhase2() {
+  document.querySelector('.add-phase').classList.add('d-none');
+  document.querySelector('.add-phase2').classList.remove('d-none');
+}
+function showAddPhase3() {
+  document.querySelector('.add-phase2').classList.add('d-none');
+  document.querySelector('.add-phase3').classList.remove('d-none');
+}
 

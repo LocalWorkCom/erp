@@ -1527,6 +1527,7 @@ a:hover {
     border: 1px solid #ced4da;
     padding: 0 0.75rem;
     border-radius: 10px !important;
+    position: relative;
 }
 
 .search-group .form-control {
@@ -1659,6 +1660,7 @@ input::placeholder {
     color: #afa8a8;
     font-size: 17px;
     pointer-events: none;
+    z-index: 1;
 }
 
 .border-red {
