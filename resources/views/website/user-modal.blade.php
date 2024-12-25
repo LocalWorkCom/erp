@@ -21,7 +21,7 @@
                                 {{ Auth::guard('client')->user()->email ?? '' }}
                             </small>
                         </div>
-                        <button class="btn reversed main-color" type="button">
+                        <button class="btn reversed main-color" type="button" onclick="window.location.href='{{ route('website.profile.view') }}';">
                             @lang('header.editprofile')
                         </button>
                     </div>
@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="favourites.html">
+                            <a href="{{ route('show.favorites') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-heart main-color ms-2"></i>
                                     @lang('header.favorite')
@@ -97,7 +97,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="policy.html">
+                            <a href="{{ route('terms') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-file-alt main-color ms-2"></i>
                                     @lang('header.policy')
@@ -106,7 +106,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="privacy.html">
+                            <a href="{{ route('privacy') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
                                     @lang('header.privacy')

@@ -290,4 +290,8 @@ class AuthController extends Controller
             'message' => __('auth.password_reset_success'),
         ]);
     }
+
+    public function viewProfile(){
+        return view('website.auth.profile');
+    }
 }

@@ -20,9 +20,11 @@ Route::post('/site/check-phone', [AuthController::class, 'checkPhone'])->name('c
 Route::post('/site/reset-password', [AuthController::class, 'resetPassword'])->name('reset.password');
 
 Route::middleware(['auth:client'])->group(function () {
-    Route::get('/site/profile', [AuthController::class, 'view'])->name('website.profile.view');
+    Route::get('/site/profile', [AuthController::class, 'viewProfile'])->name('website.profile.view');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
+    Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
+    Route::post('/myaddress', [LocationController::class, 'showAddress'])->name('showAddress');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -36,5 +38,3 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
-Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
-Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
