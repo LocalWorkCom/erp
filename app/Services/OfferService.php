@@ -15,7 +15,7 @@ class OfferService
 
     public function __construct(Request $request)
     {
-        $this->lang = $request->header('lang', 'ar');
+        $this->lang = app()->getLocale();
     }
 
     /**
@@ -47,23 +47,51 @@ class OfferService
                 'end_date.after_or_equal' => 'The end date must be after or equal to the start date.',
             ];
         }
-
         $data = $request->validate([
             'branch_selection' => 'required|in:all,specific',
             'branches' => 'required_if:branch_selection,specific|array',
             'branches.*' => 'exists:branches,id',
-            'name_ar' => 'required|string',
-            'name_en' => 'required|string',
+            'name_ar' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $exists = Offer::where('name_ar', $value)
+                        ->where('start_date', '<=', $request->end_date)
+                        ->where('end_date', '>=', $request->start_date)
+                        ->when($id, function ($query) use ($id) {
+                            $query->where('id', '!=', $id); // Exclude current record in case of update
+                        })
+                        ->exists();
+
+                    if ($exists) {
+                        $fail(__('validation.unique_within_duration', ['attribute' => __('validation.attributes.name_ar')]));
+                    }
+                },
+            ],
+            'name_en' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $exists = Offer::where('name_en', $value)
+                        ->where('start_date', '<=', $request->end_date)
+                        ->where('end_date', '>=', $request->start_date)
+                        ->when($id, function ($query) use ($id) {
+                            $query->where('id', '!=', $id); // Exclude current record in case of update
+                        })
+                        ->exists();
+
+                    if ($exists) {
+                        $fail(__('validation.unique_within_duration', ['attribute' => __('validation.attributes.name_en')]));
+                    }
+                },
+            ],
             'discount_type' => 'required|string|in:fixed,percentage',
             'discount_value' => [
                 'required',
                 'numeric',
                 function ($attribute, $value, $fail) use ($request) {
                     if ($request->discount_type === 'percentage' && $value > 100) {
-                        if (app()->getLocale() == 'en') {
-                            $fail('The discount value must not exceed 100 percentage.');
-                        }
-                        $fail('قيمة الخصم لا يجب ان تتعدى نسبة 100');
+                        $fail(__('validation.discount_exceeds_100'));
                     }
                 },
             ],

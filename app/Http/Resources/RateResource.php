@@ -18,6 +18,7 @@ class RateResource extends JsonResource
             'id'=>$this->id,
             'value'=>$this->value,
             'note'=>$this->note,
+            'active'=>$this->active,
         ];
     }
 }

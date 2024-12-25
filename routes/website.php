@@ -3,6 +3,7 @@
 use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\HomeController;
+use App\Http\Controllers\Website\LocationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -36,3 +37,4 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
+Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');

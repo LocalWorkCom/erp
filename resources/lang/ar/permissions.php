@@ -562,4 +562,8 @@ return array (
   'create offerDetails' => 'اضافة تفاصيل العرض',
   'update offerDetails' => 'تعديل تفاصيل العرض',
   'delete offerDetails' => 'حذف تفاصيل العرض',
+  'view rates' => 'عرض التقييمات',
+  'create rates' => 'اضافة تقييم',
+  'update rates' => 'تعديل تقييم',
+  'delete rates' => 'حذف تقييم',
 );

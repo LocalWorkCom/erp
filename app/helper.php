@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderDetail;
 use App\Models\pointSystem;
 use Carbon\Carbon;
 use App\Models\ApICode;
@@ -677,18 +678,22 @@ function getNearestBranch($userLat, $userLon)
     $nearestBranch = DB::table('branches')
         ->select(
             'id',
-            DB::raw("(6371 * acos(cos(radians($userLat))
-                * cos(radians(latitude))
-                * cos(radians(longitude) - radians($userLon))
+            'name_ar',
+            'address_ar',
+            DB::raw("latitute, longitute,
+                (6371 * acos(cos(radians($userLat))
+                * cos(radians(latitute))
+                * cos(radians(longitute) - radians($userLon))
                 + sin(radians($userLat))
-                * sin(radians(latitude)))) AS distance")
+                * sin(radians(latitute)))) AS distance")
         )
+        ->whereNotNull('latitute')
+        ->whereNotNull('longitute')
         ->orderBy('distance', 'asc')
         ->first();
 
-    return $nearestBranch ? $nearestBranch->id : null;
+    return $nearestBranch;
 }
-
 
 
 function scopeNearest($IDBranch, $latitude, $longitude)
@@ -835,14 +840,14 @@ function GetCountries()
 
 function AddBranchesMenu($branch_ids, $dish_id)
 {
-    $add_dish_categories = AddDishCategories2($branch_ids, $dish_id);
-    $add_dishes = AddDishes2($branch_ids, $dish_id);
-    $add_addon_category = AddAddonCategories2($branch_ids, $dish_id);
-    $add_addons = AddAddons2($branch_ids, $dish_id);
+    $add_dish_categories = AddDishCategories($branch_ids, $dish_id);
+    $add_dishes = AddDishes($branch_ids, $dish_id);
+    $add_addon_category = AddAddonCategories($branch_ids, $dish_id);
+    $add_addons = AddAddons($branch_ids, $dish_id);
     $add_sizes = AddSizes($branch_ids, $dish_id);
 }
 
-function AddDishCategories2($branch_ids, $dish_id)
+function AddDishCategories($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->first();
@@ -850,6 +855,7 @@ function AddDishCategories2($branch_ids, $dish_id)
     } else {
         $get_dish_categories = DishCategory::get();
     }
+
     if ($get_dish_categories) {
         foreach ($get_dish_categories as $get_dish_category) {
             foreach ($branch_ids as $branch_id) {
@@ -862,7 +868,7 @@ function AddDishCategories2($branch_ids, $dish_id)
     }
 }
 
-function AddDishes2($branch_ids, $dish_id)
+function AddDishes($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->first();
@@ -889,7 +895,7 @@ function AddDishes2($branch_ids, $dish_id)
     }
 }
 
-function AddAddonCategories2($branch_ids, $dish_id)
+function AddAddonCategories($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
@@ -914,7 +920,7 @@ function AddAddonCategories2($branch_ids, $dish_id)
     }
 }
 
-function AddAddons2($branch_ids, $dish_id)
+function AddAddons($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
@@ -928,117 +934,47 @@ function AddAddons2($branch_ids, $dish_id)
         foreach ($get_addons as $get_addon) {
             $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_addon_category = BranchMenuAddonCategory::where('addon_category_id', $get_addon->addon_category_id)->first();
-            $branch_menu_category = BranchMenuAddon::firstOrCreate(
-                ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
-                [
-                    'branch_menu_addon_category_id' => $branch_menu_addon_category->id,
-                    'price' => $get_addon->price,
-                    'is_active' => 1,
-                    'created_by' => auth()->user()->id
-                ]
-            );
+            foreach($branch_ids as $branch_id){
+                $branch_menu_category = BranchMenuAddon::firstOrCreate(
+                    ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
+                    [
+                        'branch_menu_addon_category_id' => $branch_menu_addon_category->id,
+                        'price' => $get_addon->price,
+                        'is_active' => 1,
+                        'created_by' => auth()->user()->id
+                    ]
+                );
+            }
         }
     }
 }
 
-
-function AddBranchMenu($branch_id)
+function AddSizes($branch_ids, $dish_id)
 {
-    $add_dish_categories = AddDishCategories($branch_id);
-    $add_dishes = AddDishes($branch_id);
-    $add_addon_category = AddAddonCategories($branch_id);
-    $add_addons = AddAddons($branch_id);
-    $add_sizes = AddSizes($branch_id);
-}
-
-function AddDishCategories($branch_id)
-{
-    $get_dish_categories = DishCategory::all();
-    if ($get_dish_categories) {
-        foreach ($get_dish_categories as $get_dish_category) {
-            $branch_menu_category = BranchMenuCategory::firstOrCreate(
-                ['dish_category_id' => $get_dish_category->id, 'branch_id' => $branch_id],
-                ['is_active' => 1, 'created_by' => auth()->user()->id]
-            );
-        }
+    if($dish_id != 0){
+        $get_sizes = DishSize::where('dish_id', $dish_id)->get();
+    }else{
+        $get_sizes = DishSize::all();
     }
-}
 
-function AddDishes($branch_id)
-{
-    $get_dishes = Dish::all();
-    if ($get_dishes) {
-        foreach ($get_dishes as $get_dish) {
-            $get_branch_menu_category = BranchMenuCategory::where('dish_category_id', $get_dish->category_id)->first();
-            $branch_menu_category = BranchMenu::firstOrCreate(
-                ['dish_id' => $get_dish->id, 'branch_id' => $branch_id],
-                [
-                    'branch_menu_category_id' => $get_branch_menu_category->id,
-                    'price' => $get_dish->price,
-                    'is_product' => 0,
-                    //'is_product' => $get_dish->price,
-                    'is_active' => 1,
-                    'created_by' => auth()->user()->id
-                ]
-            );
-        }
-    }
-}
-
-function AddAddonCategories($branch_id)
-{
-    $get_addon_categories = AddonCategory::all();
-    if ($get_addon_categories) {
-        foreach ($get_addon_categories as $get_addon_category) {
-
-            $branch_menu_addon_category = BranchMenuAddonCategory::firstOrCreate(
-                ['branch_id' => $branch_id, 'addon_category_id' => $get_addon_category->id],
-                [
-                    'is_active' => 1,
-                    'created_by' => auth()->user()->id
-                ]
-            );
-        }
-    }
-}
-
-function AddAddons($branch_id)
-{
-    $get_addons = DishAddon::all();
-    if ($get_addons) {
-        foreach ($get_addons as $get_addon) {
-            $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
-            $branch_menu_addon_category = BranchMenuAddonCategory::where('addon_category_id', $get_addon->addon_category_id)->first();
-            $branch_menu_category = BranchMenuAddon::firstOrCreate(
-                ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
-                [
-                    'branch_menu_addon_category_id' => $branch_menu_addon_category->id,
-                    'price' => $get_addon->price,
-                    'is_active' => 1,
-                    'created_by' => auth()->user()->id
-                ]
-            );
-        }
-    }
-}
-
-function AddSizes($branch_id)
-{
-    $get_sizes = DishSize::all();
     if ($get_sizes) {
         foreach ($get_sizes as $get_size) {
             $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
-            $branch_menu_category = BranchMenuSize::firstOrCreate(
-                ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
-                [
-                    'price' => $get_size->price,
-                    'is_active' => 1,
-                    'created_by' => auth()->user()->id
-                ]
-            );
+            foreach($branch_ids as $branch_id){
+                $branch_menu_category = BranchMenuSize::firstOrCreate(
+                    ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
+                    [
+                        'price' => $get_size->price,
+                        'is_active' => 1,
+                        'created_by' => auth()->user()->id
+                    ]
+                );
+            }
         }
     }
 }
+
+
 function getDefaultBranch()
 {
     $defaultBranch = Branch::where('is_default', 1)->first();
@@ -1077,13 +1013,14 @@ function respondError($error, $code, $errorMessages = [])
 }
 function getMostDishesOrdered($limit = 5)
 {
-    return Dish::select('dishes.*')
+    /*return Dish::select('dishes.*')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit($limit)
-        ->get();
+        ->get();*/
+        return [];
 }
 function checkDishExistMostOrderd($id)
 
@@ -1103,5 +1040,5 @@ function checkDishExistMostOrderd($id)
 
 function checkOfferUsed($id)
 {
-    return Order::where('IDOffer', $id)->exists();
+    return OrderDetail::where('offer_id', $id)->exists();
 }

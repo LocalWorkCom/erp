@@ -93,14 +93,14 @@ class DishController extends Controller
                 $allBranchIds = Branch::pluck('id')->toArray();
                 Log::info('All branch IDs', ['all_branch_ids' => $allBranchIds]);
     
-                // AddBranchMenu($dish->id, $allBranchIds);
+                AddBranchesMenu($allBranchIds, $dish->id);
             } else {
                 Log::info('Specific branches for the dish', [
                     'dish_id' => $dish->id,
                     'branch_ids' => $branches,
                 ]);
     
-                // AddBranchMenu($dish->id, $branches);
+                AddBranchesMenu($branches, $dish->id);
             }
     
             return redirect()->route('dashboard.dishes.index')->with('success', __('dishes.DishCreated'));

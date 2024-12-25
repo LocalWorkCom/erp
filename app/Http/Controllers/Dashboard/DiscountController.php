@@ -24,8 +24,8 @@ class DiscountController extends Controller
     public function __construct(DiscountService $discountService)
     {
         $this->discountService = $discountService;
-        $this->lang =  app()->getLocale();
         $this->checkToken = false;
+        $this->lang =  app()->getLocale();
     }
 
     public function index(Request $request)
