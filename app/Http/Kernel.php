@@ -72,4 +72,9 @@ class Kernel extends HttpKernel
         'role_or_permission' => \App\Http\Middleware\RoleOrPermissionMiddleware::class,
 
     ];
+
+    protected $except = [
+        'latitude',
+        'longitude',
+    ];
 }

@@ -6,19 +6,21 @@ return [
     'Percentage' => 'Percentage',//
     'Fixed' => 'Fixed',//
     'Value' => 'Value',//
-    'StartDate' => 'StartDate',//
-    'EndDate' => 'EndDate',//
-    'IsActive' => 'IsActive',//
+    'StartDate' => 'Start Date',//
+    'EndDate' => 'End Date',//
+    'IsActive' => 'Is Active',//
     'Active' => 'Active',//
-    'Inactive' => 'Inactive',//
-    'AddDiscount'=>'AddDiscount',//
-    'EditDiscount'=>'EditDiscount',//
-    'ShowDiscount'=>'ShowDiscount',//
-    'NameAr'=>'NameAr',
-    'NameEn'=>'NameEn',
-    'AddDishes' =>'AddDishes',
+    'Inactive' => 'In Active',//
+    'AddDiscount'=>'Add Discount',//
+    'EditDiscount'=>'Edit Discount',//
+    'ShowDiscount'=>'Show Discount',//
+    'NameAr'=>'Name Ar',
+    'NameEn'=>'Name En',
+    'AddDishes' =>'Add Dishes',
     'Discount Dish' =>'Discount Dish',
     'Actions' =>'Actions',
     'dish' =>'dish',
     'Save' =>'Save',
+    'Remove' =>'Remove',
+
 ];

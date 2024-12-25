@@ -148,6 +148,8 @@ return [
     'EnterLeaveType' => 'Please choose a leave type',
     'EnterMinmum' => 'Please enter the minmum',
     'EnterMaxmum' => 'Please enter the maxmum',
+    'EnterNameAr' => 'Please enter name ar',
+    'EnterNameEn' => 'Please enter name en',
     'EnterIsActive' => 'Please enter the rate flag active or not',
 
 ];

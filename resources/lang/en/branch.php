@@ -22,4 +22,13 @@ return [
     'SelectCountry' => 'Select Country',
     'SelectEmployee' => 'Select Employee',
     'IsDefault' => 'Main Branch',
+    'ChooseBranchDetails' => 'Choose Branch Details',
+
+    'branchMenuCategory' => 'Branch Menu Category',
+    'branchMenu' => 'Branch Menu',
+    'branchMenuCategoryAddon' => 'branch Menu Category Addons',
+    'branchMenuAddon' => 'Branch Menu Addons',
+    'branchMenuSize' => 'Branch Menu Size',
+
+
 ];
