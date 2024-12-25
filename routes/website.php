@@ -27,7 +27,8 @@ Route::middleware(['auth:client'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
     Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
-    Route::post('/myaddress', [LocationController::class, 'showAddress'])->name('showAddress');
+
+    Route::get('/myaddress', [LocationController::class, 'showAddress'])->name('showAddress');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

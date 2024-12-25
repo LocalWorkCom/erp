@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 class LocationController extends Controller
 {
-
+    public function showAddress()
+    {
+     return view('website.auth.address');
+    }
     public function saveAddress(Request $request)
     {
         if ($request->nameapart) {
