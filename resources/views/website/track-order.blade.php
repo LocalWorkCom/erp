@@ -236,9 +236,29 @@
                                     <p>مجموع طلبي</p>
                                     <p>{{ $order->total_price_befor_tax }} ج.م</p>
                                 </div>
+                                @if ($order->coupon_id)
+                                    <div class="d-flex justify-content-between">
+                                        <p class="main-color">كوبون خصم</p>
+                                        @if ($order->coupon->type === 'percentage')
+                                            <p class="main-color">
+                                                -{{ ($order->total_price_befor_tax * $order->coupon->value) / 100 }} ج.م
+                                            </p>
+                                        @elseif ($order->coupon->type === 'fixed')
+                                            <p class="main-color">
+                                                -{{ $order->coupon->value }} ج.م
+                                            </p>
+                                        @else
+                                            <p class="main-color">نوع الخصم غير معروف</p>
+                                        @endif
+                                    </div>
+                                @endif
                                 <div class="d-flex justify-content-between">
                                     <p>رسوم التوصيل</p>
-                                    <p>{{ $order->delivery_fees }} ج.م</p>
+                                    <p>{{ $order->delivery_fees ?? 0 }} ج.م</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p>رسوم الخدمة</p>
+                                    <p>{{ $order->service_fees ?? 0 }} ج.م</p>
                                 </div>
                                 <div class="d-flex justify-content-between border-top pt-2">
                                     <h5 class="fw-bold">المجموع الكلي</h5>
