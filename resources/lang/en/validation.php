@@ -1,9 +1,16 @@
 <?php
 return [
     'unique_within_duration' => 'The :attribute already exists for the same duration',
-    'discount_exceeds_100'=>'The discount value must not exceed 100 percentage',
+    'discount_exceeds_100' => 'The discount value must not exceed 100 percentage',
+    'required' => ':attribute is required.',
+    'email' => ':attribute must be a valid email address.',
+    'date_format' => ':attribute must match the format :format.',
+    'string' => ':attribute must be a string.',
+    'max' => ':attribute may not be greater than :max characters.',
+    'confirmed' => ':attribute confirmation does not match.',
     //add here the attributes of validation to translated
     'attributes' => [
+        'birth_date' => 'Birth Date',
 
         'email' => 'email address',
         'password' => 'password',
@@ -99,9 +106,9 @@ return [
     'image_en' => 'English Image',
     'branches' => 'branches',
     'branches.*' => 'branch',
-    'type_id'=>'Type Name',
-    'active'=>'Is Active',
-    'value'=>'Value',
+    'type_id' => 'Type Name',
+    'active' => 'Is Active',
+    'value' => 'Value',
 
     //web
     'Correct' =>  'Looks good!',
@@ -151,7 +158,7 @@ return [
     'EnterNameAr' => 'Please enter name ar',
     'EnterNameEn' => 'Please enter name en',
     'EnterIsActive' => 'Please enter the rate flag active or not',
-    'The category have relation' =>'The category have relation',
+    'The category have relation' => 'The category have relation',
 
 
 ];
