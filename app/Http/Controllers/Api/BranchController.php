@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Branch;
 use Illuminate\Http\Request;
@@ -51,8 +52,8 @@ class BranchController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
-            'opening_hour' => 'nullable|date_format:H:i', 
-            'closing_hour' => 'nullable|date_format:H:i', 
+            'opening_hour' => 'nullable|date_format:H:i',
+            'closing_hour' => 'nullable|date_format:H:i',
             'has_kids_area' => 'required|boolean',
             'is_delivery' => 'required|boolean',
         ]);
@@ -122,10 +123,10 @@ class BranchController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|string|max:255',
             'manager_name' => 'nullable|string|max:255',
-            'opening_hour' => 'nullable|date_format:H:i', 
-            'closing_hour' => 'nullable|date_format:H:i', 
+            'opening_hour' => 'nullable|date_format:H:i',
+            'closing_hour' => 'nullable|date_format:H:i',
             'has_kids_area' => 'required|boolean',
-            'is_delivery' => 'required|boolean', 
+            'is_delivery' => 'required|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -191,5 +192,38 @@ class BranchController extends Controller
             Log::error('Error restoring branch: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
+    }
+
+    public function listBranchAndNear(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+
+        $userLat = $request->query('latitute');
+        $userLon = $request->query('longitute');
+        $all = $request->query('all', 0);
+
+        // Fetch all branches if 'all' parameter is set to 1
+        $branches = ($all == 1) ? Branch::whereNull('deleted_at')->get() : null;
+
+        $data = [];
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+
+            if ($nearestBranch) {
+                $data['branch'] = $nearestBranch;
+            } else {
+                $defaultBranchId = getDefaultBranch();
+                $data['branch'] = DB::table('branches')->find($defaultBranchId);
+            }
+        } else {
+            $defaultBranchId = getDefaultBranch();
+            $data['branch'] = DB::table('branches')->find($defaultBranchId);
+        }
+
+        // Include all branches if fetched
+        $data['branches'] = $branches;
+
+        return ResponseWithSuccessData($lang, $data, 1); // Replace 'ar' with the desired language dynamically
     }
 }
