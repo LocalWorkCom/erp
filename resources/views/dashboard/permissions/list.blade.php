@@ -95,8 +95,8 @@
                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form action="{{ route('permission.store') }}" method="POST"
-                                                        class="needs-validation" novalidate>
+                                                    <form action="{{ route('permission.store') }}"method="POST"
+                                                        class="needs-validation" novalidate enctype="multipart/form-data">
                                                         @csrf
                                                         @if ($errors->any())
                                                             @foreach ($errors->all() as $error)
@@ -112,19 +112,20 @@
                                                         @endif
                                                         <div class="modal-header">
                                                             <h6 class="modal-title" id="exampleModalLabel1">
-                                                                @lang('roles.AddPer')
-                                                            </h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                                @lang('roles.AddPer')</h6>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row gy-4">
+                                                                <input type="text" class="form-control" name="type"
+                                                                    value="0" hidden>
                                                                 <!-- Arabic Name Input -->
                                                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                                     <label for="input-placeholder"
                                                                         class="form-label">@lang('roles.ArabicName')</label>
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.ArabicName')" name="name_ar"
+                                                                        <input type="text" class="form-control"
+                                                                        placeholder="@lang('roles.ArabicName')" name="name_ar" value="{{ old('name_ar') }}"
                                                                         required>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
                                                                     <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
@@ -134,8 +135,8 @@
                                                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                                                     <label for="input-placeholder"
                                                                         class="form-label">@lang('roles.EnglishName')</label>
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.EnglishName')" name="name_en"
+                                                                        <input type="text" class="form-control"
+                                                                        placeholder="@lang('roles.EnglishName')" name="name_en" value="{{ old('name_en') }}"
                                                                         required>
                                                                     <div class="valid-feedback">@lang('validation.Correct')</div>
                                                                     <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
@@ -228,18 +229,28 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+       <!-- JQUERY CDN -->
+       <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
 
-    <!-- DATA-TABLES CDN -->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+       <!-- DATA-TABLES CDN -->
+       <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+       <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+       <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @vite('resources/assets/js/validation.js')
-    @vite('resources/assets/js/choices.js')
-    @vite('resources/assets/js/modal.js')
+       <!-- INTERNAL DATADABLES JS -->
+       @vite('resources/assets/js/datatables.js')
+       @vite('resources/assets/js/validation.js')
+       @vite('resources/assets/js/choices.js')
+       @vite('resources/assets/js/modal.js')
+       <script>
+           @if ($errors->any())
+               // If validation errors exist, open the modal automatically
+               $(document).ready(function() {
+                   $('#exampleModal').modal('show');
+               });
+           @endif
+       </script>
     <script>
         function delete_item(id) {
             // Show confirmation dialog

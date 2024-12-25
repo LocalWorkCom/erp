@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LocationController extends Controller
 {
     public function showAddress()
     {
-     return view('website.auth.address');
+        $address = ClientAddress::where('user_id',Auth::guard('client')->user()->id)->get();
+     return view('website.auth.address',compact('address'));
     }
     public function saveAddress(Request $request)
     {
