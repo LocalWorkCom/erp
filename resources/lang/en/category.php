@@ -22,4 +22,6 @@ return [
     'none' => 'None',
     'parent' => 'Parent Category',
     'save' => 'Save',
+    'The category have relation' =>'The category have relation',
+
 ];

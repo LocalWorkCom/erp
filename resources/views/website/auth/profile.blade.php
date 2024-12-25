@@ -5,7 +5,7 @@
         <div class="container pt-sm-5 pt-4">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html"> @lang('auth.home')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('/') }}"> @lang('auth.home')</a></li>
                     <li class="breadcrumb-item active" aria-current="page"> @lang('auth.myacount')</li>
                 </ol>
             </nav>

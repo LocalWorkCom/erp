@@ -38,7 +38,7 @@ class BrandService
         }
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string|max:255',
-            'name_en' => 'nullable|string|max:255',
+            'name_en' => 'required|string|max:255',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'is_active' => 'required|boolean',
@@ -93,7 +93,7 @@ class BrandService
         if($request->hasFile('logo_path')){
             $validator = Validator::make($request->all(), [
                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
+                'name_en' => 'required|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'is_active' => 'required|boolean',
@@ -102,7 +102,7 @@ class BrandService
         }else{
             $validator = Validator::make($request->all(), [
                'name_ar' => 'required|string|max:255',
-                'name_en' => 'nullable|string|max:255',
+                'name_en' => 'required|string|max:255',
                 'description_ar' => 'nullable|string',
                 'description_en' => 'nullable|string',
                 'is_active' => 'required|boolean',
@@ -162,11 +162,11 @@ class BrandService
         if (!$brand) {
             return  RespondWithBadRequestData($lang, 8);
         }
-        // brand if there are any products associated with this brand
+        
+        // Check if there are any products associated with this brand
         if ($brand->products()->count() > 0) {
-            return RespondWithBadRequest($lang, 6);
+            return CustomRespondWithBadRequest(__('brand.The brand have relation'));
         }
-
         // Handle deletion of associated logo_path if it exists
         if ($brand->logo_path) {
             $imagePath = public_path('images/brands/' . $brand->logo_path);
