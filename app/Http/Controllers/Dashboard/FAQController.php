@@ -9,12 +9,6 @@ use Illuminate\Http\Request;
 
 class FAQController extends Controller
 {
-    protected $lang;
-
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -38,6 +32,7 @@ class FAQController extends Controller
     public function store(FAQFormRequest $request)
     {
 //        dd($request->all());
+        $lang = app()->getLocale();
         $data = $request->validated();
         $faq = new FAQ();
         $faq->name_ar = $data['name_ar'];
@@ -49,7 +44,7 @@ class FAQController extends Controller
         $faq->active = $data['active'];
         $faq->created_by = auth()->id() ?? 1 ;
         $faq->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/faqs')->with('message',$message);
@@ -78,6 +73,7 @@ class FAQController extends Controller
      */
     public function update(FAQFormRequest $request, string $id)
     {
+        $lang = app()->getLocale();
         $data = $request->validated();
         $faq = FAQ::findOrFail($id);
         $faq->name_ar = $data['name_ar'];
@@ -89,7 +85,7 @@ class FAQController extends Controller
         $faq->active = $data['active'];
         $faq->modified_by = auth()->id() ?? 1;
         $faq->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/faqs')->with('message', $message);
@@ -100,10 +96,11 @@ class FAQController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
         $faq = FAQ::findOrFail($id);
         $faq->deleted_by = auth()->id() ?? 1;
         $faq->delete();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/faqs')->with('message', $message);

@@ -126,20 +126,23 @@ class HomeController extends Controller
     {
         $privacies = StaticPageResource::collection(PrivacyPolicy::all());
         $privaciesArray = $privacies->toArray(request());
-        return view('website.privacy', compact('privaciesArray'));
+        $branches = Branch::all();
+        return view('website.privacy', compact('privaciesArray','branches'));
     }
 
     public function return()
     {
         $returns = StaticPageResource::collection(ReturnPolicy::all());
         $returnsArray = $returns->toArray(request());
-        return view('website.return', compact('returnsArray'));
+        $branches = Branch::all();
+        return view('website.return', compact('returnsArray','branches'));
     }
     public function terms()
     {
         $terms = StaticPageResource::collection(TermsAndCondition::all());
         $termsArray = $terms->toArray(request());
-        return view('website.terms', compact('termsArray'));
+        $branches = Branch::all();
+        return view('website.terms', compact('termsArray','branches'));
     }
 
     public function addFavorite(Request $request)
