@@ -48,8 +48,6 @@ class RoleController extends Controller
             'permissions_ids.*' => 'string|exists:permissions,name',
         ]);
 
-
-
         // Handle validation failure
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();

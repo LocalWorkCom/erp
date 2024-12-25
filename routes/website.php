@@ -42,7 +42,11 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 
 
+Route::get('cart', [CartController::class, 'Cart'])->name('cart');
+Route::post('cart/coupon-check', [CartController::class, 'isCouponValid'])->name('cart.coupon-check');
+
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
+Route::get('cart/checkout', [CartController::class, 'Checkout'])->name('cart.checkout');
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 

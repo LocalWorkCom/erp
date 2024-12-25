@@ -77,8 +77,14 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td><img src="{{ url($product->main_image) }}" alt="" width="100"
-                                                     height="100"></td>
+                                            <td>
+                                                <img
+                                                    src="{{ $product->main_image ? url($product->main_image) : asset('images/noimage.jpg') }}"
+                                                    alt="Product Image"
+                                                    width="100"
+                                                    height="100"
+                                                >
+                                            </td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit ? $product->mainUnit->name_en : 'N/A' }}</td>
