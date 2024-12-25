@@ -795,7 +795,7 @@ Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.st
 Route::get('/popular', [MostPopularController::class, 'index'])->name('api.popular');
 Route::get('/slider', [SliderController::class, 'index'])->name('api.slider');
 Route::get('/menu', [MenuHomeController::class, 'index'])->name('api.menu');
-// Route::get('/dish-menu', [DishCategoryController::class, 'menuDishes'])->name('api.dish.menu');
+Route::get('/dish-menu', [DishCategoryController::class, 'menuDishes'])->name('api.dish.menu');
 
 //Rates
 Route::group(['prefix' => 'rates'], function () {
