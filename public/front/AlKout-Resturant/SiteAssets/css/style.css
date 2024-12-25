@@ -548,14 +548,14 @@ body.no-scroll {
 }
 
 .intro .container .small-img {
-    width: 100%;
+    /* width: 100%; */
     height: 225px;
     object-fit: contain;
     transition: 0.5s ease;
 }
 
 .intro .container .small-img:hover {
-    transform: scale(1.1);
+    animation: shaking 0.5s infinite;
     /* animation: shaking 0.4s infinite; */
 
 }
@@ -569,18 +569,41 @@ body.no-scroll {
 }
 
 .intro .container .big-img {
-    width: 100%;
+    /* width: 100%; */
     height: 300px;
     object-fit: contain;
-    transform: scale(1.1);
     transition: 0.5s ease;
 }
 
 .intro .container .big-img:hover {
-    transform: scale(1.2);
+    animation: shaking 0.4s infinite;
 
 }
+@keyframes shaking {
+    0%{
+        transform: translate(2px, 2px);
+    }
+    20%{
+        transform: translate(3px, -2px);
+    }
+    40%{
+        transform: translate(0px, 0px);
+        transform: rotate(-3deg);
+    }
+    60%{
+        transform: translate(3px, 0px);
+        transform: rotate(0deg);
+    }
+    80%{
+        transform: translate(3px, 2px);
+        transform: rotate(3deg);
+    }
+    100%{
+        transform: translate(0px, 0px);
+        transform: rotate(0deg);
+    }
 
+}
 .intro::after {
     content: "";
     position: absolute;
