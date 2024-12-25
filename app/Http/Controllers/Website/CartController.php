@@ -74,7 +74,7 @@ class CartController extends Controller
                     'id' => $size->id,
                     'name' => $size->dishSizes->name_site,
                     'price' => $size->price,
-                    'default_size'=>$size->dishSizes->default_size
+                    'default_size' => $size->dishSizes->default_size
                 ];
             }),
             'addons' => $BranchMenuAddon->map(function ($addon) {
@@ -91,5 +91,58 @@ class CartController extends Controller
 
         // Return JSON response
         return response()->json($response, 200);
+    }
+    public function Cart()
+    {
+        $branches = Branch::all();
+
+        return view('website.cart', compact('branches'));
+    }
+    public function Checkout()
+    {
+        $branches = Branch::all();
+
+        return view('website.checkout', compact('branches'));
+    }
+    public function isCouponValid(Request $request)
+    {
+        $code = $request->code;
+        $amount = $request->amount;
+        try {
+            $lang = $request->header('lang', 'en');
+            // $branchId = $request->input('branch_id');  
+
+            $coupon = GetCouponId($code);
+            if ($coupon) {
+                $valid = CheckCouponValid($coupon->id, $amount);
+                if ($valid) {
+
+                    $amount_after_coupon =  applyCoupon($amount, $coupon);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Coupon is valid.',
+                        'data' => $amount_after_coupon
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Coupon is no longer valid.',
+                    ], 200);
+                }
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Coupon is valid.',
+                ]);
+            }
+
+          
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error checking coupon validity.',
+            ], 500);
+        }
     }
 }

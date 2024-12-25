@@ -195,6 +195,8 @@
         </div>
     </section>
     @include('website.cart-modal')
+@endsection
+@push('scripts')
     <script>
         //test
         function fill_cart(id) {
@@ -215,62 +217,62 @@
                     // Generate sizes HTML
                     for (const size of data.sizes) {
                         sizesHtml += `
-                    <div class="form-check">
-                        <div>
-                            <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" 
-                            ${size.default_size ? 'checked' : ''}>
-                            <label class="form-check-label" for="size-${size.id}">
-                                ${size.name}
-                            </label>
-                        </div>
-                        <span>${size.price} ${data.branch.currency_symbol}</span>
+                <div class="form-check">
+                    <div>
+                        <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" 
+                        ${size.default_size ? 'checked' : ''}>
+                        <label class="form-check-label" for="size-${size.id}">
+                            ${size.name}
+                        </label>
                     </div>
-                `;
+                    <span>${size.price} ${data.branch.currency_symbol}</span>
+                </div>
+            `;
                     }
 
                     // Generate addons HTML
                     for (const addon of data.addons) {
                         addonsHtml += `
-                    <div class="form-check">
-                        <div>
-                            <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}" value="${addon.price}">
-                            <label class="form-check-label" for="addon-${addon.id}">
-                                ${addon.name} 
-                            </label>
-                        </div>
-                        <span>${addon.price} ${data.branch.currency_symbol}</span>
+                <div class="form-check">
+                    <div>
+                        <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}" value="${addon.price}">
+                        <label class="form-check-label" for="addon-${addon.id}">
+                            ${addon.name} 
+                        </label>
                     </div>
-                `;
+                    <span>${addon.price} ${data.branch.currency_symbol}</span>
+                </div>
+            `;
                     }
 
                     let dishPrice = parseFloat(data.dish.price);
 
                     // Generate dish details HTML
                     dishHtml += `
-                <h5>${data.dish.name}</h5>
-                ${data.dish.mostOrdered ? `
-                                        <span class="badge bg-warning text-dark">
-                                            <i class="fas fa-star"></i>
-                                            الاعلى تقييم
-                                        </span>
-                                    ` : ''}
-                <small class="text-muted d-block py-2">${data.dish.description}</small>
-                <h4 class="fw-bold">
-                    <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
-                        ${dishPrice.toFixed(2)}
-                    </span>
-                    ${data.branch.currency_symbol}
-                </h4>
-                <div class="qty mt-3 d-flex justify-content-center align-items-center">
-                    <span class="pro-dec me-3" onclick="decreaseQuantity(this)">
-                        <i class="fa fa-minus" aria-hidden="true"></i>
-                    </span>
-                    <span class="num fs-4">1</span>
-                    <span class="pro-inc ms-3" onclick="increaseQuantity(this)">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </span>
-                </div>
-            `;
+            <h5>${data.dish.name}</h5>
+            ${data.dish.mostOrdered ? `
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-star"></i>
+                                                    الاعلى تقييم
+                                                </span>
+                                            ` : ''}
+            <small class="text-muted d-block py-2">${data.dish.description}</small>
+            <h4 class="fw-bold">
+                <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
+                    ${dishPrice.toFixed(2)}
+                </span>
+                ${data.branch.currency_symbol}
+            </h4>
+            <div class="qty mt-3 d-flex justify-content-center align-items-center">
+                <span class="pro-dec me-3" onclick="decreaseQuantity(this)">
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                </span>
+                <span class="num fs-4">1</span>
+                <span class="pro-inc ms-3" onclick="increaseQuantity(this)">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </span>
+            </div>
+        `;
 
                     // Set dish image and inject HTML
                     $('#productModal').find('#dish-img').attr('src', data.dish.image);
@@ -278,7 +280,7 @@
                     $('#productModal').find('#div-addons').html(addonsHtml);
                     $('#productModal').find('#div-detail').html(dishHtml);
                     $('#productModal').find('#dish-total').html(dishPrice.toFixed(2));
-
+                    $('#productModal').find('#dish_id').val(data.dish.id);
                     // Function to recalculate total price
                     // Function to recalculate total price
                     function recalculateTotalPrice() {
@@ -299,7 +301,7 @@
 
                         // Update the dish-price span
                         $('#dish-total').text(newTotalPrice.toFixed(2));
-                        
+
                     }
 
                     // console.log(recalculateTotalPrice);
@@ -341,4 +343,72 @@
             });
         }
     </script>
-@endsection
+@endpush
+@push('scripts')
+    <script>
+        $('#submit').on('click', function() {
+
+            // Gather selected size
+            const selectedSizePrice = $('#productModal').find('.size-option:checked').val();
+            const selectedSizeLabel = $('#productModal').find('.size-option:checked').siblings('label')
+                .text();
+
+            // Gather selected addons
+            const selectedAddons = [];
+            $('#productModal').find('.addon-option:checked').each(function() {
+                selectedAddons.push({
+                    id: $(this).attr('id'),
+                    name: $(this).siblings('label').text(),
+                    price: parseFloat($(this).val())
+                });
+            });
+
+            // Get quantity
+            const quantity = parseInt($('#productModal').find('.num').text()) || 1;
+
+            // Additional notes
+            const notes = $('#floatingTextarea2').val();
+
+            // Dish name and image
+            const dishName = $('#productModal').find('h5').text();
+            const dish_id = $('#dish_id').val();
+            const dishImage = $('#productModal').find('#dish-img').attr('src');
+            const dishPrice = parseFloat($('#total-price').text());
+
+            // Check if size is selected
+            if (!selectedSizePrice) {
+                alert('Please select a size.');
+                return;
+            }
+
+            // Create a cart item object
+            const cartItem = {
+                id: dish_id, // Unique identifier for the item
+                name: dishName,
+                image: dishImage,
+                size: {
+                    price: selectedSizePrice,
+                    label: selectedSizeLabel
+                },
+                addons: selectedAddons,
+                quantity: quantity,
+                notes: notes,
+                totalPrice: dishPrice
+            };
+
+            // Get existing cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Add the new item to the cart
+            cart.push(cartItem);
+
+            // Store updated cart in localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Redirect or notify the user
+            // alert('Item added to cart!');
+            window.location.href = '/cart'; // Change this to your cart page route
+        });
+        
+    </script>
+@endpush

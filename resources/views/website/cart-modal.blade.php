@@ -4,7 +4,9 @@
             <div class="modal-header border-0">
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <div class="modal-body">
+                <input type="hidden" name="dish_id" id="dish_id">
                 <h2 class="text-center mb-4"> من فضلك قم بتخصيص وجبتك </h2>
                 <div class="row mx-0">
                     <div class="col-md-6">
@@ -40,7 +42,7 @@
                                 <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
                             </div>
                         </div>
-                        <button class="btn w-100 d-flex justify-content-between mt-3">
+                        <button class="btn w-100 d-flex justify-content-between mt-3" id="submit">
                             <span id="dish-quantity"> + أضف الي العربة
                             </span>
                             <span id="dish-total"></span>
