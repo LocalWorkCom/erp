@@ -52,7 +52,7 @@
                                         <select name="brand_id" class=" form-control" required>
                                             <option value="" selected disabled>@lang('product.ChooseBrand')</option>
                                             @foreach ($Brands as $Brand)
-                                                <option value="{{ $Brand->id }}">{{ $Brand->name }}</option>
+                                                <option value="{{ $Brand->id }}">{{ $Brand->name_ar . " | ".$Brand->name_en }}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterBrand')</div>
@@ -66,7 +66,7 @@
 
                                     <div class="col-xl-6">
                                         <label for="name_en" class="form-label">@lang('product.EnglishName')</label>
-                                        <input type="text" name="name_en" id="name_en" class="form-control" placeholder="@lang('product.EnglishName')">
+                                        <input type="text" name="name_en" id="name_en" class="form-control" placeholder="@lang('product.EnglishName')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
                                     </div>
 
@@ -92,14 +92,14 @@
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterUnit')</div>
                                     </div>
-{{-- 
+{{--
                                     <div class="col-xl-4">
                                         <label for="factor" class="form-label">@lang('product.Factor')</label>
-                                        <input type="number" name="factor" id="factor" class="form-control" 
+                                        <input type="number" name="factor" id="factor" class="form-control"
                                                placeholder="@lang('product.Factor')" step="0.1" required>
                                         <div class="invalid-feedback">@lang('validation.EnterFactor')</div>
                                     </div> --}}
-                                    
+
                                     <div class="col-xl-4">
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
                                         <select name="currency_code" id="currency_code" class=" form-control" required>
@@ -121,7 +121,7 @@
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCategory')</div>
                                     </div>
-{{-- 
+{{--
                                     <div class="col-xl-4">
                                         <label for="store_id" class="form-label">@lang('product.Store')</label>
                                         <select name="store_id" id="store_id" class="js-example-basic-single form-control" required>
@@ -138,7 +138,7 @@
                                         <input type="text" name="barcode" id="barcode" class="form-control" placeholder="@lang('product.Barcode')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterBarcode')</div>
                                     </div>
-{{-- 
+{{--
                                     <div class="col-xl-4">
                                         <label for="price" class="form-label">@lang('product.Price')</label>
                                         <input type="number" name="price" id="price" class="form-control" placeholder="@lang('product.Price')" required>
