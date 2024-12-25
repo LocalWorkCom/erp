@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
 use App\Events\UserRegistered;
+use App\Models\ClientAddress;
 use App\Models\ClientDetail;
 use App\Models\Country;
 use App\Models\User;
+use App\Services\ClientService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,14 @@ use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
+    protected $clientService;
+    protected $checkToken;
+
+    public function __construct(ClientService $clientService)
+    {
+        $this->clientService = $clientService;
+        $this->checkToken = false;
+    }
     public function register(Request $request)
     {
         //dd($request->all());
@@ -104,7 +114,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Set application locale based on request header
+        // Set locale
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
@@ -113,14 +123,14 @@ class AuthController extends Controller
             'email_or_phone' => 'required|string',
             'password' => 'required|string',
             'country_code_login' => 'required|string',
+            'address' => 'nullable|json', // Validate address as JSON
         ], [
-            // Localized error messages
             'email_or_phone.required' => __('validation.required', ['attribute' => __('auth.email_or_phone')]),
             'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
             'country_code_login.required' => __('validation.required', ['attribute' => __('auth.country_code_login')]),
         ]);
 
-        // Return validation errors
+        // Handle validation errors
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -142,7 +152,7 @@ class AuthController extends Controller
         if (!$user || $user->flag != 'client') {
             return response()->json([
                 'status' => 'error',
-                'errors' => ['email_or_phone' => [__('validation.email_or_phone', ['attribute' => __('validation.notfound')])]],
+                'errors' => ['email_or_phone' => [__('validation.notfound', ['attribute' => __('auth.email_or_phone')])]],
             ], 422);
         }
 
@@ -155,10 +165,13 @@ class AuthController extends Controller
                 ]
             ], 403);
         }
-
         // Log the user in
         Auth::guard('client')->login($user);
         $request->session()->regenerate();
+
+
+        // $this->saveAddress($request->input('address'));
+
 
         return response()->json([
             'status' => 'success',
@@ -166,7 +179,35 @@ class AuthController extends Controller
         ]);
     }
 
+    public function saveAddress($data)
+    {
+        $jsonData = $data;
+        if (!$jsonData) {
+            return response()->json(['status' => 'error', 'message' => 'Address data is missing'], 422);
+        }
+        $addressData = json_decode($jsonData, true);
 
+        $address = json_decode($addressData);
+        $name = $address->namevilla ||
+            // Example: Access specific fields
+            $villaName = $address->namevilla;
+
+
+        // Save address if provided
+        if ($address) {
+            $clientAddress = new ClientAddress();
+            $clientAddress->user_id = $user->id;
+            $clientAddress->address = $address['address'];
+            $clientAddress->city = $address['city'];
+            $clientAddress->state = $address['state'];
+            $clientAddress->postal_code = $address['postal_code'] ?? null;
+            $clientAddress->latitude = $address['latitude'] ?? null;
+            $clientAddress->longtitude = $address['longtitude'] ?? null;
+            $clientAddress->is_default = $address['is_default'] ?? 0;
+            $clientAddress->is_active = 1;
+            $clientAddress->save();
+        }
+    }
 
     public function logout(Request $request)
     {
@@ -195,9 +236,9 @@ class AuthController extends Controller
 
         // Check if the phone number with the country code exists in the database
         $phoneExists = User::where('phone', $request->phoneforget)
-                           ->where('country_code', $request->country_code_forget)
-                           ->exists();
-            //               dd($phoneExists);
+            ->where('country_code', $request->country_code_forget)
+            ->exists();
+        //               dd($phoneExists);
         if ($phoneExists) {
             return response()->json([
                 'status' => 'success',
