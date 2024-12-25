@@ -78,7 +78,7 @@
                                 </a>
                             </li>
                         @endif
-                    @auth('client')
+                    @else
                         <li class="nav-item">
                             <a class="nav-link btn align-items-center" data-bs-toggle="modal" data-bs-target="#loginModal">
                                 <i class="fas fa-user-circle"></i>
