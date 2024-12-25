@@ -48,7 +48,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="addresses.html">
+                            <a href="{{ route('showAddress') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-map-marker-alt main-color ms-2"></i>
 

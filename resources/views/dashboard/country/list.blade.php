@@ -323,7 +323,7 @@
 
                                                 <!-- Code -->
                                                 <div class="col-xl-6">
-                                                    <label class="form-label">@lang('country.Code')</label>
+                                                    <label class="form-label">@lang('country.code')</label>
                                                     <p id="show-code" class="form-control-static"></p>
                                                 </div>
 
@@ -377,7 +377,7 @@
                                     <tr>
                                         <th scope="col">@lang('country.ArabicName')</th>
                                         <th scope="col">@lang('country.EnglishName')</th>
-                                        <th scope="col">@lang('country.Code')</th>
+                                        <th scope="col">@lang('country.code')</th>
                                         <th scope="col">@lang('country.ArabicCurrency')</th>
                                         <th scope="col">@lang('country.EnglishCurrency')</th>
                                         <th scope="col">@lang('country.CurrencyCode')</th>

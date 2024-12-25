@@ -62,5 +62,5 @@ return [
     'cancel' => 'Cancel',
     'save' => 'Save',
     'profile_updated' => 'Profile updated successfully!',
-
+    'addaddress'=>'add address',
 ];
