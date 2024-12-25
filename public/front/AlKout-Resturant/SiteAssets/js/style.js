@@ -285,6 +285,7 @@ function formatTime(time) {
         notificationSwitch.checked = false; // Reset switch
     });
 });
+
 // wizard js 
 
 $(document).ready(function () {
