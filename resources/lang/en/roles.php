@@ -27,4 +27,5 @@ return [
     'oops' => 'Oops 😢, The page you are looking for is not available for you.',
     'description' => 'We are sorry for the inconvenience. The page you are trying to access, you don\'t have permission to view.',
     'back_to_home' => 'BACK TO HOME',
+    'SaveChanges'=>'Save Changes',
 ];

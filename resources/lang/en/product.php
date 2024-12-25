@@ -29,7 +29,7 @@ return [
     'MaxLimit' => 'Max Limit',
     'MinLimit' => 'Min Limit',
     'Code' => 'Code',
-    'Remind' => 'There is remind product?',
+    'Remind' => 'There is remaining product?',
     'IsHaveExpired' => 'Has Expiration Date?',
     'ExpiryDate' => 'Expiry Date',
     'Complete' => 'Complete',
@@ -48,8 +48,8 @@ return [
     'Remove' => 'Remove',
     'Add Unit' => 'Add Unit',
     'Save' => 'Save',
-    
-    'Product Colors' => 'الوان المنتج',
-    'Color' => 'الوان ',
-    'Add Color' => 'اضافه لون للمنتج'
+    'Product Colors' => 'Product Colors',
+    'Color' => 'Colors ',
+    'Add Color' => 'Add Color',
+    'remove'=>'Remove',
 ];

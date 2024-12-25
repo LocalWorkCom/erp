@@ -23,11 +23,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductService
 {
-    private $lang;
-    public function __construct()
-    {
-        $this->lang = app()->getLocale();
-    }
 
     // In ProductService.php
 
@@ -51,41 +46,44 @@ class ProductService
     // Method to get all products with their limits
     public function index(Request $request, $checkToken)
     {
+        $lang = app()->getLocale();
         $products = Product::all();
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
         if (!$checkToken) {
             $products = $products->makeVisible(['name_en', 'name_ar', 'main_image', 'description_ar', 'description_en']);
         }
 
-        return ResponseWithSuccessData($this->lang, $products, 1);
+        return ResponseWithSuccessData($lang, $products, 1);
     }
 
     public function create(Request $request, $checkToken)
     {
+        $lang = app()->getLocale();
         $products = Product::all();
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
-        return ResponseWithSuccessData($this->lang, $products, 1);
+        return ResponseWithSuccessData($lang, $products, 1);
     }
 
     // Method to store a new product
     public function store(Request $request, $checkToken)
     {
+        $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
         // Validation
         $validator = Validator::make($request->all(), [
             'name_ar' => 'required|string',
-            'name_en' => 'nullable|string',
+            'name_en' => 'required|string',
             'description_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'main_image' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -97,7 +95,9 @@ class ProductService
             'main_unit_id' => 'required|integer',
             // 'factor' => 'required|numeric|min:0',
             'currency_code' => 'required|string',
-            'category_id' => 'required|integer'
+            'category_id' => 'required|integer',
+            'min_limit' => 'required|integer|min:0',
+            'max_limit' => 'required|integer|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -106,18 +106,18 @@ class ProductService
 
         // Check if product or category name already exists
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar) || CheckExistColumnValue('categories', 'name_en', $request->name_en)) {
-            return RespondWithBadRequest($this->lang, 9);
+            return RespondWithBadRequest($lang, 9);
         }
 
         // Check if category exists
         $category = Category::find($request->category_id);
         if (!$category) {
-            return RespondWithBadRequestData($this->lang, 8);
+            return RespondWithBadRequestData($lang, 8);
         }
         // Check if brand exists
         $brand = Brand::find($request->brand_id);
         if (!$brand) {
-            return RespondWithBadRequestData($this->lang, 8);
+            return RespondWithBadRequestData($lang, 8);
         }
 
         // Generate product code
@@ -187,15 +187,16 @@ class ProductService
             }
         }
 
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
 
     // Method to update an existing product
     public function update(Request $request, $id, $checkToken)
     {
+        $lang = app()->getLocale();
         // Check for token validity
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
         // Validate incoming request data
@@ -217,6 +218,8 @@ class ProductService
                 'category_id' => 'required|integer',
                 // 'factor' => 'required|numeric|min:0',
                 'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+                'min_limit' => 'required|integer|min:0',
+                'max_limit' => 'required|integer|min:0',
             ]
         );
 
@@ -228,7 +231,7 @@ class ProductService
         // Retrieve the product by its ID
         $product = Product::find($id);
         if (!$product) {
-            return RespondWithBadRequestData($this->lang, 8);
+            return RespondWithBadRequestData($lang, 8);
         }
 
         // // Retrieve the product_unit
@@ -315,30 +318,31 @@ class ProductService
         }
         // Check if the data was successfully updated
         if ($product->wasChanged() || $product_limit->wasChanged()) {
-            return RespondWithSuccessRequest($this->lang, 1);
+            return RespondWithSuccessRequest($lang, 1);
         } else {
-            return RespondWithBadRequest($this->lang, 11);
+            return RespondWithBadRequest($lang, 11);
         }
         // Check if the data hasn't changed
         if ($this->isProductUnchanged($product, $request)) {
-            return RespondWithBadRequestData($this->lang, 10);
+            return RespondWithBadRequestData($lang, 10);
         }
         if (CheckExistColumnValue('products', 'name_ar', $request->name_ar)) {
 
-            return RespondWithBadRequest($this->lang, 9);
+            return RespondWithBadRequest($lang, 9);
         }
     }
 
     public function delete(Request $request, $id, $checkToken, $oneProductDelete)
     {
+        $lang = app()->getLocale();
 
         $product = Product::find($id);
         if (!$product) {
-            return  RespondWithBadRequestData($this->lang, 8);
+            return  RespondWithBadRequestData($lang, 8);
         } else {
             if ($oneProductDelete) {
                 $product->delete();
-                return RespondWithSuccessRequest($this->lang, 1);
+                return RespondWithSuccessRequest($lang, 1);
             } else {
                 $CheckIfExist1 = ProductTransaction::where('product_id', $id)->get();
                 // $CheckIfExist2 = StoreTransaction::where('product_id', $id)->get();
@@ -372,25 +376,27 @@ class ProductService
                 $product->delete();
 
                 // Return success response
-                return RespondWithSuccessRequest($this->lang, 1);
+                return RespondWithSuccessRequest($lang, 1);
             }
         }
     }
     // product unit
     public function list($productId, $checkToken)
     {
+        $lang = app()->getLocale();
         $products = Product::with(['productUnits.unit' => function ($query) {
             $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
         }])->findOrFail($productId);
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
-        return ResponseWithSuccessData($this->lang, $products, 1);
+        return ResponseWithSuccessData($lang, $products, 1);
     }
     public function saveProductUnits(Request $request, $productId)
     {
         // Validate the input
+        $lang = app()->getLocale();
         $validated = $request->validate([
             'units.*.unit_id' => 'required|exists:units,id',
             'units.*.factor' => 'required|numeric',
@@ -457,20 +463,21 @@ class ProductService
         }
 
         // Return success response
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
 
     // product size
     public function listSize($productId, $checkToken)
     {
+        $lang = app()->getLocale();
         $products = Product::with(['productSizes.size' => function ($query) {
             $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
         }])->findOrFail($productId);
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
-        return ResponseWithSuccessData($this->lang, $products, 1);
+        return ResponseWithSuccessData($lang, $products, 1);
     }
     public function saveProductSizes(Request $request, $productId)
     {
@@ -494,7 +501,7 @@ class ProductService
             }
 
             // Return other validation errors
-            return RespondWithBadRequestData($this->lang, $validator->errors());
+            return RespondWithBadRequestData($lang, $validator->errors());
         }
         if (CheckExistColumnValue('product_sizes', 'code_size', $request->code_size)) {
             return RespondWithBadRequest($lang, 9);
@@ -573,23 +580,25 @@ class ProductService
         }
 
         // Return a success response after all sizes are processed
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
     // product color
     public function listColor($productId, $checkToken)
     {
+        $lang = app()->getLocale();
         $products = Product::with(['productColors.color' => function ($query) {
             $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'units' table
         }])->findOrFail($productId);
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
-        return ResponseWithSuccessData($this->lang, $products, 1);
+        return ResponseWithSuccessData($lang, $products, 1);
     }
     public function saveProductColors(Request $request, $productId)
     {
         // Validate the input
+        $lang = app()->getLocale();
         $validated = $request->validate([
             'colors.*.color_id' => 'required|exists:colors,id',
             'product_color_id' => 'nullable|array',
@@ -654,6 +663,6 @@ class ProductService
         }
 
         // Return success response
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
 }

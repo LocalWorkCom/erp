@@ -7,7 +7,7 @@ return [
     'Store' => 'المخزن',
     'Price' => 'السعر',
     'ChooseBrand' => 'اختر العلامة التجارية',
-    'ChooseUnit' => 'اخنر الوحدة',
+    'ChooseUnit' => 'اختر الوحدة',
     'ChooseStore' => 'اختر المخزن',
     'ChooseCurrency' => 'اختر العملة',
     'ChooseCategory' => 'اختر الفئة',
@@ -54,6 +54,7 @@ return [
     'Save' => 'حفظ',
     'Product Colors' => 'الوان المنتج',
     'Color' => 'الوان ',
-    'Add Color' => 'اضافه لون للمنتج'
+    'Add Color' => 'اضافه لون للمنتج',
+    'remove'=>'إزالة'
 
 ];
