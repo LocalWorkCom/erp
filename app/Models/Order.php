@@ -71,6 +71,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderTracking::class);
     }
+    public function orderTransactions()
+    {
+        return $this->hasMany(OrderTransaction::class);
+    }
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id');
+    }
     public function orderAddons()
     {
         return $this->hasMany(OrderAddon::class, 'order_id', 'id');
@@ -79,5 +87,4 @@ class Order extends Model
     {
         return $this->belongsTo(ClientAddress::class, 'client_address_id');
     }
-    
 }

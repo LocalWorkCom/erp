@@ -52,12 +52,16 @@
 
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('slider.Dish')</label>
-                                    <p class="form-text">{{ $slider->dish_id ?? __('category.none') }}</p>
+                                    <p class="form-text">
+                                        {{ $slider->dish ? $slider->dish->name_ar . ' | ' . $slider->dish->name_en : __('category.none') }}
+                                    </p>
                                 </div>
 
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('slider.Offer')</label>
-                                    <p class="form-text">{{ $slider->offer_id ?? __('category.none') }}</p>
+                                    <p class="form-text">
+                                        {{ $slider->offer ? $slider->offer->name_ar . ' | ' . $slider->offer->name_en : __('category.none') }}
+                                    </p>
                                 </div>
 
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">

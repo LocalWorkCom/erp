@@ -24,22 +24,15 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // Debug logs for cookies
-        Log::info('Laravel Cookies:', $request->cookies->all());
-        Log::info('Raw Cookies:', $_COOKIE);
-
-        // Retrieve latitude and longitude from cookies
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
-        // Check if cookies were received
         if ($userLat && $userLon) {
             Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
         } else {
             Log::warning('No coordinates found in cookies');
         }
 
-        // Determine the nearest branch
         if ($userLat && $userLon) {
             $nearestBranch = getNearestBranch($userLat, $userLon);
             if ($nearestBranch) {
@@ -54,7 +47,6 @@ class HomeController extends Controller
             Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
         }
 
-        // Fetch other data for the view
         $sliders = Slider::all();
         $branches = Branch::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
@@ -64,7 +56,6 @@ class HomeController extends Controller
             ->where('is_active', true)
             ->get();
 
-        // Handle user favorites if authenticated
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -72,8 +63,6 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
-
-        // Return the view with all data
         return view(
             'website.landing',
             compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
@@ -83,7 +72,6 @@ class HomeController extends Controller
 
     public function showMenu(Request $request)
     {
-        $branches = Branch::all();
 
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
@@ -121,7 +109,7 @@ class HomeController extends Controller
 
         return view(
             'website.menu',
-            compact(['menuCategories', 'branches', 'userFavorites'])
+            compact(['menuCategories', 'userFavorites'])
         );
     }
 
@@ -138,20 +126,23 @@ class HomeController extends Controller
     {
         $privacies = StaticPageResource::collection(PrivacyPolicy::all());
         $privaciesArray = $privacies->toArray(request());
-        return view('website.privacy', compact('privaciesArray'));
+        $branches = Branch::all();
+        return view('website.privacy', compact('privaciesArray','branches'));
     }
 
     public function return()
     {
         $returns = StaticPageResource::collection(ReturnPolicy::all());
         $returnsArray = $returns->toArray(request());
-        return view('website.return', compact('returnsArray'));
+        $branches = Branch::all();
+        return view('website.return', compact('returnsArray','branches'));
     }
     public function terms()
     {
         $terms = StaticPageResource::collection(TermsAndCondition::all());
         $termsArray = $terms->toArray(request());
-        return view('website.terms', compact('termsArray'));
+        $branches = Branch::all();
+        return view('website.terms', compact('termsArray','branches'));
     }
 
     public function addFavorite(Request $request)
@@ -191,8 +182,6 @@ class HomeController extends Controller
 
     public function showFavorites(Request $request)
     {
-        $branches = Branch::all();
-
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -224,7 +213,7 @@ class HomeController extends Controller
         }
         return view(
             'website.favorites',
-            compact(['menuCategories', 'branches', 'userFavorites'])
+            compact(['menuCategories', 'userFavorites'])
         );
     }
 }

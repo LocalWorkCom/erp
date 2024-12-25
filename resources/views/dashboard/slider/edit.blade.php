@@ -60,7 +60,7 @@
                                     </div>
 
                                     <!-- Dish Selection -->
-                                    <div class="col-xl-12 {{ old('flag', $slider->flag) === 'dish' ? '' : 'd-none' }}" id="dishDropdown">
+                                    <div class="col-xl-12 {{ old('flag', $slider->flag) == 'dish' ? '' : 'd-none' }}" id="dishDropdown">
                                         <label for="dish_id" class="form-label">@lang('slider.EnterDish')</label>
                                         <select name="dish_id" id="dish_id" class="form-control select2">
                                             <option value="" disabled>@lang('slider.ChooseDish')</option>
@@ -150,22 +150,50 @@
         $(document).ready(function () {
             $('.select2').select2();
 
-            // Toggle visibility and disable the unselected dropdown
-            $('input[name="flag"]').on('change', function () {
-                const selectedFlag = $(this).val();
-
-                if (selectedFlag === 'dish') {
+            function toggleDropdowns(flag) {
+                if (flag === 'dish') {
                     $('#dishDropdown').removeClass('d-none');
-                    $('#dish_id').prop('disabled', false); // Enable dish dropdown
+                    $('#dish_id').prop('disabled', false);
                     $('#offerDropdown').addClass('d-none');
-                    $('#offer_id').prop('disabled', true); // Disable offer dropdown
-                } else if (selectedFlag === 'offer') {
+                    $('#offer_id').prop('disabled', true);
+                } else if (flag === 'offer') {
                     $('#offerDropdown').removeClass('d-none');
-                    $('#offer_id').prop('disabled', false); // Enable offer dropdown
+                    $('#offer_id').prop('disabled', false);
                     $('#dishDropdown').addClass('d-none');
-                    $('#dish_id').prop('disabled', true); // Disable dish dropdown
+                    $('#dish_id').prop('disabled', true);
                 }
-            }).trigger('change');
+            }
+
+            // Initialize dropdown visibility on page load
+            toggleDropdowns($('input[name="flag"]:checked').val());
+
+            // Change event for radio buttons
+            $('input[name="flag"]').on('change', function () {
+                toggleDropdowns($(this).val());
+            });
+        });
+
+        //prevent spaces
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all input and textarea elements where spaces should not be allowed at the start
+            const inputs = document.querySelectorAll('input[type="text"], textarea');
+
+            // Add event listeners for each input/textarea
+            inputs.forEach(input => {
+                // On input, trim leading spaces
+                input.addEventListener('input', function () {
+                    if (this.value.startsWith(' ')) {
+                        this.value = this.value.trimStart();
+                    }
+                });
+
+                // Prevent spaces as the first character on keydown
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === ' ' && this.selectionStart === 0) {
+                        e.preventDefault(); // Block the space
+                    }
+                });
+            });
         });
     </script>
 @endsection

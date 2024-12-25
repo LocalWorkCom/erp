@@ -13,20 +13,15 @@ use Illuminate\Http\Request;
 
 class RateService
 {
-    private $lang;
-
-    public function __construct()
-    {
-        $this->lang = app()->getLocale();
-    }
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $lang = app()->getLocale();
         $rates = Rate::get();
-        return ResponseWithSuccessData($this->lang, RateResource::collection($rates), 1);
+        return ResponseWithSuccessData($lang, RateResource::collection($rates), 1);
     }
 
     /**
@@ -34,6 +29,7 @@ class RateService
      */
     public function save(Request $request, string $id = null)
     {
+        $lang = app()->getLocale();
         $data = $request->validate([
             'value' => 'required|numeric|in:1,2,3,4,5',
             'note' => 'required|string',
@@ -44,7 +40,7 @@ class RateService
 
         $rate = Rate::updateOrCreate(['id' => $id], $data);
 
-        return ResponseWithSuccessData($this->lang, RateResource::make($rate), 1);
+        return ResponseWithSuccessData($lang, RateResource::make($rate), 1);
     }
 
     /**
@@ -52,12 +48,13 @@ class RateService
      */
     public function show(string $id)
     {
+        $lang = app()->getLocale();
         $data = Rate::find($id);
 
         if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
-        return ResponseWithSuccessData($this->lang, RateResource::make($data), 1);
+        return ResponseWithSuccessData($lang, RateResource::make($data), 1);
     }
 
     /**
@@ -65,16 +62,17 @@ class RateService
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
         $data = Rate::find($id);
 
         if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
         $data->deleted_by = Auth::guard('api')->user()->id ?? 1;
         $data->save();
         $data->delete();
 
-        return ResponseWithSuccessData($this->lang, RateResource::make($data), 1);
+        return ResponseWithSuccessData($lang, RateResource::make($data), 1);
     }
 
     /**
@@ -82,12 +80,13 @@ class RateService
      */
     public function restore(string $id)
     {
+        $lang = app()->getLocale();
         $data = Rate::withTrashed()->find($id);
 
         if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
         $data->restore();
-        return ResponseWithSuccessData($this->lang, RateResource::make($data), 1);
+        return ResponseWithSuccessData($lang, RateResource::make($data), 1);
     }
 }
