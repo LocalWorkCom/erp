@@ -39,7 +39,7 @@ class PermissionController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
         $existingPermission = DB::table('permissions')
@@ -55,7 +55,6 @@ class PermissionController extends Controller
         DB::table('permissions')->insert([
             'name' => $request->name_en,
             'guard_name' => 'admin',
-
             'created_at' => now(),
             'updated_at' => now(),
         ]);

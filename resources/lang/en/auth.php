@@ -63,4 +63,7 @@ return [
     'save' => 'Save',
     'profile_updated' => 'Profile updated successfully!',
     'addaddress'=>'add address',
+    'noaddress' => 'There are no addresses registered yet.',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
 ];
