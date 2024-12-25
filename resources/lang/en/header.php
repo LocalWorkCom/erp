@@ -51,4 +51,7 @@ return [
     'nameapart' => 'Building name, e.g. Shahin Building',
     'numaoffice' => 'Villa number, e.g. Villa 12',
     'nameoffice' => 'Villa name, e.g. Shahin Villa',
+    'logoutalert' => 'Are you sure you want to log out?',
+    'confirm' => 'Confirm',
+    'cancel' => 'Cancel',
 ];

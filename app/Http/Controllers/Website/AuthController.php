@@ -303,7 +303,7 @@ class AuthController extends Controller
                 'message' => __('auth.password_reset_success'),
             ]);
         } else {
-            return redirect()->back()->with('message', __('messages.success'));
+            return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));
         }
     }
 
@@ -325,10 +325,11 @@ class AuthController extends Controller
             'birth_date' => 'nullable|date_format:Y-m-d',
         ], [
             // Custom validation messages for each field
-            'name.required' => __('validation.required', ['attribute' => __('auth.email_or_phone')]),
-            'phone.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'name.required' => __('validation.required', ['attribute' => __('auth.name')]),
+            'phone.required' => __('validation.required', ['attribute' => __('auth.phone')]),
             'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
-            'birth_date.date_format' => __('validation.json', ['attribute' => __('auth.address')]),
+            'email.email' => __('validation.email', ['attribute' => __('auth.email')]),
+            'birth_date.date_format' => __('validation.date_format', ['attribute' => __('auth.birth_date'), 'format' => 'Y-m-d']),
         ]);
 
         // Check if validation fails
@@ -345,6 +346,6 @@ class AuthController extends Controller
         $user->country_id =  Country::where('phone_code',$request->country_code_profile)->value('id');
         $user->save();
 
-        return redirect()->back()->with('message', __('messages.success'));
+        return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));
     }
 }
