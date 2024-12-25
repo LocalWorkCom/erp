@@ -36,4 +36,7 @@ return [
     'Dish' => 'Dish',
     'Addon' => 'Addon',
     'Product' => 'Product',
+    'noEdit' => 'Edit not allowed',
+    'noDelete' => 'Delete not allowed',
+    'used' => '"used offer"',
 ];

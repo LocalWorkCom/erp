@@ -20,13 +20,9 @@ class BranchController extends Controller
 
     public function index(Request $request)
     {
-//        dd(app()->getLocale());
         $response = $this->branchService->index($request);
-
         $responseData = $response->original;
-
         $branches = $responseData['data'];
-//        dd($branches);
         return view('dashboard.branch.list', compact('branches'));
     }
 

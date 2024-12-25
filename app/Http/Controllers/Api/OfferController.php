@@ -46,31 +46,78 @@ class OfferController extends Controller
      */
     public function save(Request $request, string $id = null)
     {
+        $messages = [];
+
+        if (app()->getLocale() == 'ar') {
+            $messages = [
+                'branches.required_if' => 'حقل الفروع مطلوب عند تحديد "اختر" في اختيار الفرع.',
+                'branches.*.exists' => 'الفرع المحدد غير موجود.',
+                'end_date.after_or_equal' => 'يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء.',
+            ];
+        } else {
+            $messages = [
+                'branches.required_if' => 'The branches field is required when the branch selection is specific.',
+                'branches.*.exists' => 'The selected branch does not exist.',
+                'end_date.after_or_equal' => 'The end date must be after or equal to the start date.',
+            ];
+        }
         $data = $request->validate([
-            'branch_id' => 'required',
-            'name_ar' => 'required|string',
-            'name_en' => 'required|string',
+            'branch_selection' => 'required|in:all,specific',
+            'branches' => 'required_if:branch_selection,specific|array',
+            'branches.*' => 'exists:branches,id',
+            'name_ar' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $exists = Offer::where('name_ar', $value)
+                        ->where('start_date', '<=', $request->end_date)
+                        ->where('end_date', '>=', $request->start_date)
+                        ->when($id, function ($query) use ($id) {
+                            $query->where('id', '!=', $id); // Exclude current record in case of update
+                        })
+                        ->exists();
+
+                    if ($exists) {
+                        $fail(__('validation.unique_within_duration', ['attribute' => __('validation.attributes.name_ar')]));
+                    }
+                },
+            ],
+            'name_en' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $exists = Offer::where('name_en', $value)
+                        ->where('start_date', '<=', $request->end_date)
+                        ->where('end_date', '>=', $request->start_date)
+                        ->when($id, function ($query) use ($id) {
+                            $query->where('id', '!=', $id); // Exclude current record in case of update
+                        })
+                        ->exists();
+
+                    if ($exists) {
+                        $fail(__('validation.unique_within_duration', ['attribute' => __('validation.attributes.name_en')]));
+                    }
+                },
+            ],
             'discount_type' => 'required|string|in:fixed,percentage',
             'discount_value' => [
                 'required',
                 'numeric',
                 function ($attribute, $value, $fail) use ($request) {
                     if ($request->discount_type === 'percentage' && $value > 100) {
-                        if ($this->lang == 'en'){
-                            $fail('The discount value must not exceed 100 percentage.');
-                        }
-                        $fail('قيمة الخصم لا يجب ان تتعدى نسبة 100');
+                        $fail(__('validation.discount_exceeds_100'));
                     }
                 },
             ],
-            'description_ar' => 'nullable|string',
-            'description_en' => 'nullable|string',
-            'image_ar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_en' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description_ar' => 'required|string',
+            'description_en' => 'required|string',
+            'image_ar' => 'nullable|max:2048',
+            'image_en' => 'nullable|max:2048',
             'is_active' => 'required|in:0,1',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        ], $messages);
+
         if ($request->hasFile('image_ar')) {
             $file = $request->file('image_ar');
             $newFileName = 'image_ar_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();

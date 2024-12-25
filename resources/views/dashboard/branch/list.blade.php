@@ -68,7 +68,7 @@
                                             <td>{{ $branch->name_en }}</td>
                                             <td>{{ $branch->address_ar }}</td>
                                             <td>{{ $branch->address_en }}</td>
-                                            <td>{{ $branch->country->name_ar ." | ". $branch->country->name_en}}</td>
+                                            <td>{{ ($branch->country) ? $branch->country->name_ar ." | ". $branch->country->name_en : __('category.none')}}</td>
                                             <td>
                                                 <!-- Show Button -->
                                                 <a href="{{route('branch.show',$branch->id)}}"
@@ -98,27 +98,27 @@
                                                 {{ __('floor.DishesCategory') }} <i class="ri-show-line"></i>
                                                 </a>
 
-                                                <select class="form-select d-inline btn-outline-teal" style="width: auto;"
+                                                <select class="form-select d-inline" style="width: auto;"
                                                     onchange="showBranchRalates(this.value, {{ $branch->id }})">
-                                                    <option></option>
+                                                    <option>@lang('branch.ChooseBranchDetails')</option>
                                                     @can('view branch_menu_categories')
-                                                    <option value="categories">@lang('branch.categories')</option>
+                                                    <option value="categories">@lang('branch.branchMenuCategory')</option>
                                                     @endcan
 
                                                     @can('view branch_menus')
-                                                    <option value="menus">@lang('branch.menus')</option>
+                                                    <option value="menus">@lang('branch.branchMenu')</option>
                                                     @endcan
 
                                                     @can('view branch_menu_category_addons')
-                                                    <option value="addonsCategories">@lang('branch.addonsCategories')</option>
+                                                    <option value="addonsCategories">@lang('branch.branchMenuCategoryAddon')</option>
                                                     @endcan
 
                                                     @can('view branch_menu_addons')
-                                                    <option value="addons">@lang('branch.addons')</option>
+                                                    <option value="addons">@lang('branch.branchMenuAddon')</option>
                                                     @endcan
 
                                                     @can('view branch_menu_sizes')
-                                                    <option value="sizes">@lang('branch.sizes')</option>
+                                                    <option value="sizes">@lang('branch.branchMenuSize')</option>
                                                     @endcan
                                                 </select>
                                             </td>
@@ -164,7 +164,7 @@
             const routes = {
                 categories: "{{ url('dashboard/branch/categories/showAll') }}/" + branchId,
                 menus: "{{ url('dashboard/branch/menus/showAll') }}/" + branchId,
-                addonsCategories: "{{ url('dashboard/branch/menu/addon/category/showAll') }}/" + branchId,
+                addonsCategories: "{{ url('dashboard/branch/menu/addon/categories/showAll') }}/" + branchId,
                 addons: "{{ url('dashboard/branch/menu/addons/showAll') }}/" + branchId,
                 sizes: "{{ url('dashboard/branch/menu/sizes/showAll') }}/" + branchId
             };

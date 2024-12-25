@@ -15,54 +15,35 @@
                 <div class="input-group mb-3">
                     <input type="text" name="name" class="form-control" id="nameInput"
                         placeholder=" @lang('auth.nameweb') " required>
-                    <div id="nameError" class="error-message text-danger"></div>
+                    <div id="nameError" class="error-message mb-1 text-danger"></div>
 
                 </div>
 
                 <!-- Phone and Country Code -->
                 <div class="input-group mb-3">
-                    <!-- Phone Input -->
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                        id="phoneInput" placeholder="@lang('auth.phoneplace')" value="{{ old('phone') }}" required>
-                    <div id="phoneError" class="error-message text-danger"></div>
-                    <input type="text" name="country_code" id="countryCodeInput"
-                        class="form-control @error('country_code') is-invalid @enderror"
-                        value="{{ old('country_code') }}">
-                    <div id="country_codeError" class="error-message text-danger"></div>
-                    <!-- Country Code Dropdown -->
-                    <div class="input-group mb-3">
-                        <!-- Display Selected Country Code -->
-                        <button class="country-dropdown me-2" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <small id="selected-country-code">{{ old('country_code', '+02') }}</small>
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/egypt.png') }}" alt=""
-                                width="20" id="selected-flag">
-                        </button>
+                    <input type="text" class="form-control  @error('phone') is-invalid @enderror "
+                        name="phone" id="phoneInput" placeholder="@lang('auth.phoneplace')"
+                        value="{{ old('phone') }}" required>
+                    <select id="country" name="country_code" class="selectpicker me-2" data-live-search="true">
+                        @foreach (GetCountries() as $country)
+                            <option
+                                data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                value="{{ $country->phone_code }}">{{ $country->phone_code }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                        <!-- Country Dropdown List -->
-                        <ul class="dropdown-menu">
-                            @foreach (GetCountries() as $country)
-                                <li>
-                                    <a class="dropdown-item country-item" href="#"
-                                        data-country-code="{{ $country->phone_code }}"
-                                        data-country-flag="{{ asset($country->flag) }}">
-                                        {{ $country->phone_code }}
-                                        <img src="{{ asset($country->flag) }}" alt="{{ $country->name }}"
-                                            width="20px">
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
                 </div>
+                <div id="phoneError" class="error-message mb-1 text-danger"></div>
+                <div id="country_codeError" class="error-message mb-1 text-danger"></div>
 
                 <!-- Email -->
                 <div class="input-group mb-3">
                     <input type="email" name="email" class="form-control" id="emailInput"
                         placeholder=" @lang('auth.emailweb')" required>
-                    <div id="emailError" class="error-message text-danger"></div>
 
                 </div>
+                <div id="emailError" class="error-message mb-1 text-danger"></div>
 
                 <!-- Password -->
                 <div class="input-group position-relative mb-3">
@@ -71,17 +52,16 @@
                     <button class="input-group-eye position-absolute" type="button" id="togglePassword">
                         <i class="fas fa-eye" id="eyeIcon"></i>
                     </button>
-                    <div id="passwordError" class="error-message text-danger"></div>
 
                 </div>
+                <div id="passwordError" class="error-message mb-1 text-danger"></div>
 
                 <!-- Date of Birth -->
                 <div class="input-group mb-3">
                     <input type="date" name="date_of_birth" class="form-control" id="dateInput"
                         placeholder="@lang('auth.date') ">
-                    <div id="dateError" class="error-message text-danger"></div>
-
                 </div>
+                <div id="dateError" class="error-message mb-1 text-danger"></div>
 
                 <button type="submit" class="btn py-3 mb-2 w-100">@lang('auth.signup')</button>
 
@@ -170,8 +150,7 @@
                                 inputElement.classList.add('is-invalid');
                             }
                         }
-                    } else {
-                    }
+                    } else {}
                 });
         });
     </script>

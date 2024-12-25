@@ -1,5 +1,7 @@
 <?php
 return [
+    'unique_within_duration' => 'The :attribute already exists for the same duration',
+    'discount_exceeds_100'=>'The discount value must not exceed 100 percentage',
     //add here the attributes of validation to translated
     'attributes' => [
 
@@ -10,6 +12,8 @@ return [
         'country_id' => 'country',
         "name_ar" => "name in arabic",
         "name_en" => "name in english",
+        "description_ar" => "description in arabic",
+        "description_en" => "description in english",
         'currency_ar' => 'currency in arabic',
         'currency_en' => 'currency in english',
         'currency_code' => 'currency code',
@@ -91,11 +95,13 @@ return [
     'phone_code' => 'Enter phone code',
     'flag' => 'Select flag country',
     'length' => 'Enter length phone',
-    'image_ar' => 'الصورة بالعربي',
-    'image_en' => 'الصورة بالانجليزي',
+    'image_ar' => 'Arabic Image',
+    'image_en' => 'English Image',
     'branches' => 'branches',
     'branches.*' => 'branch',
     'type_id'=>'Type Name',
+    'active'=>'Is Active',
+    'value'=>'Value',
 
     //web
     'Correct' =>  'Looks good!',
@@ -144,5 +150,6 @@ return [
     'EnterMaxmum' => 'Please enter the maxmum',
     'EnterNameAr' => 'Please enter name ar',
     'EnterNameEn' => 'Please enter name en',
+    'EnterIsActive' => 'Please enter the rate flag active or not',
 
 ];

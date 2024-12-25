@@ -562,4 +562,8 @@ return array (
   'create offerDetails' => 'create offerDetails',
   'update offerDetails' => 'update offerDetails',
   'delete offerDetails' => 'delete offerDetails',
+  'view rates' => 'view rates',
+  'create rates' => 'create rates',
+  'update rates' => 'update rates',
+  'delete rates' => 'delete rates',
 );

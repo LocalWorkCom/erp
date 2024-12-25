@@ -11,22 +11,24 @@
             <div class="col-md-7 right-side p-3">
                 <h2 class="main-color fw-bold py-3"> @lang('auth.forgetpass') </h2>
                 <h5> @lang('auth.forgetmessage') </h5>
-                <div class="input-group py-md-4 py-sm-2">
-                    <input type="text" class="form-control py-2" name="phoneforget" id="phoneforgetInput"
-                        placeholder="ادخل رقم الهاتف ,مثال 01029063398" required>
 
-                    <button class="country-dropdown me-2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <small>+02</small>
-                        <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/egypt.png') }}" alt="">
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"> <small> +02</small> <img
-                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images/egypt.png') }}"
-                                    alt=""></a></li>
-                    </ul>
-                    <div id="phoneforgetError" class="text-danger" style="display:none;"></div>
+                <div class="input-group py-md-4 py-sm-2">
+                        <input type="text" class="form-control  @error('phoneforget') is-invalid @enderror "
+                        name="phoneforget" id="phoneforgetInput" placeholder="@lang('auth.phoneplace')"
+                        value="{{ old('phoneforget') }}" required>
+                        <select id="country" name="country_code_forget" class="selectpicker me-2" data-live-search="true"
+                        required>
+                        @foreach (GetCountries() as $country)
+                            <option
+                                data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                value="{{ $country->phone_code }}">{{ $country->phone_code }}
+                            </option>
+                        @endforeach
+                    </select>
 
                 </div>
+                <div id="phoneforgetError" class="error-message mb-1 text-danger"style="display:none;"></div>
+                <div id="country_code_forgetError" class="error-message mb-1 text-danger"style="display:none;"></div>
                 <button type="submit" class="btn w-100"> @lang('auth.send') </button>
             </div>
             <div class="col-md-5 login-background">
