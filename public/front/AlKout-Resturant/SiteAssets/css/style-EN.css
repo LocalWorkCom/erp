@@ -562,11 +562,11 @@ body.no-scroll {
 }
 
 .intro .container .small-img.left {
-    object-position: left bottom;
+    object-position: right bottom;
 }
 
 .intro .container .small-img.right {
-    object-position: right bottom;
+    object-position: left bottom;
 }
 
 .intro .container .big-img {
