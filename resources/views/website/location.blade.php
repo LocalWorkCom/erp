@@ -19,9 +19,6 @@
 </section> --}}
 
 @push('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer>
-    </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const hasLatitudeCookie = document.cookie.split('; ').some(row => row.startsWith('latitude='));
@@ -56,7 +53,7 @@
                             location.reload();
                         } else {
                             console.log(
-                            'Cookies already have the correct values. Refreshing page.');
+                                'Cookies already have the correct values. Refreshing page.');
                             location.reload();
                         }
                     }, function(error) {
@@ -65,7 +62,8 @@
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
                                 alert(
-                                    'You have denied the location request. Please enable location permissions.');
+                                    'You have denied the location request. Please enable location permissions.'
+                                    );
                                 break;
                             case error.POSITION_UNAVAILABLE:
                                 alert('Location information is unavailable.');
