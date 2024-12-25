@@ -1013,13 +1013,14 @@ function respondError($error, $code, $errorMessages = [])
 }
 function getMostDishesOrdered($limit = 5)
 {
-    return Dish::select('dishes.*')
+    /*return Dish::select('dishes.*')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit($limit)
-        ->get();
+        ->get();*/
+        return [];
 }
 
 function checkOfferUsed($id)

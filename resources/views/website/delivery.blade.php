@@ -458,7 +458,7 @@
               displayAddressInThirdPhase();
 
               // Hide form sections and show third-phase
-              document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('d-none'));
+                document.querySelector('.second-phase').classList.add('d-none');
               document.getElementById('thirdPhase').classList.remove('d-none');
           }
 
