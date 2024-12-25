@@ -259,6 +259,32 @@ function formatTime(time) {
     }
   });
 
+
+  // notfications-alert modal 
+  document.addEventListener("DOMContentLoaded", function () {
+    const notificationSwitch = document.getElementById("notificationSwitch");
+    const profileBody = document.querySelector(".profile-body");
+    const notificationBody = document.querySelector(".notification-body");
+    const cancelNotification = document.getElementById("cancelNotification");
+
+    // Handle switch toggle
+    notificationSwitch.addEventListener("change", function () {
+        if (this.checked) {
+            profileBody.classList.add("d-none"); // Hide profile body
+            notificationBody.classList.remove("d-none"); // Show notification body
+        } else {
+            profileBody.classList.remove("d-none"); // Show profile body
+            notificationBody.classList.add("d-none"); // Hide notification body
+        }
+    });
+
+    // Handle cancel button in notification body
+    cancelNotification.addEventListener("click", function () {
+        profileBody.classList.remove("d-none"); // Show profile body
+        notificationBody.classList.add("d-none"); // Hide notification body
+        notificationSwitch.checked = false; // Reset switch
+    });
+});
 // wizard js 
 
 $(document).ready(function () {
