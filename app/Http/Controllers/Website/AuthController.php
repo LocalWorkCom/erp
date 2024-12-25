@@ -215,8 +215,8 @@ class AuthController extends Controller
         // Logout the client guard
         Auth::guard('client')->logout();
 
-        // Invalidate the session to clear all data
-        $request->session()->invalidate();
+        // Remove session data specific to the client guard
+        $request->session()->forget('client');
 
         // Regenerate the CSRF token for security
         $request->session()->regenerateToken();
