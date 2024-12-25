@@ -96,7 +96,7 @@ class CartController extends Controller
 
     public function trackOrder($orderId)
     {
-        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions'])
+        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
             ->findOrFail($orderId);
 
         return view('website.track-order', compact('order'));
