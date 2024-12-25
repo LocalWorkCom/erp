@@ -11,6 +11,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\BranchMenuSize;
 use App\Models\Discount;
 use App\Models\DishDiscount;
+use App\Models\Order;
 use App\Models\PrivacyPolicy;
 use App\Models\Recipe;
 use App\Models\ReturnPolicy;
@@ -74,7 +75,7 @@ class CartController extends Controller
                     'id' => $size->id,
                     'name' => $size->dishSizes->name_site,
                     'price' => $size->price,
-                    'default_size'=>$size->dishSizes->default_size
+                    'default_size' => $size->dishSizes->default_size
                 ];
             }),
             'addons' => $BranchMenuAddon->map(function ($addon) {
@@ -91,5 +92,13 @@ class CartController extends Controller
 
         // Return JSON response
         return response()->json($response, 200);
+    }
+
+    public function trackOrder($orderId)
+    {
+        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions'])
+            ->findOrFail($orderId);
+
+        return view('website.track-order', compact('order'));
     }
 }

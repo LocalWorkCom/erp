@@ -40,3 +40,6 @@ Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('s
 
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
+Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
+
+Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
