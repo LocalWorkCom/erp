@@ -148,7 +148,8 @@
                                 <h5 class="fw-bold">ملخص الطلب</h5>
                             </div>
                             <div class="bg-dark-gray p-3 my-4">
-                                <h5 class="fw-bold">معلومات التوصيل</h5>
+                                <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>معلومات
+                                    التوصيل</h5>
                                 @if ($order->address)
                                     <p>
                                         <strong>العنوان:</strong>
@@ -182,7 +183,8 @@
                                 <p><strong>الاسم:</strong> {{ $order->client?->name }}</p>
                             </div>
                             <div class="bg-dark-gray p-3 my-4">
-                                <h5 class="fw-bold">معلومات الدفع</h5>
+                                <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>معلومات الدفع
+                                </h5>
                                 @if ($order->orderTransactions->isNotEmpty())
                                     @foreach ($order->orderTransactions as $transaction)
                                         <p><strong>طريقة الدفع:</strong>
@@ -209,7 +211,8 @@
                                 @endif
                             </div>
                             <div class="bg-dark-gray p-3 my-4">
-                                <h5 class="fw-bold">تفاصيل الطلب</h5>
+                                <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>تفاصيل الطلب
+                                </h5>
                                 @foreach ($order->orderDetails as $detail)
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -227,14 +230,35 @@
                             </div>
 
                             <div class="bg-dark-gray p-3 my-4">
-                                <h5 class="fw-bold">الفاتورة</h5>
+                                <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>الفاتورة
+                                </h5>
                                 <div class="d-flex justify-content-between">
                                     <p>مجموع طلبي</p>
                                     <p>{{ $order->total_price_befor_tax }} ج.م</p>
                                 </div>
+                                @if ($order->coupon_id)
+                                    <div class="d-flex justify-content-between">
+                                        <p class="main-color">كوبون خصم</p>
+                                        @if ($order->coupon->type === 'percentage')
+                                            <p class="main-color">
+                                                -{{ ($order->total_price_befor_tax * $order->coupon->value) / 100 }} ج.م
+                                            </p>
+                                        @elseif ($order->coupon->type === 'fixed')
+                                            <p class="main-color">
+                                                -{{ $order->coupon->value }} ج.م
+                                            </p>
+                                        @else
+                                            <p class="main-color">نوع الخصم غير معروف</p>
+                                        @endif
+                                    </div>
+                                @endif
                                 <div class="d-flex justify-content-between">
                                     <p>رسوم التوصيل</p>
-                                    <p>{{ $order->delivery_fees }} ج.م</p>
+                                    <p>{{ $order->delivery_fees ?? 0 }} ج.م</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p>رسوم الخدمة</p>
+                                    <p>{{ $order->service_fees ?? 0 }} ج.م</p>
                                 </div>
                                 <div class="d-flex justify-content-between border-top pt-2">
                                     <h5 class="fw-bold">المجموع الكلي</h5>
