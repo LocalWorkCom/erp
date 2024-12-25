@@ -4,6 +4,8 @@ use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\LocationController;
+use App\Http\Controllers\Website\MyFatoorahController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -38,3 +40,11 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
+
+
+
+//myfatoorah
+Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoorah');
+Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->name('myfatoorah.callback');
+Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
+Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
