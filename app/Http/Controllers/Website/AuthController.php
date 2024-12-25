@@ -91,15 +91,16 @@ class AuthController extends Controller
         $user->phone = $request->phone;
         $user->country_id = $country->id;
         $user->country_code = $request->country_code;
+        $user->birth_date =  $request->date_of_birth;
         $user->password = Hash::make($request->password);
         $user->save();
 
         event(new UserRegistered($user));
 
-        $clientDetail = new ClientDetail();
-        $clientDetail->user_id = $user->id;
-        $clientDetail->date_of_birth = $request->date_of_birth;
-        $clientDetail->save();
+        // $clientDetail = new ClientDetail();
+        // $clientDetail->user_id = $user->id;
+        // $clientDetail->date_of_birth = $request->date_of_birth;
+        // $clientDetail->save();
 
         Auth::guard('client')->login($user);
         Auth::setUser($user);
@@ -254,44 +255,96 @@ class AuthController extends Controller
             'phone' => $request->phoneforget
         ], 422);
     }
+
     public function resetPassword(Request $request)
     {
         // Validate input
         $request->validate([
-            'phone' => 'required', // Validate phone number
-            'password' => 'required|min:6|confirmed', // Password confirmation
+            'phone' => 'required_if:auth,null',
+            'password' => 'required|min:6|confirmed',
         ]);
 
-        // Find user by phone number
-        $user = User::where('phone', $request->phone)->first();
+        // Check if the user is authenticated
+        if (Auth::guard('client')->check()) {
+            // Get the authenticated user
+            $user = Auth::guard('client')->user();
+        } else {
+            // Find user by phone number if not authenticated
+            $user = User::where('phone', $request->phone)->first();
 
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => __('auth.phone_not_found'),
-            ], 404);
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __('auth.phone_not_found'),
+                ], 404);
+            }
         }
+
+        // Ensure the new password is not the same as the old one
         if (Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('auth.password_same_as_previous'),
             ], 422); // Password can't be the same as the previous one
         }
+
         // Update the user's password
         $user->update([
             'password' => Hash::make($request->password),
         ]);
-        Auth::guard('client')->login($user);
-        Auth::setUser($user);
 
-        $request->session()->regenerate();
-        return response()->json([
-            'status' => 'success',
-            'message' => __('auth.password_reset_success'),
-        ]);
+        // If the user was found via phone number, log them in
+        if (!Auth::guard('client')->check()) {
+            Auth::guard('client')->login($user);
+            Auth::setUser($user);
+            $request->session()->regenerate();
+            return response()->json([
+                'status' => 'success',
+                'message' => __('auth.password_reset_success'),
+            ]);
+        } else {
+            return redirect()->back()->with('message', __('messages.success'));
+        }
     }
 
-    public function viewProfile(){
+
+    public function viewProfile()
+    {
         return view('website.auth.profile');
+    }
+    public function updateProfile(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'birth_date' => 'nullable|date_format:Y-m-d',
+        ], [
+            // Custom validation messages for each field
+            'name.required' => __('validation.required', ['attribute' => __('auth.email_or_phone')]),
+            'phone.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
+            'birth_date.date_format' => __('validation.json', ['attribute' => __('auth.address')]),
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            // Return errors with the old input values
+            return back()->withErrors($validator)->withInput();
+        }
+        $user = Auth::guard('client')->user();
+        $user->name = $request->name;
+        $user->phone =  $request->phone;
+        $user->email =  $request->email;
+        $user->birth_date =  $request->birth_date;
+        $user->country_code =  $request->country_code_profile;
+        $user->country_id =  Country::where('phone_code',$request->country_code_profile)->value('id');
+        $user->save();
+
+        return redirect()->back()->with('message', __('messages.success'));
     }
 }

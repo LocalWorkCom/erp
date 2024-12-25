@@ -21,6 +21,7 @@ Route::post('/site/reset-password', [AuthController::class, 'resetPassword'])->n
 
 Route::middleware(['auth:client'])->group(function () {
     Route::get('/site/profile', [AuthController::class, 'viewProfile'])->name('website.profile.view');
+    Route::post('/site/profile/update', [AuthController::class, 'updateProfile'])->name('website.profile.update');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('website.logout');
     Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
@@ -35,6 +36,7 @@ Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add.favorite');
 
+Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
