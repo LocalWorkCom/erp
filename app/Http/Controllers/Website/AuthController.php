@@ -165,21 +165,33 @@ class AuthController extends Controller
                 ]
             ], 403);
         }
-        // dd($request->input('address'));
-
-        $jsonData = $request->input('address');
-        if (!$jsonData) {
-            return response()->json(['status' => 'error', 'message' => 'Address data is missing'], 422);
-        }
-
-        $addressData = json_decode($jsonData, true);
-
-        $address = json_decode($addressData);
-        // Example: Access specific fields
-        $villaName = $address->namevilla;
         // Log the user in
         Auth::guard('client')->login($user);
         $request->session()->regenerate();
+
+
+        $this->saveAddress($request->input('address'));
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('auth.login_success')
+        ]);
+    }
+
+    public function saveAddress($data)
+    {
+        $jsonData = $data;
+        if (!$jsonData) {
+            return response()->json(['status' => 'error', 'message' => 'Address data is missing'], 422);
+        }
+        $addressData = json_decode($jsonData, true);
+
+        $address = json_decode($addressData);
+        $name = $address->namevilla || 
+            // Example: Access specific fields
+            $villaName = $address->namevilla;
+
 
         // Save address if provided
         if ($address) {
@@ -195,15 +207,7 @@ class AuthController extends Controller
             $clientAddress->is_active = 1;
             $clientAddress->save();
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => __('auth.login_success')
-        ]);
     }
-
-
-
 
     public function logout(Request $request)
     {

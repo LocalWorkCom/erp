@@ -47,6 +47,11 @@
                                   <input type="text" class="form-control" placeholder="@lang('header.search')" />
                               </div>
                               <div class="map position-relative my-3">
+                                  <div class="map" id="map"></div>
+                                  <div class="notes">
+                                      <small>@lang('header.saveaddress')</small>
+                                      <button class="btn">@lang('header.login')</button>
+                                  </div>
                                   <iframe
                                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.025253043487!2d31.22420217605614!3d30.064810617604635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145841cef6b62cc1%3A0x31bc8779f7ab8dd5!2z2YXYt9i52YUg2KfZhNmD2YjYqg!5e0!3m2!1sen!2seg!4v1734860419141!5m2!1sen!2seg"
                                       width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
@@ -55,6 +60,8 @@
                                   <div class="notes">
                                       <small> @lang('header.saveaddress')</small>
                                       <button class="btn"> @lang('header.login')</button>
+                                      <p id="location-info"></p>
+
                                   </div>
                               </div>
                               <div class="tab-footer justify-content-between d-flex align-items-center">
@@ -432,6 +439,67 @@
   </div>
   <!-- end delivery details modal -->
   @push('scripts')
+      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+      <script>
+          let map;
+          let geocoder;
+
+          function initMap() {
+              // Initialize the map
+              map = new google.maps.Map(document.getElementById("map"), {
+                  center: {
+                      lat: 30.0648,
+                      lng: 31.2242
+                  }, // Default coordinates
+                  zoom: 14,
+              });
+
+              geocoder = new google.maps.Geocoder();
+
+              // Add a click event listener to the map
+              map.addListener("click", (event) => {
+                  const latLng = event.latLng;
+                  const lat = latLng.lat();
+                  const lng = latLng.lng();
+
+                  // Geocode the clicked location
+                  geocoder.geocode({
+                      location: latLng
+                  }, (results, status) => {
+                      if (status === "OK" && results[0]) {
+                          const addressComponents = results[0].address_components;
+                          const country = getComponent(addressComponents, "country");
+                          const city = getComponent(addressComponents, "locality") || getComponent(
+                              addressComponents, "administrative_area_level_1");
+                          const state = getComponent(addressComponents, "administrative_area_level_2");
+                          const countryCode = getComponent(addressComponents, "country", "short_name");
+
+                          // Display the location info
+                          document.getElementById("location-info").innerHTML = `
+                        <strong>Location Info:</strong><br>
+                        Latitude: ${lat}<br>
+                        Longitude: ${lng}<br>
+                        Country: ${country}<br>
+                        City: ${city}<br>
+                        State: ${state}<br>
+                        Country Code: ${countryCode}
+                    `;
+                      } else {
+                          alert("Geocode was not successful for the following reason: " + status);
+                      }
+                  });
+              });
+          }
+
+          // Helper function to get specific address components
+          function getComponent(components, type, nameType = "long_name") {
+              const component = components.find((c) => c.types.includes(type));
+              return component ? component[nameType] : null;
+          }
+
+          // Initialize the map on window load
+          window.onload = initMap;
+      </script>
       <script>
           function saveAddress(event) {
               event.preventDefault();
