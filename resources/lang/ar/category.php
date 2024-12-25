@@ -22,4 +22,5 @@ return [
     'none' => 'لا يوجد',
     'parent' => 'الصنف الاب',
     'save' => 'حفظ',
+    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
 ];

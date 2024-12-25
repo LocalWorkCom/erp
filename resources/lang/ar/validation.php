@@ -220,5 +220,5 @@ return [
     'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
-
+    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
 ];
