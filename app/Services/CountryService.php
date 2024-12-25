@@ -42,8 +42,8 @@ class CountryService
     }
     public function store(Request $request, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        $lang = app()->getLocale();
+
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -86,8 +86,8 @@ class CountryService
     }
     public function update(Request $request, $id, $checkToken)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        $lang = app()->getLocale();
+
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -101,7 +101,7 @@ class CountryService
             'code' => 'required',
             'phone_code' => 'required',
             'length' => 'required',
-            'flag' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'flag' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
@@ -135,8 +135,8 @@ class CountryService
     public function destroy(Request $request, $id, $checkToken)
     {
 
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        $lang = app()->getLocale();
+
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }

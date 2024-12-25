@@ -276,7 +276,7 @@
                                                         width="150" height="150">
                                                     <button type="button" class="btn btn-danger btn-sm remove-image-btn"
                                                         data-id="{{ $image->id }}">
-                                                        Remove
+                                                        @lang('product.remove')
                                                     </button>
                                                     <!-- Hidden input to track removed images -->
                                                     <input type="hidden" name="remove_image_ids[]" value=""
@@ -319,8 +319,8 @@
 @section('scripts')
     <!-- JQUERY CDN -->
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
-    <!-- SELECT2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{{--    <!-- SELECT2 CDN -->--}}
+{{--    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>--}}
     <!-- Custom JS -->
     @vite('resources/assets/js/validation.js')
     <script>

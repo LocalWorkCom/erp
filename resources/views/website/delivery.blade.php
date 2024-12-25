@@ -626,7 +626,6 @@
   </div>
   <!-- end delivery details modal -->
   @push('scripts')
-      <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
       <script>
           let map;
           let geocoder;
