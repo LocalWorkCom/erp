@@ -14,52 +14,59 @@ use Illuminate\Support\Facades\Validator;
 
 class DiscountService
 {
-    private $lang;
-    public function __construct()
-    {
-        $this->lang = app()->getLocale();
-        app()->setLocale($this->lang);
-    }
-
     public function index(Request $request, $checkToken)
     {
-        try {
-            // Fetch discounts with both branches and dishes relationships
-            $discounts = Discount::with(['branches', 'dishes'])->get();
+        $lang = app()->getLocale();
 
-            if (!$checkToken) {
-                $discounts = $discounts->makeVisible(['name_en', 'name_ar']);
-            }
-            // Return the success response with the fetched data
-            return ResponseWithSuccessData($this->lang, $discounts, 1);
-        } catch (\Exception $e) {
-            // Log the error message
-            Log::error('Error fetching discounts: ' . $e->getMessage());
-
-            // Return a bad request response if there's an error
-            return RespondWithBadRequestData($this->lang, 2);
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
         }
+        // $sizes = Size::all();
+        $discounts = Discount::with(['branches', 'dishes'])->get();
+
+
+        if (!$checkToken) {
+            $discounts = $discounts->makeVisible(['name_en', 'name_ar']);
+        }
+
+        return ResponseWithSuccessData($lang, $discounts, 1);
     }
 
     public function show(Request $request, $id)
     {
+        $lang = app()->getLocale();
+
         try {
             $discount = Discount::with(['branches', 'dishes'])->get();
 
-            return ResponseWithSuccessData($this->lang, $discount, 1);
+            return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
             Log::error('Error fetching discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
+
     public function store(Request $request)
     {
+        $lang = app()->getLocale();
+
         try {
-            // Define the validation rules
             $validator = Validator::make($request->all(), [
-                'name_ar' => 'required|string',
-                'name_en' => 'nullable|string',
+                'name_ar' => [
+                    'required',
+                    'string',
+                    Rule::unique('discounts')->where(function ($query) use ($request) {
+                        return $query->where('type', $request->type);
+                    }),
+                ],
+                'name_en' => [
+                    'nullable',
+                    'string',
+                    Rule::unique('discounts')->where(function ($query) use ($request) {
+                        return $query->where('type', $request->type);
+                    }),
+                ],
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
                 'start_date' => 'nullable|date',
@@ -71,26 +78,30 @@ class DiscountService
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 
+            $validator->after(function ($validator) use ($request) {
+                $duplicate = Discount::where('type', $request->type)
+                    ->where('name_ar', $request->name_ar)
+                    ->exists();
+
+                if ($duplicate) {
+                    $validator->errors()->add('name_ar', __('discount.duplicate_discount'));
+                }
+            });
+
             // Check if validation fails
             if ($validator->fails()) {
-                // Check for unique code error specifically
-                // if ($validator->errors()->has('code')) {
-                //     return CustomRespondWithBadRequest('Duplicate code are submitted.');
-                // }
-                // Return other validation errors
-                return RespondWithBadRequestData($this->lang, $validator->errors());
+                return RespondWithBadRequestData($lang, $validator->errors());
             }
 
-            // Validation passed, proceed to create the discount
             $validatedData = $validator->validated();
 
             $discount = Discount::create([
                 'name_ar' => $validatedData['name_ar'],
-                'name_en' => $validatedData['name_en'],
+                'name_en' => $validatedData['name_en'] ?? null,
                 'type' => $validatedData['type'],
                 'value' => $validatedData['value'],
-                'start_date' => $validatedData['start_date'],
-                'end_date' => $validatedData['end_date'],
+                'start_date' => $validatedData['start_date'] ?? null,
+                'end_date' => $validatedData['end_date'] ?? null,
                 'is_active' => $validatedData['is_active'],
                 'created_by' => Auth::guard('admin')->user()->id,
                 'count_usage' => 0,
@@ -103,16 +114,19 @@ class DiscountService
                 $discount->dishes()->attach($validatedData['dishes']);
             }
 
-
-            return ResponseWithSuccessData($this->lang, $discount, 1);
+            return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
             Log::error('Error creating discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
+
+
     public function update(Request $request, $id)
     {
+        $lang = app()->getLocale();
+
         try {
             $discount = Discount::findOrFail($id);
 
@@ -132,7 +146,7 @@ class DiscountService
 
             if ($validator->fails()) {
                 // Return other validation errors
-                return RespondWithBadRequestData($this->lang, $validator->errors());
+                return RespondWithBadRequestData($lang, $validator->errors());
             }
 
             // Validation passed, update the discount
@@ -160,102 +174,110 @@ class DiscountService
             } else {
                 $discount->dishes()->detach();
             }
-            return ResponseWithSuccessData($this->lang, $discount, 1);
+            return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
             Log::error('Error updating discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
     public function destroy(Request $request, $id)
     {
+        $lang = app()->getLocale();
+
         try {
             $discount = Discount::findOrFail($id);
             $discount->delete();
 
-            return ResponseWithSuccessData($this->lang, null, 1);
+            return ResponseWithSuccessData($lang, null, 1);
         } catch (\Exception $e) {
             Log::error('Error deleting discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
     public function restore(Request $request, $id)
     {
+        $lang = app()->getLocale();
+
         try {
             $discount = Discount::withTrashed()->findOrFail($id);
             $discount->restore();
 
-            return ResponseWithSuccessData($this->lang, $discount, 1);
+            return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
             Log::error('Error restoring discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
     }
 
     // product color
     public function listDish($discountId, $checkToken)
     {
+        $lang = app()->getLocale();
+
         $discounts = Discount::with(['discountDishes.dish' => function ($query) {
             $query->select('id', 'name_ar');  // Select only 'id' and 'name_ar' columns from the 'dishes' table
         }])->findOrFail($discountId);
         if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($this->lang, 5);
+            return RespondWithBadRequest($lang, 5);
         }
 
-        return ResponseWithSuccessData($this->lang, $discounts, 1);
+        return ResponseWithSuccessData($lang, $discounts, 1);
     }
 
     public function saveDiscountDish(Request $request, $discountId)
     {
+        $lang = app()->getLocale();
+
         // Validate the input
         $validated = $request->validate([
             'discount_dishes.*.dish_id' => 'required|exists:dishes,id',
             'discount_dish_id' => 'nullable|array',
             'discount_dish_id.*' => 'nullable|integer|exists:dish_discount,id',
         ]);
-    
+
         // Ensure discount_dish_id is always an array, even if not provided
         $discountDishIds = $request->discount_dish_id ?? [];
-    
+
         // Ensure discount_dishes is always an array, even if not provided
         $discountDishes = $request->discount_dishes ?? [];
-    
+
         // Fetch current discount dishes
         $existingDiscountDishes = DishDiscount::where('discount_id', $discountId)->get();
-    
+
         // Collect submitted dish IDs
         $submittedDishIds = collect($discountDishes)->pluck('dish_id')->toArray();
-    
+
         // Check for duplicates among submitted dishes
         if (count($submittedDishIds) !== count(array_unique($submittedDishIds))) {
-            return CustomRespondWithBadRequest('Duplicate dishes are submitted.');
+            return CustomRespondWithBadRequest(__('discount.Duplicate dishes are submitted.'));
         }
-    
+
         // Delete dishes that are not in the submitted discount_dish_ids
         foreach ($existingDiscountDishes as $existingDish) {
             if (!in_array($existingDish->id, $discountDishIds)) {
                 $existingDish->delete();
             }
         }
-    
+
         // Save or update dishes
         foreach ($discountDishes as $index => $discountDish) {
             $dishId = (int) $discountDish['dish_id'];
             $discountDishId = $discountDishIds[$index] ?? null;
-    
+
             // Check if the same dish already exists for this discount
             $existingDish = DishDiscount::where('discount_id', $discountId)
                 ->where('dish_id', $dishId)
                 ->where('id', '!=', $discountDishId)
                 ->exists();
-    
+
             if ($existingDish) {
                 return CustomRespondWithBadRequest(
                     'The dish with ID ' . $dishId . ' already exists for this discount.'
                 );
             }
-    
+
             if ($discountDishId) {
                 // Update existing dish
                 DishDiscount::updateOrCreate(
@@ -271,9 +293,8 @@ class DiscountService
                 ]);
             }
         }
-    
+
         // Return success response
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
-    
 }

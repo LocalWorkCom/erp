@@ -22,5 +22,6 @@ return [
     'dish' =>'طبق',
     'Save' =>'حفظ',
     'Remove' =>'حذف',
-
+    'duplicate_discount'=>'يرجي ادخال الخصم بدون تكرار',
+    'Duplicate dishes are submitted.' =>'يرجيادخال الطبق بدون تكرار',
 ];

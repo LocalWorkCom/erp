@@ -13,7 +13,8 @@ class DiscountController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $discounts = Discount::with(['branches', 'dishes'])->get();
+
+            $discounts = Discount::with(['branches', 'dishes'])->get(); // Fetch with filtered dishes
 
             // Adjust for translation fields
             foreach ($discounts as $discount) {
@@ -26,6 +27,8 @@ class DiscountController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
+
 
     public function show(Request $request, $id)
     {

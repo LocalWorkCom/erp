@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,14 +59,14 @@ class Discount extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true)
-                     ->where(function ($q) {
-                         $q->whereNull('start_date')
-                           ->orWhere('start_date', '<=', now());
-                     })
-                     ->where(function ($q) {
-                         $q->whereNull('end_date')
-                           ->orWhere('end_date', '>=', now());
-                     });
+            ->where(function ($q) {
+                $q->whereNull('start_date')
+                    ->orWhere('start_date', '<=', now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>=', now());
+            });
     }
 
     public function getTypeLabelAttribute()
@@ -78,19 +79,26 @@ class Discount extends Model
         return $this->belongsToMany(Branch::class, 'branch_discount');
     }
 
-    public function dishes()
-    {
-        return $this->belongsToMany(Dish::class, 'dish_discount');
-    }
+    // public function dishes()
+    // {
+    //     return $this->belongsToMany(Dish::class, 'dish_discount');
+    // }
     public function dishDiscounts()
     {
-         return $this->hasMany(DishDiscount::class);
-     }
+        return $this->hasMany(DishDiscount::class);
+    }
 
     public function discount_dishes()
     {
         return $this->belongsToMany(Dish::class, 'dish_discount')
             ->withPivot('dish_id') // Include all necessary pivot fields
+            ->wherePivotNull('deleted_at') // Exclude deleted entries
             ->withTimestamps(); // Optional: if your pivot table has timestamps
+    }
+
+    public function dishes()
+    {
+        return $this->belongsToMany(Dish::class, 'dish_discount', 'discount_id', 'dish_id')
+            ->whereNull('dish_discount.deleted_at'); // Ensure only non-deleted dishes
     }
 }
