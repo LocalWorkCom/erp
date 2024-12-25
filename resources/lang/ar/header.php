@@ -3,7 +3,7 @@
 return [
     'deliveryTo' => 'التوصيل إلى',
     'choose' => 'اختر',
-    'home' => 'الصفحة الرئيسية',
+    'home' => ' الرئيسية',
     'menu' => 'القائمة',
     'contactUs' => 'اتصل بنا',
     'en' => 'الإنجليزية',
@@ -12,7 +12,7 @@ return [
     'editprofile' => 'تعديل الملف الشخصي',
     'previousorder' => 'الطلبات السابقة',
     'trackorder' => 'تتبع الطلب',
-    'myaddress' => 'عنواني',
+    'myaddress' => 'عناويني',
     'rate' => 'تقييم',
     'favorite' => 'المفضلة',
     'notification' => 'الإشعارات',
