@@ -1,7 +1,11 @@
 <?php
 return [
     'required' => ' :attribute مطلوب.',
-    'email' => 'يجب أن يكون :attribute عنوان بريد إلكتروني صالحًا.',
+    'email' => ':attribute يجب أن يكون بريدًا إلكترونيًا صالحًا.',
+    'date_format' => ':attribute يجب أن يتطابق مع التنسيق :format.',
+    'string' => ':attribute يجب أن يكون نصًا.',
+    'max' => ':attribute لا يمكن أن يكون أكبر من :max حرفًا.',
+    'confirmed' => 'تأكيد :attribute غير متطابق.',
     'unique' => 'عفوا  :attribute مأخوذ مسبقا',
     'name' => ' :attribute مطلوب.',
     'phone' => ' :attribute مطلوب.',
@@ -85,6 +89,7 @@ return [
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
     'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'attributes' => [
+        'birth_date' => 'تاريخ الميلاد',
 
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
