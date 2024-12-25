@@ -9,12 +9,6 @@ use Illuminate\Http\Request;
 
 class TermsAndConditionsController extends Controller
 {
-    protected $lang;
-
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -38,6 +32,7 @@ class TermsAndConditionsController extends Controller
     public function store(StaticFormsRequest $request)
     {
 //        dd($request->all());
+        $lang = app()->getLocale();
         $data = $request->validated();
         $term = new TermsAndCondition();
         $term->name_ar = $data['name_ar'];
@@ -47,7 +42,7 @@ class TermsAndConditionsController extends Controller
         $term->active = $data['active'];
         $term->created_by = auth()->id() ?? 1 ;
         $term->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/terms')->with('message',$message);
@@ -76,6 +71,7 @@ class TermsAndConditionsController extends Controller
      */
     public function update(StaticFormsRequest $request, string $id)
     {
+        $lang = app()->getLocale();
         $data = $request->validated();
         $term = TermsAndCondition::findOrFail($id);
         $term->name_ar = $data['name_ar'];
@@ -85,7 +81,7 @@ class TermsAndConditionsController extends Controller
         $term->active = $data['active'];
         $term->modified_by = auth()->id() ?? 1;
         $term->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/terms')->with('message', $message);
@@ -96,10 +92,11 @@ class TermsAndConditionsController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
         $term = TermsAndCondition::findOrFail($id);
         $term->deleted_by = auth()->id() ?? 1;
         $term->delete();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/terms')->with('message', $message);

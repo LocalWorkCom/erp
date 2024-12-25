@@ -14,8 +14,15 @@
         <div class="ms-sm-1 ms-0">
             <nav>
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard.home') }}">@lang('sidebar.Main')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><a href="javascript:void(0);" onclick="window.location.href='{{ route('sliders.list') }}'">@lang('slider.Sliders')</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('dashboard.home') }}">
+                            @lang('sidebar.Main')
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <a href="javascript:void(0);"
+                           onclick="window.location.href='{{ route('sliders.list') }}'">@lang('slider.Sliders')</a>
+                    </li>
                 </ol>
             </nav>
         </div>
@@ -101,22 +108,6 @@
 @endsection
 
 @section('scripts')
-    <!-- JQUERY CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
-
-    <!-- DATA-TABLES CDN -->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- INTERNAL DATADABLES JS -->
-    @vite('resources/assets/js/datatables.js')
 @endsection
 <script>
     function confirmDelete() {

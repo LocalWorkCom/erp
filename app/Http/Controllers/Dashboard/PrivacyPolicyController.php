@@ -9,12 +9,6 @@ use Illuminate\Http\Request;
 
 class PrivacyPolicyController extends Controller
 {
-    protected $lang;
-
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -38,6 +32,7 @@ class PrivacyPolicyController extends Controller
     public function store(StaticFormsRequest $request)
     {
 //        dd($request->all());
+        $lang = app()->getLocale();
         $data = $request->validated();
         $privacy = new PrivacyPolicy();
         $privacy->name_ar = $data['name_ar'];
@@ -47,7 +42,7 @@ class PrivacyPolicyController extends Controller
         $privacy->active = $data['active'];
         $privacy->created_by = auth()->id() ?? 1 ;
         $privacy->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/privacies')->with('message',$message);
@@ -76,6 +71,7 @@ class PrivacyPolicyController extends Controller
      */
     public function update(StaticFormsRequest $request, string $id)
     {
+        $lang = app()->getLocale();
         $data = $request->validated();
         $privacy = PrivacyPolicy::findOrFail($id);
         $privacy->name_ar = $data['name_ar'];
@@ -85,7 +81,7 @@ class PrivacyPolicyController extends Controller
         $privacy->active = $data['active'];
         $privacy->modified_by = auth()->id() ?? 1;
         $privacy->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/privacies')->with('message', $message);
@@ -96,10 +92,11 @@ class PrivacyPolicyController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
         $privacy = PrivacyPolicy::findOrFail($id);
         $privacy->deleted_by = auth()->id() ?? 1;
         $privacy->delete();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/privacies')->with('message', $message);
