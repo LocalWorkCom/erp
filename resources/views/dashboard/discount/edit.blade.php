@@ -65,7 +65,7 @@
                                     <!-- Discount Value -->
                                     <div class="col-xl-6">
                                         <label for="value" class="form-label">@lang('discount.Value')</label>
-                                        <input type="number" step="0.01" name="value" id="value" class="form-control" value="{{ old('value', $discount->value) }}" placeholder="@lang('discount.Value')" required>
+                                        <input type="number" step="0.01" name="value" id="value"  min="0" class="form-control" value="{{ old('value', $discount->value) }}" placeholder="@lang('discount.Value')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterDiscountValue')</div>
                                     </div>
 

@@ -42,6 +42,7 @@ class CartController extends Controller
                 'message' => 'Dish not found in this branch.'
             ], 404);
         }
+        $Branch = Branch::find($IDBranch);
 
         // Fetch the sizes and addons for the dish
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->id)
@@ -55,21 +56,29 @@ class CartController extends Controller
         // Structure the response data
         $response = [
             'status' => 'success',
+            'branch' => [
+                'currency_symbol' => $Branch->country->currency_symbol
+            ],
             'dish' => [
                 'id' => $BranchMenu->dish_id,
                 'name' => $BranchMenu->dish->name_ar,
                 'description' => $BranchMenu->dish->description,
                 'price' => $BranchMenu->dish->has_size ? 0 : $BranchMenu->price,
-                'image' => $BranchMenu->dish->image ?? null
+                'image' => $BranchMenu->dish->image ?? null,
+
+                'mostOrdered' => checkDishExistMostOrderd($BranchMenu->dish_id)
+
             ],
             'sizes' => $BranchMenuSize->map(function ($size) {
                 return [
                     'id' => $size->id,
                     'name' => $size->dishSizes->name_site,
-                    'price' => $size->price
+                    'price' => $size->price,
+                    'default_size'=>$size->dishSizes->default_size
                 ];
             }),
             'addons' => $BranchMenuAddon->map(function ($addon) {
+
                 return [
                     'id' => $addon->id,
                     'name' => $addon->dishAddons->addons->name_site,

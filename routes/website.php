@@ -35,3 +35,4 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
+Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');

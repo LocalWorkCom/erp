@@ -19,6 +19,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        //dd($request->all());
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
@@ -44,13 +45,13 @@ class AuthController extends Controller
             // Custom messages for validation errors (localized)
             'name.required' => __('validation.required', ['attribute' => __('auth.nameweb')]),
             'email.required' => __('validation.required', ['attribute' => __('auth.emailweb')]),
-            'email.unique' => __('validation.unique', ['attribute' => __('auth.emailweb')]),
+            'email.unique' => __('validation.unique', ['attribute' => __('auth.email')]),
             'country_code.required' => __('validation.required', ['attribute' => __('auth.country_code')]),
             'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
             'password.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
             'phone.required' => __('validation.required', ['attribute' => __('auth.phoneplace')]),
             'phone.regex' => __('validation.regex', ['attribute' => __('auth.phoneplace')]),
-            'phone.unique' => __('validation.unique', ['attribute' => __('auth.phoneplace')]),
+            'phone.unique' => __('validation.unique', ['attribute' => __('auth.phone')]),
             'date_of_birth.date' => __('validation.date', ['attribute' => __('auth.date')]),
         ]);
 
@@ -103,32 +104,70 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email_or_phone' => 'required',
-            'password' => 'required',
+        // Set application locale based on request header
+        $lang = $request->header('lang', 'ar');
+        App::setLocale($lang);
+
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'email_or_phone' => 'required|string',
+            'password' => 'required|string',
+            'country_code_login' => 'required|string',
+        ], [
+            // Localized error messages
+            'email_or_phone.required' => __('validation.required', ['attribute' => __('auth.email_or_phone')]),
+            'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'country_code_login.required' => __('validation.required', ['attribute' => __('auth.country_code_login')]),
         ]);
 
-        $user = User::where('phone', $credentials['email_or_phone'])->first();
+        // Return validation errors
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
+        // Determine if input is email or phone
+        $userQuery = User::where('country_code', $request->country_code_login);
+        if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
+            $userQuery->where('email', $request->email_or_phone);
+        } else {
+            $userQuery->where('phone', $request->email_or_phone);
+        }
+
+        $user = $userQuery->first();
+
+        // Check if user exists and is a client
         if (!$user || $user->flag != 'client') {
-            return back()->withErrors([
-                'email_or_phone' => __('auth.only_admin'),
-            ])->onlyInput('email_or_phone');
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['email_or_phone' => [__('validation.email_or_phone', ['attribute' => __('validation.notfound')])]],
+            ], 422);
         }
 
-        if (!Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors([
-                'email_or_phone' => __('auth.invalid_credentials'),
-            ])->onlyInput('email_or_phone');
+        // Verify password
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => [
+                    'password' => [__('auth.invalid_credentials')]
+                ]
+            ], 403);
         }
 
+        // Log the user in
         Auth::guard('client')->login($user);
-        Auth::setUser($user);
-
         $request->session()->regenerate();
 
-        return redirect()->route('home');
+        return response()->json([
+            'status' => 'success',
+            'message' => __('auth.login_success')
+        ]);
     }
+
+
+
     public function logout(Request $request)
     {
         // Logout the client guard
@@ -147,14 +186,24 @@ class AuthController extends Controller
     public function checkPhone(Request $request)
     {
         $request->validate([
-            'phoneforget' => 'required|regex:/^01[0-9]{9}$/', // Example validation for Egyptian phone numbers
+            'country_code_forget' => 'required|string',  // You can add more rules for the country code if necessary
+            'phoneforget' => 'required|regex:/^01[0-9]{9}$/',  // Example validation for Egyptian phone numbers
+        ], [
+            'country_code_forget.required' => __('validation.required', ['attribute' => __('auth.country_code_forget')]),
+            'phoneforget.required' => __('validation.required', ['attribute' => __('auth.phone')]),
         ]);
 
-        // Simulate checking phone number
-        $phoneExists = User::where('phone', $request->phoneforget)->exists();
-
+        // Check if the phone number with the country code exists in the database
+        $phoneExists = User::where('phone', $request->phoneforget)
+                           ->where('country_code', $request->country_code_forget)
+                           ->exists();
+            //               dd($phoneExists);
         if ($phoneExists) {
-            return response()->json(['status' => 'success', 'phone' => $request->phoneforget]);
+            return response()->json([
+                'status' => 'success',
+                'phone' => $request->phoneforget,
+                'country_code_forget' => $request->country_code_forget
+            ]);
         }
 
         return response()->json([
