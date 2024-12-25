@@ -116,14 +116,16 @@
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('category.parent')</p>
-                                        <select class="form-control" data-trigger name="parent_id" id="choices-single-default">
+                                        <select class="form-control" name="parent_id" id="choices-single-default">
                                             <option value="">{{ __('category.none') }}</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{ $category->id }}" {{ old('parent_id') == $category->id ? 'selected' : '' }}>
-                                                    {{ $category->name_ar ." | ".$category->name_en}}
+                                            @foreach($categories as $parentCategory)
+                                                <option value="{{ $parentCategory->id }}" 
+                                                    {{ old('parent_id', $category->parent_id) == $parentCategory->id ? 'selected' : '' }}>
+                                                    {{ app()->getLocale() == 'ar' ? $parentCategory->name_ar : $parentCategory->name_en }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                        
 
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')

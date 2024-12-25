@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\File;
 
 class LogoController extends Controller
 {
-    protected $lang;
-
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -38,6 +32,7 @@ class LogoController extends Controller
      */
     public function store(LogoFormRequest $request)
     {
+        $lang =  app()->getLocale();
         $data = $request->validated();
         $logo = new Logo();
         $logo->name_ar = $data['name_ar'];
@@ -52,7 +47,7 @@ class LogoController extends Controller
 //        dd($image);
         UploadFile('images/logos', 'image', $logo, $image);
         $logo->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/logos')->with('message',$message);
@@ -90,6 +85,7 @@ class LogoController extends Controller
      */
     public function update(LogoFormRequest $request, string $id)
     {
+        $lang =  app()->getLocale();
         $data = $request->validated();
         $logo = Logo::findOrFail($id);
         $logo->name_ar = $data['name_ar'];
@@ -101,7 +97,7 @@ class LogoController extends Controller
             UploadFile('images/logos', 'image', $logo, $image);
         }
         $logo->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/logos')->with('message', $message);
@@ -112,6 +108,7 @@ class LogoController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang =  app()->getLocale();
         $logo = Logo::findOrFail($id);
 
         if ($logo->image) {
@@ -124,7 +121,7 @@ class LogoController extends Controller
 
         $logo->delete();
 
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/logos')->with('message', $message);
