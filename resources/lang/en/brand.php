@@ -2,8 +2,8 @@
 return [
     'ArabicName' => 'Arabic Name',
     'EnglishName' => 'English Name',
-    'ArabicDesc' => 'Arabic Desc',
-    'EnglishDesc' => 'English Desc',
+    'ArabicDesc' => 'Arabic Description',
+    'EnglishDesc' => 'English Description',
     'Brand' => 'Brand',
     'Country' => 'Country',
     'Brands' => 'Brands',
@@ -18,6 +18,8 @@ return [
     'delete' => 'Delete',
     'yes' => 'yes',
     'no' => 'no',
-    'Remind' => 'Remind',
-
+    'Remind' => 'Available',
+    'ID' =>'ID',
+    'none' => 'not found Description',
+    'The brand have relation' => 'the brand have relation',
 ];

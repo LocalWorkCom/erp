@@ -19,7 +19,9 @@ return [
     'description_en' => 'English Description',
     'yes' => 'Yes',
     'no' => 'No',
-    'none' => 'None',
+    'none' => 'not found Description',
     'parent' => 'Parent Category',
     'save' => 'Save',
+    'The category have relation' =>'The category have relation',
+
 ];

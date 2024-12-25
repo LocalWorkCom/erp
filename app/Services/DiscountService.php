@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -46,25 +47,29 @@ class DiscountService
         }
     }
 
-
     public function store(Request $request)
     {
         $lang = app()->getLocale();
 
         try {
+            // Validation rules
             $validator = Validator::make($request->all(), [
                 'name_ar' => [
                     'required',
                     'string',
                     Rule::unique('discounts')->where(function ($query) use ($request) {
-                        return $query->where('type', $request->type);
+                        return $query
+                            ->where('type', $request->type)
+                            ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString());
                     }),
                 ],
                 'name_en' => [
                     'nullable',
                     'string',
                     Rule::unique('discounts')->where(function ($query) use ($request) {
-                        return $query->where('type', $request->type);
+                        return $query
+                            ->where('type', $request->type)
+                            ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString());
                     }),
                 ],
                 'type' => 'required|in:percentage,fixed',
@@ -78,21 +83,22 @@ class DiscountService
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 
-            $validator->after(function ($validator) use ($request) {
-                $duplicate = Discount::where('type', $request->type)
-                    ->where('name_ar', $request->name_ar)
-                    ->exists();
-
-                if ($duplicate) {
-                    $validator->errors()->add('name_ar', __('discount.duplicate_discount'));
-                }
-            });
-
-            // Check if validation fails
+            // Check for validation failures
             if ($validator->fails()) {
                 return RespondWithBadRequestData($lang, $validator->errors());
             }
 
+            // Check for duplicates manually
+            $duplicate = Discount::where('type', $request->type)
+                ->where('name_ar', $request->name_ar)
+                ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString())
+                ->exists();
+
+            if ($duplicate) {
+                return CustomRespondWithBadRequest(__('discount.duplicate_discount'));
+            }
+
+            // Create the discount
             $validatedData = $validator->validated();
 
             $discount = Discount::create([
@@ -107,6 +113,7 @@ class DiscountService
                 'count_usage' => 0,
             ]);
 
+            // Attach related branches and dishes
             if (!empty($validatedData['branches'])) {
                 $discount->branches()->attach($validatedData['branches']);
             }

@@ -151,5 +151,7 @@ return [
     'EnterNameAr' => 'Please enter name ar',
     'EnterNameEn' => 'Please enter name en',
     'EnterIsActive' => 'Please enter the rate flag active or not',
+    'The category have relation' =>'The category have relation',
+
 
 ];

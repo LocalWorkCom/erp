@@ -178,9 +178,7 @@ class CategoryService
         }
         // Check if there are any products associated with this category
         if ($category->products()->count() > 0) {
-            return CustomRespondWithBadRequest(
-                'The category have relation'
-            );
+            return CustomRespondWithBadRequest(__('category.The category have relation'));
         }
         
         // dd($category);
