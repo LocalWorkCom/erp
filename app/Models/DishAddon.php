@@ -15,9 +15,9 @@ class DishAddon extends Model
         'addon_id',
         'quantity',
         'price',
-        'addon_category_id', 
-        'min_addons',        
-        'max_addons',   
+        'addon_category_id',
+        'min_addons',
+        'max_addons',
     ];
 
     protected $hidden = [
@@ -31,16 +31,10 @@ class DishAddon extends Model
         return $this->belongsTo(Dish::class, 'dish_id');
     }
 
-
-
     public function addons()
     {
-        return $this->belongsTo(Recipe::class, 'addon_id');
+        return $this->belongsTo(Recipe::class, 'addon_id')->where('type', 2);
     }
-    public function addon()
-{
-    return $this->belongsTo(Recipe::class, 'addon_id');
-}
     public function category()
     {
         return $this->belongsTo(AddonCategory::class, 'addon_category_id');

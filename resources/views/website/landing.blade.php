@@ -105,9 +105,6 @@
             </div>
         </div>
     </section>
-
-
-
     <section class="plates">
         <div class="container py-sm-5 py-4">
             <h2 class="fw-bold" data-aos="fade-down">اشهر اطباقنا</h2>
@@ -140,7 +137,9 @@
                                     الاعلى تقييم
                                 </span>
                                 <div class="d-flex justify-content-between pt-4">
-                                    <button class="btn">+ أضف الي العربة</button>
+                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')">
+                                        + أضف الي العربة
+                                    </button>
                                     <span> {{ $dish->price }} ج . م</span>
                                 </div>
                             </div>
@@ -150,8 +149,6 @@
             </div>
         </div>
     </section>
-
-
     <section class="info">
         <div class="container py-sm-5 py-4">
             <div class="row m-0 justify-content-cennter align-items-center">
@@ -198,4 +195,151 @@
             </div>
         </div>
     </section>
+    @include('website.cart-modal')
+    <script>
+        //test
+        function fill_cart(id) {
+            $.ajax({
+                url: "{{ route('cart.dish-detail') }}",
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for security
+                },
+                data: {
+                    'id': id
+                },
+                success: function(data) {
+                    let sizesHtml = '',
+                        addonsHtml = '',
+                        dishHtml = '';
+
+                    // Generate sizes HTML
+                    for (const size of data.sizes) {
+                        sizesHtml += `
+                    <div class="form-check">
+                        <div>
+                            <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" 
+                            ${size.default_size ? 'checked' : ''}>
+                            <label class="form-check-label" for="size-${size.id}">
+                                ${size.name}
+                            </label>
+                        </div>
+                        <span>${size.price} ${data.branch.currency_symbol}</span>
+                    </div>
+                `;
+                    }
+
+                    // Generate addons HTML
+                    for (const addon of data.addons) {
+                        addonsHtml += `
+                    <div class="form-check">
+                        <div>
+                            <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}" value="${addon.price}">
+                            <label class="form-check-label" for="addon-${addon.id}">
+                                ${addon.name} 
+                            </label>
+                        </div>
+                        <span>${addon.price} ${data.branch.currency_symbol}</span>
+                    </div>
+                `;
+                    }
+
+                    let dishPrice = parseFloat(data.dish.price);
+
+                    // Generate dish details HTML
+                    dishHtml += `
+                <h5>${data.dish.name}</h5>
+                ${data.dish.mostOrdered ? `
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fas fa-star"></i>
+                                            الاعلى تقييم
+                                        </span>
+                                    ` : ''}
+                <small class="text-muted d-block py-2">${data.dish.description}</small>
+                <h4 class="fw-bold">
+                    <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
+                        ${dishPrice.toFixed(2)}
+                    </span>
+                    ${data.branch.currency_symbol}
+                </h4>
+                <div class="qty mt-3 d-flex justify-content-center align-items-center">
+                    <span class="pro-dec me-3" onclick="decreaseQuantity(this)">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </span>
+                    <span class="num fs-4">1</span>
+                    <span class="pro-inc ms-3" onclick="increaseQuantity(this)">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                </div>
+            `;
+
+                    // Set dish image and inject HTML
+                    $('#productModal').find('#dish-img').attr('src', data.dish.image);
+                    $('#productModal').find('#div-sizes').html(sizesHtml);
+                    $('#productModal').find('#div-addons').html(addonsHtml);
+                    $('#productModal').find('#div-detail').html(dishHtml);
+                    $('#productModal').find('#dish-total').html(dishPrice.toFixed(2));
+
+                    // Function to recalculate total price
+                    // Function to recalculate total price
+                    function recalculateTotalPrice() {
+                        let selectedSizePrice = parseFloat($('#productModal').find('.size-option:checked')
+                            .val()) || 0;
+                        let addonsPrice = 0;
+
+                        // Calculate addons price
+                        $('#productModal').find('.addon-option:checked').each(function() {
+                            addonsPrice += parseFloat($(this).val());
+                        });
+
+                        let quantity = parseInt($('#productModal').find('.num').text()) || 1;
+                        let newTotalPrice = (selectedSizePrice * quantity) + addonsPrice;
+
+                        // Update total price in the total-price span
+                        $('#total-price').text(newTotalPrice.toFixed(2));
+
+                        // Update the dish-price span
+                        $('#dish-total').text(newTotalPrice.toFixed(2));
+                        
+                    }
+
+                    // console.log(recalculateTotalPrice);
+
+                    // Event listeners for size changes
+                    // Event listeners for size changes
+                    $('#productModal').find('.size-option').on('change', recalculateTotalPrice);
+
+                    // Event listeners for addon changes
+                    $('#productModal').find('.addon-option').on('change', recalculateTotalPrice);
+
+                    // Event listeners for quantity changes
+                    window.increaseQuantity = function(ele) {
+                        let quantityElem = $(ele).siblings('.num');
+                        let quantity = parseInt(quantityElem.text()) || 1;
+                        quantity++;
+                        quantityElem.text(quantity);
+                        recalculateTotalPrice();
+                    };
+
+                    window.decreaseQuantity = function(ele) {
+                        let quantityElem = $(ele).siblings('.num');
+                        let quantity = parseInt(quantityElem.text()) || 1;
+                        if (quantity > 1) {
+                            quantity--;
+                            quantityElem.text(quantity);
+                            recalculateTotalPrice();
+                        }
+                    };
+
+
+                    // Show the modal
+                    $('#productModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('There was a problem with the AJAX request:', error);
+                    alert('Failed to retrieve dish details. Please try again.');
+                }
+            });
+        }
+    </script>
 @endsection

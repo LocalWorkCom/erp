@@ -18,12 +18,12 @@
                     <div id="nameError" class="error-message mb-1 text-danger"></div>
 
                 </div>
+                <meta name="csrf-token" content="{{ csrf_token() }}">
 
                 <!-- Phone and Country Code -->
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control  @error('phone') is-invalid @enderror "
-                        name="phone" id="phoneInput" placeholder="@lang('auth.phoneplace')"
-                        value="{{ old('phone') }}" required>
+                    <input type="text" class="form-control  @error('phone') is-invalid @enderror " name="phone"
+                        id="phoneInput" placeholder="@lang('auth.phoneplace')" value="{{ old('phone') }}" required>
                     <select id="country" name="country_code" class="selectpicker me-2" data-live-search="true">
                         @foreach (GetCountries() as $country)
                             <option
@@ -116,11 +116,17 @@
             const formData = new FormData(form);
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
             form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
+            // Retrieve and parse address data from local storage
+            const addressData = localStorage.getItem('addressData');
+            if (addressData) {
+                formData.append('address', JSON.stringify(addressData));
+            }
             fetch(form.action, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json',
                     },
                     body: formData
