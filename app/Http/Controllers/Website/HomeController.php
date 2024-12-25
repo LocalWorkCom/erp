@@ -24,20 +24,22 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        Log::info('Request Cookies:', $request->cookies->all());
-        $sliders = Slider::all();
-        $branches = Branch::all();
-        $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
-        // $discounts = $lastThreeDiscounts->reverse()->take(3);
-        // $discounts = $discounts->reverse();
-        $userLat = $request->cookie('latitude');
-        $userLon = $request->cookie('longitude');
+        // Debug logs for cookies
+        Log::info('Laravel Cookies:', $request->cookies->all());
+        Log::info('Raw Cookies:', $_COOKIE);
+
+        // Retrieve latitude and longitude from cookies
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        // Check if cookies were received
         if ($userLat && $userLon) {
             Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
         } else {
             Log::warning('No coordinates found in cookies');
         }
+
+        // Determine the nearest branch
         if ($userLat && $userLon) {
             $nearestBranch = getNearestBranch($userLat, $userLon);
             if ($nearestBranch) {
@@ -52,11 +54,17 @@ class HomeController extends Controller
             Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
         }
 
+        // Fetch other data for the view
+        $sliders = Slider::all();
+        $branches = Branch::all();
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)
             ->where('is_active', true)
             ->get();
+
+        // Handle user favorites if authenticated
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -64,11 +72,14 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+
+        // Return the view with all data
         return view(
             'website.landing',
             compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
         );
     }
+
 
     public function showMenu(Request $request)
     {
