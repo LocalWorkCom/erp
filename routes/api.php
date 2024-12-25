@@ -794,8 +794,9 @@ Route::prefix('addon-categories')->group(function () {
 Route::get('/static-page', [StaticPageController::class, 'index'])->name('api.static.pages');
 Route::get('/popular', [MostPopularController::class, 'index'])->name('api.popular');
 Route::get('/slider', [SliderController::class, 'index'])->name('api.slider');
-Route::get('/menu', [MenuHomeController::class, 'index'])->name('api.menu');
+//Route::get('/menu', [MenuHomeController::class, 'index'])->name('api.menu');
 Route::get('/dish-menu', [DishCategoryController::class, 'menuDishes'])->name('api.dish.menu');
+Route::get('/branch-near', [BranchController::class, 'listBranchAndNear'])->name('api.branch.near');
 
 //Rates
 Route::group(['prefix' => 'rates'], function () {
