@@ -48,13 +48,25 @@
                         </div>
                         <div class="card-body">
                             @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
+                            <div class="alert alert-solid-info alert-dismissible fade show">
+                                {{ session('message') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        @endif
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                    
+                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
                             @endif
+
                             <table class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
