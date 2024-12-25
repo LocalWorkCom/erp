@@ -68,7 +68,7 @@
                                   </div>
                                   <button class="btn reversed main-color fw-bold" type="button">
                                       @lang('header.edit') </button>
-                                  <button type="submit" class="btn" onclick="showSecondPhase()">
+                                  <button type="submit" id="saveButton" class="btn" onclick="showSecondPhase()">
                                       @lang('header.confirmeaddress') </button>
                               </div>
                           </div>
@@ -108,122 +108,152 @@
                                       </button>
                                   </li>
                               </ul>
-                              <form method="POST" action="{{ route('saveAddress') }}" id="addressForm" onsubmit="return validateActiveTab(event)">
-                                @csrf
-                                <div class="tab-content" id="pills-tabContent">
-                                    <!-- Apartment Tab -->
-                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                        <input type="hidden" class="form-control" name="apartment" value="" id="apartment">
+                              <form method="POST" action="{{ route('saveAddress') }}" id="addressForm"
+                                  onsubmit="saveToLocalStorage(event)">
+                                  @csrf
+                                  <div class="tab-content" id="pills-tabContent">
+                                      <!-- Apartment Tab -->
+                                      <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                          aria-labelledby="pills-home-tab">
+                                          <input type="hidden" class="form-control" name="apartment" value=""
+                                              id="apartment">
 
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="nameapart" placeholder="@lang('header.nameapart')" required>
-                                        </div>
-                                        <div class="mb-3 d-flex">
-                                            <input type="text" class="form-control w-50 ms-2" name="numapart" placeholder="@lang('header.numapart')" required>
-                                            <input type="text" class="form-control w-50 me-2" name="floor" placeholder="@lang('header.Floor')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="addressdetailapart" placeholder="@lang('header.addressdetail')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="markapart" placeholder="@lang('header.mark')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="@lang('header.phoneenter')" name="phoneapart" required>
-                                                <select id="country" name="country_code_apart" class="selectpicker me-2" data-live-search="true" required>
-                                                    @foreach (GetCountries() as $country)
-                                                        <option data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}' value="{{ $country->phone_code }}">
-                                                            {{ $country->phone_code }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="nameapart"
+                                                  placeholder="@lang('header.nameapart')">
+                                          </div>
+                                          <div class="mb-3 d-flex">
+                                              <input type="text" class="form-control w-50 ms-2" name="numapart"
+                                                  placeholder="@lang('header.numapart')">
+                                              <input type="text" class="form-control w-50 me-2" name="floor"
+                                                  placeholder="@lang('header.Floor')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="addressdetailapart"
+                                                  placeholder="@lang('header.addressdetail')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="markapart"
+                                                  placeholder="@lang('header.mark')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <div class="input-group">
+                                                  <input type="text" class="form-control"
+                                                      placeholder="@lang('header.phoneenter')" name="phoneapart">
+                                                  <select id="country" name="country_code_apart"
+                                                      class="selectpicker me-2" data-live-search="true">
+                                                      @foreach (GetCountries() as $country)
+                                                          <option
+                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                              value="{{ $country->phone_code }}">
+                                                              {{ $country->phone_code }}
+                                                          </option>
+                                                      @endforeach
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
 
-                                    <!-- Villa Tab -->
-                                    <div class="tab-pane fade" id="pills-villa" role="tabpanel" aria-labelledby="pills-villa-tab">
-                                        <input type="hidden" class="form-control" name="villa" value="" id="villa">
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="namevilla" placeholder="@lang('header.namevilla')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="villanumber" placeholder="@lang('header.villanumber')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="addressdetailvilla" placeholder="@lang('header.addressdetail')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="markvilla" placeholder="@lang('header.mark')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="phonevilla" placeholder="@lang('header.phoneenter')" required>
-                                                <select id="country" name="country_code_villa" class="selectpicker me-2" data-live-search="true" required>
-                                                    @foreach (GetCountries() as $country)
-                                                        <option data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}' value="{{ $country->phone_code }}">
-                                                            {{ $country->phone_code }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                      <!-- Villa Tab -->
+                                      <div class="tab-pane fade" id="pills-villa" role="tabpanel"
+                                          aria-labelledby="pills-villa-tab">
+                                          <input type="hidden" class="form-control" name="villa" value=""
+                                              id="villa">
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="namevilla"
+                                                  placeholder="@lang('header.namevilla')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="villanumber"
+                                                  placeholder="@lang('header.villanumber')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="addressdetailvilla"
+                                                  placeholder="@lang('header.addressdetail')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="markvilla"
+                                                  placeholder="@lang('header.mark')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <div class="input-group">
+                                                  <input type="text" class="form-control" name="phonevilla"
+                                                      placeholder="@lang('header.phoneenter')">
+                                                  <select id="country" name="country_code_villa"
+                                                      class="selectpicker me-2" data-live-search="true">
+                                                      @foreach (GetCountries() as $country)
+                                                          <option
+                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                              value="{{ $country->phone_code }}">
+                                                              {{ $country->phone_code }}
+                                                          </option>
+                                                      @endforeach
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
 
-                                    <!-- Office Tab -->
-                                    <div class="tab-pane fade" id="pills-work" role="tabpanel" aria-labelledby="pills-work-tab">
-                                        <input type="hidden" class="form-control" name="office" value="" id="office">
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="nameoffice" placeholder="@lang('header.nameoffice')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="numaoffice" placeholder="@lang('header.numaoffice')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="addressdetailoffice" placeholder="@lang('header.addressdetail')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control" name="markoffice" placeholder="@lang('header.mark')" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="phoneoffice" placeholder="@lang('header.phoneenter')" required>
-                                                <select id="country" name="country_code_office" class="selectpicker me-2" data-live-search="true" required>
-                                                    @foreach (GetCountries() as $country)
-                                                        <option data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}' value="{{ $country->phone_code }}">
-                                                            {{ $country->phone_code }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                      <!-- Office Tab -->
+                                      <div class="tab-pane fade" id="pills-work" role="tabpanel"
+                                          aria-labelledby="pills-work-tab">
+                                          <input type="hidden" class="form-control" name="office" value=""
+                                              id="office">
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="nameoffice"
+                                                  placeholder="@lang('header.nameoffice')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="numaoffice"
+                                                  placeholder="@lang('header.numaoffice')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="addressdetailoffice"
+                                                  placeholder="@lang('header.addressdetail')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <input type="text" class="form-control" name="markoffice"
+                                                  placeholder="@lang('header.mark')">
+                                          </div>
+                                          <div class="mb-3">
+                                              <div class="input-group">
+                                                  <input type="text" class="form-control" name="phoneoffice"
+                                                      placeholder="@lang('header.phoneenter')">
+                                                  <select id="country" name="country_code_office"
+                                                      class="selectpicker me-2" data-live-search="true">
+                                                      @foreach (GetCountries() as $country)
+                                                          <option
+                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                              value="{{ $country->phone_code }}">
+                                                              {{ $country->phone_code }}
+                                                          </option>
+                                                      @endforeach
+                                                  </select>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
                                   <div class="tab-footer justify-content-end d-flex">
-                                      <button type="submit" class="btn">
+                                      <button type="submit" class="btn" onclick="saveAddress(event)">
                                           @lang('header.saveaddressc')
                                       </button>
                                   </div>
                               </form>
                           </div>
-                          <div class="third-phase d-none">
+                          <div class="third-phase d-none" id="thirdPhase">
                               <div>
                                   <h6 class="fw-bold">
                                       @lang('header.deliverylocation') </h6>
                                   <div class="d-flex justify-content-between">
-                                      <p>
+                                      <p id="addressSummary">
                                           <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                          مصدق الدقى و المهندسين وجيزه
                                       </p>
-                                      <button class="btn reversed main-color fw-bold" type="button">
+                                      <button class="btn reversed main-color fw-bold" type="button"
+                                          onclick="editAddress()">
                                           @lang('header.edit')
                                       </button>
                                   </div>
 
-                                  <p class="text-muted">
-                                      121 مصدق , الدور 2 , شقة 12 ,رقم الهاتف: 01029061189 ,علامة مميزة: امام ماركت
-                                      الصفا
+                                  <p class="text-muted" id="detailedAddress">
                                   </p>
 
                               </div>
@@ -402,49 +432,74 @@
   </div>
   <!-- end delivery details modal -->
   @push('scripts')
-  <script>
-    function validateActiveTab(event) {
-        // Find the active tab
-        const activeTab = document.querySelector('.tab-pane .active .show');
+      <script>
+          function saveAddress(event) {
+              event.preventDefault();
 
-        if (!activeTab) {
-            return true; // If there's no active tab, prevent form submission
-        }
+              const activeTab = document.querySelector('.tab-pane.active');
+              if (!activeTab) {
+                  alert("Please fill out the address form.");
+                  return;
+              }
 
-        // Get all required inputs in the active tab (including select elements)
-        const requiredInputs = activeTab.querySelectorAll('input[required], select[required]');
-        let isValid = true;
+              // Collect data from active tab inputs
+              const inputs = activeTab.querySelectorAll('input, select, textarea');
+              const addressData = {};
+              inputs.forEach(input => {
+                  if (input.name) {
+                      addressData[input.name] = input.value;
+                  }
+              });
 
-        // Reset previous validation states
-        requiredInputs.forEach(input => {
-            input.classList.remove('is-invalid');
-        });
+              // Save to localStorage
+              localStorage.setItem("addressData", JSON.stringify(addressData));
 
-        // Check each required input
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                input.classList.add('is-invalid');  // Add invalid class for styling
-                isValid = false;
-            }
-        });
+              // Display data in third-phase
+              displayAddressInThirdPhase();
 
-        // If invalid, scroll to the first invalid input
-        if (!isValid) {
-            const firstInvalid = activeTab.querySelector('input.is-invalid, select.is-invalid');
-            if (firstInvalid) {
-                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
+              // Hide form sections and show third-phase
+                document.querySelector('.second-phase').classList.add('d-none');
+              document.getElementById('thirdPhase').classList.remove('d-none');
+          }
 
-        // If not valid, prevent form submission
-        if (!isValid) {
-            event.preventDefault();
-            return false;
-        }
+          function displayAddressInThirdPhase() {
+              const addressData = JSON.parse(localStorage.getItem("addressData"));
 
-        // If valid, allow the form to submit
-        return true;
-    }
-</script>
+              if (addressData) {
+                  const summary = `${addressData.nameapart || addressData.namevilla || addressData.nameoffice || "Address"}: ${
+                addressData.addressdetailapart || addressData.addressdetailvilla || addressData.addressdetailoffice || "Details"
+            }`;
 
+                  const detailed = `Floor: ${addressData.floor || "-"}, Apt/Villa/Office: ${addressData.numapart || addressData.villanumber || addressData.numaoffice || "-"}.
+            Phone: ${addressData.phoneapart || addressData.phonevilla || addressData.phoneoffice || "-"}, Landmark: ${
+                addressData.markapart || addressData.markvilla || addressData.markoffice || "-"
+            }`;
+
+                  document.getElementById("addressSummary").innerHTML =
+                      `<i class="fas fa-map-marker-alt main-color ms-2"></i> ${summary}`;
+                  document.getElementById("detailedAddress").textContent = detailed;
+              }
+          }
+
+          function editAddress() {
+              const addressData = JSON.parse(localStorage.getItem("addressData"));
+
+              if (addressData) {
+                  // Populate the second-phase inputs with the data
+                  const secondPhase = document.querySelector('.second-phase');
+                  const inputs = secondPhase.querySelectorAll('input, select, textarea');
+                  inputs.forEach(input => {
+                      if (addressData[input.name]) {
+                          input.value = addressData[input.name];
+                      }
+                  });
+
+                  // Hide third-phase and show second-phase
+                  document.getElementById('thirdPhase').classList.add('d-none');
+                  secondPhase.classList.remove('d-none');
+              } else {
+                  alert("No saved address data to edit.");
+              }
+          }
+      </script>
   @endpush
