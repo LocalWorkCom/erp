@@ -42,7 +42,6 @@ Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('s
 
 
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
-<<<<<<< HEAD
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 
@@ -53,8 +52,6 @@ Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoo
 Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->name('myfatoorah.callback');
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
-=======
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
->>>>>>> d86b67ac298d33e1c9ca83e854d50f255f26ef7c
