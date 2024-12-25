@@ -10,6 +10,7 @@
             <div class="col-md-7 right-side p-3">
                 <h2 class="main-color fw-bold">@lang('auth.welcome')</h2>
                 <h5>@lang('auth.getlogin')</h5>
+                <meta name="csrf-token" content="{{ csrf_token() }}">
 
                 <!-- Phone Input -->
 
@@ -82,17 +83,26 @@
 </div>
 @push('scripts')
     <script>
-          document.getElementById('login-Form').addEventListener('submit', function(event) {
+        document.getElementById('login-Form').addEventListener('submit', function(event) {
             event.preventDefault();
             const form = event.target;
             const formData = new FormData(form);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            // Clear previous errors
             document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
             form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+            // Retrieve and parse address data from local storage
+            const addressData = localStorage.getItem('addressData');
+            if (addressData) {
+                formData.append('address', JSON.stringify(addressData));
+            }
 
             fetch(form.action, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': csrfToken,
                         'Accept': 'application/json',
                     },
                     body: formData
@@ -122,9 +132,12 @@
                                 inputElement.classList.add('is-invalid');
                             }
                         }
-                    } else {}
+                    } else {
+                        console.error('An unexpected error occurred:', error);
+                    }
                 });
         });
+
         // $(document).ready(function() {
         //     $('#login-Form').on('submit', function(event) {
         //         event.preventDefault();
@@ -137,12 +150,12 @@
         //                 console.log(response);
         //                 if (response.status === 'success') {
         //                     $('#loginBody').html(`
-        //                         <div class="text-center">
-        //                             <h3>Login successful!</h3>
-        //                             <p>Welcome, ${response.data.user.name}!</p>
-        //                             <button class="btn btn-primary" onclick="window.location.href='/home'">Go to Dashboard</button>
-        //                         </div>
-        //                     `);
+    //                         <div class="text-center">
+    //                             <h3>Login successful!</h3>
+    //                             <p>Welcome, ${response.data.user.name}!</p>
+    //                             <button class="btn btn-primary" onclick="window.location.href='/home'">Go to Dashboard</button>
+    //                         </div>
+    //                     `);
         //                     setTimeout(function() {
         //                         window.location.href =
         //                         '/';

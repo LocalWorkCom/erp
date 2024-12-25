@@ -55,6 +55,17 @@
                                     </button>
                                 </div>
                             @endif
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
+
                             <table class="table table-bordered text-nowrap" style="width:100%">
                                 <thead>
                                     <tr>
@@ -104,10 +115,10 @@
                                                         @lang('category.delete') <i class="ri-delete-bin-line"></i>
                                                     </button>
                                                 </form>
-                                                @if($discount->is_active == 1)
+                                                @if ($discount->is_active == 1)
                                                     @can('view discount_dishes')
                                                         <a href="{{ url('dashboard/discounts/dish/list') }}/{{ $discount->id }}"
-                                                           class="btn btn-outline-teal btn-wave">
+                                                            class="btn btn-outline-teal btn-wave">
                                                             @lang('discount.AddDishes') <i class="ri-add-box-line"></i>
                                                         </a>
                                                     @endcan

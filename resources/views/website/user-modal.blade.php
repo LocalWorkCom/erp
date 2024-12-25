@@ -21,7 +21,8 @@
                                 {{ Auth::guard('client')->user()->email ?? '' }}
                             </small>
                         </div>
-                        <button class="btn reversed main-color" type="button">
+                        <button class="btn reversed main-color" type="button"
+                            onclick="window.location.href='{{ route('website.profile.view') }}';">
                             @lang('header.editprofile')
                         </button>
                     </div>
@@ -47,7 +48,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="addresses.html">
+                            <a href="{{ route('showAddress') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-map-marker-alt main-color ms-2"></i>
 
@@ -66,7 +67,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="favourites.html">
+                            <a href="{{ route('show.favorites') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-heart main-color ms-2"></i>
                                     @lang('header.favorite')
@@ -83,8 +84,7 @@
                                 </h6>
                             </a>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckDefault">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                             </div>
                         </li>
                         <li>
@@ -97,7 +97,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="policy.html">
+                            <a href="{{ route('terms') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-file-alt main-color ms-2"></i>
                                     @lang('header.policy')
@@ -106,7 +106,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="privacy.html">
+                            <a href="{{ route('privacy') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
                                     @lang('header.privacy')
@@ -125,15 +125,14 @@
                             <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logos_whatsapp-icon.png') }} " />
                         </li>
                         <li>
-                            <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
-                                @csrf
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
+
+                                <a href="#">
                                     <h6 class="fw-bold">
                                         <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                         @lang('header.logout')
                                     </h6>
                                 </a>
-                            </form>
+
                         </li>
 
                     </ul>
@@ -141,4 +140,69 @@
             </div>
         </div>
     </div>
+    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
+                    @csrf
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
+                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
+                    </div>
+                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+                        <button type="submit" class="btn w-25 mx-2">  @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2" data-bs-dismiss="modal">@lang('header.cancel')</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 @endauth
+@push('scripts')
+<script>
+    // logout modal
+    document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const profileModal = document.getElementById("profileModal");
+            const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+            if (profileModal) {
+                const profileInstance = bootstrap.Modal.getInstance(profileModal);
+                if (profileInstance) {
+                    profileInstance.hide();
+                }
+            }
+            logoutModal.show();
+        });
+    }
+
+    // Handling close behavior manually if necessary
+    const closeButton = document.querySelector('.btn-close');
+    const cancelButton = document.querySelector('.btn.reversed.main-color');
+
+    if (closeButton) {
+        closeButton.addEventListener('click', function () {
+            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            logoutModal.hide();
+        });
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function () {
+            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            logoutModal.hide();
+        });
+    }
+});
+);
+    </script>
+@endpush

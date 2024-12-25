@@ -23,5 +23,11 @@ return[
     'SelectCountry' => 'اختر دولة',
     'SelectEmployee' => 'اختر مدير',
     'IsDefault' => 'الفرع الرئيسى',
+    'ChooseBranchDetails' => 'اختار تفاصيل الفرع',
+    'branchMenuCategory' => 'تصنيف الاطباق للفرع',
+    'branchMenu' => 'قائمة الاطباق للفروع',
+    'branchMenuCategoryAddon' => 'تصنيف اضافات الاطباق للفروع',
+    'branchMenuAddon' => 'اضافات الاطباق للفروع',
+    'branchMenuSize' => 'احجام الاطباق للفروع',
 
 ];

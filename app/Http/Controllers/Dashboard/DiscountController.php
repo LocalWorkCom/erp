@@ -24,8 +24,8 @@ class DiscountController extends Controller
     public function __construct(DiscountService $discountService)
     {
         $this->discountService = $discountService;
-        $this->lang =  app()->getLocale();
         $this->checkToken = false;
+        $this->lang =  app()->getLocale();
     }
 
     public function index(Request $request)
@@ -53,6 +53,7 @@ class DiscountController extends Controller
                 $validationErrors = $responseData['data'];
                 return redirect()->back()->withErrors($validationErrors)->withInput();
             } else {
+                // dd(0);
                 return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
 

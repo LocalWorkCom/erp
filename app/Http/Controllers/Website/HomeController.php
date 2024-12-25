@@ -24,23 +24,32 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        if ($userLat && $userLon) {
+            Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
+        } else {
+            Log::warning('No coordinates found in cookies');
+        }
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
+        }
+
         $sliders = Slider::all();
         $branches = Branch::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        // $lastThreeDiscounts = DishDiscount::with(['dish', 'discount'])->get();
-        // $discounts = $lastThreeDiscounts->reverse()->take(3);
-        // $discounts = $discounts->reverse();
-        $userLat = $request->cookie('latitude');
-        $userLon = $request->cookie('longitude');
-
-        $branchId = $userLat && $userLon
-            ? getNearestBranch($userLat, $userLon)
-            : getDefaultBranch();
-
-        if (!$branchId) {
-            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
-        }
-
         $popularDishes = getMostDishesOrdered(5);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)
@@ -60,14 +69,36 @@ class HomeController extends Controller
         );
     }
 
-    public function showMenu()
+
+    public function showMenu(Request $request)
     {
-        $branches = Branch::all();
-        $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
-            $query->where('is_active', true);
-        }, 'dish_categories.dishes' => function ($query) {
-            $query->where('is_active', true);
-        }])->get();
+
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected:', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch:', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch:', ['branchId' => $branchId]);
+        }
+
+        if (!$branchId) {
+            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        }
+
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('branch_id', $branchId)
+            ->where('is_active', true)
+            ->get();
+
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -75,11 +106,13 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+
         return view(
             'website.menu',
-            compact(['menuCategories', 'branches',  'userFavorites'])
+            compact(['menuCategories', 'userFavorites'])
         );
     }
+
     public function contactUs()
     {
         $branches = Branch::all();
@@ -93,20 +126,23 @@ class HomeController extends Controller
     {
         $privacies = StaticPageResource::collection(PrivacyPolicy::all());
         $privaciesArray = $privacies->toArray(request());
-        return view('website.privacy', compact('privaciesArray'));
+        $branches = Branch::all();
+        return view('website.privacy', compact('privaciesArray','branches'));
     }
 
     public function return()
     {
         $returns = StaticPageResource::collection(ReturnPolicy::all());
         $returnsArray = $returns->toArray(request());
-        return view('website.return', compact('returnsArray'));
+        $branches = Branch::all();
+        return view('website.return', compact('returnsArray','branches'));
     }
     public function terms()
     {
         $terms = StaticPageResource::collection(TermsAndCondition::all());
         $termsArray = $terms->toArray(request());
-        return view('website.terms', compact('termsArray'));
+        $branches = Branch::all();
+        return view('website.terms', compact('termsArray','branches'));
     }
 
     public function addFavorite(Request $request)
@@ -144,14 +180,30 @@ class HomeController extends Controller
         }
     }
 
-    public function showFavorites()
+    public function showFavorites(Request $request)
     {
-        $branches = Branch::all();
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+            } else {
+                $branchId = getDefaultBranch();
+            }
+        } else {
+            $branchId = getDefaultBranch();
+        }
+
         $menuCategories = BranchMenuCategory::with(['dish_categories' => function ($query) {
             $query->where('is_active', true);
         }, 'dish_categories.dishes' => function ($query) {
             $query->where('is_active', true);
-        }])->get();
+        }])
+            ->where('branch_id', $branchId)
+            ->get();
+
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -161,7 +213,7 @@ class HomeController extends Controller
         }
         return view(
             'website.favorites',
-            compact(['menuCategories', 'branches',  'userFavorites'])
+            compact(['menuCategories', 'userFavorites'])
         );
     }
 }

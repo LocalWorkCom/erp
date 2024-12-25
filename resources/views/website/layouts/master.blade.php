@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/aos-master/dist/aos.css') }}">
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
     <!-- Owl Carousel -->
     <link rel="stylesheet"
         href="{{ asset('front/AlKout-Resturant/SiteAssets/OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css') }}" />
@@ -38,7 +38,12 @@
     <!-- include Gallery (lightbox) plugin -->
     <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/lightbox/css/lightbox.min.css') }}" />
     <!-- Main Style -->
-    <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/style.css') }}" type="text/css" />
+    @if (app()->getLocale() == 'ar')
+        <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/style.css') }}" type="text/css" />
+    @else
+        <link rel="stylesheet" href="{{ asset('front/AlKout-Resturant/SiteAssets/css/style-EN.css') }}"
+            type="text/css" />
+    @endif
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,7 +113,8 @@
                                         {{ $isOpen ? 'مفتوح' : 'مغلق' }}
                                     </span>
                                 </div>
-                                <p class="text-muted mx-2 branch-address">{{ $branch->address }}</p>
+                                <p class="text-muted mx-2 branch-address">
+                                    {{ $branch->address }}</p>
                                 <p class="main-color fw-bold">
                                     <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
                                 </p>
@@ -153,10 +159,15 @@
                 const query = e.target.value.toLowerCase();
 
                 branchItems.forEach((item) => {
-                    const name = item.querySelector('.branch-name').textContent.toLowerCase();
-                    const address = item.querySelector('.branch-address').textContent.toLowerCase();
+                    const name = item.querySelector(
+                            '.branch-name').textContent
+                        .toLowerCase();
+                    const address = item.querySelector(
+                            '.branch-address').textContent
+                        .toLowerCase();
 
-                    if (name.includes(query) || address.includes(query)) {
+                    if (name.includes(query) || address
+                        .includes(query)) {
                         item.style.display = '';
                     } else {
                         item.style.display = 'none';
@@ -165,7 +176,7 @@
             });
         });
     </script>
-  
+
     @stack('scripts')
 </body>
 

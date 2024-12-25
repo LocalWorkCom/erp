@@ -19,7 +19,8 @@ return [
     'description_en' => 'الوصف بالانجليزي',
     'yes' => 'نعم',
     'no' => 'لا',
-    'none' => 'لا يوجد',
+    'none' => 'لا يوجد ',
     'parent' => 'الصنف الاب',
     'save' => 'حفظ',
+    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
 ];

@@ -82,5 +82,6 @@ return [
     'branchMenuSize' => 'Branch Menu Size',
     'branchMenuCategoryAddon' => 'branch Menu Category Addons',
     'Addons'=>'Addons',
+    'Rates'=>'Rates',
 
 ];

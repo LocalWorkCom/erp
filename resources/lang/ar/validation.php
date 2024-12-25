@@ -1,7 +1,11 @@
 <?php
 return [
     'required' => ' :attribute مطلوب.',
-    'email' => 'يجب أن يكون :attribute عنوان بريد إلكتروني صالحًا.',
+    'email' => ':attribute يجب أن يكون بريدًا إلكترونيًا صالحًا.',
+    'date_format' => ':attribute يجب أن يتطابق مع التنسيق :format.',
+    'string' => ':attribute يجب أن يكون نصًا.',
+    'max' => ':attribute لا يمكن أن يكون أكبر من :max حرفًا.',
+    'confirmed' => 'تأكيد :attribute غير متطابق.',
     'unique' => 'عفوا  :attribute مأخوذ مسبقا',
     'name' => ' :attribute مطلوب.',
     'phone' => ' :attribute مطلوب.',
@@ -82,7 +86,10 @@ return [
     'DataExistMessage' => 'موجود بالفعل',
     'regex' => 'صيغة :attribute غير صحيحة.',
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
+    'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
+    'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'attributes' => [
+        'birth_date' => 'تاريخ الميلاد',
 
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
@@ -105,6 +112,8 @@ return [
         "name_ar" => "الأسم بالعربيه",
         "hexa_code" => "الكود بالهكسا",
         "name_en" => "الأسم بالأنجليزيه",
+        "description_ar" => "الوصف بالعربيه",
+        "description_en" => "الوصف بالأنجليزيه",
         'currency_ar' => 'العمله بالعربى',
         'currency_en' => 'العمله بالأنجليزيه',
         'currency_code' => 'كود العمله',
@@ -163,7 +172,11 @@ return [
         'image_en' => 'الصورة بالانجليزي',
         'branches' => 'الفروع',
         'branches.*' => 'فرع',
-        'type_id'=>'اسم النوع'
+        'type_id'=>'اسم النوع',
+        'active'=>'الفعالية',
+        'value'=>'القيمة',
+        'min_limit' => 'الحد الادنى',
+        'max_limit' => 'الحد الاقصى',
 
     ],
 
@@ -211,7 +224,8 @@ return [
     'EnterLeaveType' => 'يجب اختيار انواع الاجازات',
     'EnterMinmum' => 'يجب ادخال الحد الادنى',
     'EnterMaxmum' => 'يجب ادخال الحد الاقصى',
+    'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
-
+    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
 ];

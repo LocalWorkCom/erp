@@ -237,6 +237,54 @@ function formatTime(time) {
   return time < 10 ? "0" + time : time;
 }
 
+  // logout modal
+  document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (event) {
+        event.preventDefault(); 
+
+        const profileModal = document.getElementById("profileModal");
+        const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+        if (profileModal) {
+          const profileInstance = bootstrap.Modal.getInstance(profileModal);
+          if (profileInstance) {
+            profileInstance.hide();
+          }
+        }
+        logoutModal.show();
+      });
+    }
+  });
+
+
+  // notfications-alert modal 
+  document.addEventListener("DOMContentLoaded", function () {
+    const notificationSwitch = document.getElementById("notificationSwitch");
+    const profileBody = document.querySelector(".profile-body");
+    const notificationBody = document.querySelector(".notification-body");
+    const cancelNotification = document.getElementById("cancelNotification");
+
+    // Handle switch toggle
+    notificationSwitch.addEventListener("change", function () {
+        if (this.checked) {
+            profileBody.classList.add("d-none"); // Hide profile body
+            notificationBody.classList.remove("d-none"); // Show notification body
+        } else {
+            profileBody.classList.remove("d-none"); // Show profile body
+            notificationBody.classList.add("d-none"); // Hide notification body
+        }
+    });
+
+    // Handle cancel button in notification body
+    cancelNotification.addEventListener("click", function () {
+        profileBody.classList.remove("d-none"); // Show profile body
+        notificationBody.classList.add("d-none"); // Hide notification body
+        notificationSwitch.checked = false; // Reset switch
+    });
+});
 // wizard js 
 
 $(document).ready(function () {
@@ -471,6 +519,17 @@ function showThirdPhase() {
   document.querySelector('.second-phase').classList.add('d-none');
   document.querySelector('.third-phase').classList.remove('d-none');
 }
+function showAddPhase() {
+  document.querySelector('.fourth-phase').classList.add('d-none');
+  document.querySelector('.add-phase').classList.remove('d-none');
+}
 
-
+function showAddPhase2() {
+  document.querySelector('.add-phase').classList.add('d-none');
+  document.querySelector('.add-phase2').classList.remove('d-none');
+}
+function showAddPhase3() {
+  document.querySelector('.add-phase2').classList.add('d-none');
+  document.querySelector('.add-phase3').classList.remove('d-none');
+}
 

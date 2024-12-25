@@ -20,8 +20,6 @@ class BranchController extends Controller
 
     public function index(Request $request)
     {
-        //return $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
-
         $response = $this->branchService->index($request);
         $responseData = $response->original;
         $branches = $responseData['data'];

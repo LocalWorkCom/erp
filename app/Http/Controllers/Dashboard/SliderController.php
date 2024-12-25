@@ -12,12 +12,7 @@ use Illuminate\Support\Facades\File;
 
 class SliderController extends Controller
 {
-    protected $lang;
 
-    public function __construct()
-    {
-        $this->lang =  app()->getLocale();
-    }
     /**
      * Display a listing of the resource.
      */
@@ -34,7 +29,7 @@ class SliderController extends Controller
     public function create()
     {
         $dishes = Dish::all();
-        $offers = Offer::all();
+        $offers = Offer::where('is_active', 1)->get();
         return view('dashboard.slider.add', compact('dishes', 'offers'));
     }
 
@@ -43,6 +38,7 @@ class SliderController extends Controller
      */
     public function store(SliderFormRequest $request)
     {
+        $lang =  app()->getLocale();
         $data = $request->validated();
         $slider = new Slider();
         $slider->name_ar = $data['name_ar'];
@@ -57,7 +53,7 @@ class SliderController extends Controller
 //        dd($image);
         UploadFile('images/sliders', 'image', $slider, $image);
         $slider->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message= $responseData['message'];
         return redirect('dashboard/sliders')->with('message',$message);
@@ -88,6 +84,7 @@ class SliderController extends Controller
      */
     public function update(SliderFormRequest $request, string $id)
     {
+        $lang =  app()->getLocale();
         $data = $request->validated();
         $slider = Slider::findOrFail($id);
         $slider->name_ar = $data['name_ar'];
@@ -104,7 +101,7 @@ class SliderController extends Controller
             UploadFile('images/sliders', 'image', $slider, $image);
         }
         $slider->save();
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/sliders')->with('message', $message);
@@ -115,6 +112,7 @@ class SliderController extends Controller
      */
     public function destroy(string $id)
     {
+        $lang =  app()->getLocale();
         $slider = Slider::findOrFail($id);
 
         if ($slider->image) {
@@ -127,7 +125,7 @@ class SliderController extends Controller
 
         $slider->delete();
 
-        $response = RespondWithSuccessRequest($this->lang, 1);
+        $response = RespondWithSuccessRequest($lang, 1);
         $responseData = $response->original;
         $message = $responseData['message'];
         return redirect('dashboard/sliders')->with('message', $message);

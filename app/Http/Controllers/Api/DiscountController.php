@@ -13,7 +13,8 @@ class DiscountController extends Controller
     {
         try {
             $lang = $request->header('lang', 'en');
-            $discounts = Discount::with(['branches', 'dishes'])->get();
+
+            $discounts = Discount::with(['branches', 'dishes'])->get(); // Fetch with filtered dishes
 
             // Adjust for translation fields
             foreach ($discounts as $discount) {
@@ -26,6 +27,8 @@ class DiscountController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
+
 
     public function show(Request $request, $id)
     {
@@ -53,9 +56,9 @@ class DiscountController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  
+                'branches' => 'nullable|array',
                 'branches.*' => 'integer|exists:branches,id',
-                'dishes' => 'nullable|array',  
+                'dishes' => 'nullable|array',
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 
@@ -96,9 +99,9 @@ class DiscountController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date|after_or_equal:start_date',
                 'is_active' => 'required|boolean',
-                'branches' => 'nullable|array',  
+                'branches' => 'nullable|array',
                 'branches.*' => 'integer|exists:branches,id',
-                'dishes' => 'nullable|array',  
+                'dishes' => 'nullable|array',
                 'dishes.*' => 'integer|exists:dishes,id',
             ]);
 

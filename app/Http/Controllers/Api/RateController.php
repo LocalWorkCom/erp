@@ -25,7 +25,7 @@ class RateController extends Controller
      */
     public function index()
     {
-        $rates = Rate::get();
+        $rates = Rate::where('active',1)->get();
         return ResponseWithSuccessData($this->lang, RateResource::collection($rates), 1);
     }
 
@@ -37,6 +37,7 @@ class RateController extends Controller
         $data = $request->validate([
             'value' => 'required|numeric|in:1,2,3,4,5',
             'note' => 'nullable|string',
+            'active' => 'required|in:0,1',
         ]);
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id ?? 1
             : $data['modified_by'] =Auth::guard('api')->user()->id ?? 1;
@@ -51,7 +52,7 @@ class RateController extends Controller
      */
     public function show(string $id)
     {
-        $data = Rate::find($id);
+        $data = Rate::where('active',1)->find($id);
 
         if (!$data) {
             return RespondWithBadRequestData($this->lang, 2);

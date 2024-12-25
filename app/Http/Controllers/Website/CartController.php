@@ -11,6 +11,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\BranchMenuSize;
 use App\Models\Discount;
 use App\Models\DishDiscount;
+use App\Models\Order;
 use App\Models\PrivacyPolicy;
 use App\Models\Recipe;
 use App\Models\ReturnPolicy;
@@ -135,14 +136,18 @@ class CartController extends Controller
                     'message' => 'Coupon is valid.',
                 ]);
             }
-
-          
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error checking coupon validity.',
             ], 500);
         }
+    }
+    public function trackOrder($orderId)
+    {
+        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+            ->findOrFail($orderId);
+
+        return view('website.track-order', compact('order'));
     }
 }
