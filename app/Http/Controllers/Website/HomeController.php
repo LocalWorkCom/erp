@@ -83,7 +83,6 @@ class HomeController extends Controller
 
     public function showMenu(Request $request)
     {
-        $branches = Branch::all();
 
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
@@ -121,7 +120,7 @@ class HomeController extends Controller
 
         return view(
             'website.menu',
-            compact(['menuCategories', 'branches', 'userFavorites'])
+            compact(['menuCategories', 'userFavorites'])
         );
     }
 
