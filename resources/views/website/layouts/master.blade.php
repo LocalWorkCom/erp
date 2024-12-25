@@ -13,6 +13,8 @@
     <meta property="og:title" content="" />
     <meta property="og:description" content="" />
     <meta property="og:image" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@lang('website/home.title')</title>
 
     <link rel="shortcut icon" href="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}" sizes="25x25" />
@@ -174,89 +176,7 @@
             });
         });
     </script>
-    <!--
-  <script>
-      $('.owl-slider').owlCarousel({
-          items: 1,
-          loop: true,
-          dots: true,
-          nav: true,
-          autoplay: true,
-          smartSpeed: 450,
-          rtl: true,
-      });
 
-      $('.categories-slider').owlCarousel({
-          items: 5,
-          loop: true,
-          dots: true,
-          nav: true,
-          margin: 15,
-          pagination: false,
-          autoplay: false,
-          autoplaySpeed: 1000,
-          autoplayTimeout: 3000,
-          rtl: true,
-          responsive: {
-              0: {
-                  items: 1,
-                  nav: true,
-                  dots: false
-              },
-
-              600: {
-                  items: 2,
-                  nav: true
-              },
-
-              900: {
-                  items: 3,
-                  nav: true
-              },
-
-              1200: {
-                  items: 5,
-                  nav: true
-              }
-          }
-      });
-      $('.plates-slider').owlCarousel({
-          items: 4,
-          loop: false,
-          dots: true,
-          nav: true,
-          margin: 15,
-          pagination: false,
-          autoplay: false,
-          autoplaySpeed: 1000,
-          autoplayTimeout: 3000,
-          rtl: true,
-          responsive: {
-              0: {
-                  items: 1,
-                  nav: true,
-                  dots: false
-              },
-
-              600: {
-                  items: 2,
-                  nav: true
-              },
-
-              900: {
-                  items: 3,
-                  nav: true
-              },
-
-              1200: {
-                  items: 4,
-                  nav: true
-              }
-          }
-      });
-      $(".owl-prev > span").html('<i class="fas fa-arrow-right"></i>');
-      $(".owl-next > span").html('<i class="fas fa-arrow-left"></i>');
-  </script> -->
     @stack('scripts')
 </body>
 

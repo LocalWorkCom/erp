@@ -14,15 +14,15 @@ function closeNav() {
   document.getElementById("sidenav").style.width = "0";
 }
 function openCart() {
-  document.getElementById("sideCart").style.width = "450px"; 
+  document.getElementById("sideCart").style.width = "450px";
   document.getElementById("blur-overlay").classList.add("active");
-  document.body.classList.add("no-scroll"); 
+  document.body.classList.add("no-scroll");
 }
 
 function closeCart() {
-  document.getElementById("sideCart").style.width = "0"; 
-  document.getElementById("blur-overlay").classList.remove("active"); 
-  document.body.classList.remove("no-scroll"); 
+  document.getElementById("sideCart").style.width = "0";
+  document.getElementById("blur-overlay").classList.remove("active");
+  document.body.classList.remove("no-scroll");
 }
 
 $(document).ready(function () {
@@ -104,7 +104,7 @@ $(document).ready(function () {
       // }
     }
   });
-  
+
   $('.plates-slider').owlCarousel({
     items: 4,
     loop: false,
@@ -228,7 +228,7 @@ function startCountdown(seconds) {
     seconds--;
     if (seconds < 0) {
       clearInterval(interval);
-      timerElement.innerHTML = "00:00"; 
+      timerElement.innerHTML = "00:00";
     }
   }, 1000);
 }
@@ -242,29 +242,29 @@ function formatTime(time) {
 $(document).ready(function () {
   //Enable Tooltips
   var tooltipTriggerList = [].slice.call(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl);
+    return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
   //Advance Tabs
   $(".next").click(function () {
-      const nextTabLinkEl = $(".nav-tabs .active")
-          .closest("li")
-          .next("li")
-          .find("a")[0];
-      const nextTab = new bootstrap.Tab(nextTabLinkEl);
-      nextTab.show();
+    const nextTabLinkEl = $(".nav-tabs .active")
+      .closest("li")
+      .next("li")
+      .find("a")[0];
+    const nextTab = new bootstrap.Tab(nextTabLinkEl);
+    nextTab.show();
   });
 
   $(".previous").click(function () {
-      const prevTabLinkEl = $(".nav-tabs .active")
-          .closest("li")
-          .prev("li")
-          .find("a")[0];
-      const prevTab = new bootstrap.Tab(prevTabLinkEl);
-      prevTab.show();
+    const prevTabLinkEl = $(".nav-tabs .active")
+      .closest("li")
+      .prev("li")
+      .find("a")[0];
+    const prevTab = new bootstrap.Tab(prevTabLinkEl);
+    prevTab.show();
   });
 });
 
@@ -272,16 +272,60 @@ $(document).ready(function () {
 // ********************************************* 
 //  product quantity 
 let quantity = 1;
-function increaseQuantity() {
+// function increaseQuantity(ele) {
+//   quantity++;
+//   console.log(ele);
+//   var total = $(ele).parent().parent().find('.total-price').val();
+//   console.log(total);
+  
+//   $(ele).parent().parent().find('.total-price').val(total * quantity);
+//   updateQuantityDisplay();
+// }
+function increaseQuantity(ele) {
+  // Get the quantity span and parse its current value
+  let quantityElement = $(ele).siblings('.num');
+  let quantity = parseInt(quantityElement.text());
+
+  // Increment the quantity
   quantity++;
-  updateQuantityDisplay();
+
+  // Update the quantity display
+  quantityElement.text(quantity);
+
+  // Get the unit price from the data attribute
+  let unitPrice = parseFloat($('#total-price').data('unit-price'));
+
+  // Calculate the new total price
+  let newTotal = (unitPrice * quantity).toFixed(2);
+
+  // Update the total price in the modal
+  $('#total-price').text(newTotal);
+  $('#dish-price').text(newTotalPrice.toFixed(2));
 }
-function decreaseQuantity() {
-  if (quantity > 0) {
-    quantity--;
-    updateQuantityDisplay();
+function decreaseQuantity(ele) {
+  // Get the quantity span and parse its current value
+  let quantityElement = $(ele).siblings('.num');
+  let quantity = parseInt(quantityElement.text());
+
+  // Decrement the quantity, but ensure it doesn't go below 1
+  if (quantity > 1) {
+      quantity--;
+
+      // Update the quantity display
+      quantityElement.text(quantity);
+
+      // Get the unit price from the data attribute
+      let unitPrice = parseFloat($('#total-price').data('unit-price'));
+
+      // Calculate the new total price
+      let newTotal = (unitPrice * quantity).toFixed(2);
+
+      // Update the total price in the modal
+      $('#total-price').text(newTotal);
+      
   }
 }
+
 function updateQuantityDisplay() {
   document.getElementById('quantity').textContent = quantity;
 }
@@ -304,21 +348,21 @@ togglePasswordButton.addEventListener('click', function () {
 
 // login and register modal ***************************
 
-  document.getElementById('showLoginLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    document.getElementById('registerBody').classList.add('d-none');
-    document.getElementById('loginBody').classList.remove('d-none');
-  });
+document.getElementById('showLoginLink').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('registerBody').classList.add('d-none');
+  document.getElementById('loginBody').classList.remove('d-none');
+});
 
-  document.getElementById('showRegisterLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    document.getElementById('loginBody').classList.add('d-none');
-    document.getElementById('registerBody').classList.remove('d-none');
-  });
-  document.getElementById('showforgetLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    document.getElementById('loginBody').classList.add('d-none'); 
-    document.getElementById('forgetBody').classList.remove('d-none'); 
+document.getElementById('showRegisterLink').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('loginBody').classList.add('d-none');
+  document.getElementById('registerBody').classList.remove('d-none');
+});
+document.getElementById('showforgetLink').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('loginBody').classList.add('d-none');
+  document.getElementById('forgetBody').classList.remove('d-none');
 });
 document.getElementById('sendForgetButton').addEventListener('click', function (e) {
   e.preventDefault();
@@ -336,10 +380,10 @@ document.getElementById('sendOtpButton').addEventListener('click', function (e) 
 
   document.getElementById('otpBody').classList.add('d-none');
   document.getElementById('otpDoneBody').classList.remove('d-none');
-  setTimeout(function() {
+  setTimeout(function () {
     document.getElementById('otpDoneBody').classList.add('d-none');
     document.getElementById('resetBody').classList.remove('d-none');
-  }, 5000); 
+  }, 5000);
 });
 
 
@@ -347,28 +391,28 @@ document.getElementById('sendOtpButton').addEventListener('click', function (e) 
 // end login functions **********************
 
 // counter function 
- document.addEventListener("DOMContentLoaded", () => {
-    const sideCartPlates = document.querySelectorAll(".sideCart-plate");
+document.addEventListener("DOMContentLoaded", () => {
+  const sideCartPlates = document.querySelectorAll(".sideCart-plate");
 
-    sideCartPlates.forEach((plate, index) => {
-        const plus = plate.querySelector(".inc.plus"),
-            minus = plate.querySelector(".dec.minus"),
-            num = plate.querySelector(".num");
-        // Increment functionality
-        plus.addEventListener("click", () => {
-            let value = parseInt(num.innerText, 10);
-            value++;
-            num.innerText = value;
-        });
-        // Decrement functionality
-        minus.addEventListener("click", () => {
-            let value = parseInt(num.innerText, 10);
-            if (value > 1) {
-                value--;
-                num.innerText = value;
-            }
-        });
+  sideCartPlates.forEach((plate, index) => {
+    const plus = plate.querySelector(".inc.plus"),
+      minus = plate.querySelector(".dec.minus"),
+      num = plate.querySelector(".num");
+    // Increment functionality
+    plus.addEventListener("click", () => {
+      let value = parseInt(num.innerText, 10);
+      value++;
+      num.innerText = value;
     });
+    // Decrement functionality
+    minus.addEventListener("click", () => {
+      let value = parseInt(num.innerText, 10);
+      if (value > 1) {
+        value--;
+        num.innerText = value;
+      }
+    });
+  });
 });
 
 // rate-stars 
@@ -377,35 +421,35 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentRating = 0;
 
   stars.forEach(star => {
-      star.addEventListener('click', function () {
-          const rating = parseInt(this.getAttribute('data-value'));
+    star.addEventListener('click', function () {
+      const rating = parseInt(this.getAttribute('data-value'));
 
-          // If the clicked star is already the current rating, reset to 0
-          if (currentRating === rating) {
-              currentRating = 0;
-              resetStars();
-          } else {
-              currentRating = rating;
-              highlightStars(rating);
-          }
-      });
+      // If the clicked star is already the current rating, reset to 0
+      if (currentRating === rating) {
+        currentRating = 0;
+        resetStars();
+      } else {
+        currentRating = rating;
+        highlightStars(rating);
+      }
+    });
   });
 
   // Highlight stars up to the given rating
   function highlightStars(rating) {
-      resetStars();
-      stars.forEach(star => {
-          if (parseInt(star.getAttribute('data-value')) <= rating) {
-              star.classList.add('selected');
-          }
-      });
+    resetStars();
+    stars.forEach(star => {
+      if (parseInt(star.getAttribute('data-value')) <= rating) {
+        star.classList.add('selected');
+      }
+    });
   }
 
   // Reset all stars to the default state
   function resetStars() {
-      stars.forEach(star => {
-          star.classList.remove('selected');
-      });
+    stars.forEach(star => {
+      star.classList.remove('selected');
+    });
   }
 });
 

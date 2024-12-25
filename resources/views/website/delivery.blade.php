@@ -37,215 +37,8 @@
                   <div class="tab-content" id="pills-tabContent">
                       <div class="tab-pane fade show active" id="pills-delivery" role="tabpanel"
                           aria-labelledby="pills-delivery-tab">
-                          <div class="first-phase">
-                              <h5 class="fw-bold">
-                                  @lang('header.accesLocation') </h5>
-                              <div class="search-group ">
-                                  <span class="search-icon">
-                                      <i class="fas fa-search"></i>
-                                  </span>
-                                  <input type="text" class="form-control" placeholder="@lang('header.search')" />
-                              </div>
-                              <div class="map position-relative my-3">
-                                  <div class="map" id="map"></div>
-                                  <div class="notes">
-                                      <small>@lang('header.saveaddress')</small>
-                                      <button class="btn">@lang('header.login')</button>
-                                  </div>
-                                  <iframe
-                                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.025253043487!2d31.22420217605614!3d30.064810617604635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145841cef6b62cc1%3A0x31bc8779f7ab8dd5!2z2YXYt9i52YUg2KfZhNmD2YjYqg!5e0!3m2!1sen!2seg!4v1734860419141!5m2!1sen!2seg"
-                                      width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                                      referrerpolicy="no-referrer-when-downgrade">
-                                  </iframe>
-                                  <div class="notes">
-                                      <small> @lang('header.saveaddress')</small>
-                                      <button class="btn"> @lang('header.login')</button>
-                                      <p id="location-info"></p>
 
-                                  </div>
-                              </div>
-                              <div class="tab-footer justify-content-between d-flex align-items-center">
-                                  <div>
-                                      <h6 class="fw-bold">
-                                          @lang('header.deliverylocation') </h6>
-                                      <p>
-                                          <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                          مصدق الدقى و المهندسين وجيزه
-                                      </p>
-                                  </div>
-                                  <button class="btn reversed main-color fw-bold" type="button">
-                                      @lang('header.edit') </button>
-                                  <button type="submit" id="saveButton" class="btn" onclick="showSecondPhase()">
-                                      @lang('header.confirmeaddress') </button>
-                              </div>
-                          </div>
-                          <div class="second-phase d-none">
-                              <h6 class="fw-bold">
-                                  @lang('header.deliverylocation') </h6>
-                              <div class="d-flex justify-content-between">
-                                  <p>
-                                      <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                      مصدق الدقى و المهندسين وجيزه
-                                  </p>
-                                  <button class="btn reversed main-color fw-bold" type="button">
-                                      @lang('header.edit') </button>
-                              </div>
-                              <h6 class="fw-bold mb-3">
-                                  @lang('header.locationcomplete') </h6>
-                              <ul class="delivery-places nav nav-pills px-0 mb-3" id="pills-tab" role="tablist">
-                                  <li class="nav-item" role="presentation">
-                                      <button class="nav-link active rounded-pill" id="pills-home-tab"
-                                          data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
-                                          role="tab" aria-controls="pills-home" aria-selected="true">
-                                          <i class="fas fa-city"></i> @lang('header.apartment')
-                                      </button>
-                                  </li>
-                                  <li class="nav-item" role="presentation">
-                                      <button class="nav-link rounded-pill" id="pills-villa-tab"
-                                          data-bs-toggle="pill" data-bs-target="#pills-villa" type="button"
-                                          role="tab" aria-controls="pills-villa" aria-selected="false">
-                                          <i class="fas fa-home"></i> @lang('header.villa')
-                                      </button>
-                                  </li>
-                                  <li class="nav-item" role="presentation">
-                                      <button class="nav-link rounded-pill" id="pills-work-tab" data-bs-toggle="pill"
-                                          data-bs-target="#pills-work" type="button" role="tab"
-                                          aria-controls="pills-work" aria-selected="false">
-                                          <i class="fas fa-building"></i> @lang('header.office')
-                                      </button>
-                                  </li>
-                              </ul>
-                              <form method="POST" action="{{ route('saveAddress') }}" id="addressForm"
-                                  onsubmit="saveToLocalStorage(event)">
-                                  @csrf
-                                  <div class="tab-content" id="pills-tabContent">
-                                      <!-- Apartment Tab -->
-                                      <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                                          aria-labelledby="pills-home-tab">
-                                          <input type="hidden" class="form-control" name="apartment" value=""
-                                              id="apartment">
 
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="nameapart"
-                                                  placeholder="@lang('header.nameapart')">
-                                          </div>
-                                          <div class="mb-3 d-flex">
-                                              <input type="text" class="form-control w-50 ms-2" name="numapart"
-                                                  placeholder="@lang('header.numapart')">
-                                              <input type="text" class="form-control w-50 me-2" name="floor"
-                                                  placeholder="@lang('header.Floor')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="addressdetailapart"
-                                                  placeholder="@lang('header.addressdetail')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="markapart"
-                                                  placeholder="@lang('header.mark')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <div class="input-group">
-                                                  <input type="text" class="form-control"
-                                                      placeholder="@lang('header.phoneenter')" name="phoneapart">
-                                                  <select id="country" name="country_code_apart"
-                                                      class="selectpicker me-2" data-live-search="true">
-                                                      @foreach (GetCountries() as $country)
-                                                          <option
-                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                              value="{{ $country->phone_code }}">
-                                                              {{ $country->phone_code }}
-                                                          </option>
-                                                      @endforeach
-                                                  </select>
-                                              </div>
-                                          </div>
-                                      </div>
-
-                                      <!-- Villa Tab -->
-                                      <div class="tab-pane fade" id="pills-villa" role="tabpanel"
-                                          aria-labelledby="pills-villa-tab">
-                                          <input type="hidden" class="form-control" name="villa" value=""
-                                              id="villa">
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="namevilla"
-                                                  placeholder="@lang('header.namevilla')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="villanumber"
-                                                  placeholder="@lang('header.villanumber')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="addressdetailvilla"
-                                                  placeholder="@lang('header.addressdetail')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="markvilla"
-                                                  placeholder="@lang('header.mark')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <div class="input-group">
-                                                  <input type="text" class="form-control" name="phonevilla"
-                                                      placeholder="@lang('header.phoneenter')">
-                                                  <select id="country" name="country_code_villa"
-                                                      class="selectpicker me-2" data-live-search="true">
-                                                      @foreach (GetCountries() as $country)
-                                                          <option
-                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                              value="{{ $country->phone_code }}">
-                                                              {{ $country->phone_code }}
-                                                          </option>
-                                                      @endforeach
-                                                  </select>
-                                              </div>
-                                          </div>
-                                      </div>
-
-                                      <!-- Office Tab -->
-                                      <div class="tab-pane fade" id="pills-work" role="tabpanel"
-                                          aria-labelledby="pills-work-tab">
-                                          <input type="hidden" class="form-control" name="office" value=""
-                                              id="office">
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="nameoffice"
-                                                  placeholder="@lang('header.nameoffice')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="numaoffice"
-                                                  placeholder="@lang('header.numaoffice')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="addressdetailoffice"
-                                                  placeholder="@lang('header.addressdetail')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <input type="text" class="form-control" name="markoffice"
-                                                  placeholder="@lang('header.mark')">
-                                          </div>
-                                          <div class="mb-3">
-                                              <div class="input-group">
-                                                  <input type="text" class="form-control" name="phoneoffice"
-                                                      placeholder="@lang('header.phoneenter')">
-                                                  <select id="country" name="country_code_office"
-                                                      class="selectpicker me-2" data-live-search="true">
-                                                      @foreach (GetCountries() as $country)
-                                                          <option
-                                                              data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                              value="{{ $country->phone_code }}">
-                                                              {{ $country->phone_code }}
-                                                          </option>
-                                                      @endforeach
-                                                  </select>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="tab-footer justify-content-end d-flex">
-                                      <button type="submit" class="btn" onclick="saveAddress(event)">
-                                          @lang('header.saveaddressc')
-                                      </button>
-                                  </div>
-                              </form>
-                          </div>
                           <div class="third-phase d-none" id="thirdPhase">
                               <div>
                                   <h6 class="fw-bold">
@@ -265,112 +58,326 @@
 
                               </div>
                           </div>
-                          <!-- <div class="fourth-phase">
+                          @auth('client')
+                              <div class="fourth-phase">
+                                  <h5 class="fw-bold">
+                                      تحديد موقع التوصيل
+                                  </h5>
+                                  <div class="search-group ">
+                                      <span class="search-icon">
+                                          <i class="fas fa-search"></i>
+                                      </span>
+                                      <input type="text" class="form-control" placeholder="ابحث عن الموقع" />
+                                  </div>
+                                  <div class="d-flex justify-content-between align-items-center">
+                                      <h4 class="my-4 fw-bold">عناويني</h4>
+                                      <button class="btn fw-bold" type="button">
+                                          <span>+</span> أضف عنوان
+                                      </button>
+                                  </div>
+                                  <ul class="list-unstyled px-0">
+                                      <li class="d-flex justify-content-between align-items-start mb-4">
+                                          <div>
+                                              <h5>
+                                                  <i class="fas fa-city text-muted fa-xs ms-2"></i>
+                                                  شقة
+                                              </h5>
+                                              <small class="text-muted">
+                                                  250 معادى السريات-قسم المعادى-محافظة القاهرة
+                                              </small>
+                                          </div>
+                                          <div class="dropdown">
+                                              <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                  <i class="fas fa-ellipsis-v"></i>
+                                              </a>
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                  <li>
+                                                      <button class="dropdown-item w-100">تعديل </button>
+                                                  </li>
+                                                  <li>
+                                                      <button class="dropdown-item w-100"> حذف</button>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      </li>
+                                      <li class="d-flex justify-content-between align-items-start mb-4">
+                                          <div>
+                                              <h5>
+                                                  <i class="fas fa-city text-muted fa-xs ms-2"></i>
+                                                  فيلا
+                                              </h5>
+                                              <small class="text-muted">
+                                                  250 معادى السريات-قسم المعادى-محافظة القاهرة
+                                              </small>
+                                          </div>
+                                          <div class="dropdown">
+                                              <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                  <i class="fas fa-ellipsis-v"></i>
+                                              </a>
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                  <li>
+                                                      <button class="dropdown-item w-100">تعديل </button>
+                                                  </li>
+                                                  <li>
+                                                      <button class="dropdown-item w-100"> حذف</button>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      </li>
+                                      <li class="d-flex justify-content-between align-items-start mb-4">
+                                          <div>
+                                              <h5>
+                                                  <i class="fas fa-city text-muted fa-xs ms-2"></i>
+                                                  شركة
+                                              </h5>
+                                              <small class="text-muted">
+                                                  250 معادى السريات-قسم المعادى-محافظة القاهرة
+                                              </small>
+                                          </div>
+                                          <div class="dropdown">
+                                              <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                  <i class="fas fa-ellipsis-v"></i>
+                                              </a>
+                                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                  <li>
+                                                      <button class="dropdown-item w-100">تعديل </button>
+                                                  </li>
+                                                  <li>
+                                                      <button class="dropdown-item w-100"> حذف</button>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                      </li>
+                                  </ul>
+                                  <div class="tab-footer justify-content-between d-flex align-items-center">
+                                      <div>
+                                          <h6 class="fw-bold">
+                                              موقع التوصيل
+                                          </h6>
+                                          <p>
+                                              <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                              مصدق الدقى و المهندسين وجيزه
+                                          </p>
+                                      </div>
+                                      <button class="btn reversed main-color fw-bold" type="button">
+                                          تعديل
+                                      </button>
+                                      <button type="submit" class="btn" onclick="showSecondPhase()">تأكيد
+                                          العنوان</button>
+                                  </div>
+                              </div>
+                          @else
+                              <div class="second-phase d-none">
+                                  <h6 class="fw-bold">
+                                      @lang('header.deliverylocation') </h6>
+                                  <div class="d-flex justify-content-between">
+                                      <p>
+                                          <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                          مصدق الدقى و المهندسين وجيزه
+                                      </p>
+                                      <button class="btn reversed main-color fw-bold" type="button">
+                                          @lang('header.edit') </button>
+                                  </div>
+                                  <h6 class="fw-bold mb-3">
+                                      @lang('header.locationcomplete') </h6>
+                                  <ul class="delivery-places nav nav-pills px-0 mb-3" id="pills-tab" role="tablist">
+                                      <li class="nav-item" role="presentation">
+                                          <button class="nav-link active rounded-pill" id="pills-home-tab"
+                                              data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+                                              role="tab" aria-controls="pills-home" aria-selected="true">
+                                              <i class="fas fa-city"></i> @lang('header.apartment')
+                                          </button>
+                                      </li>
+                                      <li class="nav-item" role="presentation">
+                                          <button class="nav-link rounded-pill" id="pills-villa-tab"
+                                              data-bs-toggle="pill" data-bs-target="#pills-villa" type="button"
+                                              role="tab" aria-controls="pills-villa" aria-selected="false">
+                                              <i class="fas fa-home"></i> @lang('header.villa')
+                                          </button>
+                                      </li>
+                                      <li class="nav-item" role="presentation">
+                                          <button class="nav-link rounded-pill" id="pills-work-tab" data-bs-toggle="pill"
+                                              data-bs-target="#pills-work" type="button" role="tab"
+                                              aria-controls="pills-work" aria-selected="false">
+                                              <i class="fas fa-building"></i> @lang('header.office')
+                                          </button>
+                                      </li>
+                                  </ul>
+                                  <form method="POST" action="{{ route('saveAddress') }}" id="addressForm"
+                                      onsubmit="saveToLocalStorage(event)">
+                                      @csrf
+                                      <div class="tab-content" id="pills-tabContent">
+                                          <!-- Apartment Tab -->
+                                          <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                              aria-labelledby="pills-home-tab">
+                                              <input type="hidden" class="form-control" name="apartment" value=""
+                                                  id="apartment">
+
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="nameapart"
+                                                      placeholder="@lang('header.nameapart')">
+                                              </div>
+                                              <div class="mb-3 d-flex">
+                                                  <input type="text" class="form-control w-50 ms-2" name="numapart"
+                                                      placeholder="@lang('header.numapart')">
+                                                  <input type="text" class="form-control w-50 me-2" name="floor"
+                                                      placeholder="@lang('header.Floor')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="addressdetailapart"
+                                                      placeholder="@lang('header.addressdetail')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="markapart"
+                                                      placeholder="@lang('header.mark')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <div class="input-group">
+                                                      <input type="text" class="form-control"
+                                                          placeholder="@lang('header.phoneenter')" name="phoneapart">
+                                                      <select id="country" name="country_code_apart"
+                                                          class="selectpicker me-2" data-live-search="true">
+                                                          @foreach (GetCountries() as $country)
+                                                              <option
+                                                                  data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                                  value="{{ $country->phone_code }}">
+                                                                  {{ $country->phone_code }}
+                                                              </option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+                                          <!-- Villa Tab -->
+                                          <div class="tab-pane fade" id="pills-villa" role="tabpanel"
+                                              aria-labelledby="pills-villa-tab">
+                                              <input type="hidden" class="form-control" name="villa" value=""
+                                                  id="villa">
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="namevilla"
+                                                      placeholder="@lang('header.namevilla')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="villanumber"
+                                                      placeholder="@lang('header.villanumber')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="addressdetailvilla"
+                                                      placeholder="@lang('header.addressdetail')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="markvilla"
+                                                      placeholder="@lang('header.mark')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <div class="input-group">
+                                                      <input type="text" class="form-control" name="phonevilla"
+                                                          placeholder="@lang('header.phoneenter')">
+                                                      <select id="country" name="country_code_villa"
+                                                          class="selectpicker me-2" data-live-search="true">
+                                                          @foreach (GetCountries() as $country)
+                                                              <option
+                                                                  data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                                  value="{{ $country->phone_code }}">
+                                                                  {{ $country->phone_code }}
+                                                              </option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+
+                                          <!-- Office Tab -->
+                                          <div class="tab-pane fade" id="pills-work" role="tabpanel"
+                                              aria-labelledby="pills-work-tab">
+                                              <input type="hidden" class="form-control" name="office" value=""
+                                                  id="office">
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="nameoffice"
+                                                      placeholder="@lang('header.nameoffice')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="numaoffice"
+                                                      placeholder="@lang('header.numaoffice')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="addressdetailoffice"
+                                                      placeholder="@lang('header.addressdetail')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <input type="text" class="form-control" name="markoffice"
+                                                      placeholder="@lang('header.mark')">
+                                              </div>
+                                              <div class="mb-3">
+                                                  <div class="input-group">
+                                                      <input type="text" class="form-control" name="phoneoffice"
+                                                          placeholder="@lang('header.phoneenter')">
+                                                      <select id="country" name="country_code_office"
+                                                          class="selectpicker me-2" data-live-search="true">
+                                                          @foreach (GetCountries() as $country)
+                                                              <option
+                                                                  data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
+                                                                  value="{{ $country->phone_code }}">
+                                                                  {{ $country->phone_code }}
+                                                              </option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="tab-footer justify-content-end d-flex">
+                                          <button type="submit" class="btn" onclick="saveAddress(event)">
+                                              @lang('header.saveaddressc')
+                                          </button>
+                                      </div>
+                                  </form>
+                              </div>
+                              <div class="first-phase">
                                 <h5 class="fw-bold">
-                                تحديد موقع التوصيل
-                                </h5>
+                                    @lang('header.accesLocation') </h5>
                                 <div class="search-group ">
-                                <span class="search-icon">
-                                    <i class="fas fa-search"></i>
-                                </span>
-                                <input type="text" class="form-control" placeholder="ابحث عن الموقع" />
+                                    <span class="search-icon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="@lang('header.search')" />
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="my-4 fw-bold">عناويني</h4>
-                                <button class="btn fw-bold" type="button">
-                                    <span>+</span> أضف عنوان
-                                </button>
+                                <div class="map position-relative my-3">
+                                    <div class="map" id="map"></div>
+                                    <div class="notes">
+                                        <small>@lang('header.saveaddress')</small>
+                                        <button class="btn">@lang('header.login')</button>
+                                    </div>
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.025253043487!2d31.22420217605614!3d30.064810617604635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145841cef6b62cc1%3A0x31bc8779f7ab8dd5!2z2YXYt9i52YUg2KfZhNmD2YjYqg!5e0!3m2!1sen!2seg!4v1734860419141!5m2!1sen!2seg"
+                                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                    <div class="notes">
+                                        <small> @lang('header.saveaddress')</small>
+                                        <button class="btn"> @lang('header.login')</button>
+                                        <p id="location-info"></p>
+
+                                    </div>
                                 </div>
-                                <ul class="list-unstyled px-0">
-                                <li class="d-flex justify-content-between align-items-start mb-4">
-                                    <div>
-                                    <h5>
-                                        <i class="fas fa-city text-muted fa-xs ms-2"></i>
-                                        شقة
-                                    </h5>
-                                    <small class="text-muted">
-                                        250 معادى السريات-قسم المعادى-محافظة القاهرة
-                                    </small>
-                                    </div>
-                                    <div class="dropdown">
-                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                        <button class="dropdown-item w-100">تعديل </button>
-                                        </li>
-                                        <li>
-                                        <button class="dropdown-item w-100"> حذف</button>
-                                        </li>
-                                    </ul>
-                                    </div>
-                                </li>
-                                <li class="d-flex justify-content-between align-items-start mb-4">
-                                    <div>
-                                    <h5>
-                                        <i class="fas fa-city text-muted fa-xs ms-2"></i>
-                                        فيلا
-                                    </h5>
-                                    <small class="text-muted">
-                                        250 معادى السريات-قسم المعادى-محافظة القاهرة
-                                    </small>
-                                    </div>
-                                    <div class="dropdown">
-                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                        <button class="dropdown-item w-100">تعديل </button>
-                                        </li>
-                                        <li>
-                                        <button class="dropdown-item w-100"> حذف</button>
-                                        </li>
-                                    </ul>
-                                    </div>
-                                </li>
-                                <li class="d-flex justify-content-between align-items-start mb-4">
-                                    <div>
-                                    <h5>
-                                        <i class="fas fa-city text-muted fa-xs ms-2"></i>
-                                        شركة
-                                    </h5>
-                                    <small class="text-muted">
-                                        250 معادى السريات-قسم المعادى-محافظة القاهرة
-                                    </small>
-                                    </div>
-                                    <div class="dropdown">
-                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                        <button class="dropdown-item w-100">تعديل </button>
-                                        </li>
-                                        <li>
-                                        <button class="dropdown-item w-100"> حذف</button>
-                                        </li>
-                                    </ul>
-                                    </div>
-                                </li>
-                                </ul>
                                 <div class="tab-footer justify-content-between d-flex align-items-center">
-                                <div>
-                                    <h6 class="fw-bold">
-                                    موقع التوصيل
-                                    </h6>
-                                    <p>
-                                    <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                    مصدق الدقى و المهندسين وجيزه
-                                    </p>
+                                    <div>
+                                        <h6 class="fw-bold">
+                                            @lang('header.deliverylocation') </h6>
+                                        <p>
+                                            <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                            مصدق الدقى و المهندسين وجيزه
+                                        </p>
+                                    </div>
+                                    <button class="btn reversed main-color fw-bold" type="button">
+                                        @lang('header.edit') </button>
+                                    <button type="submit" id="saveButton" class="btn" onclick="showSecondPhase()">
+                                        @lang('header.confirmeaddress') </button>
                                 </div>
-                                <button class="btn reversed main-color fw-bold" type="button">
-                                    تعديل
-                                </button>
-                                <button type="submit" class="btn" onclick="showSecondPhase()">تأكيد العنوان</button>
-                                </div>
-                            </div> -->
+                            </div>
+                          @endauth
+
                       </div>
                       <div class="tab-pane fade" id="pills-takeaway" role="tabpanel"
                           aria-labelledby="pills-takeaway-tab">
@@ -504,13 +511,14 @@
           function saveAddress(event) {
               event.preventDefault();
 
+              // Find the active tab
               const activeTab = document.querySelector('.tab-pane.active');
               if (!activeTab) {
                   alert("Please fill out the address form.");
                   return;
               }
-
-              // Collect data from active tab inputs
+              console.log(activeTab)
+              // Collect data from inputs in the active tab
               const inputs = activeTab.querySelectorAll('input, select, textarea');
               const addressData = {};
               inputs.forEach(input => {
@@ -519,16 +527,18 @@
                   }
               });
 
-              // Save to localStorage
+              // Save active tab data to localStorage
               localStorage.setItem("addressData", JSON.stringify(addressData));
 
-              // Display data in third-phase
+              // Clear old data from storage (replaced by the new save above)
+              // Display data in third phase
               displayAddressInThirdPhase();
 
-              // Hide form sections and show third-phase
-              document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('d-none'));
+              // Hide form sections and show third phase
+              document.querySelector('.second-phase').classList.add('d-none');
               document.getElementById('thirdPhase').classList.remove('d-none');
           }
+
 
           function displayAddressInThirdPhase() {
               const addressData = JSON.parse(localStorage.getItem("addressData"));

@@ -170,7 +170,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
 
-        $this->saveAddress($request->input('address'));
+        // $this->saveAddress($request->input('address'));
 
 
         return response()->json([
@@ -188,7 +188,7 @@ class AuthController extends Controller
         $addressData = json_decode($jsonData, true);
 
         $address = json_decode($addressData);
-        $name = $address->namevilla || 
+        $name = $address->namevilla ||
             // Example: Access specific fields
             $villaName = $address->namevilla;
 

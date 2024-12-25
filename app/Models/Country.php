@@ -19,6 +19,7 @@ class Country extends Model
         'currency_ar',
         'currency_en',
         'currency_code',
+        'currency_symbol',
         'job_years',
         'phone_code',
         'length'
@@ -39,7 +40,9 @@ class Country extends Model
         'currency_en',
         'job_years',
         'phone_code',
-        'length'
+        'length',
+        'currency_symbol'
+
 
     ];
     public function getNameAttribute($value)

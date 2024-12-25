@@ -24,7 +24,7 @@ class DishDetail extends Model
 
     public function recipe()
     {
-        return $this->belongsTo(Recipe::class);
+        return $this->belongsTo(Recipe::class)->where('type', 1);
     }
     public function size()
     {
