@@ -1,9 +1,6 @@
 <header class="fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container  @if (Request::routeIs("home"))   @else second-header  @endif">
-            {{-- @include('website.layouts.home-header') {{-- Home Page Header --}}
-        {{-- @else
-            @include('website.layouts.header') Default Header --}} 
+        <div class="container  @if(Request::routeIs("home"))   @else second-header  @endif">
 
             <a class="navbar-service" href="{{ route('home') }}">
                 <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}">
