@@ -91,6 +91,8 @@
                                                         @lang('category.show') <i class="ri-eye-line"></i>
                                                     </a>
                                                 @endcan
+                                                @if($role->id != 1 )
+
                                                 @can('update roles')
                                                     <!-- Edit Button -->
                                                     <a href="{{ route('role.edit', $role->id) }}"
@@ -98,6 +100,8 @@
                                                         @lang('category.edit') <i class="ri-edit-line"></i>
                                                     </a>
                                                 @endcan
+
+
                                                 @can('delete roles')
                                                     <!-- Delete Button -->
                                                     <form class="d-inline" id="delete-form-{{ $role->id }}"
@@ -110,7 +114,7 @@
                                                         </button>
                                                     </form>
                                                 @endcan
-
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
