@@ -88,7 +88,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="questions.html">
+                            <a href="{{ route('shoe.faq') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-file-alt main-color ms-2"></i>
                                     @lang('header.questions')
