@@ -37,13 +37,14 @@ class RoleController extends Controller
     }
     public function store(Request $request)
     {
-        $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
-        ];
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:roles,name',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'name') // Ignore the current role when checking for uniqueness
+            ],
             'permissions_ids' => 'required|array',
             'permissions_ids.*' => 'string|exists:permissions,name',
         ]);
@@ -83,11 +84,6 @@ class RoleController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
-        ];
-
         $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
@@ -97,7 +93,7 @@ class RoleController extends Controller
             ],
             'permissions_ids' => 'required|array',
             'permissions_ids.*' => 'string|exists:permissions,name',
-        ], $messages);
+        ]);
 
         // Handle validation failure
         if ($validator->fails()) {
