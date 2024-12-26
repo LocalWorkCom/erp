@@ -34,20 +34,16 @@
                         <div class="card mt-4 p-4">
                             <div class="card-header bg-white border-bottom">
                                 <h5 class="card-title fw-bold">
-                                    {!! $faq['question'] !!}
+                                    {{ strip_tags($faq['question']) }}
                                 </h5>
                             </div>
                             <div class="card-body">
                                 <p class="text-muted">
-                                    {!! $faq['answer'] !!}
-
+                                    {{ strip_tags($faq['answer']) }}
                                 </p>
                             </div>
                         </div>
                     @endforeach
-
-
-
                 </div>
             </div>
         </div>
