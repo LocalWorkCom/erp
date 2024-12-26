@@ -486,7 +486,7 @@ function CheckCouponValid($id, $amount)
 
     $coupon = Coupon::find($id);
     if ($coupon) {
-        if ($coupon->end_date  < date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount) {
             return true;
         }
     }
@@ -934,7 +934,7 @@ function AddAddons($branch_ids, $dish_id)
         foreach ($get_addons as $get_addon) {
             $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_addon_category = BranchMenuAddonCategory::where('addon_category_id', $get_addon->addon_category_id)->first();
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuAddon::firstOrCreate(
                     ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
                     [
@@ -951,16 +951,16 @@ function AddAddons($branch_ids, $dish_id)
 
 function AddSizes($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_sizes = DishSize::where('dish_id', $dish_id)->get();
-    }else{
+    } else {
         $get_sizes = DishSize::all();
     }
 
     if ($get_sizes) {
         foreach ($get_sizes as $get_size) {
             $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuSize::firstOrCreate(
                     ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
                     [
@@ -1013,14 +1013,14 @@ function respondError($error, $code, $errorMessages = [])
 }
 function getMostDishesOrdered($limit = 5)
 {
-    /*return Dish::select('dishes.*')
+    return Dish::select('dishes.*')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit($limit)
-        ->get();*/
-        return [];
+        ->get(); 
+    // return [];
 }
 function checkDishExistMostOrderd($id)
 
