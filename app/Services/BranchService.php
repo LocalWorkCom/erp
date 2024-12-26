@@ -5,13 +5,14 @@ namespace App\Services;
 use App\Models\Branch;
 use App\Models\Employee;
 use App\Models\Dish;
-
-
+use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class BranchService
 {
@@ -27,7 +28,7 @@ class BranchService
 
             $branches = $withTrashed
                 ? Branch::withTrashed()->with(['country', 'creator', 'deleter'])->get()
-                : Branch::with(['country', 'creator', 'deleter','floors'])->get();
+                : Branch::with(['country', 'creator', 'deleter', 'floors'])->get();
 
             return ResponseWithSuccessData($this->lang, $branches, 1);
         } catch (\Exception $e) {
@@ -41,7 +42,7 @@ class BranchService
      */
     public function store(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         // Validation
         $validator = Validator::make($request->all(), [
             'name_en' => 'nullable|string|max:255',
@@ -68,41 +69,64 @@ class BranchService
         }
 
         //try {
-            //return $get_dishes = Dish::all();
-            $user_id =  Auth::guard('admin')->user()->id;
-            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
-            $branch = Branch::create([
-                'name_en' => $request->name_en,
-                'name_ar' => $request->name_ar,
-                'address_en' => $request->address_en,
-                'address_ar' => $request->address_ar,
-                'latitute' => $request->latitute, // Matches the database field
-                'longitute' => $request->longitute, // Matches the database field
-                'country_id' => $request->country_id,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'employee_id' => $request->employee_id,
-                'manager_name' => $manager_name,
-                'opening_hour' => $request->opening_hour,
-                'closing_hour' => $request->closing_hour,
-                'has_kids_area' => $request->has_kids_area,
-                'is_delivery' => $request->is_delivery,
-                'is_default' => $request->is_default,
-                'created_by' => $user_id,
-            ]);
+        //return $get_dishes = Dish::all();
+        $user_id =  Auth::guard('admin')->user()->id;
+        $manager_name = $this->employeeDetails($request->employee_id);
+        $branch = Branch::create([
+            'name_en' => $request->name_en,
+            'name_ar' => $request->name_ar,
+            'address_en' => $request->address_en,
+            'address_ar' => $request->address_ar,
+            'latitute' => $request->latitute, // Matches the database field
+            'longitute' => $request->longitute, // Matches the database field
+            'country_id' => $request->country_id,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'employee_id' => $request->employee_id,
+            'manager_name' => $manager_name->first_name,
+            'opening_hour' => $request->opening_hour,
+            'closing_hour' => $request->closing_hour,
+            'has_kids_area' => $request->has_kids_area,
+            'is_delivery' => $request->is_delivery,
+            'is_default' => $request->is_default,
+            'created_by' => $user_id,
+        ]);
 
-            $branche_ids = [$branch->id];
-            AddBranchesMenu($branche_ids, $dish_id=0);
+        $branche_ids = [$branch->id];
+        AddBranchesMenu($branche_ids, $dish_id = 0);
 
-            if($request->is_default == 1){
-                $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $branch->id)->first();
-                if($check_branch_default){
-                    $check_branch_default->is_default = 0;
-                    $check_branch_default->save();
-                }
+        $employee_data = $this->employeeDetails($request->employee_id);
+        if ($employee_data->user_id != null) {
+            $branchmanagerRole = Role::firstOrCreate(['name' => 'Branch Manager', 'guard_name' => 'admin']);
+            if ($branchmanagerRole) {
+                $user = User::find($employee_data->user_id);
+                $user->assignRole($branchmanagerRole);
             }
-            
-            return ResponseWithSuccessData($this->lang, $branch, 1);
+        } else {
+            $user = new User();
+            $user->email = $employee_data->email;
+            $user->name = $employee_data->first_name . ' ' . $employee_data->last_name;
+            $user->password = Hash::make('123456'); //ask for how to send pass to manager and give him update pass
+            $user->phone = $employee_data->phone_number;
+            $user->flag = 'admin';
+            $user->save();
+            $branchmanagerRole = Role::firstOrCreate(['name' => 'Branch Manager', 'guard_name' => 'admin']);
+            if ($user) {
+                $employee_user = Employee::find($employee_data->id);
+                $employee_user->user_id = $user->id;
+                $employee_user->save();
+                $user->assignRole($branchmanagerRole);
+            }
+        }
+        if ($request->is_default == 1) {
+            $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $branch->id)->first();
+            if ($check_branch_default) {
+                $check_branch_default->is_default = 0;
+                $check_branch_default->save();
+            }
+        }
+
+        return ResponseWithSuccessData($this->lang, $branch, 1);
         // } catch (\Exception $e) {
         //     Log::error('Error creating branch: ' . $e->getMessage());
         //     return RespondWithBadRequestData($this->lang, 2);
@@ -140,7 +164,7 @@ class BranchService
             'longitute' => 'nullable|string', // Matches the database
             //'country_id' => 'required|integer|exists:countries,id',
             'country_id' => 'required|exists:countries,id',
-            'employee_id' => 'integer|exists:employees,id', 
+            'employee_id' => 'integer|exists:employees,id',
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'manager_name' => 'nullable|string|max:255',
@@ -157,7 +181,7 @@ class BranchService
 
         try {
             $user_id =  Auth::guard('admin')->user()->id;
-            $manager_name = $this->employeeDetails($request->employee_id, 'first_name');
+            $manager_name = $this->employeeDetails($request->employee_id);
             $branch = Branch::findOrFail($id);
             $branch->update([
                 'name_en' => $request->name_en,
@@ -170,7 +194,7 @@ class BranchService
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'employee_id' => $request->employee_id,
-                'manager_name' => $manager_name,                
+                'manager_name' => $manager_name->first_name,
                 'opening_hour' => $request->opening_hour,
                 'closing_hour' => $request->closing_hour,
                 'has_kids_area' => $request->has_kids_area,
@@ -179,9 +203,9 @@ class BranchService
                 'modified_by' => $user_id,
             ]);
 
-            if($request->is_default == 1){
+            if ($request->is_default == 1) {
                 $check_branch_default = Branch::where('is_default', 1)->where('id', '!=', $id)->first();
-                if($check_branch_default){
+                if ($check_branch_default) {
                     $check_branch_default->is_default = 0;
                     $check_branch_default->save();
                 }
@@ -225,12 +249,12 @@ class BranchService
         }
     }
 
-    public function employeeDetails($id, $field)
+    public function employeeDetails($id)
     {
         $employee_details = Employee::where('id', $id)->first();
-        if($employee_details){
-            return $field = $employee_details->$field;
-        }else{
+        if ($employee_details) {
+            return $field = $employee_details;
+        } else {
             return null;
         }
     }
