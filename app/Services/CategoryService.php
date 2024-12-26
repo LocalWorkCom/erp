@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class CategoryService
 {
@@ -89,7 +90,7 @@ class CategoryService
 
         return RespondWithSuccessRequest($lang, 1);
     }
-    
+
     public function update(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
@@ -98,7 +99,7 @@ class CategoryService
             return RespondWithBadRequest($lang, 5);
         }
         // Validate the input
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $validator = Validator::make($request->all(), [
                 'name_ar' => 'required|string',
                 'name_en' => 'nullable|string',
@@ -108,7 +109,7 @@ class CategoryService
                 'is_freeze' => 'required|boolean',
                 'parent_id' => 'nullable|exists:categories,id',
             ]);
-        }else{
+        } else {
             $validator = Validator::make($request->all(), [
                 'name_ar' => 'required|string',
                 'name_en' => 'nullable|string',
@@ -130,14 +131,16 @@ class CategoryService
             return  RespondWithBadRequestData($lang, 8);
         }
         // dd($category, $request);
-        if ($category->name_ar == $request->name_ar
+        if (
+            $category->name_ar == $request->name_ar
             && $category->name_en == $request->name_en
             &&  $category->description_ar == $request->description_ar
             &&  $category->description_en == $request->description_en
             && $category->is_freeze == $request->is_freeze
             && $category->parent_id == $request->parent_id
-            && $category->image == $request->file('image') ) {
-            return  RespondWithBadRequestData($lang,10);
+            && $category->image == $request->file('image')
+        ) {
+            return  RespondWithBadRequestData($lang, 10);
         }
         $modify_by = Auth::guard('admin')->user()->id;
 
@@ -167,7 +170,7 @@ class CategoryService
     public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
-        
+
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
@@ -180,7 +183,12 @@ class CategoryService
         if ($category->products()->count() > 0) {
             return CustomRespondWithBadRequest(__('category.The category have relation'));
         }
+        if ($category->children()->count()> 0) {
+            return CustomRespondWithBadRequest(__('category.The category is referenced as a parent in another category and cannot be deleted.'));
+        }
+    
         
+
         // dd($category);
         // Handle deletion of associated image if it exists
         if ($category->image) {

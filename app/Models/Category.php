@@ -96,4 +96,9 @@ class Category extends Model
     {
         return $this->hasManyThrough(Store::class, StoreCategory::class, 'category_id', 'id', 'id', 'store_id');
     }
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+    
 }
