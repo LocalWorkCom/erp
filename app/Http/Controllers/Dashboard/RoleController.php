@@ -14,7 +14,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('permissions')->get();
+        $roles = Role::with('permissions')->whereNot('id',2)->get();
         return view('dashboard.roles.list', compact('roles'));
     }
 
@@ -26,7 +26,7 @@ class RoleController extends Controller
     }
     public function create()
     {
-        $permissions = Permission::where('guard_name', 'admin')->get();
+        $permissions = Permission::where('guard_name', 'admin')->where('is_active',0)->get();
         $groupedPermissions = [];
         foreach ($permissions as $permission) {
             $parts = explode(' ', $permission->name);
@@ -70,7 +70,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-        $permissions = Permission::where('guard_name', 'admin')->get();
+        $permissions = Permission::where('guard_name', 'admin')->where('is_active',0)->get();
         $groupedPermissions = [];
         foreach ($permissions as $permission) {
             $parts = explode(' ', $permission->name);
