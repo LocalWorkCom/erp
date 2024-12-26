@@ -167,6 +167,7 @@
     <script>
         // logout modal
         document.addEventListener("DOMContentLoaded", function() {
+
         const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
         if (logoutBtn) {

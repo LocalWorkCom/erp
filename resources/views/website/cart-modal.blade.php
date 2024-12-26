@@ -39,7 +39,6 @@
                             </h4>
                             <div class="form-floating mt-3">
                                 <textarea class="form-control" placeholder="من فضلك اكتب ملاحظتك" id="floatingTextarea2" style="height: 100px"></textarea>
-                                <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
                             </div>
                         </div>
                         <button class="btn w-100 d-flex justify-content-between mt-3" id="submit">

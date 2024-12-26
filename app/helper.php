@@ -487,7 +487,7 @@ function CheckCouponValid($id, $amount)
 
     $coupon = Coupon::find($id);
     if ($coupon) {
-        if ($coupon->end_date  < date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount) {
             return true;
         }
     }
@@ -1021,8 +1021,7 @@ function getMostDishesOrdered($limit = 5)
         ->orderByDesc('total_quantity')
         ->orderBy('dishes.created_at', 'desc') // Order by newest first
         ->limit($limit)
-        ->get();
-//        return [];
+
 }
 function checkDishExistMostOrderd($id)
 
