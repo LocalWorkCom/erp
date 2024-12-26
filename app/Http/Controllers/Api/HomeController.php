@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Offer;
 use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +22,15 @@ class HomeController extends Controller
 
         $branchController = new BranchController();
         $branchesResponse = $branchController->listBranchAndNear($request);
-        $branchesData = $branchesResponse->getData()->data; //LAT AND LONG OPTIONAL
+        $branchesData = $branchesResponse->getData()->data; // LAT AND LONG OPTIONAL
         $branches = [
             'branch' => $branchesData->branch ?? null,
             'branches' => $branchesData->branches ?? null,
         ];
+
+        // Check if the branch is provided and lat/long is available
+        $branchId = $branches['branch']->id ?? null;
+//        dd($branchId);
 
         $sliderController = new SliderController();
         $sliderResponse = $sliderController->index($request);
@@ -39,6 +44,27 @@ class HomeController extends Controller
         $mostPopularResponse = $mostPopularController->index($request);
         $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite
 
+        $isOffers = $request->query('offers');
+//        dd($isOffers);
+
+        if($isOffers == 1){
+            // Filter offers by branch if lat/long is provided and branch is not null
+            $offers = Offer::where(function ($query) use ($branchId) {
+                if ($branchId) {
+                    // Check if the offer is specific to the branch or is available in all branches
+                    $query->where('branch_id', $branchId)
+                        ->orWhere('branch_id', -1);
+                } else {
+                    // If no specific branch, select offers available in all branches
+                    $query->where('branch_id', -1);
+                }
+            })
+                ->get(); // Get offers based on the branch filter
+            $menu = $offers;
+        }
+
+
+        // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {
             $user = auth('api')->user(); // Get authenticated user
 
@@ -68,7 +94,8 @@ class HomeController extends Controller
         if (empty($data['branches']) || empty($data['slider']) || empty($data['menu']) || empty($data['mostPopular'])) {
             return RespondWithBadRequestData($lang, 2); // Unauthorized response
         }
-        return ResponseWithSuccessData($lang,$data,1);
+
+        return ResponseWithSuccessData($lang, $data, 1);
     }
     public function showFavorites(Request $request)
     {
