@@ -23,4 +23,6 @@ return [
     'parent' => 'الصنف الاب',
     'save' => 'حفظ',
     'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
+    'The category is referenced as a parent in another category and cannot be deleted.' =>'هذا التصنيف له علاقه بتصنيف اخر فلا يمكن حذفه',
+
 ];
