@@ -53,10 +53,13 @@
                                     <div class="d-flex flex-wrap gap-3">
                                         @foreach ($groupedPermissions as $group => $permissions)
                                             <div class="permission-group" style="flex: 1 1 calc(50% - 10px);">
-                                                <h4>{{ $group }}</h4>
+                                                <h5 class="group-title"> {{  __("permissions.{$group}")}}</h5>
+
                                                 <ul class="list-group">
                                                     @foreach ($permissions as $permission)
-                                                        <li class="list-group-item">{{ $permission->name }}</li>
+                                                        <li class="list-group-item">
+                                                            {{ __("permissions.{$permission->name}") }}
+</li>
                                                     @endforeach
                                                 </ul>
                                             </div>
