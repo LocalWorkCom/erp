@@ -274,7 +274,9 @@ header.scroll .second-header {
     font-size: 36px;
     margin-left: 50px;
 }
-
+.offcanvas-end {
+    width: 450px;
+}
 .sideCart {
     height: 100%;
     width: 0;
@@ -442,11 +444,11 @@ body.no-scroll {
 }
 
 .owl-nav .owl-prev {
-    right: -5%;
+    right: 0;
 }
 
 .owl-nav .owl-next {
-    left: -5%;
+    left: 0;
 }
 
 .owl-nav span {
@@ -735,7 +737,7 @@ body.no-scroll {
 /* categories section  */
 .categories {
     background: url(../images/bg-small.png) no-repeat center #fdf9f9;
-    mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4);
+    /* mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4); */
     background-size: 100%;
 }
 
@@ -1808,7 +1810,7 @@ input::placeholder {
         top: 0;
     }
     .intro::after {
-        bottom: 0px;
+        bottom: -5%;
         left: 0;
         right: 0;
         height: 80px;
