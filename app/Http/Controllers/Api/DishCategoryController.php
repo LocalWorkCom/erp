@@ -157,16 +157,6 @@ class DishCategoryController extends Controller
                 return RespondWithBadRequestData($lang, 2, 'Category not found.');
             }
 
-            // Translate category details
-            $dishCategory->translated_name = $lang === 'ar' ? $dishCategory->name : $dishCategory->name_site;
-            $dishCategory->translated_description = $lang === 'ar' ? $dishCategory->description : $dishCategory->description_site;
-
-            // Translate dish details
-            foreach ($dishCategory->dishes as $dish) {
-                $dish->translated_name = $lang === 'ar' ? $dish->name : $dish->name_site;
-                $dish->translated_description = $lang === 'ar' ? $dish->description : $dish->description_site;
-            }
-
             return ResponseWithSuccessData($lang, $dishCategory, 1);
         }
 
@@ -176,17 +166,6 @@ class DishCategoryController extends Controller
                 $query->where('is_active', true);
             }])->get();
 
-            // Translate category and dish details
-            foreach ($dishCategories as $category) {
-                $category->translated_name = $lang === 'ar' ? $category->name : $category->name_site;
-                $category->translated_description = $lang === 'ar' ? $category->description : $category->description_site;
-
-                foreach ($category->dishes as $dish) {
-                    $dish->translated_name = $lang === 'ar' ? $dish->name : $dish->name_site;
-                    $dish->translated_description = $lang === 'ar' ? $dish->description : $dish->description_site;
-                }
-            }
-
             return ResponseWithSuccessData($lang, $dishCategories, 1);
         }
 
@@ -195,17 +174,15 @@ class DishCategoryController extends Controller
             $activeOffers = Offer::with('details')
                 ->whereHas('details')
                 ->where('is_active', 1)
-                ->get() ?? collect();
-
-            foreach ($activeOffers as $offer) {
-                $offer->translated_name = $lang === 'ar' ? $offer->name_ar : $offer->name_en;
-                $offer->translated_description = $lang === 'ar' ? $offer->description_ar : $offer->description_en;
-
-                // Optionally, translate details (if needed)
-                foreach ($offer->details as $detail) {
-                    $detail->translated_name = $lang === 'ar' ? $detail->name_ar : $detail->name_en;
-                }
-            }
+                ->get()
+                ->map(function ($offer) {
+                    // Assuming you want to add the translated name for each detail
+                    $offer->details->each(function ($detail) {
+                        $detail->type_name_en = $detail->getTypeName('en'); // Add English name
+                        $detail->type_name_ar = $detail->getTypeName('ar'); // Add Arabic name
+                    });
+                    return $offer;
+                }) ?? collect();
 
             return ResponseWithSuccessData($lang, $activeOffers, 1);
         }
