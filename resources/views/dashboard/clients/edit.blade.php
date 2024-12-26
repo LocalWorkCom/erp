@@ -77,8 +77,7 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="image" class="form-label">@lang('client.img')</label>
-                                        <input class="form-control" type="file" id="image" name="image"
-                                            value="{{ $client->clientDetails->image }}">
+                                        <input class="form-control" type="file" id="image" name="image">
                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                         <div class="invalid-feedback">@lang('validation.EnterImage')</div>
                                         <!-- Show current image if exists -->
@@ -92,7 +91,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="date_of_birth" class="form-label">@lang('client.dob')</label>
                                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                            value="{{ $client->clientDetails->date_of_birth }}"
+                                            value="{{ $client->clientDetails->date_of_birth ?? '' }}"
                                             placeholder="@lang('client.dateOfBirth')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -151,7 +150,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md1" value="1"
-                                                {{ $client->clientDetails->is_active == 1 ? 'checked' : '' }}>
+                                                {{ isset($client) && $client->is_active == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md1">
                                                 @lang('client.yes')
                                             </label>
@@ -159,7 +158,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md2" value="0"
-                                                {{ $client->clientDetails->is_active == 0 ? 'checked' : '' }}>
+                                                {{ isset($client) && $client->is_active == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md2">
                                                 @lang('client.no')
                                             </label>
@@ -170,7 +169,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="1"
-                                                {{ $client->is_default == 0 ? 'checked' : '' }}>
+                                                {{ isset($client) && $client->is_default == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.yes')
                                             </label>
@@ -178,7 +177,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="0"
-                                                {{ $client->is_default == 0 ? 'checked' : '' }}>
+                                                {{ isset($client) && $client->is_default == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.no')
                                             </label>
