@@ -185,30 +185,33 @@
                             أكمل موقع التوصيل
                         </h6>
                         <div class="delivery-places px-0 mb-3">
-                            <!-- Radio Buttons for Delivery Places -->
                             <div class="btn-group" role="group" aria-label="Delivery Place Selector">
+                                <!-- Radio Button for Home -->
                                 <input type="radio" class="btn-check" name="deliveryPlace" id="radio-home"
                                     autocomplete="off" checked>
-                                <label class="btn btn-outline-primary rounded-pill" for="radio-home">
+                                <label class="btn rounded-pill" for="radio-home">
                                     <i class="fas fa-city"></i> شقة
                                 </label>
 
+                                <!-- Radio Button for Villa -->
                                 <input type="radio" class="btn-check" name="deliveryPlace" id="radio-villa"
                                     autocomplete="off">
-                                <label class="btn btn-outline-primary rounded-pill" for="radio-villa">
+                                <label class="btn rounded-pill" for="radio-villa">
                                     <i class="fas fa-home"></i> فيلا
                                 </label>
 
+                                <!-- Radio Button for Work -->
                                 <input type="radio" class="btn-check" name="deliveryPlace" id="radio-work"
                                     autocomplete="off">
-                                <label class="btn btn-outline-primary rounded-pill" for="radio-work">
+                                <label class="btn rounded-pill" for="radio-work">
                                     <i class="fas fa-building"></i> مكتب
                                 </label>
                             </div>
                         </div>
 
-                        <div class="tab-content">
-                            <div id="content-home" class="tab-pane fade show active">
+                        <div class="delivery-content">
+                            <!-- Home Form -->
+                            <div class="delivery-section home-section active">
                                 <form>
                                     <div class="mb-3">
                                         <input type="text" class="form-control"
@@ -237,7 +240,9 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="content-villa" class="tab-pane fade">
+
+                            <!-- Villa Form -->
+                            <div class="delivery-section villa-section d-none">
                                 <form>
                                     <div class="mb-3">
                                         <input type="text" class="form-control"
@@ -248,7 +253,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control"
-                                            placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
+                                            placeholder="121  الدقي ,المهندسين  الجيزه">
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
@@ -266,18 +271,21 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="content-work" class="tab-pane fade">
+
+                            <!-- Work Form -->
+                            <div class="delivery-section work-section d-none">
                                 <form>
                                     <div class="mb-3">
                                         <input type="text" class="form-control"
                                             placeholder="اسم  الفيلا, مثال فيلا شاهين">
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
+                                        <input type="text" class="form-control" placeholder="رقم الف
+                                        يلا ,مثال  فيلا 12">
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control"
-                                            placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
+                                            placeholder="121 مصدق الدقي ,  الجيزه">
                                     </div>
                                     <div class="mb-3">
                                         <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
@@ -1258,7 +1266,6 @@
             </div>
         </div>
     </div>
-
     <!-- end branches details modal -->
     <!-- Profile modal -->
     <div class="modal fade" tabindex="-1" id="profileModal" aria-labelledby="profileModalLabel" aria-hidden="true">
@@ -1401,7 +1408,24 @@
     <script>
         AOS.init();
     </script>
+    <script>
+        document.querySelectorAll('.btn-check').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                document.querySelectorAll('.delivery-section').forEach((section) => {
+                    section.classList.add('d-none');
+                });
 
+                if (radio.id === 'radio-home') {
+                    document.querySelector('.home-section').classList.remove('d-none');
+                } else if (radio.id === 'radio-villa') {
+                    document.querySelector('.villa-section').classList.remove('d-none');
+                } else if (radio.id === 'radio-work') {
+                    document.querySelector('.work-section').classList.remove('d-none');
+                }
+            });
+        });
+
+    </script>
 </body>
 
 </html>
