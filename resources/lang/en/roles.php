@@ -30,4 +30,5 @@ return [
     'SaveChanges'=>'Save Changes',
     'Showroles' => 'Show Roles',
     'ArabicDesc' => 'Permissions',
+    'IsActive'=>'IsActive',
 ];
