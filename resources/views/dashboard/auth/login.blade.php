@@ -16,9 +16,9 @@
                 <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
                     <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
                         <div class="my-5 d-flex justify-content-center">
-                            <a href="{{ url('dashboard.home') }}">
-                                <img src="{{ asset('SiteAssets/images/logo.png') }}" alt="logo" class="desktop-logo">
-                                <img src="{{ asset('SiteAssets/images/logo.png') }}" alt="logo"
+                            <a href="{{ route('home') }}">
+                                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}" alt="logo" class="desktop-logo" width="300px">
+                                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}" alt="logo" width="300px"
                                     class="desktop-dark">
                             </a>
                         </div>

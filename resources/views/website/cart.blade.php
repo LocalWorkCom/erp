@@ -52,7 +52,6 @@
                                     </h4>
                                     <div class="form-floating mt-3">
                                         <textarea class="form-control" placeholder="من فضلك اكتب ملاحظتك" id="floatingTextarea2" style="height: 100px"></textarea>
-                                        <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
                                     </div>
                                 </div>
                                 <div class="my-3 d-flex justify-content-end ">
@@ -63,23 +62,25 @@
 
                     </div>
                     <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="card-title fw-bold"> موقعي الحالي </h5>
-                                <button class="btn reversed main-color fw-bold" type="button">
-                                    تعديل
-                                </button>
+                        @auth('client')
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title fw-bold"> موقع التوصيل </h5>
+                                    <button class="btn reversed main-color fw-bold" type="button">
+                                        تعديل
+                                    </button>
 
-                            </div>
-                            <div class="card-body p-4">
-                                <p class="fw-bold">
-                                    <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                    مصدق الدقى و المهندسين وجيزه
-                                </p>
+                                </div>
+                                <div class="card-body p-4">
+                                    <p class="fw-bold">
+                                        <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                        مصدق الدقى و المهندسين وجيزه
+                                    </p>
 
-                                <small class="text-muted">121 مصدق , الدور 2 , شقة 12 </small>
+                                    <small class="text-muted">121 مصدق , الدور 2 , شقة 12 </small>
+                                </div>
                             </div>
-                        </div>
+                        @endauth
                         <div class="card mt-4">
                             <div class="card-header">
                                 <h5 class="card-title fw-bold"> ملخص الطلب </h5>
@@ -120,7 +121,14 @@
                                         </p>
                                     </li>
                                 </ul>
-
+                                <div class="message bg-warning p-2 rounded-3">
+                                    <small>
+                                        يشتمل على ضريبة القيمة المضافة 14% بمعنى آخر
+                                        <span id="tax">
+                                            29.23EGP
+                                        </span>
+                                    </small>
+                                </div>
                             </div>
                             <div class="card-footer p-4">
                                 <div class="total">
@@ -131,14 +139,7 @@
                                         580 ج.م
                                     </p>
                                 </div>
-                                <div class="message bg-warning p-2 rounded-3">
-                                    <small>
-                                        يشتمل على ضريبة القيمة المضافة 14% بمعنى آخر
-                                        <span id="tax">
-                                            29.23EGP
-                                        </span>
-                                    </small>
-                                </div>
+
 
                             </div>
                         </div>
@@ -153,55 +154,48 @@
             </div>
         </section>
     </main>
+    @include('website.cart-modal')
 @endsection
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const addons = JSON.parse(localStorage.getItem('addons')) || []; // Retrieve the addons
-            const cartContainer = document.getElementById('item-list');
-            const totalElement = document.getElementById('total-before-coupon');
-            const totalPayElement = document.getElementById('total-pay');
-            const serviceFeeElement = document.getElementById('service-value');
-            const shippingFeeElement = document.getElementById('shipping-value');
-            const finalTotalElement = document.getElementById('total');
-            const taxElement = document.getElementById('tax');
+            const addons = JSON.parse(localStorage.getItem('addons')) || []; // Retrieve addons
+            const cartContainer = $('#item-list');
+            const totalElement = $('#total-before-coupon');
+            const totalPayElement = $('#total-pay');
+            const serviceFeeElement = $('#service-value');
+            const shippingFeeElement = $('#shipping-value');
+            const finalTotalElement = $('#total');
+            const taxElement = $('#tax');
 
             const SERVICE_FEES = parseFloat('{{ getSetting('service_fees') }}') ||
                 0; // Fetch service fees from settings
             const SHIPPING_FEES = 0; // Adjust this value or retrieve dynamically if needed
-            const TAX_RATE = '{{ getSetting('tax_percentage') / 100 }}'; // 14% VAT
+            const TAX_RATE = parseFloat('{{ getSetting('tax_percentage') }}') / 100; // 14% VAT
 
+            // Helper function to format numbers
+            const formatCurrency = (amount) => `${amount.toFixed(2)} ج.م`;
+
+            // Helper function to render the cart
             const renderCart = () => {
-                cartContainer.innerHTML = '';
+                cartContainer.empty();
                 let total = 0;
 
                 if (cart.length === 0) {
-                    cartContainer.innerHTML = '<p class="text-center">عربة التسوق فارغة.</p>';
-                    totalElement.textContent = '0 ج.م';
-                    totalPayElement.textContent = '0 ج.م';
-                    serviceFeeElement.textContent = `${SERVICE_FEES.toFixed(2)} ج.م`;
-                    shippingFeeElement.textContent = `${SHIPPING_FEES.toFixed(2)} ج.م`;
-                    finalTotalElement.textContent = '0 ج.م';
-                    taxElement.textContent = '0 ج.م';
+                    cartContainer.html('<p class="text-center">عربة التسوق فارغة.</p>');
+                    updateCartSummary(0);
                     return;
                 }
 
                 cart.forEach((item, index) => {
-                    // Calculate the size price and addon price for the item
-                    const itemSizePrice = item.size['price'];
-                    const itemAddons = item.addons || []; // Retrieve the specific addons for this item
-                    let addonTotal = 0;
-
-                    itemAddons.forEach(addon => {
-                        addonTotal += addon.price; // Add the addon price
-                    });
-
-                    // Total price for the item including both size price and addon prices
+                    const itemSizePrice = item.size.price;
+                    const itemAddons = item.addons || [];
+                    const addonTotal = itemAddons.reduce((sum, addon) => sum + addon.price, 0);
                     const itemTotal = (item.quantity * itemSizePrice) + addonTotal;
                     total += itemTotal;
 
-                    cartContainer.innerHTML += `
+                    cartContainer.append(`
                 <div class="sideCart-plate p-4 mb-4" data-index="${index}">
                     <div class="d-flex">
                         <a href="#">
@@ -211,126 +205,272 @@
                         </a>
                         <div class="cart-details pe-5">
                             <h5>${item.name}</h5>
-                            <small class="text-muted">${item.notes || 'لا توجد ملاحظات'}</small>
-                            <p>المقاس<span>${item.size.label}</span></p>
+                            <small class="text-muted d-block"><span>الحجم:</span> ${item.size.label}</small>
+                            <small class="text-muted d-block"><span>إضافة:</span> ${itemAddons.map(addon => addon.name).join(', ') || 'لا يوجد إضافات'}</small>
+                            <small class="text-muted d-block"><span>ملاحظات:</span> ${item.notes || 'لا توجد ملاحظات'}</small>
                             <div class="qty mt-3">
-                                <span class="dec minus" data-index="${index}">
-                                    <i class="fa fa-minus" aria-hidden="true"></i>
-                                </span>
+                                <span class="dec minus" data-index="${index}"><i class="fa fa-minus" aria-hidden="true"></i></span>
                                 <span class="num">${item.quantity}</span>
-                                <span class="inc plus" data-index="${index}">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </span>
+                                <span class="inc plus" data-index="${index}"><i class="fa fa-plus" aria-hidden="true"></i></span>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex flex-column justify-content-end">
-                        <p class="fw-bold">${itemTotal.toFixed(2)} ج.م</p>
+                        <p class="fw-bold">${formatCurrency(itemTotal)}</p>
                         <div class="btns text-center">
                             <button class="btn reversed main-color mb-2 edit-item" data-index="${index}" type="button">تعديل</button>
                             <button class="btn mb-2 delete-item" data-index="${index}" type="button">حذف</button>
                         </div>
                     </div>
                 </div>
-            `;
+            `);
                 });
 
-                // Calculate final total
+                updateCartSummary(total);
+            };
+
+            // Helper function to update the cart summary
+            const updateCartSummary = (total) => {
                 const tax = total * TAX_RATE;
                 const finalTotal = total + SERVICE_FEES + SHIPPING_FEES + tax;
 
-                // Update DOM elements
-                totalElement.textContent = `${total.toFixed(2)} ج.م`;
-                serviceFeeElement.textContent = `${SERVICE_FEES.toFixed(2)} ج.م`;
-                shippingFeeElement.textContent = `${SHIPPING_FEES.toFixed(2)} ج.م`;
-                finalTotalElement.textContent = `${finalTotal.toFixed(2)} ج.م`;
-                taxElement.textContent = `${tax.toFixed(2)} ج.م`;
-                totalPayElement.textContent = `${finalTotal.toFixed(2)} ج.م`;
-
-                attachEventListeners();
+                totalElement.text(formatCurrency(total));
+                serviceFeeElement.text(formatCurrency(SERVICE_FEES));
+                shippingFeeElement.text(formatCurrency(SHIPPING_FEES));
+                finalTotalElement.text(formatCurrency(finalTotal));
+                taxElement.text(formatCurrency(tax));
+                totalPayElement.text(formatCurrency(finalTotal));
             };
 
-            const attachEventListeners = () => {
-                document.querySelectorAll('.inc').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        cart[index].quantity++;
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        renderCart();
-                    });
+            function recalculateTotalPrice() {
+                let selectedSizePrice = parseFloat($('#productModal').find('.size-option:checked')
+                    .val()) || 0;
+                let addonsPrice = 0;
+
+                // Calculate addons price
+                $('#productModal').find('.addon-option:checked').each(function() {
+                    addonsPrice += parseFloat($(this).val());
                 });
 
-                document.querySelectorAll('.dec').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        if (cart[index].quantity > 1) {
-                            cart[index].quantity--;
-                            localStorage.setItem('cart', JSON.stringify(cart));
-                            renderCart();
+                console.log(addonsPrice);
+
+                let quantity = parseInt($('#productModal').find('.num').text()) || 1;
+                let newTotalPrice = (selectedSizePrice * quantity) + addonsPrice;
+                console.log(quantity);
+
+                // Update total price in the total-price span
+                $('#total-price').text(newTotalPrice.toFixed(2));
+
+                // Update the dish-price span
+                $('#dish-total').text(newTotalPrice.toFixed(2));
+
+            }
+            // Helper function to update localStorage and re-render the cart
+            const updateCart = () => {
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+            };
+            // Attach event listeners
+            $(document).on('click', '.inc', function() {
+
+                const index = $(this).data('index');
+                cart[index].quantity++;
+                updateCart();
+            });
+            $(document).on('click', '.dec', function() {
+
+                const index = $(this).data('index');
+                if (cart[index].quantity > 1) {
+                    cart[index].quantity--;
+                    updateCart();
+                }
+            });
+            $(document).on('click', '.delete-item', function() {
+
+                const index = $(this).data('index');
+                cart.splice(index, 1);
+                updateCart();
+            });
+
+            $(document).on('click', '.edit-item', function() {
+
+                const index = $(this).data('index');
+                const item = cart[index];
+
+                editItem(item, index);
+            });
+
+
+
+            // AJAX call for editing item
+            const editItem = (item, index) => {
+                $.ajax({
+                    url: "{{ route('cart.dish-detail') }}",
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        id: item.id
+                    },
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            const product = data.dish;
+                            const dishPrice = parseFloat(item.totalPrice);
+                            let dishHtml = `
+                        <h5>${product.name}</h5>
+                        ${product.mostOrdered ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> الاعلى تقييم</span>` : ''}
+                        <small class="text-muted d-block py-2">${product.description}</small>
+                        <h4 class="fw-bold">
+                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price">${dishPrice.toFixed(2)}</span>
+                            ${data.branch.currency_symbol}
+                        </h4>
+                        <div class="qty mt-3 d-flex justify-content-center align-items-center">
+                            <span class="pro-dec me-3" onclick="decreaseQuantity(this)"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                            <span class="num fs-4">${item.quantity}</span>
+                            <span class="pro-inc ms-3" onclick="increaseQuantity(this)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                        </div>
+                    `;
+                            $('#dish-id').val(product.id);
+                            $('#dish-img').attr('src', product.image);
+                            $('#div-detail').html(dishHtml);
+                            $('#floatingTextarea2').val(item.notes || '');
+
+                            populateSizes(data.sizes, item, data.branch.currency_symbol);
+                            populateAddons(data.addons, item, data.branch.currency_symbol);
+
+                            // const itemTotal = (item.quantity * item.size.price) + item.addons
+                            //     .reduce((sum, addon) => sum + addon.price, 0);
+                            // $('#dish-total').text(
+                            //     `${itemTotal.toFixed(2)} ${data.branch.currency_symbol}`);
+                            // $('#dish-quantity').text(`+ أضف إلي العربة (${item.quantity})`);
+                            $('#submit').off('click').on('click', function() {
+                                saveChanges(index);
+                            });
+                            $('#productModal').modal('show');
+                        } else {
+                            alert('Failed to fetch product details.');
                         }
-                    });
-                });
-
-                document.querySelectorAll('.delete-item').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = this.getAttribute('data-index');
-                        cart.splice(index, 1);
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        renderCart();
-                    });
+                    },
+                    error: function() {
+                        alert('An error occurred while fetching the product details.');
+                    }
                 });
             };
 
-            renderCart();
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const couponInput = document.getElementById('coupon');
-            const applyCouponButton = document.querySelector('.btn[type="submit"]');
-            const totalBeforeCouponElement = document.getElementById('total-before-coupon');
-            const discountValueElement = document.getElementById('discount-value');
-            const couponDiv = document.getElementById('coupon-div');
-            const totalPayElement = document.getElementById('total-pay');
-            const finalTotalElement = document.getElementById('total');
+            const populateSizes = (sizes, item, currencySymbol) => {
+                const sizesContainer = $('#div-sizes');
+                sizesContainer.empty();
 
-            applyCouponButton.addEventListener('click', function() {
-                const couponCode = couponInput.value.trim();
-                const totalBeforeCoupon = parseFloat(totalBeforeCouponElement.textContent);
+                sizes.forEach(size => {
+                    sizesContainer.append(`
+                        <div class="form-check">
+                            <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" ${item.size.id === size.id ? 'checked' : ''}>
+                                <label class="form-check-label" for="size-${size.id}">${size.name}</label>
+                                <span>${size.price} ${currencySymbol}</span>
+                            </div>
+                    `);
+                });
+
+                // Rebind the change event for sizes
+                $('#div-sizes .size-option').on('change', recalculateTotalPrice);
+            };
+
+            // Helper function to populate addons
+            const populateAddons = (addons, item, currencySymbol) => {
+                const addonsContainer = $('#div-addons');
+                addonsContainer.empty();
+
+                addons.forEach(addon => {
+                    const isSelected = item.addons.some(selectedAddon => selectedAddon.id ===
+                        `addon-${addon.id}`);
+
+                    addonsContainer.append(`
+                        <div class="form-check">
+                            <input class="form-check-input addon-option" type="checkbox" id="addon-${addon.id}" value="${addon.price}" ${isSelected ? 'checked' : ''}>
+                                <label class="form-check-label" for="addon-${addon.id}">${addon.name}</label>
+                                <span>${addon.price} ${currencySymbol}</span>
+                            </div>
+                    `);
+                });
+
+                // Rebind the change event for addons
+                $('#div-addons .addon-option').on('change', recalculateTotalPrice);
+            };
+            // Apply coupon functionality
+            const applyCoupon = () => {
+                const couponCode = $('#coupon').val().trim();
+                const totalBeforeCoupon = parseFloat(totalElement.text());
 
                 if (!couponCode) {
                     alert('Please enter a coupon code.');
                     return;
                 }
 
-                fetch('{{ route('cart.coupon-check') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        },
-                        body: JSON.stringify({
-                            code: couponCode,
-                            amount: totalBeforeCoupon,
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
+                $.ajax({
+                    url: '{{ route('cart.coupon-check') }}',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        code: couponCode,
+                        amount: totalBeforeCoupon
+                    },
+                    success: function(data) {
                         if (data.success) {
-                            const discount = totalBeforeCoupon - data
-                            .data; // Assuming `data.data` is the amount after applying the coupon
-                            couponDiv.style.display = 'block';
-                            discountValueElement.textContent = `-${discount.toFixed(2)} ج.م`;
-                            totalPayElement.textContent = `${data.data.toFixed(2)} ج.م`;
-                            finalTotalElement.textContent = `${data.data.toFixed(2)} ج.م`;
+                            const discountedTotal = data.data;
+                            const discount = totalBeforeCoupon - discountedTotal;
+
+                            const tax = discountedTotal * TAX_RATE;
+                            const finalTotal = discountedTotal + SERVICE_FEES + SHIPPING_FEES + tax;
+
+                            $('#coupon-div').show();
+                            $('#discount-value').text(`-${discount.toFixed(2)} ج.م`);
+                            totalElement.text(`${discountedTotal.toFixed(2)} ج.م`);
+                            taxElement.text(`${tax.toFixed(2)} ج.م`);
+                            serviceFeeElement.text(`${SERVICE_FEES.toFixed(2)} ج.م`);
+                            shippingFeeElement.text(`${SHIPPING_FEES.toFixed(2)} ج.م`);
+                            totalPayElement.text(`${finalTotal.toFixed(2)} ج.م`);
+                            finalTotalElement.text(`${finalTotal.toFixed(2)} ج.م`);
                         } else {
                             alert(data.message);
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    },
+                    error: function() {
                         alert('An error occurred while applying the coupon.');
+                    }
+                });
+            };
+            const saveChanges = (itemIndex) => {
+                const updatedSize = $('#div-sizes .size-option:checked').val();
+                const updatedAddons = [];
+                $('#div-addons .addon-option:checked').each(function() {
+                    updatedAddons.push({
+                        id: $(this).attr('id').replace('addon-', ''), // Extract addon ID
+                        price: parseFloat($(this).val()),
+                        name: $(this).next('label').text()
                     });
-            });
+                });
+
+                const updatedNotes = $('#floatingTextarea2').val();
+                const updatedQuantity = parseInt($('#productModal .num').text()) || 1;
+
+                cart[itemIndex].size.price = parseFloat(updatedSize) || cart[itemIndex].size.price;
+                cart[itemIndex].addons = updatedAddons;
+                cart[itemIndex].notes = updatedNotes;
+                cart[itemIndex].quantity = updatedQuantity;
+
+                // Save to localStorage and re-render the cart
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+
+                $('#productModal').modal('hide');
+            };
+            renderCart();
+
+
         });
     </script>
 @endpush

@@ -252,6 +252,8 @@ Route::post('check-coupon', [CouponController::class, 'isCouponValid']);
 Route::group(["middleware" => ["auth:api"]], function () {
     Route::any("logout", [AuthController::class, "logout"]);
     Route::get('/favourite-user', [HomeController::class, 'showFavorites'])->name('api.favourite.user');
+    Route::post('/favourite-user', [HomeController::class, 'storeFavorite'])->name('api.favourite.user.store');
+    Route::delete('/unfavourite-user/{id}', [HomeController::class, 'deleteFavorite'])->name('api.unfavourite.user');
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Route::group(['prefix' => 'user'], function () {

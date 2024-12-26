@@ -157,8 +157,13 @@ return [
     'EnterMaxmum' => 'Please enter the maxmum',
     'EnterNameAr' => 'Please enter name ar',
     'EnterNameEn' => 'Please enter name en',
+    'EnterName'=>'Enter Name',
     'EnterIsActive' => 'Please enter the rate flag active or not',
     'The category have relation' => 'The category have relation',
 
-
+    'custom' => [
+        'name.required' => 'The name is required and cannot be left empty.',
+        'permissions_ids.required' => 'The permissions field is required and cannot be left empty.',
+        'permissions_ids.*.exists' => 'The selected permission does not exist.',
+    ],
 ];

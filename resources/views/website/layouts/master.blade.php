@@ -52,11 +52,8 @@
 
 <body>
 
-    @if (Request::routeIs('home'))
-        @include('website.layouts.home-header') {{-- Home Page Header --}}
-    @else
-        @include('website.layouts.header') {{-- Default Header --}}
-    @endif
+ 
+    @include('website.layouts.header') {{-- Default Header --}}
 
     <main>
         @yield('content')

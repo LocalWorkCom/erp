@@ -114,7 +114,7 @@ class EmployeeController extends Controller
                 Rule::unique('employees')->ignore($employee),
             ],
             // 'password' => 'nullable|string',
-            'phone' => 'nullable|string',
+            'phone' => 'required|string',
             'gender' => 'nullable',
             'birth_date' => 'nullable|date',
             'national_id' => 'nullable|string',

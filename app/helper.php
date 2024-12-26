@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -486,7 +487,7 @@ function CheckCouponValid($id, $amount)
 
     $coupon = Coupon::find($id);
     if ($coupon) {
-        if ($coupon->end_date  < date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount) {
             return true;
         }
     }
@@ -934,7 +935,7 @@ function AddAddons($branch_ids, $dish_id)
         foreach ($get_addons as $get_addon) {
             $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_addon_category = BranchMenuAddonCategory::where('addon_category_id', $get_addon->addon_category_id)->first();
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuAddon::firstOrCreate(
                     ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
                     [
@@ -951,16 +952,16 @@ function AddAddons($branch_ids, $dish_id)
 
 function AddSizes($branch_ids, $dish_id)
 {
-    if($dish_id != 0){
+    if ($dish_id != 0) {
         $get_sizes = DishSize::where('dish_id', $dish_id)->get();
-    }else{
+    } else {
         $get_sizes = DishSize::all();
     }
 
     if ($get_sizes) {
         foreach ($get_sizes as $get_size) {
             $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
-            foreach($branch_ids as $branch_id){
+            foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuSize::firstOrCreate(
                     ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
                     [
@@ -1020,8 +1021,7 @@ function getMostDishesOrdered($limit = 5)
         ->orderByDesc('total_quantity')
         ->orderBy('dishes.created_at', 'desc') // Order by newest first
         ->limit($limit)
-        ->get();
-//        return [];
+
 }
 function checkDishExistMostOrderd($id)
 
@@ -1042,4 +1042,28 @@ function checkDishExistMostOrderd($id)
 function checkOfferUsed($id)
 {
     return OrderDetail::where('offer_id', $id)->exists();
+}
+
+function getAddressFromLatLong($latitude, $longitude)
+{
+    $apiKey = env('GOOGLE_MAPS_API_KEY');
+    $url = "https://maps.googleapis.com/maps/api/geocode/json";
+
+    $response = Http::get($url, [
+        'latlng' => "{$latitude},{$longitude}",
+        'key' => $apiKey,
+    ]);
+
+    if ($response->successful() && isset($response['results'][0])) {
+        $result = $response['results'][0];
+        return [
+            'formatted_address' => $result['formatted_address'] ?? null,
+            'city' => collect($result['address_components'])->firstWhere('types', 'locality')['long_name'] ?? null,
+            'state' => collect($result['address_components'])->firstWhere('types', 'administrative_area_level_1')['long_name'] ?? null,
+            'country' => collect($result['address_components'])->firstWhere('types', 'country')['long_name'] ?? null,
+            'postal_code' => collect($result['address_components'])->firstWhere('types', 'postal_code')['long_name'] ?? null,
+        ];
+    }
+
+    return null;
 }
