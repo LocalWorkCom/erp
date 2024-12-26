@@ -14,7 +14,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('permissions')->whereNot('id',3)->get();
+        $roles = Role::with('permissions')->whereNot('id',2)->get();
         return view('dashboard.roles.list', compact('roles'));
     }
 
