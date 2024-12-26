@@ -210,7 +210,29 @@ class BranchService
                     $check_branch_default->save();
                 }
             }
-
+            $employee_data = $this->employeeDetails($request->employee_id);
+            if ($employee_data->user_id != null) {
+                $branchmanagerRole = Role::firstOrCreate(['name' => 'Branch Manager', 'guard_name' => 'admin']);
+                if ($branchmanagerRole) {
+                    $user = User::find($employee_data->user_id);
+                    $user->assignRole($branchmanagerRole);
+                }
+            } else {
+                $user = new User();
+                $user->email = $employee_data->email;
+                $user->name = $employee_data->first_name . ' ' . $employee_data->last_name;
+                $user->password = Hash::make('123456'); //ask for how to send pass to manager and give him update pass
+                $user->phone = $employee_data->phone_number;
+                $user->flag = 'admin';
+                $user->save();
+                $branchmanagerRole = Role::firstOrCreate(['name' => 'Branch Manager', 'guard_name' => 'admin']);
+                if ($user) {
+                    $employee_user = Employee::find($employee_data->id);
+                    $employee_user->user_id = $user->id;
+                    $employee_user->save();
+                    $user->assignRole($branchmanagerRole);
+                }
+            }
             return ResponseWithSuccessData($this->lang, $branch, 1);
         } catch (\Exception $e) {
             Log::error('Error updating branch: ' . $e->getMessage());
