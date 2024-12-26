@@ -38,121 +38,69 @@
                                 </div>
                             @endcan
                         </div>
-                        <div class="card-body">
-                            @if (session('message'))
-                                <div class="alert alert-solid-info alert-dismissible fade show">
-                                    {{ session('message') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                            @endif
-                            @if (session('error'))
-                                <div class="alert alert-solid-danger alert-dismissible fade show">
-                                    {{ session('error') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                            @endif
-
-                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">@lang('roles.Id')</th>
-                                        <th scope="col">@lang('roles.name')</th>
-                                        <th scope="col">@lang('roles.Actions')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($permissions as $permission)
-                                        <tr>
-                                            <td>{{ $permission->id }}</td>
-                                            <td>{{ __('permissions.' . $permission->name) }}</td>
-                                            <td>
-                                                @can('update permissions')
-                                                    <!-- Edit Button -->
-                                                    <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
-                                                        data-id="{{ $permission->id }}" data-bs-toggle="modal"
-                                                        data-bs-target="#editModal">
-                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                        <!-- Add Permission Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('permission.store') }}"method="POST" class="needs-validation"
+                                        novalidate enctype="multipart/form-data">
+                                        @csrf
+                                        @if ($errors->any())
+                                            @foreach ($errors->all() as $error)
+                                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                    {{ $error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <i class="bi bi-x"></i>
                                                     </button>
-                                                @endcan
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                        <div class="modal-header">
+                                            <h6 class="modal-title" id="exampleModalLabel1">
+                                                @lang('roles.AddPer')</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row gy-4">
+                                                <input type="text" class="form-control" name="type" value="0"
+                                                    hidden>
+                                                <!-- Arabic Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="input-placeholder"
+                                                        class="form-label">@lang('roles.ArabicName')</label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="@lang('roles.ArabicName')" name="name_ar"
+                                                        value="{{ old('name_ar') }}" required>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
+                                                </div>
 
-                                                @can('delete permissions')
-                                                    <!-- Delete Button -->
-                                                    <button type="button" onclick="delete_item({{ $permission->id }})"
-                                                        class="btn btn-danger-light btn-wave">
-                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                @endcan
-
-                                            </td>
-                                        </tr>
-
-                                        <!-- Add Permission Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form action="{{ route('permission.store') }}"method="POST"
-                                                        class="needs-validation" novalidate enctype="multipart/form-data">
-                                                        @csrf
-                                                        @if ($errors->any())
-                                                            @foreach ($errors->all() as $error)
-                                                                <div
-                                                                    class="alert alert-solid-danger alert-dismissible fade show">
-                                                                    {{ $error }}
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="alert" aria-label="Close">
-                                                                        <i class="bi bi-x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="exampleModalLabel1">
-                                                                @lang('roles.AddPer')</h6>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row gy-4">
-                                                                <input type="text" class="form-control" name="type"
-                                                                    value="0" hidden>
-                                                                <!-- Arabic Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="input-placeholder"
-                                                                        class="form-label">@lang('roles.ArabicName')</label>
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.ArabicName')" name="name_ar"
-                                                                        value="{{ old('name_ar') }}" required>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
-                                                                </div>
-
-                                                                <!-- English Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="input-placeholder"
-                                                                        class="form-label">@lang('roles.EnglishName')</label>
-                                                                    <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.EnglishName')" name="name_en"
-                                                                        value="{{ old('name_en') }}" required>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary"
-                                                                data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                            <button type="submit"
-                                                                class="btn btn-outline-primary">@lang('modal.save')</button>
-                                                        </div>
-                                                    </form>
+                                                <!-- English Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="input-placeholder"
+                                                        class="form-label">@lang('roles.EnglishName')</label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="@lang('roles.EnglishName')" name="name_en"
+                                                        value="{{ old('name_en') }}" required>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="submit"
+                                                class="btn btn-outline-primary">@lang('modal.save')</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                                         <!-- Edit Color Modal -->
                                         <div class="modal fade" id="editModal" tabindex="-1"
                                             aria-labelledby="editModalLabel" aria-hidden="true">
@@ -217,6 +165,58 @@
                                                 </div>
                                             </div>
                                         </div>
+                        <div class="card-body">
+                            @if (session('message'))
+                                <div class="alert alert-solid-info alert-dismissible fade show">
+                                    {{ session('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            @endif
+
+                            <table id="file-export" class="table table-bordered text-nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">@lang('roles.Id')</th>
+                                        <th scope="col">@lang('roles.name')</th>
+                                        <th scope="col">@lang('roles.Actions')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($permissions as $permission)
+                                        <tr>
+                                            <td>{{ $permission->id }}</td>
+                                            <td>{{ __('permissions.' . $permission->name) }}</td>
+                                            <td>
+                                                @can('update permissions')
+                                                    <!-- Edit Button -->
+                                                    <button type="button"
+                                                        class="btn btn-orange-light btn-wave edit-color-btn"
+                                                        data-id="{{ $permission->id }}" data-bs-toggle="modal"
+                                                        data-bs-target="#editModal">
+                                                        @lang('category.edit') <i class="ri-edit-line"></i>
+                                                    </button>
+                                                @endcan
+
+                                                @can('delete permissions')
+                                                    <!-- Delete Button -->
+                                                    <button type="button" onclick="delete_item({{ $permission->id }})"
+                                                        class="btn btn-danger-light btn-wave">
+                                                        @lang('category.delete') <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                @endcan
+
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
