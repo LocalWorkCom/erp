@@ -1615,15 +1615,20 @@ input::placeholder {
 
 }
 
-.delivery-modal .delivery-places .nav-link {
+.delivery-places .nav-link {
     background-color: transparent;
     color: #999;
     border: 1px solid #999;
     margin-left: 0.75rem;
 }
+.btn-check:checked + .nav-link {
+    color: white;
+    background-color: #FE0000;
+    border-color: #FE0000;
 
-.delivery-modal .delivery-places .nav-link.active,
-.delivery-modal .delivery-places .show>.nav-link {
+  }
+.delivery-places .nav-link.active,
+.delivery-places .show>.nav-link {
     background: #FE0000;
     color: #fff;
     border: 1px solid transparent;
