@@ -23,5 +23,6 @@ return [
     'parent' => 'Parent Category',
     'save' => 'Save',
     'The category have relation' =>'The category have relation',
+    'The category is referenced as a parent in another category and cannot be deleted.' =>'The category is referenced as a parent in another category and cannot be deleted.',
 
 ];

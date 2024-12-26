@@ -41,6 +41,7 @@ class CountryController extends Controller
                 'currency' => $lang == 'en' ? $country->currency_en : $country->currency_ar,
                 'image' => $country->flag ?? null,
                 'length' =>  $country->length ?? 10,
+                'code'=>$country->code ?? null,
             ];
         });
 

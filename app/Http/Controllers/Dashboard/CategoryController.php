@@ -62,11 +62,17 @@ class CategoryController extends Controller
     }
 
     public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-        $categories = Category::where('active', 1)->get(); // Fetch only active categories
-        return view('dashboard.category.edit', compact('category', 'categories', 'id'));
-    }
+{
+    $category = Category::findOrFail($id);
+
+    // Fetch only active categories that do not have the same ID as the one being edited
+    $categories = Category::where('active', 1)
+                          ->where('id', '!=', $id)
+                          ->get();
+
+    return view('dashboard.category.edit', compact('category', 'categories', 'id'));
+}
+
 
     public function update(Request $request, $id)
     {
