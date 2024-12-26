@@ -28,4 +28,7 @@ return [
     'description' => 'We are sorry for the inconvenience. The page you are trying to access, you don\'t have permission to view.',
     'back_to_home' => 'BACK TO HOME',
     'SaveChanges'=>'Save Changes',
+    'Showroles' => 'Show Roles',
+    'ArabicDesc' => 'Permissions',
+    'IsActive'=>'IsActive',
 ];

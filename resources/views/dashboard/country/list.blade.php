@@ -482,82 +482,82 @@
         @endif
     </script>
     <script>
-          // Get the file input and image elements
-    const flagInput = document.getElementById('edit-flag');
-    const flagImage = document.getElementById('edit-flag-image');
+        // Get the file input and image elements
+        const flagInput = document.getElementById('edit-flag');
+        const flagImage = document.getElementById('edit-flag-image');
 
-    // Listen for changes on the file input
-    flagInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
+        // Listen for changes on the file input
+        flagInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
 
-        // If a file is selected
-        if (file) {
-            const reader = new FileReader();
+            // If a file is selected
+            if (file) {
+                const reader = new FileReader();
 
-            // When the file is read, update the image source
-            reader.onload = function(e) {
-                flagImage.src = e.target.result; // Set the image src to the selected file
-                flagImage.style.display = 'block'; // Ensure the image is visible
-            };
+                // When the file is read, update the image source
+                reader.onload = function(e) {
+                    flagImage.src = e.target.result; // Set the image src to the selected file
+                    flagImage.style.display = 'block'; // Ensure the image is visible
+                };
 
-            // Read the selected file as a Data URL (base64 string)
-            reader.readAsDataURL(file);
-        }
-    });
-       document.addEventListener('DOMContentLoaded', function() {
-    const editButtons = document.querySelectorAll('.edit-country-btn');
-    const editForm = document.getElementById('edit-country-form');
-    const nameArInput = document.getElementById('edit-name-ar');
-    const nameEnInput = document.getElementById('edit-name-en');
-    const codeInput = document.getElementById('edit-code');
-    const currencyEnInput = document.getElementById('edit-currency-en');
-    const currencyCodeInput = document.getElementById('edit-currency-code');
-    const currencyArInput = document.getElementById('edit-currency-ar');
-    const phoneCodeInput = document.getElementById('edit-phone-code');
-    const lengthInput = document.getElementById('edit-length');
-    const flagInput = document.getElementById('edit-flag');
-    const flagImage = document.getElementById('edit-flag-image');
-
-    editButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Get country details from data attributes
-            const countryId = this.getAttribute('data-id');
-            const nameAr = this.getAttribute('data-name-ar');
-            const nameEn = this.getAttribute('data-name-en');
-            const code = this.getAttribute('data-code');
-            const currencyEn = this.getAttribute('data-currency-en');
-            const currencyAr = this.getAttribute('data-currency-ar');
-            const currencyCode = this.getAttribute('data-currency-code');
-            const phoneCode = this.getAttribute('data-phone-code');
-            const length = this.getAttribute('data-length');
-            const flag = this.getAttribute('data-flag');
-            const routeTemplate = this.getAttribute('data-route');
-
-            // Set form action URL dynamically
-            const updateRoute = routeTemplate.replace(':id', countryId);
-            editForm.action = updateRoute;
-
-            // Populate the modal fields
-            nameArInput.value = nameAr;
-            nameEnInput.value = nameEn;
-            codeInput.value = code;
-            currencyArInput.value = currencyAr;
-            currencyEnInput.value = currencyEn;
-            currencyCodeInput.value = currencyCode;
-            phoneCodeInput.value = phoneCode;
-            lengthInput.value = length;
-            flagInput.value = ''; // Clear the file input
-
-            // Display the current flag image if available
-            if (flag) {
-                flagImage.src = flag; // Set the image source to the flag URL
-                flagImage.style.display = 'block'; // Show the image
-            } else {
-                flagImage.style.display = 'none'; // Hide the image if no flag
+                // Read the selected file as a Data URL (base64 string)
+                reader.readAsDataURL(file);
             }
         });
-    });
-});
+        document.addEventListener('DOMContentLoaded', function() {
+            const editButtons = document.querySelectorAll('.edit-country-btn');
+            const editForm = document.getElementById('edit-country-form');
+            const nameArInput = document.getElementById('edit-name-ar');
+            const nameEnInput = document.getElementById('edit-name-en');
+            const codeInput = document.getElementById('edit-code');
+            const currencyEnInput = document.getElementById('edit-currency-en');
+            const currencyCodeInput = document.getElementById('edit-currency-code');
+            const currencyArInput = document.getElementById('edit-currency-ar');
+            const phoneCodeInput = document.getElementById('edit-phone-code');
+            const lengthInput = document.getElementById('edit-length');
+            const flagInput = document.getElementById('edit-flag');
+            const flagImage = document.getElementById('edit-flag-image');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get country details from data attributes
+                    const countryId = this.getAttribute('data-id');
+                    const nameAr = this.getAttribute('data-name-ar');
+                    const nameEn = this.getAttribute('data-name-en');
+                    const code = this.getAttribute('data-code');
+                    const currencyEn = this.getAttribute('data-currency-en');
+                    const currencyAr = this.getAttribute('data-currency-ar');
+                    const currencyCode = this.getAttribute('data-currency-code');
+                    const phoneCode = this.getAttribute('data-phone-code');
+                    const length = this.getAttribute('data-length');
+                    const flag = this.getAttribute('data-flag');
+                    const routeTemplate = this.getAttribute('data-route');
+
+                    // Set form action URL dynamically
+                    const updateRoute = routeTemplate.replace(':id', countryId);
+                    editForm.action = updateRoute;
+
+                    // Populate the modal fields
+                    nameArInput.value = nameAr;
+                    nameEnInput.value = nameEn;
+                    codeInput.value = code;
+                    currencyArInput.value = currencyAr;
+                    currencyEnInput.value = currencyEn;
+                    currencyCodeInput.value = currencyCode;
+                    phoneCodeInput.value = phoneCode;
+                    lengthInput.value = length;
+                    flagInput.value = ''; // Clear the file input
+
+                    // Display the current flag image if available
+                    if (flag) {
+                        flagImage.src = flag; // Set the image source to the flag URL
+                        flagImage.style.display = 'block'; // Show the image
+                    } else {
+                        flagImage.style.display = 'none'; // Hide the image if no flag
+                    }
+                });
+            });
+        });
 
 
         document.addEventListener('DOMContentLoaded', function() {
