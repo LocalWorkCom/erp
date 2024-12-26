@@ -32,6 +32,8 @@ Route::middleware(['auth:client'])->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/faqs', [HomeController::class, 'getfaqs'])->name('shoe.faq');
+
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/return', [HomeController::class, 'return'])->name('return');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');

@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
+use App\Models\FAQ;
 use App\Models\PrivacyPolicy;
 use App\Models\ReturnPolicy;
 use App\Models\Slider;
@@ -216,4 +217,20 @@ class HomeController extends Controller
             compact(['menuCategories', 'userFavorites'])
         );
     }
+    public function getfaqs()
+    {
+        $lang = app()->getLocale(); // Get the current language
+
+        // Select only the necessary fields based on the language
+        $faqs = FAQ::select(
+            "name_{$lang} as name",
+            "question_{$lang} as question",
+            "answer_{$lang} as answer",
+            'active'
+        )->where('active', 1) // Only fetch active FAQs
+        ->get();
+
+        return view('website.faq', compact('faqs'));
+    }
+
 }
