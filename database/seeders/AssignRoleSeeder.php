@@ -15,11 +15,17 @@ class AssignRoleSeeder extends Seeder
      */
     public function run()
     {
+        // Temporarily disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         // Truncate role and permission-related tables
         DB::table('model_has_roles')->truncate();
         DB::table('model_has_permissions')->truncate();
         DB::table('role_has_permissions')->truncate();
         Role::truncate();
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Create roles for the 'admin' guard
         $superAdminRole = Role::firstOrCreate(['name' => 'superAdmin', 'guard_name' => 'admin']);
