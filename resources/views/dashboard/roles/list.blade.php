@@ -91,7 +91,7 @@
                                                         @lang('category.show') <i class="ri-eye-line"></i>
                                                     </a>
                                                 @endcan
-                                                @if($role->id != 1 )
+                                                @if($role->id != 1 || auth()->user()->hasRole('LocalWork Admin') )
 
                                                 @can('update roles')
                                                     <!-- Edit Button -->
