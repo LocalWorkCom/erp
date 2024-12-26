@@ -167,42 +167,43 @@
     <script>
         // logout modal
         document.addEventListener("DOMContentLoaded", function() {
-            const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", function(event) {
-                    event.preventDefault();
+        const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-                    const profileModal = document.getElementById("profileModal");
-                    const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", function(event) {
+                event.preventDefault();
 
-                    if (profileModal) {
-                        const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                        if (profileInstance) {
-                            profileInstance.hide();
-                        }
+                const profileModal = document.getElementById("profileModal");
+                const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+                if (profileModal) {
+                    const profileInstance = bootstrap.Modal.getInstance(profileModal);
+                    if (profileInstance) {
+                        profileInstance.hide();
                     }
-                    logoutModal.show();
-                });
-            }
+                }
+                logoutModal.show();
+            });
+        }
 
-            // Handling close behavior manually if necessary
-            const closeButton = document.querySelector('.btn-close');
-            const cancelButton = document.querySelector('.btn.reversed.main-color');
+        // Handling close behavior manually if necessary
+        const closeButton = document.querySelector('.btn-close');
+        const cancelButton = document.querySelector('.btn.reversed.main-color');
 
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                logoutModal.hide();
+            });
+        }
 
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function() {
+                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                logoutModal.hide();
+            });
+        }
         });
     </script>
 @endpush

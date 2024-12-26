@@ -64,7 +64,7 @@
                                 <div class="row gy-4">
                                     <!-- Arabic Name -->
                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                        <label class="form-label">@lang('roles.Name')</label>
+                                        <label class="form-label">@lang('roles.name')</label>
                                         <input type="text" class="form-control" name="name"
                                             value="{{ old('name') }}" placeholder="@lang('roles.name')" required>
                                         <div class="invalid-feedback">

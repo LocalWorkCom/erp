@@ -38,6 +38,155 @@
                                 </div>
                             @endcan
                         </div>
+                        <!-- Add Permission Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form action="{{ route('permission.store') }}"method="POST" class="needs-validation"
+                                        novalidate enctype="multipart/form-data">
+                                        @csrf
+                                        @if ($errors->any())
+                                            @foreach ($errors->all() as $error)
+                                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                    {{ $error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <i class="bi bi-x"></i>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                        <div class="modal-header">
+                                            <h6 class="modal-title" id="exampleModalLabel1">
+                                                @lang('roles.AddPer')</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row gy-4">
+                                                <input type="text" class="form-control" name="type" value="0"
+                                                    hidden>
+                                                <!-- Arabic Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="input-placeholder"
+                                                        class="form-label">@lang('roles.ArabicName')</label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="@lang('roles.ArabicName')" name="name_ar"
+                                                        value="{{ old('name_ar') }}" required>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
+                                                </div>
+
+                                                <!-- English Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="input-placeholder"
+                                                        class="form-label">@lang('roles.EnglishName')</label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="@lang('roles.EnglishName')" name="name_en"
+                                                        value="{{ old('name_en') }}" required>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
+                                                </div>
+                                                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                                    <label class="form-label">@lang('roles.IsActive')</label>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="is_active" value="0" checked>
+                                                        <label class="form-check-label">@lang('category.yes')</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="is_active" value="1">
+                                                        <label class="form-check-label">@lang('category.no')</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="submit"
+                                                class="btn btn-outline-primary">@lang('modal.save')</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Color Modal -->
+                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form id="edit-color-form" action="{{ route('permission.update') }}" method="POST"
+                                        class="needs-validation" novalidate>
+                                        @csrf
+                                        @method('PUT')
+                                        @if ($errors->any())
+                                            @foreach ($errors->all() as $error)
+                                                <div class="alert alert-solid-danger alert-dismissible fade show">
+                                                    {{ $error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close">
+                                                        <i class="bi bi-x"></i>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                        <div class="modal-header">
+                                            <h6 class="modal-title" id="editModalLabel">
+                                                @lang('roles.editPer')
+                                            </h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row gy-4">
+                                                <!-- Arabic Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="edit-name-ar"
+                                                        class="form-label">@lang('color.ArabicName')</label>
+                                                    <input type="text" id="edit-name-ar" class="form-control"
+                                                        name="name_ar" required>
+                                                    <input type="text" id="edit-id" class="form-control"
+                                                        name="id" hidden>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.ArabicName')</div>
+                                                </div>
+
+                                                <!-- English Name Input -->
+                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                                    <label for="edit-name-en"
+                                                        class="form-label">@lang('color.EnglishName')</label>
+                                                    <input type="text" id="edit-name-en" class="form-control"
+                                                        name="name_en" required>
+                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
+                                                    <div class="invalid-feedback">@lang('validation.EnglishName')</div>
+                                                </div>
+                                                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12">
+                                                    <label class="form-label">@lang('roles.IsActive')</label>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="is_active_edit" value="0" checked>
+                                                        <label class="form-check-label">@lang('category.yes')</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="is_active_edit" value="1">
+                                                        <label class="form-check-label">@lang('category.no')</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-dismiss="modal">@lang('modal.close')</button>
+                                            <button type="submit"
+                                                class="btn btn-outline-primary">@lang('modal.save')</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-body">
                             @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
@@ -72,7 +221,8 @@
                                             <td>
                                                 @can('update permissions')
                                                     <!-- Edit Button -->
-                                                    <button type="button" class="btn btn-orange-light btn-wave edit-color-btn"
+                                                    <button type="button"
+                                                        class="btn btn-orange-light btn-wave edit-color-btn"
                                                         data-id="{{ $permission->id }}" data-bs-toggle="modal"
                                                         data-bs-target="#editModal">
                                                         @lang('category.edit') <i class="ri-edit-line"></i>
@@ -89,134 +239,6 @@
 
                                             </td>
                                         </tr>
-
-                                        <!-- Add Permission Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form action="{{ route('permission.store') }}"method="POST"
-                                                        class="needs-validation" novalidate enctype="multipart/form-data">
-                                                        @csrf
-                                                        @if ($errors->any())
-                                                            @foreach ($errors->all() as $error)
-                                                                <div
-                                                                    class="alert alert-solid-danger alert-dismissible fade show">
-                                                                    {{ $error }}
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="alert" aria-label="Close">
-                                                                        <i class="bi bi-x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="exampleModalLabel1">
-                                                                @lang('roles.AddPer')</h6>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row gy-4">
-                                                                <input type="text" class="form-control" name="type"
-                                                                    value="0" hidden>
-                                                                <!-- Arabic Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="input-placeholder"
-                                                                        class="form-label">@lang('roles.ArabicName')</label>
-                                                                        <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.ArabicName')" name="name_ar" value="{{ old('name_ar') }}"
-                                                                        required>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterArabicName')</div>
-                                                                </div>
-
-                                                                <!-- English Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="input-placeholder"
-                                                                        class="form-label">@lang('roles.EnglishName')</label>
-                                                                        <input type="text" class="form-control"
-                                                                        placeholder="@lang('roles.EnglishName')" name="name_en" value="{{ old('name_en') }}"
-                                                                        required>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnterEnglishName')</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary"
-                                                                data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                            <button type="submit"
-                                                                class="btn btn-outline-primary">@lang('modal.save')</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Edit Color Modal -->
-                                        <div class="modal fade" id="editModal" tabindex="-1"
-                                            aria-labelledby="editModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form id="edit-color-form" action="{{ route('permission.update') }}"
-                                                        method="POST" class="needs-validation" novalidate>
-                                                        @csrf
-                                                        @method('PUT')
-                                                        @if ($errors->any())
-                                                            @foreach ($errors->all() as $error)
-                                                                <div
-                                                                    class="alert alert-solid-danger alert-dismissible fade show">
-                                                                    {{ $error }}
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="alert" aria-label="Close">
-                                                                        <i class="bi bi-x"></i>
-                                                                    </button>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="editModalLabel">
-                                                                @lang('roles.editPer')
-                                                            </h6>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close">
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row gy-4">
-                                                                <!-- Arabic Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="edit-name-ar"
-                                                                        class="form-label">@lang('color.ArabicName')</label>
-                                                                    <input type="text" id="edit-name-ar"
-                                                                        class="form-control" name="name_ar" required>
-                                                                    <input type="text" id="edit-id"
-                                                                        class="form-control" name="id" hidden>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.ArabicName')</div>
-                                                                </div>
-
-                                                                <!-- English Name Input -->
-                                                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
-                                                                    <label for="edit-name-en"
-                                                                        class="form-label">@lang('color.EnglishName')</label>
-                                                                    <input type="text" id="edit-name-en"
-                                                                        class="form-control" name="name_en" required>
-                                                                    <div class="valid-feedback">@lang('validation.Correct')</div>
-                                                                    <div class="invalid-feedback">@lang('validation.EnglishName')</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary"
-                                                                data-bs-dismiss="modal">@lang('modal.close')</button>
-                                                            <button type="submit"
-                                                                class="btn btn-outline-primary">@lang('modal.save')</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -229,28 +251,28 @@
 @endsection
 
 @section('scripts')
-       <!-- JQUERY CDN -->
-       <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
+    <!-- JQUERY CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" crossorigin="anonymous"></script>
 
-       <!-- DATA-TABLES CDN -->
-       <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-       <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-       <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- DATA-TABLES CDN -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-       <!-- INTERNAL DATADABLES JS -->
-       @vite('resources/assets/js/datatables.js')
-       @vite('resources/assets/js/validation.js')
-       @vite('resources/assets/js/choices.js')
-       @vite('resources/assets/js/modal.js')
-       <script>
-           @if ($errors->any())
-               // If validation errors exist, open the modal automatically
-               $(document).ready(function() {
-                   $('#exampleModal').modal('show');
-               });
-           @endif
-       </script>
+    <!-- INTERNAL DATADABLES JS -->
+    @vite('resources/assets/js/datatables.js')
+    @vite('resources/assets/js/validation.js')
+    @vite('resources/assets/js/choices.js')
+    @vite('resources/assets/js/modal.js')
+    <script>
+        @if ($errors->any())
+            // If validation errors exist, open the modal automatically
+            $(document).ready(function() {
+                $('#exampleModal').modal('show');
+            });
+        @endif
+    </script>
     <script>
         function delete_item(id) {
             // Show confirmation dialog
@@ -301,26 +323,34 @@
         }
 
         $(document).on('click', '.edit-color-btn', function() {
-            var permissionId = $(this).data('id');
-            // console.log(permissionId)
-            $.ajax({
-                url: '{{ route('permissions.edit', ':id') }}'.replace(':id',
-                    permissionId), // Correct route construction
-                type: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    $('#edit-name-en').val(response.name_en); // For English name input
-                    $('#edit-name-ar').val(response.name_ar); // For Arabic name input
-                    $('#edit-id').val(response.id);
-                    // Open the modal (if not already open)
-                    $('#editModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
+    var permissionId = $(this).data('id');
+    $.ajax({
+        url: '{{ route('permissions.edit', ':id') }}'.replace(':id', permissionId),
+        type: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            // Populate the input fields with data
+            $('#edit-name-en').val(response.name_en);
+            $('#edit-name-ar').val(response.name_ar);
+            $('#edit-id').val(response.id);
+
+            // Set the radio button for is_active
+            if (response.is_active === 1) {
+                $('input[name="is_active_edit"][value="1"]').prop('checked', true);
+            } else {
+                $('input[name="is_active_edit"][value="0"]').prop('checked', true);
+            }
+
+            // Open the modal
+            $('#editModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+});
+
     </script>
 @endsection

@@ -69,9 +69,9 @@
                                             {{-- @dd( $offer) --}}
 {{--                                            <td>{{ $offer->id }}</td>--}}
                                             <td>{{ $rowNumber++  }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' . $offer->image_ar }}" alt=""
+                                            <td><img src="{{ url($offer->image_ar) }}" alt=""
                                                      width="100" height="100"></td>
-                                            <td><img src="{{ BaseUrl() . '/' . $offer->image_en }}" alt=""
+                                            <td><img src="{{ url($offer->image_en)}}" alt=""
                                                      width="100" height="100"></td>
                                             <td>{{ $offer->name_ar }}</td>
                                             <td>{{ $offer->name_en }}</td>

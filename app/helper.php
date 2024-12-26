@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -1018,9 +1019,9 @@ function getMostDishesOrdered($limit = 5)
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
+        ->orderBy('dishes.created_at', 'desc') // Order by newest first
         ->limit($limit)
-        ->get(); 
-    // return [];
+
 }
 function checkDishExistMostOrderd($id)
 
@@ -1041,4 +1042,28 @@ function checkDishExistMostOrderd($id)
 function checkOfferUsed($id)
 {
     return OrderDetail::where('offer_id', $id)->exists();
+}
+
+function getAddressFromLatLong($latitude, $longitude)
+{
+    $apiKey = env('GOOGLE_MAPS_API_KEY');
+    $url = "https://maps.googleapis.com/maps/api/geocode/json";
+
+    $response = Http::get($url, [
+        'latlng' => "{$latitude},{$longitude}",
+        'key' => $apiKey,
+    ]);
+
+    if ($response->successful() && isset($response['results'][0])) {
+        $result = $response['results'][0];
+        return [
+            'formatted_address' => $result['formatted_address'] ?? null,
+            'city' => collect($result['address_components'])->firstWhere('types', 'locality')['long_name'] ?? null,
+            'state' => collect($result['address_components'])->firstWhere('types', 'administrative_area_level_1')['long_name'] ?? null,
+            'country' => collect($result['address_components'])->firstWhere('types', 'country')['long_name'] ?? null,
+            'postal_code' => collect($result['address_components'])->firstWhere('types', 'postal_code')['long_name'] ?? null,
+        ];
+    }
+
+    return null;
 }
