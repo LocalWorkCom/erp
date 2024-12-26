@@ -132,8 +132,8 @@ class CartController extends Controller
                 }
             } else {
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Coupon is valid.',
+                    'success' => false,
+                    'message' => 'Coupon is not valid.',
                 ]);
             }
         } catch (\Exception $e) {

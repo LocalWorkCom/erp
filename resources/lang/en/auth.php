@@ -19,6 +19,7 @@ return [
     'newuser' => 'New User ?',
     'google' => 'google',
     'facebook' => 'facebook',
+    'login'=>'Login',
     'loginsocial' => 'Login using social media',
     'passplace' => 'Enter password',
     'country_code_login' => 'country code',
