@@ -110,26 +110,41 @@ class HomeController extends Controller
 
         try {
             // Validate token-based user authentication
-            $user = Auth::guard('api')->user();
+            $user = auth('api')->user();
             if (!$user) {
-                Log::error('Unauthorized access attempt.');
                 return RespondWithBadRequestData($lang, 2); // Unauthorized response
             }
+//            dd($user);
 
-            // Retrieve user's favorite dishes with details
+            $lang = $request->header('lang', 'ar'); // Get language preference from the request, default to Arabic (ar)
+
+// Query the user favorites with all dish details
             $userFavorites = DB::table('user_favorite_dishes')
-                ->join('dishes', 'user_favorite_dishes.dish_id', '=', 'dishes.id')
-                ->select('dishes.id', 'dishes.name', 'dishes.description', 'dishes.price', 'dishes.image', 'dishes.is_active')
+                ->join('dishes', 'user_favorite_dishes.dish_id', '=', 'dishes.id') // Join with dishes table
                 ->where('user_favorite_dishes.user_id', $user->id)
-                ->where('dishes.is_active', true)
-                ->get();
+                ->select('user_favorite_dishes.id', 'user_favorite_dishes.user_id', 'user_favorite_dishes.dish_id',
+                    'dishes.id as dish_id', 'dishes.category_id', 'dishes.cuisine_id', 'dishes.price',
+                    'dishes.image', 'dishes.name_en', 'dishes.name_ar', 'dishes.description_en', 'dishes.description_ar',
+                    'dishes.is_active', 'dishes.has_sizes', 'dishes.has_addon', 'dishes.created_by', 'dishes.modified_by',
+                    'dishes.deleted_by', 'dishes.created_at', 'dishes.updated_at') // Select all relevant dish columns
+                ->get()
+                ->map(function ($favorite) use ($lang) {
+                    // Depending on the language, set the dish name and description
+                    if ($lang == 'en') {
+                        $favorite->dish_name = $favorite->name_en;
+                        $favorite->dish_description = $favorite->description_en;
+                    } else {
+                        $favorite->dish_name = $favorite->name_ar;
+                        $favorite->dish_description = $favorite->description_ar;
+                    }
 
-            // Log retrieved data
-            Log::info('User ID: ' . $user->id);
-            Log::info('Favorite dishes data: ', ['favorites' => $userFavorites]);
+                    // Remove unnecessary columns if you want (we only need the dish name and description)
+                    unset($favorite->name_en, $favorite->name_ar, $favorite->description_en, $favorite->description_ar);
+
+                    return $favorite;
+                });
 
             if ($userFavorites->isEmpty()) {
-                Log::warning('No favorite dishes found for user ID: ' . $user->id);
                 return RespondWithBadRequestData($lang, 2); // No favorites found
             }
 
@@ -146,4 +161,86 @@ class HomeController extends Controller
             return RespondWithBadRequestData($lang, 2); // Generic error response
         }
     }
+
+    public function storeFavorite(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+
+        try {
+            $user = auth('api')->user();
+//            dd($user);
+            if (!$user) {
+                return RespondWithBadRequestData($lang, 4); // Unauthorized response
+            }
+
+            // Get the dish_id from the request
+            $dishId = $request->input('dish_id');
+
+            // Validate that dish_id is provided and is a valid number
+            if (!$dishId || !is_numeric($dishId)) {
+                return RespondWithBadRequestData($lang, 3); // Invalid dish_id
+            }
+
+            // Check if the dish already exists in the user's favorites
+            $existingFavorite = DB::table('user_favorite_dishes')
+                ->where('user_id', $user->id)
+                ->where('dish_id', $dishId)
+                ->first();
+
+            if ($existingFavorite) {
+                // If the dish is already a favorite, return a response indicating that
+                return RespondWithBadRequestData($lang, 9); // Favorite already exists
+            }
+
+            // Store the new favorite dish in the database
+            DB::table('user_favorite_dishes')->insert([
+                'user_id' => $user->id,
+                'dish_id' => $dishId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Return success response
+            return RespondWithSuccessRequest($lang, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 8); // Generic error response
+        }
+    }
+
+    public function deleteFavorite($id, Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
+
+        try {
+            // Authenticate user using token
+            $user = auth('api')->user();
+            if (!$user) {
+                return RespondWithBadRequestData($lang, 4); // Unauthorized response
+            }
+
+            // Check if the favorite dish exists for the given user
+            $favorite = DB::table('user_favorite_dishes')
+                ->where('user_id', $user->id)
+                ->where('dish_id', $id) // Use the dish ID from the URL parameter
+                ->first();
+
+            if (!$favorite) {
+                // If the dish is not in the user's favorites
+                return RespondWithBadRequestData($lang, 8); // Favorite not found
+            }
+
+            // Delete the favorite dish record
+            DB::table('user_favorite_dishes')
+                ->where('user_id', $user->id)
+                ->where('dish_id', $id)
+                ->delete();
+
+            // Return success response
+            return RespondWithSuccessRequest($lang, 1);
+        } catch (\Exception $e) {
+            return RespondWithBadRequestData($lang, 8); // Generic error response
+        }
+    }
+
+
 }
