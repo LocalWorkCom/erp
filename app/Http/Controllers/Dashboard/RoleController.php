@@ -19,31 +19,48 @@ class RoleController extends Controller
     }
 
     public function show($id)
-    {
-        $role = Role::with('permissions')->findOrFail($id);
+{
+    // Retrieve the role along with its permissions
+    $role = Role::with('permissions')->findOrFail($id);
 
-        return view('dashboard.roles.show', compact('role','id'));
+    // Fetch and group permissions as in the `create` method
+    $groupedPermissions = $this->getGroupedPermissions();
+
+    return view('dashboard.roles.show', compact('role', 'id', 'groupedPermissions'));
+}
+
+public function create()
+{
+    // Fetch and group permissions
+    $groupedPermissions = $this->getGroupedPermissions();
+
+    return view('dashboard.roles.add', compact('groupedPermissions'));
+}
+
+/**
+ * Common function to fetch and group permissions.
+ */
+private function getGroupedPermissions()
+{
+    $permissions = Permission::where('guard_name', 'admin')->where('is_active', 0)->get();
+    $groupedPermissions = [];
+    foreach ($permissions as $permission) {
+        $parts = explode(' ', $permission->name);
+        $group = $parts[1] ?? 'Others'; // Default group name if no second part exists
+        $groupedPermissions[$group][] = $permission;
     }
-    public function create()
-    {
-        $permissions = Permission::where('guard_name', 'admin')->where('is_active',0)->get();
-        $groupedPermissions = [];
-        foreach ($permissions as $permission) {
-            $parts = explode(' ', $permission->name);
-            $group = $parts[1] ?? 'Others';
-            $groupedPermissions[$group][] = $permission;
-        }
-        return view('dashboard.roles.add', compact('groupedPermissions'));
-    }
+    return $groupedPermissions;
+}
     public function store(Request $request)
     {
-        $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
-        ];
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:roles,name',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'name') // Ignore the current role when checking for uniqueness
+            ],
             'permissions_ids' => 'required|array',
             'permissions_ids.*' => 'string|exists:permissions,name',
         ]);
@@ -83,11 +100,6 @@ class RoleController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $messages = [
-            'name.required' => 'الاسم  مطلوب ولا يمكن تركه فارغاً.',
-            'permissions_ids.required' => 'الصلاحية   مطلوب ولا يمكن تركه فارغاً.',
-        ];
-
         $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
@@ -97,7 +109,7 @@ class RoleController extends Controller
             ],
             'permissions_ids' => 'required|array',
             'permissions_ids.*' => 'string|exists:permissions,name',
-        ], $messages);
+        ]);
 
         // Handle validation failure
         if ($validator->fails()) {

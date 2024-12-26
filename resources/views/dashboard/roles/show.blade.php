@@ -50,17 +50,19 @@
                                 <!-- Permissions -->
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <label class="form-label">@lang('roles.ArabicDesc')</label>
-                                    <ul class="list-group d-flex flex-wrap" style="gap: 10px;">
-
-                                            <li class="list-group-item" style="flex: 0 0 calc(50% - 10px);">
-                                                @foreach ($role->permissions as $permission)
-                                                {{ $permission->name }}  ---
-                                                @endforeach
-                                            </li>
-
-                                    </ul>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @foreach ($groupedPermissions as $group => $permissions)
+                                            <div class="permission-group" style="flex: 1 1 calc(50% - 10px);">
+                                                <h4>{{ $group }}</h4>
+                                                <ul class="list-group">
+                                                    @foreach ($permissions as $permission)
+                                                        <li class="list-group-item">{{ $permission->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
-
 
                             </div>
                         </div>
