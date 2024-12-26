@@ -29,4 +29,6 @@ return [
     'SaveChanges'=>'حفظ التغييرات',
     'Showroles' => 'عرض المهام',
     'ArabicDesc' => 'الصلحيات',
+    'IsActive'=>'يسمح بأظهاره',
+
 ];
