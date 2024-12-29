@@ -310,22 +310,25 @@
                                     </a>
                                 </li>
                             @endcan
+                            {{-- update with correct permission --}}
+                            @can('view timetables')
 
                             <li class="slide">
                                 <a href="{{ url('FingerDevice') }}" class="side-menu__item">
                                     <span class="side-menu__label">@lang('sidebar.FingerDevice') </span>
                                 </a>
                             </li>
+                            @endcan
 
                             <!-- Start::slide -->
+                            @can('view excuses')
+
                             <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
                                     <span class="side-menu__label">@lang('sidebar.excuses') </span>
                                     <i class="fe fe-chevron-right side-menu__angle"></i>
                                 </a>
-
                                 <ul class="slide-menu child2">
-                                    @can('view excuses')
                                         <li class="slide">
                                             <a href="{{ url('blog') }}" class="side-menu__item">@lang('sidebar.excuses') </a>
                                         </li>
@@ -340,10 +343,12 @@
                                             <a href="{{ url('blog-create') }}" class="side-menu__item">@lang('sidebar.excuseslogs')
                                             </a>
                                         </li>
-                                    @endcan
-
                                 </ul>
                             </li>
+                            @endcan
+                            @if (auth()->user()->can('view leave_requests') ||
+                            auth()->user()->can('view leave_types') ||
+                            auth()->user()->can('view leave_settings') )
                             <!-- Start::slide -->
                             <li class="slide has-sub">
                                 <a href="javascript:void(0);" class="side-menu__item">
@@ -380,6 +385,7 @@
 
                                 </ul>
                             </li>
+                            @endif
                             <!-- End::slide -->
                         </ul>
                     </li>
