@@ -1020,7 +1020,8 @@ function getMostDishesOrdered($limit = 5)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->orderBy('dishes.created_at', 'desc') // Order by newest first
-        ->limit($limit);
+        ->limit($limit)
+        ->get();
 }
 function checkDishExistMostOrderd($id)
 
