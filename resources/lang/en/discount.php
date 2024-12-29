@@ -22,5 +22,5 @@ return [
     'dish' =>'dish',
     'Save' =>'Save',
     'Remove' =>'Remove',
-
+    'duplicate_active_code' =>'duplicate_active_code',
 ];
