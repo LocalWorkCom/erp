@@ -34,15 +34,15 @@ class HomeController extends Controller
 
         $sliderController = new SliderController();
         $sliderResponse = $sliderController->index($request);
-        $slider = $sliderResponse->getData()->data;
+        $slider = $sliderResponse->getData()->data; //**************
 
         $menuController = new DishCategoryController($this->dishCategoryService);
         $menuResponse = $menuController->menuDishes($request);
-        $menu = array_slice($menuResponse->getData()->data, -4); // 4
+        $menu = array_slice($menuResponse->getData()->data, -4); // 4 //**************
 
         $mostPopularController = new MostPopularController();
         $mostPopularResponse = $mostPopularController->index($request);
-        $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite
+        $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite //**************
 
         $isOffers = $request->query('offers');
 //        dd($isOffers);
@@ -92,10 +92,10 @@ class HomeController extends Controller
         }
 
         $data = [
-            'branches' => $branches,
-            'slider' => $slider,
-            'menu' => $menu,
-            'mostPopular' => $mostPopular,
+            'branches' => $branches ?? null,
+            'slider' => $slider ?? null,
+            'menu' => $menu ?? null,
+            'mostPopular' => $mostPopular ?? null,
         ];
 
         if (empty($data['branches']) || empty($data['slider']) || empty($data['menu']) || empty($data['mostPopular'])) {
