@@ -49,6 +49,8 @@ use App\Http\Controllers\Dashboard\BranchMenuController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonController;
 use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonCategoryController;
+use App\Http\Controllers\Dashboard\ReportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -130,13 +132,13 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
 
     });
 
-    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view products');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list')->middleware('role_or_permission:view categories');
     Route::group(['prefix' => 'category'], function () {
-        Route::get('create', [CategoryController::class, 'create'])->name('category.create')->middleware('role_or_permission:create products');
-        Route::post('store', [CategoryController::class, 'store'])->name('category.store')->middleware('role_or_permission:create products');
-        Route::get('show/{id}', [CategoryController::class, 'show'])->name('category.show')->middleware('role_or_permission:view products');
-        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit')->middleware('role_or_permission:update products');
-        Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update')->middleware('role_or_permission:update products');
+        Route::get('create', [CategoryController::class, 'create'])->name('category.create')->middleware('role_or_permission:create categories');
+        Route::post('store', [CategoryController::class, 'store'])->name('category.store')->middleware('role_or_permission:create categories');
+        Route::get('show/{id}', [CategoryController::class, 'show'])->name('category.show')->middleware('role_or_permission:view categories');
+        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit')->middleware('role_or_permission:update categories');
+        Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update')->middleware('role_or_permission:update categories');
         Route::delete('delete/{id}', [CategoryController::class, 'delete'])->name('category.delete')->middleware('role_or_permission:delete categories');
     });
 
@@ -551,6 +553,11 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
+    });
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::get('clients/list', [ReportController::class, 'clients'])->name('reports.clients.list')->middleware('role_or_permission:view clients_reports');
+        Route::get('client/show', [ReportController::class, 'show_client_reports'])->name('reports.client.show')->middleware('role_or_permission:view clients_reports');
     });
 
 });

@@ -30,7 +30,7 @@ class DiscountController extends Controller
 
     public function index(Request $request)
     {
-        $response  = $this->discountService->index($request,$this->checkToken);
+        $response  = $this->discountService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $discounts = Discount::hydrate($responseData['data']);
 
@@ -46,22 +46,29 @@ class DiscountController extends Controller
     {
         $response = $this->discountService->store($request, $this->checkToken);
         $responseData = $response->original;
-         // Check if the response has a 'status' key
-         if (isset($responseData['status']) && !$responseData['status']) {
-            // If 'data' key exists, handle validation errors
-            if (isset($responseData['data'])) {
+
+        // Check if the response has a 'status' key
+        if (isset($responseData['status']) && !$responseData['status']) {
+            // Check if 'data' key exists and handle validation errors
+            if (isset($responseData['data']) && is_array($responseData['data'])) {
                 $validationErrors = $responseData['data'];
                 return redirect()->back()->withErrors($validationErrors)->withInput();
-            } else {
-                // dd(0);
+            }
+
+            // If 'data' key is not present, handle with the 'message' key
+            if (isset($responseData['message'])) {
                 return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
 
-            // If no 'data' key is present, handle it gracefully
+            // Fallback for unexpected error formats
+            return redirect()->back()->withErrors(__('Unexpected error occurred'))->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('dashboard/discounts')->with('message',$message);
+
+        // Success case
+        $message = $responseData['message'] ?? __('Operation successful');
+        return redirect('dashboard/discounts')->with('message', $message);
     }
+
 
     public function edit($id)
     {
@@ -89,16 +96,16 @@ class DiscountController extends Controller
                 return redirect()->back()->withErrors($responseData['message'])->withInput();
             }
         }
-        $message= $responseData['message'];
-        return redirect('dashboard/discounts')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('dashboard/discounts')->with('message', $message);
     }
 
     public function delete(Request $request, $id)
     {
         $response = $this->discountService->destroy($request, $id);
         $responseData = $response->original;
-        $message= $responseData['message'];
-        return redirect('dashboard/discounts')->with('message',$message);
+        $message = $responseData['message'];
+        return redirect('dashboard/discounts')->with('message', $message);
     }
 
     public function dish(Request $request, $discountId)

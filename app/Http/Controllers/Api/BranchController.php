@@ -197,13 +197,22 @@ class BranchController extends Controller
     public function listBranchAndNear(Request $request)
     {
         $lang = $request->header('lang', 'ar');
-
         $userLat = $request->query('latitute');
         $userLon = $request->query('longitute');
         $all = $request->query('all', 0);
+        $searchName = $request->query('name'); // Capture the search query for branch name
+
+        // Determine the correct column for branch name based on language
+        $nameColumn = ($lang === 'ar') ? 'name_ar' : 'name_en';
 
         // Fetch all branches if 'all' parameter is set to 1
-        $branches = ($all == 1) ? Branch::whereNull('deleted_at')->get() : null;
+        $branchesQuery = Branch::whereNull('deleted_at');
+
+        if ($searchName) {
+            $branchesQuery->where($nameColumn, 'like', "%{$searchName}%");
+        }
+
+        $branches = ($all == 1) ? $branchesQuery->get() : null;
 
         $data = [];
 
@@ -224,6 +233,6 @@ class BranchController extends Controller
         // Include all branches if fetched
         $data['branches'] = $branches;
 
-        return ResponseWithSuccessData($lang, $data, 1); // Replace 'ar' with the desired language dynamically
+        return ResponseWithSuccessData($lang, $data, 1);
     }
 }
