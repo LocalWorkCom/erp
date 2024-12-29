@@ -19,4 +19,6 @@ return [
     'ShowCoupon' => 'Show Coupon', //
     'duplicate_code' => ' code is dublicated ',
     'code_required' => 'code is required ',
+    'duplicate_active_code' =>'duplicate active code',
+
 ];
