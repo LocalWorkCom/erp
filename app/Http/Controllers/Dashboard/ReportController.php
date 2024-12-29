@@ -40,10 +40,10 @@ class ReportController extends Controller
 
     public function clients(Request $request)
     {
-        return $response = $this->reportService->index($request, $this->checkToken);
+        $response = $this->reportService->all_clients($request, $this->checkToken);
         $responseData = $response->original;
-        $orders = $responseData['data'];
-        return view('dashboard.reports.list', compact('orders'));
+        $clients = $responseData['data'];
+        return view('dashboard.reports.clients', compact('clients'));
     }
 
     public function show_client_reports(Request $request)

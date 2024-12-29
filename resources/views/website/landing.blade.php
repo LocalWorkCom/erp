@@ -43,18 +43,20 @@
         <div class="container px-0 py-sm-5 py-4">
             <div class="section-titles d-flex justify-content-between" data-aos="fade-down">
                 <h2 class="fw-bold">استكشف القائمة</h2>
-                <div class="section-btn">
-                    <span class="ms-2">عرض الكل</span>
-                    <span class="icon">
-                        <i class="fas fa-arrow-left"></i>
-                    </span>
+                <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
+                    <a href="{{ route('menu') }}" class="section-btn text-decoration-none">
+                        <span class="ms-2">عرض الكل</span>
+                        <span class="icon">
+                            <i class="fas fa-arrow-left"></i>
+                        </span>
+                    </a>
                 </div>
             </div>
             <div class="categories-slider owl-carousel owl-theme">
                 @foreach ($menuCategories as $menuCategory)
                     @if ($menuCategory->is_active && $menuCategory->dish_categories && $menuCategory->dish_categories->is_active)
                         <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                            <a href="#">
+                            <a href="{{ route('menu', ['category_id' => $menuCategory->dish_categories->id]) }}">
                                 <figure class="category-img m-0">
                                     <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front\AlKout-Resturant\SiteAssets\images\logo-with-white-bg.png') }}"
                                         alt="{{ $menuCategory->dish_categories->name_ar }}">
@@ -254,11 +256,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                    <span class="badge bg-warning text-dark">
-                                                        <i class="fas fa-star"></i>
-                                                        الاعلى تقييم
-                                                    </span>
-                                                ` : ''}
+                                                                        <span class="badge bg-warning text-dark">
+                                                                            <i class="fas fa-star"></i>
+                                                                            الاعلى تقييم
+                                                                        </span>
+                                                                    ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
