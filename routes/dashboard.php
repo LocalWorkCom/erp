@@ -49,6 +49,8 @@ use App\Http\Controllers\Dashboard\BranchMenuController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonController;
 use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonCategoryController;
+use App\Http\Controllers\Dashboard\ReportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -551,6 +553,11 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [CuisineController::class, 'update'])->name('dashboard.cuisines.update');
         Route::delete('/{id}', [CuisineController::class, 'destroy'])->name('dashboard.cuisines.destroy');
         Route::post('/restore/{id}', [CuisineController::class, 'restore'])->name('dashboard.cuisines.restore');
+    });
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::get('clients/list', [ReportController::class, 'clients'])->name('reports.clients.list')->middleware('role_or_permission:view clients_reports');
+        Route::get('client/show', [ReportController::class, 'show_client_reports'])->name('reports.client.show')->middleware('role_or_permission:view clients_reports');
     });
 
 });

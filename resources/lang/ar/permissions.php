@@ -566,4 +566,5 @@ return array (
   'create rates' => 'اضافة تقييم',
   'update rates' => 'تعديل تقييم',
   'delete rates' => 'حذف تقييم',
+  'view clients_reports' => 'عرض تقاير العملاء',
 );
