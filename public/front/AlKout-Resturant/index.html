@@ -32,8 +32,8 @@
   <!-- include Gallery (lightbox) plugin -->
   <link rel="stylesheet" href="SiteAssets/lightbox/css/lightbox.min.css" />
   <!-- Main Style -->
-   <link rel="stylesheet" href="SiteAssets/css/style.css" type="text/css" />
- 
+  <link rel="stylesheet" href="SiteAssets/css/style.css" type="text/css" />
+
 
   <!-- fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,14 +147,16 @@
         <div class=" py-5 owl-slider owl-carousel owl-theme">
           <div class="item">
             <div class="row m-0 justify-content-center align-items-center">
-              <div class="col-md-6">
-                <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>
-                <p class="slide-text my-5 ">
-                  يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك
-                </p>
-                <a href="#" class="btn">اطلب الان</a>
+              <div class="col-lg-6">
+                <div class="me-5">
+                  <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>
+                  <p class="slide-text my-5 ">
+                    يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك
+                  </p>
+                  <a href="#" class="btn">اطلب الان</a>
+                </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <figure class="intro-img">
                   <img src="SiteAssets/images/intro-plate.png" alt="">
                 </figure>
@@ -163,14 +165,14 @@
           </div>
           <div class="item">
             <div class="row m-0 justify-content-center align-items-center">
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <h1 class="slide-title">استمتع بتجربة رائعة لدينا</h1>
                 <p class="slide-text my-5 ">
                   يمكنك طلب افضل انواع المأكولات واشهر الاطباق من خلال موقعنا واستمتع بتجربة مميزه لك
                 </p>
                 <a href="#" class="btn">اطلب الان</a>
               </div>
-              <div class="col-md-6">
+              <div class="col-lg-6">
                 <figure class="intro-img">
                   <img src="SiteAssets/images/intro-plate.png" alt="">
                 </figure>
@@ -199,7 +201,7 @@
             </span>
           </div>
         </div>
-        <div class="categories-slider owl-carousel owl-theme">
+        <div class="categories-slider owl-carousel owl-theme overflow-hidden">
           <div class="item mb-4 category position-relative" data-aos="zoom-in">
             <a href="#">
               <figure class="category-img m-0">
@@ -272,7 +274,7 @@
             </span>
           </div>
         </div>
-        <div class="offers-slider owl-carousel owl-theme">
+        <div class="offers-slider owl-carousel owl-theme overflow-hidden">
           <div class="item mb-4 category position-relative" data-aos="zoom-in">
             <div class="item one row mx-0 p-4" data-aos="zoom-in">
               <div class="col-md-5">
@@ -404,7 +406,7 @@
         </div> -->
 
     </section>
-    <section class="plates">
+    <section class="plates overflow-hidden">
       <div class="container py-sm-5 py-4">
         <h2 class="fw-bold" data-aos="fade-down"> اشهر اطباقنا</h2>
         <p class="text-muted pt-4" data-aos="fade-down">
@@ -439,7 +441,7 @@
         </div>
       </div>
     </section>
-    <section class="info">
+    <section class="info overflow-hidden">
       <div class="container py-sm-5 py-4">
         <div class="row m-0 justify-content-cennter align-items-center">
           <div class="col-md-5 offset-md-1" data-aos="fade-left">
@@ -455,98 +457,102 @@
             </figure>
           </div>
         </div>
-        <button type="button" class="btn cart-btn" onclick="openCart()">
+        <button type="button" class="btn cart-btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+          aria-controls="offcanvasRight">
           <i class="fas fa-shopping-cart"></i>
-      </button>
-      <div id="blur-overlay" class="blur-overlay"></div>
+        </button>
+        <div id="blur-overlay" class="blur-overlay"></div>
 
-      <div id="sideCart" class="sideCart">
-          <!-- <div class="cart"> -->
-          <div class="cart-header p-4">
-              <a href="javascript:void(0)" class="closebtn" onclick="closeCart()">&times;</a>
-              <h4> تفاصيل العربة </h4>
-              <div class="cart-total-items">
-                  3
-              </div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+          <div class="offcanvas-header cart-header">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h4 id="offcanvasRightLabel">
+              تفاصيل العربة
+            </h4>
+            <div class="cart-total-items">
+              3
+            </div>
           </div>
-          <div class="cart-content p-4">
+          <div class="offcanvas-body">
+            <div class="cart-content">
               <!-- <figure class="text-center">
-                  <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                  <figcaption>
-                      <h4>
-                          لا توجد منتجات
-                      </h4>
-                  </figcaption>
-              </figure> -->
+              <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+              <figcaption>
+                  <h4>
+                      لا توجد منتجات
+                  </h4>
+              </figcaption>
+          </figure> -->
 
               <div class="sideCart-plate p-4 mb-4">
-                  <a href="#">
-                      <figure class="sideCart-plate-img m-0">
-                          <img src="SiteAssets/images/plate1.png" alt="">
-                      </figure>
-                  </a>
-                  <div class="cart-details">
-                      <h5>كبسة فراخ </h5>
-                      <div class="qty mt-3">
-                          <span class="dec minus">
-                              <i class="fa fa-minus" aria-hidden="true"></i>
+                <a href="#">
+                  <figure class="sideCart-plate-img m-0">
+                    <img src="SiteAssets/images/plate1.png" alt="">
+                  </figure>
+                </a>
+                <div class="cart-details">
+                  <h5>كبسة فراخ </h5>
+                  <div class="qty mt-3">
+                    <span class="dec minus">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
 
-                          </span>
-                          <span class="num">
-                              0
-                          </span>
-                          <span class="inc plus">
-                              <i class="fa fa-plus" aria-hidden="true"></i>
-                          </span>
-                      </div>
-                      <p class="fw-bold"> 300 ج . م</p>
-                      <div class="btns">
-                          <button class="btn reversed main-color" type="button">تعديل</button>
-                          <button class="btn" type="button">حذف</button>
-                      </div>
+                    </span>
+                    <span class="num">
+                      0
+                    </span>
+                    <span class="inc plus">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
                   </div>
+                  <p class="fw-bold"> 300 ج . م</p>
+                  <div class="btns">
+                    <button class="btn reversed main-color" type="button">تعديل</button>
+                    <button class="btn" type="button">حذف</button>
+                  </div>
+                </div>
               </div>
               <div class="sideCart-plate p-4 mb-4">
-                  <a href="#">
-                      <figure class="sideCart-plate-img m-0">
-                          <img src="SiteAssets/images/plate1.png" alt="">
-                      </figure>
-                  </a>
-                  <div class="cart-details">
-                      <h5>كبسة فراخ </h5>
-                      <div class="qty mt-3">
-                          <span class="dec minus">
-                              <i class="fa fa-minus" aria-hidden="true"></i>
+                <a href="#">
+                  <figure class="sideCart-plate-img m-0">
+                    <img src="SiteAssets/images/plate1.png" alt="">
+                  </figure>
+                </a>
+                <div class="cart-details">
+                  <h5>كبسة فراخ </h5>
+                  <div class="qty mt-3">
+                    <span class="dec minus">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
 
-                          </span>
-                          <span class="num">
-                              0
-                          </span>
-                          <span class="inc plus">
-                              <i class="fa fa-plus" aria-hidden="true"></i>
-                          </span>
-                      </div>
-                      <p class="fw-bold"> 300 ج . م</p>
-                      <div class="btns">
-                          <button class="btn reversed main-color" type="button">تعديل</button>
-                          <button class="btn" type="button">حذف</button>
-                      </div>
+                    </span>
+                    <span class="num">
+                      0
+                    </span>
+                    <span class="inc plus">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
                   </div>
+                  <p class="fw-bold"> 300 ج . م</p>
+                  <div class="btns">
+                    <button class="btn reversed main-color" type="button">تعديل</button>
+                    <button class="btn" type="button">حذف</button>
+                  </div>
+                </div>
               </div>
-          </div>
-          <div class="cart-footer p-4">
-              <a class="btn w-100 d-flex justify-content-between" href="cart.html">
-                  <i class="fas fa-shopping-cart"></i>
-                  <span> أذهب الي العربة</span>
-                  <span> 300 ج . م</span>
+            </div>
+            <div class="cart-footer">
+              <a class="btn w-100 d-flex justify-content-between align-items-center" href="cart.html">
+                <i class="fas fa-shopping-cart"></i>
+                <span> أذهب الي العربة</span>
+                <span> 300 ج . م</span>
               </a>
+            </div>
+            <!-- </div> -->
           </div>
-          <!-- </div> -->
-      </div>
+        </div>
       </div>
 
     </section>
-    <section class="apps">
+    <section class="apps overflow-hidden">
       <div class="container pt-sm-5 pt-4">
         <div class="row m-0 justify-content-cennter align-items-center text-center">
           <div class="col-md-6" data-aos="fade-left">
@@ -582,7 +588,7 @@
         <img src="SiteAssets/images/logo-with-white-bg.png" />
       </figure>
     </div>
-    <div class="footer">
+    <div class="footer overflow-hidden">
       <div class="container py-sm-5 p-4">
         <div class=" row m-0">
           <div class="col-md-3" data-aos="zoom-in">
@@ -658,7 +664,7 @@
   <!-- modals -->
 
   <!-- login modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"> 
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header border-0">
@@ -1086,7 +1092,6 @@
                 <h6 class="me-2">الإستلام</h6>
               </button>
             </li>
-
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-delivery" role="tabpanel"
@@ -1144,62 +1149,31 @@
                 <h6 class="fw-bold mb-3">
                   أكمل موقع التوصيل
                 </h6>
-                <ul class="delivery-places nav nav-pills px-0 mb-3" id="pills-tab" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active rounded-pill" id="pills-home-tab" data-bs-toggle="pill"
-                      data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                      aria-selected="true">
+                <div class="delivery-places px-0 mb-3">
+                  <!-- Radio Buttons for Delivery Places -->
+                  <div class="btn-group" role="group" aria-label="Delivery Place Selector">
+                    <input type="radio" class="btn-check" name="deliveryPlace" id="radio-home" autocomplete="off"
+                      checked>
+                    <label class="btn btn-outline-primary rounded-pill" for="radio-home">
                       <i class="fas fa-city"></i> شقة
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link rounded-pill" id="pills-villa-tab" data-bs-toggle="pill"
-                      data-bs-target="#pills-villa" type="button" role="tab" aria-controls="pills-villa"
-                      aria-selected="false">
+                    </label>
+
+                    <input type="radio" class="btn-check" name="deliveryPlace" id="radio-villa" autocomplete="off">
+                    <label class="btn btn-outline-primary rounded-pill" for="radio-villa">
                       <i class="fas fa-home"></i> فيلا
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link rounded-pill" id="pills-work-tab" data-bs-toggle="pill"
-                      data-bs-target="#pills-work" type="button" role="tab" aria-controls="pills-work"
-                      aria-selected="false">
+                    </label>
+
+                    <input type="radio" class="btn-check" name="deliveryPlace" id="radio-work" autocomplete="off">
+                    <label class="btn btn-outline-primary rounded-pill" for="radio-work">
                       <i class="fas fa-building"></i> مكتب
-                    </button>
-                  </li>
-                </ul>
-                <div class="tab-content" id="pills-tabContent">
-                  <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                    aria-labelledby="pills-home-tab">
-                    <form>
-                      <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="اسم  المبنى, مثال مبنى شاهين">
-                      </div>
-                      <div class="mb-3 d-flex">
-                        <input type="text" class="form-control w-50 ms-2" placeholder="رقم الشقة ,مثال  شقة 12">
-                        <input type="text" class="form-control w-50 me-2" placeholder="الدور, مثال الدور2">
-                      </div>
-                      <div class="mb-3">
-                        <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
-                      </div>
-                      <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
-                      </div>
-                      <div class="mb-3">
-                        <div class="input-group">
-                          <input type="text" class="form-control" placeholder="  ادخل رقم الهاتف  ,مثال01029063398">
-                          <select id="country1" class="selectpicker me-2" data-live-search="true">
-                            <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                    </form>
+                    </label>
                   </div>
-                  <div class="tab-pane fade" id="pills-villa" role="tabpanel" aria-labelledby="pills-villa-tab">
+                </div>
+
+                <!-- Content Sections -->
+                <div class="tab-content">
+                  <!-- Home Form -->
+                  <div id="content-home" class="tab-pane fade show active">
                     <form>
                       <div class="mb-3">
                         <input type="text" class="form-control" placeholder="اسم  الفيلا, مثال فيلا شاهين">
@@ -1208,7 +1182,7 @@
                         <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
                       </div>
                       <div class="mb-3">
-                        <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
+                        <input type="text" class="form-control" placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
                       </div>
                       <div class="mb-3">
                         <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
@@ -1216,19 +1190,18 @@
                       <div class="mb-3">
                         <div class="input-group">
                           <input type="text" class="form-control" placeholder="  ادخل رقم الهاتف  ,مثال01029063398">
-                          <select id="country2" class="selectpicker me-2" data-live-search="true">
-                            <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
-                            </option>
+                          <select class="form-select country-dropdown me-3" style="max-width: 100px;">
+                            <option value="eg" selected>+20</option>
+                            <option value="ae">+971</option>
+                            <option value="jo">+962</option>
                           </select>
                         </div>
                       </div>
                     </form>
                   </div>
-                  <div class="tab-pane fade" id="pills-work" role="tabpanel" aria-labelledby="pills-work-tab">
+
+                  <!-- Villa Form -->
+                  <div id="content-villa" class="tab-pane fade">
                     <form>
                       <div class="mb-3">
                         <input type="text" class="form-control" placeholder="اسم  الفيلا, مثال فيلا شاهين">
@@ -1237,7 +1210,7 @@
                         <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
                       </div>
                       <div class="mb-3">
-                        <input type="text" class="form-control" placeholder=" 121 مصدق الدقي ,المهندسين  الجيزه">
+                        <input type="text" class="form-control" placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
                       </div>
                       <div class="mb-3">
                         <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
@@ -1245,19 +1218,45 @@
                       <div class="mb-3">
                         <div class="input-group">
                           <input type="text" class="form-control" placeholder="  ادخل رقم الهاتف  ,مثال01029063398">
-                          <select id="country3" class="selectpicker me-2" data-live-search="true">
-                            <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
-                            </option>
-                            <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
-                            </option>
+                          <select class="form-select country-dropdown me-3" style="max-width: 100px;">
+                            <option value="eg" selected>+20</option>
+                            <option value="ae">+971</option>
+                            <option value="jo">+962</option>
+                          </select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Work Form -->
+                  <div id="content-work" class="tab-pane fade">
+                    <form>
+                      <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="اسم  الفيلا, مثال فيلا شاهين">
+                      </div>
+                      <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="رقم الفيلا ,مثال  فيلا 12">
+                      </div>
+                      <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
+                      </div>
+                      <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
+                      </div>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="  ادخل رقم الهاتف  ,مثال01029063398">
+                          <select class="form-select country-dropdown me-3" style="max-width: 100px;">
+                            <option value="eg" selected>+20</option>
+                            <option value="ae">+971</option>
+                            <option value="jo">+962</option>
                           </select>
                         </div>
                       </div>
                     </form>
                   </div>
                 </div>
+
                 <div class="tab-footer justify-content-end d-flex">
                   <button type="submit" class="btn" onclick="showThirdPhase()">حفظ العنوان</button>
                 </div>
@@ -1501,7 +1500,6 @@
       </div>
     </div>
   </div>
-
   <!-- end branches details modal -->
   <!-- Profile modal -->
   <div class="modal fade" tabindex="-1" id="profileModal" aria-labelledby="profileModalLabel" aria-hidden="true">
@@ -1632,14 +1630,14 @@
           <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-          <img src="SiteAssets/images/Vector.png" alt=""/>
+          <img src="SiteAssets/images/Vector.png" alt="" />
           <h4 class="mt-4">
-            عذرا لا نقوم بالتوصيل لهذة المنطقة برجاء تغير موقعك او الفرع   علما بانه سوف يؤثر علي سعر الفاتورة
+            عذرا لا نقوم بالتوصيل لهذة المنطقة برجاء تغير موقعك او الفرع علما بانه سوف يؤثر علي سعر الفاتورة
           </h4>
         </div>
         <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
           <button type="button" class="btn">تغيير الموقع</button>
-          <button type="button" class="btn reversed main-color">  تغيير الفرع </button>
+          <button type="button" class="btn reversed main-color"> تغيير الفرع </button>
         </div>
       </div>
     </div>
@@ -1668,6 +1666,7 @@
       $('.selectpicker').selectpicker();
     });
   </script>
+
 </body>
 
 </html>
