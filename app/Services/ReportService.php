@@ -33,6 +33,23 @@ use Illuminate\Support\Str;
 class ReportService
 {
 
+    public function all_clients(Request $request, $checkToken)
+    {
+
+        $lang = $request->header('lang', 'ar');  // Default to 'en' if not provided
+        if (!CheckToken() && $checkToken) {
+            return RespondWithBadRequest($lang, 5);
+        }
+
+        $clients = User::query()->whereIn('id', function ($query){
+            $query->select('client_id')
+                    ->from('orders');
+        })
+        ->with(['orders'])
+        ->get();
+        return ResponseWithSuccessData($lang, $clients, 1);
+    }
+
     public function index(Request $request, $checkToken)
     {
 
@@ -41,21 +58,21 @@ class ReportService
             return RespondWithBadRequest($lang, 5);
         }
 
-        return $orders = DB::table('orders')
-            ->join(DB::raw('(SELECT client_id, COUNT(*) as order_count FROM orders GROUP BY client_id) as counts'), 'orders.client_id', '=', 'counts.client_id')
-            ->select('orders.*', 'counts.order_count')
-            ->distinct('client_id')  
-            ->get();
+        $clients = User::query()->whereIn('id', function ($query){
+            $query->select('client_id')
+                    ->from('orders');
+        })
+        ->with(['orders'])
+        ->get();
 
-        foreach ($orders as $order) {
-            $order['details'] = OrderDetail::where('order_id', $order->id)->get();
-            $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
-            $order['transaction'] = OrderTransaction::where('order_id', $order->id)->first();
-            $order_tracking = OrderTracking::where('order_id', $order->id)->orderby('id', 'desc')->first();
-            $order['last_status'] = $order_tracking->order_status;
-            $order['next_status'] = $this->getNextStatus($order_tracking->order_status);
-        }
-
+        // foreach ($orders as $order) {
+        //     $order['details'] = OrderDetail::where('order_id', $order->id)->get();
+        //     $order['addons'] = OrderAddon::where('order_id', $order->id)->get();
+        //     $order['transaction'] = OrderTransaction::where('order_id', $order->id)->first();
+        //     $order_tracking = OrderTracking::where('order_id', $order->id)->orderby('id', 'desc')->first();
+        //     $order['last_status'] = $order_tracking->order_status;
+        //     $order['next_status'] = $this->getNextStatus($order_tracking->order_status);
+        // }
 
         return ResponseWithSuccessData($lang, $orders, 1);
     }
