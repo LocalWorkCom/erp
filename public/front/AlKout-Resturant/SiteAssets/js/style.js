@@ -285,6 +285,7 @@ function formatTime(time) {
         notificationSwitch.checked = false; // Reset switch
     });
 });
+
 // wizard js 
 
 $(document).ready(function () {
@@ -348,7 +349,7 @@ function increaseQuantity(ele) {
 
   // Update the total price in the modal
   $('#total-price').text(newTotal);
-  $('#dish-price').text(newTotalPrice.toFixed(2));
+  // $('#dish-price').text(newTotalPrice.toFixed(2));
 }
 function decreaseQuantity(ele) {
   // Get the quantity span and parse its current value

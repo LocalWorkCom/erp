@@ -88,7 +88,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="questions.html">
+                            <a href="{{ route('shoe.faq') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-file-alt main-color ms-2"></i>
                                     @lang('header.questions')
@@ -126,12 +126,12 @@
                         </li>
                         <li>
 
-                                <a href="#">
-                                    <h6 class="fw-bold">
-                                        <i class="fas fa-sign-out-alt main-color ms-2"></i>
-                                        @lang('header.logout')
-                                    </h6>
-                                </a>
+                            <a href="#">
+                                <h6 class="fw-bold">
+                                    <i class="fas fa-sign-out-alt main-color ms-2"></i>
+                                    @lang('header.logout')
+                                </h6>
+                            </a>
 
                         </li>
 
@@ -153,8 +153,9 @@
                         <h4 class="mt-4"> @lang('header.logoutalert')</h4>
                     </div>
                     <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
-                        <button type="submit" class="btn w-25 mx-2">  @lang('header.confirm')</button>
-                        <button type="button" class="btn reversed main-color w-25 mx-2" data-bs-dismiss="modal">@lang('header.cancel')</button>
+                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2"
+                            data-bs-dismiss="modal">@lang('header.cancel')</button>
                     </div>
                 </form>
 
@@ -163,46 +164,46 @@
     </div>
 @endauth
 @push('scripts')
-<script>
-    // logout modal
-    document.addEventListener("DOMContentLoaded", function () {
-    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+    <script>
+        // logout modal
+        document.addEventListener("DOMContentLoaded", function() {
 
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", function (event) {
-            event.preventDefault();
+        const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-            const profileModal = document.getElementById("profileModal");
-            const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", function(event) {
+                event.preventDefault();
 
-            if (profileModal) {
-                const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                if (profileInstance) {
-                    profileInstance.hide();
+                const profileModal = document.getElementById("profileModal");
+                const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+                if (profileModal) {
+                    const profileInstance = bootstrap.Modal.getInstance(profileModal);
+                    if (profileInstance) {
+                        profileInstance.hide();
+                    }
                 }
-            }
-            logoutModal.show();
-        });
-    }
+                logoutModal.show();
+            });
+        }
 
-    // Handling close behavior manually if necessary
-    const closeButton = document.querySelector('.btn-close');
-    const cancelButton = document.querySelector('.btn.reversed.main-color');
+        // Handling close behavior manually if necessary
+        const closeButton = document.querySelector('.btn-close');
+        const cancelButton = document.querySelector('.btn.reversed.main-color');
 
-    if (closeButton) {
-        closeButton.addEventListener('click', function () {
-            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-            logoutModal.hide();
-        });
-    }
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                logoutModal.hide();
+            });
+        }
 
-    if (cancelButton) {
-        cancelButton.addEventListener('click', function () {
-            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-            logoutModal.hide();
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function() {
+                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                logoutModal.hide();
+            });
+        }
         });
-    }
-});
-);
     </script>
 @endpush

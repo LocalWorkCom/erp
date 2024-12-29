@@ -47,7 +47,6 @@ class ProductController extends Controller
         $this->countryService = $countryService;
         $this->categoryService = $categoryService;
         $this->checkToken = false;
-        $this->lang =  app()->getLocale();
     }
 
     public function index(Request $request)

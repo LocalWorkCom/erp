@@ -73,7 +73,8 @@
                                             <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>{{ $user->country->name_ar . ' | ' . $user->country->name_en }}</td>
+                                            <td>{{ $user->country_id ? $user->country->name_ar . ' | ' . $user->country->name_en : '---' }}
+                                            </td>
                                             <td>{{ $user->phone }}</td>
                                             <td>
                                                 @if ($user->clientDetails && $user->clientDetails->image)

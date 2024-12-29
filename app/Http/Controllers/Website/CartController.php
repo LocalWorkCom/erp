@@ -93,7 +93,56 @@ class CartController extends Controller
         // Return JSON response
         return response()->json($response, 200);
     }
+    public function Cart()
+    {
+        $branches = Branch::all();
 
+        return view('website.cart', compact('branches'));
+    }
+    public function Checkout()
+    {
+        $branches = Branch::all();
+
+        return view('website.checkout', compact('branches'));
+    }
+    public function isCouponValid(Request $request)
+    {
+        $code = $request->code;
+        $amount = $request->amount;
+        try {
+            $lang = $request->header('lang', 'en');
+            // $branchId = $request->input('branch_id');  
+
+            $coupon = GetCouponId($code);
+            if ($coupon) {
+                $valid = CheckCouponValid($coupon->id, $amount);
+                if ($valid) {
+
+                    $amount_after_coupon =  applyCoupon($amount, $coupon);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Coupon is valid.',
+                        'data' => $amount_after_coupon
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Coupon is no longer valid.',
+                    ], 200);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Coupon is not valid.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error checking coupon validity.',
+            ], 500);
+        }
+    }
     public function trackOrder($orderId)
     {
         $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])

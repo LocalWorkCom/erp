@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BranchMenuCategory;
 use App\Models\DishCategory;
+use App\Models\Offer;
 use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -135,19 +136,20 @@ class DishCategoryController extends Controller
             return RespondWithBadRequestData($lang, 2);
         }
     }
-    public function menuDishes(Request $request){
+    public function menuDishes(Request $request)
+    {
         $lang = $request->header('lang', 'ar');
-        $categoryId = $request->query('categoryId', 0);
+        $categoryId = $request->query('categoryId', 'all');
         $offers = $request->query('offers', 0);
 
         // Validate inputs
-        if (!is_numeric($categoryId) || !in_array($offers, [0, 1])) {
+        if (!is_numeric($categoryId) && $categoryId !== 'all' || !in_array($offers, [0, 1])) {
             return RespondWithBadRequestData($lang, 2, 'Invalid input values.');
         }
 
         // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
-        if ($categoryId > 0) {
-            $dishCategory = DishCategory::with(['dishes' => function ($query){
+        if (is_numeric($categoryId) && $categoryId > 0) {
+            $dishCategory = DishCategory::with(['dishes' => function ($query) {
                 $query->where('is_active', true);
             }])->where('id', $categoryId)->first();
 
@@ -155,35 +157,32 @@ class DishCategoryController extends Controller
                 return RespondWithBadRequestData($lang, 2, 'Category not found.');
             }
 
-            // Translate category details
-            $dishCategory->translated_name = $lang === 'ar' ? $dishCategory->name : $dishCategory->name_site;
-            $dishCategory->translated_description = $lang === 'ar' ? $dishCategory->description : $dishCategory->description_site;
-
-            // Translate dish details
-            foreach ($dishCategory->dishes as $dish) {
-                $dish->translated_name = $lang === 'ar' ? $dish->name : $dish->name_site;
-                $dish->translated_description = $lang === 'ar' ? $dish->description : $dish->description_site;
-            }
-
             return ResponseWithSuccessData($lang, $dishCategory, 1);
         }
 
-        // Scenario 2: If offers = 1, fetch active offers with details
+        // Scenario 2: If categoryId is 'all', fetch all categories
+        if ($categoryId === 'all') {
+            $dishCategories = DishCategory::with(['dishes' => function ($query) {
+                $query->where('is_active', true);
+            }])->get();
+
+            return ResponseWithSuccessData($lang, $dishCategories, 1);
+        }
+
+        // Scenario 3: If offers = 1, fetch active offers with details
         if ($offers == 1) {
             $activeOffers = Offer::with('details')
                 ->whereHas('details')
                 ->where('is_active', 1)
-                ->get() ?? collect();
-
-            foreach ($activeOffers as $offer) {
-                $offer->translated_name = $lang === 'ar' ? $offer->name_ar : $offer->name_en;
-                $offer->translated_description = $lang === 'ar' ? $offer->description_ar : $offer->description_en;
-
-                // Optionally, translate details (if needed)
-                foreach ($offer->details as $detail) {
-                    $detail->translated_name = $lang === 'ar' ? $detail->name_ar : $detail->name_en;
-                }
-            }
+                ->get()
+                ->map(function ($offer) {
+                    // Assuming you want to add the translated name for each detail
+                    $offer->details->each(function ($detail) {
+                        $detail->type_name_en = $detail->getTypeName('en'); // Add English name
+                        $detail->type_name_ar = $detail->getTypeName('ar'); // Add Arabic name
+                    });
+                    return $offer;
+                }) ?? collect();
 
             return ResponseWithSuccessData($lang, $activeOffers, 1);
         }

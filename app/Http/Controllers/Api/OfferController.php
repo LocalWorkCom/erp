@@ -122,14 +122,14 @@ class OfferController extends Controller
             $file = $request->file('image_ar');
             $newFileName = 'image_ar_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/ar'), $newFileName);
-            $data['image_ar'] = 'images/offers/ar/' . $newFileName;
+            $data['image_ar'] = url('images/offers/ar/' . $newFileName);
         }
 
         if ($request->hasFile('image_en')) {
             $file = $request->file('image_en');
             $newFileName = 'image_en_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/en'), $newFileName);
-            $data['image_en'] = 'images/offers/en/' . $newFileName;
+            $data['image_en'] = url('images/offers/en/' . $newFileName);
         }
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id??1
             : $data['modified_by'] =Auth::guard('api')->user()->id??1;

@@ -16,7 +16,7 @@ return [
     'rate' => 'تقييم',
     'favorite' => 'المفضلة',
     'notification' => 'الإشعارات',
-    'questions' => 'الأسئلة',
+    'questions' => 'الأسئله المتكرره',
     'terms' => 'الشروط والأحكام',
     'support' => 'الدعم',
     'logout' => 'تسجيل الخروج',

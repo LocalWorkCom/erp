@@ -36,10 +36,11 @@ class PermissionController extends Controller
         $validator = Validator::make($request->all(), [
             'name_en' => 'required|string',
             'name_ar' => 'required|string',
+            'is_active' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return RespondWithBadRequestWithData($validator->errors());
+            return redirect()->back()->withErrors($validator->errors())->withInput();
         }
 
         $existingPermission = DB::table('permissions')
@@ -54,8 +55,8 @@ class PermissionController extends Controller
         }
         DB::table('permissions')->insert([
             'name' => $request->name_en,
+            'is_active' => $request->is_active,
             'guard_name' => 'admin',
-
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -153,12 +154,14 @@ class PermissionController extends Controller
         // Find the existing translation for the permission name
         $nameEn = $permission->name;
         $nameAr = $arTranslations[$permission->name] ?? '';
+        $isActive = $permission->is_active;
 
         return response()->json([
             'permission' => $permission,
             'name_en' => $nameEn,
             'id' => $id,
             'name_ar' => $nameAr,
+            'isActive' => $isActive,
         ]);
     }
 
@@ -184,6 +187,7 @@ class PermissionController extends Controller
             ->where('id', $request->id)
             ->update([
                 'name' => $request->name_en,
+                'is_active' => $request->is_active_edit,
                 'guard_name' => 'admin',
                 'updated_at' => now(),
             ]);

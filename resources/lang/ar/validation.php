@@ -175,6 +175,8 @@ return [
         'type_id'=>'اسم النوع',
         'active'=>'الفعالية',
         'value'=>'القيمة',
+        'min_limit' => 'الحد الادنى',
+        'max_limit' => 'الحد الاقصى',
 
     ],
 
@@ -226,4 +228,11 @@ return [
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
     'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
+    'custom' => [
+        'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
+        'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',
+        'permissions_ids.*.exists' => 'الصلاحية المحددة غير موجودة.',
+    ],
+    'EnterName'=>'أدخل الأسم',
+
 ];

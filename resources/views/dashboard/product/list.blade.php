@@ -77,8 +77,14 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>{{ $product->id }}</td>
-                                            <td><img src="{{ BaseUrl() . '/' . $product->main_image }}" alt=""
-                                                    width="100" height="100"></td>
+                                            <td>
+                                                <img
+                                                    src="{{ $product->main_image ? url($product->main_image) : asset('images/noimage.jpg') }}"
+                                                    alt="Product Image"
+                                                    width="100"
+                                                    height="100"
+                                                >
+                                            </td>
                                             <td>{{ $product->name_ar }}</td>
                                             <td>{{ $product->name_en }}</td>
                                             <td>{{ $product->mainUnit ? $product->mainUnit->name_en : 'N/A' }}</td>
@@ -136,19 +142,19 @@
 
                                                     @can('view product_sizes')
 
-                                                    <option value="sizes">@lang('product.Sizes')</option>
+                                                    <option class="form-select" value="sizes">@lang('product.Sizes')</option>
 
                                                     @endcan
 
                                                     @can('view product_colors')
 
-                                                    <option value="colors">@lang('product.Colors')</option>
+                                                    <option class="form-select" value="colors">@lang('product.Colors')</option>
 
                                                     @endcan
 
                                                     @can('view product_units')
 
-                                                    <option value="units">@lang('product.Units')</option>
+                                                    <option class="form-select" value="units">@lang('product.Units')</option>
 
                                                     @endcan
 
@@ -189,11 +195,6 @@
     <!-- INTERNAL DATADABLES JS -->
     @vite('resources/assets/js/datatables.js')
 @endsection
-<script>
-    function confirmDelete() {
-        return confirm("@lang('validation.DeleteConfirm')");
-    }
-</script>
 <script>
     function navigateOption(value, productId) {
         if (value) {

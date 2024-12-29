@@ -32,6 +32,8 @@ Route::middleware(['auth:client'])->group(function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/faqs', [HomeController::class, 'getfaqs'])->name('shoe.faq');
+
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/return', [HomeController::class, 'return'])->name('return');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
@@ -42,7 +44,11 @@ Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 
 
+Route::get('cart', [CartController::class, 'Cart'])->name('cart');
+Route::post('cart/coupon-check', [CartController::class, 'isCouponValid'])->name('cart.coupon-check');
+
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
+Route::get('cart/checkout', [CartController::class, 'Checkout'])->name('cart.checkout');
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 

@@ -109,7 +109,7 @@ class OfferService
             $file = $request->file('image_ar');
             $newFileName = 'image_ar_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/ar'), $newFileName);
-            $data['image_ar'] = 'images/offers/ar/' . $newFileName;
+            $data['image_ar'] = url('images/offers/ar/' . $newFileName);
         }
 
         // Handle English image upload
@@ -117,7 +117,9 @@ class OfferService
             $file = $request->file('image_en');
             $newFileName = 'image_en_' . rand(1, 999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images/offers/en'), $newFileName);
-            $data['image_en'] = 'images/offers/en/' . $newFileName;
+
+            // Generate the full URL for the image
+            $data['image_en'] = url('images/offers/en/' . $newFileName);
         }
 
         // Determine created_by or modified_by
