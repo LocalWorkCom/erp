@@ -82,26 +82,28 @@
 
 
             <div class="offers-slider owl-carousel owl-theme">
-                @foreach ($discounts as $discount)
-                    <div class="item mb-4 category position-relative" data-aos="zoom-in">
-                        <div class="item three row mx-0 p-4" data-aos="zoom-in">
-                            <div class="col-md-5">
-                                <img class="offer-img"
-                                    src="{{ asset($discount->dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
-                                    alt="">
-                            </div>
-                            <div class="col-md-7">
-                                <h2 class="main-color fw-bold">خصم
-                                    {{ $discount->discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->discount->value }}
-                                </h2>
-                                <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
-                                <a href="#" class="btn ">
-                                    <h4 class="fw-bold">اطلب الان</h4>
-                                </a>
+                @if($discounts)
+                    @foreach ($discounts as $discount)
+                        <div class="item mb-4 category position-relative" data-aos="zoom-in">
+                            <div class="item three row mx-0 p-4" data-aos="zoom-in">
+                                <div class="col-md-5">
+                                    <img class="offer-img"
+                                        src="{{ asset($discount->dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                        alt="">
+                                </div>
+                                <div class="col-md-7">
+                                    <h2 class="main-color fw-bold">خصم
+                                        {{ $discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->value }}
+                                    </h2>
+                                    <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
+                                    <a href="#" class="btn ">
+                                        <h4 class="fw-bold">اطلب الان</h4>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
