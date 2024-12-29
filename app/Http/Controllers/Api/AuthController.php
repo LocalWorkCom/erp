@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
@@ -116,8 +117,27 @@ class AuthController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+                $expiresIn = 86400;
 
+                // Create the token
                 $token = $user->createToken("myToken")->accessToken;
+
+                // Set the custom expiration date
+                $expiresAt = Carbon::now()->addSeconds($expiresIn);
+                $formattedExpiresAt = $expiresAt->format('Y-m-d H:i:s');
+
+                // Find the token we just created (last one for this user) and update its expiration date
+                $lastToken = DB::table('oauth_access_tokens')
+                    ->where('user_id', $user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->first(); // Get the latest token for the user
+
+                if ($lastToken) {
+                    // Update the expiration date for the most recent token
+                    DB::table('oauth_access_tokens')
+                        ->where('id', $lastToken->id) // Use the token ID to update
+                        ->update(['expires_at' => $formattedExpiresAt]);
+                }
 
                 $data = [
                     "access_token" => $token,
