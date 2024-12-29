@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Jobs\ActivateOffers;
+use App\Jobs\DeactivateExpiredOffers;
+use App\Jobs\UpdateOfferStatuses;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('coupons:deactivate-expired')->daily();
+        $schedule->job(new UpdateOfferStatuses)->hourly();
 
     }
 
