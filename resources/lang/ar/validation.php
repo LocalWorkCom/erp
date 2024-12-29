@@ -88,6 +88,7 @@ return [
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
     'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'active_offer_conflict'=> 'يوجد عرض فعال بنفس الاسم',
     'attributes' => [
         'birth_date' => 'تاريخ الميلاد',
 
