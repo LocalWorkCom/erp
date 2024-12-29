@@ -57,20 +57,38 @@ class DiscountService
                 'name_ar' => [
                     'required',
                     'string',
-                    Rule::unique('discounts')->where(function ($query) use ($request) {
-                        return $query
-                            ->where('type', $request->type)
-                            ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString());
-                    }),
+                    function ($attribute, $value, $fail) {
+                        $trimmedValue = trim($value);
+
+                        // Check for active discounts with the same code
+                        $activeExists = DB::table('discounts')
+                            ->where('name_ar', $trimmedValue)
+                            ->where('is_active', 1) // Check only active discounts
+                            ->whereNull('deleted_at') // Exclude deleted discounts
+                            ->exists();
+
+                        if ($activeExists) {
+                            $fail(__('discount.duplicate_active_code'));
+                        }
+                    },
                 ],
                 'name_en' => [
                     'nullable',
                     'string',
-                    Rule::unique('discounts')->where(function ($query) use ($request) {
-                        return $query
-                            ->where('type', $request->type)
-                            ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString());
-                    }),
+                    function ($attribute, $value, $fail) {
+                        $trimmedValue = trim($value);
+
+                        // Check for active discounts with the same code
+                        $activeExists = DB::table('discounts')
+                            ->where('name_en', $trimmedValue)
+                            ->where('is_active', 1) // Check only active discounts
+                            ->whereNull('deleted_at') // Exclude deleted discounts
+                            ->exists();
+
+                        if ($activeExists) {
+                            $fail(__('discount.duplicate_active_code'));
+                        }
+                    },
                 ],
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
@@ -85,17 +103,14 @@ class DiscountService
 
             // Check for validation failures
             if ($validator->fails()) {
+                if ($validator->errors()->has('name_ar')) {
+                    $error = $validator->errors()->first('name_ar');
+                    if ($error === __('discount.duplicate_active_code')) {
+                        return CustomRespondWithBadRequest(__('discount.duplicate_active_code'));
+                    }
+                    return CustomRespondWithBadRequest(__('discount.code_required'));
+                }
                 return RespondWithBadRequestData($lang, $validator->errors());
-            }
-
-            // Check for duplicates manually
-            $duplicate = Discount::where('type', $request->type)
-                ->where('name_ar', $request->name_ar)
-                ->whereDate('start_date', Carbon::parse($request->start_date)->toDateString())
-                ->exists();
-
-            if ($duplicate) {
-                return CustomRespondWithBadRequest(__('discount.duplicate_discount'));
             }
 
             // Create the discount
@@ -128,8 +143,6 @@ class DiscountService
         }
     }
 
-
-
     public function update(Request $request, $id)
     {
         $lang = app()->getLocale();
@@ -152,8 +165,22 @@ class DiscountService
             ]);
 
             if ($validator->fails()) {
-                // Return other validation errors
+                // Return validation errors
                 return RespondWithBadRequestData($lang, $validator->errors());
+            }
+
+            // Check for active discounts with the same names and type, excluding the current discount
+            $existingActiveDiscount = Discount::where(function ($query) use ($request) {
+                $query->where('name_ar', $request->name_ar)
+                    ->orWhere('name_en', $request->name_en);
+            })
+                ->where('type', $request->type)
+                ->where('is_active', true)
+                ->where('id', '!=', $id) // Exclude the current discount
+                ->exists();
+
+            if ($existingActiveDiscount) {
+                return CustomRespondWithBadRequest(__('discount.duplicate_active_code'));
             }
 
             // Validation passed, update the discount
@@ -170,6 +197,7 @@ class DiscountService
                 'modified_by' => Auth::guard('admin')->user()->id,
             ]);
 
+            // Sync related branches and dishes
             if (!empty($validatedData['branches'])) {
                 $discount->branches()->sync($validatedData['branches']);
             } else {
@@ -181,12 +209,14 @@ class DiscountService
             } else {
                 $discount->dishes()->detach();
             }
+
             return ResponseWithSuccessData($lang, $discount, 1);
         } catch (\Exception $e) {
             Log::error('Error updating discount: ' . $e->getMessage());
             return RespondWithBadRequestData($lang, 2);
         }
     }
+
 
     public function destroy(Request $request, $id)
     {

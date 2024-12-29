@@ -8,6 +8,7 @@ return [
     'string' => ':attribute must be a string.',
     'max' => ':attribute may not be greater than :max characters.',
     'confirmed' => ':attribute confirmation does not match.',
+    'active_offer_conflict'=> 'There is an active offer with the same name.',
     //add here the attributes of validation to translated
     'attributes' => [
         'birth_date' => 'Birth Date',

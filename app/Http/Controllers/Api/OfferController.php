@@ -72,6 +72,7 @@ class OfferController extends Controller
                     $exists = Offer::where('name_ar', $value)
                         ->where('start_date', '<=', $request->end_date)
                         ->where('end_date', '>=', $request->start_date)
+                        ->where('is_active', 1)
                         ->when($id, function ($query) use ($id) {
                             $query->where('id', '!=', $id); // Exclude current record in case of update
                         })
@@ -89,6 +90,7 @@ class OfferController extends Controller
                     $exists = Offer::where('name_en', $value)
                         ->where('start_date', '<=', $request->end_date)
                         ->where('end_date', '>=', $request->start_date)
+                        ->where('is_active', 1)
                         ->when($id, function ($query) use ($id) {
                             $query->where('id', '!=', $id); // Exclude current record in case of update
                         })
@@ -113,7 +115,27 @@ class OfferController extends Controller
             'description_en' => 'required|string',
             'image_ar' => 'nullable|max:2048',
             'image_en' => 'nullable|max:2048',
-            'is_active' => 'required|in:0,1',
+            'is_active' => [
+                'required',
+                'in:0,1',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    if ($value == 1) { // Only check if activating the offer
+                        $exists = Offer::where(function ($query) use ($request, $id) {
+                            $query->where('name_ar', $request->name_ar)
+                                ->orWhere('name_en', $request->name_en);
+                        })
+                            ->where('is_active', 1)
+                            ->when($id, function ($query) use ($id) {
+                                $query->where('id', '!=', $id); // Exclude current record in case of update
+                            })
+                            ->exists();
+
+                        if ($exists) {
+                            $fail(__('validation.active_offer_conflict'));
+                        }
+                    }
+                },
+            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ], $messages);
