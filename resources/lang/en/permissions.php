@@ -573,4 +573,5 @@ return array (
   'create rates' => 'create rates',
   'update rates' => 'update rates',
   'delete rates' => 'delete rates',
+  'view clients_reports' => 'view clients_reports',
 );
