@@ -74,6 +74,7 @@ class HomeController extends Controller
         // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {
             $user = auth('api')->user(); // Get authenticated user
+//            dd($user);
 
             if ($user) {
                 $mostPopular = collect($mostPopular)->map(function ($dish) use ($user) {

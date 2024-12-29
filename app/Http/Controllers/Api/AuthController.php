@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
@@ -48,7 +49,7 @@ class AuthController extends Controller
 
         if (!$country) {
             return respondError('Invalid country code.', 400, [
-                'credential' => ['كود الدولة غير صالح.']
+                'credential' => [__('validation.countryCodeExists')]
             ]);
         }
 
@@ -78,9 +79,9 @@ class AuthController extends Controller
             App::setLocale($lang);
 
             $messages = [
-                'email_or_phone.required' => 'البريد الإلكتروني أو رقم الهاتف مطلوب.',
-                'password.required' => 'كلمة المرور مطلوبة.',
-                'country_code.required_if' => 'رمز البلد مطلوب عند تسجيل الدخول باستخدام رقم الهاتف.',
+                'email_or_phone.required' => __('validation.email_or_phone.required'),
+                'password.required' => __('validation.password.required'),
+                'country_code.required_if' => __('validation.country_code.required_if'),
             ];
 
             $validator = Validator::make($request->all(), [
@@ -102,8 +103,8 @@ class AuthController extends Controller
 
             if (!$user) {
                 $errorMessage = $isEmail
-                    ? __('البريد الإلكتروني غير موجود.')
-                    : __('رقم الهاتف مع رمز البلد غير موجود.');
+                    ? __('validation.emailDoesntExist')
+                    : __('validation.phoneDoesntExist');
 
                 return respondError('User Not Found.', 404, [
                     'email_or_phone' => [$errorMessage]
@@ -116,8 +117,27 @@ class AuthController extends Controller
 
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+                $expiresIn = 86400;
 
+                // Create the token
                 $token = $user->createToken("myToken")->accessToken;
+
+                // Set the custom expiration date
+                $expiresAt = Carbon::now()->addSeconds($expiresIn);
+                $formattedExpiresAt = $expiresAt->format('Y-m-d H:i:s');
+
+                // Find the token we just created (last one for this user) and update its expiration date
+                $lastToken = DB::table('oauth_access_tokens')
+                    ->where('user_id', $user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->first(); // Get the latest token for the user
+
+                if ($lastToken) {
+                    // Update the expiration date for the most recent token
+                    DB::table('oauth_access_tokens')
+                        ->where('id', $lastToken->id) // Use the token ID to update
+                        ->update(['expires_at' => $formattedExpiresAt]);
+                }
 
                 $data = [
                     "access_token" => $token,
@@ -127,7 +147,7 @@ class AuthController extends Controller
                 return ResponseWithSuccessData($lang, $data, 12);
             } else {
                 return respondError('Password Error', 403, [
-                    'credential' => [__('كلمة المرور لا تتطابق مع سجلاتنا')]
+                    'credential' => [__('validation.passwordMatch')]
                 ]);
             }
         } catch (\Exception $e) {
@@ -141,9 +161,9 @@ class AuthController extends Controller
         App::setLocale($lang);
 
         $messages = [
-            "phone.required" => "رقم الهاتف مطلوب.",
-            "country_code.required" => "رمز البلد مطلوب.",
-            "phone.exists" => "رقم الهاتف مع رمز البلد غير مسجل.",
+            "phone.required" => __('validation.email_or_phone.required'),
+            "country_code.required" => __('validation.country_code.required'),
+            "phone.exists" => __('validation.phoneDoesntExist'),
         ];
 
         $validator = Validator::make($request->all(), [
@@ -164,7 +184,7 @@ class AuthController extends Controller
             return respondError(
                 'Validation Error.',
                 400,
-                ['phone' => ['رقم الهاتف مع رمز البلد غير مسجل.']]
+                ['phone' => __('validation.phoneDoesntExist')]
             );
         }
 
@@ -181,12 +201,12 @@ class AuthController extends Controller
         App::setLocale($lang);
 
         $messages = [
-            "phone.required" => "رقم الهاتف مطلوب.",
-            "country_code.required" => "رمز البلد مطلوب.",
-            "phone.exists" => "رقم الهاتف مع رمز البلد غير مسجل.",
-            "password.required" => "كلمة المرور الجديدة مطلوبة.",
-            "password_confirm.required" => "تأكيد كلمة المرور مطلوب.",
-            "password_confirm.same" => "تأكيد كلمة المرور يجب أن يطابق كلمة المرور الجديدة.",
+            "phone.required" => __('validation.email_or_phone.required'),
+            "country_code.required" => __('validation.country_code.required'),
+            "phone.exists" => __('validation.phoneDoesntExist'),
+            "password.required" => __('validation.newPasswordRequired'),
+            "password_confirm.required" => __('validation.confirmPassword'),
+            "password_confirm.same" => __('validation.confirmPasswordSame'),
         ];
 
         $validator = Validator::make($request->all(), [
@@ -208,14 +228,14 @@ class AuthController extends Controller
             return respondError(
                 'Validation Error.',
                 400,
-                ['password' => ['رقم الهاتف مع رمز البلد غير مسجل']]
+                ['phone' => __('validation.phoneDoesntExist')]
             );
         }
 
         // Check if the new password is the same as the old one
         if (Hash::check($request->password, $user->password)) {
             return respondError('Password Error', 403, [
-                'password' => ['لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية']
+                'password' => __('validation.newOldPassword')
             ]);
         }
 
