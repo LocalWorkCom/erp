@@ -31,9 +31,10 @@
                 @foreach ($menuCategories as $key => $menuCategory)
                     @if ($menuCategory->dish_categories)
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $key == 0 ? 'active' : '' }}" id="pills-{{ $menuCategory->id }}-tab"
-                                data-bs-toggle="pill" data-bs-target="#pills-{{ $menuCategory->id }}" type="button"
-                                role="tab" aria-controls="pills-{{ $menuCategory->id }}"
+                            <button class="nav-link {{ $categoryId == $menuCategory->dish_categories->id ? 'active' : '' }}"
+                                id="pills-{{ $menuCategory->id }}-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-{{ $menuCategory->id }}" type="button" role="tab"
+                                aria-controls="pills-{{ $menuCategory->id }}"
                                 aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
                                 <div class="category-button">
                                     <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
@@ -129,13 +130,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                        <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                        <figcaption>
-                                            <h4>
-                                                لا توجد منتجات
-                                            </h4>
-                                        </figcaption>
-                                    </figure> -->
+                                            <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                                            <figcaption>
+                                                <h4>
+                                                    لا توجد منتجات
+                                                </h4>
+                                            </figcaption>
+                                        </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">
