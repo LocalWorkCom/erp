@@ -92,7 +92,7 @@
                             </div>
                             <div class="col-md-7">
                                 <h2 class="main-color fw-bold">خصم
-                                    {{ $discount->discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->discount->value }}
+                                    {{ $discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->discount->value }}
                                 </h2>
                                 <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
                                 <a href="#" class="btn ">
