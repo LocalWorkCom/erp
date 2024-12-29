@@ -285,16 +285,16 @@ function CheckToken()
 {
     $lang = 'ar';
     $User = auth('api')->user();
-
+    if (!$User) {
+        return false;
+    }
     $token = DB::table('oauth_access_tokens')
         ->select( 'expires_at') // Get the necessary fields
         ->orderBy('created_at', 'desc') // Order by creation date (ascending)
         ->where('user_id', $User->id) // Filter by the user's ID
         ->first();
 
-    if (!$User) {
-        return false;
-    }elseif ($token->expires_at < Carbon::now()->toDateTimeString()) {
+    if($token->expires_at < Carbon::now()->toDateTimeString()) {
         return false;
     }
     return true;
