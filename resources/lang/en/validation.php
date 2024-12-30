@@ -10,9 +10,9 @@ return [
     'confirmed' => ':attribute confirmation does not match.',
     'active_offer_conflict'=> 'There is an active offer with the same name.',
     'The dish_id field must be a number'=>'The dish_id field must be a number',
-    'active_offer_conflict' => 'There is an active offer with the same name.',
     //add here the attributes of validation to translated
     'attributes' => [
+        'notfound'=>'User not found',
         'birth_date' => 'Birth Date',
         'email' => 'email address',
         'password' => 'password',
@@ -198,5 +198,11 @@ return [
         'phone' => [
             'length' => 'The :attribute must be exactly :length characters long.',
         ],
+        'auth.nameweb' => 'Name',
+        'auth.emailweb' => 'Email',
+        'auth.password' => 'Password',
+        'auth.phoneplace' => 'Phone',
+        'auth.country_code' => 'Country code',
+        'auth.date' => 'Date of Birth',
     ],
 ];
