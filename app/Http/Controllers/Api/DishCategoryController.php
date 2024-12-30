@@ -8,6 +8,7 @@ use App\Models\DishCategory;
 use App\Models\Offer;
 use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DishCategoryController extends Controller
@@ -146,7 +147,10 @@ class DishCategoryController extends Controller
 
         // Validate inputs
         if (!is_numeric($categoryId) && $categoryId !== 'all' || !in_array($offers, [0, 1])) {
-            return RespondWithBadRequestData($lang, 2);
+            return respondError('Validation Error', 400,[
+                'categoryId' => $lang == 'en' ? ['it must be a number or all'] : ['يجب ان تكون رقم او all'],
+                'offers' => $lang == 'en' ? ['it must be 0 or 1'] : ['يجب ان تكون 0 او 1'],
+            ]);
         }
 
         // Determine the column for dish name based on language
@@ -178,7 +182,36 @@ class DishCategoryController extends Controller
             }])->where('id', $categoryId)->first();
 
             if (!$dishCategory) {
-                return RespondWithBadRequestData($lang, 2);
+                return RespondWithBadRequestData($lang, 8);
+            }
+
+            // Check if user is authenticated and add 'is_favorite' to each dish
+            if (CheckToken()) {
+                $user = auth('api')->user(); // Get authenticated user
+
+                if ($user) {
+                    // Map over dishes to check if each dish is a favorite
+                    $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user) {
+                        // Initialize flag to 0 for each dish
+                        $flag = 0;
+
+                        // Check if the dish is in the user's favorites
+                        $isFavorite = DB::table('user_favorite_dishes')
+                            ->where('user_id', $user->id)
+                            ->where('dish_id', $dish->id)
+                            ->exists(); // Using exists() for performance optimization
+
+                        // If the dish is in the favorites, set the flag to 1
+                        if ($isFavorite) {
+                            $flag = 1;
+                        }
+
+                        // Set the is_favorite attribute
+                        $dish->is_favorite = $flag;
+
+                        return $dish;
+                    });
+                }
             }
 
             return ResponseWithSuccessData($lang, $dishCategory, 1);

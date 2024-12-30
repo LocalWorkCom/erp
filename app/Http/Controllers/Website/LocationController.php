@@ -178,9 +178,10 @@ class LocationController extends Controller
         if (!$check) {
             $address = ClientAddress::findOrFail($id);
             $address->delete();
+            return redirect()->route('showAddress')->with('success', __('Address deleted successfully.'));
+
         } else {
             return redirect()->route('showAddress')->with('error', __('Address cannot deleted.'));
         }
-        return redirect()->route('showAddress')->with('success', __('Address deleted successfully.'));
     }
 }

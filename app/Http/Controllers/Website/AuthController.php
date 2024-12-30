@@ -317,16 +317,27 @@ class AuthController extends Controller
         $lang = $request->header('lang', 'ar');
         App::setLocale($lang);
 
+        // Fetch phone length dynamically
+        $phone_length = Country::where('phone_code', $request->country_code_profile)->value('length');
+
         // Validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'phone' => 'required',
+            'phone' => [
+                'required','numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'email' => 'required|email',
             'birth_date' => 'nullable|date_format:Y-m-d',
         ], [
-            // Custom validation messages for each field
+            // Custom validation messages
             'name.required' => __('validation.required', ['attribute' => __('auth.name')]),
             'phone.required' => __('validation.required', ['attribute' => __('auth.phone')]),
+            'phone.numeric' => __('validation.custom.phone.numeric', ['attribute' => __('auth.phone')]),
             'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
             'email.email' => __('validation.email', ['attribute' => __('auth.email')]),
             'birth_date.date_format' => __('validation.date_format', ['attribute' => __('auth.birth_date'), 'format' => 'Y-m-d']),
@@ -337,15 +348,18 @@ class AuthController extends Controller
             // Return errors with the old input values
             return back()->withErrors($validator)->withInput();
         }
+
+        // Update user profile
         $user = Auth::guard('client')->user();
         $user->name = $request->name;
-        $user->phone =  $request->phone;
-        $user->email =  $request->email;
-        $user->birth_date =  $request->birth_date;
-        $user->country_code =  $request->country_code_profile;
-        $user->country_id =  Country::where('phone_code',$request->country_code_profile)->value('id');
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+        $user->birth_date = $request->birth_date;
+        $user->country_code = $request->country_code_profile;
+        $user->country_id = Country::where('phone_code', $request->country_code_profile)->value('id');
         $user->save();
 
         return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));
     }
+
 }

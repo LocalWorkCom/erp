@@ -19,7 +19,7 @@ return [
     'newuser' => 'New User ?',
     'google' => 'google',
     'facebook' => 'facebook',
-    'login'=>'Login',
+    'login' => 'Login',
     'loginsocial' => 'Login using social media',
     'passplace' => 'Enter password',
     'country_code_login' => 'country code',
@@ -63,8 +63,11 @@ return [
     'cancel' => 'Cancel',
     'save' => 'Save',
     'profile_updated' => 'Profile updated successfully!',
-    'addaddress'=>'add address',
+    'addaddress' => 'add address',
     'noaddress' => 'There are no addresses registered yet.',
     'edit' => 'Edit',
     'delete' => 'Delete',
+    'birth_date' => 'Birth Date',
+
+
 ];

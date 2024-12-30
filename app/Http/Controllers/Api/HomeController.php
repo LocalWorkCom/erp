@@ -146,7 +146,7 @@ class HomeController extends Controller
                 });
 
             if ($userFavorites->isEmpty()) {
-                return RespondWithBadRequestData($lang, 2); // No favorites found
+                return RespondWithBadRequestData($lang, 8); // No favorites found
             }
 
             // Prepare the response
@@ -156,9 +156,6 @@ class HomeController extends Controller
 
             return ResponseWithSuccessData($lang, $menus, 1);
         } catch (\Exception $e) {
-            // Log error for debugging
-            Log::error('Error fetching favorite dishes: ' . $e->getMessage());
-
             return RespondWithBadRequestData($lang, 2); // Generic error response
         }
     }
@@ -192,8 +189,9 @@ class HomeController extends Controller
 
             if ($existingFavorite) {
                 // If the dish is already a favorite, return a response indicating that
-                return RespondWithBadRequestData($lang, 9); // Favorite already exists
-            }
+                return respondError('Validation Error', 400,[
+                    'dish_id' => $lang == 'en' ? ['data already exists'] : ['البيانات موجودة بالفعل'],
+                ]);            }
 
             // Store the new favorite dish in the database
             DB::table('user_favorite_dishes')->insert([
@@ -229,7 +227,9 @@ class HomeController extends Controller
 
             if (!$favorite) {
                 // If the dish is not in the user's favorites
-                return RespondWithBadRequestData($lang, 8); // Favorite not found
+                return respondError('Validation Error', 400,[
+                    'dish_id' => $lang == 'en' ? ['data does not exists'] : ['البيانات غير موجودة'],
+                ]); // Favorite not found
             }
 
             // Delete the favorite dish record
