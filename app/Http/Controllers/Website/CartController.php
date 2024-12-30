@@ -95,15 +95,14 @@ class CartController extends Controller
     }
     public function Cart()
     {
-        $branches = Branch::all();
+        // $branches = Branch::all();
 
-        return view('website.cart', compact('branches'));
+        return view('website.cart');
     }
-    public function Checkout()
+    public function Checkout(Request $request)
     {
-        $branches = Branch::all();
-
-        return view('website.checkout', compact('branches'));
+        // $branches = Branch::all();
+        return view('website.checkout');
     }
     public function isCouponValid(Request $request)
     {

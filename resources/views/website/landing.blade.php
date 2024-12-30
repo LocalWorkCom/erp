@@ -252,11 +252,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                    <span class="badge bg-warning text-dark">
-                                                        <i class="fas fa-star"></i>
-                                                        الاعلى تقييم
-                                                    </span>
-                                                ` : ''}
+                                                            <span class="badge bg-warning text-dark">
+                                                                <i class="fas fa-star"></i>
+                                                                الاعلى تقييم
+                                                            </span>
+                                                        ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
@@ -397,12 +397,18 @@
                 notes: notes,
                 totalPrice: dishPrice
             };
+            const updatedCart = {
+                items: cartItem, // Existing cart items
+                coupon: '',
+                coupon_value: 0,
+                notes: notes,
+            };
 
             // Get existing cart from localStorage
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             // Add the new item to the cart
-            cart.push(cartItem);
+            cart.push(updatedCart);
 
             // Store updated cart in localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
