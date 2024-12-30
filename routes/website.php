@@ -58,5 +58,5 @@ Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->n
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
 
-Route::get('/rate', [HomeController::class, 'showRate'])->name('rate.show');
-Route::post('/rate', [HomeController::class, 'addRate'])->name('rate.store');
+Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
+Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');

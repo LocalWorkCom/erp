@@ -31,7 +31,7 @@
                         </div>
                     @endif
                     <div class="card mt-4 p-4">
-                        <form action="{{ route('rate.store') }}" method="POST">
+                        <form action="{{ route('store.rating') }}" method="POST">
                             @csrf
                             <div class="row">
                                 <div class="col-md-4 offset-md-1 rate-side py-md-3">
