@@ -9,4 +9,6 @@ return [
     'ArabicName' => 'Arabic Name',
     'EnglishName' => 'English Name',
     'Actions' => 'Actions',
+    'The unit have relation'=>'The unit have relation',
+
 ];
