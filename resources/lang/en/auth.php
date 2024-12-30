@@ -70,6 +70,27 @@ return [
     'edit' => 'Edit',
     'delete' => 'Delete',
     'birth_date' => 'Birth Date',
+    'nameapart' => 'اسم الشقة',
 
-
+    'attributes' => [
+        'numapart' => 'رقم الشقة',
+        'floorapart' => 'الطابق',
+        'phoneapart' => 'رقم الهاتف',
+        'country_code_apart' => 'رمز الدولة',
+        'addressdetailapart' => 'تفاصيل العنوان',
+        'markapart' => 'علامة',
+        'namevilla' => 'اسم الفيلا',
+        'villanumber' => 'رقم الفيلا',
+        'addressdetailvilla' => 'تفاصيل العنوان للفيلا',
+        'phonevilla' => 'رقم الهاتف للفيلا',
+        'country_code_villa' => 'رمز الدولة للفيلا',
+        'nameoffice' => 'اسم المكتب',
+        'numaoffice' => 'رقم المكتب',
+        'addressdetailoffice' => 'تفاصيل العنوان للمكتب',
+        'phoneoffice' => 'رقم الهاتف للمكتب',
+        'country_code_office' => 'رمز الدولة للمكتب',
+        'flooroffice' => 'الطابق للمكتب',
+        'birth_date' => 'تاريخ الميلاد',
+        'floor' => 'الدور',
+    ]
 ];
