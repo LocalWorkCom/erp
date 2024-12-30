@@ -28,7 +28,7 @@
                     </div>
                     <ul class="profile-list list-unstyled px-0 pt-4">
                         <li>
-                            <a href="">
+                            <a href="{{ route('orders.show') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 

@@ -169,9 +169,23 @@ class CartController extends Controller
 
         $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
             ->where('client_id', $user->id)
+            ->whereNotIn('status', ['completed', 'cancelled'])
             ->orderBy('created_at', 'desc')
             ->get();
 
         return view('website.track-order', compact('orders'));
+    }
+
+    public function pastOrders()
+    {
+        $user = Auth::guard('client')->user();
+
+        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+            ->where('client_id', $user->id)
+            ->whereIn('status', ['completed', 'cancelled'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('website.orders', compact('orders'));
     }
 }
