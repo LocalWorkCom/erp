@@ -14,11 +14,8 @@ return [
     'same' => ':attribute لا تتطابق ',
     'unauthenticated_title' => 'لا يمكن الدخول',
     'unauthenticated_msg' => 'لا يمكنك الدخول',
-    'country_id' => ' :attribute مطلوب.',
-    'same' => ':attribute لا تتطابق ',
     'exists' => ':attribute غير موجود',
     'integer' => ':attribute يجب ان يكون أرقام',
-    'date_format' => ':attribute ليس بالشكل الصحيح ',
     'validator_title' => 'تصحيح',
     'validator_msg' => 'تصحيح الرسايل',
     'is_remind' => ':attribute مطلوب',
@@ -79,7 +76,6 @@ return [
     'details' => ':attribute مطلوب',
     'quantity' => ':attribute مطلوب',
     'total' => ':attribute مطلوب',
-    'unit_id' => ':attribute مطلوب',
     'recipe_addon_id' => ':attribute مطلوب',
     'price' => ':attribute مطلوب',
     'DataExist' => 'موجود بالفعل',
@@ -90,8 +86,6 @@ return [
     'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'active_offer_conflict'=> 'يوجد عرض فعال بنفس الاسم',
     'The dish_id field must be a number'=>'يجب ان يكون رقم الطبق رقم صحيح',
-    'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
-    'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'attributes' => [
         'birth_date' => 'تاريخ الميلاد',
         'nameapart' => 'اسم الشقة',
@@ -117,7 +111,6 @@ return [
         'color_id' => 'اللون',
         'unit_id' => 'الوحدة',
         'product_id' => 'المنتج',
-        'password_confirm' => 'تأكيد كلمه المرور',
         "name_ar" => "الأسم بالعربيه",
         "hexa_code" => "الكود بالهكسا",
         "name_en" => "الأسم بالأنجليزيه",
@@ -127,7 +120,6 @@ return [
         'currency_en' => 'العمله بالأنجليزيه',
         'currency_code' => 'كود العمله',
         'code' => 'كود الدوله',
-        'hexa_code' => 'كود اللون',
         'category_id' => 'اسم الفئة',
         "product" => "المنتج",
         "store" => "المخزن",
@@ -161,7 +153,6 @@ return [
         'delivery_fees' => 'رسوم التوصيل',
         'note' => 'الملاحظة',
         'table_id' => 'رقم الطاولة',
-        'branch_id' => 'رقم الفرع',
         'coupon_code' => 'قسيمة الخصم',
         'details' => 'تفاصيل',
         'quantity' => 'الكمية',
@@ -265,6 +256,12 @@ return [
         'country_code_apart' => [
             'required' => 'يرجى اختيار رمز الدولة للشقة.',
         ],
+        'phone' => [
+            'length' => 'يجب أن يتكون :attribute من :length رقمًا بالضبط.',
+            'numeric' => 'يجب أن يكون :attribute رقماً فقط.',
+
+        ],
+
     ],
     'EnterName' => 'أدخل الأسم',
 
