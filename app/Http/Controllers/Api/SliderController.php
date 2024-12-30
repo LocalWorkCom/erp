@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Slider;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\OfferResource;
 
 class SliderController extends Controller
 {
@@ -25,9 +26,10 @@ class SliderController extends Controller
             }
         }
 
-        if (!$sliders) {
-            return RespondWithBadRequestData($this->lang, 2);
-        }
-        return ResponseWithSuccessData($this->lang, $sliders, 1);
+    if (!$sliders) {
+        return RespondWithBadRequestData($this->lang, 2);
     }
+
+    return ResponseWithSuccessData($this->lang, $sliders, 1);
+}
 }
