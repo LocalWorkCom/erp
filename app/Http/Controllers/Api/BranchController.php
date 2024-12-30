@@ -223,11 +223,11 @@ class BranchController extends Controller
                 $data['branch'] = $nearestBranch;
             } else {
                 $defaultBranchId = getDefaultBranch();
-                $data['branch'] = DB::table('branches')->find($defaultBranchId);
+                $data['branch'] = Branch::find($defaultBranchId);
             }
         } else {
             $defaultBranchId = getDefaultBranch();
-            $data['branch'] = DB::table('branches')->find($defaultBranchId);
+            $data['branch'] = Branch::find($defaultBranchId);
         }
 
         // Include all branches if fetched

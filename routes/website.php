@@ -57,3 +57,6 @@ Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->nam
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
+
+Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
+Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');

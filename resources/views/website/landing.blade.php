@@ -84,7 +84,7 @@
 
 
             <div class="offers-slider owl-carousel owl-theme">
-                @if($discounts)
+                @if ($discounts)
                     @foreach ($discounts as $discount)
                         <div class="item mb-4 category position-relative" data-aos="zoom-in">
                             <div class="item three row mx-0 p-4" data-aos="zoom-in">
@@ -218,13 +218,17 @@
                     let sizesHtml = '',
                         addonsHtml = '',
                         dishHtml = '';
+                    var version = data.has_size ? '_v1' : '_v2'
+                    let modal = $(`#productModal${version}`);
 
                     // Generate sizes HTML
-                    for (const size of data.sizes) {
-                        sizesHtml += `
+                    if (data.has_size) {
+
+                        for (const size of data.sizes) {
+                            sizesHtml += `
                 <div class="form-check">
                     <div>
-                        <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" data-id="${size.id}"
+                        <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}${version}" value="${size.price}" data-id="${size.id}"
                         ${size.default_size ? 'checked' : ''}>
                         <label class="form-check-label" for="size-${size.id}">
                             ${size.name}
@@ -233,14 +237,18 @@
                     <span>${size.price} ${data.branch.currency_symbol}</span>
                 </div>
             `;
+                        }
+
                     }
 
                     // Generate addons HTML
-                    for (const addon of data.addons) {
-                        addonsHtml += `
+                    if (data.has_addon) {
+
+                        for (const addon of data.addons) {
+                            addonsHtml += `
                 <div class="form-check">
                     <div>
-                        <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}" value="${addon.price}">
+                        <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}${version}" value="${addon.price}">
                         <label class="form-check-label" for="addon-${addon.id}">
                             ${addon.name}
                         </label>
@@ -248,7 +256,9 @@
                     <span>${addon.price} ${data.branch.currency_symbol}</span>
                 </div>
             `;
+                        }
                     }
+
 
                     let dishPrice = parseFloat(data.dish.price);
 
@@ -256,14 +266,14 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                        <span class="badge bg-warning text-dark">
-                                                                            <i class="fas fa-star"></i>
-                                                                            الاعلى تقييم
-                                                                        </span>
-                                                                    ` : ''}
+                                                                                                                                        <span class="badge bg-warning text-dark">
+                                                                                                                                            <i class="fas fa-star"></i>
+                                                                                                                                             الاكثر طلبا
+                                                                                                                                        </span>
+                                                                                                                                    ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
-                <span class="total-price" data-unit-price="${dishPrice}" id="total-price">
+                <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
                     ${dishPrice.toFixed(2)}
                 </span>
                 ${data.branch.currency_symbol}
@@ -280,32 +290,38 @@
         `;
 
                     // Set dish image and inject HTML
-                    $('#productModal').find('#dish-img').attr('src', data.dish.image);
-                    $('#productModal').find('#div-sizes').html(sizesHtml);
-                    $('#productModal').find('#div-addons').html(addonsHtml);
-                    $('#productModal').find('#div-detail').html(dishHtml);
-                    $('#productModal').find('#dish-total').html(dishPrice.toFixed(2));
-                    $('#productModal').find('#dish_id').val(data.dish.id);
+                    modal.find(`#dish-img${version}`).attr('src', data.dish.image);
+                    modal.find(`#div-sizes${version}`).html(sizesHtml);
+                    modal.find(`#div-addons${version}`).html(addonsHtml);
+                    modal.find(`#div-detail${version}`).html(dishHtml);
+                    modal.find(`#dish-total${version}`).html(dishPrice.toFixed(2));
+                    modal.find(`#dish_id${version}`).val(data.dish.id);
                     // Function to recalculate total price
                     // Function to recalculate total price
                     function recalculateTotalPrice() {
-                        let selectedSizePrice = parseFloat($('#productModal').find('.size-option:checked')
+                        let selectedSizePrice = parseFloat(modal.find('.size-option:checked')
                             .val()) || 0;
+                        let price = 0;
                         let addonsPrice = 0;
+                        if (selectedSizePrice) {
+                             price = selectedSizePrice;
+                        } else {
+                             price = dishPrice;
 
+                        }
                         // Calculate addons price
-                        $('#productModal').find('.addon-option:checked').each(function() {
+                        modal.find('.addon-option:checked').each(function() {
                             addonsPrice += parseFloat($(this).val());
                         });
 
-                        let quantity = parseInt($('#productModal').find('.num').text()) || 1;
-                        let newTotalPrice = (selectedSizePrice * quantity) + addonsPrice;
+                        let quantity = parseInt(modal.find('.num').text()) || 1;
+                        let newTotalPrice = (price * quantity) + addonsPrice;
 
                         // Update total price in the total-price span
-                        $('#total-price').text(newTotalPrice.toFixed(2));
+                        $(`#total-price${version}`).text(newTotalPrice.toFixed(2));
 
                         // Update the dish-price span
-                        $('#dish-total').text(newTotalPrice.toFixed(2));
+                        $(`#dish-total${version}`).text(newTotalPrice.toFixed(2));
 
                     }
 
@@ -313,13 +329,14 @@
 
                     // Event listeners for size changes
                     // Event listeners for size changes
-                    $('#productModal').find('.size-option').on('change', recalculateTotalPrice);
+                    modal.find('.size-option').on('change', recalculateTotalPrice);
 
                     // Event listeners for addon changes
-                    $('#productModal').find('.addon-option').on('change', recalculateTotalPrice);
+                    modal.find('.addon-option').on('change', recalculateTotalPrice);
 
                     // Event listeners for quantity changes
                     window.increaseQuantity = function(ele) {
+
                         let quantityElem = $(ele).siblings('.num');
                         let quantity = parseInt(quantityElem.text()) || 1;
                         quantity++;
@@ -339,7 +356,8 @@
 
 
                     // Show the modal
-                    $('#productModal').modal('show');
+                    modal.modal('show');
+
                 },
                 error: function(xhr, status, error) {
                     console.error('There was a problem with the AJAX request:', error);
@@ -351,16 +369,22 @@
 @endpush
 @push('scripts')
     <script>
-        $('#submit').on('click', function() {
+        $('.submit').on('click', function() {
+
+            console.log("Button clicked");
+
+            let id = $(this).attr('id');
+            let parts = id.split('_'); // Split the string by the underscore '_'
+            let version = '_' + parts[1];
 
             // Gather selected size
-            const selectedSizePrice = $('#productModal').find('.size-option:checked').val();
-            const selectedSizeLabel = $('#productModal').find('.size-option:checked').siblings('label')
-                .text();
-            const selectedSizeId = $('#productModal').find('.size-option:checked').data('id');
+            const selectedSizePrice = $(this).find('.size-option:checked').val();
+            const selectedSizeLabel = $(this).find('.size-option:checked').siblings('label').text();
+            const selectedSizeId = $(this).find('.size-option:checked').data('id');
+
             // Gather selected addons
             const selectedAddons = [];
-            $('#productModal').find('.addon-option:checked').each(function() {
+            $(this).find('.addon-option:checked').each(function() {
                 selectedAddons.push({
                     id: $(this).attr('id'),
                     name: $(this).siblings('label').text(),
@@ -369,28 +393,30 @@
             });
 
             // Get quantity
-            const quantity = parseInt($('#productModal').find('.num').text()) || 1;
+            const quantity = parseInt($('#div-detail_v2').find('.num').text()) || 1;
 
             // Additional notes
-            const notes = $('#floatingTextarea2').val();
+            const notes = $(`#note${version}`).val();
+
 
             // Dish name and image
-            const dishName = $('#productModal').find('h5').text();
-            const dish_id = $('#dish_id').val();
-            const dishImage = $('#productModal').find('#dish-img').attr('src');
-            const dishPrice = parseFloat($('#total-price').text());
+            const dishName = $(`#div-detail${version}`).find('h5').text().trim();
+            const dish_id = $(`#dish_id${version}`).val();
+            const dishImage = $(`#dish-img${version}`).attr('src');
+            const dishPrice = parseFloat($(`#total-price${version}`).text());
 
             // Check if size is selected
-            if (!selectedSizePrice) {
+            if (!selectedSizePrice && version === '_v1') {
                 alert('Please select a size.');
                 return;
             }
 
             // Create a cart item object
             const cartItem = {
-                id: dish_id, // Unique identifier for the item
+                id: dish_id,
                 name: dishName,
                 image: dishImage,
+                price: dishPrice,
                 size: {
                     id: selectedSizeId,
                     price: selectedSizePrice,
@@ -402,11 +428,20 @@
                 totalPrice: dishPrice
             };
 
-            // Get existing cart from localStorage
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Add the new item to the cart
-            cart.push(cartItem);
+            // Get existing cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || {
+                items: [],
+                coupon: '',
+                coupon_value: 0
+            };
+
+            // Add the new item to the cart's items array
+            cart.items.push(cartItem);
+
+            // Update notes (optional if specific to the session)
+            cart.notes = notes;
+
 
             // Store updated cart in localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
