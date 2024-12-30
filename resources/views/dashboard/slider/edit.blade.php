@@ -55,6 +55,11 @@
                                                        {{ old('flag', $slider->flag) === 'offer' ? 'checked' : '' }} required>
                                                 <label class="form-check-label" for="offerOption">@lang('slider.Offer')</label>
                                             </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="flag" value="discount" id="discountOption"
+                                                       {{ old('flag', $slider->flag) === 'discount' ? 'checked' : '' }} required>
+                                                <label class="form-check-label" for="discountOption">@lang('slider.Discount')</label>
+                                            </div>
                                             <div class="invalid-feedback">@lang('validation.EnterFlag')</div>
                                         </div>
                                     </div>
@@ -87,6 +92,20 @@
                                         </select>
                                     </div>
 
+                                    <!-- Discount Selection -->
+                                    <div class="col-xl-12 {{ old('flag', $slider->flag) === 'discount' ? '' : 'd-none' }}" id="discountDropdown">
+                                        <label for="discount_id" class="form-label">@lang('slider.EnterDiscount')</label>
+                                        <select name="discount_id" id="discount_id" class="form-control select2" {{ old('flag', $slider->flag) === 'discount' ? '' : 'disabled' }}>
+                                            <option value="" disabled>@lang('slider.ChooseDiscount')</option>
+                                            @foreach($discounts as $discount)
+                                                <option value="{{ $discount->id }}"
+                                                    {{ old('discount_id', $slider->discount_id) == $discount->id ? 'selected' : '' }}>
+                                                    {{ $discount->dish->name_ar . " | " . $discount->dish->name_en . " | " . number_format($discount->discount->value, 0) . ($discount->discount->type == "percentage" ? "%" : "EGP") }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <!-- Name Fields -->
                                     <div class="col-xl-6">
                                         <label for="name_ar" class="form-label">@lang('slider.ArabicName')</label>
@@ -104,11 +123,13 @@
                                     <div class="col-xl-6">
                                         <label for="description_ar" class="form-label">@lang('slider.ArabicDescription')</label>
                                         <textarea name="description_ar" id="description_ar" class="form-control" required>{{ old('description_ar', $slider->description_ar) }}</textarea>
+                                        <div class="invalid-feedback">@lang('validation.EnterArabicDesc')</div>
                                     </div>
 
                                     <div class="col-xl-6">
                                         <label for="description_en" class="form-label">@lang('slider.EnglishDescription')</label>
                                         <textarea name="description_en" id="description_en" class="form-control" required>{{ old('description_en', $slider->description_en) }}</textarea>
+                                        <div class="invalid-feedback">@lang('validation.EnterEnglishDesc')</div>
                                     </div>
 
                                     <!-- Image Upload -->
@@ -120,6 +141,7 @@
                                         </p>
                                         <input type="file" name="image" id="image" class="form-control">
                                         <div class="form-text">@lang('slider.ImageNote')</div>
+                                        <div class="invalid-feedback">@lang('validation.EnterImage')</div>
                                     </div>
 
                                     <!-- Submit Button -->
@@ -147,6 +169,32 @@
     @vite('resources/assets/js/validation.js')
 
     <script>
+        // $(document).ready(function () {
+        //     $('.select2').select2();
+        //
+        //     function toggleDropdowns(flag) {
+        //         if (flag === 'dish') {
+        //             $('#dishDropdown').removeClass('d-none');
+        //             $('#dish_id').prop('disabled', false);
+        //             $('#offerDropdown').addClass('d-none');
+        //             $('#offer_id').prop('disabled', true);
+        //         } else if (flag === 'offer') {
+        //             $('#offerDropdown').removeClass('d-none');
+        //             $('#offer_id').prop('disabled', false);
+        //             $('#dishDropdown').addClass('d-none');
+        //             $('#dish_id').prop('disabled', true);
+        //         }
+        //     }
+        //
+        //     // Initialize dropdown visibility on page load
+        //     toggleDropdowns($('input[name="flag"]:checked').val());
+        //
+        //     // Change event for radio buttons
+        //     $('input[name="flag"]').on('change', function () {
+        //         toggleDropdowns($(this).val());
+        //     });
+        // });
+
         $(document).ready(function () {
             $('.select2').select2();
 
@@ -156,15 +204,26 @@
                     $('#dish_id').prop('disabled', false);
                     $('#offerDropdown').addClass('d-none');
                     $('#offer_id').prop('disabled', true);
+                    $('#discountDropdown').addClass('d-none');
+                    $('#discount_id').prop('disabled', true);
                 } else if (flag === 'offer') {
                     $('#offerDropdown').removeClass('d-none');
                     $('#offer_id').prop('disabled', false);
                     $('#dishDropdown').addClass('d-none');
                     $('#dish_id').prop('disabled', true);
+                    $('#discountDropdown').addClass('d-none');
+                    $('#discount_id').prop('disabled', true);
+                } else if (flag === 'discount') {
+                    $('#discountDropdown').removeClass('d-none');
+                    $('#discount_id').prop('disabled', false);
+                    $('#dishDropdown').addClass('d-none');
+                    $('#dish_id').prop('disabled', true);
+                    $('#offerDropdown').addClass('d-none');
+                    $('#offer_id').prop('disabled', true);
                 }
             }
 
-            // Initialize dropdown visibility on page load
+            // Initialize dropdown visibility based on the current flag
             toggleDropdowns($('input[name="flag"]:checked').val());
 
             // Change event for radio buttons

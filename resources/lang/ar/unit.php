@@ -9,5 +9,5 @@ return [
     'ArabicName' => 'الاسم بالعربي',
     'EnglishName' => 'الاسم بالانجليزي',
     'Actions' => 'العمليات',
-
+    'The unit have relation'=>'هذه الوحده لها علاقه بمنتج',
 ];

@@ -119,6 +119,10 @@ class UnitService
         if (!$unit) {
             return  RespondWithBadRequestData($lang, 8);
         }
+        // Check if there are any products associated with this unit
+        if ($unit->productUnits()->count() > 0) {
+            return CustomRespondWithBadRequest(__('unit.The unit have relation'));
+        }
         // Delete the unit
         $unit->delete();
 

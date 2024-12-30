@@ -14,7 +14,8 @@ class StaticPageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $lang = $request->header('lang', 'ar');
+        $lang = $request->header('lang') ?? app()->getLocale() ;
+//        dd($lang);
         if($lang == 'en') {
             $title = $this->name_en;
             $description=$this->description_en;

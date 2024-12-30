@@ -70,7 +70,6 @@ class HomeController extends Controller
         );
     }
 
-
     public function showMenu(Request $request)
     {
         $categoryId = $request->query('category_id');
@@ -125,7 +124,9 @@ class HomeController extends Controller
 
     public function privacy()
     {
-        $privacies = StaticPageResource::collection(PrivacyPolicy::all());
+        $privacies = StaticPageResource::collection(
+            PrivacyPolicy::where('active', 1)->get()
+        );
         $privaciesArray = $privacies->toArray(request());
         $branches = Branch::all();
         return view('website.privacy', compact('privaciesArray', 'branches'));
@@ -133,14 +134,19 @@ class HomeController extends Controller
 
     public function return()
     {
-        $returns = StaticPageResource::collection(ReturnPolicy::all());
+        $returns = StaticPageResource::collection(
+            ReturnPolicy::where('active', 1)->get()
+        );
         $returnsArray = $returns->toArray(request());
         $branches = Branch::all();
         return view('website.return', compact('returnsArray', 'branches'));
     }
+
     public function terms()
     {
-        $terms = StaticPageResource::collection(TermsAndCondition::all());
+        $terms = StaticPageResource::collection(
+            TermsAndCondition::where('active', 1)->get()
+        );
         $termsArray = $terms->toArray(request());
         $branches = Branch::all();
         return view('website.terms', compact('termsArray', 'branches'));
@@ -217,6 +223,7 @@ class HomeController extends Controller
             compact(['menuCategories', 'userFavorites'])
         );
     }
+
     public function getfaqs()
     {
         $lang = app()->getLocale(); // Get the current language

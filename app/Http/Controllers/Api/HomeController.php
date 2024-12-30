@@ -179,7 +179,9 @@ class HomeController extends Controller
 
             // Validate that dish_id is provided and is a valid number
             if (!$dishId || !is_numeric($dishId)) {
-                return RespondWithBadRequestData($lang, 3); // Invalid dish_id
+                return respondError('Validation Error', 400,[
+                    'dish_id' => $lang == 'en' ? ['invalid number'] : ['رقم غير صحيح'],
+                ]); // Invalid dish_id
             }
 
             // Check if the dish already exists in the user's favorites

@@ -29,6 +29,15 @@ Route::middleware(['auth:client'])->group(function () {
     Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 
     Route::get('/myaddress', [LocationController::class, 'showAddress'])->name('showAddress');
+    // Route for creating a new address
+    Route::get('/myaddress/add', [LocationController::class, 'createAddress'])->name('create.Address');
+
+    // Route for editing an existing address
+    Route::get('/myaddress/edit/{id}', [LocationController::class, 'createAddress'])->name('edit.Address');
+    Route::post('/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
+    Route::post('/address/delete/{id}', [LocationController::class, 'destroyAddress'])->name('address.delete');
+
+    Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -59,6 +68,6 @@ Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoo
 Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->name('myfatoorah.callback');
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
-Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
+Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
 
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
