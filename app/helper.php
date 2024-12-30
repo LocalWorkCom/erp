@@ -289,12 +289,12 @@ function CheckToken()
         return false;
     }
     $token = DB::table('oauth_access_tokens')
-        ->select( 'expires_at') // Get the necessary fields
+        ->select('expires_at') // Get the necessary fields
         ->orderBy('created_at', 'desc') // Order by creation date (ascending)
         ->where('user_id', $User->id) // Filter by the user's ID
         ->first();
 
-    if($token->expires_at < Carbon::now()->toDateTimeString()) {
+    if ($token->expires_at < Carbon::now()->toDateTimeString()) {
         return false;
     }
     return true;
@@ -1014,23 +1014,25 @@ function respondError($error, $code, $errorMessages = [])
 
     return response()->json($response, $code1);
 }
-function getMostDishesOrdered($limit = 5)
+function getMostDishesOrdered($IDBranch, $limit = 5)
 {
-    return Dish::select('dishes.*')
+    return BranchMenu::select('dishes.*')
+        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->where('branch_id', $IDBranch)
         ->orderByDesc('total_quantity')
         ->orderBy('dishes.created_at', 'desc') // Order by newest first
-        ->limit($limit)
-        ->get();
+        ->limit($limit)->get();
 }
-function checkDishExistMostOrderd($id)
-
+function checkDishExistMostOrderd($IDBranch, $id)
 {
-    $Dishes =  Dish::select('dishes.*')
+    $Dishes =  BranchMenu::select('dishes.*')
+        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
+        ->where('branch_id', $IDBranch)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit(5)

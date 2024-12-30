@@ -15,10 +15,10 @@ class MostPopularController extends Controller
             if($popularDish)
             $popularDish->makeHidden(['name_site', 'description_site']);
         }
+
         if (!$popularDishes) {
             return RespondWithBadRequestData($this->lang, 2);
         }
         return ResponseWithSuccessData($this->lang, $popularDishes, 1);
-
     }
 }

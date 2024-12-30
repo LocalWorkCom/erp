@@ -26,6 +26,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
+    'notfound'=>'عفوا هذا المستخدم غير موجود بالسيستيم',
 
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
@@ -92,7 +93,6 @@ return [
         'numapart' => 'رقم الشقة',
         'phoneapart' => 'هاتف الشقة',
         'floor' => 'الدور',
-
         'country_code_apart' => 'رمز الدولة للشقة',
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
@@ -177,6 +177,7 @@ return [
         'value' => 'القيمة',
         'min_limit' => 'الحد الادنى',
         'max_limit' => 'الحد الاقصى',
+        'auth.name'=>'الاسم',
 
     ],
     'countryCodeExists' => 'كود الدولة غير صالح.',
@@ -261,6 +262,14 @@ return [
             'numeric' => 'يجب أن يكون :attribute رقماً فقط.',
 
         ],
+        'auth.nameweb' => 'الاسم',
+                'auth.name' => 'الاسم',
+
+        'auth.emailweb' => 'البريد الإلكتروني',
+        'auth.password' => 'كلمة المرور',
+        'auth.phoneplace' => 'الهاتف',
+        'auth.country_code' => 'رمز الدولة',
+        'auth.date' => 'تاريخ الميلاد',
 
     ],
     'EnterName' => 'أدخل الأسم',

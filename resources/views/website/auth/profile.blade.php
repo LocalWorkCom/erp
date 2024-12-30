@@ -124,7 +124,9 @@
                                             id="passwordInput" placeholder="@lang('auth.newpass')">
                                         <i class="fas fa-eye-slash form-icon"></i>
                                     </div>
-
+                                    @error('password')
+                                        <div id="passwordError" class="error-message mb-1 text-danger">{{ $message }}</div>
+                                    @enderror
                                     <!-- Buttons -->
                                     <div class="mt-4">
                                         <button type="button" class="btn reversed main-color w-25 ms-3">
@@ -150,6 +152,6 @@
             if (successMessage) {
                 successMessage.style.display = 'none';
             }
-        }, 10000); // 10 seconds (10000 milliseconds)
+        }, 10000);
     </script>
 @endpush
