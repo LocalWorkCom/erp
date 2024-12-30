@@ -57,7 +57,9 @@
 
     <main>
         @yield('content')
+        <section class="before-footer"></section>
     </main>
+
     <!-- modals -->
     @include('website.layouts.footer')
 

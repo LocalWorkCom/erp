@@ -37,9 +37,9 @@
             @endif
 
             @if ($address->isNotEmpty())
-                @foreach ($address as $item)
-                    <div class="card p-5 w-75 mx-auto mt-5">
-                        <ul class="list-unstyled px-0">
+                <div class="card p-5 w-75 mx-auto mt-5">
+                    <ul class="list-unstyled px-0">
+                        @foreach ($address as $item)
                             <li class="d-flex justify-content-between align-items-start mb-4">
                                 <div>
                                     <h5> <i class="fas fa-city text-muted fa-xs ms-2"></i>
@@ -55,32 +55,31 @@
 
                                 </div>
                                 @if ($item->has_inprogress_or_pending_orders == 0)
-
-                                <div class="dropdown">
-                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <button class="dropdown-item w-100"
-                                                onclick="window.location.href='{{ route('edit.Address', ['id' => $item->id]) }}'">
-                                                @lang('auth.edit')
-                                            </button>
-                                        </li>
-                                        @if ($address->count() > 1)
+                                    <div class="dropdown">
+                                        <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <li>
-                                                <button class="dropdown-item w-100" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteaddressModal" data-id="{{ $item->id }}">
-                                                    @lang('auth.delete')</button>
+                                                <button class="dropdown-item w-100"
+                                                    onclick="window.location.href='{{ route('edit.Address', ['id' => $item->id]) }}'">
+                                                    @lang('auth.edit')
+                                                </button>
                                             </li>
-                                        @endif
-                                    </ul>
-                                </div>
+                                            @if ($address->count() > 1)
+                                                <li>
+                                                    <button class="dropdown-item w-100" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteaddressModal" data-id="{{ $item->id }}">
+                                                        @lang('auth.delete')</button>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
                                 @endif
                             </li>
-                        </ul>
-                    </div>
-                @endforeach
+                        @endforeach
+                    </ul>
+                </div>
             @else
                 <div class="card p-5 w-50 text-center mx-auto mt-5">
                     <img class="noAddress-img"
