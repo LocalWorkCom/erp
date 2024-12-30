@@ -1673,14 +1673,267 @@ input::placeholder {
 
 
 /* responsive */
-@media(max-width: 1024px) {}
+/* responsive */
+@media(max-width: 1440px) {
+    .intro-img {
+        height: 310px;
+    }
+    .owl-slider img {
+        height: 275px;
+        margin-inline: 70px;
+    }
+    .big-img {
+        height: 220px !important;
+    }
+    .intro .container .small-img {
+        height: 190px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 120px;
+    }
+    .intro .overflow-plates {
+        bottom: 1%;
+        z-index: 9;
+    }
+    .info .info-img img {
+        height: 330px;
+    }
+    .apps-img {
+        height: 320px;
+    }
+    .code-input input {
+        width: 3.2rem;
+        height: 3rem;
+    }
+    .contact-us img {
+        width: 18rem;
+    }
+    footer .footer-curve {
+        background: #BF0000;
+        color: #fff;
+        mask: radial-gradient(55% 45px at TOP, #0000 98%, #000);
+        height: 39px;
+        position: relative;
+        top: 0;
+        z-index: -1;
+    }
+}
+@media(max-width:1200px) {
+    header .navbar-light .navbar-nav .nav-link {
+        font-size: 14px;
+        margin: 0px 0.50rem;
+    }
+    header .navbar .navbar-service img {
+        width: 170px;
+    }
+}
+@media(max-width: 992px) {
+    .owl-slider img {
+        height: 275px;
+        margin-inline: 0px;
+    }
+    .intro-img {
+        height: 295px;
+        margin-inline: 125px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90px;
+    }
+    .apps-img {
+        height: 255px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 0.rem;
+        border-radius: 10px;
+        margin-left: 1rem;
+        margin-bottom: 12px;
+    }
+    .info .info-img img {
+        height: 280px;
+    }
+}
 
-@media(max-width: 992px) {}
+@media(max-width: 772px) {
+    .apps-img {
+        height: 220px;
+    }
+    .footer-logo {
+        width: 100px;
+        height: 100px;
+        top: -10%;
+        right: 7px;
+    }
+    .app-store-btn .fa-apple, .google-play-btn .fa-google-play {
+        font-size: 25px;
+        margin-right: 55px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 1rem;
+        margin-left: 1rem;
+        margin-bottom: 15px;
+    }
+    footer .footer-curve {
+        height: 24px;
+        top: 0;
+    }
+    .intro::after {
+        bottom: -5%;
+        left: 0;
+        right: 0;
+        height: 80px;
+    }
+    .big-img {
+        height: 160px !important;
+    }
+    .intro .container .small-img {
+        height: 125px;
+    }
+    .owl-slider img {
+        height: 225px;
+        margin-inline: 0px;
+    }
+    .intro-img {
+        height: 240px;
+    }
+    .info .info-img img {
+        height: 260px;
+    }
+    .owl-slider img {
+        height: 225px;
+        margin-inline: 150px;
+    }
+}
 
-@media(max-width: 768px) {}
+@media(max-width: 425px) {
+    .owl-slider img {
+        height: 165px;
+        margin-inline: 0px;
+        margin-top: 10px;
+    }
+  .slide-title {
+        margin-top: 101px;
+    }
+    .categories-slider .owl-stage-outer, .categories-slider .owl-stage-outer {
+        padding: 0rem;
+    }
+    .nav-link {
+        padding: 0.1rem 1.1rem;
+    }
+    .apps-img {
+        height: 175px;
+    }
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+        top: -5%;
+        right: 2px;
+    }
+    .info .info-img img {
+        display: none;
+    }
+    .plate-img img {
+        height: 145px;
+    }
+    .offer-img {
+        height: 145px;
+    }
+    .intro .overflow-plates {
+        display: none;
+    }
+    .info .btn-lg {
+        padding: 0.5rem 2rem;
+        font-size: 1rem;
+    }
+    .apps-img {
+        height: 155px;
+    }
+}
 
-@media(max-width: 640px) {}
+@media(max-width: 375px) {
+    .intro .overflow-plates {
+   display: none;
+    }
 
-@media(max-width: 480px) {}
-
-@media(max-width: 360px) {}
+    .owl-slider img {
+        height: 185px;
+        margin-inline: 0px;
+        margin-top: 34px;
+    }
+    .intro::after {
+        bottom: -2%;
+        left: 0;
+        right: 0;
+        height: 60px;
+    }
+    .plates-slider .owl-stage-outer {
+      padding: 0rem; 
+    }
+    .plate-img img {
+        height: 140px;
+    }
+    .offer-img {
+        height: 140px;
+    }
+    .offer-img {
+        height: 140px;
+    }
+    .info .info-img img {
+        display: none;
+    }
+    .info .btn-lg {
+        padding: .5rem 1rem;
+        font-size: 1rem;
+    }
+    .cart-btn {
+        height: 40px;
+        width: 40px;
+    }
+    .apps-img {
+        height: 145px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 1rem;
+        margin-left: 0rem;
+        margin-bottom: 10px;
+    }
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+        top: -3%;
+        right: 1px;
+    }
+    .intro .owl-carousel .owl-item img {
+        display: none;
+    }
+    .intro  .intro-img {
+        display: none;
+    }
+    .intro {
+        height: 70vh;
+    }
+    .intro::after {
+        bottom: -5%;
+        height: 60px;
+    }
+    .owl-slider .owl-stage-outer {
+        padding-block: 0rem;
+    }
+    header .navbar .navbar-service img {
+        width: 145px;
+    }
+}
