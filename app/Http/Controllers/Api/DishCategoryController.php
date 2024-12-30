@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\BranchMenuCategory;
+use App\Models\BranchMenu;
 use App\Models\DishCategory;
 use App\Models\Offer;
 use App\Services\DishCategoryService;
@@ -180,6 +181,8 @@ class DishCategoryController extends Controller
             if (!$dishCategory) {
                 return RespondWithBadRequestData($lang, 2);
             }
+            
+            $dishCategory->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
 
             return ResponseWithSuccessData($lang, $dishCategory, 1);
         }
@@ -209,6 +212,8 @@ class DishCategoryController extends Controller
                 }
             }])->get();
 
+            $dishCategories->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
+
             return ResponseWithSuccessData($lang, $dishCategories, 1);
         }
 
@@ -232,6 +237,15 @@ class DishCategoryController extends Controller
 
         // Default fallback
         return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
+    }
+
+    public function menuDishesDetails(Request $request){
+        $this->lang = $request->header('lang','ar');
+        $menuCategories = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
+        if (!$menuCategories) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+        return ResponseWithSuccessData($this->lang, $menuCategories, 1);
     }
 
 }

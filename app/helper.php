@@ -901,7 +901,7 @@ function AddDishCategories($branch_ids, $dish_id)
 function AddDishes($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
-        $get_dish = Dish::where('id', $dish_id)->first();
+        $get_dishes = Dish::where('id', $dish_id)->get();
     } else {
         $get_dishes = Dish::get();
     }
@@ -954,7 +954,7 @@ function AddAddons($branch_ids, $dish_id)
 {
     if ($dish_id != 0) {
         $get_dish = Dish::where('id', $dish_id)->with('dishAddonsDetails')->first();
-        $addons = $get_dish->dishAddonsDetails->pluck('addon_id');
+        $addons = $get_dish->dishAddonsDetails->pluck('id');
         $get_addons = DishAddon::whereIn('id', $addons)->get();
     } else {
         $get_addons = DishAddon::get();
@@ -962,11 +962,11 @@ function AddAddons($branch_ids, $dish_id)
 
     if ($get_addons) {
         foreach ($get_addons as $get_addon) {
-            $menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
+            //$menu = BranchMenu::where('dish_id', $get_addon->dish_id)->first();
             $branch_menu_addon_category = BranchMenuAddonCategory::where('addon_category_id', $get_addon->addon_category_id)->first();
             foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuAddon::firstOrCreate(
-                    ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
+                    ['dish_id' => $get_addon->dish_id, 'branch_id' => $branch_id, 'dish_addon_id' => $get_addon->id],
                     [
                         'branch_menu_addon_category_id' => $branch_menu_addon_category->id,
                         'price' => $get_addon->price,
@@ -989,10 +989,10 @@ function AddSizes($branch_ids, $dish_id)
 
     if ($get_sizes) {
         foreach ($get_sizes as $get_size) {
-            $menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
+            //$menu = BranchMenu::where('dish_id', $get_size->dish_id)->first();
             foreach ($branch_ids as $branch_id) {
                 $branch_menu_category = BranchMenuSize::firstOrCreate(
-                    ['dish_id' => $menu->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
+                    ['dish_id' => $get_size->dish_id, 'branch_id' => $branch_id, 'dish_size_id' => $get_size->id],
                     [
                         'price' => $get_size->price,
                         'is_active' => 1,
