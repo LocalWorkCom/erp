@@ -29,5 +29,9 @@ return [
     'warning' => 'Warning',
     'deleteMsg' => 'Are you sure you want to delete this client',
     'yesDelete' => 'Yes Delete',
-    'cancelDelete' => 'Cancel'
+    'cancelDelete' => 'Cancel',
+    'none' => 'None',
+    'chooseCountry' => 'Choose Country',
+    'countryCode' => 'Country Code',
+    'addressPhone' => 'Address Phone Number'
 ];
