@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClientAddress;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,9 +13,17 @@ class LocationController extends Controller
 {
     public function showAddress()
     {
-        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)->get();
+        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
+            ->withCount([
+                'orders as has_inprogress_or_pending_orders' => function ($query) {
+                    $query->whereIn('status', ['inprogress', 'pending']);
+                }
+            ])
+            ->get();
+
         return view('website.auth.address', compact('address'));
     }
+
     public function createAddress($id = null)
     {
         // If an address ID is passed, fetch the address for editing, otherwise create a new address
@@ -25,7 +34,6 @@ class LocationController extends Controller
 
     public function createOrUpdateAddress(Request $request)
     {
-        dd($request->all(),$request->id);
         // Fetch existing address or create a new one if no ID is provided
         $address = $request->id ? ClientAddress::findOrFail($request->id) : new ClientAddress();
 
@@ -81,7 +89,7 @@ class LocationController extends Controller
                     'phoneoffice' => 'required',
                     'country_code_office' => 'required',
                     'floor' => 'required',
-                    'markoffice'=> 'required',
+                    'markoffice' => 'required',
                 ];
                 $messages = [
                     'nameoffice.required' => __('validation.required', ['attribute' => __('validation.nameoffice')]),
@@ -159,4 +167,20 @@ class LocationController extends Controller
         }
     }
 
+    public function destroyAddress($id)
+    {
+        $check = Order::where('client_address_id', $id)
+            ->where(function ($query) {
+                $query->where('status', 'inprogress')
+                    ->orWhere('status', 'pending');
+            })
+            ->exists();
+        if (!$check) {
+            $address = ClientAddress::findOrFail($id);
+            $address->delete();
+        } else {
+            return redirect()->route('showAddress')->with('error', __('Address cannot deleted.'));
+        }
+        return redirect()->route('showAddress')->with('success', __('Address deleted successfully.'));
+    }
 }

@@ -58,9 +58,6 @@
                     <form action="{{ route('handle.Address') }}"
                         method="POST">
                         @csrf
-                        @if ($address)
-                            @method('PUT')
-                        @endif
                         <h6 class="fw-bold mb-3">
                             @lang('header.locationcomplete')
                         </h6>
@@ -268,6 +265,7 @@
 
         </div>
     </section>
+
 @endsection
 @push('scripts')
     <script>

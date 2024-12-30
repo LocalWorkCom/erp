@@ -34,7 +34,8 @@ Route::middleware(['auth:client'])->group(function () {
 
     // Route for editing an existing address
     Route::get('/myaddress/edit/{id}', [LocationController::class, 'createAddress'])->name('edit.Address');
-    Route::match(['get', 'post'], '/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
+    Route::post('/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
+    Route::post('/address/delete/{id}', [LocationController::class, 'destroyAddress'])->name('address.delete');
 
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
 });

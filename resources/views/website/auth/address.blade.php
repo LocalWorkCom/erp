@@ -22,6 +22,19 @@
                 </button>
 
             </div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             @if ($address->isNotEmpty())
                 @foreach ($address as $item)
@@ -29,8 +42,7 @@
                         <ul class="list-unstyled px-0">
                             <li class="d-flex justify-content-between align-items-start mb-4">
                                 <div>
-                                    <h5>
-                                        <i class="fas fa-city text-muted fa-xs ms-2"></i>
+                                    <h5> <i class="fas fa-city text-muted fa-xs ms-2"></i>
                                         {{ $item->building }}
                                     </h5>
                                     <small class="text-muted">
@@ -42,6 +54,8 @@
                                     </small>
 
                                 </div>
+                                @if ($item->has_inprogress_or_pending_orders == 0)
+
                                 <div class="dropdown">
                                     <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>
@@ -53,11 +67,16 @@
                                                 @lang('auth.edit')
                                             </button>
                                         </li>
-                                        <li>
-                                            <button class="dropdown-item w-100"> @lang('auth.delete')</button>
-                                        </li>
+                                        @if ($address->count() > 1)
+                                            <li>
+                                                <button class="dropdown-item w-100" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteaddressModal" data-id="{{ $item->id }}">
+                                                    @lang('auth.delete')</button>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
+                                @endif
                             </li>
                         </ul>
                     </div>
@@ -70,9 +89,56 @@
                     <h4 class="my-4 fw-bold">@lang('auth.noaddress')</h4>
                 </div>
             @endif
-
-
-
         </div>
     </section>
+
+    <div class="logout-modal modal fade" tabindex="-1" id="deleteaddressModal">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" id="deleteaddressForm">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
+                        <h4 class="mt-4"> @lang('header.deleteaddress')</h4>
+                    </div>
+                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2"
+                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('[data-bs-target="#deleteaddressModal"]');
+            const deleteForm = document.getElementById('deleteaddressForm');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const addressId = button.getAttribute('data-id');
+                    const deleteUrl = `{{ route('address.delete', ['id' => ':id']) }}`.replace(
+                        ':id', addressId);
+                    deleteForm.setAttribute('action', deleteUrl);
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const alertDivs = document.querySelectorAll('.auto-hide');
+                alertDivs.forEach(div => {
+                    div.classList.add('d-none');
+                });
+            }, 200);
+        });
+    </script>
+@endpush
