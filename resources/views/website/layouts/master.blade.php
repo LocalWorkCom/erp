@@ -162,6 +162,8 @@
                 items: []
             };
 
+            console.log(cart);
+            
             // Check if cart has an items array and calculate the count
             let items = cart.items || []; // Safely access the items array
             let count = items.length; // Count the total number of items
