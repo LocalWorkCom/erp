@@ -83,5 +83,7 @@ return[
     'branchMenuCategoryAddon' => 'تصنيف اضافات الاطباق للفروع',
     'Addons'=>'الاضافات',
     'Rates'=>'التقييمات',
+    'Reports'=>'التقرير',
+    'ClientsReports'=>'تقارير العملاء',
 
 ];

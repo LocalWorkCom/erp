@@ -23,11 +23,11 @@ class LocationController extends Controller
         return view('website.auth.create-address', compact('address'));
     }
 
-    public function createOrUpdateAddress(Request $request, $id = null)
+    public function createOrUpdateAddress(Request $request)
     {
-        //dd($request->all(),$id);
+        dd($request->all(),$request->id);
         // Fetch existing address or create a new one if no ID is provided
-        $address = $id ? ClientAddress::findOrFail($id) : new ClientAddress();
+        $address = $request->id ? ClientAddress::findOrFail($request->id) : new ClientAddress();
 
         // Initialize validation rules and messages
         $rules = $messages = [];

@@ -49,7 +49,6 @@ class CouponService
 
     public function store(Request $request, $lang)
     {
-
         try {
             // Define the validation rules
             $validator = Validator::make($request->all(), [
@@ -58,15 +57,16 @@ class CouponService
                     'string',
                     function ($attribute, $value, $fail) {
                         $trimmedValue = trim($value);
-                        // Check only for active (non-deleted) coupon codes
-                        $exists = DB::table('coupons')
+
+                        // Check for active coupons with the same code
+                        $activeExists = DB::table('coupons')
                             ->where('code', $trimmedValue)
-                            ->whereNull('deleted_at')
+                            ->where('is_active', 1) // Check only active coupons
+                            ->whereNull('deleted_at') // Exclude deleted coupons
                             ->exists();
 
-                        if ($exists) {
-                            // dd(0)
-                            $fail(__('coupon.duplicate_code'));
+                        if ($activeExists) {
+                            $fail(__('coupon.duplicate_active_code'));
                         }
                     },
                 ],
@@ -86,16 +86,10 @@ class CouponService
             // Check if validation fails
             if ($validator->fails()) {
                 if ($validator->errors()->has('code')) {
-                    // Get the first error for 'code'
                     $error = $validator->errors()->first('code');
-                    // dd($error);
-                    // Check if the error is for duplication
-                    if ($error === __('coupon.duplicate_code')) {
-                        // dd('dd');
-                        return CustomRespondWithBadRequest(__('coupon.duplicate_code'));
+                    if ($error === __('coupon.duplicate_active_code')) {
+                        return CustomRespondWithBadRequest(__('coupon.duplicate_active_code'));
                     }
-                    // dd('00');
-                    // Otherwise, handle generic code error
                     return CustomRespondWithBadRequest(__('coupon.code_required'));
                 }
 
@@ -103,12 +97,8 @@ class CouponService
                 return RespondWithBadRequestData($lang, $validator->errors());
             }
 
-
-
             // Validation passed, proceed to create the coupon
             $validatedData = $validator->validated();
-
-            // No need to check again for code uniqueness here, as it is handled in the validator
 
             $coupon = Coupon::create([
                 'code' => $validatedData['code'],
@@ -126,7 +116,7 @@ class CouponService
             if (!empty($validatedData['branches'])) {
                 $coupon->branches()->attach($validatedData['branches']);
             }
-            // dd($lang);
+
             return ResponseWithSuccessData($lang, $coupon, 1);
         } catch (\Exception $e) {
             Log::error('Error creating coupon: ' . $e->getMessage());
@@ -135,20 +125,17 @@ class CouponService
     }
 
 
+
     public function update(Request $request, $id, $lang)
     {
         try {
             $coupon = Coupon::findOrFail($id);
 
+            // Validate the request data
             $validator = Validator::make($request->all(), [
                 'code' => [
                     'required',
                     'string',
-                    Rule::unique('coupons', 'code')
-                        ->ignore($id) // Ignore the current record
-                        ->where(function ($query) {
-                            return $query->whereNull('deleted_at'); // Ignore soft-deleted records
-                        }),
                 ],
                 'type' => 'required|in:percentage,fixed',
                 'value' => 'required|numeric|min:0',
@@ -162,13 +149,18 @@ class CouponService
             ]);
 
             if ($validator->fails()) {
-                // Check for unique code error specifically
-                if ($validator->errors()->has('code')) {
-                    return CustomRespondWithBadRequest('Duplicate code is submitted.');
-                }
-
                 // Return other validation errors
                 return RespondWithBadRequestData($lang, $validator->errors());
+            }
+
+            // Check if there is another active coupon with the same code (excluding the current one)
+            $existingActiveCoupon = Coupon::where('code', $request->code)
+                ->where('is_active', true)
+                ->where('id', '!=', $id) // Exclude the current coupon
+                ->exists();
+
+            if ($existingActiveCoupon) {
+                return CustomRespondWithBadRequest(__('coupon.duplicate_active_code'));
             }
 
             // Validation passed, update the coupon

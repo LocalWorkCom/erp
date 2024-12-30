@@ -55,9 +55,8 @@
                     </div>
                 </div>
                 <div class="second-phase d-none">
-                    <form action="{{ $address ? route('handle.Address', $address->id) : route('handle.Address') }}"
+                    <form action="{{ route('handle.Address') }}"
                         method="POST">
-
                         @csrf
                         @if ($address)
                             @method('PUT')
@@ -65,6 +64,7 @@
                         <h6 class="fw-bold mb-3">
                             @lang('header.locationcomplete')
                         </h6>
+                        <input type="hidden" name="id" value="{{ $address ? $address->id : null }}">
                         <div class="delivery-places px-0 mb-3">
                             <div class="btn-group" role="group" aria-label="Delivery Place Selector">
                                 <!-- Apartment Radio Button -->
@@ -85,21 +85,23 @@
                                 </label>
 
                                 <!-- Office Radio Button -->
-                                <input type="radio" class="btn-check" {{ old('deliveryPlace', $address ? $address->address_type : '') === 'office' ? 'checked' : '' }} name="deliveryPlace" value="office" id="radio-work" autocomplete="off">
+                                <input type="radio" class="btn-check"
+                                    {{ old('deliveryPlace', $address ? $address->address_type : '') === 'office' ? 'checked' : '' }}
+                                    name="deliveryPlace" value="office" id="radio-work" autocomplete="off">
 
                                 <label class="nav-link rounded-pill" for="radio-work">
                                     <i class="fas fa-building"></i> @lang('header.office')
                                 </label>
                             </div>
-
                         </div>
 
                         <div class="delivery-content">
-                            <div class="delivery-section home-section {{ old('deliveryPlace', $address ? $address->address_type : 'apartment') === 'apartment' ? '' : 'd-none' }}">
+                            <div
+                                class="delivery-section home-section {{ old('deliveryPlace', $address ? $address->address_type : 'apartment') === 'apartment' ? '' : 'd-none' }}">
 
                                 <div class="mb-3">
                                     <input type="text" class="form-control" name="nameapart"
-                                        value="{{ old('nameapart', $address->address ?? null) }}"
+                                        value="{{ old('nameapart', $address && $address->address_type === 'apartment' ? $address->building : null) }}"
                                         placeholder="@lang('header.nameapart')">
                                     @error('nameapart')
                                         <small class="text-danger">{{ $message }}</small>
@@ -107,14 +109,14 @@
                                 </div>
                                 <div class="mb-3 d-flex ">
                                     <input type="text" class="form-control "
-                                        value="{{ old('numapart', $address->apartment_number ?? null) }}" name="numapart"
-                                        placeholder="@lang('header.numapart')">
+                                        value="{{ old('numapart', $address && $address->address_type === 'apartment' ? $address->apartment_number : null) }}"
+                                        name="numapart" placeholder="@lang('header.numapart')">
                                     @error('numapart')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address->floor_number ?? null) }}" name="floor"
-                                        placeholder="@lang('header.Floor')">
+                                        value="{{ old('floor', $address && $address->address_type === 'apartment' ? $address->floor_number : null) }}"
+                                        name="floor" placeholder="@lang('header.Floor')">
                                     @error('floor')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -122,7 +124,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('addressdetailapart', $address->note ?? null) }}"
+                                        value="{{ old('addressdetailapart', $address && $address->address_type === 'apartment' ? $address->address : null) }}"
                                         name="addressdetailapart" placeholder="@lang('header.addressdetail')">
                                     @error('addressdetailapart')
                                         <small class="text-danger">{{ $message }}</small>
@@ -130,8 +132,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('markapart', $address->name ?? null) }}" name="markapart"
-                                        placeholder="@lang('header.mark')">
+                                        value="{{ old('markapart', $address && $address->address_type === 'apartment' ? $address->notes : null) }}"
+                                        name="markapart" placeholder="@lang('header.mark')">
                                     @error('markapart')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -139,16 +141,18 @@
                                 <div class="mb-3">
                                     <div class="input-group">
                                         <input type="text" class="form-control"
-                                            value="{{ old('phoneenter', $address->name ?? null) }}"
+                                            value="{{ old('phoneapart', $address && $address->address_type === 'apartment' ? $address->address_phone : null) }}"
                                             placeholder="@lang('header.phoneenter')" name="phoneapart">
                                         <select id="country" name="country_code_apart" class="selectpicker me-2"
                                             data-live-search="true">
                                             @foreach (GetCountries() as $country)
                                                 <option
                                                     data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                    value="{{ $country->phone_code }}">
-                                                    {{ $country->phone_code }}
-                                                </option>
+                                                    value="{{ $country->phone_code }}" @if ($address && $address->address_type === 'apartment' && $country->phone_code == $address->country_code)
+                                                    selected
+                                            @endif>
+                                            {{ $country->phone_code }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -161,41 +165,44 @@
                                 </div>
                             </div>
 
-                            <div class="delivery-section villa-section {{ old('deliveryPlace', $address ? $address->address_type : '') === 'villa' ? '' : 'd-none' }}">
+                            <div
+                                class="delivery-section villa-section {{ old('deliveryPlace', $address ? $address->address_type : '') === 'villa' ? '' : 'd-none' }}">
 
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('namevilla', $address->building ?? null) }}" name="namevilla"
-                                        placeholder="@lang('header.namevilla')">
+                                        value="{{ old('namevilla', $address && $address->address_type === 'villa' ? $address->building : null) }}"
+                                        name="namevilla" placeholder="@lang('header.namevilla')">
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('villanumber', $address->apartment_number ?? null) }}"
+                                        value="{{ old('villanumber', $address && $address->address_type === 'villa' ? $address->apartment_number : null) }}"
                                         name="villanumber" placeholder="@lang('header.villanumber')">
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('addressdetailvilla', $address->address ?? null) }}"
+                                        value="{{ old('addressdetailvilla', $address && $address->address_type === 'villa' ? $address->address : null) }}"
                                         name="addressdetailvilla" placeholder="@lang('header.addressdetail')">
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('markvilla', $address->notes ?? null) }}" name="markvilla"
-                                        placeholder="@lang('header.mark')">
+                                        value="{{ old('markvilla', $address && $address->address_type === 'villa' ? $address->notes : null) }}"
+                                        name="markvilla" placeholder="@lang('header.mark')">
                                 </div>
                                 <div class="mb-3">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="phonevilla"
-                                            value="{{ old('phonevilla', $address->address_phone ?? null) }}"
+                                            value="{{ old('phonevilla', $address && $address->address_type === 'villa' ? $address->address_phone : null) }}"
                                             placeholder="@lang('header.phoneenter')">
                                         <select id="country" name="country_code_villa" class="selectpicker me-2"
                                             data-live-search="true">
                                             @foreach (GetCountries() as $country)
                                                 <option
                                                     data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                    value="{{ $country->phone_code }}">
-                                                    {{ $country->phone_code }}
-                                                </option>
+                                                    value="{{ $country->phone_code }}" @if ($address && $address->address_type === 'villa' && $country->phone_code == $address->country_code)
+                                                    selected
+                                            @endif>
+                                            {{ $country->phone_code }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -203,45 +210,47 @@
 
                             </div>
 
-                            <div class="delivery-section office-section {{ old('deliveryPlace', $address ? $address->address_type : '') === 'office' ? '' : 'd-none' }}">
+                            <div
+                                class="delivery-section office-section  work-section {{ old('deliveryPlace', $address ? $address->address_type : '') === 'office' ? '' : 'd-none' }}">
 
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('nameoffice', $address->name ?? null) }}" name="nameoffice"
-                                        placeholder="@lang('header.nameoffice')">
+                                        value="{{ old('nameoffice', $address && $address->address_type === 'office' ? $address->building : null) }}"
+                                        name="nameoffice" placeholder="@lang('header.nameoffice')">
                                 </div>
                                 <div class="mb-3 d-flex ">
                                     <input type="text" class="form-control "
-                                        value="{{ old('numaoffice', $address->name ?? null) }}" name="numaoffice"
-                                        placeholder="@lang('header.numaoffice')">
+                                        value="{{ old('numaoffice', $address && $address->address_type === 'office' ? $address->apartment_number : null) }}"
+                                        name="numaoffice" placeholder="@lang('header.numaoffice')">
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address->name ?? null) }}" name="floor"
-                                        placeholder="@lang('header.Floor')">
+                                        value="{{ old('floor', $address && $address->address_type === 'office' ? $address->floor_number : null) }}"
+                                        name="floor" placeholder="@lang('header.Floor')">
 
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('addressdetailoffice', $address->name ?? null) }}"
+                                        value="{{ old('addressdetailoffice', $address && $address->address_type === 'office' ? $address->address : null) }}"
                                         name="addressdetailoffice" placeholder="@lang('header.addressdetail')">
                                 </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control"
-                                        value="{{ old('markoffice', $address->name ?? null) }}" name="markoffice"
-                                        placeholder="@lang('header.mark')">
+                                        value="{{ old('markoffice', $address && $address->address_type === 'office' ? $address->notes : null) }}"
+                                        name="markoffice" placeholder="@lang('header.mark')">
                                 </div>
                                 <div class="mb-3">
                                     <div class="input-group">
                                         <input type="text" class="form-control"
-                                            value="{{ old('phoneoffice', $address->name ?? null) }}" name="phoneoffice"
-                                            placeholder="@lang('header.phoneenter')">
+                                            value="{{ old('phoneoffice', $address && $address->address_type === 'office' ? $address->address_phone : null) }}"
+                                            name="phoneoffice" placeholder="@lang('header.phoneenter')">
                                         <select id="country" name="country_code_office" class="selectpicker me-2"
                                             data-live-search="true">
                                             @foreach (GetCountries() as $country)
                                                 <option
                                                     data-content='<img src="{{ $country->flag }}" class="flag-icon"> {{ $country->phone_code }}'
-                                                    value="{{ $country->phone_code }}">
-                                                    {{ $country->phone_code }}
-                                                </option>
+                                                    value="{{ $country->phone_code }}" @if ($address && $address->address_type === 'office' && $country->phone_code == $address->country_code)
+                                                    selected
+                                            @endif> {{ $country->phone_code }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>

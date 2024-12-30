@@ -47,25 +47,32 @@ class CouponController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $response = $this->couponService->store($request, $this->checkToken);
-        $responseData = $response->original;
-         // Check if the response has a 'status' key
+{
+    $response = $this->couponService->store($request, $this->checkToken);
+    $responseData = $response->original;
 
-         if (isset($responseData['status']) && !$responseData['data']) {
-            // If 'data' key exists, handle validation errors
-            if (isset($responseData['data'])) {
-                $validationErrors = $responseData['data'];
-                return redirect()->back()->withErrors($validationErrors)->withInput();
-            } else {
-                return redirect()->back()->withErrors($responseData['message'])->withInput();
-            }
-
-            // If no 'data' key is present, handle it gracefully
+    // Check if the response has a 'status' key
+    if (isset($responseData['status']) && !$responseData['status']) {
+        // Check if 'data' key exists and handle validation errors
+        if (isset($responseData['data']) && is_array($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
         }
-        $message= $responseData['message'];
-        return redirect('dashboard/coupons')->with('message',$message);
+
+        // If 'data' key is not present, handle with the 'message' key
+        if (isset($responseData['message'])) {
+            return redirect()->back()->withErrors($responseData['message'])->withInput();
+        }
+
+        // Fallback for unexpected error formats
+        return redirect()->back()->withErrors(__('Unexpected error occurred'))->withInput();
     }
+
+    // Success case
+    $message = $responseData['message'] ?? __('Operation successful');
+    return redirect('dashboard/coupons')->with('message', $message);
+}
+
 
     public function edit($id)
     {
