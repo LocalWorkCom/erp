@@ -46,8 +46,10 @@
                     <li class="nav-item">
                         <a class="nav-link cart-icon" href="{{ route('cart') }}">
                             <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="badge bg-danger rounded-pill">0</span>
                         </a>
                     </li>
+                    
                     <li class="nav-item">
                         @if (session('locale') == 'ar')
                             <a class="nav-link" href="{{ route('set-locale', 'en') }}">

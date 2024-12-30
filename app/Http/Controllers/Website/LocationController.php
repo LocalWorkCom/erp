@@ -13,6 +13,7 @@ class LocationController extends Controller
 {
     public function showAddress()
     {
+        
         $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
             ->withCount([
                 'orders as has_inprogress_or_pending_orders' => function ($query) {
