@@ -685,43 +685,16 @@ function helper_update_by_id(array $data, $id, $table)
 
 function getNearestBranch($userLat, $userLon)
 {
-    $nearestBranch = DB::table('branches')
-        ->select(
-            'id',
-            'name_en',
-            'name_ar',
-            'address_en',
-            'address_ar',
-            'latitute',
-            'longitute',
-            'country_id',
-            'phone',
-            'email',
-            'manager_name',
-            'opening_hour',
-            'closing_hour',
-            'has_kids_area',
-            'created_by',
-            'modified_by',
-            'deleted_by',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-            'is_delivery',
-            'employee_id',
-            'is_default',
-            DB::raw("latitute, longitute,
-                (6371 * acos(cos(radians($userLat))
-                * cos(radians(latitute))
-                * cos(radians(longitute) - radians($userLon))
-                + sin(radians($userLat))
+    $nearestBranch = Branch::select('*') // Select all columns
+    ->selectRaw("(6371 * acos(cos(radians($userLat)) 
+                * cos(radians(latitute)) 
+                * cos(radians(longitute) - radians($userLon)) 
+                + sin(radians($userLat)) 
                 * sin(radians(latitute)))) AS distance")
-        )
-        ->whereNotNull('latitute')
-        ->whereNotNull('longitute')
-        ->orderBy('distance', 'asc')
-        ->first();
-
+    ->whereNotNull('latitute')
+    ->whereNotNull('longitute')
+    ->orderBy('distance', 'asc')
+    ->first();
     return $nearestBranch;
 }
 
