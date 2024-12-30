@@ -981,7 +981,7 @@ function AddSizes($branch_ids, $dish_id)
 function getDefaultBranch()
 {
     $defaultBranch = Branch::where('is_default', 1)->first();
-
+    $defaultBranch->makeHidden(['name_site', 'address_site']);
     if (!$defaultBranch) {
         throw new Exception('No default branch is set.');
     }

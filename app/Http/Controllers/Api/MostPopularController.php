@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
 class MostPopularController extends Controller
 {
     protected $lang;
-    public function index(Request $request)
-    {
-        $this->lang = $request->header('lang', 'ar');
-        $popularDishes = getMostDishesOrdered(1, 5);
+    public function index(Request $request){
+        $this->lang = $request->header('lang','ar');
+        $popularDishes = getMostDishesOrdered(5);
+        foreach($popularDishes as $popularDish){
+            if($popularDish)
+            $popularDish->makeHidden(['name_site', 'description_site']);
+        }
+
         if (!$popularDishes) {
             return RespondWithBadRequestData($this->lang, 2);
         }
