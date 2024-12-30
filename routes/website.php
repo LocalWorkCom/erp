@@ -49,7 +49,6 @@ Route::post('cart/coupon-check', [CartController::class, 'isCouponValid'])->name
 Route::get('cart/dish-detail', [CartController::class, 'getDishDetail'])->name('cart.dish-detail');
 Route::get('cart/checkout', [CartController::class, 'Checkout'])->name('cart.checkout');
 Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
-//Route::post('/saveaddress', [LocationController::class, 'saveAddress'])->name('saveAddress');
 
 //myfatoorah
 Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoorah');
@@ -57,3 +56,5 @@ Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->n
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
+Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
+

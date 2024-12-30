@@ -131,13 +131,21 @@ class ProductController extends Controller
 
         $response  = $this->countryService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
+        // $Countries = Country::hydrate($responseData['data']);
+        // $Currencies = [];
+        // foreach ($Countries as $country) {
+        //     // Check if currency_code exists and add it to the array
+        //     if (isset($country->currency_code)) {
+        //         $Currencies[] = $country->currency_code;
+        //     }
+        // }
+
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
-
         foreach ($Countries as $country) {
             // Check if currency_code exists and add it to the array
             if (isset($country->currency_code)) {
-                $Currencies[] = $country->currency_code;
+                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
             }
         }
         // $Stores = Store::all();

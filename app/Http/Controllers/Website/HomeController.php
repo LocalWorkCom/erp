@@ -70,7 +70,6 @@ class HomeController extends Controller
         );
     }
 
-
     public function showMenu(Request $request)
     {
         $categoryId = $request->query('category_id');
@@ -142,6 +141,7 @@ class HomeController extends Controller
         $branches = Branch::all();
         return view('website.return', compact('returnsArray', 'branches'));
     }
+
     public function terms()
     {
         $terms = StaticPageResource::collection(
@@ -223,6 +223,7 @@ class HomeController extends Controller
             compact(['menuCategories', 'userFavorites'])
         );
     }
+
     public function getfaqs()
     {
         $lang = app()->getLocale(); // Get the current language
