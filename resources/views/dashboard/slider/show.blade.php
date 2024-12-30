@@ -53,14 +53,23 @@
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('slider.Dish')</label>
                                     <p class="form-text">
-                                        {{ $slider->dish ? $slider->dish->name_ar . ' | ' . $slider->dish->name_en : __('category.none') }}
+                                        {{ $slider->dish ? $slider->dish->name_ar . ' | ' . $slider->dish->name_en : __('slider.none') }}
                                     </p>
                                 </div>
 
                                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                     <label class="form-label">@lang('slider.Offer')</label>
                                     <p class="form-text">
-                                        {{ $slider->offer ? $slider->offer->name_ar . ' | ' . $slider->offer->name_en : __('category.none') }}
+                                        {{ $slider->offer ? $slider->offer->name_ar . ' | ' . $slider->offer->name_en : __('slider.none') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                    <label class="form-label">@lang('slider.Discount')</label>
+                                    <p class="form-text">
+                                        {{ $slider->discount ? $slider->discount->dish->name_ar . " | " . $slider->discount->dish->name_en
+                                        . " | ". number_format($slider->discount->discount->value, 0). ($slider->discount->discount->type == "percentage" ? "%" : "EGP")
+                                        : __('slider.none') }}
                                     </p>
                                 </div>
 

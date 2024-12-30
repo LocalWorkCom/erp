@@ -32,7 +32,7 @@ class RateService
         $lang = app()->getLocale();
         $data = $request->validate([
             'value' => 'required|numeric|in:1,2,3,4,5',
-            'note' => 'required|string',
+            'note' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
         $id == null ?$data['created_by'] =Auth::guard('api')->user()->id ?? 1

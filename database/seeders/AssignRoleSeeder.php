@@ -21,7 +21,7 @@ class AssignRoleSeeder extends Seeder
         // Truncate role and permission-related tables
         DB::table('model_has_roles')->truncate();
         DB::table('model_has_permissions')->truncate();
-        DB::table('role_has_permissions')->truncate();
+        //DB::table('role_has_permissions')->truncate();
         Role::truncate();
 
         // Re-enable foreign key checks

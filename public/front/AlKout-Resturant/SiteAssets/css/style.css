@@ -43,6 +43,7 @@ body {
 }
 
 /* any link to read */
+/* k */
 a {
     text-decoration: none;
     color: inherit;
@@ -1098,8 +1099,9 @@ footer .icon {
     transition: 0.3s;
 }
 .navbar-light .navbar-toggler {
-    color: rgb(116 29 29 / 55%);
-    border-color: rgb(230 22 22) !important;
+    color: rgb(255 255 255);
+    border-color: rgb(242 242 242) !important;
+    border-radius: 10px;
 }
 .input-group input {
     border: 1px solid #DFDFDF;
@@ -1806,7 +1808,42 @@ input::placeholder {
         width: 170px;
     }
 }
-@media(max-width: 992px) {}
+@media(max-width: 992px) {
+    .owl-slider img {
+        height: 275px;
+        margin-inline: 0px;
+    }
+    .intro-img {
+        height: 295px;
+        margin-inline: 125px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90px;
+    }
+    .intro::after {
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 90px;
+    }
+    .apps-img {
+        height: 255px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 0.rem;
+        border-radius: 10px;
+        margin-left: 1rem;
+        margin-bottom: 12px;
+    }
+    .info .info-img img {
+        height: 280px;
+    }
+}
 
 @media(max-width: 772px) {
     .apps-img {
@@ -1853,10 +1890,127 @@ input::placeholder {
     .info .info-img img {
         height: 260px;
     }
+    .owl-slider img {
+        height: 225px;
+        margin-inline: 150px;
+    }
 }
 
-@media(max-width: 640px) {}
+@media(max-width: 425px) {
+    .owl-slider img {
+        height: 165px;
+        margin-inline: 0px;
+        margin-top: 10px;
+    }
+  .slide-title {
+        margin-top: 101px;
+    }
+    .categories-slider .owl-stage-outer, .categories-slider .owl-stage-outer {
+        padding: 0rem;
+    }
+    .nav-link {
+        padding: 0.1rem 1.1rem;
+    }
+    .apps-img {
+        height: 175px;
+    }
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+        top: -5%;
+        right: 2px;
+    }
+    .info .info-img img {
+        display: none;
+    }
+    .plate-img img {
+        height: 145px;
+    }
+    .offer-img {
+        height: 145px;
+    }
+    .intro .overflow-plates {
+        display: none;
+    }
+    .info .btn-lg {
+        padding: 0.5rem 2rem;
+        font-size: 1rem;
+    }
+    .apps-img {
+        height: 155px;
+    }
+}
 
-@media(max-width: 480px) {}
+@media(max-width: 375px) {
+    .intro .overflow-plates {
+   display: none;
+    }
 
-@media(max-width: 360px) {}
+    .owl-slider img {
+        height: 185px;
+        margin-inline: 0px;
+        margin-top: 34px;
+    }
+    .intro::after {
+        bottom: -2%;
+        left: 0;
+        right: 0;
+        height: 60px;
+    }
+    .plates-slider .owl-stage-outer {
+      padding: 0rem; 
+    }
+    .plate-img img {
+        height: 140px;
+    }
+    .offer-img {
+        height: 140px;
+    }
+    .offer-img {
+        height: 140px;
+    }
+    .info .info-img img {
+        display: none;
+    }
+    .info .btn-lg {
+        padding: .5rem 1rem;
+        font-size: 1rem;
+    }
+    .cart-btn {
+        height: 40px;
+        width: 40px;
+    }
+    .apps-img {
+        height: 145px;
+    }
+    .app-store-btn, .google-play-btn {
+        padding-inline: 1rem;
+        margin-left: 0rem;
+        margin-bottom: 10px;
+    }
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+        top: -3%;
+        right: 1px;
+    }
+    .intro .owl-carousel .owl-item img {
+        display: none;
+    }
+    .intro  .intro-img {
+        display: none;
+    }
+    .intro {
+        height: 70vh;
+    }
+    .intro::after {
+        bottom: -5%;
+        height: 60px;
+    }
+    .owl-slider .owl-stage-outer {
+        padding-block: 0rem;
+    }
+    header .navbar .navbar-service img {
+        width: 145px;
+    }
+}

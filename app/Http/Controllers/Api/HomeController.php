@@ -99,7 +99,7 @@ class HomeController extends Controller
             'mostPopular' => $mostPopular ?? null,
         ];
 
-        if (empty($data['branches']) || empty($data['slider']) || empty($data['menu']) || empty($data['mostPopular'])) {
+        if (empty($data['branches']) && empty($data['slider']) && empty($data['menu']) && empty($data['mostPopular'])) {
             return RespondWithBadRequestData($lang, 2); // Unauthorized response
         }
 

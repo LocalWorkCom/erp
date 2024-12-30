@@ -50,6 +50,7 @@ use App\Http\Controllers\Dashboard\BranchMenuAddonController;
 use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonCategoryController;
 use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\DishProductController;
 
 
 /*
@@ -556,8 +557,16 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     });
 
     Route::group(['prefix' => 'reports'], function () {
-        Route::get('clients/list', [ReportController::class, 'clients'])->name('reports.clients.list')->middleware('role_or_permission:view clients_reports');
-        Route::get('client/show', [ReportController::class, 'show_client_reports'])->name('reports.client.show')->middleware('role_or_permission:view clients_reports');
+        Route::group(['prefix' => 'customers'], function () {
+            Route::get('list', [CustomerReportController::class, 'customers'])->name('reports.customers.list')->middleware('role_or_permission:view customers_reports');
+        });
     });
 
+
+
+    Route::prefix('dish_products')->name('dashboard.dish_products.')->group(function () {
+        Route::get('create', [DishProductController::class, 'create'])->name('create');
+        Route::post('store', [DishProductController::class, 'store'])->name('store');
+    });
+    
 });

@@ -42,7 +42,8 @@ class ClientController extends Controller
             'email' => 'required|email|unique:users',
             // 'password' => 'nullable|string',
             'country_id' => 'required|exists:countries,id',
-            'phone' => 'required|string',
+            'country_code' => 'required|string',
+            'phone' => 'required|string|min:10',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
             'is_active' => 'required|boolean',
@@ -50,6 +51,7 @@ class ClientController extends Controller
             'city' => 'required|string',
             'state' => 'required|string',
             'postal_code' => 'nullable|string',
+            'address_phone' => 'required|string|min:10',
             'is_default' => 'nullable|boolean'
         ]);
 
@@ -71,7 +73,8 @@ class ClientController extends Controller
             'email' => 'nullable|email|unique:users,email,' . $id,
             // 'password' => 'nullable|string',
             'country_id' => 'nullable|exists:countries,id',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|string|min:10',
+            'country_code' => 'nullable|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
             'is_active' => 'nullable|boolean',
@@ -79,6 +82,7 @@ class ClientController extends Controller
             'city' => 'nullable|string',
             'state' => 'nullable|string',
             'postal_code' => 'nullable|string',
+            'address_phone' => 'nullable|string|min:10',
             'is_default' => 'nullable|boolean'
         ]);
 

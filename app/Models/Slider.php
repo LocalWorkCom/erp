@@ -20,6 +20,7 @@ class Slider extends Model
         'flag',
         'dish_id',
         'offer_id',
+        'discount_id',
         'created_by',
         'modified_by',
         'deleted_by',
@@ -42,5 +43,10 @@ class Slider extends Model
     public function offer()
     {
         return $this->belongsTo(Offer::class, 'offer_id', 'id');
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo(DishDiscount::class, 'discount_id', 'id');
     }
 }

@@ -30,6 +30,7 @@ class SliderFormRequest extends FormRequest
             'flag'=>'required',
             'dish_id' => 'filled|exists:dishes,id',
             'offer_id' => 'filled|exists:offers,id',
+            'discount_id' => 'filled|exists:dish_discount,id',
         ];
     }
 }
