@@ -195,5 +195,8 @@ return [
         'country_code_apart' => [
             'required' => 'Please select a country code for the apartment.',
         ],
+        'phone' => [
+            'length' => 'The :attribute must be exactly :length characters long.',
+        ],
     ],
 ];

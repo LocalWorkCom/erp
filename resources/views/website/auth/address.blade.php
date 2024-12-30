@@ -97,7 +97,6 @@
             <div class="modal-content">
                 <form method="POST" id="deleteaddressForm">
                     @csrf
-                    @method('DELETE')
                     <div class="modal-header border-0">
                         <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
