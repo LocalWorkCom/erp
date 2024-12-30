@@ -101,7 +101,9 @@ p {
     color: #000;
 }
 
-
+.bg-danger{
+    background-color: #FCDCDC!important;
+}
 /* ************************************************************************************** */
 /*--- navbar styling ---*/
 .second-header {
