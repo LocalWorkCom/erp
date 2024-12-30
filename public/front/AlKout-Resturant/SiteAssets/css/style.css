@@ -43,6 +43,7 @@ body {
 }
 
 /* any link to read */
+/* k */
 a {
     text-decoration: none;
     color: inherit;
@@ -101,7 +102,9 @@ p {
     color: #000;
 }
 
-
+.bg-danger{
+    background-color: #FCDCDC!important;
+}
 /* ************************************************************************************** */
 /*--- navbar styling ---*/
 .second-header {
@@ -1591,17 +1594,14 @@ input::placeholder {
 }
 
 .delivery-modal .main-pills .nav-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.delivery-modal .main-pills .nav-link {
     color: #fe0000;
     background-color: transparent;
     border: 1px solid #FE0000;
     border-radius: 0.75rem;
-    padding: 0.25rem 2.25rem;
+    padding: 0.25rem 2.25rem;   
+     display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .delivery-modal .main-pills .nav-link.active,
@@ -1707,7 +1707,26 @@ input::placeholder {
     height: 50px;
     object-fit: contain;
 }
+/* coupons page */
+.coupons .nav-pills .nav-link {
+    color: #fe0000;
+    background-color: transparent;
+    border: 1px solid #FE0000;
+    border-radius: 0.75rem;
+    padding: 0.75rem;   
+    width: 80%;
+   
+}
 
+.coupons .nav-pills .nav-link.active,
+.coupons .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #FE0000;
+    border: 1px solid transparent;
+}
+.card.disabled .card-body{
+    filter: grayscale(1) opacity(0.3);
+}
 /* responsive */
 @media(max-width: 1440px) {
     .intro-img {
