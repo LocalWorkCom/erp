@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{ route('rate.show') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-star main-color ms-2"></i>
                                     @lang('header.rate')
