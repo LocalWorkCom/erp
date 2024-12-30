@@ -34,6 +34,11 @@
                                 <i class="fe fe-plus label-btn-icon me-2"></i>
                                 @lang('dishes.AddDish')
                             </a>
+                            <a href="{{ route('dashboard.dish_products.create') }}" class="btn btn-secondary label-btn">
+                                <i class="fe fe-plus label-btn-icon me-2"></i>
+                                @lang('dishes.AddProduct')
+                            </a>
+
                         </div>
                         <div class="card-body">
                             @if (session('success'))

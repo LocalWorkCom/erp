@@ -50,6 +50,7 @@ use App\Http\Controllers\Dashboard\BranchMenuAddonController;
 use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonCategoryController;
 use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\DishProductController;
 
 
 /*
@@ -560,4 +561,11 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
         Route::get('client/show', [ReportController::class, 'show_client_reports'])->name('reports.client.show')->middleware('role_or_permission:view clients_reports');
     });
 
+
+
+    Route::prefix('dish_products')->name('dashboard.dish_products.')->group(function () {
+        Route::get('create', [DishProductController::class, 'create'])->name('create');
+        Route::post('store', [DishProductController::class, 'store'])->name('store');
+    });
+    
 });
