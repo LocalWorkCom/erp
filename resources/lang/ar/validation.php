@@ -88,12 +88,7 @@ return [
     'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'The dish_id field must be a number' => 'يجب ان يكون رقم الطبق رقم صحيح',
     'attributes' => [
-        'birth_date' => 'تاريخ الميلاد',
-        'nameapart' => 'اسم الشقة',
-        'numapart' => 'رقم الشقة',
-        'phoneapart' => 'هاتف الشقة',
-        'floor' => 'الدور',
-        'country_code_apart' => 'رمز الدولة للشقة',
+       
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
         'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
@@ -280,8 +275,20 @@ return [
         'auth.phoneplace' => 'الهاتف',
         'auth.country_code' => 'رمز الدولة',
         'auth.date' => 'تاريخ الميلاد',
-
+        'floorapart' => 'الطابق',
+        'addressdetailapart' => 'تفاصيل العنوان',
+        'markapart' => 'علامة',
+        'namevilla' => 'اسم الفيلا',
+        'villanumber' => 'رقم الفيلا',
+        'addressdetailvilla' => 'تفاصيل العنوان للفيلا',
+        'phonevilla' => 'رقم الهاتف للفيلا',
+        'country_code_villa' => 'رمز الدولة للفيلا',
+        'nameoffice' => 'اسم المكتب',
+        'numaoffice' => 'رقم المكتب',
+        'addressdetailoffice' => 'تفاصيل العنوان للمكتب',
+        'phoneoffice' => 'رقم الهاتف للمكتب',
+        'country_code_office' => 'رمز الدولة للمكتب',
+        'flooroffice' => 'الطابق للمكتب',
     ],
     'EnterName' => 'أدخل الأسم',
-
 ];

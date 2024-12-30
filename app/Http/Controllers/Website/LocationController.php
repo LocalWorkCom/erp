@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Validator;
 class LocationController extends Controller
 {
     public function showAddress()
-    {
-        
+    {        $lang = app()->getLocale();
+
+
         $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
             ->withCount([
                 'orders as has_inprogress_or_pending_orders' => function ($query) {
@@ -27,6 +28,8 @@ class LocationController extends Controller
 
     public function createAddress($id = null)
     {
+        $lang = app()->getLocale();
+
         // If an address ID is passed, fetch the address for editing, otherwise create a new address
         $address = $id ? ClientAddress::find($id) : null;
 
@@ -35,6 +38,8 @@ class LocationController extends Controller
 
     public function createOrUpdateAddress(Request $request)
     {
+        $lang = app()->getLocale();
+
         // Fetch existing address or create a new one if no ID is provided
         $address = $request->id ? ClientAddress::findOrFail($request->id) : new ClientAddress();
 
@@ -47,18 +52,19 @@ class LocationController extends Controller
                 $rules = [
                     'nameapart' => 'required|string|max:255',
                     'numapart' => 'required',
-                    'floor' => 'required',
+                    'floorapart' => 'required',
                     'phoneapart' => 'required',
                     'country_code_apart' => 'required',
                     'addressdetailapart' => 'required',
+                    'markapart' => 'nullable',
                 ];
                 $messages = [
-                    'nameapart.required' => __('validation.required', ['attribute' => __('validation.nameapart')]),
-                    'numapart.required' => __('validation.required', ['attribute' => __('validation.numapart')]),
-                    'floor.required' => __('validation.required', ['attribute' => __('validation.floor')]),
-                    'phoneapart.required' => __('validation.required', ['attribute' => __('validation.phoneapart')]),
-                    'country_code_apart.required' => __('validation.required', ['attribute' => __('validation.country_code_apart')]),
-                    'addressdetailapart.required' => __('validation.required', ['attribute' => __('validation.addressdetailapart')]),
+                    'nameapart.required' => __('validation.required', ['attribute' => __('auth.nameapart')]),
+                    'numapart.required' => __('validation.required', ['attribute' => __('auth.numapart')]),
+                    'floorapart.required' => __('validation.required', ['attribute' => __('auth.floorapart')]),
+                    'phoneapart.required' => __('validation.required', ['attribute' => __('auth.phoneapart')]),
+                    'country_code_apart.required' => __('validation.required', ['attribute' => __('auth.country_code_apart')]),
+                    'addressdetailapart.required' => __('validation.required', ['attribute' => __('auth.addressdetailapart')]),
                 ];
                 break;
 
@@ -69,7 +75,7 @@ class LocationController extends Controller
                     'addressdetailvilla' => 'required',
                     'phonevilla' => 'required',
                     'country_code_villa' => 'required',
-                    'markvilla' => 'required',
+                    'markvilla' => 'nullable',
                 ];
                 $messages = [
                     'namevilla.required' => __('validation.required', ['attribute' => __('validation.namevilla')]),
@@ -77,7 +83,6 @@ class LocationController extends Controller
                     'addressdetailvilla.required' => __('validation.required', ['attribute' => __('validation.addressdetailvilla')]),
                     'phonevilla.required' => __('validation.required', ['attribute' => __('validation.phonevilla')]),
                     'country_code_villa.required' => __('validation.required', ['attribute' => __('validation.country_code_villa')]),
-                    'markvilla.required' => __('validation.required', ['attribute' => __('validation.markvilla')]),
 
                 ];
                 break;
@@ -89,18 +94,16 @@ class LocationController extends Controller
                     'addressdetailoffice' => 'required',
                     'phoneoffice' => 'required',
                     'country_code_office' => 'required',
-                    'floor' => 'required',
-                    'markoffice' => 'required',
+                    'flooroffice' => 'required',
+                    'markoffice' => 'nullable',
                 ];
                 $messages = [
-                    'nameoffice.required' => __('validation.required', ['attribute' => __('validation.nameoffice')]),
+                    'nameoffice.required' => __('validation.required', ['attribute' => __('auth.nameoffice')]),
                     'numaoffice.required' => __('validation.required', ['attribute' => __('validation.numaoffice')]),
                     'addressdetailoffice.required' => __('validation.required', ['attribute' => __('validation.addressdetailoffice')]),
                     'phoneoffice.required' => __('validation.required', ['attribute' => __('validation.phoneoffice')]),
                     'country_code_office.required' => __('validation.required', ['attribute' => __('validation.country_code_office')]),
-                    'floor.required' => __('validation.required', ['attribute' => __('validation.floor')]),
-                    'markoffice.required' => __('validation.required', ['attribute' => __('validation.markoffice')]),
-
+                    'flooroffice.required' => __('validation.required', ['attribute' => __('validation.floor')]),
                 ];
                 break;
         }
@@ -136,7 +139,7 @@ class LocationController extends Controller
             case 'apartment':
                 $address->address_type = 'apartment';
                 $address->building = $request->input('nameapart');
-                $address->floor_number = $request->input('floor');
+                $address->floor_number = $request->input('floorapart');
                 $address->apartment_number = $request->input('numapart');
                 $address->country_code = $request->input('country_code_apart');
                 $address->address_phone = $request->input('phoneapart');
@@ -158,7 +161,7 @@ class LocationController extends Controller
             case 'office':
                 $address->address_type = 'office';
                 $address->building = $request->input('nameoffice');
-                $address->floor_number = $request->input('floor');
+                $address->floor_number = $request->input('flooroffice');
                 $address->apartment_number = $request->input('numaoffice');
                 $address->country_code = $request->input('country_code_office');
                 $address->address_phone = $request->input('phoneoffice');

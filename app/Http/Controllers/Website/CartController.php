@@ -9,6 +9,7 @@ use App\Models\BranchMenu;
 use App\Models\BranchMenuAddon;
 use App\Models\BranchMenuCategory;
 use App\Models\BranchMenuSize;
+use App\Models\ClientAddress;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\Order;
@@ -116,9 +117,13 @@ class CartController extends Controller
     }
     public function Cart()
     {
+        $address = '';
         // $branches = Branch::all();
+        if(auth('client')->check()){
 
-        return view('website.cart');
+            $address = ClientAddress::where('is_active', 1)->where('is_default', 1)->where('user_id',auth('client')->user()->id)->first();
+        }
+        return view('website.cart', compact('address'));
     }
     public function Checkout(Request $request)
     {

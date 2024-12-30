@@ -325,7 +325,6 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $lang = app()->getLocale();
-        ;
 
         // Fetch phone length dynamically
         $phone_length = Country::where('phone_code', $request->country_code_profile)->value('length');

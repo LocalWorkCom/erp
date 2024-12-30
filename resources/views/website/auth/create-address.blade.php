@@ -7,7 +7,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('auth.home')</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('showAddress') }}"> @lang('header.myaddress')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.addaddress')</li>
+                    <li class="breadcrumb-item active" aria-current="page"> @lang('auth.addaddress')</li>
                 </ol>
             </nav>
         </div>
@@ -55,8 +55,7 @@
                     </div>
                 </div>
                 <div class="second-phase d-none">
-                    <form action="{{ route('handle.Address') }}"
-                        method="POST">
+                    <form action="{{ route('handle.Address') }}" method="POST">
                         @csrf
                         <h6 class="fw-bold mb-3">
                             @lang('header.locationcomplete')
@@ -112,9 +111,9 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address && $address->address_type === 'apartment' ? $address->floor_number : null) }}"
-                                        name="floor" placeholder="@lang('header.Floor')">
-                                    @error('floor')
+                                        value="{{ old('floorapart', $address && $address->address_type === 'apartment' ? $address->floor_number : null) }}"
+                                        name="floorapart" placeholder="@lang('header.Floor')">
+                                    @error('floorapart')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
 
@@ -220,8 +219,8 @@
                                         value="{{ old('numaoffice', $address && $address->address_type === 'office' ? $address->apartment_number : null) }}"
                                         name="numaoffice" placeholder="@lang('header.numaoffice')">
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address && $address->address_type === 'office' ? $address->floor_number : null) }}"
-                                        name="floor" placeholder="@lang('header.Floor')">
+                                        value="{{ old('flooroffice', $address && $address->address_type === 'office' ? $address->floor_number : null) }}"
+                                        name="flooroffice" placeholder="@lang('header.Floor')">
 
                                 </div>
                                 <div class="mb-3">
