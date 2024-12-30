@@ -73,18 +73,20 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="card-title fw-bold"> موقع التوصيل </h5>
-                                        <button class="btn reversed main-color fw-bold" type="button">
+                                        <a class="btn reversed main-color fw-bold"
+                                            href="{{ route('edit.Address', $address->id) }}">
                                             تعديل
-                                        </button>
+                                        </a>
 
                                     </div>
                                     <div class="card-body p-4">
                                         <p class="fw-bold">
                                             <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                            مصدق الدقى و المهندسين وجيزه
+                                            {{ $address->address_type }} {{ $address->address }}
                                         </p>
 
-                                        <small class="text-muted">121 مصدق , الدور 2 , شقة 12 </small>
+                                        <small class="text-muted">{{ $address->city }} مبي{{ $address->building }}
+                                            دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
                                     </div>
                                 </div>
                             @endauth
@@ -294,28 +296,34 @@
                 totalPayElement.text(formatCurrency(finalTotal));
             };
 
-            function recalculateTotalPrice() {
-                let selectedSizePrice = parseFloat($('#productModal').find('.size-option:checked')
+            function recalculateTotalPrice(version, dishPrice) {
+                let modal = $(`#productModal${version}`);
+                let selectedSizePrice = parseFloat(modal.find('.size-option:checked')
                     .val()) || 0;
+                let price = 0;
                 let addonsPrice = 0;
+                if (selectedSizePrice) {
+                    price = selectedSizePrice;
+                } else {
+                    price = dishPrice;
 
+                }
                 // Calculate addons price
-                $('#productModal').find('.addon-option:checked').each(function() {
+                modal.find('.addon-option:checked').each(function() {
                     addonsPrice += parseFloat($(this).val());
                 });
 
-                console.log(addonsPrice);
-
-                let quantity = parseInt($('#productModal').find('.num').text()) || 1;
-                let newTotalPrice = (selectedSizePrice * quantity) + addonsPrice;
+                let quantity = parseInt(modal.find('.num').text()) || 1;
+                let newTotalPrice = (price * quantity) + addonsPrice;
 
                 // Update total price in the total-price span
-                $('#total-price').text(newTotalPrice.toFixed(2));
+                $(`#total-price${version}`).text(newTotalPrice.toFixed(2));
 
                 // Update the dish-price span
-                $('#dish-total').text(newTotalPrice.toFixed(2));
+                $(`#dish-total${version}`).text(newTotalPrice.toFixed(2));
 
             }
+
             // Helper function to update localStorage and re-render the cart
             const updateCart = () => {
                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -437,6 +445,8 @@
                     },
                     success: function(data) {
                         if (data.status === 'success') {
+                            var version = data.has_size ? '_v1' : '_v2'
+                            let modal = $(`#productModal${version}`);
                             const product = data.dish;
                             const dishPrice = parseFloat(item.totalPrice);
                             let dishHtml = `
@@ -444,7 +454,7 @@
                         ${product.mostOrdered ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> الاعلى تقييم</span>` : ''}
                         <small class="text-muted d-block py-2">${product.description}</small>
                         <h4 class="fw-bold">
-                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price">${dishPrice.toFixed(2)}</span>
+                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">${dishPrice.toFixed(2)}</span>
                             ${data.branch.currency_symbol}
                         </h4>
                         <div class="qty mt-3 d-flex justify-content-center align-items-center">
@@ -453,23 +463,54 @@
                             <span class="pro-inc ms-3" onclick="increaseQuantity(this)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                         </div>
                     `;
-                            $('#dish-id').val(product.id);
-                            $('#dish-img').attr('src', product.image);
-                            $('#div-detail').html(dishHtml);
-                            $('#floatingTextarea2').val(item.notes || '');
+                            $(`#dish-id${version}`).val(product.id);
+                            $(`#dish-img${version}`).attr('src', product.image);
+                            $(`#div-detail${version}`).html(dishHtml);
+                            $(`#note${version}`).val(item.notes || '');
+                            var itemTotal = 0;
+                            if (data.has_size) {
+                                itemTotal = (item.quantity * item.size.price) +
+                                    (item.addons && item.addons.length > 0 ?
+                                        item.addons.reduce((sum, addon) => sum + addon.price, 0) : 0
+                                    );
+                                populateSizes(data.sizes, item, data.branch.currency_symbol);
+                                populateAddons(data.addons, item, data.branch.currency_symbol);
+                            } else {
+                                itemTotal = (item.quantity * item.price) +
+                                    (item.addons && item.addons.length > 0 ?
+                                        item.addons.reduce((sum, addon) => sum + addon.price, 0) : 0
+                                    );
+                            }
+                            // let dishPrice = parseFloat(data.dish.price);
 
-                            populateSizes(data.sizes, item, data.branch.currency_symbol);
-                            populateAddons(data.addons, item, data.branch.currency_symbol);
 
-                            // const itemTotal = (item.quantity * item.size.price) + item.addons
-                            //     .reduce((sum, addon) => sum + addon.price, 0);
-                            // $('#dish-total').text(
-                            //     `${itemTotal.toFixed(2)} ${data.branch.currency_symbol}`);
+                            window.increaseQuantity = function(ele) {
+
+                                let quantityElem = $(ele).siblings('.num');
+                                let quantity = parseInt(quantityElem.text()) || 1;
+                                quantity++;
+                                quantityElem.text(quantity);
+                                recalculateTotalPrice(version, dishPrice);
+                            };
+
+                            window.decreaseQuantity = function(ele) {
+                                let quantityElem = $(ele).siblings('.num');
+                                let quantity = parseInt(quantityElem.text()) || 1;
+                                if (quantity > 1) {
+                                    quantity--;
+                                    quantityElem.text(quantity);
+                                    recalculateTotalPrice(version, dishPrice);
+                                }
+                            };
+
+
+                            $(`#dish-total${version}`).text(
+                                `${itemTotal.toFixed(2)} ${data.branch.currency_symbol}`);
                             // $('#dish-quantity').text(`+ أضف إلي العربة (${item.quantity})`);
-                            $('#submit').off('click').on('click', function() {
+                            $('.submit').off('click').on('click', function() {
                                 saveChanges(index);
                             });
-                            $('#productModal').modal('show');
+                            modal.modal('show');
                         } else {
                             alert('Failed to fetch product details.');
                         }
@@ -565,7 +606,7 @@
                 });
 
                 // Rebind the change event for sizes
-                $('#div-sizes .size-option').on('change', recalculateTotalPrice);
+                $('#div-sizes .size-option').on('change', recalculateTotalPrice('_v1', item.size.price));
             };
 
             // Helper function to populate addons
@@ -587,35 +628,69 @@
                 });
 
                 // Rebind the change event for addons
-                $('#div-addons .addon-option').on('change', recalculateTotalPrice);
+                $('#div-addons .addon-option').on('change', recalculateTotalPrice('_v1', item.size.price));
             };
             // Apply coupon functionality
 
             const saveChanges = (itemIndex) => {
-                const updatedSize = $('#div-sizes .size-option:checked').val();
+                console.log(cart);
+
+                var version = cart[itemIndex].size && cart[itemIndex].size.label ? '_v1' : '_v2';
+                let modal = $(`#productModal${version}`);
+                const updatedSizePrice = 0;
+                const updatedSizeLabel = '';
+                const updatedSizeId = 0;
                 const updatedAddons = [];
-                $('#div-addons .addon-option:checked').each(function() {
-                    updatedAddons.push({
-                        id: $(this).attr('id').replace('addon-', ''), // Extract addon ID
-                        price: parseFloat($(this).val()),
-                        name: $(this).next('label').text()
+
+                // Updated size
+                if (version === '_v1') {
+
+                    updatedSizePrice = parseFloat($('#div-sizes .size-option:checked').val()) || 0;
+                    updatedSizeLabel = $('#div-sizes .size-option:checked').siblings('label').text() ||
+                        cart[itemIndex].size.label;
+                    updatedSizeId = $('#div-sizes .size-option:checked').data('id') || cart[itemIndex]
+                        .size.id;
+                }
+                // Updated addons
+                if (version === '_v1') {
+                    $('#div-addons .addon-option:checked').each(function() {
+                        updatedAddons.push({
+                            id: $(this).attr('id').replace('addon-', ''), // Extract addon ID
+                            price: parseFloat($(this).val()),
+                            name: $(this).next('label').text()
+                        });
                     });
-                });
+                }
 
-                const updatedNotes = $('#floatingTextarea2').val();
-                const updatedQuantity = parseInt($('#productModal .num').text()) || 1;
+                // Updated notes and quantity
+                const updatedNotes = $(`#note${version}`).val() || cart[itemIndex].notes;
+                const updatedQuantity = parseInt(modal.find('.num').text()) || cart[itemIndex].quantity;
 
-                cart[itemIndex].size.price = parseFloat(updatedSize) || cart[itemIndex].size.price;
-                cart[itemIndex].addons = updatedAddons;
-                cart[itemIndex].notes = updatedNotes;
-                cart[itemIndex].quantity = updatedQuantity;
+                // Update the cart item
+                cart[itemIndex] = {
+                    ...cart[itemIndex],
+                    size: {
+                        id: updatedSizeId,
+                        price: updatedSizePrice,
+                        label: updatedSizeLabel
+                    },
+                    addons: updatedAddons,
+                    notes: updatedNotes,
+                    quantity: updatedQuantity,
+                    totalPrice: (updatedQuantity * updatedSizePrice) + updatedAddons.reduce((sum, addon) =>
+                        sum + addon.price, 0) // Recalculate total price
+                };
 
-                // Save to localStorage and re-render the cart
+                // Save updated cart to localStorage
                 localStorage.setItem('cart', JSON.stringify(cart));
+
+                // Re-render the cart
                 renderCart();
 
-                $('#productModal').modal('hide');
+                // Hide the modal
+                modal.modal('hide');
             };
+
             renderCart();
             removeCouponBtn.addEventListener('click', removeCoupon);
             applyCouponButton.addEventListener('click', applyCoupon);
