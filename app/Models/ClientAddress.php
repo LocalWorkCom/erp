@@ -33,4 +33,8 @@ class ClientAddress extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function orders()
+{
+    return $this->hasMany(Order::class, 'client_address_id');
+}
 }
