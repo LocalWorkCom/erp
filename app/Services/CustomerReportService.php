@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class ReportService
+class CustomerReportService
 {
 
     public function all_clients(Request $request, $checkToken)

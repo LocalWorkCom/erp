@@ -659,9 +659,9 @@
                             <!-- Start::slide -->
                             @can('view clients_reports')
                                 <li class="slide">
-                                    <a href="{{ route('reports.clients.list') }}" class="side-menu__item">
+                                    <?php /*<a href="{{ route('reports.clients.list') }}" class="side-menu__item">
                                         <span class="side-menu__label">@lang('sidebar.ClientsReports') </span>
-                                    </a>
+                                    </a>*/?>
                                 </li>
                             @endcan
                         </ul>

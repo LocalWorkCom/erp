@@ -13,7 +13,7 @@ use App\Models\OrderDetail;
 use App\Models\OrderTracking;
 use App\Models\Table;
 use App\Services\BranchService;
-use App\Services\ReportService;
+use App\Services\CustomerReportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -22,17 +22,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-class ReportController extends Controller
+class CustomerReportController extends Controller
 {
-    protected $reportService;
+    protected $customerReportService;
     protected $lang;
     protected $checkToken;  // Set to true or false based on your need
     protected $branchService;
 
 
-    public function __construct(ReportService $reportService,BranchService $branchService)
+    public function __construct(CustomerReportService $customerReportService,BranchService $branchService)
     {
-        $this->reportService = $reportService;
+        $this->customerReportService = $customerReportService;
         $this->lang =  app()->getLocale();
         $this->checkToken = false;
         $this->branchService = $branchService;
@@ -40,7 +40,7 @@ class ReportController extends Controller
 
     public function clients(Request $request)
     {
-        $response = $this->reportService->all_clients($request, $this->checkToken);
+        $response = $this->customerReportService->all_clients($request, $this->checkToken);
         $responseData = $response->original;
         $clients = $responseData['data'];
         return view('dashboard.reports.clients', compact('clients'));
@@ -48,7 +48,7 @@ class ReportController extends Controller
 
     public function show_client_reports(Request $request)
     {
-        $response = $this->reportService->index($request, $this->checkToken);
+        $response = $this->customerReportService->index($request, $this->checkToken);
         $responseData = $response->original;
         $orders = $responseData['data'];
         return view('dashboard.reports.list', compact('orders'));
@@ -58,7 +58,7 @@ class ReportController extends Controller
     {
         $lang = App::getLocale(); // Get the current locale
 
-        $response = $this->reportService->show($lang, $id, $this->checkToken);
+        $response = $this->customerReportService->show($lang, $id, $this->checkToken);
 
         $responseData = $response->original;
 
@@ -71,7 +71,7 @@ class ReportController extends Controller
     {
         $lang = App::getLocale(); // Get the current locale
 
-        $response = $this->reportService->show($lang, $id, $this->checkToken);
+        $response = $this->customerReportService->show($lang, $id, $this->checkToken);
 
         $responseData = $response->original;
 
@@ -101,7 +101,7 @@ class ReportController extends Controller
     public function downloadOrder($id)
     {
         $lang = App::getLocale(); // Get the current locale
-        $response = $this->reportService->show($lang, $id, $this->checkToken);
+        $response = $this->customerReportService->show($lang, $id, $this->checkToken);
         $responseData = $response->original;
         $order = $responseData['data'];
         $URL = URL::to('/');
