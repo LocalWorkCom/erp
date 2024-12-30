@@ -112,9 +112,9 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address && $address->address_type === 'apartment' ? $address->floor_number : null) }}"
-                                        name="floor" placeholder="@lang('header.Floor')">
-                                    @error('floor')
+                                        value="{{ old('floorapart', $address && $address->address_type === 'apartment' ? $address->floor_number : null) }}"
+                                        name="floorapart" placeholder="@lang('header.Floor')">
+                                    @error('floorapart')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
 
@@ -220,8 +220,8 @@
                                         value="{{ old('numaoffice', $address && $address->address_type === 'office' ? $address->apartment_number : null) }}"
                                         name="numaoffice" placeholder="@lang('header.numaoffice')">
                                     <input type="text" class="form-control me-4"
-                                        value="{{ old('floor', $address && $address->address_type === 'office' ? $address->floor_number : null) }}"
-                                        name="floor" placeholder="@lang('header.Floor')">
+                                        value="{{ old('flooroffice', $address && $address->address_type === 'office' ? $address->floor_number : null) }}"
+                                        name="flooroffice" placeholder="@lang('header.Floor')">
 
                                 </div>
                                 <div class="mb-3">
