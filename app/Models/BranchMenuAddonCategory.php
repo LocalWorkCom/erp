@@ -23,6 +23,9 @@ class BranchMenuAddonCategory extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'modified_by',
+        'deleted_by',
     ];
 
     public function branches()
@@ -33,5 +36,10 @@ class BranchMenuAddonCategory extends Model
     public function addonCategories()
     {
         return $this->belongsTo(AddonCategory::class, 'addon_category_id');
+    }
+
+    public function branchMenuAddons()
+    {
+        return $this->hasMany(BranchMenuAddon::class, 'branch_menu_addon_category_id');
     }
 }

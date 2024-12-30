@@ -657,11 +657,11 @@
                                 <a href="javascript:void(0)">@lang('sidebar.Reports') </a>
                             </li>
                             <!-- Start::slide -->
-                            @can('view clients_reports')
+                            @can('view purchasing_reports')
                                 <li class="slide">
-                                    <?php /*<a href="{{ route('reports.clients.list') }}" class="side-menu__item">
-                                        <span class="side-menu__label">@lang('sidebar.ClientsReports') </span>
-                                    </a>*/?>
+                                    <a href="{{ route('reports.purchasing.list') }}" class="side-menu__item">
+                                        <span class="side-menu__label">@lang('sidebar.PurchasingsReports') </span>
+                                    </a>
                                 </li>
                             @endcan
                         </ul>
