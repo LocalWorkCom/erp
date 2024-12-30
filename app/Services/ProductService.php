@@ -194,41 +194,37 @@ class ProductService
     public function update(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
+
         // Check for token validity
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
 
         // Validate incoming request data
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name_ar' => 'required|string',
-                'name_en' => 'nullable|string',
-                'description_ar' => 'nullable|string',
-                'description_en' => 'nullable|string',
-                'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'is_have_expired' => 'required|boolean',
-                'type' => 'required|string|in:complete,raw',
-                'is_remind' => 'required|boolean',
-                'sku' => 'required|string',
-                'barcode' => 'required|string',
-                'main_unit_id' => 'required|integer',
-                'currency_code' => 'required|string',
-                'category_id' => 'required|integer',
-                // 'factor' => 'required|numeric|min:0',
-                'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
-                'min_limit' => 'required|integer|min:0',
-                'max_limit' => 'required|integer|min:0',
-            ]
-        );
+        $validator = Validator::make($request->all(), [
+            'name_ar' => 'required|string',
+            'name_en' => 'nullable|string',
+            'description_ar' => 'nullable|string',
+            'description_en' => 'nullable|string',
+            'main_image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'is_have_expired' => 'required|boolean',
+            'type' => 'required|string|in:complete,raw',
+            'is_remind' => 'required|boolean',
+            'sku' => 'required|string',
+            'barcode' => 'required|string',
+            'main_unit_id' => 'required|integer',
+            'currency_code' => 'required|string',
+            'category_id' => 'required|integer',
+            'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg|max:2048',
+            'min_limit' => 'nullable|numeric|min:0',
+            'max_limit' => 'nullable|numeric',
+        ]);
+        
 
-        // Handle validation failure
         if ($validator->fails()) {
             return RespondWithBadRequestWithData($validator->errors());
         }
 
-        // Retrieve the product by its ID
         $product = Product::find($id);
         if (!$product) {
             return RespondWithBadRequestData($lang, 8);
@@ -261,7 +257,6 @@ class ProductService
             'sku',
             'barcode',
             'main_unit_id',
-            // 'factor',
             'currency_code',
             'category_id'
         ]));
@@ -320,7 +315,7 @@ class ProductService
         if ($product->wasChanged() || $product_limit->wasChanged()) {
             return RespondWithSuccessRequest($lang, 1);
         } else {
-            return RespondWithBadRequest($lang, 11);
+            return RespondWithBadRequest($lang, 10);
         }
         // Check if the data hasn't changed
         if ($this->isProductUnchanged($product, $request)) {

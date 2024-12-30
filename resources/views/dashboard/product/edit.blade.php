@@ -121,12 +121,13 @@
                                         <label for="currency_code" class="form-label">@lang('product.Currency')</label>
                                         <select name="currency_code" id="currency_code"
                                             class="js-example-basic-single form-control" required>
-                                            <option value="" disabled>@lang('product.ChooseCurrency')</option>
+                                            <option value="" disabled {{ old('currency_code', $product->currency_code) == '' ? 'selected' : '' }}>
+                                                @lang('product.ChooseCurrency')
+                                            </option>
                                             @foreach ($Currencies as $index => $Currency)
-                                                <option value="{{ $index }}"
-                                                    {{ $index == $product->currency_code ? 'selected' : '' }}>
-                                                    {{ $Currency }}
-                                                </option>
+                                                @foreach ($Currencies as $index => $Currency)
+                                                    <option value="{{ $Currency['id'] }}" {{ $Currency['id'] == $product->currency_code ? 'selected' : '' }}>{{ $Currency['code'] }}</option>
+                                                @endforeach
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCurrency')</div>
@@ -173,24 +174,21 @@
                                         <input type="number" name="price" id="price" class="form-control" value="{{ old('price', $product->price) }}" placeholder="@lang('product.Price')" required>
                                         <div class="invalid-feedback">@lang('validation.EnterPrice')</div>
                                     </div> --}}
-
                                     <div class="col-xl-4">
                                         <label for="min_limit" class="form-label">@lang('product.MinLimit')</label>
                                         <input type="number" name="min_limit" id="min_limit" class="form-control"
-                                            value="{{ old('min_limit', $product_limit ? $product_limit->min_limit : '') }}"
+                                            value="{{ old('min_limit', $product_limit->min_limit ?? '') }}"
                                             placeholder="@lang('product.MinLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMinLimit')</div>
                                     </div>
-
+                                    
                                     <div class="col-xl-4">
                                         <label for="max_limit" class="form-label">@lang('product.MaxLimit')</label>
                                         <input type="number" name="max_limit" id="max_limit" class="form-control"
-                                            value="{{ old('max_limit', $product_limit ? $product_limit->max_limit : '') }}"
+                                            value="{{ old('max_limit', $product_limit->max_limit ?? '') }}"
                                             placeholder="@lang('product.MaxLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMaxLimit')</div>
                                     </div>
-
-
 
                                     <div class="col-xl-4">
                                         <label for="sku" class="form-label">@lang('product.Sku')</label>
