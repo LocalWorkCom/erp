@@ -7,7 +7,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('auth.home')</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('showAddress') }}"> @lang('header.myaddress')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.addaddress')</li>
+                    <li class="breadcrumb-item active" aria-current="page"> @lang('auth.addaddress')</li>
                 </ol>
             </nav>
         </div>
@@ -55,8 +55,7 @@
                     </div>
                 </div>
                 <div class="second-phase d-none">
-                    <form action="{{ route('handle.Address') }}"
-                        method="POST">
+                    <form action="{{ route('handle.Address') }}" method="POST">
                         @csrf
                         <h6 class="fw-bold mb-3">
                             @lang('header.locationcomplete')
