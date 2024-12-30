@@ -15,6 +15,14 @@ class SliderController extends Controller
         foreach($sliders as $slider){
             if($slider->dish)
             $slider->dish->makeHidden(['name_site', 'description_site']);
+            $slider->makeHidden(['name_ar', 'description_ar', 'name_en', 'description_en']);
+            if(request()->header('lang', 'ar') === 'en'){
+                $slider['name'] = $slider->name_en;
+                $slider['description'] = $slider->description_en;
+            }else{
+                $slider['name'] = $slider->name_ar;
+                $slider['description'] = $slider->description_ar;
+            }
         }
 
         if (!$sliders) {
