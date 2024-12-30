@@ -16,12 +16,14 @@
         <div class="container pb-sm-5 pb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="my-4 fw-bold">@lang('header.myaddress')</h4>
-                <button class="btn fw-bold fs-5" type="button">
+                <button class="btn fw-bold fs-5" type="button"
+                    onclick="window.location.href='{{ route('create.Address') }}'">
                     <span>+</span> @lang('auth.addaddress')
                 </button>
+
             </div>
 
-            @if($address->isNotEmpty())
+            @if ($address->isNotEmpty())
                 @foreach ($address as $item)
                     <div class="card p-5 w-75 mx-auto mt-5">
                         <ul class="list-unstyled px-0">
@@ -33,7 +35,7 @@
                                     </h5>
                                     <small class="text-muted">
                                         @if ($item->building === 'apartment')
-                                            {{ $item->floor_number . ' , ' . $item->apartment_number . ' , ' . $item->state . ' , ' . $item->city . ' , ' . $item->country }}
+                                            {{ $item->address_type . ' , ' . $item->apartment_number . ' , ' . $item->floor_number . ' , ' . $item->floor_number . ' , ' . $item->address . ' , ' . $item->state . ' , ' . $item->city . ' , ' . $item->country }}
                                         @else
                                             {{ $item->apartment_number . ' , ' . $item->state . ' , ' . $item->city . ' , ' . $item->country }}
                                         @endif
@@ -46,10 +48,13 @@
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
-                                            <button class="dropdown-item w-100"> @lang('auth.edit')</button>
+                                            <button class="dropdown-item w-100"
+                                                onclick="window.location.href='{{ route('edit.Address', ['id' => $item->id]) }}'">
+                                                @lang('auth.edit')
+                                            </button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item w-100">  @lang('auth.delete')</button>
+                                            <button class="dropdown-item w-100"> @lang('auth.delete')</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -59,7 +64,9 @@
                 @endforeach
             @else
                 <div class="card p-5 w-50 text-center mx-auto mt-5">
-                    <img class="noAddress-img" src="{{ asset('front/AlKout-Resturant/SiteAssets/images/mdi_file-location.png') }}" alt="" />
+                    <img class="noAddress-img"
+                        src="{{ asset('front/AlKout-Resturant/SiteAssets/images/mdi_file-location.png') }}"
+                        alt="" />
                     <h4 class="my-4 fw-bold">@lang('auth.noaddress')</h4>
                 </div>
             @endif

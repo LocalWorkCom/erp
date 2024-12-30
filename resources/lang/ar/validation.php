@@ -87,10 +87,15 @@ return [
     'regex' => 'صيغة :attribute غير صحيحة.',
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
-    'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'attributes' => [
         'birth_date' => 'تاريخ الميلاد',
+        'nameapart' => 'اسم الشقة',
+        'numapart' => 'رقم الشقة',
+        'phoneapart' => 'هاتف الشقة',
+        'floor' => 'الدور',
 
+        'country_code_apart' => 'رمز الدولة للشقة',
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
         'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
@@ -172,9 +177,9 @@ return [
         'image_en' => 'الصورة بالانجليزي',
         'branches' => 'الفروع',
         'branches.*' => 'فرع',
-        'type_id'=>'اسم النوع',
-        'active'=>'الفعالية',
-        'value'=>'القيمة',
+        'type_id' => 'اسم النوع',
+        'active' => 'الفعالية',
+        'value' => 'القيمة',
         'min_limit' => 'الحد الادنى',
         'max_limit' => 'الحد الاقصى',
 
@@ -227,12 +232,25 @@ return [
     'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
-    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
+    'The category have relation' => 'هذا التصنيف له علاقه بمنتج',
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',
         'permissions_ids.*.exists' => 'الصلاحية المحددة غير موجودة.',
+        'nameapart' => [
+            'required' => 'اسم الشقة مطلوب.',
+        ],
+        'numapart' => [
+            'required' => 'رقم الشقة مطلوب.',
+        ],
+        'phoneapart' => [
+            'required' => 'رقم هاتف الشقة مطلوب.',
+            'phone' => 'يجب أن يكون رقم الهاتف صحيحاً.',
+        ],
+        'country_code_apart' => [
+            'required' => 'يرجى اختيار رمز الدولة للشقة.',
+        ],
     ],
-    'EnterName'=>'أدخل الأسم',
+    'EnterName' => 'أدخل الأسم',
 
 ];

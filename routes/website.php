@@ -29,6 +29,14 @@ Route::middleware(['auth:client'])->group(function () {
     Route::get('/favorites', [HomeController::class, 'showFavorites'])->name('show.favorites');
 
     Route::get('/myaddress', [LocationController::class, 'showAddress'])->name('showAddress');
+    // Route for creating a new address
+    Route::get('/myaddress/add', [LocationController::class, 'createAddress'])->name('create.Address');
+
+    // Route for editing an existing address
+    Route::get('/myaddress/edit/{id}', [LocationController::class, 'createAddress'])->name('edit.Address');
+    Route::match(['get', 'post'], '/myaddress/handle/{id?}', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
+
+    Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
