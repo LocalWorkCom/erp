@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{ route('orders.tracking') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-map-marked-alt main-color ms-2"></i>
 
@@ -168,42 +168,42 @@
         // logout modal
         document.addEventListener("DOMContentLoaded", function() {
 
-        const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+            const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", function(event) {
-                event.preventDefault();
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", function(event) {
+                    event.preventDefault();
 
-                const profileModal = document.getElementById("profileModal");
-                const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+                    const profileModal = document.getElementById("profileModal");
+                    const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
 
-                if (profileModal) {
-                    const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                    if (profileInstance) {
-                        profileInstance.hide();
+                    if (profileModal) {
+                        const profileInstance = bootstrap.Modal.getInstance(profileModal);
+                        if (profileInstance) {
+                            profileInstance.hide();
+                        }
                     }
-                }
-                logoutModal.show();
-            });
-        }
+                    logoutModal.show();
+                });
+            }
 
-        // Handling close behavior manually if necessary
-        const closeButton = document.querySelector('.btn-close');
-        const cancelButton = document.querySelector('.btn.reversed.main-color');
+            // Handling close behavior manually if necessary
+            const closeButton = document.querySelector('.btn-close');
+            const cancelButton = document.querySelector('.btn.reversed.main-color');
 
-        if (closeButton) {
-            closeButton.addEventListener('click', function() {
-                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                logoutModal.hide();
-            });
-        }
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                    logoutModal.hide();
+                });
+            }
 
-        if (cancelButton) {
-            cancelButton.addEventListener('click', function() {
-                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                logoutModal.hide();
-            });
-        }
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function() {
+                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                    logoutModal.hide();
+                });
+            }
         });
     </script>
 @endpush
