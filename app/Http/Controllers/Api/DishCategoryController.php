@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BranchMenuCategory;
 use App\Models\BranchMenu;
+use App\Models\BranchMenuSize;
+use App\Models\BranchMenuAddon;
 use App\Models\DishCategory;
 use App\Models\Offer;
 use App\Services\DishCategoryService;
@@ -274,11 +276,52 @@ class DishCategoryController extends Controller
 
     public function menuDishesDetails(Request $request){
         $this->lang = $request->header('lang','ar');
-        $menuCategories = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
-        if (!$menuCategories) {
+        $menuDetails = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
+
+        // Fetch the sizes and addons for the dish
+        $BranchMenuSize = BranchMenuSize::where('dish_id', $request->dishId)
+            ->where('branch_id', $request->branchId)
+            ->get();
+
+        $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->dishId)
+            ->where('branch_id', $request->branchId)
+            ->get();
+
+        // Structure the response data
+        $response = [
+            'dish' => [
+                'id' => $menuDetails->dish_id,
+                'name' => $menuDetails->dish->name_ar,
+                'description' => $menuDetails->dish->description,
+                'price' => $menuDetails->dish->has_sizes ? ($menuDetails->dish->sizeDefaults ? $menuDetails->dish->sizeDefaults->price : 0) : $menuDetails->price,
+                'has_size' => $menuDetails->dish->has_sizes,
+                'image' => url($menuDetails->dish->image) ?? null,
+                'mostOrdered' => checkDishExistMostOrderd($menuDetails->dish_id)
+            ],
+            'sizes' => $BranchMenuSize->map(function ($size) {
+                return [
+                    'id' => $size->id,
+                    'name' => $size->dishSizes->name_site,
+                    'price' => $size->price,
+                    'default_size' => $size->dishSizes->default_size
+                ];
+            }),
+            'addons' => $BranchMenuAddon->map(function ($addon) {
+
+                return [
+                    'id' => $addon->id,
+                    'name' => $addon->dishAddons->addons->name_site,
+                    'price' => $addon->price,
+                    'min' => $addon->dishAddons->addons->min_addons,
+                    'max' =>  $addon->dishAddons->addons->max_addons
+                ];
+            })
+        ];
+
+        if (!$response) {
             return RespondWithBadRequestData($this->lang, 2);
         }
-        return ResponseWithSuccessData($this->lang, $menuCategories, 1);
+        return ResponseWithSuccessData($this->lang, $response, 1);
     }
 
 }
