@@ -34,15 +34,15 @@ class HomeController extends Controller
 
         $sliderController = new SliderController();
         $sliderResponse = $sliderController->index($request);
-        $slider = $sliderResponse->getData()->data;
+        $slider = $sliderResponse->getData()->data; //**************
 
         $menuController = new DishCategoryController($this->dishCategoryService);
         $menuResponse = $menuController->menuDishes($request);
-        $menu = array_slice($menuResponse->getData()->data, -4); // 4
+        $menu = array_slice($menuResponse->getData()->data, -4); // 4 //**************
 
         $mostPopularController = new MostPopularController();
         $mostPopularResponse = $mostPopularController->index($request);
-        $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite
+        $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite //**************
 
         $isOffers = $request->query('offers');
 //        dd($isOffers);
@@ -74,6 +74,7 @@ class HomeController extends Controller
         // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {
             $user = auth('api')->user(); // Get authenticated user
+//            dd($user);
 
             if ($user) {
                 $mostPopular = collect($mostPopular)->map(function ($dish) use ($user) {
@@ -92,10 +93,10 @@ class HomeController extends Controller
         }
 
         $data = [
-            'branches' => $branches,
-            'slider' => $slider,
-            'menu' => $menu,
-            'mostPopular' => $mostPopular,
+            'branches' => $branches ?? null,
+            'slider' => $slider ?? null,
+            'menu' => $menu ?? null,
+            'mostPopular' => $mostPopular ?? null,
         ];
 
         if (empty($data['branches']) || empty($data['slider']) || empty($data['menu']) || empty($data['mostPopular'])) {
@@ -178,7 +179,9 @@ class HomeController extends Controller
 
             // Validate that dish_id is provided and is a valid number
             if (!$dishId || !is_numeric($dishId)) {
-                return RespondWithBadRequestData($lang, 3); // Invalid dish_id
+                return respondError('Validation Error', 400,[
+                    'dish_id' => $lang == 'en' ? ['invalid number'] : ['رقم غير صحيح'],
+                ]); // Invalid dish_id
             }
 
             // Check if the dish already exists in the user's favorites

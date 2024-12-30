@@ -283,9 +283,18 @@ function GenerateCode($table, $table_id = 0)
 }
 function CheckToken()
 {
+    $lang = 'ar';
     $User = auth('api')->user();
-
     if (!$User) {
+        return false;
+    }
+    $token = DB::table('oauth_access_tokens')
+        ->select( 'expires_at') // Get the necessary fields
+        ->orderBy('created_at', 'desc') // Order by creation date (ascending)
+        ->where('user_id', $User->id) // Filter by the user's ID
+        ->first();
+
+    if($token->expires_at < Carbon::now()->toDateTimeString()) {
         return false;
     }
     return true;
@@ -679,8 +688,28 @@ function getNearestBranch($userLat, $userLon)
     $nearestBranch = DB::table('branches')
         ->select(
             'id',
+            'name_en',
             'name_ar',
+            'address_en',
             'address_ar',
+            'latitute',
+            'longitute',
+            'country_id',
+            'phone',
+            'email',
+            'manager_name',
+            'opening_hour',
+            'closing_hour',
+            'has_kids_area',
+            'created_by',
+            'modified_by',
+            'deleted_by',
+            'created_at',
+            'updated_at',
+            'deleted_at',
+            'is_delivery',
+            'employee_id',
+            'is_default',
             DB::raw("latitute, longitute,
                 (6371 * acos(cos(radians($userLat))
                 * cos(radians(latitute))

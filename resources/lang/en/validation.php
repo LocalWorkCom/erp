@@ -8,6 +8,9 @@ return [
     'string' => ':attribute must be a string.',
     'max' => ':attribute may not be greater than :max characters.',
     'confirmed' => ':attribute confirmation does not match.',
+    'active_offer_conflict'=> 'There is an active offer with the same name.',
+    'The dish_id field must be a number'=>'The dish_id field must be a number',
+    'active_offer_conflict' => 'There is an active offer with the same name.',
     //add here the attributes of validation to translated
     'attributes' => [
         'birth_date' => 'Birth Date',
@@ -109,7 +112,18 @@ return [
     'type_id' => 'Type Name',
     'active' => 'Is Active',
     'value' => 'Value',
-
+    'countryCodeExists' => 'Country Code is not valid',
+    'email_or_phone.required' => 'Email or Phone Number required',
+    'password.required' => 'Password is Required',
+    'country_code.required_if' => 'Country Code is required when registering with phone number',
+    'country_code.required' => 'Country code is required',
+    'passwordMatch' => 'Password is not correct',
+    'emailDoesntExist' => 'Email Does not exist',
+    'phoneDoesntExist' => 'Phone number with country code does not exist',
+    'newPasswordRequired' => 'New Password is required',
+    'confirmPassword' => 'Password Confirmation is required',
+    'confirmPasswordSame' => 'Password confirmation should match your new password',
+    'newOldPassword' => 'New password can not be the same as the old one',
     //web
     'Correct' =>  'Looks good!',
     'Alert' =>  'Alert',
@@ -157,7 +171,7 @@ return [
     'EnterMaxmum' => 'Please enter the maxmum',
     'EnterNameAr' => 'Please enter name ar',
     'EnterNameEn' => 'Please enter name en',
-    'EnterName'=>'Enter Name',
+    'EnterName' => 'Enter Name',
     'EnterIsActive' => 'Please enter the rate flag active or not',
     'The category have relation' => 'The category have relation',
 

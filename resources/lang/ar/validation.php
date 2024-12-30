@@ -88,6 +88,10 @@ return [
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
     'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'active_offer_conflict'=> 'يوجد عرض فعال بنفس الاسم',
+    'The dish_id field must be a number'=>'يجب ان يكون رقم الطبق رقم صحيح',
+    'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'attributes' => [
         'birth_date' => 'تاريخ الميلاد',
 
@@ -172,14 +176,25 @@ return [
         'image_en' => 'الصورة بالانجليزي',
         'branches' => 'الفروع',
         'branches.*' => 'فرع',
-        'type_id'=>'اسم النوع',
-        'active'=>'الفعالية',
-        'value'=>'القيمة',
+        'type_id' => 'اسم النوع',
+        'active' => 'الفعالية',
+        'value' => 'القيمة',
         'min_limit' => 'الحد الادنى',
         'max_limit' => 'الحد الاقصى',
 
     ],
-
+    'countryCodeExists' => 'كود الدولة غير صالح.',
+    'email_or_phone.required' => 'البريد الإلكتروني أو رقم الهاتف مطلوب.',
+    'password.required' => 'كلمة المرور مطلوبة.',
+    'country_code.required_if' => 'رمز البلد مطلوب عند تسجيل الدخول باستخدام رقم الهاتف.',
+    'country_code.required' => 'رمزالبلد مطلوب',
+    'passwordMatch' => 'كلمة المرور لا تتطابق مع سجلاتنا',
+    'emailDoesntExist' => 'البريد الإلكتروني غير موجود.',
+    'phoneDoesntExist' => 'رقم الهاتف مع رمز البلد غير موجود.',
+    'newPasswordRequired' => 'كلمة المرور الجديدة مطلوبة.',
+    'confirmPassword' => 'تأكيد كلمة المرور مطلوب.',
+    'confirmPasswordSame' => 'تأكيد كلمة المرور يجب أن يطابق كلمة المرور الجديدة.',
+    'newOldPassword' => 'لا يمكن أن تكون كلمة المرور الجديدة هي نفس كلمة المرور الحالية',
     //web
     'Correct' => 'صحيح',
     'Alert' => 'تنبيه',
@@ -227,12 +242,12 @@ return [
     'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
-    'The category have relation' =>'هذا التصنيف له علاقه بمنتج',
+    'The category have relation' => 'هذا التصنيف له علاقه بمنتج',
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',
         'permissions_ids.*.exists' => 'الصلاحية المحددة غير موجودة.',
     ],
-    'EnterName'=>'أدخل الأسم',
+    'EnterName' => 'أدخل الأسم',
 
 ];

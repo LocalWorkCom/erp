@@ -11,20 +11,14 @@ use Illuminate\Http\Request;
 
 class OfferService
 {
-    private $lang;
-
-    public function __construct(Request $request)
-    {
-        $this->lang = app()->getLocale();
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $lang = app()->getLocale();
         $offers = Offer::with('details')->get();
-        return ResponseWithSuccessData($this->lang, OfferResource::collection($offers), 1);
+        return ResponseWithSuccessData($lang, OfferResource::collection($offers), 1);
     }
 
     /**
@@ -32,6 +26,8 @@ class OfferService
      */
     public function save(Request $request, $id = null)
     {
+        $lang = app()->getLocale();
+
         $messages = [];
 
         if (app()->getLocale() == 'ar') {
@@ -56,6 +52,7 @@ class OfferService
                 'string',
                 function ($attribute, $value, $fail) use ($request, $id) {
                     $exists = Offer::where('name_ar', $value)
+                        ->where('is_active', 1)
                         ->where('start_date', '<=', $request->end_date)
                         ->where('end_date', '>=', $request->start_date)
                         ->when($id, function ($query) use ($id) {
@@ -73,6 +70,7 @@ class OfferService
                 'string',
                 function ($attribute, $value, $fail) use ($request, $id) {
                     $exists = Offer::where('name_en', $value)
+                        ->where('is_active', 1)
                         ->where('start_date', '<=', $request->end_date)
                         ->where('end_date', '>=', $request->start_date)
                         ->when($id, function ($query) use ($id) {
@@ -99,7 +97,27 @@ class OfferService
             'description_en' => 'required|string',
             'image_ar' => 'nullable|max:2048',
             'image_en' => 'nullable|max:2048',
-            'is_active' => 'required|in:0,1',
+            'is_active' => [
+                'required',
+                'in:0,1',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    if ($value == 1) { // Only check if activating the offer
+                        $exists = Offer::where(function ($query) use ($request, $id) {
+                            $query->where('name_ar', $request->name_ar)
+                                ->orWhere('name_en', $request->name_en);
+                        })
+                            ->where('is_active', 1)
+                            ->when($id, function ($query) use ($id) {
+                                $query->where('id', '!=', $id); // Exclude current record in case of update
+                            })
+                            ->exists();
+
+                        if ($exists) {
+                            $fail(__('validation.active_offer_conflict'));
+                        }
+                    }
+                },
+            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ], $messages);
@@ -139,7 +157,7 @@ class OfferService
         // Save the offer
         $offer = Offer::updateOrCreate(['id' => $id], $data);
 
-        return ResponseWithSuccessData($this->lang, OfferResource::make($offer), 1);
+        return ResponseWithSuccessData($lang, OfferResource::make($offer), 1);
     }
 
     /**
@@ -147,17 +165,19 @@ class OfferService
      */
     public function show(string $id)
     {
+        $lang = app()->getLocale();
+
         $offer = Offer::find($id);
 
         if (!$offer) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
 
         // Retrieve branches from the `branches` table using the comma-separated `branch_id`
         $branchIds = explode(',', $offer->branch_id); // Assuming branch_id is stored as a comma-separated string
         $branches = Branch::whereIn('id', $branchIds)->get();
 
-        return ResponseWithSuccessData($this->lang, [
+        return ResponseWithSuccessData($lang, [
             'offer' => $offer,
             'branches' => $branches
         ], 1);
@@ -168,16 +188,18 @@ class OfferService
      */
     public function destroy(string $id)
     {
+        $lang = app()->getLocale();
+
         $data = Offer::find($id);
 
         if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
         $data->deleted_by = Auth::guard('api')->user()->id ?? 1;
         $data->save();
         $data->delete();
 
-        return ResponseWithSuccessData($this->lang, OfferResource::make($data), 1);
+        return ResponseWithSuccessData($lang, OfferResource::make($data), 1);
     }
 
     /**
@@ -185,25 +207,31 @@ class OfferService
      */
     public function restore(string $id)
     {
+        $lang = app()->getLocale();
+
         $data = Offer::withTrashed()->find($id);
 
         if (!$data) {
-            return RespondWithBadRequestData($this->lang, 2);
+            return RespondWithBadRequestData($lang, 2);
         }
         $data->restore();
-        return ResponseWithSuccessData($this->lang, OfferResource::make($data), 1);
+        return ResponseWithSuccessData($lang, OfferResource::make($data), 1);
     }
 
     public function listDetail($offerId)
     {
+        $lang = app()->getLocale();
+
         $offers = Offer::with(['offerDetails.detail' => function ($query) {
             $query->select('id', 'name_ar');
         }])->findOrFail($offerId);
 
-        return ResponseWithSuccessData($this->lang, $offers, 1);
+        return ResponseWithSuccessData($lang, $offers, 1);
     }
     public function saveOfferDetails(Request $request, $offerId)
     {
+        $lang = app()->getLocale();
+
         // Validate the input
         $validated = $request->validate([
             'details.*.detail_id' => 'required|exists:details,id',
@@ -269,6 +297,6 @@ class OfferService
         }
 
         // Return success response
-        return RespondWithSuccessRequest($this->lang, 1);
+        return RespondWithSuccessRequest($lang, 1);
     }
 }

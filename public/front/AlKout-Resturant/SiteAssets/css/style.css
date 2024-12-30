@@ -274,7 +274,9 @@ header.scroll .second-header {
     font-size: 36px;
     margin-left: 50px;
 }
-
+.offcanvas-end {
+    width: 450px;
+}
 .sideCart {
     height: 100%;
     width: 0;
@@ -442,11 +444,11 @@ body.no-scroll {
 }
 
 .owl-nav .owl-prev {
-    right: -5%;
+    right: 0;
 }
 
 .owl-nav .owl-next {
-    left: -5%;
+    left: 0;
 }
 
 .owl-nav span {
@@ -555,8 +557,8 @@ body.no-scroll {
 }
 
 .intro .container .small-img:hover {
-    transform: scale(1.1);
-    /* animation: shaking 0.4s infinite; */
+    /* transform: scale(1.1); */
+    animation: shaking 0.4s infinite;
 
 }
 
@@ -570,14 +572,14 @@ body.no-scroll {
 
 .intro .container .big-img {
     width: 100%;
-    height: 300px;
+    height: 325px;
     object-fit: contain;
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
     transition: 0.5s ease;
 }
 
 .intro .container .big-img:hover {
-    transform: scale(1.2);
+    animation: shaking 0.4s infinite;
 
 }
 
@@ -712,7 +714,7 @@ body.no-scroll {
 /* categories section  */
 .categories {
     background: url(../images/bg-small.png) no-repeat center #fdf9f9;
-    mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4);
+    /* mask: radial-gradient(60% 98px at TOP, #0000 98%, #f2f3f4); */
     background-size: 100%;
 }
 
@@ -884,7 +886,9 @@ body.no-scroll {
 footer {
     position: relative;
 }
-
+.before-footer{
+    height: 100px;
+}
 footer .footer-curve {
     background: #BF0000;
     color: #fff;
@@ -1429,7 +1433,7 @@ a:hover {
     top: 35px;
     left: 0;
     right: 0;
-    width: 100%;
+    width: 95%;
     height: 2px;
     background-color: #ccc;
     z-index: -1;
@@ -1613,15 +1617,20 @@ input::placeholder {
 
 }
 
-.delivery-modal .delivery-places .nav-link {
+.delivery-places .nav-link {
     background-color: transparent;
     color: #999;
     border: 1px solid #999;
     margin-left: 0.75rem;
 }
+.btn-check:checked + .nav-link {
+    color: white;
+    background-color: #FE0000;
+    border-color: #FE0000;
 
-.delivery-modal .delivery-places .nav-link.active,
-.delivery-modal .delivery-places .show>.nav-link {
+  }
+.delivery-places .nav-link.active,
+.delivery-places .show>.nav-link {
     background: #FE0000;
     color: #fff;
     border: 1px solid transparent;
@@ -1783,7 +1792,7 @@ input::placeholder {
         top: 0;
     }
     .intro::after {
-        bottom: 0px;
+        bottom: -5%;
         left: 0;
         right: 0;
         height: 80px;

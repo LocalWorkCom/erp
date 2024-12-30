@@ -73,7 +73,7 @@ class HomeController extends Controller
 
     public function showMenu(Request $request)
     {
-
+        $categoryId = $request->query('category_id');
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -110,7 +110,7 @@ class HomeController extends Controller
 
         return view(
             'website.menu',
-            compact(['menuCategories', 'userFavorites'])
+            compact(['menuCategories', 'userFavorites', 'categoryId'])
         );
     }
 
@@ -125,25 +125,31 @@ class HomeController extends Controller
 
     public function privacy()
     {
-        $privacies = StaticPageResource::collection(PrivacyPolicy::all());
+        $privacies = StaticPageResource::collection(
+            PrivacyPolicy::where('active', 1)->get()
+        );
         $privaciesArray = $privacies->toArray(request());
         $branches = Branch::all();
-        return view('website.privacy', compact('privaciesArray','branches'));
+        return view('website.privacy', compact('privaciesArray', 'branches'));
     }
 
     public function return()
     {
-        $returns = StaticPageResource::collection(ReturnPolicy::all());
+        $returns = StaticPageResource::collection(
+            ReturnPolicy::where('active', 1)->get()
+        );
         $returnsArray = $returns->toArray(request());
         $branches = Branch::all();
-        return view('website.return', compact('returnsArray','branches'));
+        return view('website.return', compact('returnsArray', 'branches'));
     }
     public function terms()
     {
-        $terms = StaticPageResource::collection(TermsAndCondition::all());
+        $terms = StaticPageResource::collection(
+            TermsAndCondition::where('active', 1)->get()
+        );
         $termsArray = $terms->toArray(request());
         $branches = Branch::all();
-        return view('website.terms', compact('termsArray','branches'));
+        return view('website.terms', compact('termsArray', 'branches'));
     }
 
     public function addFavorite(Request $request)
@@ -228,9 +234,8 @@ class HomeController extends Controller
             "answer_{$lang} as answer",
             'active'
         )->where('active', 1) // Only fetch active FAQs
-        ->get();
+            ->get();
 
         return view('website.faq', compact('faqs'));
     }
-
 }
