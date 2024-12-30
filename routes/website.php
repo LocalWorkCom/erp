@@ -5,9 +5,7 @@ use App\Http\Controllers\Website\CartController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\LocationController;
 use App\Http\Controllers\Website\MyFatoorahController;
-
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +30,8 @@ Route::middleware(['auth:client'])->group(function () {
     Route::post('/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
     Route::post('/address/delete/{id}', [LocationController::class, 'destroyAddress'])->name('address.delete');
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
+    Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
+
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -57,4 +57,3 @@ Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->nam
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
-
