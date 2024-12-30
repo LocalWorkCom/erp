@@ -87,6 +87,9 @@ return [
     'regex' => 'صيغة :attribute غير صحيحة.',
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
+    'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'active_offer_conflict'=> 'يوجد عرض فعال بنفس الاسم',
+    'The dish_id field must be a number'=>'يجب ان يكون رقم الطبق رقم صحيح',
     'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'attributes' => [

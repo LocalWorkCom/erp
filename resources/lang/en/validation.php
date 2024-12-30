@@ -8,6 +8,8 @@ return [
     'string' => ':attribute must be a string.',
     'max' => ':attribute may not be greater than :max characters.',
     'confirmed' => ':attribute confirmation does not match.',
+    'active_offer_conflict'=> 'There is an active offer with the same name.',
+    'The dish_id field must be a number'=>'The dish_id field must be a number',
     'active_offer_conflict' => 'There is an active offer with the same name.',
     //add here the attributes of validation to translated
     'attributes' => [
