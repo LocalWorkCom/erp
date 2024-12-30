@@ -141,20 +141,44 @@ class DishCategoryController extends Controller
         $lang = $request->header('lang', 'ar');
         $categoryId = $request->query('categoryId', 'all');
         $offers = $request->query('offers', 0);
+        $searchName = $request->query('name', null); // Add search query parameter
+        $orderBy = $request->query('orderBy', 'newest'); // Add orderBy query parameter ('newest' or 'most_ordered')
 
         // Validate inputs
         if (!is_numeric($categoryId) && $categoryId !== 'all' || !in_array($offers, [0, 1])) {
-            return RespondWithBadRequestData($lang, 2, 'Invalid input values.');
+            return RespondWithBadRequestData($lang, 2);
         }
+
+        // Determine the column for dish name based on language
+        $nameColumn = ($lang === 'en') ? 'name_en' : 'name_ar';
 
         // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
         if (is_numeric($categoryId) && $categoryId > 0) {
-            $dishCategory = DishCategory::with(['dishes' => function ($query) {
+            $dishCategory = DishCategory::with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
                 $query->where('is_active', true);
+
+                // Apply name search filter if provided
+                if ($searchName) {
+                    $query->where($nameColumn, 'like', "%{$searchName}%");
+                }
+
+                // Include total_quantity in the select
+                $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+                    ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
+                    ->groupBy('dishes.id')
+                    ->orderByDesc('total_quantity')
+                    ->orderBy('dishes.created_at', 'desc'); // Order by newest
+
+                // Order based on the 'orderBy' query parameter
+                if ($orderBy === 'most_ordered') {
+                    $query->orderByDesc('total_quantity'); // Order by most ordered
+                } else {
+                    $query->orderBy('dishes.created_at', 'desc');
+                }
             }])->where('id', $categoryId)->first();
 
             if (!$dishCategory) {
-                return RespondWithBadRequestData($lang, 2, 'Category not found.');
+                return RespondWithBadRequestData($lang, 2);
             }
 
             return ResponseWithSuccessData($lang, $dishCategory, 1);
@@ -162,8 +186,27 @@ class DishCategoryController extends Controller
 
         // Scenario 2: If categoryId is 'all', fetch all categories
         if ($categoryId === 'all') {
-            $dishCategories = DishCategory::with(['dishes' => function ($query) {
+            $dishCategories = DishCategory::with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
                 $query->where('is_active', true);
+
+                // Apply name search filter if provided
+                if ($searchName) {
+                    $query->where($nameColumn, 'like', "%{$searchName}%");
+                }
+
+                // Include total_quantity in the select
+                $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+                    ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
+                    ->groupBy('dishes.id')
+                    ->orderByDesc('total_quantity')
+                    ->orderBy('dishes.created_at', 'desc'); // Order by newest
+
+                // Order based on the 'orderBy' query parameter
+                if ($orderBy === 'most_ordered') {
+                    $query->orderByDesc('total_quantity'); // Order by most ordered
+                } else {
+                    $query->orderBy('dishes.created_at', 'desc');
+                }
             }])->get();
 
             return ResponseWithSuccessData($lang, $dishCategories, 1);

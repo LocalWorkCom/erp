@@ -8,11 +8,11 @@
                     <div class="item">
                         <div class="row m-0 justify-content-center align-items-center">
                             <div class="col-md-6">
-                                <h1 class="slide-title">{{ $slider->name_ar }}</h1>
+                                <h1 class="slide-title">{{ app()->getLocale() == 'ar' ? $slider->name_ar : $slider->name_en}}</h1>
                                 <p class="slide-text my-5 ">
-                                    {{ $slider->description_ar }}
+                                    {{ app()->getLocale() == 'ar' ? $slider->description_ar :  $slider->description_en}}
                                 </p>
-                                <a href="#" class="btn">اطلب الان</a>
+                                <a href="#" class="btn">{{app()->getLocale() == 'ar' ? 'اطلب الان' : 'Order now'}}</a>
                             </div>
                             <div class="col-md-6">
                                 <figure class="intro-img">
@@ -242,7 +242,7 @@
                     <div>
                         <input class="form-check-input addon-option" type="checkbox" name="addons" id="addon-${addon.id}" value="${addon.price}">
                         <label class="form-check-label" for="addon-${addon.id}">
-                            ${addon.name} 
+                            ${addon.name}
                         </label>
                     </div>
                     <span>${addon.price} ${data.branch.currency_symbol}</span>
