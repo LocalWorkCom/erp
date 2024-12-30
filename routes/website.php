@@ -55,6 +55,7 @@ Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoo
 Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->name('myfatoorah.callback');
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
+Route::get('/orders', [CartController::class, 'pastOrders'])->name('orders.show');
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
 
