@@ -29,11 +29,31 @@ class CartController extends Controller
      */
     public function getDishDetail(Request $request)
     {
-        $IDBranch = getDefaultBranch();
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
+        if ($userLat && $userLon) {
+            Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
+        } else {
+            Log::warning('No coordinates found in cookies');
+        }
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
+        }
         // Fetch the dish details for the branch
         $BranchMenu = BranchMenu::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->first();
 
         // Check if the dish exists
@@ -43,17 +63,16 @@ class CartController extends Controller
                 'message' => 'Dish not found in this branch.'
             ], 404);
         }
-        $Branch = Branch::find($IDBranch);
+        $Branch = Branch::find($branchId);
 
         // Fetch the sizes and addons for the dish
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->get();
 
         $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->get();
-
         // Structure the response data
         $response = [
             'status' => 'success',
@@ -66,8 +85,10 @@ class CartController extends Controller
                 'description' => $BranchMenu->dish->description,
                 'price' => $BranchMenu->dish->has_size ? 0 : $BranchMenu->price,
                 'image' => $BranchMenu->dish->image ?? null,
+                'has_size' => $BranchMenu->dish->has_size,
+                'has_addon' => count($BranchMenuAddon) > 0 ? 1 : 0,
 
-                'mostOrdered' => checkDishExistMostOrderd($BranchMenu->dish_id)
+                'mostOrdered' => checkDishExistMostOrderd($branchId, $BranchMenu->dish_id)
 
             ],
             'sizes' => $BranchMenuSize->map(function ($size) {

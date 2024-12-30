@@ -212,41 +212,45 @@
                 }
 
                 cart.forEach((item, index) => {
-                    const itemSizePrice = item.size.price;
+                    const itemSizePrice = item.size && item.size.price ? item.size.price :
+                        item.price; // Check if size exists and has a price
                     const itemAddons = item.addons || [];
                     const addonTotal = itemAddons.reduce((sum, addon) => sum + addon.price, 0);
                     const itemTotal = (item.quantity * itemSizePrice) + addonTotal;
+                    const itemSizeLabel = item.size && item.size.label ? item.size.label :
+                        'غير محدد'; // Fallback if size is empty or undefined
+
                     total += itemTotal;
 
                     cartContainer.append(`
-                        <div class="sideCart-plate p-4 mb-4" data-index="${index}">
-                            <div class="d-flex">
-                                <a href="#">
-                                    <figure class="sideCart-plate-img m-0">
-                                        <img src="${item.image}" alt="${item.name}">
-                                    </figure>
-                                </a>
-                                <div class="cart-details pe-5">
-                                    <h5>${item.name}</h5>
-                                    <small class="text-muted d-block"><span>الحجم:</span> ${item.size.label}</small>
-                                    <small class="text-muted d-block"><span>إضافة:</span> ${itemAddons.map(addon => addon.name).join(', ') || 'لا يوجد إضافات'}</small>
-                                    <small class="text-muted d-block"><span>ملاحظات:</span> ${item.notes || 'لا توجد ملاحظات'}</small>
-                                    <div class="qty mt-3">
-                                        <span class="dec minus" data-index="${index}"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                        <span class="num">${item.quantity}</span>
-                                        <span class="inc plus" data-index="${index}"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-column justify-content-end">
-                                <p class="fw-bold">${formatCurrency(itemTotal)}</p>
-                                <div class="btns text-center">
-                                    <button class="btn reversed main-color mb-2 edit-item" data-index="${index}" type="button">تعديل</button>
-                                    <button class="btn mb-2 delete-item" data-index="${index}" type="button">حذف</button>
-                                </div>
-                            </div>
+            <div class="sideCart-plate p-4 mb-4" data-index="${index}">
+                <div class="d-flex">
+                    <a href="#">
+                        <figure class="sideCart-plate-img m-0">
+                            <img src="${item.image}" alt="${item.name}">
+                        </figure>
+                    </a>
+                    <div class="cart-details pe-5">
+                        <h5>${item.name}</h5>
+                        <small class="text-muted d-block"><span>الحجم:</span> ${itemSizeLabel}</small> <!-- Display the fallback text if size is empty -->
+                        <small class="text-muted d-block"><span>إضافة:</span> ${itemAddons.map(addon => addon.name).join(', ') || 'لا يوجد إضافات'}</small>
+                        <small class="text-muted d-block"><span>ملاحظات:</span> ${item.notes || 'لا توجد ملاحظات'}</small>
+                        <div class="qty mt-3">
+                            <span class="dec minus" data-index="${index}"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                            <span class="num">${item.quantity}</span>
+                            <span class="inc plus" data-index="${index}"><i class="fa fa-plus" aria-hidden="true"></i></span>
                         </div>
-                    `);
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end">
+                    <p class="fw-bold">${formatCurrency(itemTotal)}</p>
+                    <div class="btns text-center">
+                        <button class="btn reversed main-color mb-2 edit-item" data-index="${index}" type="button">تعديل</button>
+                        <button class="btn mb-2 delete-item" data-index="${index}" type="button">حذف</button>
+                    </div>
+                </div>
+            </div>
+        `);
                 });
 
                 if (local_storage.coupon) {

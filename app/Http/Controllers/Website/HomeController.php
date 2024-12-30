@@ -33,9 +33,10 @@ class HomeController extends Controller
         } else {
             Log::warning('No coordinates found in cookies');
         }
-
+        
         if ($userLat && $userLon) {
             $nearestBranch = getNearestBranch($userLat, $userLon);
+
             if ($nearestBranch) {
                 $branchId = $nearestBranch->id;
                 Log::info('Nearest branch selected', ['branchId' => $branchId]);
@@ -51,7 +52,8 @@ class HomeController extends Controller
         $sliders = Slider::all();
         $branches = Branch::all();
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        $popularDishes = getMostDishesOrdered(5);
+        $popularDishes = getMostDishesOrdered($branchId,5);
+        // dd($popularDishes);
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)
             ->where('is_active', true)

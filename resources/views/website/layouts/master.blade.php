@@ -156,7 +156,9 @@
 
         function updateCartCount() {
             // Get cart data from localStorage or default to an empty object
-            let cart = JSON.parse(localStorage.getItem('cart')) || {};
+            let cart = JSON.parse(localStorage.getItem('cart')) || {
+                items: []
+            };
 
             // Check if cart has an items array and calculate the count
             let items = cart.items || []; // Safely access the items array
