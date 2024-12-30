@@ -212,7 +212,10 @@ class BranchController extends Controller
             $branchesQuery->where($nameColumn, 'like', "%{$searchName}%");
         }
 
-        $branches = ($all == 1) ? $branchesQuery->get() : null;
+        $get_all_branches = $branchesQuery->get();
+        $get_all_branches->makeHidden(['name_site', 'address_site']);
+
+        $branches = ($all == 1) ? $get_all_branches : null;
 
         $data = [];
 
@@ -225,12 +228,16 @@ class BranchController extends Controller
                 $defaultBranchId = getDefaultBranch();
                 $data['branch'] = Branch::find($defaultBranchId);
             }
+            $data['branch']->makeHidden(['name_site', 'address_site']);
         } else {
             $defaultBranchId = getDefaultBranch();
             $data['branch'] = Branch::find($defaultBranchId);
+            $data['branch']->makeHidden(['name_site', 'address_site']);
         }
 
         // Include all branches if fetched
+
+
         $data['branches'] = $branches;
 
         return ResponseWithSuccessData($lang, $data, 1);

@@ -245,7 +245,10 @@ class DishCategoryController extends Controller
                 }
             }])->get();
 
-            $dishCategories->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
+            $dishCategories->makeHidden(['name_site', 'description_site']);
+            foreach($dishCategories as $dishCategory){
+                $dishCategory->dishes->makeHidden(['name_site', 'description_site']);
+            }
 
             return ResponseWithSuccessData($lang, $dishCategories, 1);
         }
