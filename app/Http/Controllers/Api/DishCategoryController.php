@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OfferResource;
 use App\Models\BranchMenuCategory;
 use App\Models\BranchMenu;
 use App\Models\BranchMenuSize;
@@ -247,22 +248,29 @@ class DishCategoryController extends Controller
                 }
             }])->get();
 
-            $dishCategories->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
+            $dishCategories->makeHidden(['name_site', 'description_site']);
+            foreach($dishCategories as $dishCategory){
+                $dishCategory->dishes->makeHidden(['name_site', 'description_site']);
+            }
 
             return ResponseWithSuccessData($lang, $dishCategories, 1);
         }
 
         // Scenario 3: If offers = 1, fetch active offers with details
         if ($offers == 1) {
-            $activeOffers = Offer::with('details')
-                ->whereHas('details')
-                ->where('is_active', 1)
-                ->get()
+            $activeOffers = OfferResource::collection (Offer::with('details')
+            ->whereHas('details')
+            ->where('is_active', 1)
+            ->get())
                 ->map(function ($offer) {
                     // Assuming you want to add the translated name for each detail
                     $offer->details->each(function ($detail) {
-                        $detail->type_name_en = $detail->getTypeName('en'); // Add English name
-                        $detail->type_name_ar = $detail->getTypeName('ar'); // Add Arabic name
+
+                        if(request()->header('lang', 'ar') === 'en'){
+                            $detail->type_name = $detail->getTypeName('en'); // Add English name
+                        }else{
+                            $detail->type_name = $detail->getTypeName('ar'); // Add Arabic name
+                        }
                     });
                     return $offer;
                 }) ?? collect();

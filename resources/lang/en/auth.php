@@ -45,6 +45,8 @@ return [
     'newpass' => 'Enter a new password',
     'success' => 'Verified successfully',
     'phone' => 'Phone',
+    'name' => 'Name',
+
     'messgesend' => 'A code has been sent to the phone number registered with us via WhatsApp',
     'comfirmephone' => 'Confirm phone number',
     'send' => 'Send',

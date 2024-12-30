@@ -289,12 +289,12 @@ function CheckToken()
         return false;
     }
     $token = DB::table('oauth_access_tokens')
-        ->select( 'expires_at') // Get the necessary fields
+        ->select('expires_at') // Get the necessary fields
         ->orderBy('created_at', 'desc') // Order by creation date (ascending)
         ->where('user_id', $User->id) // Filter by the user's ID
         ->first();
 
-    if($token->expires_at < Carbon::now()->toDateTimeString()) {
+    if ($token->expires_at < Carbon::now()->toDateTimeString()) {
         return false;
     }
     return true;
@@ -685,43 +685,16 @@ function helper_update_by_id(array $data, $id, $table)
 
 function getNearestBranch($userLat, $userLon)
 {
-    $nearestBranch = DB::table('branches')
-        ->select(
-            'id',
-            'name_en',
-            'name_ar',
-            'address_en',
-            'address_ar',
-            'latitute',
-            'longitute',
-            'country_id',
-            'phone',
-            'email',
-            'manager_name',
-            'opening_hour',
-            'closing_hour',
-            'has_kids_area',
-            'created_by',
-            'modified_by',
-            'deleted_by',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-            'is_delivery',
-            'employee_id',
-            'is_default',
-            DB::raw("latitute, longitute,
-                (6371 * acos(cos(radians($userLat))
-                * cos(radians(latitute))
-                * cos(radians(longitute) - radians($userLon))
-                + sin(radians($userLat))
+    $nearestBranch = Branch::select('*') // Select all columns
+    ->selectRaw("(6371 * acos(cos(radians($userLat)) 
+                * cos(radians(latitute)) 
+                * cos(radians(longitute) - radians($userLon)) 
+                + sin(radians($userLat)) 
                 * sin(radians(latitute)))) AS distance")
-        )
-        ->whereNotNull('latitute')
-        ->whereNotNull('longitute')
-        ->orderBy('distance', 'asc')
-        ->first();
-
+    ->whereNotNull('latitute')
+    ->whereNotNull('longitute')
+    ->orderBy('distance', 'asc')
+    ->first();
     return $nearestBranch;
 }
 
@@ -1008,7 +981,7 @@ function AddSizes($branch_ids, $dish_id)
 function getDefaultBranch()
 {
     $defaultBranch = Branch::where('is_default', 1)->first();
-
+    $defaultBranch->makeHidden(['name_site', 'address_site']);
     if (!$defaultBranch) {
         throw new Exception('No default branch is set.');
     }
@@ -1041,23 +1014,25 @@ function respondError($error, $code, $errorMessages = [])
 
     return response()->json($response, $code1);
 }
-function getMostDishesOrdered($limit = 5)
+function getMostDishesOrdered($IDBranch, $limit = 5)
 {
-    return Dish::select('dishes.*')
+    return BranchMenu::select('dishes.*')
+        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->where('branch_id', $IDBranch)
         ->orderByDesc('total_quantity')
         ->orderBy('dishes.created_at', 'desc') // Order by newest first
-        ->limit($limit)
-        ->get();
+        ->limit($limit)->get();
 }
-function checkDishExistMostOrderd($id)
-
+function checkDishExistMostOrderd($IDBranch, $id)
 {
-    $Dishes =  Dish::select('dishes.*')
+    $Dishes =  BranchMenu::select('dishes.*')
+        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
         ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
         ->groupBy('dishes.id', 'dishes.name_ar')
+        ->where('branch_id', $IDBranch)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->limit(5)

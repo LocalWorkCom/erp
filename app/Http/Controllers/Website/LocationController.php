@@ -13,6 +13,7 @@ class LocationController extends Controller
 {
     public function showAddress()
     {
+
         $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
             ->withCount([
                 'orders as has_inprogress_or_pending_orders' => function ($query) {
@@ -46,7 +47,7 @@ class LocationController extends Controller
                 $rules = [
                     'nameapart' => 'required|string|max:255',
                     'numapart' => 'required',
-                    'floor' => 'required',
+                    'floorapart' => 'required',
                     'phoneapart' => 'required',
                     'country_code_apart' => 'required',
                     'addressdetailapart' => 'required',
@@ -54,7 +55,7 @@ class LocationController extends Controller
                 $messages = [
                     'nameapart.required' => __('validation.required', ['attribute' => __('validation.nameapart')]),
                     'numapart.required' => __('validation.required', ['attribute' => __('validation.numapart')]),
-                    'floor.required' => __('validation.required', ['attribute' => __('validation.floor')]),
+                    'floorapart.required' => __('validation.required', ['attribute' => __('validation.floor')]),
                     'phoneapart.required' => __('validation.required', ['attribute' => __('validation.phoneapart')]),
                     'country_code_apart.required' => __('validation.required', ['attribute' => __('validation.country_code_apart')]),
                     'addressdetailapart.required' => __('validation.required', ['attribute' => __('validation.addressdetailapart')]),
@@ -88,7 +89,7 @@ class LocationController extends Controller
                     'addressdetailoffice' => 'required',
                     'phoneoffice' => 'required',
                     'country_code_office' => 'required',
-                    'floor' => 'required',
+                    'flooroffice' => 'required',
                     'markoffice' => 'required',
                 ];
                 $messages = [
@@ -97,7 +98,7 @@ class LocationController extends Controller
                     'addressdetailoffice.required' => __('validation.required', ['attribute' => __('validation.addressdetailoffice')]),
                     'phoneoffice.required' => __('validation.required', ['attribute' => __('validation.phoneoffice')]),
                     'country_code_office.required' => __('validation.required', ['attribute' => __('validation.country_code_office')]),
-                    'floor.required' => __('validation.required', ['attribute' => __('validation.floor')]),
+                    'flooroffice.required' => __('validation.required', ['attribute' => __('validation.floor')]),
                     'markoffice.required' => __('validation.required', ['attribute' => __('validation.markoffice')]),
 
                 ];
@@ -135,7 +136,7 @@ class LocationController extends Controller
             case 'apartment':
                 $address->address_type = 'apartment';
                 $address->building = $request->input('nameapart');
-                $address->floor_number = $request->input('floor');
+                $address->floor_number = $request->input('floorapart');
                 $address->apartment_number = $request->input('numapart');
                 $address->country_code = $request->input('country_code_apart');
                 $address->address_phone = $request->input('phoneapart');
@@ -157,7 +158,7 @@ class LocationController extends Controller
             case 'office':
                 $address->address_type = 'office';
                 $address->building = $request->input('nameoffice');
-                $address->floor_number = $request->input('floor');
+                $address->floor_number = $request->input('flooroffice');
                 $address->apartment_number = $request->input('numaoffice');
                 $address->country_code = $request->input('country_code_office');
                 $address->address_phone = $request->input('phoneoffice');
