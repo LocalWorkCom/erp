@@ -29,12 +29,7 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        //dd($request->all());
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
-
-        $lang = $request->header('lang', 'ar'); // Default to Arabic if no 'lang' header is provided
-        App::setLocale($lang);
+        $lang = app()->getLocale(); // Get the current language
 
         // Validation rules
         $validator = Validator::make($request->all(), [
@@ -69,7 +64,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -79,67 +74,71 @@ class AuthController extends Controller
         if (!$country) {
             return response()->json([
                 'status' => 'error',
-                'errors' => ['country_code' => [__('validation.phone_code', ['attribute' => __('auth.phone_code')])]], // Localized message
+                'errors' => ['country_code' => [__('validation.phone_code', ['attribute' => __('auth.phone_code')])]],
             ], 422);
         }
 
+        // Use a database transaction to ensure data consistency
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->flag = 'client';
+            $user->phone = $request->phone;
+            $user->country_id = $country->id;
+            $user->country_code = $request->country_code;
+            $user->birth_date = $request->date_of_birth;
+            $user->password = Hash::make($request->password);
+            $user->save();
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->flag = 'client';
-        $user->phone = $request->phone;
-        $user->country_id = $country->id;
-        $user->country_code = $request->country_code;
-        $user->birth_date =  $request->date_of_birth;
-        $user->password = Hash::make($request->password);
-        $user->save();
+            event(new UserRegistered($user));
 
-        event(new UserRegistered($user));
+            Auth::guard('client')->login($user);
+            Auth::setUser($user);
 
-        // $clientDetail = new ClientDetail();
-        // $clientDetail->user_id = $user->id;
-        // $clientDetail->date_of_birth = $request->date_of_birth;
-        // $clientDetail->save();
+            $request->session()->regenerate();
 
-        Auth::guard('client')->login($user);
-        Auth::setUser($user);
 
-        $request->session()->regenerate();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => __('Registration successful!'),
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Registration successful!'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('An error occurred during registration. Please try again later.'),
+            ], 500);
+        }
     }
+
 
     public function login(Request $request)
     {
-        // Set locale
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        // Set the application language
+        $lang = app()->getLocale();
 
-        // Validation rules
+        // Validation rules and localized error messages
         $validator = Validator::make($request->all(), [
             'email_or_phone' => 'required|string',
             'password' => 'required|string',
             'country_code_login' => 'required|string',
-            'address' => 'nullable|json', // Validate address as JSON
+            'address' => 'nullable|json', // Optional: Validate address as JSON
         ], [
-            'email_or_phone.required' => __('validation.required', ['attribute' => __('auth.email_or_phone')]),
+            'email_or_phone.required' => __('validation.required', ['attribute' => __('auth.phone')]),
             'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
             'country_code_login.required' => __('validation.required', ['attribute' => __('auth.country_code_login')]),
+            'address.json' => __('validation.json', ['attribute' => __('auth.address')]),
         ]);
 
         // Handle validation errors
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
-        // Determine if input is email or phone
+        // Check if the input is email or phone
         $userQuery = User::where('country_code', $request->country_code_login);
         if (filter_var($request->email_or_phone, FILTER_VALIDATE_EMAIL)) {
             $userQuery->where('email', $request->email_or_phone);
@@ -149,36 +148,38 @@ class AuthController extends Controller
 
         $user = $userQuery->first();
 
-        // Check if user exists and is a client
+        // Validate user existence and role
         if (!$user || $user->flag != 'client') {
             return response()->json([
                 'status' => 'error',
-                'errors' => ['email_or_phone' => [__('validation.notfound', ['attribute' => __('auth.email_or_phone')])]],
+                'errors' => ['email_or_phone' => [__('validation.notfound', ['attribute' => __('auth.phone')])]],
             ], 422);
         }
 
-        // Verify password
+        // Check the password
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'error',
-                'errors' => [
-                    'password' => [__('auth.invalid_credentials')]
-                ]
+                'errors' => ['password' => [__('auth.invalid_credentials')]],
             ], 403);
         }
-        // Log the user in
+
+        // Log the user in and regenerate the session
         Auth::guard('client')->login($user);
         $request->session()->regenerate();
 
+        // Optional: Save the address if provided (function implementation required)
+        // if ($request->filled('address')) {
+        //     $this->saveAddress($request->input('address'), $user);
+        // }
 
-        // $this->saveAddress($request->input('address'));
-
-
+        // Success response
         return response()->json([
             'status' => 'success',
-            'message' => __('auth.login_success')
+            'message' => __('auth.login_success'),
         ]);
     }
+
 
     public function saveAddress($data)
     {
@@ -258,18 +259,29 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
-        // Validate input
-        $request->validate([
-            'phone' => 'required_if:auth,null',
+        $lang = app()->getLocale();
+
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required_if:auth,null|numeric',
             'password' => 'required|min:6|confirmed',
+
+        ], [
+            'phone.required_if' => __('validation.required', ['attribute' => __('auth.phone')]),
+            'phone.numeric' => __('validation.numeric', ['attribute' => __('auth.phone')]),
+            'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'password.confirmed' => __('validation.confirmed', ['attribute' => __('auth.password')]),
         ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            // Return errors with the old input values
+            return back()->withErrors($validator)->withInput();
+        }
 
         // Check if the user is authenticated
         if (Auth::guard('client')->check()) {
-            // Get the authenticated user
             $user = Auth::guard('client')->user();
         } else {
-            // Find user by phone number if not authenticated
             $user = User::where('phone', $request->phone)->first();
 
             if (!$user) {
@@ -285,27 +297,25 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => __('auth.password_same_as_previous'),
-            ], 422); // Password can't be the same as the previous one
+            ], 422);
         }
 
-        // Update the user's password
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
+        // Update the password
+        $user->update(['password' => Hash::make($request->password)]);
 
-        // If the user was found via phone number, log them in
+        // Log in the user if they were found via phone
         if (!Auth::guard('client')->check()) {
             Auth::guard('client')->login($user);
-            Auth::setUser($user);
             $request->session()->regenerate();
             return response()->json([
                 'status' => 'success',
                 'message' => __('auth.password_reset_success'),
             ]);
-        } else {
-            return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));
         }
+
+        return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));
     }
+
 
 
     public function viewProfile()
@@ -314,19 +324,29 @@ class AuthController extends Controller
     }
     public function updateProfile(Request $request)
     {
-        $lang = $request->header('lang', 'ar');
-        App::setLocale($lang);
+        $lang = app()->getLocale();
+
+        // Fetch phone length dynamically
+        $phone_length = Country::where('phone_code', $request->country_code_profile)->value('length');
 
         // Validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'phone' => 'required',
+            'phone' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'email' => 'required|email',
             'birth_date' => 'nullable|date_format:Y-m-d',
         ], [
-            // Custom validation messages for each field
             'name.required' => __('validation.required', ['attribute' => __('auth.name')]),
             'phone.required' => __('validation.required', ['attribute' => __('auth.phone')]),
+            'phone.numeric' => __('validation.custom.phone.numeric', ['attribute' => __('auth.phone')]),
             'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
             'email.email' => __('validation.email', ['attribute' => __('auth.email')]),
             'birth_date.date_format' => __('validation.date_format', ['attribute' => __('auth.birth_date'), 'format' => 'Y-m-d']),
@@ -337,13 +357,15 @@ class AuthController extends Controller
             // Return errors with the old input values
             return back()->withErrors($validator)->withInput();
         }
+
+        // Update user profile
         $user = Auth::guard('client')->user();
         $user->name = $request->name;
-        $user->phone =  $request->phone;
-        $user->email =  $request->email;
-        $user->birth_date =  $request->birth_date;
-        $user->country_code =  $request->country_code_profile;
-        $user->country_id =  Country::where('phone_code',$request->country_code_profile)->value('id');
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+        $user->birth_date = $request->birth_date;
+        $user->country_code = $request->country_code_profile;
+        $user->country_id = Country::where('phone_code', $request->country_code_profile)->value('id');
         $user->save();
 
         return redirect()->route('website.profile.view')->with('message', __('auth.profile_updated'));

@@ -2,9 +2,10 @@
 
 namespace App\Console;
 
-use App\Jobs\ActivateOffers;
-use App\Jobs\DeactivateExpiredOffers;
 use App\Jobs\UpdateOfferStatuses;
+use App\Jobs\UpdateCouponStatuses;
+use App\Jobs\UpdateDiscountStatuses;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +18,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('coupons:deactivate-expired')->daily();
-        $schedule->job(new UpdateOfferStatuses)->hourly();
+        $schedule->command('offers:update-status')->hourly();
+        $schedule->command('coupons:update-status')->hourly();
+        $schedule->command('discounts:update-status')->hourly();
 
     }
 
@@ -30,4 +33,11 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
+    protected $commands = [
+        \App\Console\Commands\UpdateOfferStatusesCommand::class,
+        \App\Console\Commands\UpdateDiscountStatusesCommand::class,
+        \App\Console\Commands\UpdateDiscountStatusesCommand::class,
+
+    ];
 }

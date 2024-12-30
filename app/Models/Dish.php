@@ -105,5 +105,10 @@ class Dish extends Model
         return $this->hasMany(DishAddon::class, 'dish_id');
     }
 
+    public function sizeDefaults()
+    {
+        return $this->hasOne(DishSize::class)->where('default_size', 1);
+    }
+
     
 }

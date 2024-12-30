@@ -69,6 +69,17 @@
                                         <div class="invalid-feedback">@lang('validation.EnterValidEmail')</div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="input-placeholder" class="form-label">@lang('client.countryCode')</label>
+                                        <input type="text" class="form-control" id="country_code" name="country_code"
+                                            value="{{ $client->country_code }}" placeholder="@lang('client.countryCode')" required>
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterCountryCode')
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="phone" class="form-label">@lang('client.phone')</label>
                                         <input type="text" class="form-control" id="phone" name="phone"
                                             value="{{ $client->phone }}" placeholder="@lang('client.phone')">
@@ -91,7 +102,7 @@
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="date_of_birth" class="form-label">@lang('client.dob')</label>
                                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                            value="{{ $client->clientDetails->date_of_birth ?? '' }}"
+                                            value="{{ $client->clientDetails && $client->clientDetails->date_of_birth ?? '' }}"
                                             placeholder="@lang('client.dateOfBirth')">
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
@@ -144,6 +155,18 @@
                                             placeholder="@lang('client.postalCode')">
                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                         <div class="invalid-feedback">@lang('validation.EnterPostalCode')</div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="input-placeholder" class="form-label">@lang('client.addressPhone')</label>
+                                        <input type="text" class="form-control" id="address_phone"
+                                            name="address_phone" value="{{ $client->addresses->first()->address_phone }}"
+                                            placeholder="@lang('client.addressPhone')" required>
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterValidAddressPhone')
+                                        </div>
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.is_active')</p>

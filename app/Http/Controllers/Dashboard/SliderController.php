@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SliderFormRequest;
 use App\Models\Dish;
+use App\Models\DishDiscount;
 use App\Models\Offer;
 use App\Models\Slider;
 use Illuminate\Http\Request;
@@ -30,7 +31,9 @@ class SliderController extends Controller
     {
         $dishes = Dish::all();
         $offers = Offer::where('is_active', 1)->get();
-        return view('dashboard.slider.add', compact('dishes', 'offers'));
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+//        dd($discounts);
+        return view('dashboard.slider.add', compact('dishes', 'offers', 'discounts'));
     }
 
     /**
@@ -48,6 +51,7 @@ class SliderController extends Controller
         $slider->flag = $data['flag'];
         $slider->dish_id = $data['dish_id'] ?? null;
         $slider->offer_id = $data['offer_id'] ?? null;
+        $slider->discount_id = $data['discount_id'] ?? null;
         $slider->created_by = auth()->id() ?? 1 ;
         $image = $request->file('image');
 //        dd($image);
@@ -75,8 +79,9 @@ class SliderController extends Controller
     {
         $slider = Slider::findOrFail($id);
         $dishes = Dish::all();
-        $offers = Offer::all();
-        return view('dashboard.slider.edit', compact('slider','dishes','offers'));
+        $offers = Offer::where('is_active', 1)->get();
+        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        return view('dashboard.slider.edit', compact('slider','dishes','offers', 'discounts'));
     }
 
     /**
@@ -94,6 +99,7 @@ class SliderController extends Controller
         $slider->flag = $data['flag'];
         $slider->dish_id = $data['dish_id']??null;
         $slider->offer_id = $data['offer_id']??null;
+        $slider->discount_id = $data['discount_id']??null;
         $slider->modified_by = auth()->id() ?? 1;
         if ($request->hasFile('image')) {
             $image = $request->file('image');

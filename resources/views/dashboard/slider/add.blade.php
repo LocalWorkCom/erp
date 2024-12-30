@@ -52,6 +52,10 @@
                                                 <input class="form-check-input" type="radio" name="flag" id="offerOption" value="offer" required>
                                                 <label class="form-check-label" for="offerOption">@lang('slider.Offer')</label>
                                             </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="flag" id="discountOption" value="discount" required>
+                                                <label class="form-check-label" for="discountOption">@lang('slider.Discount')</label>
+                                            </div>
                                             <div class="invalid-feedback">@lang('validation.EnterFlag')</div>
                                         </div>
                                     </div>
@@ -62,10 +66,14 @@
                                         <select name="dish_id" id="dish_id" class="form-control select2">
                                             <option value="" selected disabled>@lang('slider.ChooseDish')</option>
                                             @foreach($dishes as $dish)
-                                                <option value="{{ $dish->id }}">{{ $dish->name_ar . " | " . $dish->name_en  }}</option>
+                                               @if ($dish->id != null)
+                                                    <option value="{{ $dish->id }}">{{ $dish->name_ar . " | " . $dish->name_en  }}</option>
+                                                @else
+                                                    <option value="">{{ __('slider.none')  }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.EnterDish')</div>
+                                        <div class="invalid-feedback">@lang('slider.EnterDish')</div>
                                     </div>
 
                                     <!-- Offer Dropdown -->
@@ -74,10 +82,30 @@
                                         <select name="offer_id" id="offer_id" class="form-control select2">
                                             <option value="" selected disabled>@lang('slider.ChooseOffer')</option>
                                             @foreach($offers as $offer)
+                                                @if($offer->id != null)
                                                 <option value="{{ $offer->id }}">{{ $offer->name_ar . " | " . $offer->name_en  }}</option>
+                                                @else
+                                                    <option value="">{{ __('slider.none')  }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
-                                        <div class="invalid-feedback">@lang('validation.EnterOffer')</div>
+                                        <div class="invalid-feedback">@lang('slider.EnterOffer')</div>
+                                    </div>
+
+                                    <!-- Discount Dropdown -->
+                                    <div class="col-xl-12 d-none" id="discountDropdown">
+                                        <label for="discount_id" class="form-label">@lang('slider.EnterDiscount')</label>
+                                        <select name="discount_id" id="discount_id" class="form-control select2">
+                                            <option value="" selected disabled>@lang('slider.ChooseDiscount')</option>
+                                            @foreach($discounts as $discount)
+                                                @if ($discount->id != null)
+                                                <option value="{{ $discount->id }}">{{ $discount->dish->name_ar . " | " . $discount->dish->name_en . " | " . number_format($discount->discount->value, 0) . ($discount->discount->type == "percentage" ? "%" : "EGP") }}</option>
+                                                @else
+                                                    <option value="">{{ __('slider.none')  }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback">@lang('slider.EnterDiscount')</div>
                                     </div>
 
                                     <div class="col-xl-6">
@@ -137,41 +165,60 @@
     @vite('resources/assets/js/validation.js')
 
     <script>
-            $(document).ready(function () {
+        //     $(document).ready(function () {
+        //     $('.select2').select2();
+        //
+        //     // Toggle Dish/Offer dropdown
+        //     $('input[name="flag"]').change(function () {
+        //         const selected = $(this).val();
+        //         if (selected === 'dish') {
+        //             $('#dishDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+        //             $('#offerDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+        //         } else if (selected === 'offer') {
+        //             $('#offerDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
+        //             $('#dishDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+        //         }
+        //     });
+        //
+        //     // Toggle New/Existing Names and Descriptions
+        //     $('input[name="name_option"]').change(function () {
+        //     if ($(this).val() === 'new') {
+        //     $('#newNameInputs').removeClass('d-none');
+        // } else {
+        //     $('#newNameInputs').addClass('d-none');
+        // }
+        // });
+        //
+        //     // Toggle New/Existing Image
+        //     $('input[name="image_option"]').change(function () {
+        //     if ($(this).val() === 'new') {
+        //     $('#newImageInput').removeClass('d-none');
+        //     $('#existingImageDropdown').addClass('d-none');
+        // } else {
+        //     $('#existingImageDropdown').removeClass('d-none');
+        //     $('#newImageInput').addClass('d-none');
+        // }
+        // });
+        // });
+
+        $(document).ready(function () {
             $('.select2').select2();
 
-            // Toggle Dish/Offer dropdown
+            // Toggle Dish/Offer/Discount dropdown
             $('input[name="flag"]').change(function () {
                 const selected = $(this).val();
+                $('#dishDropdown, #offerDropdown, #discountDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+
                 if (selected === 'dish') {
-                    $('#dishDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
-                    $('#offerDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                    $('#dishDropdown').removeClass('d-none').find('select').prop('required', true);
                 } else if (selected === 'offer') {
-                    $('#offerDropdown').removeClass('d-none').find('select').prop('required', true).val('').trigger('change');
-                    $('#dishDropdown').addClass('d-none').find('select').prop('required', false).val('').trigger('change');
+                    $('#offerDropdown').removeClass('d-none').find('select').prop('required', true);
+                } else if (selected === 'discount') {
+                    $('#discountDropdown').removeClass('d-none').find('select').prop('required', true);
                 }
             });
-
-            // Toggle New/Existing Names and Descriptions
-            $('input[name="name_option"]').change(function () {
-            if ($(this).val() === 'new') {
-            $('#newNameInputs').removeClass('d-none');
-        } else {
-            $('#newNameInputs').addClass('d-none');
-        }
         });
 
-            // Toggle New/Existing Image
-            $('input[name="image_option"]').change(function () {
-            if ($(this).val() === 'new') {
-            $('#newImageInput').removeClass('d-none');
-            $('#existingImageDropdown').addClass('d-none');
-        } else {
-            $('#existingImageDropdown').removeClass('d-none');
-            $('#newImageInput').addClass('d-none');
-        }
-        });
-        });
 
         //prevent spaces
         document.addEventListener('DOMContentLoaded', function () {

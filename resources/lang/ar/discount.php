@@ -24,6 +24,6 @@ return [
     'Remove' =>'حذف',
     'duplicate_discount'=>'يرجي ادخال الخصم بدون تكرار',
     'Duplicate dishes are submitted.' =>'يرجيادخال الطبق بدون تكرار',
-    'duplicate_active_code' =>'يرجي ادخال الخصم بدون تكرار المده لانها فعاله فى خصم اخر',
+    'duplicate_active_code' =>'يرجي ادخال الاسم بدون تكرار المده لانها فعاله فى خصم اخر',
 
 ];

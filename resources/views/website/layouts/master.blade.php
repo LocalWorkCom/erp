@@ -52,12 +52,14 @@
 
 <body>
 
- 
+
     @include('website.layouts.header') {{-- Default Header --}}
 
     <main>
         @yield('content')
+        <section class="before-footer"></section>
     </main>
+
     <!-- modals -->
     @include('website.layouts.footer')
 
@@ -68,6 +70,9 @@
                 <div class="modal-header border-0">
                     <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal"
                         aria-label="Close"></button>
+                </div>
+                <div id="msg-error" style="display: none;text-align:center" class="message bg-warning p-2 rounded-3">
+                    الرجاء قم بتسجيل الدخول لمتابعة الدفع
                 </div>
                 @include('website.auth.login')
                 @include('website.auth.register')
@@ -129,6 +134,7 @@
 
     @include('website.delivery')
     @include('website.location')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
@@ -148,6 +154,27 @@
         AOS.init();
     </script>
     <script>
+        // Function to update the cart count
+
+        function updateCartCount() {
+            // Get cart data from localStorage or default to an empty object
+            let cart = JSON.parse(localStorage.getItem('cart')) || {
+                items: []
+            };
+
+            console.log(cart);
+            
+            // Check if cart has an items array and calculate the count
+            let items = cart.items || []; // Safely access the items array
+            let count = items.length; // Count the total number of items
+
+            // Update the cart count in the DOM
+            document.getElementById('cart-count').textContent = count;
+        }
+
+
+        // Call this function whenever the cart changes
+
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('branchSearch');
             const branchItems = document.querySelectorAll('.branch-item');
@@ -171,6 +198,10 @@
                     }
                 });
             });
+
+
+            updateCartCount();
+
         });
     </script>
 

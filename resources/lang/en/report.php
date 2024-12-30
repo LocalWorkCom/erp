@@ -61,7 +61,7 @@ return [
     "fees" => "fees",
     "print" => "print",
     "dish" => "dish",
-    "order_addons" => "اضافات الطلب"
-
+    "order_addons" => "Order addons",
+    "order_counts" => "Order counts",
 
 ];

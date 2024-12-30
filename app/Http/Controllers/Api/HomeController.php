@@ -74,6 +74,7 @@ class HomeController extends Controller
         // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {
             $user = auth('api')->user(); // Get authenticated user
+//            dd($user);
 
             if ($user) {
                 $mostPopular = collect($mostPopular)->map(function ($dish) use ($user) {
@@ -98,7 +99,7 @@ class HomeController extends Controller
             'mostPopular' => $mostPopular ?? null,
         ];
 
-        if (empty($data['branches']) || empty($data['slider']) || empty($data['menu']) || empty($data['mostPopular'])) {
+        if (empty($data['branches']) && empty($data['slider']) && empty($data['menu']) && empty($data['mostPopular'])) {
             return RespondWithBadRequestData($lang, 2); // Unauthorized response
         }
 
@@ -178,7 +179,9 @@ class HomeController extends Controller
 
             // Validate that dish_id is provided and is a valid number
             if (!$dishId || !is_numeric($dishId)) {
-                return RespondWithBadRequestData($lang, 3); // Invalid dish_id
+                return respondError('Validation Error', 400,[
+                    'dish_id' => $lang == 'en' ? ['invalid number'] : ['رقم غير صحيح'],
+                ]); // Invalid dish_id
             }
 
             // Check if the dish already exists in the user's favorites
