@@ -10,6 +10,7 @@ use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\FAQ;
 use App\Models\PrivacyPolicy;
+use App\Models\Rate;
 use App\Models\ReturnPolicy;
 use App\Models\Slider;
 use App\Models\TermsAndCondition;
@@ -71,7 +72,6 @@ class HomeController extends Controller
             compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
         );
     }
-
 
     public function showMenu(Request $request)
     {
@@ -144,6 +144,7 @@ class HomeController extends Controller
         $branches = Branch::all();
         return view('website.return', compact('returnsArray', 'branches'));
     }
+
     public function terms()
     {
         $terms = StaticPageResource::collection(
@@ -225,6 +226,7 @@ class HomeController extends Controller
             compact(['menuCategories', 'userFavorites'])
         );
     }
+
     public function getfaqs()
     {
         $lang = app()->getLocale(); // Get the current language
@@ -239,5 +241,26 @@ class HomeController extends Controller
             ->get();
 
         return view('website.faq', compact('faqs'));
+    }
+
+    public function showRate()
+    {
+        $rates = Rate::all();
+        return view('website.rate', compact('rates'));
+    }
+
+    public function addRate(Request $request) {
+        $validatedData = $request->validate([
+            'value' => 'required|integer|min:1|max:5',
+            'note' => 'nullable|string|max:1000',
+        ]);
+    
+        $rating = new Rate();
+        $rating->value = $validatedData['value'];
+        $rating->note = $validatedData['note'];
+        $rating->created_by = auth()->id();
+        $rating->save();
+    
+        return redirect()->back()->with('success', 'شكراً لتقييمك!');
     }
 }

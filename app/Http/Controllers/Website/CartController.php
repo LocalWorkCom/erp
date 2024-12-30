@@ -163,11 +163,15 @@ class CartController extends Controller
             ], 500);
         }
     }
-    public function trackOrder($orderId)
+    public function trackOrder()
     {
-        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
-            ->findOrFail($orderId);
+        $user = Auth::guard('client')->user();
 
-        return view('website.track-order', compact('order'));
+        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+            ->where('client_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('website.track-order', compact('orders'));
     }
 }

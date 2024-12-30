@@ -44,6 +44,9 @@ class Unit extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot('unit_id', 'factor');
     }
-    
+    public function productUnits()
+    {
+        return $this->hasMany(ProductUnit::class);
+    }
     // Optionally, you can define other model properties or methods here
 }

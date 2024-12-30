@@ -800,6 +800,7 @@ Route::get('/popular', [MostPopularController::class, 'index'])->name('api.popul
 Route::get('/slider', [SliderController::class, 'index'])->name('api.slider');
 //Route::get('/menu', [MenuHomeController::class, 'index'])->name('api.menu');
 Route::get('/dish-menu', [DishCategoryController::class, 'menuDishes'])->name('api.dish.menu');
+Route::get('/dish-menu-details', [DishCategoryController::class, 'menuDishesDetails'])->name('api.dish.menu.details');
 Route::get('/branch-near', [BranchController::class, 'listBranchAndNear'])->name('api.branch.near');
 Route::get('/home', [HomeController::class, 'index'])->name('api.home');
 

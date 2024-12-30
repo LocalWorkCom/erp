@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\BranchMenuCategory;
+use App\Models\BranchMenu;
 use App\Models\DishCategory;
 use App\Models\Offer;
 use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class DishCategoryController extends Controller
@@ -141,30 +143,109 @@ class DishCategoryController extends Controller
         $lang = $request->header('lang', 'ar');
         $categoryId = $request->query('categoryId', 'all');
         $offers = $request->query('offers', 0);
+        $searchName = $request->query('name', null); // Add search query parameter
+        $orderBy = $request->query('orderBy', 'newest'); // Add orderBy query parameter ('newest' or 'most_ordered')
 
         // Validate inputs
         if (!is_numeric($categoryId) && $categoryId !== 'all' || !in_array($offers, [0, 1])) {
-            return RespondWithBadRequestData($lang, 2, 'Invalid input values.');
+            return respondError('Validation Error', 400,[
+                'categoryId' => $lang == 'en' ? ['it must be a number or all'] : ['يجب ان تكون رقم او all'],
+                'offers' => $lang == 'en' ? ['it must be 0 or 1'] : ['يجب ان تكون 0 او 1'],
+            ]);
         }
+
+        // Determine the column for dish name based on language
+        $nameColumn = ($lang === 'en') ? 'name_en' : 'name_ar';
 
         // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
         if (is_numeric($categoryId) && $categoryId > 0) {
-            $dishCategory = DishCategory::with(['dishes' => function ($query) {
+            $dishCategory = DishCategory::with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
                 $query->where('is_active', true);
+
+                // Apply name search filter if provided
+                if ($searchName) {
+                    $query->where($nameColumn, 'like', "%{$searchName}%");
+                }
+
+                // Include total_quantity in the select
+                $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+                    ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
+                    ->groupBy('dishes.id')
+                    ->orderByDesc('total_quantity')
+                    ->orderBy('dishes.created_at', 'desc'); // Order by newest
+
+                // Order based on the 'orderBy' query parameter
+                if ($orderBy === 'most_ordered') {
+                    $query->orderByDesc('total_quantity'); // Order by most ordered
+                } else {
+                    $query->orderBy('dishes.created_at', 'desc');
+                }
             }])->where('id', $categoryId)->first();
 
             if (!$dishCategory) {
-                return RespondWithBadRequestData($lang, 2, 'Category not found.');
+                return RespondWithBadRequestData($lang, 8);
             }
+
+            // Check if user is authenticated and add 'is_favorite' to each dish
+            if (CheckToken()) {
+                $user = auth('api')->user(); // Get authenticated user
+
+                if ($user) {
+                    // Map over dishes to check if each dish is a favorite
+                    $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user) {
+                        // Initialize flag to 0 for each dish
+                        $flag = 0;
+
+                        // Check if the dish is in the user's favorites
+                        $isFavorite = DB::table('user_favorite_dishes')
+                            ->where('user_id', $user->id)
+                            ->where('dish_id', $dish->id)
+                            ->exists(); // Using exists() for performance optimization
+
+                        // If the dish is in the favorites, set the flag to 1
+                        if ($isFavorite) {
+                            $flag = 1;
+                        }
+
+                        // Set the is_favorite attribute
+                        $dish->is_favorite = $flag;
+
+                        return $dish;
+                    });
+                }
+            }
+            
+            $dishCategory->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
 
             return ResponseWithSuccessData($lang, $dishCategory, 1);
         }
 
         // Scenario 2: If categoryId is 'all', fetch all categories
         if ($categoryId === 'all') {
-            $dishCategories = DishCategory::with(['dishes' => function ($query) {
+            $dishCategories = DishCategory::with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
                 $query->where('is_active', true);
+
+                // Apply name search filter if provided
+                if ($searchName) {
+                    $query->where($nameColumn, 'like', "%{$searchName}%");
+                }
+
+                // Include total_quantity in the select
+                $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+                    ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
+                    ->groupBy('dishes.id')
+                    ->orderByDesc('total_quantity')
+                    ->orderBy('dishes.created_at', 'desc'); // Order by newest
+
+                // Order based on the 'orderBy' query parameter
+                if ($orderBy === 'most_ordered') {
+                    $query->orderByDesc('total_quantity'); // Order by most ordered
+                } else {
+                    $query->orderBy('dishes.created_at', 'desc');
+                }
             }])->get();
+
+            $dishCategories->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
 
             return ResponseWithSuccessData($lang, $dishCategories, 1);
         }
@@ -189,6 +270,15 @@ class DishCategoryController extends Controller
 
         // Default fallback
         return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
+    }
+
+    public function menuDishesDetails(Request $request){
+        $this->lang = $request->header('lang','ar');
+        $menuCategories = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
+        if (!$menuCategories) {
+            return RespondWithBadRequestData($this->lang, 2);
+        }
+        return ResponseWithSuccessData($this->lang, $menuCategories, 1);
     }
 
 }

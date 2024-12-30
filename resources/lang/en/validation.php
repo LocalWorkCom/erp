@@ -14,7 +14,6 @@ return [
     //add here the attributes of validation to translated
     'attributes' => [
         'birth_date' => 'Birth Date',
-
         'email' => 'email address',
         'password' => 'password',
         'name' => 'name',
@@ -61,6 +60,10 @@ return [
             'string' => 'The :attribute must be between :min and :max characters.',
         ],
         'boolean' => 'The :attribute field must be true or false.',
+        'nameapart' => 'apartment name',
+        'numapart' => 'apartment number',
+        'phoneapart' => 'apartment phone',
+        'country_code_apart' => 'apartment country code',
 
     ],
     'regex' => 'The :attribute format is invalid.',
@@ -179,5 +182,21 @@ return [
         'name.required' => 'The name is required and cannot be left empty.',
         'permissions_ids.required' => 'The permissions field is required and cannot be left empty.',
         'permissions_ids.*.exists' => 'The selected permission does not exist.',
+        'nameapart' => [
+            'required' => 'The apartment name is required.',
+        ],
+        'numapart' => [
+            'required' => 'The apartment number is required.',
+        ],
+        'phoneapart' => [
+            'required' => 'The phone number for the apartment is required.',
+            'phone' => 'The phone number must be valid.',
+        ],
+        'country_code_apart' => [
+            'required' => 'Please select a country code for the apartment.',
+        ],
+        'phone' => [
+            'length' => 'The :attribute must be exactly :length characters long.',
+        ],
     ],
 ];

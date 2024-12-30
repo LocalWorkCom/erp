@@ -64,6 +64,7 @@
                                     <th scope="col">@lang('slider.EnglishName')</th>
                                     <th scope="col">@lang('slider.Dish')</th>
                                     <th scope="col">@lang('slider.Offer')</th>
+                                    <th scope="col">@lang('slider.Discount')</th>
                                     <th scope="col">@lang('category.Actions')</th>
                                 </tr>
                                 </thead>
@@ -77,8 +78,11 @@
                                                  width="100" height="100"></td>
                                         <td>{{ $slider->name_ar }}</td>
                                         <td>{{ $slider->name_en }}</td>
-                                        <td>{{ $slider->dish ? $slider->dish->name_ar . " | " . $slider->dish->name_en : __('category.none') }}</td>
-                                        <td>{{ $slider->offer ? $slider->offer->name_ar . " | " . $slider->offer->name_en : __('category.none') }}</td>
+                                        <td>{{ $slider->dish ? $slider->dish->name_ar . " | " . $slider->dish->name_en : __('slider.none') }}</td>
+                                        <td>{{ $slider->offer ? $slider->offer->name_ar . " | " . $slider->offer->name_en : __('slider.none') }}</td>
+                                        <td>{{ $slider->discount ? $slider->discount->dish->name_ar . " | " . $slider->discount->dish->name_en
+                                        . " | ". number_format($slider->discount->discount->value, 0). ($slider->discount->discount->type == "percentage" ? "%" : "EGP")
+                                        : __('slider.none') }}</td>
                                         <td>
                                             <a href="{{ route('slider.show', $slider->id) }}" class="btn btn-info-light btn-wave">@lang('category.show') <i class="ri-eye-line"></i></a>
                                             <a href="{{ route('slider.edit', $slider->id) }}" class="btn btn-orange-light btn-wave">@lang('category.edit') <i class="ri-edit-line"></i></a>

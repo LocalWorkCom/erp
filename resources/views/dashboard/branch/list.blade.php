@@ -90,13 +90,13 @@
                                                     </button>
                                                 </form>
 
-                                                <a href="{{ route('floor.branch', $branch->id) }}" class="btn btn-orange-light btn-wave">
+                                                <!-- <a href="{{ route('floor.branch', $branch->id) }}" class="btn btn-orange-light btn-wave">
                                                 {{ __('floor.Floors') }} <i class="ri-show-line"></i>
                                                 </a>
 
                                                 <a href="{{ route('branch.categories.show.all', $branch->id) }}" class="btn btn-orange-light btn-wave">
                                                 {{ __('floor.DishesCategory') }} <i class="ri-show-line"></i>
-                                                </a>
+                                                </a> -->
 
                                                 <select class="form-select d-inline" style="width: auto;"
                                                     onchange="showBranchRalates(this.value, {{ $branch->id }})">
