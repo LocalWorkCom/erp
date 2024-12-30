@@ -228,7 +228,7 @@
                                           </label>
                                       </div>
                                   </div>
-                                  <form method="POST" action="{{ route('saveAddress') }}" id="addressForm"
+                                  <form method="POST" action="" id="addressForm"
                                       onsubmit="saveToLocalStorage(event)">
                                       @csrf
                                       <div id="tabContent">
@@ -413,7 +413,7 @@
                                           </button>
                                       </li>
                                   </ul>
-                                  <form method="POST" action="{{ route('saveAddress') }}" id="addressForm"
+                                  <form method="POST" action="" id="addressForm"
                                       onsubmit="saveToLocalStorage(event)">
                                       @csrf
                                       <div class="tab-content" id="pills-tabContent">
