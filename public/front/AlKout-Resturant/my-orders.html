@@ -117,144 +117,60 @@
                 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">الرئيسية</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"> متابعة الطلب</li>
+                        <li class="breadcrumb-item active" aria-current="page"> طلباتى</li>
                     </ol>
                 </nav>
             </div>
-
         </section>
-        <section class="tracking-order">
+        <section class="my-orders">
             <div class="container py-2">
-                <div class="card mt-2 p-3">
-                    <div class="card-header bg-white ">
-                        <div class="d-flex justify-content-between">
-                            <h5 class="card-title fw-bold mb-3">حالة الطلب الحالية</h5>
-                                       
+                <h4 class="fw-bold "> طلباتى</h4>
+                <div class="card p-4">
+                    <h5>
+                        <i class="fas fa-file-alt main-color fa-xs"></i>
+                        مجموع طلباتى
+                    </h5>
+                    <div class="card-body border-bottom">
+
+
+                        <div class="d-flex justify-content-between pt-3">
+                            <h5 class="fw-bold m-0">
+                                8 ديسمبر .8:50 م
+                            </h5>
+                            <p class="bg-warning text-dark rounded fw-bold p-1 mb-0">تم الاستلام</p>
                         </div>
-                        <h6 class="mb-3"> الوقت المتوقع لاستلام الطلب </h6>
-                        <h5 class="main-color fw-bold mb-3 d-flex flex-wrap">
-                            <span class="to-time">10:30 ص - </span>
-                            <span class="from-time">11:15 ص </span>
-                            <span class="p-1 mx-1 bg-warning text-dark rounded"><small>45 دقيقة</small></span>
-                        </h5>
-                        <h5 class="p-1 bg-warning text-dark rounded d-inline-block">رقم الطلب 255454558#</h5>
+                        <small class="text-muted py-1">رمز الطلب: 1588787</small>
+                        <p class="mb-0 py-1">
+                            1 X مجبوس دجاج
+                        </p>
+                        <small class="text-muted py-1"> نص فرخة </small>
+                        <p class="fw-bold mb-0 py-1">
+                            142.99 ج .م
+                        </p>
+                        <a href="#" class="text-decoration-underline py-1 fw-bold">تفاصيل الدفع </a>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="wizard my-3">
-                            <ul class="nav nav-tabs justify-content-between w-100" id="myTab" role="tablist">
-                                <li class="nav-item " role="presentation">
-                                    <a class="nav-link active rounded-circle  d-flex align-items-center justify-content-center"
-                                        href="#step1" id="step1-tab" data-bs-toggle="tab" role="tab"
-                                        aria-controls="step1" aria-selected="true">
-                                        <i class="fas fa-mobile-alt"></i>
-                                    </a>
-                                    <span class="d-block mt-2"> تم تأكيد الطلب </span>
-
-                                </li>
-                                <li class="nav-item " role="presentation">
-                                    <a class="nav-link rounded-circle  d-flex  mx-auto align-items-center justify-content-center"
-                                        href="#step2" id="step2-tab" data-bs-toggle="tab" role="tab"
-                                        aria-controls="step2" aria-selected="false">
-                                        <i class="fas fa-utensils"></i>
-                                    </a>
-                                    <span class="d-block mt-2"> يتم تحضير طلبك </span>
-
-                                </li>
-                                <li class="nav-item " role="presentation" data-bs-toggle="modal"
-                                    href="#exampleModalToggle" role="button">
-                                    <a class="nav-link rounded-circle  d-flex align-items-center justify-content-center"
-                                        href="#step4" id="step4-tab" data-bs-toggle="tab" role="tab"
-                                        aria-controls="step4" aria-selected="false">
-                                        <i class="fas fa-check-circle"></i>
-
-                                    </a>
-                                    <span class="d-block mt-2"> جاهز للاستلام </span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="bg-dark-gray p-3 my-4">
-                            <h5 class="fw-bold">ملخص الطلب</h5>
-                        </div>
-                        <div class="bg-dark-gray p-3 my-4">
-                            <h5 class="fw-bold">
-                                <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
-                                الاستلام من
+                    <div class="card-body border-bottom">
+                        <div class="d-flex justify-content-between pt-3">
+                            <h5 class="fw-bold m-0">
+                                8 ديسمبر .8:50 م
                             </h5>
-                            <p class="fw-bold mb-0">
-                                <span><i class="fas fa-map-marker-alt ms-2 main-color"></i></span>
-                                121 مصدق , الدور 2 , شقة 12 ,الدقى , المهندسين ,جيزه
-                            </p>
-                            <p class="text-muted">121 مصدق , الدور 2 , شقة 12 </p>
+                            <p class="bg-danger text-dark rounded fw-bold p-1 mb-0">ملغي </p>
                         </div>
-                        <div class="bg-dark-gray p-3 my-4">
-                            <h5 class="fw-bold">
-                                <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
-                                معلومات الدفع
-                            </h5>
-                            <p>الدفع عند الاستلام <span class="p-1 bg-success text-light rounded">الدفع
-                                    نقدا</span></p>
-
-                        </div>
-                        <div class="bg-dark-gray p-3 my-4">
-                            <h5 class="fw-bold">
-                                <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
-                                تفاصيل الطلب
-                            </h5>
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="p-1 bg-secondary text-light rounded">1</span>
-                                    <span class="mx-1">x</span>
-                                    <span>مجبوس دجاج</span>
-                                    <p class="text-muted mt-1 mb-0 mx-4"> <small>نص فرخة , دقوس ,كولا </small></p>
-                                </div>
-                                <p class="mb-0 fw-bold">400 ج.م</p>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="p-1 bg-secondary text-light rounded">1</span>
-                                    <span class="mx-1">x</span>
-                                    <span>مجبوس دجاج</span>
-                                    <p class="text-muted mt-1 mb-0 mx-4"> <small>نص فرخة , دقوس ,كولا </small></p>
-                                </div>
-                                <p class="mb-0 fw-bold">400 ج.م</p>
-                            </div>
-
-                        </div>
-
-                        <div class="bg-dark-gray p-3 my-4">
-                            <h5 class="fw-bold">
-                                <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1" aria-hidden="true"></i>
-                                الفاتورة
-                            </h5>
-                            <div class="d-flex justify-content-between">
-                                <p>مجموع طلبي</p>
-                                <p>400 ج.م</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p class="main-color">كوبون خصم</p>
-                                <p class="main-color">-100 ج.م</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p>رسوم التوصيل</p>
-                                <p>400 ج.م</p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p>رسوم الخدمة</p>
-                                <p>400 ج.م</p>
-                            </div>
-                            <div class="d-flex justify-content-between border-top pt-2">
-                                <h5 class="fw-bold">المجموع الكلي</h5>
-                                <h5 class="fw-bold">1100 ج.م</h5>
-                            </div>
-                        </div>
-
-
+                        <small class="text-muted py-1">رمز الطلب: 1588787</small>
+                        <p class="mb-0 py-1">
+                            1 X مجبوس دجاج
+                        </p>
+                        <small class="text-muted py-1"> نص فرخة </small>
+                        <p class="fw-bold mb-0 py-1">
+                            142.99 ج .م
+                        </p>
+                        <a href="#" class="text-decoration-underline py-1 fw-bold">تفاصيل الدفع </a>
                     </div>
+
+
                 </div>
 
-
+            </div>
         </section>
         <section class="before-footer"></section>
     </main>
@@ -268,7 +184,7 @@
         </div>
         <div class="footer">
             <div class="container py-sm-5 p-4">
-                <div class=" row m-0">
+                <div class="row m-0">
                     <div class="col-md-3" data-aos="zoom-in">
                         <h4 class="footer-title"> تواصل معنا </h4>
                         <ul class="list-unstyled px-0 pt-4">
