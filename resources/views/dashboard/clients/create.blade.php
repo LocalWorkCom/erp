@@ -76,6 +76,17 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="input-placeholder" class="form-label">@lang('client.countryCode')</label>
+                                        <input type="text" class="form-control" id="country_code" name="country_code"
+                                            value="{{ old('country_code') }}" placeholder="@lang('client.countryCode')" required>
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterCountryCode')
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('client.phone')</label>
                                         <input type="text" class="form-control" id="phone" name="phone"
                                             value="{{ old('phone') }}" placeholder="@lang('client.phone')" required>
@@ -161,6 +172,18 @@
                                         </div>
                                         <div class="invalid-feedback">
                                             @lang('validation.EnterPostalCode')
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
+                                        <label for="input-placeholder" class="form-label">@lang('client.addressPhone')</label>
+                                        <input type="text" class="form-control" id="address_phone"
+                                            name="address_phone" value="{{ old('address_phone') }}"
+                                            placeholder="@lang('client.addressPhone')" required>
+                                        <div class="valid-feedback">
+                                            @lang('validation.Correct')
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterValidAddressPhone')
                                         </div>
                                     </div>
                                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
