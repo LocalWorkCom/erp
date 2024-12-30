@@ -286,7 +286,6 @@ class DishCategoryController extends Controller
         $this->lang = $request->header('lang','ar');
         $menuDetails = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
 
-        // Fetch the sizes and addons for the dish
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->dishId)
             ->where('branch_id', $request->branchId)
             ->get();
@@ -295,8 +294,7 @@ class DishCategoryController extends Controller
             ->where('branch_id', $request->branchId)
             ->get();
 
-        // Structure the response data
-        $response = [
+        $dish = [
             'dish' => [
                 'id' => $menuDetails->dish_id,
                 'name' => $menuDetails->dish->name_ar,
@@ -326,10 +324,10 @@ class DishCategoryController extends Controller
             })
         ];
 
-        if (!$response) {
-            return RespondWithBadRequestData($this->lang, 2);
+        if (!$dish) {
+            return RespondWithBadRequestData($lang, 2);
         }
-        return ResponseWithSuccessData($this->lang, $response, 1);
+        return ResponseWithSuccessData($lang, $dish, 1);
     }
 
 }
