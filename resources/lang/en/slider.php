@@ -5,6 +5,7 @@ return [
     'Flag' => 'Type',//
     'Dish' => 'Dish',//
     'Offer' => 'Offer',//
+    'Discount' => 'Discount',//
     'ArabicName' => 'Arabic Name',//
     'EnglishName' => 'English Name',//
     'ArabicDescription' => 'Arabic Description',//
@@ -15,7 +16,10 @@ return [
     'EnterOffer'=>'Choose Offer',//
     'ChooseDish'=>'Choose Dish',//
     'EnterDish'=>'Choose Dish',//
+    'ChooseDiscount'=>'Choose Discount',//
+    'EnterDiscount'=>'Choose Discount',//
     'AddSlider'=>'Add Slider',//
     'EditSlider'=>'Edit Slider',//
     'ShowSlider'=>'Show Slider',//
+    'none' => 'None',
 ];
