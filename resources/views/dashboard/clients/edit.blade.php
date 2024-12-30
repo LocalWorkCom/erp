@@ -173,7 +173,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md1" value="1"
-                                                {{ isset($client) && $client->is_active == 1 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md1">
                                                 @lang('client.yes')
                                             </label>
@@ -181,7 +181,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_active"
                                                 id="Radio-md2" value="0"
-                                                {{ isset($client) && $client->is_active == 0 ? 'checked' : '' }}>
+                                                {{ $client->clientDetails->is_active == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md2">
                                                 @lang('client.no')
                                             </label>
@@ -192,7 +192,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="1"
-                                                {{ isset($client) && $client->is_default == 1 ? 'checked' : '' }}>
+                                                {{ $client->addresses->first()->is_default == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.yes')
                                             </label>
@@ -200,7 +200,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="0"
-                                                {{ isset($client) && $client->is_default == 0 ? 'checked' : '' }}>
+                                                {{ $client->addresses->first()->is_default == 0 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.no')
                                             </label>
