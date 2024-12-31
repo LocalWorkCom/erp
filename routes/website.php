@@ -64,4 +64,5 @@ Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->n
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
 
-Route::get('/order/store', [CartController::class, 'store'])->name('order.store');
+Route::get('/order-store', [CartController::class, 'store'])->name('web.order.add');
+
