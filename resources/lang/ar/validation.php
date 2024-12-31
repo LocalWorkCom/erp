@@ -26,7 +26,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
-    'notfound'=>'عفوا هذا المستخدم غير موجود بالسيستيم',
+    'notfound' => 'عفوا هذا المستخدم غير موجود بالسيستيم',
 
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
@@ -84,9 +84,9 @@ return [
     'regex' => 'صيغة :attribute غير صحيحة.',
     'date' => ':attribute يجب أن يكون تاريخًا صالحًا.',
     'unique_within_duration' => ':attribute موجود بالفعل لنفس المدة الزمنية',
-    'discount_exceeds_100'=>'قيمة الخصم لا يجب ان تتعدى نسبة 100',
-    'active_offer_conflict'=> 'يوجد عرض فعال بنفس الاسم',
-    'The dish_id field must be a number'=>'يجب ان يكون رقم الطبق رقم صحيح',
+    'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
+    'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
+    'The dish_id field must be a number' => 'يجب ان يكون رقم الطبق رقم صحيح',
     'attributes' => [
        
         'EnterCode' => 'أدخل كود الدوله',
@@ -97,6 +97,9 @@ return [
         'flag' => 'يرجى تحميل علم الدوله',
         'length' => 'أدخل عدد أرقام الهاتف',
         'email' => 'البريد الإلكتروني',
+        'address' => 'العنوان',
+        'city' => 'المدينة',
+        'state' => 'المحافظة',
         'password' => 'كلمة المرور',
         'name' => 'الاسم',
         'phone' => 'رقم الهاتف',
@@ -172,7 +175,7 @@ return [
         'value' => 'القيمة',
         'min_limit' => 'الحد الادنى',
         'max_limit' => 'الحد الاقصى',
-        'auth.name'=>'الاسم',
+        'auth.name' => 'الاسم',
 
     ],
     'countryCodeExists' => 'كود الدولة غير صالح.',
@@ -234,6 +237,13 @@ return [
     'EnterIsActive' => 'يجب ادخال علامة التقييم فعال ام لا',
     'EnterNameAr' => 'يجب ادخال الاسم بالعربيه ',
     'EnterNameEn' => 'يجب ادخال الاسم بالانجليزية ',
+    'EnterValidEmail' => 'ادخل البريد الاكتلاوني',
+    'EnterValidPhone' => 'ادخل رقم الهاتف',
+    'EnterAddress' => 'ادخل العنوان',
+    'EnterCity' => 'ادخل المدينة',
+    'EnterState' => 'ادخل المحافظة',
+    'EnterCountryCode' => 'ادخل رمز الدولة',
+    'EnterValidAddressPhone' => 'ادخل رقم هاتف العنوان',
     'The category have relation' => 'هذا التصنيف له علاقه بمنتج',
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
@@ -258,7 +268,7 @@ return [
 
         ],
         'auth.nameweb' => 'الاسم',
-                'auth.name' => 'الاسم',
+        'auth.name' => 'الاسم',
 
         'auth.emailweb' => 'البريد الإلكتروني',
         'auth.password' => 'كلمة المرور',

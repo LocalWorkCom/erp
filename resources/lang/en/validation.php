@@ -8,8 +8,8 @@ return [
     'string' => ':attribute must be a string.',
     'max' => ':attribute may not be greater than :max characters.',
     'confirmed' => ':attribute confirmation does not match.',
-    'active_offer_conflict'=> 'There is an active offer with the same name.',
-    'The dish_id field must be a number'=>'The dish_id field must be a number',
+    'active_offer_conflict' => 'There is an active offer with the same name.',
+    'The dish_id field must be a number' => 'The dish_id field must be a number',
     //add here the attributes of validation to translated
     'attributes' => [
         'nameapart'=>'nameapart',
@@ -168,6 +168,13 @@ return [
     'EnterNameEn' => 'Please enter name en',
     'EnterName' => 'Enter Name',
     'EnterIsActive' => 'Please enter the rate flag active or not',
+    'EnterValidEmail' => 'Enter Email Address',
+    'EnterValidPhone' => 'Enter Phone Number',
+    'EnterAddress' => 'Enter Address',
+    'EnterCity' => 'Enter City',
+    'EnterState' => 'Enter State',
+    'EnterCountryCode' => 'Enter Country Code',
+    'EnterValidAddressPhone' => 'Enter Address Phone',
     'The category have relation' => 'The category have relation',
 
     'custom' => [
