@@ -28,7 +28,7 @@
                     </div>
                     <ul class="profile-list list-unstyled px-0 pt-4">
                         <li>
-                            <a href="">
+                            <a href="{{ route('orders.show') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 
@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{ route('orders.tracking') }}">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-map-marked-alt main-color ms-2"></i>
 
@@ -126,7 +126,7 @@
                         </li>
                         <li>
 
-                            <a href="#">
+                            <a  data-bs-toggle="modal" data-bs-target="#logoutModal">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                     @lang('header.logout')
@@ -140,8 +140,8 @@
             </div>
         </div>
     </div>
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
                     @csrf
@@ -164,12 +164,4 @@
     </div>
 @endauth
 @push('scripts')
-    <script>
-        // logout modal
-        document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
-    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
-});
-
-
-    </script>
 @endpush

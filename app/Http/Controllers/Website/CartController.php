@@ -157,7 +157,7 @@ class CartController extends Controller
         $amount = $request->amount;
         try {
             $lang = $request->header('lang', 'en');
-            // $branchId = $request->input('branch_id');  
+            // $branchId = $request->input('branch_id');
 
             $coupon = GetCouponId($code);
             if ($coupon) {
@@ -206,12 +206,44 @@ class CartController extends Controller
     {
         $user = Auth::guard('client')->user();
 
-        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
-            ->where('client_id', $user->id)
-            ->whereIn('status', ['completed', 'cancelled'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $orders = Order::with([
+            'client',
+            'branch.country', // Eager load country through branch
+            'address',
+            'tracking',
+            'orderDetails',
+            'orderAddons.Addon',
+            'orderProducts',
+            'orderTransactions',
+            'coupon',
+        ])
+        ->where('client_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+
 
         return view('website.orders', compact('orders'));
+    }
+
+    public function paymentDetails($id){
+        $user = Auth::guard('client')->user();
+
+        $details =  Order::with([
+            'client',
+            'branch.country',
+            'address',
+            'tracking',
+            'orderDetails',
+            'orderAddons.Addon',
+            'orderProducts',
+            'orderTransactions',
+            'coupon',
+        ])
+        ->where('client_id', $user->id)
+        ->where('id', $id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        return view('website.order-payment-details',compact('details'));
     }
 }
