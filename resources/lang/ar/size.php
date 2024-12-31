@@ -11,5 +11,6 @@ return [
     'ArabicName' => 'الاسم بالعربي',
     'EnglishName' => 'الاسم بالانجليزي',
     'Actions' => 'العمليات',
+    'The size has relations' =>'هذا الحجم له علاقه بمنتج',
 
 ];

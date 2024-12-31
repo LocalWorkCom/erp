@@ -70,7 +70,7 @@
                                         <select name="dish_id" id="dish_id" class="form-control select2">
                                             <option value="" disabled>@lang('slider.ChooseDish')</option>
                                             @foreach($dishes as $dish)
-                                                @if ($dish->id != null)
+                                                @if ($dish && $dish->id != null)
                                                 <option value="{{ $dish->id }}"
                                                     {{ old('dish_id', $slider->dish_id) == $dish->id ? 'selected' : '' }}>
                                                     {{ $dish->name_ar . ' | ' . $dish->name_en }}
@@ -88,7 +88,7 @@
                                         <select name="offer_id" id="offer_id" class="form-control select2">
                                             <option value="" disabled>@lang('slider.ChooseOffer')</option>
                                             @foreach($offers as $offer)
-                                                @if($offer->id != null)
+                                                @if($offer && $offer->id != null)
                                                 <option value="{{ $offer->id }}"
                                                     {{ old('offer_id', $slider->offer_id) == $offer->id ? 'selected' : '' }}>
                                                     {{ $offer->name_ar . ' | ' . $offer->name_en }}
@@ -106,7 +106,7 @@
                                         <select name="discount_id" id="discount_id" class="form-control select2" {{ old('flag', $slider->flag) === 'discount' ? '' : 'disabled' }}>
                                             <option value="" disabled>@lang('slider.ChooseDiscount')</option>
                                             @foreach($discounts as $discount)
-                                                @if ($discount->id != null)
+                                                @if ($discount && $discount->dish && $discount->discount)
                                                 <option value="{{ $discount->id }}"
                                                     {{ old('discount_id', $slider->discount_id) == $discount->id ? 'selected' : '' }}>
                                                     {{ $discount->dish->name_ar . " | " . $discount->dish->name_en . " | " . number_format($discount->discount->value, 0) . ($discount->discount->type == "percentage" ? "%" : "EGP") }}

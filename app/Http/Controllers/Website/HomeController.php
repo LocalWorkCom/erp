@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StaticPageResource;
 use App\Models\Branch;
+use App\Models\BranchMenu;
 use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
@@ -34,7 +35,7 @@ class HomeController extends Controller
         } else {
             Log::warning('No coordinates found in cookies');
         }
-        
+
         if ($userLat && $userLon) {
             $nearestBranch = getNearestBranch($userLat, $userLon);
 
@@ -55,8 +56,9 @@ class HomeController extends Controller
         $discounts = DishDiscount::with(['dish', 'discount'])->get();
         $popularDishes = getMostDishesOrdered($branchId,5);
         // dd($popularDishes);
+        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
             ->where('is_active', true)
             ->get();
 
@@ -96,9 +98,10 @@ class HomeController extends Controller
         if (!$branchId) {
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
+        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
 
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
             ->where('is_active', true)
             ->get();
 
@@ -254,13 +257,13 @@ class HomeController extends Controller
             'value' => 'required|integer|min:1|max:5',
             'note' => 'nullable|string|max:1000',
         ]);
-    
+
         $rating = new Rate();
         $rating->value = $validatedData['value'];
         $rating->note = $validatedData['note'];
         $rating->created_by = auth()->id();
         $rating->save();
-    
+
         return redirect()->back()->with('success', 'شكراً لتقييمك!');
     }
 }

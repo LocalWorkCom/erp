@@ -54,5 +54,7 @@ return [
     'confirm' => 'Confirm',
     'cancel' => 'Cancel',
     'deleteaddress' => 'You will delete this address !?',
+    'successmessage' => 'Done',
+    'makedefault'=>'Make address default',
 
 ];

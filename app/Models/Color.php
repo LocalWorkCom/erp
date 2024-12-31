@@ -13,4 +13,8 @@ class Color extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot('color_id');
     }
+    public function productColors()
+    {
+        return $this->hasMany(ProductColor::class);
+    }
 }

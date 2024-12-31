@@ -633,7 +633,6 @@
             // Apply coupon functionality
 
             const saveChanges = (itemIndex) => {
-                console.log(cart);
 
                 var version = cart[itemIndex].size && cart[itemIndex].size.label ? '_v1' : '_v2';
                 let modal = $(`#productModal${version}`);

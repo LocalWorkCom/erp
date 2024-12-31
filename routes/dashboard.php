@@ -49,6 +49,9 @@ use App\Http\Controllers\Dashboard\BranchMenuController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonController;
 use App\Http\Controllers\Dashboard\BranchMenuSizeController;
 use App\Http\Controllers\Dashboard\BranchMenuAddonCategoryController;
+use App\Http\Controllers\Dashboard\CustomerReportController;
+use App\Http\Controllers\Dashboard\PurchasingReportController;
+
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\DishProductController;
 
@@ -559,6 +562,9 @@ Route::prefix('dashboard')->middleware('auth:admin')->group(function () {
     Route::group(['prefix' => 'reports'], function () {
         Route::group(['prefix' => 'customers'], function () {
             Route::get('list', [CustomerReportController::class, 'customers'])->name('reports.customers.list')->middleware('role_or_permission:view customers_reports');
+        });
+        Route::group(['prefix' => 'purchasing'], function () {
+            Route::get('list', [PurchasingReportController::class, 'list'])->name('reports.purchasing.list')->middleware('role_or_permission:view purchasing_reports');
         });
     });
 

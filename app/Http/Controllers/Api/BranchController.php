@@ -199,7 +199,7 @@ class BranchController extends Controller
         $lang = $request->header('lang', 'ar');
         $userLat = $request->query('latitute');
         $userLon = $request->query('longitute');
-        $all = $request->query('all', 0);
+        $all = $request->query('all', 1);
         $searchName = $request->query('name'); // Capture the search query for branch name
 
         // Determine the correct column for branch name based on language
