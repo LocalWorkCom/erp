@@ -147,6 +147,11 @@ class CountryService
         if ($country->users()->count() > 0) {
             return RespondWithBadRequest($lang, 6);
         }
+
+        $product_exists = Product::where('currency_code',$country->currency_code)->exists();
+        if ($product_exists) {
+            return RespondWithBadRequest($lang, 6);
+        }
         // Delete the country
         $country->delete();
 
