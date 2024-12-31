@@ -238,9 +238,26 @@ function formatTime(time) {
 }
 
   // logout modal
-  document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
-    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
-});
+  document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (event) {
+        event.preventDefault(); 
+
+        const profileModal = document.getElementById("profileModal");
+        const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+
+        if (profileModal) {
+          const profileInstance = bootstrap.Modal.getInstance(profileModal);
+          if (profileInstance) {
+            profileInstance.hide();
+          }
+        }
+        logoutModal.show();
+      });
+    }
+  });
 
 
   // notfications-alert modal 
