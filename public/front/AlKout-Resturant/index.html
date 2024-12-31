@@ -670,75 +670,8 @@
         <div class="modal-header border-0">
           <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <!-- body-register  -->
-        <div class="modal-body register px-4" id="registerBody">
-          <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
-            </div>
-
-            <div class="col-md-7 right-side p-3">
-              <h2 class="main-color fw-bold">مرحبا بك!</h2>
-              <h5> يمكنك انشاء حساب بكل سهولة</h5>
-
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
-              </div>
-
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
-                <select id="country" class="selectpicker me-2" data-live-search="true">
-                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
-                  </option>
-                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
-                  </option>
-                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
-                  </option>
-                </select>
-              </div>
-
-              <div class="input-group mb-3">
-                <input type="email" class="form-control" id="emailInput"
-                  placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
-              </div>
-
-
-              <div class="input-group position-relative mb-3">
-                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
-                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
-                  <i class="fas fa-eye" id="eyeIcon"></i>
-                </button>
-              </div>
-
-
-              <button type="submit" class="btn mb-2 w-100">انشاء حساب</button>
-
-              <p class="text-center">
-                <small>
-                  هل لديك حساب بالفعل؟
-                  <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
-                    aria-label="تسجيل الدخول">تسجيل دخول</a>
-                </small>
-              </p>
-
-              <p class="text-center">
-                <small>
-                  <span class="text-muted">عند انشاء حساب انت توافق علي</span>
-
-                  <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و <a
-                    class="main-color text-decoration-underline" href="./policy.html"> الشروط و الاحكام</a>
-
-                </small>
-              </p>
-            </div>
-
-            <div class="col-md-5 login-background">
-              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
-            </div>
-          </div>
-        </div>
         <!-- body-login  -->
-        <div class="modal-body login d-none px-4" id="loginBody">
+        <div class="modal-body login  px-4" id="loginBody">
           <div class="row">
             <div class="col-12 d-flex justify-content-center">
               <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
@@ -807,7 +740,75 @@
               <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
             </div>
           </div>
+        </div> 
+        <!-- body-register  -->
+        <div class="modal-body register d-none px-4" id="registerBody">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+            </div>
+
+            <div class="col-md-7 right-side p-3">
+              <h2 class="main-color fw-bold">مرحبا بك!</h2>
+              <h5> يمكنك انشاء حساب بكل سهولة</h5>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
+                <select id="country" class="selectpicker me-2" data-live-search="true">
+                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
+                  </option>
+                </select>
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" id="emailInput"
+                  placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
+              </div>
+
+
+              <div class="input-group position-relative mb-3">
+                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
+                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                  <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+
+
+              <button type="submit" class="btn mb-2 w-100">انشاء حساب</button>
+
+              <p class="text-center">
+                <small>
+                  هل لديك حساب بالفعل؟
+                  <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
+                    aria-label="تسجيل الدخول">تسجيل دخول</a>
+                </small>
+              </p>
+
+              <p class="text-center">
+                <small>
+                  <span class="text-muted">عند انشاء حساب انت توافق علي</span>
+
+                  <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و <a
+                    class="main-color text-decoration-underline" href="./policy.html"> الشروط و الاحكام</a>
+
+                </small>
+              </p>
+            </div>
+
+            <div class="col-md-5 login-background">
+              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+            </div>
+          </div>
         </div>
+       
         <!-- Forget Body -->
         <div class="modal-body forget d-none px-4" id="forgetBody">
           <div class="row">
