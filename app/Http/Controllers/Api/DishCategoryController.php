@@ -273,10 +273,15 @@ class DishCategoryController extends Controller
 
             // Scenario 3: If offers = 1, fetch active offers with details
             if ($offers == 1) {
-                $activeOffers = OfferResource::collection (Offer::with('details')
-                    ->whereHas('details')
+                $activeOffers = Offer::
+                    with('details')
+                ->whereHas('details')
+//                dd($activeOffers);
+                    ->where('branch_id', $branchId)
+                    ->orWhere('branch_id', -1)
                     ->where('is_active', 1)
-                    ->get())
+                    ->get()
+//                dd($activeOffers);
                     ->map(function ($offer) {
                         // Assuming you want to add the translated name for each detail
                         $offer->details->each(function ($detail) {
@@ -289,6 +294,11 @@ class DishCategoryController extends Controller
                         });
                         return $offer;
                     }) ?? collect();
+                $activeOffers= OfferResource::collection($activeOffers);
+                $activeOffers = $activeOffers->filter(function ($offer) {
+                    return $offer->details->isNotEmpty();
+                });
+
 
                 return ResponseWithSuccessData($lang, $activeOffers, 1);
             }
