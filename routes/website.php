@@ -32,7 +32,7 @@ Route::middleware(['auth:client'])->group(function () {
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
     Route::get('/myaddress/active/{id}', [LocationController::class, 'activeAddress'])->name('active.Address');
 
-   // Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
+    // Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
 
 });
 
@@ -60,7 +60,7 @@ Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->n
 Route::get('/orders', [CartController::class, 'pastOrders'])->name('orders.show');
 Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
 Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
-Route::get('/order/add', [CartController::class, 'store'])->name('order.add');
+Route::get('/order-store', [CartController::class, 'store'])->name('web.order.add');
 
 Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
 Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');
