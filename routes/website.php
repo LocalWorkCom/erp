@@ -35,6 +35,7 @@ Route::middleware(['auth:client'])->group(function () {
     Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
     Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
     Route::get('/order/payment/{id}/details', [CartController::class, 'paymentDetails'])->name('order.paymentdetails');
+    Route::get('/order-store', [CartController::class, 'store'])->name('web.order.add');
 
     Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
     Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');
@@ -64,5 +65,4 @@ Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->n
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
 
-Route::get('/order-store', [CartController::class, 'store'])->name('web.order.add');
 
