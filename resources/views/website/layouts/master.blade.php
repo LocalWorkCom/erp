@@ -62,6 +62,7 @@
 
     <!-- modals -->
     @include('website.layouts.footer')
+    @include('website.success-modal')
 
     <!-- login modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -202,7 +203,20 @@
 
         });
     </script>
+    @if (session('showModal'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Show the modal
+                const confirmOrderModal = new bootstrap.Modal(document.getElementById('successmodal'));
+                confirmOrderModal.show();
 
+                // Close the modal after 1 second
+                setTimeout(() => {
+                    confirmOrderModal.hide();
+                }, 1000); // 1000ms = 1 second
+            });
+        </script>
+    @endif
     @stack('scripts')
 </body>
 

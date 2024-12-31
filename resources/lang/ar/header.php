@@ -56,5 +56,7 @@ return [
     'confirm' => 'تأكيد',
     'cancel' => 'إلغاء',
     'deleteaddress' => 'سوف تقوم بحذف هذا العنوان ؟ ',
+    'successmessage' => 'تم تنفيذ طلبك بنجاح',
+    'makedefault'=>'عنوان افتراضى',
 
 ];

@@ -30,6 +30,8 @@ Route::middleware(['auth:client'])->group(function () {
     Route::post('/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
     Route::post('/address/delete/{id}', [LocationController::class, 'destroyAddress'])->name('address.delete');
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
+    Route::get('/myaddress/active/{id}', [LocationController::class, 'activeAddress'])->name('active.Address');
+
     Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
 
 });

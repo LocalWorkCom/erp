@@ -15,7 +15,7 @@ class LocationController extends Controller
     {        $lang = app()->getLocale();
 
 
-        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
+        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)->where('is_active',1)
             ->withCount([
                 'orders as has_inprogress_or_pending_orders' => function ($query) {
                     $query->whereIn('status', ['inprogress', 'pending']);
@@ -117,7 +117,7 @@ class LocationController extends Controller
         // Set common fields
         $address->user_id = Auth::guard('client')->user()->id;
         $address->state = $request->input('state', 'state');
-        $address->country = $request->input('country', 'country');
+        // $address->country = $request->input('country', 'country');
         $address->latitude = $request->input('latitude', 30.0308979);
         $address->longtitude = $request->input('longitude', 31.2053958);
         $address->city = $request->input('city', 'city');
@@ -129,7 +129,7 @@ class LocationController extends Controller
         $address->save();
 
         // Redirect with a success message
-        return redirect()->route('showAddress')->with('success', __('messages.address_saved'));
+        return redirect()->route('showAddress')->with(['showModal' => true]);
     }
 
     // Map fields based on delivery type (apartment, villa, office)
@@ -187,5 +187,8 @@ class LocationController extends Controller
         } else {
             return redirect()->route('showAddress')->with('error', __('Address cannot deleted.'));
         }
+    }
+    public function activeAddress($id){
+
     }
 }

@@ -41,12 +41,18 @@
                                     </small>
 
                                 </div>
-                                @if ($item->has_inprogress_or_pending_orders == 0)
-                                    <div class="dropdown">
-                                        <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown">
+                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <button class="dropdown-item w-100"
+                                                onclick="window.location.href='{{ route('active.Address', ['id' => $item->id]) }}'">
+                                                @lang('header.makedefault')
+                                            </button>
+                                        </li>
+                                        @if ($item->has_inprogress_or_pending_orders == 0)
                                             <li>
                                                 <button class="dropdown-item w-100"
                                                     onclick="window.location.href='{{ route('edit.Address', ['id' => $item->id]) }}'">
@@ -60,9 +66,9 @@
                                                         @lang('auth.delete')</button>
                                                 </li>
                                             @endif
-                                        </ul>
-                                    </div>
-                                @endif
+                                        @endif
+                                    </ul>
+                                </div>
                             </li>
                         @endforeach
                     </ul>
@@ -99,6 +105,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 @push('scripts')
     <script>
@@ -126,4 +133,6 @@
             }, 200);
         });
     </script>
+
+
 @endpush
