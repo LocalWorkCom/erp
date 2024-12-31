@@ -12,6 +12,7 @@ return [
     'The dish_id field must be a number' => 'The dish_id field must be a number',
     //add here the attributes of validation to translated
     'attributes' => [
+        'type_id' => 'Type Name',
         'nameapart'=>'nameapart',
         'notfound'=>'User not found',
         'birth_date' => 'Birth Date',
@@ -104,7 +105,6 @@ return [
     'image_en' => 'English Image',
     'branches' => 'branches',
     'branches.*' => 'branch',
-    'type_id' => 'Type Name',
     'active' => 'Is Active',
     'value' => 'Value',
     'countryCodeExists' => 'Country Code is not valid',
@@ -213,6 +213,9 @@ return [
         'country_code_apart' => 'Country Code',
         'addressdetailapart' => 'Detailed Address',
         'markapart' => 'Mark',
+        'type_id' => [
+            'required' => 'type name is required.',
+        ],
     ],
     'attributes' => [
         'nameapart' => 'Apartment Name',
