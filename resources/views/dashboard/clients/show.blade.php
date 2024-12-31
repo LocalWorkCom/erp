@@ -50,7 +50,7 @@
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.dob')</label>
                                     <p class="form-text">
-                                        {{ $client->clientDetails && $client->clientDetails->date_of_birth ? $client->clientDetails->date_of_birth : __('client.none') }}
+                                        {{ $client->birth_date ?? __('client.none') }}
                                     </p>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
