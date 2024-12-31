@@ -35,7 +35,6 @@ return [
     'confirmeaddress' => 'Confirm address',
     'privacy' => 'Privacy',
     'policy' => 'Policy',
-
     'locationcomplete' => 'Complete the delivery location',
     'office' => 'Office',
     'villa' => 'Villa',
@@ -54,4 +53,8 @@ return [
     'logoutalert' => 'Are you sure you want to log out?',
     'confirm' => 'Confirm',
     'cancel' => 'Cancel',
+    'deleteaddress' => 'You will delete this address !?',
+    'successmessage' => 'Done',
+    'makedefault'=>'Make address default',
+
 ];

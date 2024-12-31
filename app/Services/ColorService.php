@@ -125,14 +125,21 @@ class ColorService
     {
         $lang = app()->getLocale();
 
-        if (!CheckToken() && $checkToken) {
+        // Check token
+        if ($checkToken && !CheckToken()) {
             return RespondWithBadRequest($lang, 5);
         }
 
         // Find the color by ID, or throw a 404 if not found
         $color = Color::find($id);
         if (!$color) {
-            return  RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($lang, 8);
+        }
+
+        // Check if the color is associated with any products
+        $activeProductColors = $color->productColors()->count();
+        if ($activeProductColors > 0) {
+            return CustomRespondWithBadRequest(__('color.The color has relations'));
         }
 
         // Delete the color

@@ -25,6 +25,9 @@ class BranchMenu extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'created_by',
+        'modified_by',
+        'deleted_by',
     ];
 
     // Relationships
@@ -43,6 +46,16 @@ class BranchMenu extends Model
         return $this->belongsTo(Dish::class, 'dish_id');
     }
 
+    public function branchMenuAddons()
+    {
+        return $this->hasMany(BranchMenuAddon::class, 'dish_id', 'dish_id');
+    }
+
+    public function branchMenuSizes()
+    {
+        return $this->hasMany(BranchMenuSize::class, 'dish_id', 'dish_id');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -56,5 +69,9 @@ class BranchMenu extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    public function scopeActive($query){
+        return $query->where('is_active', 1);
     }
 }

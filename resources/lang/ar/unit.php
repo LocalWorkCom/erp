@@ -9,5 +9,6 @@ return [
     'ArabicName' => 'الاسم بالعربي',
     'EnglishName' => 'الاسم بالانجليزي',
     'Actions' => 'العمليات',
-
+    'The unit have relation'=>'هذه الوحده لها علاقه بمنتج',
+    'The unit with ID already exists for this product.' => 'الوحده متكررة لنفس المنتج',
 ];

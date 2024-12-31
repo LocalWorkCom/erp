@@ -199,7 +199,7 @@ class BranchController extends Controller
         $lang = $request->header('lang', 'ar');
         $userLat = $request->query('latitute');
         $userLon = $request->query('longitute');
-        $all = $request->query('all', 0);
+        $all = $request->query('all', 1);
         $searchName = $request->query('name'); // Capture the search query for branch name
 
         // Determine the correct column for branch name based on language
@@ -212,7 +212,10 @@ class BranchController extends Controller
             $branchesQuery->where($nameColumn, 'like', "%{$searchName}%");
         }
 
-        $branches = ($all == 1) ? $branchesQuery->get() : null;
+        $get_all_branches = $branchesQuery->get();
+        $get_all_branches->makeHidden(['name_site', 'address_site']);
+
+        $branches = ($all == 1) ? $get_all_branches : null;
 
         $data = [];
 
@@ -223,14 +226,18 @@ class BranchController extends Controller
                 $data['branch'] = $nearestBranch;
             } else {
                 $defaultBranchId = getDefaultBranch();
-                $data['branch'] = DB::table('branches')->find($defaultBranchId);
+                $data['branch'] = Branch::find($defaultBranchId);
             }
+            $data['branch']->makeHidden(['name_site', 'address_site']);
         } else {
             $defaultBranchId = getDefaultBranch();
-            $data['branch'] = DB::table('branches')->find($defaultBranchId);
+            $data['branch'] = Branch::find($defaultBranchId);
+            $data['branch']->makeHidden(['name_site', 'address_site']);
         }
 
         // Include all branches if fetched
+
+
         $data['branches'] = $branches;
 
         return ResponseWithSuccessData($lang, $data, 1);

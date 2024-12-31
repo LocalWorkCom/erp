@@ -25,14 +25,14 @@ class DishDiscount extends Model
         'created_at',
         'updated_at',
     ];
-    
+
     public function dish()
     {
-        return $this->belongsTo(Dish::class, 'dish_id');
+        return $this->belongsTo(Dish::class, 'dish_id')->whereNull('deleted_at');
     }
 
     public function discount()
     {
-        return $this->belongsTo(Discount::class, 'discount_id');
+        return $this->belongsTo(Discount::class, 'discount_id')->whereNull('deleted_at');
     }
 }

@@ -1,4 +1,4 @@
-<div class="modal-body login d-none px-4" id="loginBody">
+<div class="modal-body login  px-4" id="loginBody">
     <form method="POST" id="login-Form" action="{{ route('website.login') }}">
         @csrf
         <div class="row">

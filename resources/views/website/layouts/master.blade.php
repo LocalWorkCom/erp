@@ -52,14 +52,17 @@
 
 <body>
 
- 
+
     @include('website.layouts.header') {{-- Default Header --}}
 
     <main>
         @yield('content')
+        <section class="before-footer"></section>
     </main>
+
     <!-- modals -->
     @include('website.layouts.footer')
+    @include('website.success-modal')
 
     <!-- login modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -68,6 +71,9 @@
                 <div class="modal-header border-0">
                     <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal"
                         aria-label="Close"></button>
+                </div>
+                <div id="msg-error" style="display: none;text-align:center" class="message bg-warning p-2 rounded-3">
+                    الرجاء قم بتسجيل الدخول لمتابعة الدفع
                 </div>
                 @include('website.auth.login')
                 @include('website.auth.register')
@@ -129,6 +135,29 @@
 
     @include('website.delivery')
     @include('website.location')
+    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
+                    @csrf
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
+                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
+                    </div>
+                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2"
+                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
@@ -148,6 +177,27 @@
         AOS.init();
     </script>
     <script>
+        // Function to update the cart count
+
+        function updateCartCount() {
+            // Get cart data from localStorage or default to an empty object
+            let cart = JSON.parse(localStorage.getItem('cart')) || {
+                items: []
+            };
+
+            console.log(cart);
+
+            // Check if cart has an items array and calculate the count
+            let items = cart.items || []; // Safely access the items array
+            let count = items.length; // Count the total number of items
+
+            // Update the cart count in the DOM
+            document.getElementById('cart-count').textContent = count;
+        }
+
+
+        // Call this function whenever the cart changes
+
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('branchSearch');
             const branchItems = document.querySelectorAll('.branch-item');
@@ -171,9 +221,26 @@
                     }
                 });
             });
+
+
+            updateCartCount();
+
         });
     </script>
+    @if (session('showModal'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Show the modal
+                const confirmOrderModal = new bootstrap.Modal(document.getElementById('successmodal'));
+                confirmOrderModal.show();
 
+                // Close the modal after 1 second
+                setTimeout(() => {
+                    confirmOrderModal.hide();
+                }, 1000); // 1000ms = 1 second
+            });
+        </script>
+    @endif
     @stack('scripts')
 </body>
 

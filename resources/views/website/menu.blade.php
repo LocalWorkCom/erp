@@ -65,7 +65,7 @@
             <div class="tab-content pt-5" id="pills-tabContent">
                 @foreach ($menuCategories as $key => $menuCategory)
                     @if ($menuCategory->dish_categories)
-                        <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="pills-{{ $menuCategory->id }}"
+                        <div class="tab-pane fade {{$categoryId == $menuCategory->dish_categories->id  && $key == 0 ? 'show active' : '' }}" id="pills-{{ $menuCategory->id }}"
                             role="tabpanel" aria-labelledby="pills-{{ $menuCategory->id }}-tab">
                             <div class="row mx-0">
                                 @foreach ($menuCategory->dish_categories->dishes as $dish)
@@ -130,13 +130,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                            <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                            <figcaption>
-                                                <h4>
-                                                    لا توجد منتجات
-                                                </h4>
-                                            </figcaption>
-                                        </figure> -->
+                                                <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                                                <figcaption>
+                                                    <h4>
+                                                        لا توجد منتجات
+                                                    </h4>
+                                                </figcaption>
+                                            </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">

@@ -9,6 +9,7 @@ use App\Models\BranchMenu;
 use App\Models\BranchMenuAddon;
 use App\Models\BranchMenuCategory;
 use App\Models\BranchMenuSize;
+use App\Models\ClientAddress;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\Order;
@@ -29,11 +30,31 @@ class CartController extends Controller
      */
     public function getDishDetail(Request $request)
     {
-        $IDBranch = getDefaultBranch();
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
+        if ($userLat && $userLon) {
+            Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
+        } else {
+            Log::warning('No coordinates found in cookies');
+        }
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
+        }
         // Fetch the dish details for the branch
         $BranchMenu = BranchMenu::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->first();
 
         // Check if the dish exists
@@ -43,17 +64,16 @@ class CartController extends Controller
                 'message' => 'Dish not found in this branch.'
             ], 404);
         }
-        $Branch = Branch::find($IDBranch);
+        $Branch = Branch::find($branchId);
 
         // Fetch the sizes and addons for the dish
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->get();
 
         $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->id)
-            ->where('branch_id', $IDBranch)
+            ->where('branch_id', $branchId)
             ->get();
-
         // Structure the response data
         $response = [
             'status' => 'success',
@@ -66,8 +86,10 @@ class CartController extends Controller
                 'description' => $BranchMenu->dish->description,
                 'price' => $BranchMenu->dish->has_size ? 0 : $BranchMenu->price,
                 'image' => $BranchMenu->dish->image ?? null,
+                'has_size' => $BranchMenu->dish->has_size,
+                'has_addon' => count($BranchMenuAddon) > 0 ? 1 : 0,
 
-                'mostOrdered' => checkDishExistMostOrderd($BranchMenu->dish_id)
+                'mostOrdered' => checkDishExistMostOrderd($branchId, $BranchMenu->dish_id)
 
             ],
             'sizes' => $BranchMenuSize->map(function ($size) {
@@ -95,15 +117,18 @@ class CartController extends Controller
     }
     public function Cart()
     {
-        $branches = Branch::all();
+        $address = '';
+        // $branches = Branch::all();
+        if(auth('client')->check()){
 
-        return view('website.cart', compact('branches'));
+            $address = ClientAddress::where('is_active', 1)->where('is_default', 1)->where('user_id',auth('client')->user()->id)->first();
+        }
+        return view('website.cart', compact('address'));
     }
-    public function Checkout()
+    public function Checkout(Request $request)
     {
-        $branches = Branch::all();
-
-        return view('website.checkout', compact('branches'));
+        // $branches = Branch::all();
+        return view('website.checkout');
     }
     public function isCouponValid(Request $request)
     {
@@ -143,11 +168,29 @@ class CartController extends Controller
             ], 500);
         }
     }
-    public function trackOrder($orderId)
+    public function trackOrder()
     {
-        $order = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
-            ->findOrFail($orderId);
+        $user = Auth::guard('client')->user();
 
-        return view('website.track-order', compact('order'));
+        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+            ->where('client_id', $user->id)
+            ->whereNotIn('status', ['completed', 'cancelled'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('website.track-order', compact('orders'));
+    }
+
+    public function pastOrders()
+    {
+        $user = Auth::guard('client')->user();
+
+        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+            ->where('client_id', $user->id)
+            ->whereIn('status', ['completed', 'cancelled'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('website.orders', compact('orders'));
     }
 }
