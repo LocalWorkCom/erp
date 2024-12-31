@@ -2,8 +2,10 @@
 
 
 namespace App\Services;
+
 use App\Models\Unit;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -107,22 +109,31 @@ class UnitService
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
-    public function delete(Request $request, $id,$checkToken)
+    public function delete(Request $request, $id, $checkToken)
     {
         $lang = app()->getLocale();
 
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
-        // Find the unit by ID, or throw a 404 if not found
+
+        // Find the unit by ID, or return a 404 response if not found
         $unit = Unit::find($id);
         if (!$unit) {
-            return  RespondWithBadRequestData($lang, 8);
+            return RespondWithBadRequestData($lang, 8);
         }
-        // Check if there are any products associated with this unit
+
+        // Check if there are any products associated with this unit via productUnits()
         if ($unit->productUnits()->count() > 0) {
             return CustomRespondWithBadRequest(__('unit.The unit have relation'));
         }
+
+        // Check if the unit is referenced as main_unit_id in the products table
+        $isMainUnit = Product::where('main_unit_id', $id)->exists();
+        if ($isMainUnit) {
+            return CustomRespondWithBadRequest(__('unit.The unit have relation'));
+        }
+
         // Delete the unit
         $unit->delete();
 
