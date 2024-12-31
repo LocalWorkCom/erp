@@ -41,12 +41,12 @@
                     @endif
                 @endforeach
 
-                {{-- <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation">
                     <form id="searchForm">
                         <input id="searchInput" class="form-control py-2" type="search" placeholder="ابحث في القائمة"
                             aria-label="Search">
                     </form>
-                </li> --}}
+                </li>
             </ul>
 
             <div class="d-flex justify-content-end">
@@ -75,7 +75,7 @@
                                                     <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
                                                         alt="{{ $dish->name_ar }}">
                                                 </figure>
-                                            
+
                                             <div class="fav">
                                                 <form action="{{ route('add.favorite') }}" method="POST"
                                                     class="favorite-form">
@@ -96,7 +96,7 @@
                                                 </span>
                                                 <div class="d-flex justify-content-between pt-4">
                                                     <button class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#productModal"> @lang('header.addtocart')
+                                                        data-bs-target="#productModal" onclick="fill_cart('{{ $dish->id }}')"> @lang('header.addtocart')
                                                         +
                                                     </button>
                                                     <span>{{ $dish->price }} ج . م</span>
@@ -203,6 +203,7 @@
         </div>
     </section>
 @endsection
+@include('website.cart-modal')
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
