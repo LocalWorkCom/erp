@@ -686,10 +686,10 @@ function helper_update_by_id(array $data, $id, $table)
 function getNearestBranch($userLat, $userLon)
 {
     $nearestBranch = Branch::select('*') // Select all columns
-    ->selectRaw("(6371 * acos(cos(radians($userLat)) 
-                * cos(radians(latitute)) 
-                * cos(radians(longitute) - radians($userLon)) 
-                + sin(radians($userLat)) 
+    ->selectRaw("(6371 * acos(cos(radians($userLat))
+                * cos(radians(latitute))
+                * cos(radians(longitute) - radians($userLon))
+                + sin(radians($userLat))
                 * sin(radians(latitute)))) AS distance")
     ->whereNotNull('latitute')
     ->whereNotNull('longitute')
@@ -1017,14 +1017,19 @@ function respondError($error, $code, $errorMessages = [])
 function getMostDishesOrdered($IDBranch, $limit = 5)
 {
     return BranchMenu::select('dishes.*')
-        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
-        ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
-        ->groupBy('dishes.id', 'dishes.name_ar')
-        ->selectRaw('SUM(order_details.quantity) as total_quantity')
-        ->where('branch_id', $IDBranch)
-        ->orderByDesc('total_quantity')
-        ->orderBy('dishes.created_at', 'desc') // Order by newest first
-        ->limit($limit)->get();
+    ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
+    ->leftJoin('branches', 'branches.id', 'branch_menus.branch_id')
+    ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+    ->leftJoin('countries', 'countries.id', '=', 'branches.country_id') // Join the countries table
+    ->groupBy('dishes.id', 'dishes.name_ar', 'countries.currency_symbol') // Include currency_symbol in GROUP BY
+    ->selectRaw('SUM(order_details.quantity) as total_quantity')
+    ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
+    ->where('branch_id', $IDBranch)
+    ->orderByDesc('total_quantity')
+    ->orderBy('dishes.created_at', 'desc') // Order by newest first
+    ->limit($limit)
+    ->get();
+
 }
 function checkDishExistMostOrderd($IDBranch, $id)
 {
