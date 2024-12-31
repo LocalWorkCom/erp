@@ -39,6 +39,16 @@
                             </a>
                         </div>
                         <div class="card-body">
+                            @if ($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div class="alert alert-solid-danger alert-dismissible fade show">
+                                        {{ $error }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @endif
                             @if (session('message'))
                                 <div class="alert alert-solid-info alert-dismissible fade show">
                                     {{ session('message') }}
