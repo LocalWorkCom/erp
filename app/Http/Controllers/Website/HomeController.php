@@ -99,7 +99,6 @@ class HomeController extends Controller
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
         $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
-
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
             ->where('is_active', true)
