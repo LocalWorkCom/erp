@@ -608,47 +608,58 @@
 
 
         function delete_item(id) {
-            Swal.fire({
-                title: '{{ __('country.warning_titleper') }}',
-                text: '{{ __('country.delete_confirmationper') }}',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '{{ __('country.confirm_delete') }}',
-                cancelButtonText: '{{ __('country.cancel') }}',
-                confirmButtonColor: '#3085d6'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var form = document.getElementById('delete-form-' + id);
+    Swal.fire({
+        title: '{{ __('country.warning_titleper') }}',
+        text: '{{ __('country.delete_confirmationper') }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '{{ __('country.confirm_delete') }}',
+        cancelButtonText: '{{ __('country.cancel') }}',
+        confirmButtonColor: '#3085d6'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '{{ route('country.delete', ':id') }}'.replace(':id', id),
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'DELETE'
+                },
+                success: function(response) {
+                    if (response.status) {
+                        // Success - Country deleted
+                        Swal.fire({
+                            icon: 'success',
+                            title: '{{ __('country.delete_success') }}',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
 
-                    $.ajax({
-                        url: '{{ route('country.delete', ':id') }}'.replace(':id', id),
-                        type: 'POST',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            _method: 'DELETE'
-                        },
-                        success: function(response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: '{{ __('country.delete_success') }}',
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: '{{ __('country.delete_error') }}',
-                                text: xhr.responseJSON?.error || 'An error occurred.',
-                                showConfirmButton: true
-                            });
-                        }
+                        // Optionally refresh or update the UI
+                        location.reload();
+                    } else {
+                        // Handle cases where the country cannot be deleted
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('country.delete_error') }}',
+                            text: response.message ,
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __('country.delete_error') }}',
+                        text: xhr.responseJSON?.error ,
+                        showConfirmButton: true
                     });
                 }
             });
         }
+    });
+}
+
     </script>
     <script>
         // Add event listener for the form submission

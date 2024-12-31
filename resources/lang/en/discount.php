@@ -23,4 +23,6 @@ return [
     'Save' =>'Save',
     'Remove' =>'Remove',
     'duplicate_active_code' =>'duplicate_active_code',
+    'The discount have relation' =>' The discount have relation',
+
 ];

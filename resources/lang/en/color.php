@@ -9,5 +9,6 @@ return [
     'ArabicName' => 'Arabic Name',
     'EnglishName' => 'English Name',
     'Hexacode' => 'Hexa color code',
+    'The color has relations' =>'The color has relations',
     'Actions' => 'Actions',
 ];

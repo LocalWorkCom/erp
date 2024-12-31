@@ -28,7 +28,7 @@
                     </div>
                     <ul class="profile-list list-unstyled px-0 pt-4">
                         <li>
-                            <a href="{{ route('orders.show') }}">
+                            <a href="">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 
@@ -38,7 +38,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('orders.tracking') }}">
+                            <a href="">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-map-marked-alt main-color ms-2"></i>
 
@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('show.rating') }}">
+                            <a href="">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-star main-color ms-2"></i>
                                     @lang('header.rate')
@@ -155,7 +155,7 @@
                     <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
                         <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
                         <button type="button" class="btn reversed main-color w-25 mx-2"
-                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                            data-bs-dismiss="modal" aria-label="Close">@lang('header.cancel')</button>
                     </div>
                 </form>
 
@@ -166,44 +166,10 @@
 @push('scripts')
     <script>
         // logout modal
-        document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
+});
 
-            const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", function(event) {
-                    event.preventDefault();
-
-                    const profileModal = document.getElementById("profileModal");
-                    const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
-
-                    if (profileModal) {
-                        const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                        if (profileInstance) {
-                            profileInstance.hide();
-                        }
-                    }
-                    logoutModal.show();
-                });
-            }
-
-            // Handling close behavior manually if necessary
-            const closeButton = document.querySelector('.btn-close');
-            const cancelButton = document.querySelector('.btn.reversed.main-color');
-
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
-
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
-        });
     </script>
 @endpush
