@@ -5,8 +5,8 @@
         <div class="container pt-sm-5 pt-4">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">قائمة الطعام</li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('auth.home')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@lang('header.menu') </li>
                 </ol>
             </nav>
         </div>
@@ -21,12 +21,12 @@
                     {{ session('success') }}
                 </div>
             @endif
-
+{{--
             @if (session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
-            @endif
+            @endif --}}
             <ul class="nav nav-pills mb-3 px-0 align-items-center" id="pills-tab" role="tablist">
                 @foreach ($menuCategories as $key => $menuCategory)
                 @if ($menuCategory->dish_categories)
@@ -46,19 +46,19 @@
                 @endif
             @endforeach
 
-                <li class="nav-item" role="presentation">
+                {{-- <li class="nav-item" role="presentation">
                     <form id="searchForm">
                         <input id="searchInput" class="form-control py-2" type="search" placeholder="ابحث في القائمة"
                             aria-label="Search">
                     </form>
-                </li>
+                </li> --}}
             </ul>
 
             <div class="d-flex justify-content-end">
                 <select class="form-select form-select-lg mb-3 w-25" aria-label=".form-select-lg example">
-                    <option selected>ترتيب حسب </option>
-                    <option value="1">الاعلى تقييم</option>
-                    <option value="2">اضيف حديثا</option>
+                    <option selected>ترتيب حسب  @lang('header.myaddress')</option>
+                    <option value="1">الاعلى تقييم @lang('header.myaddress')</option>
+                    <option value="2">اضيف حديثا @lang('header.myaddress')</option>
                 </select>
             </div>
 

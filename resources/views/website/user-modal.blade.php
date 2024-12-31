@@ -126,7 +126,7 @@
                         </li>
                         <li>
 
-                            <a href="#">
+                            <a  data-bs-toggle="modal" data-bs-target="#logoutModal">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                     @lang('header.logout')
@@ -140,8 +140,8 @@
             </div>
         </div>
     </div>
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
                     @csrf
@@ -164,46 +164,5 @@
     </div>
 @endauth
 @push('scripts')
-    <script>
-        // logout modal
-        document.addEventListener("DOMContentLoaded", function() {
 
-        const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
-
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                const profileModal = document.getElementById("profileModal");
-                const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
-
-                if (profileModal) {
-                    const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                    if (profileInstance) {
-                        profileInstance.hide();
-                    }
-                }
-                logoutModal.show();
-            });
-        }
-
-        // Handling close behavior manually if necessary
-        const closeButton = document.querySelector('.btn-close');
-        const cancelButton = document.querySelector('.btn.reversed.main-color');
-
-        if (closeButton) {
-            closeButton.addEventListener('click', function() {
-                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                logoutModal.hide();
-            });
-        }
-
-        if (cancelButton) {
-            cancelButton.addEventListener('click', function() {
-                const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                logoutModal.hide();
-            });
-        }
-        });
-    </script>
 @endpush
