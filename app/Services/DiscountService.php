@@ -218,19 +218,45 @@ class DiscountService
     }
 
 
+    // public function destroy(Request $request, $id)
+    // {
+    //     $lang = app()->getLocale();
+
+    //     try {
+    //         $discount = Discount::findOrFail($id);
+    //         $discount->delete();
+
+    //         return ResponseWithSuccessData($lang, null, 1);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error deleting discount: ' . $e->getMessage());
+    //         return RespondWithBadRequestData($lang, 2);
+    //     }
+    // }
+
     public function destroy(Request $request, $id)
     {
         $lang = app()->getLocale();
 
-        try {
-            $discount = Discount::findOrFail($id);
-            $discount->delete();
-
-            return ResponseWithSuccessData($lang, null, 1);
-        } catch (\Exception $e) {
-            Log::error('Error deleting discount: ' . $e->getMessage());
-            return RespondWithBadRequestData($lang, 2);
+        // Find the unit by ID, or return a 404 response if not found
+        $discount = Discount::find($id);
+        if (!$discount) {
+            return RespondWithBadRequestData($lang, 8);
         }
+
+        // Check if there are any products associated with this unit via slider_discounts()
+        $activeSliderDiscounts = $discount->slider_discounts()
+        ->whereHas('discount', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->count();
+        if ($activeSliderDiscounts > 0) {
+            return CustomRespondWithBadRequest(__('discount.The discount have relation'));
+        }
+        // Delete the discount
+        $discount->delete();
+
+        // Return success response
+        return RespondWithSuccessRequest($lang, 1);
     }
 
     public function restore(Request $request, $id)

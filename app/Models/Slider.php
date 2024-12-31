@@ -49,4 +49,8 @@ class Slider extends Model
     {
         return $this->belongsTo(DishDiscount::class, 'discount_id', 'id');
     }
+    // public function discount()
+    // {
+    //     return $this->hasMany(ProductUnit::class);
+    // }
 }
