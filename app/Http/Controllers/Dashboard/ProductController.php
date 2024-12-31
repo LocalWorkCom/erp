@@ -67,7 +67,7 @@ class ProductController extends Controller
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Brands = Brand::hydrate($responseData['data']);
-// dd($Brands);
+        // dd($Brands);
         $response  = $this->unitService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Units = Unit::hydrate($responseData['data']);
@@ -82,12 +82,16 @@ class ProductController extends Controller
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
 
+        // Track seen currency codes
+        $seenCurrencies = [];
+
         foreach ($Countries as $country) {
-            // Check if currency_code exists and add it to the array
-            if (isset($country->currency_code)) {
-                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
+            if (isset($country->currency_code) && !in_array($country->currency_code, $seenCurrencies)) {
+                $Currencies[] = ['id' => $country->id, 'code' => $country->currency_code];
+                $seenCurrencies[] = $country->currency_code;
             }
         }
+
 
         //return $Currencies;
 
@@ -129,25 +133,21 @@ class ProductController extends Controller
         $responseData = json_decode($response->getContent(), true);
         $Categories = Category::hydrate($responseData['data']);
 
-        $response  = $this->countryService->index($request, $this->checkToken);
+        $response = $this->countryService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        // $Countries = Country::hydrate($responseData['data']);
-        // $Currencies = [];
-        // foreach ($Countries as $country) {
-        //     // Check if currency_code exists and add it to the array
-        //     if (isset($country->currency_code)) {
-        //         $Currencies[] = $country->currency_code;
-        //     }
-        // }
 
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
+        $seenCurrencies = [];
+
         foreach ($Countries as $country) {
-            // Check if currency_code exists and add it to the array
-            if (isset($country->currency_code)) {
-                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
+            if (isset($country->currency_code) && !in_array($country->currency_code, $seenCurrencies)) {
+                $Currencies[] = ['id' => $country->id, 'code' => $country->currency_code];
+                $seenCurrencies[] = $country->currency_code;
             }
         }
+
+
         // $Stores = Store::all();
 
         return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit', 'product_unit', 'id'));
