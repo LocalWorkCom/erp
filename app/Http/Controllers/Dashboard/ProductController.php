@@ -161,14 +161,14 @@ class ProductController extends Controller
 
         $response = $this->countryService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        
+
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
-        
+
         // Prepare an associative array for $Currencies
         foreach ($Countries as $country) {
             if (isset($country->currency_code)) {
-                $Currencies[$country->id] = $country->currency_code; // Use country ID as the key and currency code as the value
+                $Currencies[$country->currency_code] = $country->currency_code; // Use country ID as the key and currency code as the value
             }
         }
 
