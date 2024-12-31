@@ -66,7 +66,7 @@
                                         <select name="dish_id" id="dish_id" class="form-control select2">
                                             <option value="" selected disabled>@lang('slider.ChooseDish')</option>
                                             @foreach($dishes as $dish)
-                                               @if ($dish->id != null)
+                                               @if ($dish && $dish->id != null)
                                                     <option value="{{ $dish->id }}">{{ $dish->name_ar . " | " . $dish->name_en  }}</option>
                                                 @else
                                                     <option value="">{{ __('slider.none')  }}</option>
@@ -82,7 +82,7 @@
                                         <select name="offer_id" id="offer_id" class="form-control select2">
                                             <option value="" selected disabled>@lang('slider.ChooseOffer')</option>
                                             @foreach($offers as $offer)
-                                                @if($offer->id != null)
+                                                @if($offer && $offer->id != null)
                                                 <option value="{{ $offer->id }}">{{ $offer->name_ar . " | " . $offer->name_en  }}</option>
                                                 @else
                                                     <option value="">{{ __('slider.none')  }}</option>
@@ -98,10 +98,14 @@
                                         <select name="discount_id" id="discount_id" class="form-control select2">
                                             <option value="" selected disabled>@lang('slider.ChooseDiscount')</option>
                                             @foreach($discounts as $discount)
-                                                @if ($discount->id != null)
-                                                <option value="{{ $discount->id }}">{{ $discount->dish->name_ar . " | " . $discount->dish->name_en . " | " . number_format($discount->discount->value, 0) . ($discount->discount->type == "percentage" ? "%" : "EGP") }}</option>
+                                                @if ($discount && $discount->dish && $discount->discount)
+                                                    <option value="{{ $discount->id }}">
+                                                        {{ $discount->dish->name_ar . " | " . $discount->dish->name_en . " | " .
+                                                        number_format($discount->discount->value, 0) .
+                                                        ($discount->discount->type == "percentage" ? "%" : "EGP") }}
+                                                    </option>
                                                 @else
-                                                    <option value="">{{ __('slider.none')  }}</option>
+                                                    <option value="">{{ __('slider.none') }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
