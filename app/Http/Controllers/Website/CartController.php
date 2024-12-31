@@ -119,17 +119,38 @@ class CartController extends Controller
     {
         $address = '';
         // $branches = Branch::all();
-        if(auth('client')->check()){
+        if (auth('client')->check()) {
 
-            $address = ClientAddress::where('is_active', 1)->where('is_default', 1)->where('user_id',auth('client')->user()->id)->first();
+            $address = ClientAddress::where('is_active', 1)->where('is_default', 1)->where('user_id', auth('client')->user()->id)->first();
         }
         return view('website.cart', compact('address'));
     }
     public function Checkout(Request $request)
     {
+        $address = '';
         // $branches = Branch::all();
-        return view('website.checkout');
+        if (auth('client')->check()) {
+
+            $address = ClientAddress::where('is_active', 1)->where('is_default', 1)->where('user_id', auth('client')->user()->id)->first();
+        }
+        // $branches = Branch::all();
+        return view('website.checkout', compact('address'));
     }
+    public function store(Request $request)
+    {
+        dd($request);
+        // //        dd($request->all());
+        // $response = $this->orderService->store($request, $this->checkToken);
+        // $responseData = $response->original;
+        // //        dd($responseData);
+        // if (!$responseData['status'] && isset($responseData['data'])) {
+        //     $validationErrors = $responseData['data'];
+        //     return redirect()->back()->withErrors($validationErrors)->withInput();
+        // }
+        // $message = $responseData['message'];
+        // return redirect('dashboard/orders')->with('message', $message);
+    }
+
     public function isCouponValid(Request $request)
     {
         $code = $request->code;

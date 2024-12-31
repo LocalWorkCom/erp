@@ -90,17 +90,18 @@
                                             </form>
                                         </div>
 
-                                        <div class="text-center pt-4">
-                                            <h5>{{ $dish->name_ar }}</h5>
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="fas fa-star"></i>
-                                                الاعلى تقييم
-                                            </span>
-                                            <div class="d-flex justify-content-between pt-4">
-                                                <button class="btn" data-bs-toggle="modal" data-bs-target="#productModal">
-                                                    + أضف الي العربة
-                                                </button>
-                                                <span>{{ $dish->price }} ج . م</span>
+                                            <div class="text-center pt-4">
+                                                <h5>{{ $dish->name_ar }}</h5>
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-star"></i>
+                                                    الاعلى تقييم
+                                                </span>
+                                                <div class="d-flex justify-content-between pt-4">
+                                                    <button class="btn" onclick="fill_cart('{{ $dish->id }}')">
+                                                        + أضف الي العربة
+                                                    </button>
+                                                    <span>{{ $dish->price }} ج . م</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -204,6 +205,7 @@
         </div>
     </section>
 @endsection
+@include('website.cart-modal')
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

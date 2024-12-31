@@ -70,25 +70,27 @@
                         </div>
                         <div class="col-md-4">
                             @auth('client')
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title fw-bold"> موقع التوصيل </h5>
-                                        <a class="btn reversed main-color fw-bold"
-                                            href="{{ route('edit.Address', $address->id) }}">
-                                            تعديل
-                                        </a>
+                                @if ($address)
+                                    <div class="card" id="address">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title fw-bold"> موقع التوصيل </h5>
+                                            <a class="btn reversed main-color fw-bold"
+                                                href="{{ route('edit.Address', $address->id) }}">
+                                                تعديل
+                                            </a>
 
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <p class="fw-bold">
-                                            <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                            {{ $address->address_type }} {{ $address->address }}
-                                        </p>
+                                        </div>
+                                        <div class="card-body p-4">
+                                            <p class="fw-bold">
+                                                <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                                {{ $address->address_type }} {{ $address->address }}
+                                            </p>
 
-                                        <small class="text-muted">{{ $address->city }} مبي{{ $address->building }}
-                                            دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
+                                            <small class="text-muted">{{ $address->city }} مبي{{ $address->building }}
+                                                دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endauth
                             <div class="card mt-4" id="card-payment">
                                 <div class="card-header">
@@ -176,7 +178,7 @@
         $(document).ready(function() {
             let local_storage = JSON.parse(localStorage.getItem('cart')) || {};
             let cart = local_storage.items; // Extract all items from the array
-
+            let currency_symbol = local_storage.symbol;
             // const addons = JSON.parse(localStorage.getItem('addons')) || []; // Retrieve addons
             const cartContainer = $('#item-list');
             const totalElement = $('#total-before-coupon');
@@ -197,7 +199,7 @@
             const coupon_application = parseFloat('{{ getSetting('coupon_application') }}') / 100; // 14% VAT
 
             // Helper function to format numbers
-            const formatCurrency = (amount) => `${amount.toFixed(2)} ج.م`;
+            const formatCurrency = (amount) => `${amount.toFixed(2)} ${currency_symbol}`;
 
             // Helper function to render the cart
             const renderCart = () => {
@@ -210,6 +212,7 @@
                     $('#card-payment').addClass('d-none');
                     $('#checkout-btn').addClass('d-none');
                     $('#note-div').addClass('d-none');
+                    $('#address').addClass('d-none');
                     return;
                 }
 
@@ -245,7 +248,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-end">
-                    <p class="fw-bold">${formatCurrency(itemTotal)}</p>
+                    <p class="fw-bold">${formatCurrency(itemTotal)} ${currency_symbol}</p>
                     <div class="btns text-center">
                         <button class="btn reversed main-color mb-2 edit-item" data-index="${index}" type="button">تعديل</button>
                         <button class="btn mb-2 delete-item" data-index="${index}" type="button">حذف</button>
@@ -262,7 +265,7 @@
                     applyCouponButton.disabled = true;
                     couponInput.disabled = true;
 
-                    $('#discount-value').text(`-${local_storage.coupon_value.toFixed(2)} ج.م`);
+                    $('#discount-value').text(`-${local_storage.coupon_value.toFixed(2)} ${currency_symbol}`);
 
                     removeCouponBtn.classList.remove('d-none');
                 }
@@ -326,7 +329,8 @@
 
             // Helper function to update localStorage and re-render the cart
             const updateCart = () => {
-                localStorage.setItem('cart', JSON.stringify(cart));
+                local_storage.items = cart;
+                localStorage.setItem('cart', JSON.stringify(local_storage));
                 renderCart();
             };
             // Attach event listeners
@@ -348,6 +352,19 @@
 
                 const index = $(this).data('index');
                 cart.splice(index, 1);
+                if (cart.length === 0) {
+                    localStorage.setItem('cart', []);
+                    localStorage.coupon = '';
+                    localStorage.couponValue = '';
+                    localStorage.notes = '';
+                    document.getElementById('cart-count').textContent = 0;
+
+                    // If empty, remove the entire cart from localStorage
+                    // localStorage.removeItem('cart');
+                } else {
+                    // Otherwise, update the cart in localStorage
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                }
                 updateCart();
             });
 
@@ -402,6 +419,7 @@
                     coupon: couponCode,
                     coupon_value: couponValue,
                     notes: notes,
+                    symbol: currency_symbol
                 };
 
                 // Save updated cart to localStorage
@@ -574,13 +592,14 @@
                             const finalTotal = discountedTotal + SERVICE_FEES + SHIPPING_FEES + tax;
 
                             couponDiv.classList.remove('d-none');
-                            $('#discount-value').text(`-${discount.toFixed(2)} ج.م`);
-                            totalElement.text(`${discountedTotal.toFixed(2)} ج.م`);
-                            taxElement.text(`${tax.toFixed(2)} ج.م`);
-                            serviceFeeElement.text(`${SERVICE_FEES.toFixed(2)} ج.م`);
-                            shippingFeeElement.text(`${SHIPPING_FEES.toFixed(2)} ج.م`);
-                            totalPayElement.text(`${finalTotal.toFixed(2)} ج.م`);
-                            finalTotalElement.text(`${finalTotal.toFixed(2)} ج.م`);
+                            $('#discount-value').text(`-${discount.toFixed(2)} ${currency_symbol}`);
+                            totalElement.text(`${discountedTotal.toFixed(2)} ${currency_symbol}`);
+                            taxElement.text(`${tax.toFixed(2)} ${currency_symbol}`);
+                            serviceFeeElement.text(`${SERVICE_FEES.toFixed(2)} ${currency_symbol}`);
+                            shippingFeeElement.text(
+                                `${SHIPPING_FEES.toFixed(2)} ${currency_symbol}`);
+                            totalPayElement.text(`${finalTotal.toFixed(2)} ${currency_symbol}`);
+                            finalTotalElement.text(`${finalTotal.toFixed(2)} ${currency_symbol}`);
                         } else {
                             alert(data.message);
                         }
