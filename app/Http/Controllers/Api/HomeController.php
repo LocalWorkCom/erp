@@ -39,37 +39,47 @@ class HomeController extends Controller
         $menuController = new DishCategoryController($this->dishCategoryService);
         $menuResponse = $menuController->menuDishes($request);
         $menu = array_slice($menuResponse->getData()->data, -4); // 4 //**************
+        $menu = array_map(function ($item) {
+            unset($item->dishes); // Remove the dishes array
+            return $item;
+        }, $menu);
+
 
         $mostPopularController = new MostPopularController();
         $mostPopularResponse = $mostPopularController->index($request);
         $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite //**************
 
-        $isOffers = $request->query('offers');
-//        dd($isOffers);
-
-        if ($isOffers == 1) {
-            // Check if lat/long are provided and if branch is not null
-            if ($branchId && isset($request->lat) && isset($request->long)) {
-                // Filter offers by branch if lat/long is provided and branch is not null
-                $offers = Offer::where(function ($query) use ($branchId) {
-                    if ($branchId) {
-                        // Check if the offer is specific to the branch or is available in all branches
-                        $query->where('branch_id', $branchId)
-                            ->orWhere('branch_id', -1);  // Include offers available in all branches
-                    } else {
-                        // If no specific branch, select offers available in all branches
-                        $query->where('branch_id', -1);
-                    }
-                })
-                    ->get(); // Get offers based on the branch filter
-
-                // If offers exist, set them as the menu
-                if ($offers->isNotEmpty()) {
-                    $menu = $offers;
-                }
-            }
-        }
-
+//        $isOffers = $request->query('offers');
+////        dd($isOffers);
+//
+//        if ($isOffers == 1) {
+//            // Check if lat/long are provided and if branch is not null
+//            if ($branchId && isset($request->lat) && isset($request->long)) {
+//                // Filter offers by branch if lat/long is provided and branch is not null
+//                $offers = Offer::where(function ($query) use ($branchId) {
+//                    if ($branchId) {
+//                        // Check if the offer is specific to the branch or is available in all branches
+//                        $query->where('branch_id', $branchId)
+//                            ->orWhere('branch_id', -1);  // Include offers available in all branches
+//                    }
+//                })
+//                    ->get(); // Get offers based on the branch filter
+//
+//                // If offers exist, set them as the menu
+//                if ($offers->isNotEmpty()) {
+//                    $menu = $offers;
+//                }
+//            }
+//            else{
+//                $offers = Offer::where('branch_id', -1)
+//                    ->get(); // Get offers based on the branch filter
+//
+//                // If offers exist, set them as the menu
+//                if ($offers->isNotEmpty()) {
+//                    $menu = $offers;
+//                }
+//            }
+//        }
 
         // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {

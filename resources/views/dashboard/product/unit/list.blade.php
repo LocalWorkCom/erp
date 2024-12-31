@@ -76,7 +76,7 @@
                                                         <input type="hidden" name="product_unit_id[]"
                                                             value="{{ $productUnit->id }}">
                                                         <input type="number" name="units[{{ $index }}][factor]"
-                                                            class="form-control" value="{{ $productUnit->factor }}"
+                                                            class="form-control" value="{{ $productUnit->factor }}" min="1"
                                                             required>
                                                     </td>
                                                     <td>
@@ -87,8 +87,6 @@
                                                             @lang('product.Remove')
                                                         </button>
                                                         {{-- @endforeach --}}
-
-
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -133,7 +131,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="number" name="units[${unitIndex}][factor]" class="form-control" required>
+                    <input type="number" name="units[${unitIndex}][factor]" class="form-control" min="1" required>
                 </td>
                 <td>
                     <button type="button" class="btn btn-danger btn-sm remove-unit">@lang('product.Remove')</button>

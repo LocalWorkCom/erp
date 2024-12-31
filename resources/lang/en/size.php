@@ -11,4 +11,6 @@ return [
     'ArabicName' => 'Arabic Name',
     'EnglishName' => 'English Name',
     'Actions' => 'Actions',
+    'The size has relations' =>'The size has relations',
+
 ];

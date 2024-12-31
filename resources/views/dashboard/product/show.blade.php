@@ -61,8 +61,12 @@
                                 </div> --}}
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Currency')</label>
-                                    <p class="form-text">{{ $Currencies[$product->currency_code] ?? __('category.none') }}</p>
+                                    <p class="form-text">
+                                        {{ $Currencies[$product->currency_code] ?? __('category.none') }}
+                                    </p>
                                 </div>
+                                
+                                
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                     <label class="form-label">@lang('product.Barcode')</label>
                                     <p class="form-text">{{ $product->barcode }}</p>

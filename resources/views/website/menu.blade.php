@@ -29,22 +29,23 @@
             @endif
             <ul class="nav nav-pills mb-3 px-0 align-items-center" id="pills-tab" role="tablist">
                 @foreach ($menuCategories as $key => $menuCategory)
-                    @if ($menuCategory->dish_categories)
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $categoryId == $menuCategory->dish_categories->id ? 'active' : '' }}"
-                                id="pills-{{ $menuCategory->id }}-tab" data-bs-toggle="pill"
-                                data-bs-target="#pills-{{ $menuCategory->id }}" type="button" role="tab"
-                                aria-controls="pills-{{ $menuCategory->id }}"
-                                aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
-                                <div class="category-button">
-                                    <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
-                                        alt="{{ $menuCategory->dish_categories->name_ar }}" />
-                                    <p class="me-3 mb-0">{{ $menuCategory->dish_categories->name_ar }}</p>
-                                </div>
-                            </button>
-                        </li>
-                    @endif
-                @endforeach
+                @if ($menuCategory->dish_categories)
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{ ($categoryId == $menuCategory->dish_categories->id || (is_null($categoryId) && $key == 0)) ? 'active' : '' }}"
+                            id="pills-{{ $menuCategory->id }}-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-{{ $menuCategory->id }}" type="button" role="tab"
+                            aria-controls="pills-{{ $menuCategory->id }}"
+                            aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
+                            <div class="category-button">
+                                <img src="{{ asset($menuCategory->dish_categories->image_path ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                    alt="{{ $menuCategory->dish_categories->name_ar }}" />
+                                <p class="me-3 mb-0">{{ $menuCategory->dish_categories->name_ar }}</p>
+                            </div>
+                        </button>
+                    </li>
+                @endif
+            @endforeach
+
                 <li class="nav-item" role="presentation">
                     <form id="searchForm">
                         <input id="searchInput" class="form-control py-2" type="search" placeholder="ابحث في القائمة"
@@ -64,32 +65,30 @@
 
             <div class="tab-content pt-5" id="pills-tabContent">
                 @foreach ($menuCategories as $key => $menuCategory)
-                    @if ($menuCategory->dish_categories)
-                        <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="pills-{{ $menuCategory->id }}"
-                            role="tabpanel" aria-labelledby="pills-{{ $menuCategory->id }}-tab">
-                            <div class="row mx-0">
-                                @foreach ($menuCategory->dish_categories->dishes as $dish)
-                                    <div class="col-md-4 mb-4 dish-card {{ in_array($dish->id, $userFavorites) ? 'favorite' : '' }}"
-                                        data-dish-id="{{ $dish->id }}" data-dish-name="{{ $dish->name_ar }}"
-                                        data-aos="zoom-in">
-                                        <div class="plate">
-                                            <a href="#">
-                                                <figure class="plate-img m-0">
-                                                    <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
-                                                        alt="{{ $dish->name_ar }}">
-                                                </figure>
-                                            </a>
-                                            <div class="fav">
-                                                <form action="{{ route('add.favorite') }}" method="POST"
-                                                    class="favorite-form">
-                                                    @csrf
-                                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
-                                                    <button type="submit" class="btn">
-                                                        <i
-                                                            class="{{ in_array($dish->id, $userFavorites) ? 'fas' : 'far' }} fa-heart"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
+                @if ($menuCategory->dish_categories)
+                    <div class="tab-pane fade {{ ($categoryId == $menuCategory->dish_categories->id || (is_null($categoryId) && $key == 0)) ? 'show active' : '' }}"
+                        id="pills-{{ $menuCategory->id }}" role="tabpanel"
+                        aria-labelledby="pills-{{ $menuCategory->id }}-tab">
+                        <div class="row mx-0">
+                            @foreach ($menuCategory->dish_categories->dishes as $dish)
+                                <div class="col-md-4 mb-4 dish-card {{ in_array($dish->id, $userFavorites) ? 'favorite' : '' }}"
+                                    data-dish-id="{{ $dish->id }}" data-dish-name="{{ $dish->name_ar }}" data-aos="zoom-in">
+                                    <div class="plate">
+                                        <a href="#">
+                                            <figure class="plate-img m-0">
+                                                <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                                    alt="{{ $dish->name_ar }}">
+                                            </figure>
+                                        </a>
+                                        <div class="fav">
+                                            <form action="{{ route('add.favorite') }}" method="POST" class="favorite-form">
+                                                @csrf
+                                                <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                                <button type="submit" class="btn">
+                                                    <i class="{{ in_array($dish->id, $userFavorites) ? 'fas' : 'far' }} fa-heart"></i>
+                                                </button>
+                                            </form>
+                                        </div>
 
                                             <div class="text-center pt-4">
                                                 <h5>{{ $dish->name_ar }}</h5>
@@ -106,11 +105,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endif
-                @endforeach
+                    </div>
+                @endif
+            @endforeach
+
             </div>
 
             <button type="button" class="btn cart-btn" onclick="openCart()">
@@ -129,13 +130,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                            <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                            <figcaption>
-                                                <h4>
-                                                    لا توجد منتجات
-                                                </h4>
-                                            </figcaption>
-                                        </figure> -->
+                                                <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                                                <figcaption>
+                                                    <h4>
+                                                        لا توجد منتجات
+                                                    </h4>
+                                                </figcaption>
+                                            </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">

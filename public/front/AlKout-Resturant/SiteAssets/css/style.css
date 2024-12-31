@@ -105,6 +105,28 @@ p {
 .bg-danger{
     background-color: #FCDCDC!important;
 }
+.bg-grey{
+    background-color:#DFDFDF ;
+}
+.accordion-item{
+    border: none;
+    color: #000;
+}
+.accordion-button{
+    background: transparent;
+    
+}
+.accordion-button, .accordion-button:not(.collapsed),
+.accordion-button:focus{
+    color: #000;
+    background-color: transparent;
+    box-shadow: none;
+}
+.accordion-button::after{
+    margin-right: auto;
+    margin-left: 0;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
 /* ************************************************************************************** */
 /*--- navbar styling ---*/
 .second-header {
@@ -537,13 +559,15 @@ body.no-scroll {
 /* intro section */
 
 .intro {
-    background: url(../images/intro-bg.png);
+    
+    background: url(../images/intro-bg.png) no-repeat ;
     height: 100vh;
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    background-size: cover;
 }
 
 .intro .overflow-plates {
@@ -554,7 +578,7 @@ body.no-scroll {
 
 .intro .container .small-img {
     width: 100%;
-    height: 225px;
+    height: 190px;
     object-fit: contain;
     transition: 0.5s ease;
 }
@@ -575,7 +599,7 @@ body.no-scroll {
 
 .intro .container .big-img {
     width: 100%;
-    height: 325px;
+    height: 265px;
     object-fit: contain;
     /* transform: scale(1.1); */
     transition: 0.5s ease;
@@ -1335,7 +1359,7 @@ a:hover {
     flex-wrap: wrap;
     align-items: center;
 }
-
+/* 
 .accordion-button,
 .accordion-button:not(.collapsed) {
     background-color: #dfdfdf7d;
@@ -1355,7 +1379,7 @@ a:hover {
 .accordion-button:not(.collapsed)::after,
 .accordion-button.collapsed::after {
     color: black !important;
-}
+} */
 
 /* product-details */
 .product-details {
