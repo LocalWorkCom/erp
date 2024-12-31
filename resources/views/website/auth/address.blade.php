@@ -22,19 +22,6 @@
                 </button>
 
             </div>
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
             @if ($address->isNotEmpty())
                 <div class="card p-5 w-75 mx-auto mt-5">
@@ -54,12 +41,18 @@
                                     </small>
 
                                 </div>
-                                @if ($item->has_inprogress_or_pending_orders == 0)
-                                    <div class="dropdown">
-                                        <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown">
+                                    <a id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <button class="dropdown-item w-100"
+                                                onclick="window.location.href='{{ route('active.Address', ['id' => $item->id]) }}'">
+                                                @lang('header.makedefault')
+                                            </button>
+                                        </li>
+                                        @if ($item->has_inprogress_or_pending_orders == 0)
                                             <li>
                                                 <button class="dropdown-item w-100"
                                                     onclick="window.location.href='{{ route('edit.Address', ['id' => $item->id]) }}'">
@@ -73,9 +66,9 @@
                                                         @lang('auth.delete')</button>
                                                 </li>
                                             @endif
-                                        </ul>
-                                    </div>
-                                @endif
+                                        @endif
+                                    </ul>
+                                </div>
                             </li>
                         @endforeach
                     </ul>
@@ -112,6 +105,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 @push('scripts')
     <script>
@@ -139,4 +133,6 @@
             }, 200);
         });
     </script>
+
+
 @endpush

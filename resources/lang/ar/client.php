@@ -22,12 +22,16 @@ return [
     'lastName' => 'الاسم الاخير',
     'address' => 'العنوان',
     'city' => 'المدينة',
-    'state' => 'الدزلة',
+    'state' => 'المحافظة',
     'postalCode' => 'الرمز البريدي',
     'isDefault' => 'جعل هذا العنوان الافتراضي؟',
     'save' => 'حفظ',
     'warning' => 'تحذير',
     'deleteMsg' => 'هل انت متاكد من انك تريد ان تحذف هذا العميل',
     'yesDelete' => 'نعم حذف',
-    'cancelDelete' => 'الغاء'
+    'cancelDelete' => 'الغاء',
+    'none' => 'لا يوجد',
+    'chooseCountry' => 'اختر دولة',
+    'countryCode' => 'رمز الدولة',
+    'addressPhone' => 'رقم هاتف العنوان'
 ];

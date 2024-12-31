@@ -82,7 +82,7 @@
                                                     </div>
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                                         <label for="rate-name" class="form-label">@lang('rate.Note')</label>
-                                                        <textarea type="text" class="form-control" placeholder="@lang('rate.Note')" name="note" required>{{ old('note') }}</textarea>
+                                                        <textarea type="text" class="form-control" placeholder="@lang('rate.Note')" name="note">{{ old('note') }}</textarea>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnterNote')</div>
                                                     </div>
@@ -152,7 +152,7 @@
                                                         <label for="edit-expiration-date"
                                                             class="form-label">@lang('rate.Note')</label>
                                                         <textarea type="text" id="edit-note" class="form-control"
-                                                                  name="note" required></textarea>
+                                                                  name="note"></textarea>
                                                         <div class="valid-feedback">@lang('validation.Correct')</div>
                                                         <div class="invalid-feedback">@lang('validation.EnterNote')</div>
                                                     </div>

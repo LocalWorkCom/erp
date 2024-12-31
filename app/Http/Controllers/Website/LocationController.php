@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Validator;
 class LocationController extends Controller
 {
     public function showAddress()
-    {
+    {        $lang = app()->getLocale();
 
-        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)
+
+        $address = ClientAddress::where('user_id', Auth::guard('client')->user()->id)->where('is_active',1)
             ->withCount([
                 'orders as has_inprogress_or_pending_orders' => function ($query) {
                     $query->whereIn('status', ['inprogress', 'pending']);
@@ -27,6 +28,8 @@ class LocationController extends Controller
 
     public function createAddress($id = null)
     {
+        $lang = app()->getLocale();
+
         // If an address ID is passed, fetch the address for editing, otherwise create a new address
         $address = $id ? ClientAddress::find($id) : null;
 
@@ -35,6 +38,8 @@ class LocationController extends Controller
 
     public function createOrUpdateAddress(Request $request)
     {
+        $lang = app()->getLocale();
+
         // Fetch existing address or create a new one if no ID is provided
         $address = $request->id ? ClientAddress::findOrFail($request->id) : new ClientAddress();
 
@@ -51,14 +56,15 @@ class LocationController extends Controller
                     'phoneapart' => 'required',
                     'country_code_apart' => 'required',
                     'addressdetailapart' => 'required',
+                    'markapart' => 'nullable',
                 ];
                 $messages = [
-                    'nameapart.required' => __('validation.required', ['attribute' => __('validation.nameapart')]),
-                    'numapart.required' => __('validation.required', ['attribute' => __('validation.numapart')]),
-                    'floorapart.required' => __('validation.required', ['attribute' => __('validation.floor')]),
-                    'phoneapart.required' => __('validation.required', ['attribute' => __('validation.phoneapart')]),
-                    'country_code_apart.required' => __('validation.required', ['attribute' => __('validation.country_code_apart')]),
-                    'addressdetailapart.required' => __('validation.required', ['attribute' => __('validation.addressdetailapart')]),
+                    'nameapart.required' => __('validation.required', ['attribute' => __('auth.nameapart')]),
+                    'numapart.required' => __('validation.required', ['attribute' => __('auth.numapart')]),
+                    'floorapart.required' => __('validation.required', ['attribute' => __('auth.floorapart')]),
+                    'phoneapart.required' => __('validation.required', ['attribute' => __('auth.phoneapart')]),
+                    'country_code_apart.required' => __('validation.required', ['attribute' => __('auth.country_code_apart')]),
+                    'addressdetailapart.required' => __('validation.required', ['attribute' => __('auth.addressdetailapart')]),
                 ];
                 break;
 
@@ -69,7 +75,7 @@ class LocationController extends Controller
                     'addressdetailvilla' => 'required',
                     'phonevilla' => 'required',
                     'country_code_villa' => 'required',
-                    'markvilla' => 'required',
+                    'markvilla' => 'nullable',
                 ];
                 $messages = [
                     'namevilla.required' => __('validation.required', ['attribute' => __('validation.namevilla')]),
@@ -77,7 +83,6 @@ class LocationController extends Controller
                     'addressdetailvilla.required' => __('validation.required', ['attribute' => __('validation.addressdetailvilla')]),
                     'phonevilla.required' => __('validation.required', ['attribute' => __('validation.phonevilla')]),
                     'country_code_villa.required' => __('validation.required', ['attribute' => __('validation.country_code_villa')]),
-                    'markvilla.required' => __('validation.required', ['attribute' => __('validation.markvilla')]),
 
                 ];
                 break;
@@ -90,17 +95,15 @@ class LocationController extends Controller
                     'phoneoffice' => 'required',
                     'country_code_office' => 'required',
                     'flooroffice' => 'required',
-                    'markoffice' => 'required',
+                    'markoffice' => 'nullable',
                 ];
                 $messages = [
-                    'nameoffice.required' => __('validation.required', ['attribute' => __('validation.nameoffice')]),
+                    'nameoffice.required' => __('validation.required', ['attribute' => __('auth.nameoffice')]),
                     'numaoffice.required' => __('validation.required', ['attribute' => __('validation.numaoffice')]),
                     'addressdetailoffice.required' => __('validation.required', ['attribute' => __('validation.addressdetailoffice')]),
                     'phoneoffice.required' => __('validation.required', ['attribute' => __('validation.phoneoffice')]),
                     'country_code_office.required' => __('validation.required', ['attribute' => __('validation.country_code_office')]),
                     'flooroffice.required' => __('validation.required', ['attribute' => __('validation.floor')]),
-                    'markoffice.required' => __('validation.required', ['attribute' => __('validation.markoffice')]),
-
                 ];
                 break;
         }
@@ -114,7 +117,7 @@ class LocationController extends Controller
         // Set common fields
         $address->user_id = Auth::guard('client')->user()->id;
         $address->state = $request->input('state', 'state');
-        $address->country = $request->input('country', 'country');
+        // $address->country = $request->input('country', 'country');
         $address->latitude = $request->input('latitude', 30.0308979);
         $address->longtitude = $request->input('longitude', 31.2053958);
         $address->city = $request->input('city', 'city');
@@ -126,7 +129,7 @@ class LocationController extends Controller
         $address->save();
 
         // Redirect with a success message
-        return redirect()->route('showAddress')->with('success', __('messages.address_saved'));
+        return redirect()->route('showAddress')->with(['showModal' => true]);
     }
 
     // Map fields based on delivery type (apartment, villa, office)
@@ -184,5 +187,8 @@ class LocationController extends Controller
         } else {
             return redirect()->route('showAddress')->with('error', __('Address cannot deleted.'));
         }
+    }
+    public function activeAddress($id){
+
     }
 }
