@@ -171,11 +171,10 @@ class DishCategoryController extends Controller
         if ($branchId){
             // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
             if (is_numeric($categoryId) && $categoryId > 0) {
-                $dishCategory = DishCategory::with([
-                    'branchMenuCategory' => function ($query) use ($categoryId, $branchId) {
-                        $query->where('dish_category_id', $categoryId)
-                            ->where('branch_id', $branchId);
-                    },
+                $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
+                    $query->where('branch_id', $branchId)
+                        ->where('dish_category_id', $categoryId);
+                })->with([
                     'dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
                         $query->where('is_active', true);
 
