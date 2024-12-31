@@ -42,10 +42,10 @@
     <section class="categories pt-5">
         <div class="container px-0 py-sm-5 py-4">
             <div class="section-titles d-flex justify-content-between" data-aos="fade-down">
-                <h2 class="fw-bold">استكشف القائمة</h2>
+                <h2 class="fw-bold">  @lang('header.menuopen')</h2>
                 <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
                     <a href="{{ route('menu') }}" class="section-btn text-decoration-none">
-                        <span class="ms-2">عرض الكل</span>
+                        <span class="ms-2"> @lang('header.viewall')</span>
                         <span class="icon">
                             <i class="fas fa-arrow-left"></i>
                         </span>
@@ -75,7 +75,7 @@
         <div class="container py-sm-5 py-4">
             <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
                 <a href="{{ route('menu') }}" class="section-btn text-decoration-none">
-                    <span class="ms-2">عرض الكل</span>
+                    <span class="ms-2">@lang('header.viewall')</span>
                     <span class="icon">
                         <i class="fas fa-arrow-left"></i>
                     </span>
@@ -94,12 +94,12 @@
                                         alt="">
                                 </div>
                                 <div class="col-md-7">
-                                    <h2 class="main-color fw-bold">خصم
+                                    <h2 class="main-color fw-bold"> @lang('header.discount')
                                         {{ $discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->value }}
                                     </h2>
                                     <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
                                     <a href="#" class="btn ">
-                                        <h4 class="fw-bold">اطلب الان</h4>
+                                        <h4 class="fw-bold">@lang('header.ordernow')</h4>
                                     </a>
                                 </div>
                             </div>
@@ -111,11 +111,11 @@
     </section>
     <section class="plates">
         <div class="container py-sm-5 py-4">
-            <h2 class="fw-bold" data-aos="fade-down">اشهر اطباقنا</h2>
-            <p class="text-muted pt-4" data-aos="fade-down">
-                وجبات متنوعه من المأكولات الكويتية يمكنك الطلب منها بكل سهولة
+            <h2 class="fw-bold" data-aos="fade-down">@lang('header.mostpopular')</h2>
+            <p class="text-muted pt-4" data-aos="fade-down"> @lang('header.popularnote')
             </p>
             <div class="plates-slider owl-carousel owl-theme">
+
                 @foreach ($popularDishes as $dish)
                     <div class="item mb-4" data-aos="zoom-in">
                         <div class="plate">
@@ -137,14 +137,11 @@
                             <div class="text-center pt-4">
                                 <h5>{{ $dish->name_ar }}</h5>
                                 <span class="badge bg-warning text-dark">
-                                    <i class="fas fa-star"></i>
-                                    الاعلى تقييم
+                                    <i class="fas fa-star"></i> @lang('header.rateall')
                                 </span>
                                 <div class="d-flex justify-content-between pt-4">
-                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')">
-                                        + أضف الي العربة
-                                    </button>
-                                    <span> {{ $dish->price }} ج . م</span>
+                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')"> @lang('header.addtocart')  +                                    </button>
+                                    <span> {{ $dish->price }} {{ $dish->currency_symbol }}</span>
                                 </div>
                             </div>
                         </div>
@@ -157,11 +154,10 @@
         <div class="container py-sm-5 py-4">
             <div class="row m-0 justify-content-cennter align-items-center">
                 <div class="col-md-5 offset-md-1" data-aos="fade-left">
-                    <h1 class="fw-bold">يمكنك الطلب اونلاين الان بكل سهولة</h1>
-                    <p class="text-muted my-5 ">
-                        في خلال بضعة دقائق ستتمكن من عمل طلبك وتتبعه من خلال موقعنا
+                    <h1 class="fw-bold">  @lang('header.orderonline')</h1>
+                    <p class="text-muted my-5 "> @lang('header.fewmin')
                     </p>
-                    <a href="#" class="btn btn-lg">اطلب الان</a>
+                    <a href="{{ route('menu') }}" class="btn btn-lg">@lang('header.ordernow')</a>
                 </div>
                 <div class="col-md-6" data-aos="fade-right">
                     <figure class="info-img">
@@ -176,19 +172,19 @@
         <div class="container pt-sm-5 pt-4">
             <div class="row m-0 justify-content-cennter align-items-center text-center">
                 <div class="col-md-6" data-aos="fade-left">
-                    <h3 class="mb-5"> يمكنك تحميل تطبيقنا الان بكل سهوله من خلال </h3>
+                    <h3 class="mb-5"> @lang('header.downloadapp')</h3>
 
                     <a href="#" class="app-store-btn">
                         <div>
-                            <small>Download on the</small>
-                            <h5>App Store</h5>
+                            <small> @lang('header.download')</small>
+                            <h5> @lang('header.app')</h5>
                         </div>
                         <i class="fab fa-apple"></i>
                     </a>
                     <a href="#" class="google-play-btn">
                         <div>
-                            <small>Get it on</small>
-                            <h5>Google Play</h5>
+                            <small> @lang('header.get')</small>
+                            <h5> @lang('header.play')</h5>
                         </div>
                         <i class="fab fa-google-play"></i>
                     </a>
