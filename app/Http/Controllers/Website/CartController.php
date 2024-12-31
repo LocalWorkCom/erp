@@ -157,7 +157,7 @@ class CartController extends Controller
         $amount = $request->amount;
         try {
             $lang = $request->header('lang', 'en');
-            // $branchId = $request->input('branch_id');  
+            // $branchId = $request->input('branch_id');
 
             $coupon = GetCouponId($code);
             if ($coupon) {
@@ -213,5 +213,10 @@ class CartController extends Controller
             ->get();
 
         return view('website.orders', compact('orders'));
+    }
+
+    public function paymentDetails($id){
+        $details = Order::where('id',$id)->get();
+        return view('website.order-payment-details',compact('details'));
     }
 }
