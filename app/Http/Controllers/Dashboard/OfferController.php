@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Offer;
+use App\Models\Slider;
 use App\Services\OfferService;
 use Illuminate\Http\Request;
 
@@ -105,6 +106,11 @@ class OfferController extends Controller
      */
     public function destroy(string $id)
     {
+        $isLinkedToSlider = Slider::where('offer_id', $id)->exists();
+
+        if ($isLinkedToSlider) {
+            return redirect()->back()->withErrors(__('validation.offer_linked_error'));
+        }
         $response = $this->offerService->destroy($id);
         $responseData = $response->original;
         $message= $responseData['message'];
