@@ -124,14 +124,15 @@
                                             <option value="" disabled {{ old('currency_code', $product->currency_code) == '' ? 'selected' : '' }}>
                                                 @lang('product.ChooseCurrency')
                                             </option>
-                                            @foreach ($Currencies as $index => $Currency)
-                                                @foreach ($Currencies as $index => $Currency)
-                                                    <option value="{{ $Currency['id'] }}" {{ $Currency['id'] == $product->currency_code ? 'selected' : '' }}>{{ $Currency['code'] }}</option>
-                                                @endforeach
+                                            @foreach ($Currencies as $Currency)
+                                                <option value="{{ $Currency['id'] }}" {{ $Currency['id'] == $product->currency_code ? 'selected' : '' }}>
+                                                    {{ $Currency['code'] }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCurrency')</div>
                                     </div>
+                                    
 
                                     <div class="col-xl-4">
                                         <label for="category_id" class="form-label">@lang('product.Category')</label>
