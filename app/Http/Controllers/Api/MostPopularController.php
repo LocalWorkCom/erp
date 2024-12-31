@@ -10,7 +10,12 @@ class MostPopularController extends Controller
     protected $lang;
     public function index(Request $request){
         $this->lang = $request->header('lang','ar');
-        $popularDishes = getMostDishesOrdered(5);
+        $branchController = new BranchController();
+        $branchesResponse = $branchController->listBranchAndNear($request);
+        $branchesData = $branchesResponse->getData()->data; // LAT AND LONG OPTIONAL
+        $branch = $branchesData->branch ?? null;
+        $branchId = $branch->id ?? null;
+        $popularDishes = getMostDishesOrdered($branchId);
         foreach($popularDishes as $popularDish){
             if($popularDish)
             //$popularDish->makeHidden(['name_site', 'description_site']);
