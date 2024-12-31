@@ -98,8 +98,7 @@
                                                     الاعلى تقييم
                                                 </span>
                                                 <div class="d-flex justify-content-between pt-4">
-                                                    <button class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#productModal">
+                                                    <button class="btn" onclick="fill_cart('{{ $dish->id }}')">
                                                         + أضف الي العربة
                                                     </button>
                                                     <span>{{ $dish->price }} ج . م</span>
@@ -205,6 +204,7 @@
         </div>
     </section>
 @endsection
+@include('website.cart-modal')
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
