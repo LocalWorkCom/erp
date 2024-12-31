@@ -125,14 +125,14 @@
                                                 @lang('product.ChooseCurrency')
                                             </option>
                                             @foreach ($Currencies as $Currency)
-                                                <option value="{{ $Currency['id'] }}" {{ $Currency['id'] == $product->currency_code ? 'selected' : '' }}>
+                                                <option value="{{ $Currency['code'] }}" {{ $Currency['code'] == $product->currency_code ? 'selected' : '' }}>
                                                     {{ $Currency['code'] }}
                                                 </option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback">@lang('validation.EnterCurrency')</div>
                                     </div>
-                                    
+
 
                                     <div class="col-xl-4">
                                         <label for="category_id" class="form-label">@lang('product.Category')</label>
@@ -182,7 +182,7 @@
                                             placeholder="@lang('product.MinLimit')">
                                         <div class="invalid-feedback">@lang('validation.EnterMinLimit')</div>
                                     </div>
-                                    
+
                                     <div class="col-xl-4">
                                         <label for="max_limit" class="form-label">@lang('product.MaxLimit')</label>
                                         <input type="number" name="max_limit" id="max_limit" class="form-control"
