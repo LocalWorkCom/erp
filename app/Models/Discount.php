@@ -101,4 +101,8 @@ class Discount extends Model
         return $this->belongsToMany(Dish::class, 'dish_discount', 'discount_id', 'dish_id')
             ->whereNull('dish_discount.deleted_at'); // Ensure only non-deleted dishes
     }
+    public function slider_discounts()
+    {
+        return $this->hasMany(DishDiscount::class);
+    }
 }

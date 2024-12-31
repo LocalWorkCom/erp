@@ -83,7 +83,10 @@ class SliderController extends Controller
         $slider = Slider::findOrFail($id);
         $dishes = Dish::all();
         $offers = Offer::where('is_active', 1)->get();
-        $discounts = DishDiscount::with(['dish', 'discount'])->get();
+        $discounts = DishDiscount::with(['dish', 'discount'])
+            ->whereHas('dish')
+            ->whereHas('discount')
+            ->get();
         return view('dashboard.slider.edit', compact('slider','dishes','offers', 'discounts'));
     }
 

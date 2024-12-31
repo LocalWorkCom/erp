@@ -7,6 +7,7 @@
 
             <div class="modal-body">
                 <input type="hidden" name="dish_id" id="dish_id_v1">
+                <input type="hidden" name="currency_symbol" id="currency_symbol_v1">
                 <h2 class="text-center mb-4"> من فضلك قم بتخصيص وجبتك </h2>
                 <div class="row mx-0">
                     <div class="col-md-6">
@@ -60,6 +61,8 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="dish_id" id="dish_id_v2">
+          <input type="hidden" name="currency_symbol" id="currency_symbol_v2">
+
 
           <h2 class="text-center mb-4"> من فضلك قم بتخصيص وجبتك </h2>
           <div>
