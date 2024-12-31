@@ -1,4 +1,4 @@
-<div class="modal-body register px-4" id="registerBody">
+<div class="modal-body register d-none px-4" id="registerBody">
     <form method="POST" action="{{ route('website.register') }}" id="Register">
         @csrf
         <div class="row">

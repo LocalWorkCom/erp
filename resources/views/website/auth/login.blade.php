@@ -1,4 +1,4 @@
-<div class="modal-body login d-none px-4" id="loginBody">
+<div class="modal-body login  px-4" id="loginBody">
     <form method="POST" id="login-Form" action="{{ route('website.login') }}">
         @csrf
         <div class="row">
@@ -13,7 +13,7 @@
                 <meta name="csrf-token" content="{{ csrf_token() }}">
 
                 <!-- Phone Input -->
-         
+
                 <div class="input-group mb-3">
                     <input type="text" class="form-control  @error('email_or_phone') is-invalid @enderror "
                         name="email_or_phone" id="phoneInput" placeholder="@lang('auth.phoneplace')"

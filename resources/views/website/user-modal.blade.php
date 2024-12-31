@@ -126,7 +126,7 @@
                         </li>
                         <li>
 
-                            <a href="#">
+                            <a data-bs-toggle="modal" data-bs-target="#logoutModal" >
                                 <h6 class="fw-bold">
                                     <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                     @lang('header.logout')
@@ -140,70 +140,49 @@
             </div>
         </div>
     </div>
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
-                    @csrf
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
-                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
-                    </div>
-                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
-                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
-                        <button type="button" class="btn reversed main-color w-25 mx-2"
-                            data-bs-dismiss="modal">@lang('header.cancel')</button>
-                    </div>
-                </form>
 
-            </div>
-        </div>
-    </div>
 @endauth
 @push('scripts')
     <script>
         // logout modal
-        document.addEventListener("DOMContentLoaded", function() {
+        // document.addEventListener("DOMContentLoaded", function() {
 
-            const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+        //     const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", function(event) {
-                    event.preventDefault();
+        //     if (logoutBtn) {
+        //         logoutBtn.addEventListener("click", function(event) {
+        //             event.preventDefault();
 
-                    const profileModal = document.getElementById("profileModal");
-                    const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+        //             const profileModal = document.getElementById("profileModal");
+        //             const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
 
-                    if (profileModal) {
-                        const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                        if (profileInstance) {
-                            profileInstance.hide();
-                        }
-                    }
-                    logoutModal.show();
-                });
-            }
+        //             if (profileModal) {
+        //                 const profileInstance = bootstrap.Modal.getInstance(profileModal);
+        //                 if (profileInstance) {
+        //                     profileInstance.hide();
+        //                 }
+        //             }
+        //             logoutModal.show();
+        //         });
+        //     }
 
-            // Handling close behavior manually if necessary
-            const closeButton = document.querySelector('.btn-close');
-            const cancelButton = document.querySelector('.btn.reversed.main-color');
+        //     // Handling close behavior manually if necessary
+        //     const closeButton = document.querySelector('.btn-close');
+        //     const cancelButton = document.querySelector('.btn.reversed.main-color');
 
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
+        //     if (closeButton) {
+        //         closeButton.addEventListener('click', function() {
+        //             const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+        //             logoutModal.hide();
+        //         });
+        //     }
 
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
-        });
+        //     if (cancelButton) {
+        //         cancelButton.addEventListener('click', function() {
+        //             const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+        //             logoutModal.hide();
+        //         });
+        //     }
+        // });
     </script>
 @endpush
