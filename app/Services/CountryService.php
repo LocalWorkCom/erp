@@ -137,10 +137,6 @@ class CountryService
 
         $lang = app()->getLocale();
 
-        if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
-        }
-
         // Find the country
         $country = Country::find($id);
         if (!$country) {

@@ -32,7 +32,7 @@ Route::middleware(['auth:client'])->group(function () {
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
     Route::get('/myaddress/active/{id}', [LocationController::class, 'activeAddress'])->name('active.Address');
 
-    Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
+   // Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
 
 });
 
