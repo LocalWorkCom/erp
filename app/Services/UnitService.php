@@ -124,7 +124,8 @@ class UnitService
         }
 
         // Check if there are any products associated with this unit via productUnits()
-        if ($unit->productUnits()->count() > 0) {
+        $activeProductUnits = $unit->productUnits()->whereNull('deleted_at')->count();
+        if ($activeProductUnits > 0) {
             return CustomRespondWithBadRequest(__('unit.The unit have relation'));
         }
 
