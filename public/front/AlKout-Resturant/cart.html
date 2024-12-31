@@ -1502,7 +1502,11 @@
   <script src="SiteAssets/aos-master/dist/aos.js"></script>
   <script>
     AOS.init();
-  
+    document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
+});
+
+
 
   </script>
  

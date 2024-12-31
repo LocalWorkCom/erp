@@ -164,5 +164,4 @@
     </div>
 @endauth
 @push('scripts')
-
 @endpush
