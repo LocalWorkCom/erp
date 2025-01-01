@@ -47,14 +47,14 @@
 
                 <!-- Password -->
                 <div class="input-group position-relative mb-3">
-                    <input type="password" name="password" class="form-control" id="passwordInput"
+                    <input type="password" name="passwordregister" class="form-control" id="passwordInput"
                         placeholder=" @lang('auth.passweb') " required>
                     <button class="input-group-eye position-absolute" type="button" id="togglePassword">
                         <i class="fas fa-eye" id="eyeIcon"></i>
                     </button>
 
                 </div>
-                <div id="passwordError" class="error-message mb-1 text-danger"></div>
+                <div id="passwordregisterError" class="error-message mb-1 text-danger"></div>
 
                 <!-- Date of Birth -->
                 <div class="input-group mb-3">
