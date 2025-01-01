@@ -10,6 +10,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\FAQ;
+use App\Models\Offer;
 use App\Models\PrivacyPolicy;
 use App\Models\Rate;
 use App\Models\ReturnPolicy;
@@ -145,7 +146,7 @@ class HomeController extends Controller
 
     public function showOffers(Request $request)
     {
-        $categoryId = 'offers';
+        $categoryId ='offers';
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -179,10 +180,20 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+        $offers = Offer::where('is_active', 1)
+            ->where(function ($query) use ($branchId) {
+                $query->whereRaw('FIND_IN_SET(?, branch_id)', [$branchId])
+                    ->orWhere('branch_id', -1);
+            })
+            ->whereHas('details', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->get();
+
 
         return view(
             'website.menu',
-            compact(['menuCategories', 'userFavorites', 'categoryId'])
+            compact(['menuCategories', 'userFavorites', 'categoryId','offers'])
         );
     }
 

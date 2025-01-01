@@ -76,28 +76,40 @@
                 <div class="tab-pane fade {{ $categoryId == 'offers' ? 'show active' : '' }}" id="pills-offers" role="tabpanel"
                      aria-labelledby="pills-offers-tab">
                     <div class="row mx-0">
-                        <div class="col-md-4 mb-4" data-aos="zoom-in">
-                            <div class="plate">
-                                <figure class="plate-img m-0">
-                                    <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
-                                    <figcaption class="offers-badge">
-                                        <img src="{{asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
-                                        {{app()->getLocale() == 'en' ? 'Offer' : 'عرض'}}
-                                    </figcaption>
-                                </figure>
-                                <div class="text-center pt-4">
-                                    <h5>كبسة فراخ </h5>
-                                    <div class="d-flex justify-content-between pt-4">
-                                        <button class="btn " data-bs-toggle="modal"
-                                                data-bs-target="#productDiscountModal">
-                                            @lang('header.addtocart')</button>
-                                        <div>
-                                            <span class="discount"> 300 ج . م</span>
+                        @foreach($offers as $offer)
+                            <div class="col-md-4 mb-4" data-aos="zoom-in">
+                                <div class="plate">
+                                    <figure class="plate-img m-0">
+                                        <img src="{{ asset((app()->getLocale() == 'en'? $offer->image_en : $offer->image_ar )?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
+                                        <figcaption class="offers-badge">
+                                            <img src="{{asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
+                                            {{app()->getLocale() == 'en' ? 'Offer' : 'عرض'}}
+                                        </figcaption>
+                                    </figure>
+                                    <div class="text-center pt-4">
+                                        <h5>{{app()->getLocale() == 'en'? $offer->name_en : $offer->name_ar}} </h5>
+                                        <div class="d-flex justify-content-between pt-4">
+                                            <button class="btn " data-bs-toggle="modal"
+                                                    data-bs-target="#productDiscountModal">
+                                                @lang('header.addtocart')</button>
+                                            <div>
+                                                <span class="discount"> {{$offer->discount_value}}
+                                                    @if($offer->discount_type == 'percentage')
+                                                       %
+                                                    @else
+                                                        @if(app()->getLocale() == 'en')
+                                                            Pound
+                                                        @else
+                                                            ج
+                                                        @endif
+                                                    @endif
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
                 @foreach ($menuCategories as $key => $menuCategory)
