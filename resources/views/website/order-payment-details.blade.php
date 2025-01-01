@@ -6,14 +6,15 @@
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('header.home')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.myorder')</li>
+                    <li class="breadcrumb-item"><a href="{{ route('orders.show') }}"> @lang('header.myorder')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.paymentdetails')</li>
                 </ol>
             </nav>
         </div>
     </section>
     <section class="payment-details">
         <div class="container py-2">
-            <h4 class="fw-bold "> @lang('header.myorder')</h4>
+            <h4 class="fw-bold "> @lang('header.paymentdetails')</h4>
             <div class="card p-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between pt-3">
@@ -37,7 +38,7 @@
                                     aria-controls="panelsStayOpen-collapseOne">
                                     <h6 class="fw-bold">
                                         <i class="fas fa-file-alt main-color fa-xs"></i>
-                                          @lang('header.orderdetails')
+                                        @lang('header.orderdetails')
                                     </h6>
                                 </button>
                             </h2>
@@ -52,9 +53,10 @@
                                                     {{ $detail->quantity }} X {{ $detail->dish?->name ?? 'N/A' }}
                                                 </p>
                                             </li>
-                                        @endforeach
                                         <li class="order-list">
-                                            <small class="text-muted py-1 d-block"> نص فرخة </small>
+                                            <small class="text-muted py-1 d-block">
+                                                {{ is_array(getDishRecipeIds($detail->dish?->id, null)) ? implode(', ', getDishRecipeIds($detail->dish?->id, null)) : getDishRecipeIds($detail->dish?->id, null) ?? __('header.nodish') }}
+                                            </small>
                                         </li>
                                         <li class="order-list">
                                             @foreach ($order->orderAddons as $addon)
@@ -63,10 +65,12 @@
                                                 </small>
                                             @endforeach
                                         </li>
+                                        @endforeach
+
                                         <li class="order-list">
                                             <small class="text-muted py-1 d-block">
                                                 @if ($order->note)
-                                                @lang('header.note') : {{ $order->note }}
+                                                    @lang('header.note') : {{ $order->note }}
                                                 @else
                                                     @lang('header.nonote')
                                                 @endif
@@ -120,11 +124,26 @@
                                     @endif
                                     <ul class="list-unstyled p-0 mb-0">
                                         <li class="order-list">
-                                            <p class="mb-0">   @lang('header.paymentmethod')
+                                            <p class="mb-0"> @lang('header.paymentmethod')
 
                                             </p>
                                             <p class="mb-0 py-1">
-                                                {{ $order->orderTransactions->first()?->payment_method }}
+                                                @switch($order->orderTransactions->first()?->payment_method)
+                                                    @case('cash')
+                                                        @lang('header.cash')
+                                                    @break
+
+                                                    @case('credit_card')
+                                                        @lang('header.credit_card')
+                                                    @break
+
+                                                    @case('online')
+                                                        @lang('header.online')
+                                                    @break
+
+                                                    @default
+                                                        @lang('header.cash')
+                                                @endswitch
                                             </p>
                                         </li>
                                         <li class="order-list">
@@ -132,7 +151,7 @@
 
                                             </p>
                                             <p class="mb-0 py-1">
-                                                {{ getSetting('delivery_time')  .   __('header.min') }}
+                                                {{ getSetting('delivery_time') . __('header.min') }}
                                             </p>
                                         </li>
                                     </ul>

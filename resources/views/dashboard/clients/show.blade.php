@@ -56,23 +56,23 @@
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.address')</label>
                                     <p class="form-text">
-                                        {{ $client->clientDetails && $client->clientDetails->address_id ? $client->addresses->first()->address : __('client.none') }}
+                                        {{$client->addresses->isNotEmpty() ? $client->addresses->first()->address : __('client.none') }}
                                     </p>
                                 </div>
-                                @if ($client->clientDetails && $client->clientDetails->address_id)
-                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                        <label class="form-label">@lang('client.city')</label>
-                                        <p class="form-text">{{ $client->addresses->first()->city }}</p>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                        <label class="form-label">@lang('client.state')</label>
-                                        <p class="form-text">{{ $client->addresses->first()->state }}</p>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
-                                        <label class="form-label">@lang('client.postalCode')</label>
-                                        <p class="form-text">{{ $client->addresses->first()->postal_code }}</p>
-                                    </div>
-                                @endif
+                                @if ($client->addresses->isNotEmpty())
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.city')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->city }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.state')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->state }}</p>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
+                                    <label class="form-label">@lang('client.postalCode')</label>
+                                    <p class="form-text">{{ $client->addresses->first()->postal_code }}</p>
+                                </div>
+                            @endif
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-8">
                                     <label class="form-label">@lang('client.is_active')</label>
                                     <p class="form-text">

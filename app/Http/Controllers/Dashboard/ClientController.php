@@ -37,13 +37,23 @@ class ClientController extends Controller
     }
     public function store(Request $request)
     {
+        $phone_length = Country::where('phone_code', $request->country_code)->value('length');
+
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             // 'password' => 'nullable|string',
             'country_id' => 'required|exists:countries,id',
             'country_code' => 'required|string',
-            'phone' => 'required|string|min:10',
+            'phone' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
             'is_active' => 'required|boolean',
@@ -51,9 +61,18 @@ class ClientController extends Controller
             'city' => 'required|string',
             'state' => 'required|string',
             'postal_code' => 'nullable|string',
-            'address_phone' => 'required|string|min:10',
+            'address_phone' => [
+                'nullable',
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'is_default' => 'nullable|boolean'
         ]);
+
 
         $this->clientService->createClient($validatedData, $this->checkToken);
         return redirect()->route('client.index')->with('success', 'Client created successfully!');
@@ -68,12 +87,22 @@ class ClientController extends Controller
 
     public function update(Request $request, $id)
     {
+        $phone_length = Country::where('phone_code', $request->country_code)->value('length');
+
         $validatedData = $request->validate([
             'name' => 'nullable|string',
             'email' => 'nullable|email|unique:users,email,' . $id,
             // 'password' => 'nullable|string',
             'country_id' => 'nullable|exists:countries,id',
-            'phone' => 'nullable|string|min:10',
+            'phone' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'country_code' => 'nullable|string',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'date_of_birth' => 'nullable|date',
@@ -82,7 +111,15 @@ class ClientController extends Controller
             'city' => 'nullable|string',
             'state' => 'nullable|string',
             'postal_code' => 'nullable|string',
-            'address_phone' => 'nullable|string|min:10',
+            'address_phone' => [
+                'nullable',
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
+            ],
             'is_default' => 'nullable|boolean'
         ]);
 
