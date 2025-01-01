@@ -238,29 +238,29 @@ function formatTime(time) {
 }
 
   // logout modal
-  document.addEventListener("DOMContentLoaded", function () {
-    const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
+//   document.addEventListener("DOMContentLoaded", function () {
+//     const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
 
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function (event) {
-        event.preventDefault(); 
+//     if (logoutBtn) {
+//       logoutBtn.addEventListener("click", function (event) {
+//         event.preventDefault();
 
-        const profileModal = document.getElementById("profileModal");
-        const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
+//         const profileModal = document.getElementById("profileModal");
+//         const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
 
-        if (profileModal) {
-          const profileInstance = bootstrap.Modal.getInstance(profileModal);
-          if (profileInstance) {
-            profileInstance.hide();
-          }
-        }
-        logoutModal.show();
-      });
-    }
-  });
+//         if (profileModal) {
+//           const profileInstance = bootstrap.Modal.getInstance(profileModal);
+//           if (profileInstance) {
+//             profileInstance.hide();
+//           }
+//         }
+//         logoutModal.show();
+//       });
+//     }
+//   });
 
 
-  // notfications-alert modal 
+  // notfications-alert modal
   document.addEventListener("DOMContentLoaded", function () {
     const notificationSwitch = document.getElementById("notificationSwitch");
     const profileBody = document.querySelector(".profile-body");
@@ -286,7 +286,7 @@ function formatTime(time) {
     });
 });
 
-// wizard js 
+// wizard js
 
 $(document).ready(function () {
   //Enable Tooltips
@@ -318,15 +318,15 @@ $(document).ready(function () {
 });
 
 
-// ********************************************* 
-//  product quantity 
+// *********************************************
+//  product quantity
 let quantity = 1;
 // function increaseQuantity(ele) {
 //   quantity++;
 //   console.log(ele);
 //   var total = $(ele).parent().parent().find('.total-price').val();
 //   console.log(total);
-  
+
 //   $(ele).parent().parent().find('.total-price').val(total * quantity);
 //   updateQuantityDisplay();
 // }
@@ -371,15 +371,15 @@ function decreaseQuantity(ele) {
 
       // Update the total price in the modal
       $('#total-price').text(newTotal);
-      
+
   }
 }
 
 function updateQuantityDisplay() {
   document.getElementById('quantity').textContent = quantity;
 }
-// ************************************************** 
-// eye password hide and show 
+// **************************************************
+// eye password hide and show
 const passwordInput = document.getElementById('passwordInput');
 const togglePasswordButton = document.getElementById('togglePassword');
 const eyeIcon = document.getElementById('eyeIcon');
@@ -393,7 +393,7 @@ togglePasswordButton.addEventListener('click', function () {
   eyeIcon.classList.toggle('fa-eye-slash');
 });
 
-//  ********* 
+//  *********
 
 // login and register modal ***************************
 
@@ -439,7 +439,7 @@ document.getElementById('sendOtpButton').addEventListener('click', function (e) 
 
 // end login functions **********************
 
-// counter function 
+// counter function
 document.addEventListener("DOMContentLoaded", () => {
   const sideCartPlates = document.querySelectorAll(".sideCart-plate");
 
@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// rate-stars 
+// rate-stars
 document.addEventListener('DOMContentLoaded', function () {
   const stars = document.querySelectorAll('.star');
   let currentRating = 0;

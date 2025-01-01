@@ -37,7 +37,7 @@
                                     aria-controls="panelsStayOpen-collapseOne">
                                     <h6 class="fw-bold">
                                         <i class="fas fa-file-alt main-color fa-xs"></i>
-                                        تفاصيل الطلب @lang('header.orderdetails')
+                                          @lang('header.orderdetails')
                                     </h6>
                                 </button>
                             </h2>
@@ -51,65 +51,88 @@
                                                 <p class="mb-0 py-1">
                                                     {{ $detail->quantity }} X {{ $detail->dish?->name ?? 'N/A' }}
                                                 </p>
-                                                @foreach ($order->orderAddons as $addon)
-                                                    <small>
-                                                        {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
-                                                    </small>
-                                                @endforeach
-                                                <p class="fw-bold mb-0 py-1">
-                                                    {{ $order->total_price_after_tax }}
-                                                    {{ $order->Branch->country->currency_symbol }} </p>
                                             </li>
-
                                         @endforeach
+                                        <li class="order-list">
+                                            <small class="text-muted py-1 d-block"> نص فرخة </small>
+                                        </li>
+                                        <li class="order-list">
+                                            @foreach ($order->orderAddons as $addon)
+                                                <small class="text-muted py-1 d-block">
+                                                    {{ __('header.addons') . '(' . $addon->Addon?->addons?->name . ')' ?? __('header.noaddons') }}
+                                                </small>
+                                            @endforeach
+                                        </li>
+                                        <li class="order-list">
+                                            <small class="text-muted py-1 d-block">
+                                                @if ($order->note)
+                                                @lang('header.note') : {{ $order->note }}
+                                                @else
+                                                    @lang('header.nonote')
+                                                @endif
+                                            </small>
+                                        </li>
+                                        <li class="order-list">
+                                            <p class="mb-0">@lang('header.totalorder')
 
-                                        <li class="order-list">
-                                            <p class="mb-0">
-                                                مجموع طلبي
                                             </p>
                                             <p class="mb-0 py-1">
-                                                1550 ج.م
+                                                {{ $order->total_price_after_tax }}
+                                                {{ $order->Branch->country->currency_symbol }}
                                             </p>
                                         </li>
                                         <li class="order-list">
-                                            <p class="mb-0">
-                                                رسوم التوصيل
+                                            <p class="mb-0">@lang('header.feesdelivery')
+
                                             </p>
                                             <p class="mb-0 py-1">
-                                                140 ج.م
+                                                @if ($order->delivery_fees)
+                                                    {{ $order->delivery_fees }}
+                                                    {{ $order->Branch->country->currency_symbol }}
+                                                @else
+                                                    @lang('header.nodliveryfees')
+                                                @endif
                                             </p>
                                         </li>
                                         <li class="order-list">
-                                            <p class="mb-0">
-                                                رسوم الخدمة
+                                            <p class="mb-0">@lang('header.fees')
+
                                             </p>
                                             <p class="mb-0 py-1">
-                                                220 ج.م
+                                                @if ($order->delivery_fees)
+                                                    {{ $order->service_fees }}
+                                                    {{ $order->Branch->country->currency_symbol }}
+                                                @else
+                                                    @lang('header.nofees')
+                                                @endif
                                             </p>
                                         </li>
 
                                     </ul>
-                                    <p class="mb-0">
-                                        يشتمل على ضريبة القيمة المضافة
-                                        <span class="main-color fw-bold"> 14% </span>
-                                        بمعنى آخر
-                                        29.23EGP
-                                    </p>
+                                    @if ($order->tax_value != 0.0)
+                                        <p class="mb-0">@lang('header.includefees')
+                                            <span class="main-color fw-bold">
+                                                {{ ($order->tax_value / $order->total_price_befor_tax) * 100 . '%' }}
+                                            </span>@lang('header.anotherway')
+
+                                            {{ $order->tax_value }} {{ $order->Branch->country->currency_symbol }}
+                                        </p>
+                                    @endif
                                     <ul class="list-unstyled p-0 mb-0">
                                         <li class="order-list">
-                                            <p class="mb-0">
-                                                طريقة الدفع
+                                            <p class="mb-0">   @lang('header.paymentmethod')
+
                                             </p>
                                             <p class="mb-0 py-1">
-                                                نقدا
+                                                {{ $order->orderTransactions->first()?->payment_method }}
                                             </p>
                                         </li>
                                         <li class="order-list">
-                                            <p class="mb-0">
-                                                وقت التوصيل
+                                            <p class="mb-0">@lang('header.deliveryTime')
+
                                             </p>
                                             <p class="mb-0 py-1">
-                                                38 دقيقة
+                                                {{ getSetting('delivery_time')  .   __('header.min') }}
                                             </p>
                                         </li>
                                     </ul>
