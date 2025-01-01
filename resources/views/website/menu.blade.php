@@ -22,6 +22,19 @@
                 </div>
             @endif
             <ul class="nav nav-pills mb-3 px-0 align-items-center" id="pills-tab" role="tablist">
+                <!-- Fixed "Offers" Tab -->
+                <li class="nav-item" role="presentation">
+                    <button
+                        class="nav-link {{ $categoryId == 'offers' || (is_null($categoryId) && !$menuCategories->count()) ? 'active' : '' }}"
+                        id="pills-offers-tab" data-bs-toggle="pill" data-bs-target="#pills-offers" type="button" role="tab"
+                        aria-controls="pills-offers" aria-selected="{{ $categoryId == 'offers' ? 'true' : 'false' }}">
+                        <div class="category-button">
+                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="العروض" class="offer-img" />
+                            <p class="me-3 mb-0">{{app()->getLocale() == 'en' ? 'Offers' : 'العروض'}}</p>
+                        </div>
+                    </button>
+                </li>
+
                 @foreach ($menuCategories as $key => $menuCategory)
                     @if ($menuCategory->dish_categories)
                         <li class="nav-item" role="presentation">
@@ -59,6 +72,34 @@
 
 
             <div class="tab-content pt-5" id="pills-tabContent">
+                <!-- Offers Tab Content -->
+                <div class="tab-pane fade {{ $categoryId == 'offers' ? 'show active' : '' }}" id="pills-offers" role="tabpanel"
+                     aria-labelledby="pills-offers-tab">
+                    <div class="row mx-0">
+                        <div class="col-md-4 mb-4" data-aos="zoom-in">
+                            <div class="plate">
+                                <figure class="plate-img m-0">
+                                    <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
+                                    <figcaption class="offers-badge">
+                                        <img src="{{asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
+                                        {{app()->getLocale() == 'en' ? 'Offer' : 'عرض'}}
+                                    </figcaption>
+                                </figure>
+                                <div class="text-center pt-4">
+                                    <h5>كبسة فراخ </h5>
+                                    <div class="d-flex justify-content-between pt-4">
+                                        <button class="btn " data-bs-toggle="modal"
+                                                data-bs-target="#productDiscountModal">
+                                            @lang('header.addtocart')</button>
+                                        <div>
+                                            <span class="discount"> 300 ج . م</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @foreach ($menuCategories as $key => $menuCategory)
                     @if ($menuCategory->dish_categories)
                         <div class="tab-pane fade {{ $categoryId == $menuCategory->dish_categories->id || (is_null($categoryId) && $key == 0) ? 'show active' : '' }}"
@@ -109,6 +150,7 @@
                         </div>
                     @endif
                 @endforeach
+
 
             </div>
 
