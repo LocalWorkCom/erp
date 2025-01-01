@@ -18,7 +18,6 @@
             <div class="card p-4">
                 <h5>
                     <i class="fas fa-file-alt main-color fa-xs"></i>  @lang('header.ordersum')
-
                 </h5>
                 @forelse ($orders as $order)
                     <div class="card-body border-bottom">
@@ -32,11 +31,8 @@
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.cancelled')</p>
                                 @elseif ($order->status == 'pending')
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.pending')</p>
-
                                 @elseif ($order->status == 'inprogress')
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.inprogress')</p>
-
-
                             @endif
                         </div>
                         <small class="text-muted py-1"> @lang('header.ordermark') :  {{ $order->order_number }}</small>
@@ -47,14 +43,11 @@
                                 <span>{{ $detail->dish?->name ?? 'N/A' }}</span>
                             </p>
                             <p class="text-muted mt-1 mb-0 mx-4">
-                                @foreach ($order->orderAddons as $addon)
-                                <small>
-                                    {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
-                                </small>
-                            @endforeach                        </p>
+                                {{ is_array(getDishRecipeIds($detail->dish?->id, null)) ? implode(', ', getDishRecipeIds($detail->dish?->id, null)) : getDishRecipeIds($detail->dish?->id, null) ?? __('header.nodish') }}
+                            </p>
                             <p class="fw-bold mb-0 py-1">{{ $order->total_price_after_tax }} {{ $order->Branch->country->currency_symbol}}</p>
                         @endforeach
-                        <a href="{{ route('order.paymentdetails',['id'=>$order->id]) }}" class="text-decoration-underline py-1 fw-bold">  @lang('header.orderdetails')</a>
+                        <a href="{{ route('order.paymentdetails',['id'=>$order->id]) }}" class="text-decoration-underline py-1 fw-bold">  @lang('header.paymentdetails')</a>
                         <div class="d-flex justify-content-end">
                             <button class="btn reversed main-color" onclick="window.location.href='{{ route('order.tracking',['id'=>$order->id]) }}'">
                                 @lang('header.trackorder')</button>

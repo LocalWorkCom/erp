@@ -193,7 +193,7 @@ class CartController extends Controller
     {
         $user = Auth::guard('client')->user();
 
-        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+        $orders = Order::with(['client', 'branch.country', 'address', 'tracking', 'orderDetails', 'orderAddons.Addon','orderProducts', 'orderTransactions', 'coupon'])
             ->where('client_id', $user->id)
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->orderBy('created_at', 'desc')
@@ -208,7 +208,7 @@ class CartController extends Controller
 
         $orders = Order::with([
             'client',
-            'branch.country', // Eager load country through branch
+            'branch.country',
             'address',
             'tracking',
             'orderDetails',
@@ -229,7 +229,7 @@ class CartController extends Controller
     public function paymentDetails($id){
         $user = Auth::guard('client')->user();
 
-        $details =  Order::with([
+        $order =  Order::with([
             'client',
             'branch.country',
             'address',
@@ -243,7 +243,7 @@ class CartController extends Controller
         ->where('client_id', $user->id)
         ->where('id', $id)
         ->orderBy('created_at', 'desc')
-        ->get();
-        return view('website.order-payment-details',compact('details'));
+        ->first();
+        return view('website.order-payment-details',compact('order'));
     }
 }

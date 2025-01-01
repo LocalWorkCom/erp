@@ -70,8 +70,15 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('client.countryCode')</label>
-                                        <input type="text" class="form-control" id="country_code" name="country_code"
-                                            value="{{ $client->country_code }}" placeholder="@lang('client.countryCode')" required>
+                                            <select name="country_code" id="country_code" class="select2 form-control" required>
+                                                <option value="" disabled>@lang('client.chooseCountry')</option>
+                                                @foreach (GetCountries() as $country)
+                                                    <option value="{{ $country->phone_code }}"
+                                                        {{ $country->phone_code == $client->country_code && $client->country_code != ' ' ? 'selected' : '' }}>
+                                                        {{ $country->phone_code }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -160,7 +167,7 @@
                                         <label for="input-placeholder" class="form-label">@lang('client.addressPhone')</label>
                                         <input type="text" class="form-control" id="address_phone"
                                             name="address_phone" value="{{ $client->addresses->first()->address_phone ?? '' }}"
-                                            placeholder="@lang('client.addressPhone')" required>
+                                            placeholder="@lang('client.addressPhone')" {{ $client->addresses && $client->addresses->isNotEmpty() ? 'required' :'' }} >
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>
@@ -187,12 +194,12 @@
                                             </label>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
                                         <p class="mb-2 text-muted">@lang('client.isDefault')</p>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="1"
-                                                {{ $client->addresses && $client->addresses->first()->is_default == 1 ? 'checked' : '' }}>
+                                                {{ $client->addresses && $client->addresses->first() && $client->addresses->first()->is_default == 1 ? 'checked' : '' }}>
                                             <label class="form-check-label" for="Radio-md">
                                                 @lang('client.yes')
                                             </label>
@@ -200,12 +207,12 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="is_default"
                                                 id="Radio-md" value="0"
-                                                {{ $client->addresses && $client->addresses->first()->is_default == 0 ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="Radio-md">
+                                                {{ $client->addresses && $client->addresses->first() && $client->addresses->first()->is_default == 0 ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="Radio-md">
                                                 @lang('client.no')
                                             </label>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <center>
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                                             <input type="submit" class="form-control btn btn-primary" id="input-submit"

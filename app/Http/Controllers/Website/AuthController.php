@@ -30,20 +30,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $lang = app()->getLocale(); // Get the current language
+        $phone_length = Country::where('phone_code', $request->country_code)->value('length');
 
         // Validation rules
         $validator = Validator::make($request->all(), [
             "name" => "required|string",
             "email" => "required|email|unique:users",
             'country_code' => 'required|string',
-            "password" => "required|min:6",
+            "passwordregister" => "required|min:6",
             'phone' => [
                 'required',
-                'string',
-                'regex:/^[0-9]+$/', // Ensures only numbers are allowed
-                Rule::unique('users')->where(function ($query) use ($request) {
-                    return $query->where('country_code', $request->country_code);
-                }),
+                'numeric',
+                function ($attribute, $value, $fail) use ($phone_length) {
+                    if ($phone_length && strlen($value) != $phone_length) {
+                        $fail(__('validation.custom.phone.length', ['attribute' => __('auth.phone'), 'length' => $phone_length]));
+                    }
+                },
             ],
             "date_of_birth" => "nullable|date",
         ], [
@@ -52,8 +54,8 @@ class AuthController extends Controller
             'email.required' => __('validation.required', ['attribute' => __('auth.emailweb')]),
             'email.unique' => __('validation.unique', ['attribute' => __('auth.email')]),
             'country_code.required' => __('validation.required', ['attribute' => __('auth.country_code')]),
-            'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
-            'password.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
+            'passwordregister.required' => __('validation.required', ['attribute' => __('auth.password')]),
+            'passwordregister.min' => __('validation.min.string', ['attribute' => __('auth.password'), 'min' => 6]),
             'phone.required' => __('validation.required', ['attribute' => __('auth.phoneplace')]),
             'phone.regex' => __('validation.regex', ['attribute' => __('auth.phoneplace')]),
             'phone.unique' => __('validation.unique', ['attribute' => __('auth.phone')]),
@@ -88,7 +90,7 @@ class AuthController extends Controller
             $user->country_id = $country->id;
             $user->country_code = $request->country_code;
             $user->birth_date = $request->date_of_birth;
-            $user->password = Hash::make($request->password);
+            $user->password = Hash::make($request->passwordregister);
             $user->save();
 
             event(new UserRegistered($user));
