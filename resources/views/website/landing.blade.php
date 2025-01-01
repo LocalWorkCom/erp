@@ -13,7 +13,8 @@
                                 <p class="slide-text my-5 ">
                                     {{ app()->getLocale() == 'ar' ? $slider->description_ar : $slider->description_en }}
                                 </p>
-                                <a href="{{route(('menu'))}}" class="btn">{{app()->getLocale() == 'ar' ? 'اطلب الان' : 'Order now'}}</a>
+                                <a href="{{ route('menu') }}"
+                                    class="btn">{{ app()->getLocale() == 'ar' ? 'اطلب الان' : 'Order now' }}</a>
                             </div>
                             <div class="col-md-6">
                                 <figure class="intro-img">
@@ -43,7 +44,7 @@
     <section class="categories pt-5">
         <div class="container px-0 py-sm-5 py-4">
             <div class="section-titles d-flex justify-content-between" data-aos="fade-down">
-                <h2 class="fw-bold">  @lang('header.menuopen')</h2>
+                <h2 class="fw-bold"> @lang('header.menuopen')</h2>
                 <div class="section-titles d-flex justify-content-end mb-2" data-aos="fade-down">
                     <a href="{{ route('menu') }}" class="section-btn text-decoration-none">
                         <span class="ms-2"> @lang('header.viewall')</span>
@@ -83,23 +84,24 @@
                 </a>
             </div>
 
-
             <div class="offers-slider owl-carousel owl-theme">
-                @if ($discounts)
+                @if ($discounts->isNotEmpty())
                     @foreach ($discounts as $discount)
                         <div class="item mb-4 category position-relative" data-aos="zoom-in">
                             <div class="item three row mx-0 p-4" data-aos="zoom-in">
                                 <div class="col-md-5">
                                     <img class="offer-img"
                                         src="{{ asset($discount->dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
-                                        alt="">
+                                        alt="{{ $discount->dish->name_ar }}">
                                 </div>
                                 <div class="col-md-7">
-                                    <h2 class="main-color fw-bold"> @lang('header.discount')
-                                        {{ $discount->type == 'percentage' ? '%' : 'جنيه' }}{{ (int) $discount->value }}
+                                    <h2 class="main-color fw-bold">
+                                        @lang('header.discount')
+                                        {{ $discount->discount->type == 'percentage' ? '%' : $discount->currency_symbol }}
+                                        {{ (int) $discount->discount->value }}
                                     </h2>
-                                    <h5 class=" pb-4">{{ $discount->dish->name_ar }}</h5>
-                                    <a href="#" class="btn ">
+                                    <h5 class="pb-4">{{ $discount->dish->name_ar }}</h5>
+                                    <a href="#" class="btn">
                                         <h4 class="fw-bold">@lang('header.ordernow')</h4>
                                     </a>
                                 </div>
@@ -107,6 +109,8 @@
                         </div>
                     @endforeach
                 @endif
+
+
             </div>
         </div>
     </section>
@@ -141,7 +145,8 @@
                                     <i class="fas fa-star"></i> @lang('header.rateall')
                                 </span>
                                 <div class="d-flex justify-content-between pt-4">
-                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')"> @lang('header.addtocart')  +                                    </button>
+                                    <button class="btn add-to-cart-btn"onclick="fill_cart('{{ $dish->id }}')">
+                                        @lang('header.addtocart') + </button>
                                     <span> {{ $dish->price }} {{ $dish->currency_symbol }}</span>
                                 </div>
                             </div>
@@ -155,7 +160,7 @@
         <div class="container py-sm-5 py-4">
             <div class="row m-0 justify-content-cennter align-items-center">
                 <div class="col-md-5 offset-md-1" data-aos="fade-left">
-                    <h1 class="fw-bold">  @lang('header.orderonline')</h1>
+                    <h1 class="fw-bold"> @lang('header.orderonline')</h1>
                     <p class="text-muted my-5 "> @lang('header.fewmin')
                     </p>
                     <a href="{{ route('menu') }}" class="btn btn-lg">@lang('header.ordernow')</a>

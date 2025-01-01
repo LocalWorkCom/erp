@@ -25,13 +25,13 @@ class DishService
 {
     try {
         $dish = Dish::with([
-            'dishCategory', 
+            'dishCategory',
             'cuisine',
             'sizes.details.recipe',
             'details.recipe',
-           
-         'dishAddonsDetails.category', 
-        'dishAddonsDetails.addon',   
+
+         'dishAddonsDetails.category',
+        'dishAddonsDetails.addon',
         ])->findOrFail($id);
 
         Log::info('Dish Retrieved', ['dish' => $dish]);
@@ -43,7 +43,7 @@ class DishService
     }
 }
 
-    
+
 
     public function store($data, $image)
     {
@@ -52,13 +52,13 @@ class DishService
             try {
                 // Log the initial data
                 Log::info('Starting Dish Creation', ['data' => $data]);
-    
-               
+
+
                 $validatedData = $this->validateDishData($data);
-                Log::info('Validated Data', ['validated_data' => $validatedData]);    
+                Log::info('Validated Data', ['validated_data' => $validatedData]);
                 if ($image) {
-                    $imagePath = 'images/dishes/' . $image->getClientOriginalName(); 
-                    $image->move(public_path('images/dishes'), $image->getClientOriginalName()); 
+                    $imagePath = 'images/dishes/' . $image->getClientOriginalName();
+                    $image->move(public_path('images/dishes'), $image->getClientOriginalName());
                     Log::info('New image uploaded', ['path' => $imagePath]);
                     $validatedData['image'] = $imagePath;
                 }
@@ -68,15 +68,15 @@ class DishService
                 $validatedData['has_addon'] = $validatedData['has_addon'] ?? 0;
                 $validatedData['created_by'] = auth()->id();
                 Log::info('Default Values Set', ['validated_data' => $validatedData]);
-    
+
                 // Create the main dish
                 $dish = Dish::create($validatedData);
                 Log::info('Dish Created', ['dish_id' => $dish->id]);
-    
+
                 // Process sizes
                 if (isset($data['sizes'])) {
                     Log::info('Processing Sizes for Dish', ['dish_id' => $dish->id, 'sizes' => $data['sizes']]);
-                
+
                     foreach ($data['sizes'] as $sizeIndex => $size) {
                         try {
                             $dishSize = DishSize::create([
@@ -90,7 +90,7 @@ class DishService
                         } catch (\Exception $e) {
                             Log::error('Error Creating Dish Size', ['error' => $e->getMessage()]);
                         }
-                
+
                         // Handle recipes for this size
                         if (isset($size['recipes'])) {
                             foreach ($size['recipes'] as $recipe) {
@@ -130,7 +130,7 @@ class DishService
                         ]);
                     }
                 }
-    
+
                 if (isset($data['addon_categories'])) {
                     foreach ($data['addon_categories'] as $addonCategory) {
                         foreach ($addonCategory['addons'] as $addon) {
@@ -140,7 +140,7 @@ class DishService
                                 'price' => $addon['price'],
                                 'addon_category_id' => $addonCategory['addon_category_id'],
                             ]);
-                
+
                             DishAddon::create([
                                 'dish_id' => $dish->id,
                                 'addon_id' => $addon['addon_id'],
@@ -153,16 +153,16 @@ class DishService
                         }
                     }
                 }
-                
+
                 Log::info('Dish Creation Completed Successfully', ['dish_id' => $dish->id]);
                 return $dish;
-    
+
             } catch (\Exception $e) {
                 Log::error('Dish Creation Failed', ['error' => $e->getMessage()]);
                 throw $e;
             }
 
-            
+
         });
 
     } catch (\Exception $e) {
@@ -170,8 +170,8 @@ class DishService
         throw $e;
     }
     }
-    
-    
+
+
 
     private function validateDishData($data)
     {
@@ -199,9 +199,9 @@ class DishService
             'addon_categories.*.addons.*.price' => 'required_if:has_addon,1|numeric|min:0',
         ])->validate();
     }
-    
 
-    
+
+
 
     public function update(Request $request, $id)
     {
@@ -210,14 +210,14 @@ class DishService
                 try {
                     // Log the initial request
                     Log::info('Starting Dish Update', ['dish_id' => $id, 'data' => $request->all()]);
-    
+
                     // Fetch the existing dish
                     $dish = Dish::findOrFail($id);
-    
+
                     // Validate incoming data
                     $validatedData = $this->validateDishData($request->all());
                     Log::info('Validated Data', ['validated_data' => $validatedData]);
-    
+
                     // Process the image
                     if ($request->hasFile('image')) {
                         $image = $request->file('image');
@@ -226,7 +226,7 @@ class DishService
                         $validatedData['image'] = $imagePath;
                         Log::info('Image Uploaded', ['path' => $imagePath]);
                     }
-    
+
                     // Update dish details
                     $validatedData['modified_by'] = auth()->id();
                     $dish->update($validatedData);
@@ -290,10 +290,10 @@ class DishService
 
                 if (isset($request->addon_categories)) {
                     Log::info('Processing Addon Categories', ['dish_id' => $dish->id, 'addon_categories' => $request->addon_categories]);
-                
+
                     // Delete existing addons
                     DishAddon::where('dish_id', $dish->id)->delete();
-                
+
                     foreach ($request->addon_categories as $addonCategory) {
                         foreach ($addonCategory['addons'] as $addon) {
                             DishAddon::create([
@@ -315,7 +315,7 @@ class DishService
                         }
                     }
                 }
-                
+
 
                 Log::info('Dish Update Completed Successfully', ['dish_id' => $dish->id]);
                 return true;

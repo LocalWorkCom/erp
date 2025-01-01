@@ -127,5 +127,6 @@ return [
     'copy' => 'Copy Coupon',
     'track-order' => 'Track Order',
     'resivefrom' => 'Received From',
+    'paymentdetails' =>'Payment details',
 
 ];

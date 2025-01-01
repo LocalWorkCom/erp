@@ -6,14 +6,15 @@
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('header.home')</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.myorder')</li>
+                    <li class="breadcrumb-item"><a href="{{ route('orders.show') }}"> @lang('header.myorder')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.paymentdetails')</li>
                 </ol>
             </nav>
         </div>
     </section>
     <section class="payment-details">
         <div class="container py-2">
-            <h4 class="fw-bold "> @lang('header.myorder')</h4>
+            <h4 class="fw-bold "> @lang('header.paymentdetails')</h4>
             <div class="card p-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between pt-3">
@@ -52,9 +53,10 @@
                                                     {{ $detail->quantity }} X {{ $detail->dish?->name ?? 'N/A' }}
                                                 </p>
                                             </li>
-                                        @endforeach
                                         <li class="order-list">
-                                            <small class="text-muted py-1 d-block"> نص فرخة </small>
+                                            <small class="text-muted py-1 d-block">
+                                                {{ is_array(getDishRecipeIds($detail->dish?->id, null)) ? implode(', ', getDishRecipeIds($detail->dish?->id, null)) : getDishRecipeIds($detail->dish?->id, null) ?? __('header.nodish') }}
+                                            </small>
                                         </li>
                                         <li class="order-list">
                                             @foreach ($order->orderAddons as $addon)
@@ -63,6 +65,8 @@
                                                 </small>
                                             @endforeach
                                         </li>
+                                        @endforeach
+
                                         <li class="order-list">
                                             <small class="text-muted py-1 d-block">
                                                 @if ($order->note)

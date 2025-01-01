@@ -77,8 +77,14 @@
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label for="input-placeholder" class="form-label">@lang('client.countryCode')</label>
-                                        <input type="text" class="form-control" id="country_code" name="country_code"
-                                            value="{{ old('country_code') }}" placeholder="@lang('client.countryCode')" required>
+                                        <select name="country_code" id="country_code" class="select2 form-control" required>
+                                            <option value="" disabled>@lang('client.chooseCountry')</option>
+                                            @foreach (GetCountries() as $country)
+                                                <option value="{{ $country->phone_code }}">
+                                                    {{ $country->phone_code }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         <div class="valid-feedback">
                                             @lang('validation.Correct')
                                         </div>

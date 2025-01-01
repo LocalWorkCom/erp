@@ -77,6 +77,7 @@ class ClientService
         if (!CheckToken() && $checkToken) {
             return RespondWithBadRequest($lang, 5);
         }
+
         $user = User::findOrFail($id);
         $user->name = $data['name'] ?? $user->name;
         $user->country_code = $data['country_code'] ?? $user->country_code;
@@ -100,14 +101,17 @@ class ClientService
 
         $clientAddress = clientAddress::where('user_id', $id)->first();
 
-        $clientAddress->address = $data['address'] ?? $clientAddress->address;
-        $clientAddress->address = $data['address_phone'] ?? $clientAddress->address_phone;
-        $user->country_code = $data['country_code'] ?? $user->country_code;
-        $clientAddress->city = $data['city'] ?? $clientAddress->city;
-        $clientAddress->state = $data['state'] ?? $clientAddress->state;
-        $clientAddress->postal_code = $data['postal_code'] ?? $clientAddress->postal_code;
-        $clientAddress->is_default = $data['is_default'] ?? 0;
-        $clientAddress->save();
+        if($data['address'] || $clientAddress){
+            $clientAddress->address = $data['address'] ?? $clientAddress->address;
+            $clientAddress->address_phone = $data['address_phone'] ?? $clientAddress->address_phone;
+            $user->country_code = $data['country_code'] ?? $user->country_code;
+            $clientAddress->city = $data['city'] ?? $clientAddress->city;
+            $clientAddress->state = $data['state'] ?? $clientAddress->state;
+            $clientAddress->postal_code = $data['postal_code'] ?? $clientAddress->postal_code;
+            $clientAddress->is_default = $data['is_default'] ?? 0;
+            $clientAddress->save();
+        }
+
     }
 
     public function deleteClient($id, $checkToken)

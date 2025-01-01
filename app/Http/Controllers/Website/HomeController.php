@@ -27,6 +27,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        // Get the latitude and longitude from cookies
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -53,15 +54,34 @@ class HomeController extends Controller
 
         $sliders = Slider::all();
         $branches = Branch::all();
-        $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        $popularDishes = getMostDishesOrdered($branchId,5);
-        // dd($popularDishes);
-        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
+        $discounts = DishDiscount::with(['dish' => function ($query) {
+            $query->select('id', 'name_ar', 'name_en', 'image');
+        }])
+        ->with('discount') // Make sure to include the discount relationship
+        ->whereHas('discount', function ($query) {
+            $query->where('is_active', 1);
+        })
+        ->join('branch_menus', 'branch_menus.dish_id', '=', 'dish_discount.dish_id')
+        ->join('branches', 'branches.id', '=', 'branch_menus.branch_id')
+        ->join('countries', 'countries.id', '=', 'branches.country_id')
+        ->where('branches.is_default', 1)  // Only get the branch where is_default = 1
+        ->select('dish_discount.*', 'countries.currency_symbol') // Select only necessary columns
+        ->distinct() // Ensure no duplicates are returned
+        ->get();
+
+
+
+        // Get popular dishes for the selected branch
+        $popularDishes = getMostDishesOrdered($branchId, 5);
+
+        // Get the menu categories for the selected branch
+        $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
             ->where('is_active', true)
             ->get();
 
+        // Get user favorites, if the user is authenticated
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -69,11 +89,16 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+
+        // Pass the current locale and selected brandId to the view
+        $locale = app()->getLocale();
+
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites', 'locale', 'branchId'])
         );
     }
+
 
     public function showMenu(Request $request)
     {
@@ -98,9 +123,9 @@ class HomeController extends Controller
         if (!$branchId) {
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
-        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
+        $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
             ->where('is_active', true)
             ->get();
 
@@ -251,7 +276,8 @@ class HomeController extends Controller
         return view('website.rate', compact('rates'));
     }
 
-    public function addRate(Request $request) {
+    public function addRate(Request $request)
+    {
         $validatedData = $request->validate([
             'value' => 'required|integer|min:1|max:5',
             'note' => 'nullable|string|max:1000',
