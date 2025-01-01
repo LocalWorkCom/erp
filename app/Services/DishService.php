@@ -56,13 +56,7 @@ class DishService
                
                 $validatedData = $this->validateDishData($data);
                 Log::info('Validated Data', ['validated_data' => $validatedData]);    
-                if ($image) {
-                    $imagePath = 'images/dishes/' . $image->getClientOriginalName(); 
-                    $image->move(public_path('images/dishes'), $image->getClientOriginalName()); 
-                    Log::info('New image uploaded', ['path' => $imagePath]);
-                    $validatedData['image'] = $imagePath;
-                }
-
+               
                 $validatedData['is_active'] = $validatedData['is_active'] ?? 1;
                 $validatedData['has_sizes'] = $validatedData['has_sizes'] ?? 0;
                 $validatedData['has_addon'] = $validatedData['has_addon'] ?? 0;
@@ -153,6 +147,13 @@ class DishService
                         }
                     }
                 }
+
+                if (isset($data['image'])) {
+                    $image = $data['image'];
+                    UploadFile('images/dishes', 'image', $dish, $image);
+                    Log::info('Image uploaded and associated with dish', ['dish_id' => $dish->id]);
+                }
+
                 
                 Log::info('Dish Creation Completed Successfully', ['dish_id' => $dish->id]);
                 return $dish;
@@ -217,7 +218,25 @@ class DishService
                     // Validate incoming data
                     $validatedData = $this->validateDishData($request->all());
                     Log::info('Validated Data', ['validated_data' => $validatedData]);
-    
+                    if ($request->hasFile('image')) {
+                        try {
+                            $image = $request->file('image');
+                    
+                            // Validate and upload the image
+                            if ($image->isValid()) {
+                                UploadFile('images/dishes', 'image', $dish, $image);
+                                Log::info('Image uploaded successfully', ['dish_id' => $dish->id]);
+                            } else {
+                                Log::error('Invalid image file detected', ['file' => $image]);
+                                throw new \Exception('The uploaded file is invalid.');
+                            }
+                        } catch (\Exception $e) {
+                            Log::error('Image upload failed', ['error' => $e->getMessage()]);
+                            throw $e;
+                        }
+                    }
+                    
+                    
                     // Process the image
                     if ($request->hasFile('image')) {
                         $image = $request->file('image');
