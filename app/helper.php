@@ -1039,6 +1039,7 @@ function checkDishExistMostOrderd($IDBranch, $id)
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->where('branch_id', $IDBranch)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
         ->orderByDesc('total_quantity')
         ->limit(5)
         ->pluck('id')->toArray();
