@@ -502,9 +502,9 @@
                         @else
                             <div class="card p-5 w-50 text-center mx-auto mt-5">
                                 <img class="noAddress-img"
-                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images/mdi_file-location.png') }}"
+                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images----/order.png') }}"
                                     alt="" />
-                                <h4 class="my-4 fw-bold">@lang('auth.noorders')</h4>
+                                <h4 class="my-4 fw-bold">@lang('header.noorders')</h4>
                             </div>
                         @endif
                     @endforeach
