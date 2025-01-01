@@ -135,6 +135,26 @@
 
     @include('website.delivery')
     @include('website.location')
+    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
+                    @csrf
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
+                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
+                    </div>
+                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2"
+                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                    </div>
+                </form>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -156,6 +176,14 @@
         AOS.init();
     </script>
     <script>
+        document.getElementById('productModal_v1').addEventListener('show.bs.modal', function() {
+            this.setAttribute('aria-hidden', 'false');
+        });
+
+        document.getElementById('productModal_v1').addEventListener('hide.bs.modal', function() {
+            this.setAttribute('aria-hidden', 'true');
+        });
+
         // Function to update the cart count
         function fill_cart(id) {
             $.ajax({
@@ -171,11 +199,12 @@
                     let sizesHtml = '',
                         addonsHtml = '',
                         dishHtml = '';
-                    var version = data.has_size ? '_v1' : '_v2'
+                    var version = data.dish.has_size ? '_v1' : '_v2'
+
                     let modal = $(`#productModal${version}`);
                     $(`#currency_symbol${version}`).val(data.branch.currency_symbol);
                     // Generate sizes HTML
-                    if (data.has_size) {
+                    if (data.dish.has_size) {
 
                         for (const size of data.sizes) {
                             sizesHtml += `
@@ -214,22 +243,23 @@
 
 
                     let dishPrice = parseFloat(data.dish.price);
+                    console.log(data.dish);
 
                     // Generate dish details HTML
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                            <span class="badge bg-warning text-dark">
-                                                                                                                                                                <i class="fas fa-star"></i>
-                                                                                                                                                                 الاكثر طلبا
-                                                                                                                                                            </span>
-                                                                                                                                                        ` : ''}
+                                                                                                                                                                <span class="badge bg-warning text-dark">
+                                                                                                                                                                    <i class="fas fa-star"></i>
+                                                                                                                                                                     الاكثر طلبا
+                                                                                                                                                                </span>
+                                                                                                                                                            ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
                     ${dishPrice.toFixed(2)}
+                    ${data.branch.currency_symbol}
                 </span>
-                ${data.branch.currency_symbol}
             </h4>
             <div class="qty mt-3 d-flex justify-content-center align-items-center">
                 <span class="pro-dec me-3" onclick="decreaseQuantity(this)">
@@ -247,7 +277,7 @@
                     modal.find(`#div-sizes${version}`).html(sizesHtml);
                     modal.find(`#div-addons${version}`).html(addonsHtml);
                     modal.find(`#div-detail${version}`).html(dishHtml);
-                    modal.find(`#dish-total${version}`).html(dishPrice.toFixed(2));
+                    modal.find(`#dish-total${version}`).html(`${dishPrice.toFixed(2)} ${data.branch.currency_symbol}`);
                     modal.find(`#dish_id${version}`).val(data.dish.id);
                     // Function to recalculate total price
                     // Function to recalculate total price
@@ -329,9 +359,10 @@
             let version = '_' + parts[1];
 
             // Gather selected size
-            const selectedSizePrice = $(this).find('.size-option:checked').val();
-            const selectedSizeLabel = $(this).find('.size-option:checked').siblings('label').text();
-            const selectedSizeId = $(this).find('.size-option:checked').data('id');
+            const selectedSizePrice = $('#div-sizes_v1').find('.size-option:checked').val();
+            
+            const selectedSizeLabel = $('#div-sizes_v1').find('.size-option:checked').siblings('label').text();
+            const selectedSizeId = $('#div-sizes_v1').find('.size-option:checked').data('id');
 
             // Gather selected addons
             const selectedAddons = [];

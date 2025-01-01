@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\DishDetail;
 
@@ -594,6 +595,17 @@ function CheckUserType()
         return $User->flag;
     }
     return '';
+}
+function getAuthenticatedGuard() {
+    $guards = ['web', 'client', 'admin', 'api']; // Add your guards here
+
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            return $guard;
+        }
+    }
+
+    return null; // No guard is authenticated
 }
 function isValid($branch_id)
 {
