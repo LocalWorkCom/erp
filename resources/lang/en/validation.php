@@ -177,6 +177,7 @@ return [
     'EnterCountryCode' => 'Enter Country Code',
     'EnterValidAddressPhone' => 'Enter Address Phone',
     'The category have relation' => 'The category have relation',
+    'offer_linked_error' => "Can't be deleted, this offer is linked to a slider",
 
     'custom' => [
         'name.required' => 'The name is required and cannot be left empty.',
