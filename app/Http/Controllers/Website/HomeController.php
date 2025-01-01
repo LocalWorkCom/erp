@@ -27,6 +27,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        // Get the latitude and longitude from cookies
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -63,16 +64,24 @@ class HomeController extends Controller
         ->join('branch_menus', 'branch_menus.dish_id', '=', 'dish_discount.dish_id')
         ->join('branches', 'branches.id', '=', 'branch_menus.branch_id')
         ->join('countries', 'countries.id', '=', 'branches.country_id')
-        ->select('dish_discount.*', 'countries.currency_symbol') // Select the required columns
+        ->where('branches.is_default', 1)  // Only get the branch where is_default = 1
+        ->select('dish_discount.*', 'countries.currency_symbol') // Select only necessary columns
+        ->distinct() // Ensure no duplicates are returned
         ->get();
 
+
+
+        // Get popular dishes for the selected branch
         $popularDishes = getMostDishesOrdered($branchId, 5);
+
+        // Get the menu categories for the selected branch
         $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
             ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
             ->where('is_active', true)
             ->get();
 
+        // Get user favorites, if the user is authenticated
         $userFavorites = [];
         if (Auth::guard('client')->check()) {
             $userFavorites = DB::table('user_favorite_dishes')
@@ -81,12 +90,12 @@ class HomeController extends Controller
                 ->toArray();
         }
 
-        // Pass the current locale to the view
+        // Pass the current locale and selected brandId to the view
         $locale = app()->getLocale();
 
         return view(
             'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites', 'locale'])
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites', 'locale', 'branchId'])
         );
     }
 
