@@ -169,6 +169,11 @@ class DishCategoryController extends Controller
         $nameColumn = ($lang === 'en') ? 'name_en' : 'name_ar';
 
         if ($branchId){
+            $mostPopularController = new MostPopularController();
+            $mostPopularResponse = $mostPopularController->index($request);
+            $mostPopular = collect($mostPopularResponse->getData()->data);
+            $popularDishIds = $mostPopular->pluck('id')->toArray();
+            $popularDishCurrencyMap = $mostPopular->pluck('currency_symbol', 'id')->toArray();
             // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
             if (is_numeric($categoryId) && $categoryId > 0) {
                 $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
@@ -183,13 +188,6 @@ class DishCategoryController extends Controller
                             $query->where($nameColumn, 'like', "%{$searchName}%");
                         }
 
-                        // Include total_quantity in the select
-                        $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
-                            ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
-                            ->groupBy('dishes.id')
-                            ->orderByDesc('total_quantity')
-                            ->orderBy('dishes.created_at', 'desc'); // Order by newest
-
                         // Order based on the 'orderBy' query parameter
                         if ($orderBy === 'most_ordered') {
                             $query->orderByDesc('total_quantity'); // Order by most ordered
@@ -201,16 +199,14 @@ class DishCategoryController extends Controller
                 if (!$dishCategory) {
                     return RespondWithBadRequestData($lang, 8);
                 }
-
-                // Check if user is authenticated and add 'is_favorite' to each dish
                 if (CheckToken()) {
                     $user = auth('api')->user(); // Get authenticated user
-
                     if ($user) {
-                        // Map over dishes to check if each dish is a favorite
-                        $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user) {
-                            // Initialize flag to 0 for each dish
-                            $flag = 0;
+                        $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user, $popularDishIds, $popularDishCurrencyMap) {
+                            // Initialize flags for favorites and popularity
+                            $flagFavorite = 0;
+                            $flagPopular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                            $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
 
                             // Check if the dish is in the user's favorites
                             $isFavorite = DB::table('user_favorite_dishes')
@@ -220,15 +216,25 @@ class DishCategoryController extends Controller
 
                             // If the dish is in the favorites, set the flag to 1
                             if ($isFavorite) {
-                                $flag = 1;
+                                $flagFavorite = 1;
                             }
 
-                            // Set the is_favorite attribute
-                            $dish->is_favorite = $flag;
+                            // Set the flags
+                            $dish->is_favorite = $flagFavorite;
+                            $dish->is_most_popular = $flagPopular;
 
                             return $dish;
                         });
                     }
+                } else {
+                    // If user is not authenticated, only set the most popular flag
+                    $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds) {
+                        // Check if the dish is in the most popular dishes
+                        $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                        $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+
+                        return $dish;
+                    });
                 }
 
                 $dishCategory->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
@@ -248,13 +254,6 @@ class DishCategoryController extends Controller
                         $query->where($nameColumn, 'like', "%{$searchName}%");
                     }
 
-                    // Include total_quantity in the select
-                    $query->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
-                        ->selectRaw('dishes.*, SUM(order_details.quantity) as total_quantity')
-                        ->groupBy('dishes.id')
-                        ->orderByDesc('total_quantity')
-                        ->orderBy('dishes.created_at', 'desc'); // Order by newest
-
                     // Order based on the 'orderBy' query parameter
                     if ($orderBy === 'most_ordered') {
                         $query->orderByDesc('total_quantity'); // Order by most ordered
@@ -262,6 +261,55 @@ class DishCategoryController extends Controller
                         $query->orderBy('dishes.created_at', 'desc');
                     }
                 }])->get();
+
+                // Get the most popular dishes' IDs
+                $mostPopularController = new MostPopularController();
+                $mostPopularResponse = $mostPopularController->index($request);
+                $mostPopular = collect($mostPopularResponse->getData()->data);
+                $popularDishIds = $mostPopular->pluck('id')->toArray();
+
+                // Check if user is authenticated
+                if (CheckToken()) {
+                    $user = auth('api')->user(); // Get authenticated user
+                    if ($user) {
+                        // Map over dishes to check if each dish is a favorite and is most popular
+                        $dishCategories->each(function ($dishCategory) use ($user, $popularDishIds, $popularDishCurrencyMap) {
+                            $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user, $popularDishIds, $popularDishCurrencyMap) {
+                                // Initialize flags for favorites and popularity
+                                $flagFavorite = 0;
+                                $flagPopular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                                $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+
+                                // Check if the dish is in the user's favorites
+                                $isFavorite = DB::table('user_favorite_dishes')
+                                    ->where('user_id', $user->id)
+                                    ->where('dish_id', $dish->id)
+                                    ->exists(); // Using exists() for performance optimization
+
+                                // If the dish is in the favorites, set the flag to 1
+                                if ($isFavorite) {
+                                    $flagFavorite = 1;
+                                }
+
+                                // Set the flags
+                                $dish->is_favorite = $flagFavorite;
+                                $dish->is_most_popular = $flagPopular;
+
+                                return $dish;
+                            });
+                        });
+                    }
+                } else {
+                    // If user is not authenticated, only set the most popular flag
+                    $dishCategories->each(function ($dishCategory) use ($popularDishIds, $popularDishCurrencyMap) {
+                        $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds, $popularDishCurrencyMap) {
+                            // Check if the dish is in the most popular dishes
+                            $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                            $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+                            return $dish;
+                        });
+                    });
+                }
 
                 $dishCategories->makeHidden(['name_site', 'description_site']);
                 foreach($dishCategories as $dishCategory){
