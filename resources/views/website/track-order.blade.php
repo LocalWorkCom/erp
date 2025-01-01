@@ -81,7 +81,9 @@
                                         $fromTime = $orderCreationTime
                                             ? \Carbon\Carbon::parse($orderCreationTime)
                                             : null;
-                                        $toTime = $fromTime ? $fromTime->copy()->addMinutes(getSetting('delivery_time')) : null;
+                                        $toTime = $fromTime
+                                            ? $fromTime->copy()->addMinutes(getSetting('delivery_time'))
+                                            : null;
 
                                         $estimatedMinutes = $lastTracking?->time;
                                     @endphp
@@ -89,17 +91,20 @@
                                     <h6 class="mb-3"> @lang('header.deliverytimeexpect')</h6>
                                     <h5 class="main-color fw-bold mb-3 d-flex flex-wrap">
                                         <span class="to-time">
-                                            {{ $fromTime ? $fromTime->format('h:i A') : 'N/A' }} -
+                                            {{ $fromTime ? $fromTime->format('h:i') : 'N/A' }}
+                                            @lang($fromTime && $fromTime->format('A') === 'AM' ? 'header.am' : 'header.pm') -
                                         </span>
                                         <span class="from-time">
-                                            {{ $toTime ? $toTime->format('h:i A') : 'N/A' }}
+                                            {{ $toTime ? $toTime->format('h:i') : 'N/A' }}
+                                            @lang($toTime && $toTime->format('A') === 'AM' ? 'header.am' : 'header.pm')
                                         </span>
                                         <span class="p-1 mx-1 bg-warning text-dark rounded">
                                             <small>
-                                                {{ getSetting('delivery_time') ? getSetting('delivery_time') . __('header.min') : 'N/A' }}
+                                                {{ getSetting('delivery_time') ? getSetting('delivery_time') . ' ' . __('header.min') : 'N/A' }}
                                             </small>
                                         </span>
                                     </h5>
+
                                     <h5 class="p-1 bg-warning text-dark rounded d-inline-block">
                                         @lang('header.ordernum') {{ $order->order_number }} #
                                     </h5>
@@ -173,7 +178,7 @@
                                                 {{ $order->address->state }}
                                             </p>
                                             <p>
-                                                <strong>  @lang('header.extranote') :</strong>
+                                                <strong> @lang('header.extranote') :</strong>
                                                 @if ($order->address->building || $order->address->floor_number || $order->address->apartment_number)
                                                     {{ $order->address->building ? ': ' . __('header.bulding') . $order->address->building : '' }}
                                                     {{ $order->address->floor_number ? ': ' . __('header.Floor') . ', ' . $order->address->floor_number : '' }}
@@ -187,7 +192,7 @@
                                                 {{ $order->address->notes ?? __('header.nonote') }}
                                             </p>
                                             <p>
-                                                <strong>  @lang('header.phone') :</strong>
+                                                <strong> @lang('header.phone') :</strong>
                                                 {{ $order->address->address_phone ?? __('header.nophone') }}
                                             </p>
                                         @else
@@ -207,19 +212,23 @@
                                                         <strong>
                                                             @switch($transaction->payment_method)
                                                                 @case('cash')
-                                                                    @lang('header.cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
                                                                 @break
 
                                                                 @case('credit_card')
-                                                                    @lang('header.credit_card')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.credit_card') </span>
                                                                 @break
 
                                                                 @case('online')
-                                                                    @lang('header.online')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.online') </span>
                                                                 @break
 
                                                                 @default
-                                                                    @lang('header.cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
                                                             @endswitch
                                                 </p>
                                             @endforeach
@@ -241,11 +250,16 @@
                                                     <span class="mx-1">x</span>
                                                     <span>{{ $detail->dish?->name ?? __('header.nodish') }}</span>
                                                     <p class="text-muted mt-1 mb-0 mx-4">
+                                                        {{ is_array(getDishRecipeNames($detail->dish?->id, null))
+                                                            ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                                            : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish') }}
+                                                        ,
                                                         @foreach ($order->orderAddons as $addon)
                                                             <small>
-                                                                {{ __('header.addons') . '(' . $addon->Addon?->addons?->name . ')' ?? __('header.noaddons') }}
+                                                                {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
                                                             </small>
                                                         @endforeach
+
                                                     </p>
                                                 </div>
                                                 <p class="mb-0 fw-bold">{{ $detail->total }}
@@ -386,8 +400,7 @@
                                         <h5 class="fw-bold">@lang('header.ordererevioun') </h5>
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
                                             @lang('header.resivefrom')
                                         </h5>
                                         <p class="fw-bold mb-0">
@@ -408,19 +421,23 @@
                                                         <strong>
                                                             @switch($transaction->payment_method)
                                                                 @case('cash')
-                                                                    @lang('header.cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
                                                                 @break
 
                                                                 @case('credit_card')
-                                                                    @lang('header.credit_card')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.credit_card') </span>
                                                                 @break
 
                                                                 @case('online')
-                                                                    @lang('header.online')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.online') </span>
                                                                 @break
 
                                                                 @default
-                                                                    @lang('header.cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
                                                             @endswitch
                                                 </p>
                                             @endforeach
@@ -443,9 +460,13 @@
                                                     <span class="mx-1">x</span>
                                                     <span>{{ $detail->dish?->name ?? 'N/A' }}</span>
                                                     <p class="text-muted mt-1 mb-0 mx-4">
+                                                        {{ is_array(getDishRecipeNames($detail->dish?->id, null))
+                                                            ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                                            : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish') }}
+                                                        ,
                                                         @foreach ($order->orderAddons as $addon)
                                                             <small>
-                                                                {{ __('header.addons') . '(' . $addon->Addon?->addons?->name . ')' ?? __('header.noaddons') }}
+                                                                {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
                                                             </small>
                                                         @endforeach
                                                     </p>
@@ -502,9 +523,9 @@
                         @else
                             <div class="card p-5 w-50 text-center mx-auto mt-5">
                                 <img class="noAddress-img"
-                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images/mdi_file-location.png') }}"
+                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images----/order.png') }}"
                                     alt="" />
-                                <h4 class="my-4 fw-bold">@lang('auth.noorders')</h4>
+                                <h4 class="my-4 fw-bold">@lang('header.noorders')</h4>
                             </div>
                         @endif
                     @endforeach

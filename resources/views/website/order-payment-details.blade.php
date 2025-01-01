@@ -53,18 +53,20 @@
                                                     {{ $detail->quantity }} X {{ $detail->dish?->name ?? 'N/A' }}
                                                 </p>
                                             </li>
-                                        <li class="order-list">
-                                            <small class="text-muted py-1 d-block">
-                                                {{ is_array(getDishRecipeIds($detail->dish?->id, null)) ? implode(', ', getDishRecipeIds($detail->dish?->id, null)) : getDishRecipeIds($detail->dish?->id, null) ?? __('header.nodish') }}
-                                            </small>
-                                        </li>
-                                        <li class="order-list">
-                                            @foreach ($order->orderAddons as $addon)
+                                            <li class="order-list">
                                                 <small class="text-muted py-1 d-block">
-                                                    {{ __('header.addons') . '(' . $addon->Addon?->addons?->name . ')' ?? __('header.noaddons') }}
+                                                    {{ is_array(getDishRecipeNames($detail->dish?->id, null))
+                                                        ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                                        : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish') }}
                                                 </small>
-                                            @endforeach
-                                        </li>
+                                            </li>
+                                            <li class="order-list">
+                                                @foreach ($order->orderAddons as $addon)
+                                                    <small class="text-muted py-1 d-block">
+                                                        {{ __('header.addons') . '(' . $addon->Addon?->addons?->name . ')' ?? __('header.noaddons') }}
+                                                    </small>
+                                                @endforeach
+                                            </li>
                                         @endforeach
 
                                         <li class="order-list">

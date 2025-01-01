@@ -1079,16 +1079,16 @@ function getAddressFromLatLong($latitude, $longitude)
     return null;
 }
 
+function getDishRecipeNames($dishId, $sizeId = null)
+{
+    $query = DishDetail::where('dish_id', $dishId);
 
-function getDishRecipeIds($dishId, $sizeId = null)
-    {
-        $query = DishDetail::where('dish_id', $dishId);
-
-        if (!is_null($sizeId)) {
-            $query->where('dish_size_id', $sizeId);
-        } else {
-            $query->whereNull('dish_size_id');
-        }
-
-        return $query->pluck('recipe_id')->toArray();
+    if (!is_null($sizeId)) {
+        $query->where('dish_size_id', $sizeId);
+    } else {
+        $query->whereNull('dish_size_id');
     }
+
+    // Use the relationship to fetch recipe names
+    return $query->with('recipe')->get()->pluck('recipe.name')->toArray();
+}
