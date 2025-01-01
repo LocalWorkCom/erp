@@ -8,14 +8,14 @@
                     <div class="row justify-content-center text-center">
                         <div class="col-12">
                             <i class="fas fa-gift text-warning fs-1 my-3"></i>
-                            <h2 class="fw-bold main-color">مفاجأة</h2>
-                            <h5 class="text-muted">احصل على كوبونات خصم أو توصيل مجاني المرة القادمة</h5>
-                            <h3 class="fw-bold text-dark">هل تم توصيل طلبك بنجاح؟</h3>
+                            <h2 class="fw-bold main-color"> @lang('header.surprise')</h2>
+                            <h5 class="text-muted">@lang('header.getcopun')</h5>
+                            <h3 class="fw-bold text-dark">@lang('header.isdelivered')</h3>
                             <div class="d-flex justify-content-center py-4">
                                 <a href="#" class="btn mx-1 w-50" data-bs-target="#exampleModalToggle2"
-                                    data-bs-toggle="modal" data-bs-dismiss="modal">نعم</a>
-                                <a href="#" class="btn-no-modal mx-1 w-50" data-bs-dismiss="modal"
-                                    aria-label="Close">لا</a>
+                                    data-bs-toggle="modal" data-bs-dismiss="modal"> @lang('header.yes')</a>
+                                <a href="#" class="btn-no-modal mx-1 w-50" data-bs-dismiss="modal" aria-label="Close">
+                                    @lang('header.no')</a>
                             </div>
                         </div>
                     </div>
@@ -35,11 +35,11 @@
                     <div class="row justify-content-center text-center">
                         <div class="col-12">
                             <i class="fas fa-gift text-warning fs-1 my-3"></i>
-                            <h2 class="fw-bold main-color">مبرووك</h2>
-                            <h5 class="text-muted">حصلت على كوبون خصم 10% عند الطلب فى المرة القادمة</h5>
-                            <h4 class="fw-bold">#58768467</h4>
+                            <h2 class="fw-bold main-color"> @lang('header.congrate')</h2>
+                            <h5 class="text-muted"> @lang('header.getcopon')</h5>
+                            <h4 class="fw-bold">#58768467 </h4>
                             <div class="d-flex justify-content-center py-4">
-                                <a href="#" class="btn mx-1 w-100">نسخ الكوبون</a>
+                                <a href="#" class="btn mx-1 w-100"> @lang('header.copy')</a>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,9 @@
         <div class="container pt-sm-5 pt-4">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">الرئيسية</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">متابعة الطلب</li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">@lang('header.home')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('orders.show') }}"> @lang('header.myorder')</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> @lang('header.track-order')</li>
                 </ol>
             </nav>
         </div>
@@ -62,44 +63,50 @@
         <div class="container py-2">
             <div class="row">
                 <div class="col-12">
-                    @forelse ($orders as $order)
+                    @foreach ($orders as $order)
                         @if ($order->type === 'Delivery')
                             <div class="card mt-2 p-3">
                                 <div class="card-header bg-white">
                                     <div class="d-flex justify-content-between">
-                                        <h5 class="card-title fw-bold mb-3">حالة الطلب الحالية</h5>
-                                        <button class="btn reversed main-color d-flex fw-bold" type="button">إلغاء
-                                            الطلب</button>
+                                        <h5 class="card-title fw-bold mb-3"> @lang('header.orderstatus')</h5>
+                                        <button class="btn reversed main-color d-flex fw-bold" type="button">
+                                            @lang('header.cancelorder')
+                                        </button>
                                     </div>
                                     @php
                                         $lastTracking = $order->tracking->last();
 
-                                        $orderCreationTime = $order->created_at;
+                                        $orderCreationTime = $order->time;
 
                                         $fromTime = $orderCreationTime
                                             ? \Carbon\Carbon::parse($orderCreationTime)
                                             : null;
-                                        $toTime = $fromTime ? $fromTime->copy()->addMinutes(15) : null;
+                                        $toTime = $fromTime
+                                            ? $fromTime->copy()->addMinutes(getSetting('delivery_time'))
+                                            : null;
 
                                         $estimatedMinutes = $lastTracking?->time;
                                     @endphp
 
-                                    <h6 class="mb-3">الوقت المتوقع للتوصيل</h6>
+                                    <h6 class="mb-3"> @lang('header.deliverytimeexpect')</h6>
                                     <h5 class="main-color fw-bold mb-3 d-flex flex-wrap">
                                         <span class="to-time">
-                                            {{ $fromTime ? $fromTime->format('h:i A') : 'N/A' }} -
+                                            {{ $fromTime ? $fromTime->format('h:i') : 'N/A' }}
+                                            @lang($fromTime && $fromTime->format('A') === 'AM' ? 'header.am' : 'header.pm') -
                                         </span>
                                         <span class="from-time">
-                                            {{ $toTime ? $toTime->format('h:i A') : 'N/A' }}
+                                            {{ $toTime ? $toTime->format('h:i') : 'N/A' }}
+                                            @lang($toTime && $toTime->format('A') === 'AM' ? 'header.am' : 'header.pm')
                                         </span>
                                         <span class="p-1 mx-1 bg-warning text-dark rounded">
                                             <small>
-                                                {{ $estimatedMinutes ? $estimatedMinutes . ' دقيقة' : 'N/A' }}
+                                                {{ getSetting('delivery_time') ? getSetting('delivery_time') . ' ' . __('header.min') : 'N/A' }}
                                             </small>
                                         </span>
                                     </h5>
+
                                     <h5 class="p-1 bg-warning text-dark rounded d-inline-block">
-                                        رقم الطلب {{ $order->order_number }}#
+                                        @lang('header.ordernum') {{ $order->order_number }} #
                                     </h5>
                                 </div>
 
@@ -155,78 +162,85 @@
                                     </div>
 
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold">ملخص الطلب</h5>
+                                        <h5 class="fw-bold"> @lang('header.ordererevioun')</h5>
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>معلومات
-                                            التوصيل</h5>
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.deliveryinfo')
+                                        </h5>
                                         @if ($order->address)
                                             <p>
-                                                <strong>العنوان:</strong>
+                                                <strong> @lang('header.address') :</strong>
                                                 {{ $order->address->address }}
                                             </p>
                                             <p>
-                                                <strong>المحافظة:</strong>
+                                                <strong>@lang('header.state') :</strong>
                                                 {{ $order->address->state }}
                                             </p>
                                             <p>
-                                                <strong>تفاصيل إضافية:</strong>
+                                                <strong> @lang('header.extranote') :</strong>
                                                 @if ($order->address->building || $order->address->floor_number || $order->address->apartment_number)
-                                                    {{ $order->address->building ? 'المبنى: ' . $order->address->building : '' }}
-                                                    {{ $order->address->floor_number ? ', الدور: ' . $order->address->floor_number : '' }}
-                                                    {{ $order->address->apartment_number ? ', الشقة: ' . $order->address->apartment_number : '' }}
+                                                    {{ $order->address->building ? ': ' . __('header.bulding') . $order->address->building : '' }}
+                                                    {{ $order->address->floor_number ? ': ' . __('header.Floor') . ', ' . $order->address->floor_number : '' }}
+                                                    {{ $order->address->apartment_number ? ': ' . __('header.apartment') . ', ' . $order->address->apartment_number : '' }}
                                                 @else
-                                                    لا يوجد تفاصيل إضافية
+                                                    @lang('header.noextrainfo')
                                                 @endif
                                             </p>
                                             <p>
-                                                <strong>ملاحظات:</strong>
-                                                {{ $order->address->notes ?? 'N/A' }}
+                                                <strong>@lang('header.note') :</strong>
+                                                {{ $order->address->notes ?? __('header.nonote') }}
                                             </p>
                                             <p>
-                                                <strong>رقم الهاتف:</strong>
-                                                {{ $order->address->address_phone ?? 'N/A' }}
+                                                <strong> @lang('header.phone') :</strong>
+                                                {{ $order->address->address_phone ?? __('header.nophone') }}
                                             </p>
                                         @else
-                                            <p>لا يوجد عنوان مسجل.</p>
+                                            <p>@lang('header.noaddress')</p>
                                         @endif
-                                        <p><strong>الاسم:</strong> {{ $order->client?->name }}</p>
+                                        <p><strong> @lang('header.name') :</strong> {{ $order->client?->name }}</p>
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>معلومات
-                                            الدفع
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.paymentinfo')
+
                                         </h5>
                                         @if ($order->orderTransactions->isNotEmpty())
                                             @foreach ($order->orderTransactions as $transaction)
-                                                <p><strong>طريقة الدفع:</strong>
-                                                    @switch($transaction->payment_method)
-                                                        @case('cash')
-                                                            الدفع نقدًا
-                                                        @break
+                                                <p><strong>
+                                                        @lang('header.paymentmethod')
+                                                        <strong>
+                                                            @switch($transaction->payment_method)
+                                                                @case('cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
+                                                                @break
 
-                                                        @case('credit_card')
-                                                            الدفع ببطاقة الائتمان
-                                                        @break
+                                                                @case('credit_card')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.credit_card') </span>
+                                                                @break
 
-                                                        @case('online')
-                                                            الدفع عبر الإنترنت
-                                                        @break
+                                                                @case('online')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.online') </span>
+                                                                @break
 
-                                                        @default
-                                                            طريقة دفع غير معروفة
-                                                    @endswitch
+                                                                @default
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
+                                                            @endswitch
                                                 </p>
                                             @endforeach
                                         @else
-                                            <p>لم يتم تسجيل أي معاملات دفع.</p>
+                                            <p>
+                                                @lang('header.nopaymentmethod')
+                                            </p>
                                         @endif
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>تفاصيل
-                                            الطلب
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.orderdetails')
                                         </h5>
                                         @foreach ($order->orderDetails as $detail)
                                             <div class="d-flex justify-content-between align-items-center">
@@ -234,52 +248,64 @@
                                                     <span
                                                         class="p-1 bg-secondary text-light rounded">{{ $detail->quantity }}</span>
                                                     <span class="mx-1">x</span>
-                                                    <span>{{ $detail->dish?->name ?? 'N/A' }}</span>
+                                                    <span>{{ $detail->dish?->name ?? __('header.nodish') }}</span>
                                                     <p class="text-muted mt-1 mb-0 mx-4">
-                                                        <small>{{ $detail->addons?->pluck('name')->join(', ') ?? 'No Addons' }}</small>
+                                                        {{ is_array(getDishRecipeNames($detail->dish?->id, null))
+                                                            ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                                            : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish') }}
+                                                        ,
+                                                        @foreach ($order->orderAddons as $addon)
+                                                            <small>
+                                                                {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
+                                                            </small>
+                                                        @endforeach
+
                                                     </p>
                                                 </div>
-                                                <p class="mb-0 fw-bold">{{ $detail->total }} ج.م</p>
+                                                <p class="mb-0 fw-bold">{{ $detail->total }}
+                                                    {{ $order->Branch->country->currency_symbol }}</p>
                                             </div>
                                         @endforeach
                                     </div>
 
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>الفاتورة
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.reset')
                                         </h5>
                                         <div class="d-flex justify-content-between">
-                                            <p>مجموع طلبي</p>
-                                            <p>{{ $order->total_price_befor_tax }} ج.م</p>
+                                            <p>@lang('header.totalorder')</p>
+                                            <p>{{ $order->total_price_befor_tax }}
+                                                {{ $order->Branch->country->currency_symbol }} </p>
                                         </div>
                                         @if ($order->coupon_id)
                                             <div class="d-flex justify-content-between">
-                                                <p class="main-color">كوبون خصم</p>
+                                                <p class="main-color"> @lang('header.coupon')</p>
                                                 @if ($order->coupon->type === 'percentage')
                                                     <p class="main-color">
                                                         -{{ ($order->total_price_befor_tax * $order->coupon->value) / 100 }}
-                                                        ج.م
-                                                    </p>
+                                                        {{ $order->Branch->country->currency_symbol }} </p>
                                                 @elseif ($order->coupon->type === 'fixed')
                                                     <p class="main-color">
-                                                        -{{ $order->coupon->value }} ج.م
+                                                        -{{ $order->coupon->value }}
+                                                        {{ $order->Branch->country->currency_symbol }}
                                                     </p>
-                                                @else
-                                                    <p class="main-color">نوع الخصم غير معروف</p>
                                                 @endif
                                             </div>
                                         @endif
                                         <div class="d-flex justify-content-between">
-                                            <p>رسوم التوصيل</p>
-                                            <p>{{ $order->delivery_fees ?? 0 }} ج.م</p>
+                                            <p> @lang('header.feesdelivery')</p>
+                                            <p>{{ $order->delivery_fees ?? 0 }}
+                                                {{ $order->Branch->country->currency_symbol }} </p>
                                         </div>
                                         <div class="d-flex justify-content-between">
-                                            <p>رسوم الخدمة</p>
-                                            <p>{{ $order->service_fees ?? 0 }} ج.م</p>
+                                            <p> @lang('header.fees') </p>
+                                            <p>{{ $order->service_fees ?? 0 }}
+                                                {{ $order->Branch->country->currency_symbol }} </p>
                                         </div>
                                         <div class="d-flex justify-content-between border-top pt-2">
-                                            <h5 class="fw-bold">المجموع الكلي</h5>
-                                            <h5 class="fw-bold">{{ $order->total_price_after_tax }} ج.م</h5>
+                                            <h5 class="fw-bold"> @lang('header.total') </h5>
+                                            <h5 class="fw-bold">{{ $order->total_price_after_tax }}
+                                                {{ $order->Branch->country->currency_symbol }} </h5>
                                         </div>
                                     </div>
                                 </div>
@@ -288,9 +314,10 @@
                             <div class="card mt-2 p-3">
                                 <div class="card-header bg-white">
                                     <div class="d-flex justify-content-between">
-                                        <h5 class="card-title fw-bold mb-3">حالة الطلب الحالية</h5>
-                                        <button class="btn reversed main-color d-flex fw-bold" type="button">إلغاء
-                                            الطلب</button>
+                                        <h5 class="card-title fw-bold mb-3"> @lang('header.orderstatus')</h5>
+                                        <button class="btn reversed main-color d-flex fw-bold" type="button">
+                                            @lang('header.cancelorder')
+                                        </button>
                                     </div>
                                     @php
                                         $lastTracking = $order->tracking->last();
@@ -305,7 +332,7 @@
                                         $estimatedMinutes = $lastTracking?->time;
                                     @endphp
 
-                                    <h6 class="mb-3">الوقت المتوقع لاستلام الطلب</h6>
+                                    <h6 class="mb-3"> @lang('header.deliverytimeexpect')</h6>
                                     <h5 class="main-color fw-bold mb-3 d-flex flex-wrap">
                                         <span class="to-time">
                                             {{ $fromTime ? $fromTime->format('h:i A') : 'N/A' }} -
@@ -315,12 +342,12 @@
                                         </span>
                                         <span class="p-1 mx-1 bg-warning text-dark rounded">
                                             <small>
-                                                {{ $estimatedMinutes ? $estimatedMinutes . ' دقيقة' : 'N/A' }}
+                                                {{ $estimatedMinutes ? $estimatedMinutes . __('header.min') : 'N/A' }}
                                             </small>
                                         </span>
                                     </h5>
                                     <h5 class="p-1 bg-warning text-dark rounded d-inline-block">
-                                        رقم الطلب {{ $order->order_number }}#
+                                        @lang('header.ordernum'){{ $order->order_number }}#
                                     </h5>
                                 </div>
 
@@ -370,11 +397,12 @@
                                     </div>
 
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold">ملخص الطلب</h5>
+                                        <h5 class="fw-bold">@lang('header.ordererevioun') </h5>
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>الاستلام من</h5>
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.resivefrom')
+                                        </h5>
                                         <p class="fw-bold mb-0">
                                             <span><i class="fas fa-map-marker-alt ms-2 main-color"></i></span>
                                             {{ $order->branch->address_ar }}
@@ -383,38 +411,46 @@
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
                                         <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>معلومات
-                                            الدفع
+                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>@lang('header.paymentinfo')
+
                                         </h5>
                                         @if ($order->orderTransactions->isNotEmpty())
                                             @foreach ($order->orderTransactions as $transaction)
-                                                <p><strong>طريقة الدفع:</strong>
-                                                    @switch($transaction->payment_method)
-                                                        @case('cash')
-                                                            الدفع نقدًا
-                                                        @break
+                                                <p><strong>
+                                                        @lang('header.paymentmethod')
+                                                        <strong>
+                                                            @switch($transaction->payment_method)
+                                                                @case('cash')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
+                                                                @break
 
-                                                        @case('credit_card')
-                                                            الدفع ببطاقة الائتمان
-                                                        @break
+                                                                @case('credit_card')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.credit_card') </span>
+                                                                @break
 
-                                                        @case('online')
-                                                            الدفع عبر الإنترنت
-                                                        @break
+                                                                @case('online')
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.online') </span>
+                                                                @break
 
-                                                        @default
-                                                            طريقة دفع غير معروفة
-                                                    @endswitch
+                                                                @default
+                                                                    <span class="p-1 bg-success text-light rounded">
+                                                                        @lang('header.cash') </span>
+                                                            @endswitch
                                                 </p>
                                             @endforeach
                                         @else
-                                            <p>لم يتم تسجيل أي معاملات دفع.</p>
+                                            <p>
+                                                @lang('header.nopaymentmethod')
+                                            </p>
                                         @endif
                                     </div>
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>تفاصيل
-                                            الطلب
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.orderdetails')
+
                                         </h5>
                                         @foreach ($order->orderDetails as $detail)
                                             <div class="d-flex justify-content-between align-items-center">
@@ -424,60 +460,77 @@
                                                     <span class="mx-1">x</span>
                                                     <span>{{ $detail->dish?->name ?? 'N/A' }}</span>
                                                     <p class="text-muted mt-1 mb-0 mx-4">
-                                                        <small>{{ $detail->addons?->pluck('name')->join(', ') ?? 'No Addons' }}</small>
+                                                        {{ is_array(getDishRecipeNames($detail->dish?->id, null))
+                                                            ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                                            : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish') }}
+                                                        ,
+                                                        @foreach ($order->orderAddons as $addon)
+                                                            <small>
+                                                                {{ $addon->Addon?->addons?->name ?? __('header.noaddons') }}
+                                                            </small>
+                                                        @endforeach
                                                     </p>
                                                 </div>
-                                                <p class="mb-0 fw-bold">{{ $detail->total }} ج.م</p>
+                                                <p class="mb-0 fw-bold">{{ $detail->total }}
+                                                    {{ $order->Branch->country->currency_symbol }}</p>
                                             </div>
                                         @endforeach
                                     </div>
 
                                     <div class="bg-dark-gray p-3 my-4">
-                                        <h5 class="fw-bold"> <i
-                                                class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>الفاتورة
+                                        <h5 class="fw-bold"> <i class="fas fa-file-alt main-color fa-xs fs-5 mx-1"></i>
+                                            @lang('header.reset')
+
                                         </h5>
                                         <div class="d-flex justify-content-between">
-                                            <p>مجموع طلبي</p>
-                                            <p>{{ $order->total_price_befor_tax }} ج.م</p>
+                                            <p>@lang('header.totalorder') </p>
+                                            <p>{{ $order->total_price_befor_tax }}
+                                                {{ $order->Branch->country->currency_symbol }}</p>
                                         </div>
                                         @if ($order->coupon_id)
                                             <div class="d-flex justify-content-between">
-                                                <p class="main-color">كوبون خصم</p>
+                                                <p class="main-color"> @lang('header.coupon') </p>
                                                 @if ($order->coupon->type === 'percentage')
                                                     <p class="main-color">
                                                         -{{ ($order->total_price_befor_tax * $order->coupon->value) / 100 }}
-                                                        ج.م
-                                                    </p>
+                                                        {{ $order->Branch->country->currency_symbol }} </p>
                                                 @elseif ($order->coupon->type === 'fixed')
                                                     <p class="main-color">
-                                                        -{{ $order->coupon->value }} ج.م
+                                                        -{{ $order->coupon->value }}
+                                                        {{ $order->Branch->country->currency_symbol }}
                                                     </p>
-                                                @else
-                                                    <p class="main-color">نوع الخصم غير معروف</p>
                                                 @endif
                                             </div>
                                         @endif
                                         <div class="d-flex justify-content-between">
-                                            <p>رسوم التوصيل</p>
-                                            <p>{{ $order->delivery_fees ?? 0 }} ج.م</p>
+                                            <p>@lang('header.feesdelivery') </p>
+                                            <p>{{ $order->delivery_fees ?? 0 }}
+                                                {{ $order->Branch->country->currency_symbol }}</p>
                                         </div>
                                         <div class="d-flex justify-content-between">
-                                            <p>رسوم الخدمة</p>
-                                            <p>{{ $order->service_fees ?? 0 }} ج.م</p>
+                                            <p> @lang('header.fees')</p>
+                                            <p>{{ $order->service_fees ?? 0 }}
+                                                {{ $order->Branch->country->currency_symbol }}</p>
                                         </div>
                                         <div class="d-flex justify-content-between border-top pt-2">
-                                            <h5 class="fw-bold">المجموع الكلي</h5>
-                                            <h5 class="fw-bold">{{ $order->total_price_after_tax }} ج.م</h5>
+                                            <h5 class="fw-bold"> @lang('header.total') </h5>
+                                            <h5 class="fw-bold">{{ $order->total_price_after_tax }}
+                                                {{ $order->Branch->country->currency_symbol }}</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        @else
+                            <div class="card p-5 w-50 text-center mx-auto mt-5">
+                                <img class="noAddress-img"
+                                    src="{{ asset('front/AlKout-Resturant/SiteAssets/images----/order.png') }}"
+                                    alt="" />
+                                <h4 class="my-4 fw-bold">@lang('header.noorders')</h4>
+                            </div>
                         @endif
-                        @empty
-                            <p class="text-center">لا يوجد طلبات حالياً.</p>
-                        @endforelse
-                    </div>
+                    @endforeach
                 </div>
             </div>
-        </section>
-    @endsection
+        </div>
+    </section>
+@endsection

@@ -45,6 +45,7 @@ use App\Services\TimetableService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\DishDetail;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -1051,6 +1052,7 @@ function checkDishExistMostOrderd($IDBranch, $id)
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->where('branch_id', $IDBranch)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
         ->orderByDesc('total_quantity')
         ->limit(5)
         ->pluck('id')->toArray();
@@ -1087,4 +1089,18 @@ function getAddressFromLatLong($latitude, $longitude)
     }
 
     return null;
+}
+
+function getDishRecipeNames($dishId, $sizeId = null)
+{
+    $query = DishDetail::where('dish_id', $dishId);
+
+    if (!is_null($sizeId)) {
+        $query->where('dish_size_id', $sizeId);
+    } else {
+        $query->whereNull('dish_size_id');
+    }
+
+    // Use the relationship to fetch recipe names
+    return $query->with('recipe')->get()->pluck('recipe.name')->toArray();
 }

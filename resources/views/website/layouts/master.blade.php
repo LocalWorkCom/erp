@@ -73,7 +73,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div id="msg-error" style="display: none;text-align:center" class="message bg-warning p-2 rounded-3">
-                    الرجاء قم بتسجيل الدخول لمتابعة الدفع
+
                 </div>
                 @include('website.auth.login')
                 @include('website.auth.register')
@@ -155,9 +155,7 @@
                     </div>
                 </form>
 
-            </div>
-        </div>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>

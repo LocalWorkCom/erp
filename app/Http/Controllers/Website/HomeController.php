@@ -10,6 +10,7 @@ use App\Models\BranchMenuCategory;
 use App\Models\Discount;
 use App\Models\DishDiscount;
 use App\Models\FAQ;
+use App\Models\Offer;
 use App\Models\PrivacyPolicy;
 use App\Models\Rate;
 use App\Models\ReturnPolicy;
@@ -27,6 +28,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        // Get the latitude and longitude from cookies
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -53,12 +55,78 @@ class HomeController extends Controller
 
         $sliders = Slider::all();
         $branches = Branch::all();
-        $discounts = DishDiscount::with(['dish', 'discount'])->get();
-        $popularDishes = getMostDishesOrdered($branchId,5);
-        // dd($popularDishes);
-        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
+        $discounts = DishDiscount::with(['dish' => function ($query) {
+            $query->select('id', 'name_ar', 'name_en', 'image');
+        }])
+        ->with('discount') // Make sure to include the discount relationship
+        ->whereHas('discount', function ($query) {
+            $query->where('is_active', 1);
+        })
+        ->join('branch_menus', 'branch_menus.dish_id', '=', 'dish_discount.dish_id')
+        ->join('branches', 'branches.id', '=', 'branch_menus.branch_id')
+        ->join('countries', 'countries.id', '=', 'branches.country_id')
+        ->where('branches.is_default', 1)  // Only get the branch where is_default = 1
+        ->select('dish_discount.*', 'countries.currency_symbol') // Select only necessary columns
+        ->distinct() // Ensure no duplicates are returned
+        ->get();
+
+
+
+        // Get popular dishes for the selected branch
+        $popularDishes = getMostDishesOrdered($branchId, 5);
+
+        // Get the menu categories for the selected branch
+        $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
+            ->where('is_active', true)
+            ->get();
+
+        // Get user favorites, if the user is authenticated
+        $userFavorites = [];
+        if (Auth::guard('client')->check()) {
+            $userFavorites = DB::table('user_favorite_dishes')
+                ->where('user_id', Auth::guard('client')->id())
+                ->pluck('dish_id')
+                ->toArray();
+        }
+
+        // Pass the current locale and selected brandId to the view
+        $locale = app()->getLocale();
+
+        return view(
+            'website.landing',
+            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites', 'locale', 'branchId'])
+        );
+    }
+
+
+    public function showMenu(Request $request)
+    {
+        $categoryId = $request->query('category_id');
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected:', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch:', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch:', ['branchId' => $branchId]);
+        }
+
+        if (!$branchId) {
+            return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
+        }
+        $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
+        $menuCategories = BranchMenuCategory::with('dish_categories')
+            ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
             ->where('is_active', true)
             ->get();
 
@@ -69,15 +137,16 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+
         return view(
-            'website.landing',
-            compact(['sliders', 'discounts', 'popularDishes', 'menuCategories', 'branches', 'userFavorites'])
+            'website.menu',
+            compact(['menuCategories', 'userFavorites', 'categoryId'])
         );
     }
 
-    public function showMenu(Request $request)
+    public function showOffers(Request $request)
     {
-        $categoryId = $request->query('category_id');
+        $categoryId ='offers';
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -111,10 +180,20 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
+        $offers = Offer::where('is_active', 1)
+            ->where(function ($query) use ($branchId) {
+                $query->whereRaw('FIND_IN_SET(?, branch_id)', [$branchId])
+                    ->orWhere('branch_id', -1);
+            })
+            ->whereHas('details', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->get();
+
 
         return view(
             'website.menu',
-            compact(['menuCategories', 'userFavorites', 'categoryId'])
+            compact(['menuCategories', 'userFavorites', 'categoryId','offers'])
         );
     }
 
@@ -251,7 +330,8 @@ class HomeController extends Controller
         return view('website.rate', compact('rates'));
     }
 
-    public function addRate(Request $request) {
+    public function addRate(Request $request)
+    {
         $validatedData = $request->validate([
             'value' => 'required|integer|min:1|max:5',
             'note' => 'nullable|string|max:1000',

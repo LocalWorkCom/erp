@@ -49,6 +49,7 @@ Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/return', [HomeController::class, 'return'])->name('return');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
+Route::get('/offers', [HomeController::class, 'showOffers'])->name('offers.website');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add.favorite');
 

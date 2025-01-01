@@ -10,11 +10,15 @@ return [
     'confirmed' => ':attribute confirmation does not match.',
     'active_offer_conflict' => 'There is an active offer with the same name.',
     'The dish_id field must be a number' => 'The dish_id field must be a number',
-    //add here the attributes of validation to translated
+    'notfound'=>'User not found',
     'attributes' => [
+        'nameapart' => 'Apartment Name',
+        'numapart' => 'Apartment Number',
+        'floorapart' => 'Floor Number',
+        'phoneapart' => 'Phone Number',
+        'addressdetailapart' => 'Detailed Address',
+        'markapart' => 'Mark',
         'type_id' => 'Type Name',
-        'nameapart'=>'nameapart',
-        'notfound'=>'User not found',
         'birth_date' => 'Birth Date',
         'email' => 'email address',
         'password' => 'password',
@@ -108,7 +112,9 @@ return [
     'active' => 'Is Active',
     'value' => 'Value',
     'countryCodeExists' => 'Country Code is not valid',
-    'email_or_phone.required' => 'Email or Phone Number required',
+    'email_or_phone.required' => 'Phone Number required',
+    'email_or_phone.notfound' => 'Phone Number not found',
+
     'password.required' => 'Password is Required',
     'country_code.required_if' => 'Country Code is required when registering with phone number',
     'country_code.required' => 'Country code is required',
@@ -179,6 +185,21 @@ return [
     'offer_linked_error' => "Can't be deleted, this offer is linked to a slider",
 
     'custom' => [
+        'phone' => [
+            'length' => 'The :attribute must be exactly :length characters long.',
+            'phone.notfound' => 'User not found',
+
+        ],
+        'nameapart' => 'Apartment Name',
+        'numapart' => 'Apartment Number',
+        'floorapart' => 'Floor Number',
+        'phoneapart' => 'Phone Number',
+        'country_code_apart' => 'Country Code',
+        'addressdetailapart' => 'Detailed Address',
+        'markapart' => 'Mark',
+        'type_id' => [
+            'required' => 'type name is required.',
+        ],
         'name.required' => 'The name is required and cannot be left empty.',
         'permissions_ids.required' => 'The permissions field is required and cannot be left empty.',
         'permissions_ids.*.exists' => 'The selected permission does not exist.',
@@ -195,9 +216,7 @@ return [
         'country_code_apart' => [
             'required' => 'Please select a country code for the apartment.',
         ],
-        'phone' => [
-            'length' => 'The :attribute must be exactly :length characters long.',
-        ],
+
         'auth.nameweb' => 'Name',
         'auth.emailweb' => 'Email',
         'auth.password' => 'Password',
@@ -206,25 +225,4 @@ return [
         'auth.date' => 'Date of Birth',
     ],
 
-    'custom' => [
-        'nameapart' => 'Apartment Name',
-        'numapart' => 'Apartment Number',
-        'floorapart' => 'Floor Number',
-        'phoneapart' => 'Phone Number',
-        'country_code_apart' => 'Country Code',
-        'addressdetailapart' => 'Detailed Address',
-        'markapart' => 'Mark',
-        'type_id' => [
-            'required' => 'type name is required.',
-        ],
-    ],
-    'attributes' => [
-        'nameapart' => 'Apartment Name',
-        'numapart' => 'Apartment Number',
-        'floorapart' => 'Floor Number',
-        'phoneapart' => 'Phone Number',
-        'country_code_apart' => 'Country Code',
-        'addressdetailapart' => 'Detailed Address',
-        'markapart' => 'Mark',
-    ],
 ];

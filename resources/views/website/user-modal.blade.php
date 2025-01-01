@@ -32,7 +32,7 @@
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 
-                                    @lang('header.previousorder')
+                                    @lang('header.myorder')
 
                                 </h6>
                             </a>
@@ -119,27 +119,24 @@
                                 <h6 class="fw-bold">
                                     <i class="fas fa-headset main-color ms-2"></i>
                                     @lang('header.support')
-
                                 </h6>
                             </a>
                             <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logos_whatsapp-icon.png') }} " />
                         </li>
                         <li>
-
-                            <a  data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <a data-bs-toggle="modal" data-bs-target="#logoutModal">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                     @lang('header.logout')
                                 </h6>
                             </a>
-
                         </li>
-
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -163,5 +160,3 @@
         </div>
     </div>
 @endauth
-@push('scripts')
-@endpush

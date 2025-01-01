@@ -69,6 +69,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
+
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ $user->name }}</td>
