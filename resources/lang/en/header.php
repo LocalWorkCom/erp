@@ -81,5 +81,17 @@ return [
     'orderdetails' => 'Order Details',
     'noorders' => 'No previous orders.',
     'noaddons' => 'No Addons',
-
+    'addons' => 'Addons',
+'note' => 'Notes:',
+    'nonote' => 'No Notes',
+    'totalorder' => 'Total Order',
+    'feesdelivery' => 'Delivery Fees',
+    'nodliveryfees' => 'No Delivery Fees',
+    'fees' => 'Service Fees',
+    'nofees' => 'No Fees',
+    'includefees' => 'Includes VAT',
+    'anotherway' => 'In other words',
+    'paymentmethod' => 'Payment Method',
+    'deliveryTime'=>'delivery Time' ,
+    'min'=>'min',
 ];

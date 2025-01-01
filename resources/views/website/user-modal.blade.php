@@ -32,7 +32,7 @@
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 
-                                    @lang('header.previousorder')
+                                    @lang('header.myorder')
 
                                 </h6>
                             </a>
@@ -133,6 +133,29 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
+                    @csrf
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
+                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
+                    </div>
+                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
+                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2"
+                            data-bs-dismiss="modal" aria-label="Close">@lang('header.cancel')</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

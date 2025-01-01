@@ -83,5 +83,18 @@ return [
     'orderdetails' => 'تفاصيل الطلب',
     'noorders' => 'لا يوجد طلبات سابقة.',
     'noaddons' => 'لا يوجد إضافات',
+    'addons' => 'إضافات',
+    'note' => 'ملاحظات:',
+    'nonote' => 'لا توجد ملاحظات',
+    'totalorder' => 'مجموع الطلب',
+    'feesdelivery' => 'رسوم التوصيل',
+    'nodliveryfees' => 'لا توجد رسوم توصيل',
+    'fees' => 'رسوم الخدمة',
+    'nofees' => 'لا توجد رسوم',
+    'includefees' => 'يشمل ضريبة القيمة المضافة',
+    'anotherway' => 'بمعنى آخر',
+    'paymentmethod' => 'طريقة الدفع',
+    'deliveryTime'=>' وقت التوصيل' ,
+    'min'=>'دقيقه',
 
 ];
