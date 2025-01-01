@@ -37,7 +37,7 @@
                                     aria-controls="panelsStayOpen-collapseOne">
                                     <h6 class="fw-bold">
                                         <i class="fas fa-file-alt main-color fa-xs"></i>
-                                          @lang('header.orderdetails')
+                                        @lang('header.orderdetails')
                                     </h6>
                                 </button>
                             </h2>
@@ -66,7 +66,7 @@
                                         <li class="order-list">
                                             <small class="text-muted py-1 d-block">
                                                 @if ($order->note)
-                                                @lang('header.note') : {{ $order->note }}
+                                                    @lang('header.note') : {{ $order->note }}
                                                 @else
                                                     @lang('header.nonote')
                                                 @endif
@@ -120,11 +120,26 @@
                                     @endif
                                     <ul class="list-unstyled p-0 mb-0">
                                         <li class="order-list">
-                                            <p class="mb-0">   @lang('header.paymentmethod')
+                                            <p class="mb-0"> @lang('header.paymentmethod')
 
                                             </p>
                                             <p class="mb-0 py-1">
-                                                {{ $order->orderTransactions->first()?->payment_method }}
+                                                @switch($order->orderTransactions->first()?->payment_method)
+                                                    @case('cash')
+                                                        @lang('header.cash')
+                                                    @break
+
+                                                    @case('credit_card')
+                                                        @lang('header.credit_card')
+                                                    @break
+
+                                                    @case('online')
+                                                        @lang('header.online')
+                                                    @break
+
+                                                    @default
+                                                        @lang('header.cash')
+                                                @endswitch
                                             </p>
                                         </li>
                                         <li class="order-list">
@@ -132,7 +147,7 @@
 
                                             </p>
                                             <p class="mb-0 py-1">
-                                                {{ getSetting('delivery_time')  .   __('header.min') }}
+                                                {{ getSetting('delivery_time') . __('header.min') }}
                                             </p>
                                         </li>
                                     </ul>

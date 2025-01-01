@@ -193,7 +193,7 @@ class CartController extends Controller
     {
         $user = Auth::guard('client')->user();
 
-        $orders = Order::with(['client', 'branch', 'address', 'tracking', 'orderDetails', 'orderProducts', 'orderTransactions', 'coupon'])
+        $orders = Order::with(['client', 'branch.country', 'address', 'tracking', 'orderDetails', 'orderAddons.Addon','orderProducts', 'orderTransactions', 'coupon'])
             ->where('client_id', $user->id)
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->orderBy('created_at', 'desc')
