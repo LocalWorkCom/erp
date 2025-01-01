@@ -168,12 +168,14 @@ class DishCategoryController extends Controller
         // Determine the column for dish name based on language
         $nameColumn = ($lang === 'en') ? 'name_en' : 'name_ar';
 
-        if ($branchId){
+        if ($branchId) {
+            // Fetch most popular dishes once
             $mostPopularController = new MostPopularController();
             $mostPopularResponse = $mostPopularController->index($request);
             $mostPopular = collect($mostPopularResponse->getData()->data);
             $popularDishIds = $mostPopular->pluck('id')->toArray();
             $popularDishCurrencyMap = $mostPopular->pluck('currency_symbol', 'id')->toArray();
+
             // Scenario 1: If categoryId is greater than 0, fetch dishes for the category
             if (is_numeric($categoryId) && $categoryId > 0) {
                 $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
@@ -199,9 +201,12 @@ class DishCategoryController extends Controller
                 if (!$dishCategory) {
                     return RespondWithBadRequestData($lang, 8);
                 }
+
+                // Check if user is authenticated
                 if (CheckToken()) {
                     $user = auth('api')->user(); // Get authenticated user
                     if ($user) {
+                        // Map over dishes to check if each dish is a favorite and is most popular
                         $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user, $popularDishIds, $popularDishCurrencyMap) {
                             // Initialize flags for favorites and popularity
                             $flagFavorite = 0;
@@ -228,7 +233,7 @@ class DishCategoryController extends Controller
                     }
                 } else {
                     // If user is not authenticated, only set the most popular flag
-                    $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds) {
+                    $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds, $popularDishCurrencyMap) {
                         // Check if the dish is in the most popular dishes
                         $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
                         $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
@@ -238,7 +243,6 @@ class DishCategoryController extends Controller
                 }
 
                 $dishCategory->makeHidden(['name_site', 'description_site'])->dishes->makeHidden(['name_site', 'description_site']);
-
                 return ResponseWithSuccessData($lang, $dishCategory, 1);
             }
 
@@ -261,12 +265,6 @@ class DishCategoryController extends Controller
                         $query->orderBy('dishes.created_at', 'desc');
                     }
                 }])->get();
-
-                // Get the most popular dishes' IDs
-                $mostPopularController = new MostPopularController();
-                $mostPopularResponse = $mostPopularController->index($request);
-                $mostPopular = collect($mostPopularResponse->getData()->data);
-                $popularDishIds = $mostPopular->pluck('id')->toArray();
 
                 // Check if user is authenticated
                 if (CheckToken()) {
@@ -306,13 +304,14 @@ class DishCategoryController extends Controller
                             // Check if the dish is in the most popular dishes
                             $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+
                             return $dish;
                         });
                     });
                 }
 
                 $dishCategories->makeHidden(['name_site', 'description_site']);
-                foreach($dishCategories as $dishCategory){
+                foreach ($dishCategories as $dishCategory) {
                     $dishCategory->dishes->makeHidden(['name_site', 'description_site']);
                 }
 
@@ -321,32 +320,28 @@ class DishCategoryController extends Controller
 
             // Scenario 3: If offers = 1, fetch active offers with details
             if ($offers == 1) {
-                $activeOffers = Offer::
-                    with('details')
-                ->whereHas('details')
-//                dd($activeOffers);
+                $activeOffers = Offer::with('details')
+                    ->whereHas('details')
                     ->where('branch_id', $branchId)
                     ->orWhere('branch_id', -1)
                     ->where('is_active', 1)
                     ->get()
-//                dd($activeOffers);
                     ->map(function ($offer) {
                         // Assuming you want to add the translated name for each detail
                         $offer->details->each(function ($detail) {
-
-                            if(request()->header('lang', 'ar') === 'en'){
+                            if (request()->header('lang', 'ar') === 'en') {
                                 $detail->type_name = $detail->getTypeName('en'); // Add English name
-                            }else{
+                            } else {
                                 $detail->type_name = $detail->getTypeName('ar'); // Add Arabic name
                             }
                         });
                         return $offer;
                     }) ?? collect();
-                $activeOffers= OfferResource::collection($activeOffers);
+
+                $activeOffers = OfferResource::collection($activeOffers);
                 $activeOffers = $activeOffers->filter(function ($offer) {
                     return $offer->details->isNotEmpty();
                 });
-
 
                 return ResponseWithSuccessData($lang, $activeOffers, 1);
             }

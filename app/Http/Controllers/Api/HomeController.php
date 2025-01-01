@@ -101,6 +101,12 @@ class HomeController extends Controller
                 })->toArray();
             }
         }
+        else{
+            $mostPopular = collect($mostPopular)->map(function ($dish) {
+                $dish->is_favorite = 0;
+                return $dish;
+            })->toArray();
+        }
 
         $data = [
             'branches' => $branches ?? null,
