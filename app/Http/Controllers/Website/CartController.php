@@ -18,6 +18,7 @@ use App\Models\Recipe;
 use App\Models\ReturnPolicy;
 use App\Models\Slider;
 use App\Models\TermsAndCondition;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,17 @@ use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
+
+    protected $orderService;
+    protected $lang;
+    protected $checkToken;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+        $this->lang =  app()->getLocale();
+        $this->checkToken = false;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -74,6 +86,16 @@ class CartController extends Controller
         $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->id)
             ->where('branch_id', $branchId)
             ->get();
+        $price = 0;
+        if ($BranchMenu->dish->has_sizes) {
+            foreach ($BranchMenuSize as $key => $size) {
+                if ($size->dishSizes->default_size) {
+                    $price =  $size->price;
+                }
+            }
+        } else {
+            $price =  $BranchMenu->price;
+        }
         // Structure the response data
         $response = [
             'status' => 'success',
@@ -84,9 +106,9 @@ class CartController extends Controller
                 'id' => $BranchMenu->dish_id,
                 'name' => $BranchMenu->dish->name_ar,
                 'description' => $BranchMenu->dish->description,
-                'price' => $BranchMenu->dish->has_size ? 0 : $BranchMenu->price,
+                'price' => $BranchMenu->dish->has_sizes ? $price : $BranchMenu->price,
                 'image' => $BranchMenu->dish->image ?? null,
-                'has_size' => $BranchMenu->dish->has_size,
+                'has_size' => $BranchMenu->dish->has_sizes,
                 'has_addon' => count($BranchMenuAddon) > 0 ? 1 : 0,
 
                 'mostOrdered' => checkDishExistMostOrderd($branchId, $BranchMenu->dish_id)
@@ -138,17 +160,46 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        dd($request);
+        $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
+        $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
+
+        if ($userLat && $userLon) {
+            Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
+        } else {
+            Log::warning('No coordinates found in cookies');
+        }
+
+        if ($userLat && $userLon) {
+            $nearestBranch = getNearestBranch($userLat, $userLon);
+            if ($nearestBranch) {
+                $branchId = $nearestBranch->id;
+                Log::info('Nearest branch selected', ['branchId' => $branchId]);
+            } else {
+                $branchId = getDefaultBranch();
+                Log::warning('Fallback to default branch', ['branchId' => $branchId]);
+            }
+        } else {
+            $branchId = getDefaultBranch();
+            Log::warning('No coordinates found, using default branch', ['branchId' => $branchId]);
+        }
         // //        dd($request->all());
-        // $response = $this->orderService->store($request, $this->checkToken);
-        // $responseData = $response->original;
-        // //        dd($responseData);
-        // if (!$responseData['status'] && isset($responseData['data'])) {
-        //     $validationErrors = $responseData['data'];
-        //     return redirect()->back()->withErrors($validationErrors)->withInput();
-        // }
-        // $message = $responseData['message'];
-        // return redirect('dashboard/orders')->with('message', $message);
+        $cart = json_decode($request->cart_data);
+        $request['type'] = 'Online';
+        $request['note'] = $cart->notes;
+        $request['table_id'] = null;
+        $request['branch_id'] = $branchId;
+        $request['coupon_code'] = $request->coupon_code;
+        $request['details'] = $cart->items;
+        // dd($request);
+        $response = $this->orderService->store($request, $this->checkToken);
+        $responseData = $response->original;
+        // dd($responseData);
+        if (!$responseData['status'] && isset($responseData['data'])) {
+            $validationErrors = $responseData['data'];
+            return redirect()->back()->withErrors($validationErrors)->withInput();
+        }
+        $message = $responseData['message'];
+        return redirect('orders')->with('message', $message);
     }
 
     public function isCouponValid(Request $request)
@@ -217,16 +268,17 @@ class CartController extends Controller
             'orderTransactions',
             'coupon',
         ])
-        ->where('client_id', $user->id)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('client_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
 
         return view('website.orders', compact('orders'));
     }
 
-    public function paymentDetails($id){
+    public function paymentDetails($id)
+    {
         $user = Auth::guard('client')->user();
 
         $details =  Order::with([
@@ -240,10 +292,10 @@ class CartController extends Controller
             'orderTransactions',
             'coupon',
         ])
-        ->where('client_id', $user->id)
-        ->where('id', $id)
-        ->orderBy('created_at', 'desc')
-        ->get();
-        return view('website.order-payment-details',compact('details'));
+            ->where('client_id', $user->id)
+            ->where('id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('website.order-payment-details', compact('details'));
     }
 }

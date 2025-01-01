@@ -248,7 +248,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column justify-content-end">
-                    <p class="fw-bold">${formatCurrency(itemTotal)} ${currency_symbol}</p>
+                    <p class="fw-bold">${formatCurrency(itemTotal)}</p>
                     <div class="btns text-center">
                         <button class="btn reversed main-color mb-2 edit-item" data-index="${index}" type="button">تعديل</button>
                         <button class="btn mb-2 delete-item" data-index="${index}" type="button">حذف</button>
@@ -320,10 +320,10 @@
                 let newTotalPrice = (price * quantity) + addonsPrice;
 
                 // Update total price in the total-price span
-                $(`#total-price${version}`).text(newTotalPrice.toFixed(2));
+                $(`#total-price${version}`).text(formatCurrency(newTotalPrice));
 
                 // Update the dish-price span
-                $(`#dish-total${version}`).text(newTotalPrice.toFixed(2));
+                $(`#dish-total${version}`).text(formatCurrency(newTotalPrice));
 
             }
 
@@ -472,8 +472,8 @@
                         ${product.mostOrdered ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> الاعلى تقييم</span>` : ''}
                         <small class="text-muted d-block py-2">${product.description}</small>
                         <h4 class="fw-bold">
-                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">${dishPrice.toFixed(2)}</span>
-                            ${data.branch.currency_symbol}
+                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">${formatCurrency(dishPrice)}</span>
+                    
                         </h4>
                         <div class="qty mt-3 d-flex justify-content-center align-items-center">
                             <span class="pro-dec me-3" onclick="decreaseQuantity(this)"><i class="fa fa-minus" aria-hidden="true"></i></span>
@@ -523,7 +523,7 @@
 
 
                             $(`#dish-total${version}`).text(
-                                `${itemTotal.toFixed(2)} ${data.branch.currency_symbol}`);
+                                `${formatCurrency(itemTotal)}`);
                             // $('#dish-quantity').text(`+ أضف إلي العربة (${item.quantity})`);
                             $('.submit').off('click').on('click', function() {
                                 saveChanges(index);
@@ -592,14 +592,13 @@
                             const finalTotal = discountedTotal + SERVICE_FEES + SHIPPING_FEES + tax;
 
                             couponDiv.classList.remove('d-none');
-                            $('#discount-value').text(`-${discount.toFixed(2)} ${currency_symbol}`);
-                            totalElement.text(`${discountedTotal.toFixed(2)} ${currency_symbol}`);
-                            taxElement.text(`${tax.toFixed(2)} ${currency_symbol}`);
-                            serviceFeeElement.text(`${SERVICE_FEES.toFixed(2)} ${currency_symbol}`);
-                            shippingFeeElement.text(
-                                `${SHIPPING_FEES.toFixed(2)} ${currency_symbol}`);
-                            totalPayElement.text(`${finalTotal.toFixed(2)} ${currency_symbol}`);
-                            finalTotalElement.text(`${finalTotal.toFixed(2)} ${currency_symbol}`);
+                            $('#discount-value').text(`-${formatCurrency(discount)}`);
+                            totalElement.text(`${formatCurrency(discountedTotal)}`);
+                            taxElement.text(`${formatCurrency(tax)}`);
+                            serviceFeeElement.text(`${formatCurrency(SERVICE_FEES)}`);
+                            shippingFeeElement.text(`${formatCurrency(SHIPPING_FEES)}`);
+                            totalPayElement.text(`${formatCurrency(finalTotal)}`);
+                            finalTotalElement.text(`${formatCurrency(finalTotal)}`);
                         } else {
                             alert(data.message);
                         }
@@ -619,7 +618,7 @@
                         <div class="form-check">
                             <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" ${item.size.id === size.id ? 'checked' : ''}>
                                 <label class="form-check-label" for="size-${size.id}">${size.name}</label>
-                                <span>${size.price} ${currencySymbol}</span>
+                                <span>${formatCurrency(size.price)}</span>
                             </div>
                     `);
                 });
@@ -641,7 +640,7 @@
                         <div class="form-check">
                             <input class="form-check-input addon-option" type="checkbox" id="addon-${addon.id}" value="${addon.price}" ${isSelected ? 'checked' : ''}>
                                 <label class="form-check-label" for="addon-${addon.id}">${addon.name}</label>
-                                <span>${addon.price} ${currencySymbol}</span>
+                                <span>${formatCurrency(addon.price)}</span>
                             </div>
                     `);
                 });

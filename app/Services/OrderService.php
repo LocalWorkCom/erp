@@ -63,20 +63,28 @@ class OrderService
         //     return RespondWithBadRequest($lang, 5);
         // } else {
         $UserType =  CheckUserType();
-        $client_id = Auth::guard('api')->user()->id;
-        if ($UserType != '') {
-            $unknown_user = User::where('flag', $UserType)->first()->id;
-            $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
+        $gaurd_name = getAuthenticatedGuard();
+        if ($gaurd_name == 'api') {
+
+            $client_id = Auth::guard('api')->user()->id;
+        } else if ($gaurd_name == 'client') {
+            $client_id = Auth::guard('client')->user()->id;
+        } else if ($gaurd_name == 'admin') {
+            $client_id = Auth::user()->id;
         }
-        $created_by = Auth::guard('api')->user()->id;
+        // if ($UserType != '') {
+        // $unknown_user = User::where('flag', $UserType)->first()->id;
+        // $client_id = ($UserType == 'admin') ? $unknown_user : Auth::guard('api')->user()->id;
+        // }
+        $created_by = $client_id;
         // }
         $discount = null;
         $total_price_befor_tax = 0;
         $total_addon_price_befor_tax = 0;
         $DataOrderDetails = $request->details;
-        $DataAddons = $request->addons;
+        // $DataAddons = $request->addons;
         $done = false;
-        $DataProducts = $request->Products;
+        // $DataProducts = $request->Products;
 
         //settings
         $tax_application = getSetting('tax_application');
@@ -90,35 +98,36 @@ class OrderService
 
         try {
             //validation
-            $validator = Validator::make($request->all(), [
-                'type' => 'required|string|in:Takeaway,Online,InResturant,Delivery,CallCenter',  // Enforce enum-like values
-                'note' => 'nullable|string', // Optional but must be a string
-                // 'use_point' => 'nullable|integer', // Optional but must be a string
-                // 'delivery_fees' => 'nullable|numeric', // Must be a number
-                'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
-                'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
-                'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
-                'details' => 'required|array', // Must be an array (contains order details)
-                'details.*.quantity' => 'required|integer', // Every detail must have a quantity
-                // 'details.*.total' => 'required|numeric', // Every detail must have a total
-                'details.*.note' => 'nullable|string', // Optional note in details
-                'details.*.coupon_code' => 'nullable|exists:coupons,code', // Optional coupon in details
-                // 'details.*.product_id' => 'nullable|exists:products,id', // Product ID must exist in the 'products' table
-                'details.*.dish_id' => 'nullable|exists:dishes,id', // Optional recipe ID
-                // 'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
-                'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
-                'addons.*.quantity' => 'required|integer', // Add-ons must have a quantity
-                'addons.*.dish_addon_id' => 'required|exists:dish_addons,id', // Add-on recipe must exist
-                // 'addons.*.price' => 'required|numeric', // Add-on price must be numeric
-            ]);
+            // $validator = Validator::make($request->all(), [
+            //     'type' => 'required|string|in:Takeaway,Online,InResturant,Delivery,CallCenter',  // Enforce enum-like values
+            //     'note' => 'nullable|string', // Optional but must be a string
+            //     // 'use_point' => 'nullable|integer', // Optional but must be a string
+            //     // 'delivery_fees' => 'nullable|numeric', // Must be a number
+            //     'table_id' => 'nullable|exists:tables,id', // Optional but must exist in the 'tables' table
+            //     'branch_id' => 'required|exists:branches,id', // Optional but must exist in the 'discounts' table
+            //     'coupon_code' => 'nullable|exists:coupons,code', // Optional but must exist in the 'coupons' table
+            //     'details' => 'required|array', // Must be an array (contains order details)
+            //     'details.*.quantity' => 'required|integer', // Every detail must have a quantity
+            //     // 'details.*.total' => 'required|numeric', // Every detail must have a total
+            //     'details.*.note' => 'nullable|string', // Optional note in details
+            //     // 'details.*.product_id' => 'nullable|exists:products,id', // Product ID must exist in the 'products' table
+            //     'details.*.dish_id' => 'nullable|exists:dishes,id', // Optional recipe ID
+            //     'details.*.dish_size_id' => 'nullable|exists:dish_sizes,id', // Add-on recipe must exist
+            //     // 'details.*.unit_id' => 'required|exists:units,id', // Unit ID must exist in the 'units' table
+            //     'addons' => 'nullable|array', // Add-ons can be optional but must be an array if provided
+            //     'addons.*.quantity' => 'required|integer', // Add-ons must have a quantity
+            //     'addons.*.dish_addon_id' => 'required|exists:dish_addons,id', // Add-on recipe must exist
+            //     // 'addons.*.price' => 'required|numeric', // Add-on price must be numeric
+            // ]);
 
-            if ($validator->fails()) {
-                DB::rollBack();
+            // if ($validator->fails()) {
+            //     DB::rollBack();
 
-                return RespondWithBadRequestWithData($validator->errors());
-            }
+            //     return RespondWithBadRequestWithData($validator->errors());
+            // }
 
             // Handle coupons
+
             $coupon = null;
             if (isset($request->coupon_code)) {
                 $coupon = GetCouponId($request->coupon_code);
@@ -129,27 +138,13 @@ class OrderService
                 }
             }
 
-            if (CheckDiscountValid()) {
-                $discount = CheckDiscountValid();
-            }
-            $IDBranch = 1;
+            // if (CheckDiscountValid()) {
+            //     $discount = CheckDiscountValid();
+            // }
+            $IDBranch = $request->branch_id;
             $delivery_fees = 0;
 
-            if ($UserType == 'admin') {
-                $IDBranch = 1;
-            } else {
-                if ($request->IDBranch) {
-                    $IDBranch = $request->IDBranch;
-                }
-                // $user = Auth::guard('api')->user();
-                // $client_address = ClientAddress::where('user_id', $user->id)->where('is_default', 1)->first();
-                // if ($client_address) {
-                //     $IDBranch = getNearestBranch($client_address->latitude, $client_address->longtitude)->id;
-                // } else {
 
-                //     $IDBranch = 1;
-                // }
-            }
 
             if ($request->type == 'Delivery' || $request->type == 'CallCenter' || $request->type == 'Online') {
                 // $delivery_fees = scopeNearest($IDBranch, $client_address->latitude, $client_address->longtitude)->price;
@@ -188,26 +183,51 @@ class OrderService
             // }
 
 
-            if ($DataOrderDetails->count()) {
+            if (sizeof($DataOrderDetails)) {
 
+                $total_items = 0;
                 foreach ($DataOrderDetails as $DataOrderDetail) {
-                    //need to get price from menu table updated _________________________________________________________
-                    $Dish = BranchMenu::where('dish_id', $DataOrderDetail['dish_id'])->where('branch_id', $request->branch_id)->first();
+                    $Dish = BranchMenu::where('dish_id', $DataOrderDetail->id)->where('branch_id', $request->branch_id)->first();
                     if ($Dish) {
                         $total = $Dish->price;
                     }
                     $OrderDetails = new OrderDetail();
                     $OrderDetails->order_id = $Order->id;
-                    $OrderDetails->quantity = $DataOrderDetail['quantity'];
+                    $OrderDetails->quantity = $DataOrderDetail->quantity;
                     $OrderDetails->total = $total; // price for 1 unit 
-                    $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total * $DataOrderDetail['quantity'], $tax_percentage, $tax_application) : $total * $DataOrderDetail['quantity'];
-                    $OrderDetails->tax_value = CalculateTax($tax_percentage, $total * $DataOrderDetail['quantity']);
-                    $OrderDetails->note = $DataOrderDetail['note'] ?? null;
-                    $OrderDetails->dish_id = $DataOrderDetail['dish_id'] ?? null;
+                    $OrderDetails->price_befor_tax = $tax_application == 1 ? applyTax($total * $DataOrderDetail->quantity, $tax_percentage, $tax_application) : $total * $DataOrderDetail->quantity;
+                    $OrderDetails->tax_value = CalculateTax($tax_percentage, $total * $DataOrderDetail->quantity);
+                    $OrderDetails->note = $DataOrderDetail->note ?? null;
+                    $OrderDetails->dish_id = $DataOrderDetail->id ?? null;
                     $OrderDetails->created_by = $created_by;
-                    $total_product_price_after_tax = $tax_application == 0 ? applyTax($total * $DataOrderDetail['quantity'], $tax_percentage, $tax_application) * $DataOrderDetail['quantity'] : $total * $DataOrderDetail['quantity'];
+                    $total_product_price_after_tax = $tax_application == 0 ? applyTax($total * $DataOrderDetail->quantity, $tax_percentage, $tax_application) * $DataOrderDetail->quantity : $total * $DataOrderDetail->quantity;
                     $OrderDetails->price_after_tax = $total_product_price_after_tax;
                     $OrderDetails->save();
+                    $total_items += $total_product_price_after_tax;
+
+                    $DataAddons = $DataOrderDetail->addons;
+                    if (sizeof($DataAddons)) {
+
+                        foreach ($DataAddons as $DataAddon) {
+                            $addon = BranchMenuAddon::with('addon')->where('dish_addons.id', $DataAddon->id)->first();
+                            if ($addon) {
+                                $price = $addon->price;
+
+                                $OrderAddons = new OrderAddon();
+                                $OrderAddons->order_id = $Order->id;
+                                $OrderAddons->quantity = $DataAddon->quantity;
+                                $OrderAddons->total = $price; // price for 1 unit
+                                $OrderAddons->dish_addon_id = $DataAddon->id;
+                                $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price * $DataAddon->quantity, $tax_percentage, $tax_application) : $price * $DataAddon->quantity;
+                                $price_after_tax = $tax_application == 0 ? applyTax($price * $DataAddon->quantity, $tax_percentage, $tax_application) * $DataAddon->quantity : $price * $DataAddon->quantity;
+                                $OrderAddons->price_after_tax = $price_after_tax;
+                                $OrderAddons->created_by = $created_by;
+                                $OrderAddons->save();
+                                $total_items += $price_after_tax;
+                                // dd($price_after_tax);
+                            }
+                        }
+                    }
                 }
             }
             if ($request->IDOffer) {
@@ -243,27 +263,7 @@ class OrderService
                 }
             }
 
-            if ($DataAddons->count()) {
 
-                foreach ($DataAddons as $DataAddon) {
-                    $addon = BranchMenuAddon::with('addon')->where('dish_addons.id', $DataAddon['dish_addon_id'])->first();
-                    if ($addon) {
-                        $price = $addon->price;
-
-                        $OrderAddons = new OrderAddon();
-                        $OrderAddons->order_id = $Order->id;
-                        $OrderAddons->quantity = $DataAddon['quantity'];
-                        $OrderAddons->total = $price; // price for 1 unit
-                        $OrderAddons->dish_addon_id = $DataAddon['dish_addon_id'];
-                        $OrderAddons->price_before_tax = $tax_application == 1 ? applyTax($price * $DataAddon['quantity'], $tax_percentage, $tax_application) : $price * $DataAddon['quantity'];
-                        $price_after_tax = $tax_application == 0 ? applyTax($price * $DataAddon['quantity'], $tax_percentage, $tax_application) * $DataAddon['quantity'] : $price * $DataAddon['quantity'];
-                        $OrderAddons->price_after_tax = $price_after_tax;
-                        $OrderAddons->created_by = $created_by;
-                        $OrderAddons->save();
-                        // dd($price_after_tax);
-                    }
-                }
-            }
             $store_id = 0;
             //need to confirm from eng/rasha
             // if ($DataProducts->count()) {
@@ -287,27 +287,27 @@ class OrderService
             //     }
             // }
             // need to return from updated table 
-            $total_addon_price_befor_tax = array_sum(
-                array_map(
-                    function ($addon) {
-                        $data = BranchMenuAddon::with('addon')->where('dish_addons.id', $addon['dish_addon_id'])->first();
-                        return $data->price * $addon['quantity'];
-                    },
-                    $DataAddons
-                )
-            );
+            // $total_addon_price_befor_tax = array_sum(
+            //     array_map(
+            //         function ($addon) {
+            //             $data = BranchMenuAddon::with('addon')->where('dish_addons.id', $addon['dish_addon_id'])->first();
+            //             return $data->price * $addon['quantity'];
+            //         },
+            //         $DataAddons
+            //     )
+            // );
 
 
-            $total_price_befor_tax = $total_price_befor_tax2 = array_sum(
-                array_map(
-                    function ($detail) {
-                        $Dish = BranchMenu::where('dush_id', $detail['dish_id'])->where('branch_id', $detail['branch_id'])->first();
+            // $total_price_befor_tax = $total_price_befor_tax2 = array_sum(
+            //     array_map(
+            //         function ($detail) {
+            //             $Dish = BranchMenu::where('dush_id', $detail['dish_id'])->where('branch_id', $detail['branch_id'])->first();
 
-                        return $Dish['price'] * $detail['quantity'];
-                    },
-                    $DataOrderDetails
-                )
-            ) + $total_addon_price_befor_tax + $total_offer_price_befor_tax;
+            //             return $Dish['price'] * $detail['quantity'];
+            //         },
+            //         $DataOrderDetails
+            //     )
+            // ) + $total_addon_price_befor_tax + $total_offer_price_befor_tax;
 
 
             if ($coupon && CheckCouponValid($coupon->id, $total_price_befor_tax)) {
@@ -315,40 +315,44 @@ class OrderService
 
                 return RespondWithBadRequest($lang, 11);
             }
-
+            $tax_value = 0;
+            $total_before_tax = $total_items;
             //total here is included tax as setting applied so we need get total before tax 
             if ($tax_application == 1) {
-                $total_price_befor_tax = applyTax($total_price_befor_tax, $tax_percentage, $tax_application);
+
+                $total_before_tax = applyTax($total_items, $tax_percentage, $tax_application);
+                $tax_value = CalculateTax($tax_percentage, $total_items);
+            }
+            if ($coupon && $coupon_application == 0) {
+                $total_items = applyCoupon($total_items, $coupon);
             }
             // Apply coupon before tax (if applicable)
-            if ($coupon && $coupon_application == 0) {
-                $total_price_befor_tax = applyCoupon($total_price_befor_tax, $coupon);
-            }
 
-            if ($discount) {
-                $total_price_befor_tax = applyDiscount($total_price_befor_tax, $discount);
-            }
+
+            // if ($discount) {
+            //     $total_price_befor_tax = applyDiscount($total_price_befor_tax, $discount);
+            // }
 
 
             // Apply tax because it's not included so calculate
-            if ($tax_application == 0) {
-                $total_price_after_tax = applyTax(($coupon && $coupon_application == 0) ? $total_price_befor_tax : $total_price_befor_tax2, $tax_percentage, $tax_application);
-            } else {
-                $total_price_after_tax = $total_price_befor_tax2;
-            }
-            // Apply coupon after tax (if applicable)
-            if ($coupon && $coupon_application == 1) {
-                $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
-            }
+            // if ($tax_application == 0) {
+            //     $total_price_after_tax = applyTax(($coupon && $coupon_application == 0) ? $total_price_befor_tax : $total_price_befor_tax2, $tax_percentage, $tax_application);
+            // } else {
+            //     $total_price_after_tax = $total_price_befor_tax2;
+            // }
+            // // Apply coupon after tax (if applicable)
+            // if ($coupon && $coupon_application == 1) {
+            //     $total_price_after_tax = applyCoupon($total_price_after_tax, $coupon);
+            // }
 
             // use point call pointredeem function else point redeem=0   return point num and amount of redeem
             // if ($request->use_points && $UserType == 'client' && isActive($Order->branch_id)) {
             // $redeem_total =   calculateRedeemPoint($total_price_after_tax, $Order->branch_id, $Order->id, $client_id);
             // }
-            $Order->tax_value = CalculateTax($tax_percentage, $total_price_after_tax);
-            $Order->total_price_befor_tax = $total_price_befor_tax;
+            $Order->tax_value = $tax_value;
+            $Order->total_price_befor_tax = $total_before_tax;
             // $Order->total_price_after_tax = ($total_price_after_tax + $service_fees) - $redeem_total;
-            $Order->total_price_after_tax = $total_price_after_tax;
+            $Order->total_price_after_tax = $total_items + $service_fees + $delivery_fees;
             $Order->service_fees = $service_fees;
             $Order->delivery_fees = $delivery_fees;
             $Order->save();
@@ -367,7 +371,17 @@ class OrderService
             // $OrderTracking->save();
             // }
 
-
+            $order_transaction = new OrderTransaction();
+            $order_transaction->order_id = $Order->id;
+            $order_transaction->order_type = 'order';
+            $order_transaction->payment_method = $request->payment_method;
+            $order_transaction->transaction_id = Str::uuid()->toString();;
+            $order_transaction->paid = $total_items + $service_fees + $delivery_fees;
+            $order_transaction->date = date('Y-m-d');
+            // $order_transaction->refund = $request->refund;
+            $order_transaction->discount_id = ($discount) ? $discount->id : null;
+            $order_transaction->coupon_id = $request->coupon_id;
+            $order_transaction->save();
             // $transactionId = Str::uuid()->toString();
             // $points_num = 0;
             // if ($request->payment_method != 'cash') {
