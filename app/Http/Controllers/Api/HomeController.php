@@ -93,17 +93,17 @@ class HomeController extends Controller
                         ->where('dish_id', $dish->id)
                         ->get(); // Check if the dish is in user's favorites
                     if ($isFavorite->isNotEmpty()) {
-                        $flag = 1;
+                        $flag = true;
                     }
 
-                    $dish->is_favorite = $flag ?? 0;
+                    $dish->is_favorite = $flag ?? false;
                     return $dish;
                 })->toArray();
             }
         }
         else{
             $mostPopular = collect($mostPopular)->map(function ($dish) {
-                $dish->is_favorite = 0;
+                $dish->is_favorite = false;
                 return $dish;
             })->toArray();
         }

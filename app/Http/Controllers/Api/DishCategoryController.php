@@ -210,7 +210,7 @@ class DishCategoryController extends Controller
                         $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user, $popularDishIds, $popularDishCurrencyMap) {
                             // Initialize flags for favorites and popularity
                             $flagFavorite = 0;
-                            $flagPopular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                            $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
 
                             // Check if the dish is in the user's favorites
@@ -221,7 +221,10 @@ class DishCategoryController extends Controller
 
                             // If the dish is in the favorites, set the flag to 1
                             if ($isFavorite) {
-                                $flagFavorite = 1;
+                                $flagFavorite = true ;
+                            }else{
+                                $flagFavorite = false ;
+
                             }
 
                             // Set the flags
@@ -235,8 +238,9 @@ class DishCategoryController extends Controller
                     // If user is not authenticated, only set the most popular flag
                     $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds, $popularDishCurrencyMap) {
                         // Check if the dish is in the most popular dishes
-                        $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                        $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                         $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+                        $dish->is_favorite = false;
 
                         return $dish;
                     });
@@ -275,7 +279,7 @@ class DishCategoryController extends Controller
                             $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($user, $popularDishIds, $popularDishCurrencyMap) {
                                 // Initialize flags for favorites and popularity
                                 $flagFavorite = 0;
-                                $flagPopular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                                $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                                 $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
 
                                 // Check if the dish is in the user's favorites
@@ -286,7 +290,10 @@ class DishCategoryController extends Controller
 
                                 // If the dish is in the favorites, set the flag to 1
                                 if ($isFavorite) {
-                                    $flagFavorite = 1;
+                                    $flagFavorite = true ;
+                                }else{
+                                    $flagFavorite = false ;
+    
                                 }
 
                                 // Set the flags
@@ -302,8 +309,9 @@ class DishCategoryController extends Controller
                     $dishCategories->each(function ($dishCategory) use ($popularDishIds, $popularDishCurrencyMap) {
                         $dishCategory->dishes = $dishCategory->dishes->map(function ($dish) use ($popularDishIds, $popularDishCurrencyMap) {
                             // Check if the dish is in the most popular dishes
-                            $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? 1 : 0;
+                            $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
+                            $dish->is_favorite = false;
 
                             return $dish;
                         });
