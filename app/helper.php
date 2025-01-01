@@ -44,6 +44,7 @@ use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
+use App\Models\DishDetail;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -1076,3 +1077,17 @@ function getAddressFromLatLong($latitude, $longitude)
 
     return null;
 }
+
+
+function getDishRecipeIds($dishId, $sizeId = null)
+    {
+        $query = DishDetail::where('dish_id', $dishId);
+
+        if (!is_null($sizeId)) {
+            $query->where('dish_size_id', $sizeId);
+        } else {
+            $query->whereNull('dish_size_id');
+        }
+
+        return $query->pluck('recipe_id')->toArray();
+    }
