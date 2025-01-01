@@ -10,11 +10,10 @@ return [
     'confirmed' => ':attribute confirmation does not match.',
     'active_offer_conflict' => 'There is an active offer with the same name.',
     'The dish_id field must be a number' => 'The dish_id field must be a number',
-    //add here the attributes of validation to translated
+    'notfound'=>'User not found',
     'attributes' => [
         'type_id' => 'Type Name',
         'nameapart'=>'nameapart',
-        'notfound'=>'User not found',
         'birth_date' => 'Birth Date',
         'email' => 'email address',
         'password' => 'password',
@@ -108,7 +107,9 @@ return [
     'active' => 'Is Active',
     'value' => 'Value',
     'countryCodeExists' => 'Country Code is not valid',
-    'email_or_phone.required' => 'Email or Phone Number required',
+    'email_or_phone.required' => 'Phone Number required',
+    'email_or_phone.notfound' => 'Phone Number not found',
+
     'password.required' => 'Password is Required',
     'country_code.required_if' => 'Country Code is required when registering with phone number',
     'country_code.required' => 'Country code is required',
@@ -197,6 +198,8 @@ return [
         ],
         'phone' => [
             'length' => 'The :attribute must be exactly :length characters long.',
+            'phone.notfound' => 'User not found',
+
         ],
         'auth.nameweb' => 'Name',
         'auth.emailweb' => 'Email',

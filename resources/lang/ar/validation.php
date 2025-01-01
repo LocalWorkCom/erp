@@ -26,7 +26,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
-    'notfound' => 'عفوا هذا المستخدم غير موجود بالسيستيم',
+    'notfound' => 'عفوا هذا المستخدم غير موجود بالأبليكشن',
 
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
