@@ -135,8 +135,8 @@
 
     @include('website.delivery')
     @include('website.location')
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
                     @csrf
@@ -150,7 +150,7 @@
                     <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
                         <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
                         <button type="button" class="btn reversed main-color w-25 mx-2"
-                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                            data-bs-dismiss="modal" aria-label="Close">@lang('header.cancel')</button>
                     </div>
                 </form>
 

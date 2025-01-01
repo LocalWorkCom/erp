@@ -26,7 +26,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
-    'notfound' => 'عفوا هذا المستخدم غير موجود بالسيستيم',
+    'notfound' => 'عفوا هذا المستخدم غير موجود بالأبليكشن',
 
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
@@ -88,7 +88,7 @@ return [
     'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'The dish_id field must be a number' => 'يجب ان يكون رقم الطبق رقم صحيح',
     'attributes' => [
-       
+
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
         'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
