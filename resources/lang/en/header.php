@@ -128,5 +128,6 @@ return [
     'track-order' => 'Track Order',
     'resivefrom' => 'Received From',
     'paymentdetails' =>'Payment details',
-
+    'am' => 'AM',
+    'pm' => 'PM',
 ];

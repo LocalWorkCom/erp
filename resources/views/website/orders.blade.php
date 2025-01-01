@@ -42,7 +42,11 @@
                                 <span>{{ $detail->dish?->name ?? 'N/A' }}</span>
                             </p>
                             <p class="text-muted mt-1 mb-0 mx-4">
-                                {{ is_array(getDishRecipeIds($detail->dish?->id, null)) ? implode(', ', getDishRecipeIds($detail->dish?->id, null)) : getDishRecipeIds($detail->dish?->id, null) ?? __('header.nodish') }}
+                                {{
+                                    is_array(getDishRecipeNames($detail->dish?->id, null))
+                                    ? implode(', ', getDishRecipeNames($detail->dish?->id, null))
+                                    : getDishRecipeNames($detail->dish?->id, null) ?? __('header.nodish')
+                                }}
                             </p>
                             <p class="fw-bold mb-0 py-1">{{ $order->total_price_after_tax }}
                                 {{ $order->Branch->country->currency_symbol }}</p>
