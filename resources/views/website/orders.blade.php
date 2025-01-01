@@ -18,7 +18,6 @@
             <div class="card p-4">
                 <h5>
                     <i class="fas fa-file-alt main-color fa-xs"></i>  @lang('header.ordersum')
-
                 </h5>
                 @forelse ($orders as $order)
                     <div class="card-body border-bottom">
@@ -32,11 +31,8 @@
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.cancelled')</p>
                                 @elseif ($order->status == 'pending')
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.pending')</p>
-
                                 @elseif ($order->status == 'inprogress')
                                 <p class="bg-danger text-dark rounded fw-bold p-1 mb-0"> @lang('header.inprogress')</p>
-
-
                             @endif
                         </div>
                         <small class="text-muted py-1"> @lang('header.ordermark') :  {{ $order->order_number }}</small>
