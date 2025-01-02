@@ -643,7 +643,7 @@
                     </li>
                 @endif
 
-                <?php /* @if (auth()->user()->can('view purchasing_reports')) */?>
+                @if (auth()->user()->can('view branches'))
                     <li class="slide has-sub">
                         <a href="javascript:void(0);" class="side-menu__item">
                             <span class=" side-menu__icon">
@@ -657,16 +657,16 @@
                                 <a href="javascript:void(0)">@lang('sidebar.Reports') </a>
                             </li>
                             <!-- Start::slide -->
-                            <?php /* @can('view purchasing_reports') */?>
+                            @can('view branches')
                                 <li class="slide">
                                     <a href="{{ route('reports.purchasing.list') }}" class="side-menu__item">
                                         <span class="side-menu__label">@lang('sidebar.PurchasingsReports') </span>
                                     </a>
                                 </li>
-                            <?php /* @endcan */?>
+                             @endcan
                         </ul>
                     </li>
-                <?php /* @endif */?>
+                @endif
 
                 @if (auth()->user()->can('view countries') ||
                         auth()->user()->can('view colors') ||

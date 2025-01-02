@@ -177,6 +177,14 @@ return [
     'EnterValidAddressPhone' => 'Enter Address Phone',
     'The category have relation' => 'The category have relation',
 
+    'EnterClosingHour' => 'Enter Closing Hour',
+    'EnterOpeningHour' => 'Enter Opening Hour',
+    'EnterPhone' => 'Enter Phone',
+    'EnterLongitude' => 'Enter Longitude',
+    'EnterLatitude' => 'Enter Latitude',
+    'EnterEnglishAddress' => 'Enter English Address',
+    'EnterArabicAddress' => 'Enter Arabic Address',
+
     'custom' => [
         'name.required' => 'The name is required and cannot be left empty.',
         'permissions_ids.required' => 'The permissions field is required and cannot be left empty.',

@@ -245,6 +245,15 @@ return [
     'EnterCountryCode' => 'ادخل رمز الدولة',
     'EnterValidAddressPhone' => 'ادخل رقم هاتف العنوان',
     'The category have relation' => 'هذا التصنيف له علاقه بمنتج',
+
+    'EnterClosingHour' => 'ادخل وقت الاغلاق',
+    'EnterOpeningHour' => 'ادخل وقت الفتح',
+    'EnterPhone' => 'ادخل رقم الهاتف',
+    'EnterLongitude' => 'أدخل خط الطول',
+    'EnterLatitude' => 'أدخل خط العرض',
+    'EnterEnglishAddress' => 'أدخل العنوان بالانجليزية',
+    'EnterArabicAddress' => 'أدخل العنوان بالعربية',
+
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',
