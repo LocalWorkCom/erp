@@ -85,5 +85,6 @@ return[
     'Rates'=>'التقييمات',
     'Reports'=>'التقرير',
     'ClientsReports'=>'تقارير العملاء',
+    'PurchasingsReports'=>'تقارير المشتريات',
 
 ];

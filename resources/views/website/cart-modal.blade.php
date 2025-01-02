@@ -1,4 +1,4 @@
-<div class="modal fade show" tabindex="-1" id="productModal_v1" aria-labelledby="productModalLabel" aria-modal="true"
+<div class="modal fade" tabindex="-1" id="productModal_v1" aria-labelledby="productModalLabel" aria-modal="true"
     role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">

@@ -85,4 +85,5 @@ return [
     'Rates'=>'Rates',
     'Reports'=>'Reports',
     'ClientsReports'=>'Clients Reports',
+    'PurchasingsReports'=>'Purchasings Reports',
 ];

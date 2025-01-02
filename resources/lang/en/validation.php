@@ -184,6 +184,14 @@ return [
     'The category have relation' => 'The category have relation',
     'offer_linked_error' => "Can't be deleted, this offer is linked to a slider",
 
+    'EnterClosingHour' => 'Enter Closing Hour',
+    'EnterOpeningHour' => 'Enter Opening Hour',
+    'EnterPhone' => 'Enter Phone',
+    'EnterLongitude' => 'Enter Longitude',
+    'EnterLatitude' => 'Enter Latitude',
+    'EnterEnglishAddress' => 'Enter English Address',
+    'EnterArabicAddress' => 'Enter Arabic Address',
+
     'custom' => [
         'phone' => [
             'length' => 'The :attribute must be exactly :length characters long.',

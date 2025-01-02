@@ -72,9 +72,9 @@
                     <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div id="msg-error" style="display: none;text-align:center" class="message bg-warning p-2 rounded-3">
+                {{-- <div id="msg-error" style="display: none;text-align:center" class="message bg-warning p-2 rounded-3">
 
-                </div>
+                </div> --}}
                 @include('website.auth.login')
                 @include('website.auth.register')
                 @include('website.auth.forgetpass')
@@ -135,33 +135,10 @@
 
     @include('website.delivery')
     @include('website.location')
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
-            <div class="modal-content">
-                <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
-                    @csrf
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <i class="fas fa-sign-out-alt main-color fs-1"></i>
-                        <h4 class="mt-4"> @lang('header.logoutalert')</h4>
-                    </div>
-                    <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
-                        <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
-                        <button type="button" class="btn reversed main-color w-25 mx-2"
-                            data-bs-dismiss="modal">@lang('header.cancel')</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script>
+    {{-- <script src="{{ asset('front/AlKout-Resturant/SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js') }}"></script> --}}
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/bootstrap-5.1.3/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/bootstarp-select.js') }}"></script>
