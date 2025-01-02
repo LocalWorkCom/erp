@@ -9,7 +9,7 @@ class Branch extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $appends = ['name', 'address','name_site', 'address_site'];
+    protected $appends = ['name', 'address','name_site', 'address_site', 'is_open'];
 
     protected $fillable = [
         'category_ids',
@@ -65,6 +65,20 @@ class Branch extends Model
     public function getAddressSiteAttribute()
     {
         return app()->getLocale() === 'en' ? $this->address_en : $this->address_ar;
+    }
+
+    public function getIsOpenAttribute()
+    {
+        $opening_hour = $this->opening_hour;
+        $closing_hour = $this->closing_hour;
+        $this_time = date('H:i:s');
+        if($this_time >= $opening_hour){
+            if($this_time <= $closing_hour){
+                return true;
+            }
+        }else{
+            return false;
+        }
     }
 
     // Relationships
