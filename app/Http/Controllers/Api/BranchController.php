@@ -216,6 +216,7 @@ class BranchController extends Controller
             // Convert is_delivery and is_default to boolean
             $branch->is_delivery = (bool) $branch->is_delivery;
             $branch->is_default = (bool) $branch->is_default;
+            //$branch->is_open = (bool) $branch->is_open;
             return $branch;
         });
 
@@ -231,13 +232,15 @@ class BranchController extends Controller
             if ($nearestBranch) {
                 $nearestBranch->is_delivery = (bool) $nearestBranch->is_delivery;
                 $nearestBranch->is_default = (bool) $nearestBranch->is_default;
+                //$nearestBranch->is_open = (bool) $nearestBranch->is_open;
                 $data['branch'] = $nearestBranch;
             } else {
                 $defaultBranchId = getDefaultBranch();
                 $data['branch'] = Branch::find($defaultBranchId);
                 $defaultBranchId->is_delivery = (bool) $defaultBranchId->is_delivery;
                 $defaultBranchId->is_default = (bool) $defaultBranchId->is_default;
-    
+                //$defaultBranchId->is_open = (bool) $defaultBranchId->is_open;
+
             }
             $data['branch']->makeHidden(['name_site', 'address_site']);
         } else {
@@ -246,7 +249,8 @@ class BranchController extends Controller
             if ($defaultBranch) {
                 $defaultBranch->is_delivery = (bool) $defaultBranch->is_delivery;
                 $defaultBranch->is_default = (bool) $defaultBranch->is_default;
-    
+                //$defaultBranch->is_open = (bool) $defaultBranch->is_open;
+
                 // Hide unnecessary attributes
                 $defaultBranch->makeHidden(['name_site', 'address_site']);
                 $data['branch'] = $defaultBranch;
