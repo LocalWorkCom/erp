@@ -178,7 +178,8 @@
                     let sizesHtml = '',
                         addonsHtml = '',
                         dishHtml = '';
-                    var version = data.dish.has_size ? '_v1' : '_v2'
+                    var version = data.dish.has_size ? '_v1' : '_v2';
+
 
                     let modal = $(`#productModal${version}`);
                     $(`#currency_symbol${version}`).val(data.branch.currency_symbol);
@@ -186,6 +187,8 @@
                     if (data.dish.has_size) {
 
                         for (const size of data.sizes) {
+                            $('#sizes-div').show();
+
                             sizesHtml += `
                 <div class="form-check">
                     <div>
@@ -201,9 +204,9 @@
                         }
 
                     }
-
                     // Generate addons HTML
                     if (data.has_addon) {
+                        $('#addons-div').show();
 
                         for (const addon of data.addons) {
                             addonsHtml += `
@@ -228,11 +231,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                                                    <span class="badge bg-warning text-dark">
-                                                                                                                                                                                        <i class="fas fa-star"></i>
-                                                                                                                                                                                         الاكثر طلبا
-                                                                                                                                                                                    </span>
-                                                                                                                                                                                ` : ''}
+                                                                                                                                                                                            <span class="badge bg-warning text-dark">
+                                                                                                                                                                                                <i class="fas fa-star"></i>
+                                                                                                                                                                                                 الاكثر طلبا
+                                                                                                                                                                                            </span>
+                                                                                                                                                                                        ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">

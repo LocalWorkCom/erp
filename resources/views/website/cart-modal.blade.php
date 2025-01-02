@@ -13,16 +13,19 @@
                 <div class="row mx-0">
                     <div class="col-md-6">
                         <div class="product-details">
-                            <h4>اختيارات من الحجم
-                            </h4>
-                            <div class="choices my-3" id="div-sizes_v1">
+                            <div id="sizes-div" style="display: none">
 
+                                <h4>اختيارات من الحجم
+                                </h4>
+                                <div class="choices my-3" id="div-sizes">
+
+                                </div>
                             </div>
-                            <div id="addons-div">
+                            <div id="addons-div" style="display: none">
 
                                 <h4> اضافات
                                 </h4>
-                                <div class="choices my-3 addon" id="div-addons_v1">
+                                <div class="choices my-3 addon" id="div-addons">
 
                                 </div>
                             </div>
