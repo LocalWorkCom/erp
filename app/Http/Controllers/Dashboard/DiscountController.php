@@ -113,8 +113,7 @@ class DiscountController extends Controller
         $response = $this->discountService->listDish($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $discount = Discount::with('discount_dishes')->findOrFail($discountId); // Load discount with dishes
-        $dishes = Dish::all();  // Retrieve all dishes
-
+        $dishes = Dish::where('is_active', 1)->whereNull('deleted_at')->get();
         foreach ($discount->dishes as $dish) {
             if ($dish->pivot) {
                 $dishId = $dish->pivot->dish_id ?? null;

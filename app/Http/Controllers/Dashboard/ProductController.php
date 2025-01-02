@@ -204,7 +204,7 @@ class ProductController extends Controller
         $response = $this->productService->list($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('units')->findOrFail($productId); // Load product with units
-        $units = Unit::all();  // Retrieve all units
+        $units = Unit::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->units as $unit) {
             if ($unit->pivot) {
@@ -250,7 +250,7 @@ class ProductController extends Controller
         $response = $this->productService->listSize($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('product_sizes')->findOrFail($productId); // Load product with sizes
-        $sizes = Size::all();  // Retrieve all sizes
+        $sizes = Size::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->sizes as $size) {
             if ($size->pivot) {
@@ -297,7 +297,7 @@ class ProductController extends Controller
         $response = $this->productService->listColor($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('product_colors')->findOrFail($productId); // Load product with sizes
-        $colors = Color::all();  // Retrieve all sizes
+        $colors = Color::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->colors as $color) {
             if ($color->pivot) {
