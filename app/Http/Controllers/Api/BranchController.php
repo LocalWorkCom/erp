@@ -197,6 +197,18 @@ class BranchController extends Controller
     public function listBranchAndNear(Request $request)
     {
         $lang = $request->header('lang', 'ar');
+        $request->validate([
+            'latitute' => [ 'numeric', 'regex:/^-?\d+(\.\d+)?$/'],
+            'longitute' => ['numeric', 'regex:/^-?\d+(\.\d+)?$/'],
+        ], [
+            'latitute.required' => __('validation.latitute.required'),
+            'latitute.numeric' => __('validation.latitute.numeric'),
+            'latitute.regex' => __('validation.latitute.regex'),
+            'longitute.required' => __('validation.longitute.required'),
+            'longitute.numeric' => __('validation.longitute.numeric'),
+            'longitute.regex' => __('validation.longitute.regex'),
+        ]);
+        // Retrieve validated data
         $userLat = $request->query('latitute');
         $userLon = $request->query('longitute');
         $all = $request->query('all', 1);

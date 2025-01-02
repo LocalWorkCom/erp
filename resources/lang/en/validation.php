@@ -69,6 +69,16 @@ return [
 
 
     ],
+    'latitute' => [
+        'required' => 'The latitude field is required.',
+        'numeric' => 'The latitude must be a valid number.',
+        'regex' => 'The latitude must be a valid decimal number.',
+    ],
+    'longitute' => [
+        'required' => 'The longitude field is required.',
+        'numeric' => 'The longitude must be a valid number.',
+        'regex' => 'The longitude must be a valid decimal number.',
+    ],
     'regex' => 'The :attribute format is invalid.',
     'date' => ':attribute must be a valid date.',
     'name' => 'The :attribute field is required.',
@@ -232,5 +242,6 @@ return [
         'auth.country_code' => 'Country code',
         'auth.date' => 'Date of Birth',
     ],
-
+       
+    
 ];

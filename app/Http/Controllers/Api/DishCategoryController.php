@@ -364,9 +364,12 @@ class DishCategoryController extends Controller
                 $activeOffers = $activeOffers->filter(function ($offer) {
                     return $offer->details->isNotEmpty();
                 });
-
-                return ResponseWithSuccessData($lang, $activeOffers, 1);
+            
+                return ResponseWithSuccessData($lang, OfferResource::collection($activeOffers), 1);
             }
+            
+            
+            
         }
 
 
