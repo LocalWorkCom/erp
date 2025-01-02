@@ -185,18 +185,34 @@ class DishCategoryController extends Controller
                         $query->where('is_active', true);
                     })
                     ->with([
-                        'dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
+                        'dishes' => function ($query) use ($searchName, $nameColumn, $orderBy, $branchId) {
                             $query->where('is_active', true);
 
                             if ($searchName) {
                                 $query->where($nameColumn, 'like', "%{$searchName}%");
                             }
-
                             if ($orderBy === 'most_ordered') {
-                                $query->orderByDesc('total_quantity');
+                                BranchMenu::select('dishes.*')
+                                        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
+                                        ->leftJoin('branches', 'branches.id', 'branch_menus.branch_id')
+                                        ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+                                        ->leftJoin('countries', 'countries.id', '=', 'branches.country_id') // Join the countries table
+                                        ->groupBy('dishes.id', 'dishes.name_ar', 'countries.currency_symbol') // Include currency_symbol in GROUP BY
+                                        ->selectRaw('SUM(order_details.quantity) as total_quantity')
+                                        ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
+                                        ->where('branch_id', $branchId)
+                                        ->orderBy('total_quantity', 'desc')
+                                        ->get();
+
                             } else {
-                                $query->orderBy('dishes.created_at', 'desc');
+                                $query->orderBy('dishes.created_at', 'desc'); // Default order by creation date
                             }
+                            
+                            // if ($orderBy === 'most_ordered') {
+                            //     $query->orderByDesc('total_quantity');
+                            // } else {
+                            //     $query->orderBy('dishes.created_at', 'desc');
+                            // }
                         }
                     ])->where('id', $categoryId)->first();
                         $dishCategory['is_active'] = (bool)$dishCategory->is_active;
@@ -371,6 +387,7 @@ class DishCategoryController extends Controller
             
             
         }
+        // $branchId = getDefaultBranch();
 
 
         // Default fallback
