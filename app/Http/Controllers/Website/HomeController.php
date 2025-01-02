@@ -58,17 +58,17 @@ class HomeController extends Controller
         $discounts = DishDiscount::with(['dish' => function ($query) {
             $query->select('id', 'name_ar', 'name_en', 'image');
         }])
-        ->with('discount') // Make sure to include the discount relationship
-        ->whereHas('discount', function ($query) {
-            $query->where('is_active', 1);
-        })
-        ->join('branch_menus', 'branch_menus.dish_id', '=', 'dish_discount.dish_id')
-        ->join('branches', 'branches.id', '=', 'branch_menus.branch_id')
-        ->join('countries', 'countries.id', '=', 'branches.country_id')
-        ->where('branches.is_default', 1)  // Only get the branch where is_default = 1
-        ->select('dish_discount.*', 'countries.currency_symbol') // Select only necessary columns
-        ->distinct() // Ensure no duplicates are returned
-        ->get();
+            ->with('discount') // Make sure to include the discount relationship
+            ->whereHas('discount', function ($query) {
+                $query->where('is_active', 1);
+            })
+            ->join('branch_menus', 'branch_menus.dish_id', '=', 'dish_discount.dish_id')
+            ->join('branches', 'branches.id', '=', 'branch_menus.branch_id')
+            ->join('countries', 'countries.id', '=', 'branches.country_id')
+            ->where('branches.is_default', 1)  // Only get the branch where is_default = 1
+            ->select('dish_discount.*', 'countries.currency_symbol') // Select only necessary columns
+            ->distinct() // Ensure no duplicates are returned
+            ->get();
 
 
 
@@ -137,16 +137,24 @@ class HomeController extends Controller
                 ->pluck('dish_id')
                 ->toArray();
         }
-
+        $offers = Offer::where('is_active', 1)
+        ->where(function ($query) use ($branchId) {
+            $query->whereRaw('FIND_IN_SET(?, branch_id)', [$branchId])
+                ->orWhere('branch_id', -1);
+        })
+        ->whereHas('details', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+        ->get();
         return view(
             'website.menu',
-            compact(['menuCategories', 'userFavorites', 'categoryId'])
+            compact(['menuCategories', 'userFavorites', 'categoryId','offers'])
         );
     }
 
     public function showOffers(Request $request)
     {
-        $categoryId ='offers';
+        $categoryId = 'offers';
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
 
@@ -167,9 +175,9 @@ class HomeController extends Controller
         if (!$branchId) {
             return redirect()->back()->with('error', 'لا يوجد فرع متاح حاليًا.');
         }
-        $menueDishes = BranchMenu::where('branch_id',$branchId)->pluck('branch_menu_category_id')->toArray();
+        $menueDishes = BranchMenu::where('branch_id', $branchId)->pluck('branch_menu_category_id')->toArray();
         $menuCategories = BranchMenuCategory::with('dish_categories')
-            ->where('branch_id', $branchId)->whereIn('dish_category_id',$menueDishes)
+            ->where('branch_id', $branchId)->whereIn('dish_category_id', $menueDishes)
             ->where('is_active', true)
             ->get();
 
@@ -189,11 +197,9 @@ class HomeController extends Controller
                 $query->whereNull('deleted_at');
             })
             ->get();
-
-
         return view(
             'website.menu',
-            compact(['menuCategories', 'userFavorites', 'categoryId','offers'])
+            compact(['menuCategories', 'userFavorites', 'categoryId', 'offers'])
         );
     }
 
