@@ -498,7 +498,7 @@ function CheckCouponValid($id, $amount)
 
     $coupon = Coupon::find($id);
     if ($coupon) {
-        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount && $coupon->is_active) {
             return true;
         }
     }

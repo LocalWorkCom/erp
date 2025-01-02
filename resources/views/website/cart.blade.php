@@ -463,10 +463,13 @@
                     },
                     success: function(data) {
                         if (data.status === 'success') {
-                            var version = data.has_size ? '_v1' : '_v2'
+                            var version = data.dish.has_size ? '_v1' : '_v2'
+                            console.log(data);
+
                             let modal = $(`#productModal${version}`);
                             const product = data.dish;
-                            const dishPrice = parseFloat(item.totalPrice);
+                            const dishPrice = parseFloat(product.price);
+
                             let dishHtml = `
                         <h5>${product.name}</h5>
                         ${product.mostOrdered ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> الاعلى تقييم</span>` : ''}
@@ -486,7 +489,8 @@
                             $(`#div-detail${version}`).html(dishHtml);
                             $(`#note${version}`).val(item.notes || '');
                             var itemTotal = 0;
-                            if (data.has_size) {
+                            if (data.dish.has_size) {
+
                                 itemTotal = (item.quantity * item.size.price) +
                                     (item.addons && item.addons.length > 0 ?
                                         item.addons.reduce((sum, addon) => sum + addon.price, 0) : 0
@@ -612,13 +616,18 @@
             const populateSizes = (sizes, item, currencySymbol) => {
                 const sizesContainer = $('#div-sizes');
                 sizesContainer.empty();
+                // $('#sizes-div').show();
+                if (sizes.length > 0) {
 
+                    $('#sizes-div').show();
+                }
                 sizes.forEach(size => {
+                    console.log(size.price);
                     sizesContainer.append(`
                         <div class="form-check">
                             <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" ${item.size.id === size.id ? 'checked' : ''}>
                                 <label class="form-check-label" for="size-${size.id}">${size.name}</label>
-                                <span>${formatCurrency(size.price)}</span>
+                                <span>${formatCurrency(parseFloat(size.price))}</span>
                             </div>
                     `);
                 });
@@ -631,7 +640,10 @@
             const populateAddons = (addons, item, currencySymbol) => {
                 const addonsContainer = $('#div-addons');
                 addonsContainer.empty();
+                if (addons.length > 0) {
 
+                    $('#addons-div').show();
+                }
                 addons.forEach(addon => {
                     const isSelected = item.addons.some(selectedAddon => selectedAddon.id ===
                         `addon-${addon.id}`);
@@ -652,25 +664,25 @@
 
             const saveChanges = (itemIndex) => {
 
-                var version = cart[itemIndex].size && cart[itemIndex].size.label ? '_v1' : '_v2';
-                let modal = $(`#productModal${version}`);
-                const updatedSizePrice = 0;
-                const updatedSizeLabel = '';
-                const updatedSizeId = 0;
-                const updatedAddons = [];
+                const version = cart[itemIndex].size && cart[itemIndex].size.label ? '_v1' : '_v2';
+                const modal = $(`#productModal${version}`);
+                let updatedSizePrice = 0;
+                let updatedSizeLabel = '';
+                let updatedSizeId = 0;
+                let updatedAddons = [];
 
                 // Updated size
                 if (version === '_v1') {
+                    const selectedSize = $(`#div-sizes${version} .size-option:checked`);
+                    updatedSizePrice = parseFloat(selectedSize.val()) || cart[itemIndex].size.price || 0;
 
-                    updatedSizePrice = parseFloat($('#div-sizes .size-option:checked').val()) || 0;
-                    updatedSizeLabel = $('#div-sizes .size-option:checked').siblings('label').text() ||
-                        cart[itemIndex].size.label;
-                    updatedSizeId = $('#div-sizes .size-option:checked').data('id') || cart[itemIndex]
-                        .size.id;
+                    updatedSizeLabel = selectedSize.siblings('label').text() || cart[itemIndex].size.label ||
+                    '';
+                    updatedSizeId = selectedSize.data('id') || cart[itemIndex].size.id || 0;
                 }
                 // Updated addons
                 if (version === '_v1') {
-                    $('#div-addons .addon-option:checked').each(function() {
+                    $(`#div-addons${version} .addon-option:checked`).each(function() {
                         updatedAddons.push({
                             id: $(this).attr('id').replace('addon-', ''), // Extract addon ID
                             price: parseFloat($(this).val()),
