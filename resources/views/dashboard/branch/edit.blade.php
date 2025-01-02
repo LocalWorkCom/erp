@@ -68,13 +68,19 @@
                                     <!-- Address Arabic -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('branch.ArabicAddress')</label>
-                                        <textarea class="form-control" name="address_ar" rows="2">{{ old('address_ar', $branch->address_ar) }}</textarea>
+                                        <textarea class="form-control" name="address_ar" rows="2" required>{{ old('address_ar', $branch->address_ar) }}</textarea>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterArabicAddress')
+                                        </div>
                                     </div>
 
                                     <!-- Address English -->
                                     <div class="col-xl-6 col-lg-8 col-md-8 col-sm-12">
                                         <label class="form-label">@lang('branch.EnglishAddress')</label>
-                                        <textarea class="form-control" name="address_en" rows="2">{{ old('address_en', $branch->address_en) }}</textarea>
+                                        <textarea class="form-control" name="address_en" rows="2" required>{{ old('address_en', $branch->address_en) }}</textarea>
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterEnglishAddress')
+                                        </div>
                                     </div>
 
                                     <!-- Country -->
@@ -96,17 +102,27 @@
                                     <!-- Latitude and Longitude -->
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.Latitude')</label>
-                                        <input type="text" class="form-control" name="latitute" value="{{ old('latitute', $branch->latitute) }}">
+                                        <input type="text" class="form-control" name="latitute" required value="{{ old('latitute', $branch->latitute) }}">
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterLatitude')
+                                        </div>
                                     </div>
+
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.Longitude')</label>
-                                        <input type="text" class="form-control" name="longitute" value="{{ old('longitute', $branch->longitute) }}">
+                                        <input type="text" class="form-control" name="longitute" required value="{{ old('longitute', $branch->longitute) }}">
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterLongitude')
+                                        </div>
                                     </div>
 
                                     <!-- Phone -->
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                                         <label class="form-label">@lang('branch.Phone')</label>
-                                        <input type="text" class="form-control" name="phone" value="{{ old('phone', $branch->phone) }}" maxlength="20">
+                                        <input type="text" class="form-control" name="phone" required value="{{ old('phone', $branch->phone) }}" maxlength="20">
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterPhone')
+                                        </div>
                                     </div>
 
                                     <!-- Email -->
@@ -132,11 +148,18 @@
                                     <!-- Opening and Closing Hours -->
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.OpeningHour')</label>
-                                        <input type="time" class="form-control" name="opening_hour" value="{{ old('opening_hour', $branch->opening_hour) }}">
+                                        <input type="time" class="form-control" name="opening_hour" required value="{{ old('opening_hour', $branch->opening_hour) }}">
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterOpeningHour')
+                                        </div>
                                     </div>
+
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                                         <label class="form-label">@lang('branch.ClosingHour')</label>
-                                        <input type="time" class="form-control" name="closing_hour" value="{{ old('closing_hour', $branch->closing_hour) }}">
+                                        <input type="time" class="form-control" name="closing_hour" required value="{{ old('closing_hour', $branch->closing_hour) }}">
+                                        <div class="invalid-feedback">
+                                            @lang('validation.EnterClosingHour')
+                                        </div>
                                     </div>
 
                                     <!-- Has Kids Area -->

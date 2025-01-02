@@ -1,4 +1,4 @@
-<div class="modal fade show" tabindex="-1" id="productModal_v1" aria-labelledby="productModalLabel" aria-modal="true"
+<div class="modal fade" tabindex="-1" id="productModal_v1" aria-labelledby="productModalLabel" aria-modal="true"
     role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -18,10 +18,13 @@
                             <div class="choices my-3" id="div-sizes_v1">
 
                             </div>
-                            <h4> اضافات
-                            </h4>
-                            <div class="choices my-3" id="div-addons_v1">
+                            <div id="addons-div">
 
+                                <h4> اضافات
+                                </h4>
+                                <div class="choices my-3 addon" id="div-addons_v1">
+
+                                </div>
                             </div>
                         </div>
                     </div>

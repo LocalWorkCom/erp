@@ -82,20 +82,23 @@ class CartController extends Controller
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->id)
             ->where('branch_id', $branchId)
             ->get();
+        // dd($BranchMenuSize);
 
         $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->id)
             ->where('branch_id', $branchId)
             ->get();
+        // dd($BranchMenu);
         $price = 0;
         if ($BranchMenu->dish->has_sizes) {
             foreach ($BranchMenuSize as $key => $size) {
-                if ($size->dishSizes->default_size) {
+                if ($size->dishSizes && $size->dishSizes->default_size) {
                     $price =  $size->price;
                 }
             }
         } else {
             $price =  $BranchMenu->price;
         }
+        // dd($Branch->country->currency_symbol);
         // Structure the response data
         $response = [
             'status' => 'success',
@@ -133,6 +136,7 @@ class CartController extends Controller
                 ];
             })
         ];
+        // dd($response);
 
         // Return JSON response
         return response()->json($response, 200);
@@ -244,7 +248,7 @@ class CartController extends Controller
     {
         $user = Auth::guard('client')->user();
 
-        $orders = Order::with(['client', 'branch.country', 'address', 'tracking', 'orderDetails', 'orderAddons.Addon','orderProducts', 'orderTransactions', 'coupon'])
+        $orders = Order::with(['client', 'branch.country', 'address', 'tracking', 'orderDetails', 'orderAddons.Addon', 'orderProducts', 'orderTransactions', 'coupon'])
             ->where('client_id', $user->id)
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->orderBy('created_at', 'desc')
@@ -297,6 +301,5 @@ class CartController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         return view('website.order-payment-details', compact('details'));
-
     }
 }

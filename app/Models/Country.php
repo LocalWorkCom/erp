@@ -41,7 +41,6 @@ class Country extends Model
         'job_years',
         'phone_code',
         'length',
-        'currency_symbol'
 
 
     ];
