@@ -201,5 +201,4 @@
             </div>
         </div>
     </section>
-    @include('website.cart-modal')
 @endsection
