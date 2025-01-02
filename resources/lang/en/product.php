@@ -52,4 +52,9 @@ return [
     'Color' => 'Colors ',
     'Add Color' => 'Add Color',
     'remove'=>'Remove',
+    'Product Sizes' => 'Product Sizes',
+    'Add Size' => 'Add Size',
+    'Code_size' => 'Code_size',
+    'Size' => 'Size',
+
 ];
