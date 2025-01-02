@@ -101,23 +101,23 @@
                                                 <select class="form-select d-inline" style="width: auto;"
                                                     onchange="showBranchRalates(this.value, {{ $branch->id }})">
                                                     <option>@lang('branch.ChooseBranchDetails')</option>
-                                                    @can('view branch_menu_categories')
+                                                    @can('view branches')
                                                     <option value="categories">@lang('branch.branchMenuCategory')</option>
                                                     @endcan
 
-                                                    @can('view branch_menus')
+                                                    @can('view branches')
                                                     <option value="menus">@lang('branch.branchMenu')</option>
                                                     @endcan
 
-                                                    @can('view branch_menu_category_addons')
+                                                    @can('view branches')
                                                     <option value="addonsCategories">@lang('branch.branchMenuCategoryAddon')</option>
                                                     @endcan
 
-                                                    @can('view branch_menu_addons')
+                                                    @can('view branches')
                                                     <option value="addons">@lang('branch.branchMenuAddon')</option>
                                                     @endcan
 
-                                                    @can('view branch_menu_sizes')
+                                                    @can('view branches')
                                                     <option value="sizes">@lang('branch.branchMenuSize')</option>
                                                     @endcan
                                                 </select>
