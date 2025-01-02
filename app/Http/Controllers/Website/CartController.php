@@ -166,13 +166,13 @@ class CartController extends Controller
     {
         $userLat = $request->cookie('latitude') ?? ($_COOKIE['latitude'] ?? null);
         $userLon = $request->cookie('longitude') ?? ($_COOKIE['longitude'] ?? null);
-
+        
         if ($userLat && $userLon) {
             Log::info('Received location from cookies', ['latitude' => $userLat, 'longitude' => $userLon]);
         } else {
             Log::warning('No coordinates found in cookies');
         }
-
+        
         if ($userLat && $userLon) {
             $nearestBranch = getNearestBranch($userLat, $userLon);
             if ($nearestBranch) {
@@ -195,11 +195,13 @@ class CartController extends Controller
         $request['coupon_code'] = $request->coupon_code;
         $request['details'] = $cart->items;
         // dd($request);
+
         $response = $this->orderService->store($request, $this->checkToken);
         $responseData = $response->original;
         // dd($responseData);
         if (!$responseData['status'] && isset($responseData['data'])) {
             $validationErrors = $responseData['data'];
+            dd($validationErrors);
             return redirect()->back()->withErrors($validationErrors)->withInput();
         }
         $message = $responseData['message'];
@@ -300,6 +302,6 @@ class CartController extends Controller
             ->where('id', $id)
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('website.order-payment-details', compact('details'));
+        return view('website.order-payment-details', compact('order'));
     }
 }

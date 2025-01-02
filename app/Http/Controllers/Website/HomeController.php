@@ -116,6 +116,8 @@ class HomeController extends Controller
                 $branchId = getDefaultBranch();
                 Log::warning('Fallback to default branch:', ['branchId' => $branchId]);
             }
+        }elseif($request->query('branch_id')){
+            $branchId =$request->query('branch_id');
         } else {
             $branchId = getDefaultBranch();
             Log::warning('No coordinates found, using default branch:', ['branchId' => $branchId]);

@@ -83,14 +83,12 @@
     </div>
     <!-- end login modal -->
 
-    <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel"
-        aria-hidden="true">
+    <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form class="d-flex mb-1 position-relative search-form">
-                        <input id="branchSearch" class="form-control search-input" type="search"
-                            placeholder="ابحث عن الفرع المناسب لك" aria-label="Search">
+                    <form class="d-flex mb-1 position-relative search-form" id="branchSearchForm">
+                        <input id="branchSearch" class="form-control search-input" type="search" placeholder="@lang('header.searchLocationbranch')" aria-label="Search">
                         <i class="fas fa-search search-icon"></i>
                     </form>
 
@@ -107,25 +105,26 @@
                                     $openingTime = $closingTime = null;
                                 }
                             @endphp
-                            <div class="location border-bottom mb-1 branch-item">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="fw-bold mt-2 branch-name">
-                                        <i class="fas fa-map-marker-alt main-color mx-2"></i>{{ $branch->name }}
-                                    </h6>
-                                    <span class="badge {{ $isOpen ? 'text-success' : 'text-muted' }} mt-2">
-                                        {{ $isOpen ? 'مفتوح' : 'مغلق' }}
-                                    </span>
+                            <a href="{{ route('menu', ['branch_id' => $branch->id]) }}">
+                                <div class="location border-bottom mb-1 branch-item">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="fw-bold mt-2 branch-name">
+                                            <i class="fas fa-map-marker-alt main-color mx-2"></i>{{ $branch->name }}
+                                        </h6>
+                                        <span class="badge {{ $isOpen ? 'text-success' : 'text-muted' }} mt-2">
+                                            {{ $isOpen ? 'مفتوح' : 'مغلق' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mx-2 branch-address">{{ $branch->address }}</p>
+                                    <p class="main-color fw-bold">
+                                        <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
+                                    </p>
                                 </div>
-                                <p class="text-muted mx-2 branch-address">
-                                    {{ $branch->address }}</p>
-                                <p class="main-color fw-bold">
-                                    <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
-                                </p>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-no-modal"> استخدم موقعى </button>
+                    <div class="d-flex justify-content-end" id="locationBtnWrapper">
+                        <button class="btn btn-no-modal" id="useMyLocationBtn">@lang('header.userlocation')</button>
                     </div>
                 </div>
             </div>
@@ -178,7 +177,8 @@
                     let sizesHtml = '',
                         addonsHtml = '',
                         dishHtml = '';
-                    var version = data.dish.has_size ? '_v1' : '_v2'
+                    var version = data.dish.has_size ? '_v1' : '_v2';
+
 
                     let modal = $(`#productModal${version}`);
                     $(`#currency_symbol${version}`).val(data.branch.currency_symbol);
@@ -186,6 +186,8 @@
                     if (data.dish.has_size) {
 
                         for (const size of data.sizes) {
+                            $('#sizes-div').show();
+
                             sizesHtml += `
                 <div class="form-check">
                     <div>
@@ -201,9 +203,9 @@
                         }
 
                     }
-
                     // Generate addons HTML
                     if (data.has_addon) {
+                        $('#addons-div').show();
 
                         for (const addon of data.addons) {
                             addonsHtml += `
@@ -228,11 +230,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                                                    <span class="badge bg-warning text-dark">
-                                                                                                                                                                                        <i class="fas fa-star"></i>
-                                                                                                                                                                                         الاكثر طلبا
-                                                                                                                                                                                    </span>
-                                                                                                                                                                                ` : ''}
+                                                                                                                                                                                            <span class="badge bg-warning text-dark">
+                                                                                                                                                                                                <i class="fas fa-star"></i>
+                                                                                                                                                                                                 الاكثر طلبا
+                                                                                                                                                                                            </span>
+                                                                                                                                                                                        ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
