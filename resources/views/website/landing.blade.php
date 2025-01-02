@@ -13,8 +13,8 @@
                                 <p class="slide-text my-5 ">
                                     {{ app()->getLocale() == 'ar' ? $slider->description_ar : $slider->description_en }}
                                 </p>
-                                <a href="{{ route('menu') }}"
-                                    class="btn">{{ app()->getLocale() == 'ar' ? 'اطلب الان' : 'Order now' }}</a>
+                                {{-- <a href="{{ route('menu') }}"
+                                    class="btn">{{ app()->getLocale() == 'ar' ? 'اطلب الان' : 'Order now' }}</a> --}}
                             </div>
                             <div class="col-md-6">
                                 <figure class="intro-img">

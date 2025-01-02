@@ -49,7 +49,7 @@
                             <span id="cart-count" class="badge bg-danger rounded-pill">0</span>
                         </a>
                     </li>
-                    
+
                     <li class="nav-item">
                         @if (session('locale') == 'ar')
                             <a class="nav-link" href="{{ route('set-locale', 'en') }}">
@@ -99,7 +99,7 @@
         <div id="sidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="overlay-content">
-                <a href="#"> @lang('header.home') </a>
+                <a href="{{ route('home') }}"> @lang('header.home') </a>
                 <a href="#"> @lang('header.menue') </a>
                 <a href="#"> @lang('header.contactUs') </a>
                 <a href="#"> <i class="fas fa-shopping-cart"></i>

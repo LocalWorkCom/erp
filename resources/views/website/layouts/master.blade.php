@@ -360,7 +360,7 @@
 
             // Gather selected size
             const selectedSizePrice = $('#div-sizes_v1').find('.size-option:checked').val();
-            
+
             const selectedSizeLabel = $('#div-sizes_v1').find('.size-option:checked').siblings('label').text();
             const selectedSizeId = $('#div-sizes_v1').find('.size-option:checked').data('id');
 
