@@ -13,10 +13,10 @@
                 <h5> @lang('auth.forgetmessage') </h5>
 
                 <div class="input-group py-md-4 py-sm-2">
-                        <input type="text" class="form-control  @error('phoneforget') is-invalid @enderror "
+                    <input type="text" class="form-control  @error('phoneforget') is-invalid @enderror "
                         name="phoneforget" id="phoneforgetInput" placeholder="@lang('auth.phoneplace')"
                         value="{{ old('phoneforget') }}" required>
-                        <select id="country" name="country_code_forget" class="selectpicker me-2" data-live-search="true"
+                    <select id="country" name="country_code_forget" class="selectpicker me-2" data-live-search="true"
                         required>
                         @foreach (GetCountries() as $country)
                             <option
@@ -98,7 +98,7 @@
 </div>
 <!-- Reset Body -->
 <div class="modal-body reset-pass d-none px-4" id="resetBody">
-    <form id="resetForm" method="POST">
+    <form id="resetPasswordForm" method="POST" action="{{ route('reset.password') }}">
         @csrf
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
@@ -110,7 +110,7 @@
 
                 <!-- Password Input -->
                 <div class="input-group position-relative mb-3">
-                    <input type="password" class="form-control" id="passwordInput" name="password"
+                    <input type="password" class="form-control" id="passwordInput" name="passwordforget"
                         placeholder="@lang('auth.newpass')" required>
                     <button class="input-group-eye position-absolute" type="button" id="togglePassword">
                         <i class="fas fa-eye" id="eyeIcon"></i>
@@ -119,18 +119,19 @@
 
                 <!-- Confirm Password Input -->
                 <div class="input-group position-relative mb-3">
-                    <input type="password" class="form-control" id="passwordInput2" name="password_confirmation"
-                        placeholder="@lang('auth.newpass')" required>
+                    <input type="password" class="form-control" id="passwordInput2"
+                        name="passwordforget_confirmation" placeholder="@lang('auth.newpass')" required>
                     <button class="input-group-eye position-absolute" type="button" id="togglePassword2">
                         <i class="fas fa-eye" id="eyeIcon2"></i>
                     </button>
                 </div>
 
                 <!-- Error message -->
-                <div id="passwordError" class="text-danger d-none">
+                <div id="passwordforgetError" class="text-danger d-none">
                     @lang('auth.password_mismatch')
                 </div>
                 <input type="hidden" name="phone" id="hidden-phone">
+                <div id="resetPasswordErrors" class="alert alert-danger d-none"></div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn w-100">@lang('auth.confirm')</button>
@@ -143,94 +144,87 @@
             </div>
         </div>
     </form>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('#forgetBody form').on('submit', function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $('#phoneError').hide().text('');
-            // Send the AJAX request for phone validation
-            $.ajax({
-                url: '{{ route('check.phone') }}',
-                method: 'POST',
-                data: formData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        $('#forgetBody').addClass('d-none');
-                        $('#resetBody').removeClass('d-none');
-                        $('#hidden-phone').prop('value', response.phone);
-                    }
-                },
-                error: function(response) {
-                    var errors = response.responseJSON.errors;
-                    if (response.status === 400 || response.status === 422) {
-                        var errorMessages = '';
-                        $.each(errors, function(key, value) {
-                            errorMessages += value.join("\n") + "\n";
-                        });
-                        $('#phoneforgetError').show().text(errorMessages);
-                    } else {
-                    }
-                }
-            });
-        });
-
-        $('#resetForm').on('submit', function(event) {
-            event.preventDefault();
-            var password = $('#passwordInput').val();
-            var confirmPassword = $('#passwordInput2').val();
-            if (password !== confirmPassword) {
-                $('#passwordError').removeClass('d-none');
-            }
-            $('#passwordError').addClass('d-none');
-            var formData = $(this).serialize();
-            $('.alert-danger').remove();
-            $.ajax({
-                url: '{{ route('reset.password') }}',
-                method: 'POST',
-                data: formData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        setTimeout(function() {
-                            window.location.href = '{{ route('home') }}';
-                        }, 300);
-                    }
-                },
-                error: function(response) {
-                    if (response.status === 422) {
-                        // Display validation errors
+    <script>
+        $(document).ready(function() {
+            $('#forgetBody form').on('submit', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $('#phoneError').hide().text('');
+                // Send the AJAX request for phone validation
+                $.ajax({
+                    url: '{{ route('check.phone') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#forgetBody').addClass('d-none');
+                            $('#resetBody').removeClass('d-none');
+                            $('#hidden-phone').prop('value', response.phone);
+                        }
+                    },
+                    error: function(response) {
                         var errors = response.responseJSON.errors;
-                        var errorMessages = '';
-
-                        $.each(errors, function(key, value) {
-                            errorMessages += `<p>${value[0]}</p>`;
-                        });
-                        $('#passwordError').removeClass('d-none');
-                        $('#resetForm').prepend(`
-                        <div class="alert alert-danger">${errorMessages}</div>
-                    `);
-                    } else {
+                        if (response.status === 400 || response.status === 422) {
+                            var errorMessages = '';
+                            $.each(errors, function(key, value) {
+                                errorMessages += value.join("\n") + "\n";
+                            });
+                            $('#phoneforgetError').show().text(errorMessages);
+                        } else {}
                     }
-                }
+                });
             });
+
+            document.querySelector('#resetPasswordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const form = this;
+                const formData = new FormData(form);
+                const errorsDiv = document.querySelector('#resetPasswordErrors');
+
+                fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'error') {
+                            // Show validation errors
+                            errorsDiv.classList.remove('d-none');
+                            errorsDiv.innerHTML = '';
+                            Object.keys(data.errors).forEach(field => {
+                                errorsDiv.innerHTML +=
+                                    `<p>${data.errors[field].join('<br>')}</p>`;
+                            });
+                        } else {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+
+
+
         });
-    });
 
-    $('#togglePassword, #togglePassword2').on('click', function() {
-        var input = $(this).siblings('input');
-        var icon = $(this).find('i');
-        if (input.attr('type') === 'password') {
-            input.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-        } else {
-            input.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-        }
-    });
-</script>
+        $('#togglePassword, #togglePassword2').on('click', function() {
+            var input = $(this).siblings('input');
+            var icon = $(this).find('i');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+    </script>
 @endpush
-

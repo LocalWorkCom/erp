@@ -44,7 +44,7 @@
                                         <input type="text" id="name" name="name" class="form-control"
                                             placeholder="{{ Auth::guard('client')->user()->name }}"
                                             value="{{ old('name', Auth::guard('client')->user()->name) }}" required>
-                                        @error('name')
+                                            @error('name')
                                             <div id="nameError" class="error-message mb-1 text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -114,17 +114,17 @@
                                 <form method="POST" action="{{ route('reset.password') }}">
                                     @csrf
                                     <div class="mb-3 position-relative">
-                                        <input type="password" class="form-control" name="password" id="passwordInput"
+                                        <input type="password" class="form-control" name="passwordforget" id="passwordInput"
                                             placeholder="@lang('auth.newpass')">
                                         <i class="fas fa-eye form-icon"></i>
                                     </div>
 
                                     <div class="mb-3 position-relative">
-                                        <input type="password" class="form-control" name="password_confirmation"
+                                        <input type="password" class="form-control" name="passwordforget_confirmation"
                                             id="passwordInput" placeholder="@lang('auth.newpass')">
                                         <i class="fas fa-eye-slash form-icon"></i>
                                     </div>
-                                    @error('password')
+                                    @error('passwordforget')
                                         <div id="passwordError" class="error-message mb-1 text-danger">{{ $message }}</div>
                                     @enderror
                                     <!-- Buttons -->

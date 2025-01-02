@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'confirm'=>'confirm',
     'signin' => 'Sign In',
     'remember' => 'Remember Password',
     'password' => 'Password',
@@ -92,5 +93,7 @@ return [
         'flooroffice' => 'الطابق للمكتب',
         'birth_date' => 'تاريخ الميلاد',
         'floor' => 'الدور',
+        'passwordforget'=>'password',
+
     ]
 ];
