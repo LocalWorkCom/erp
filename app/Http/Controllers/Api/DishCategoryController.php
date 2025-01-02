@@ -155,17 +155,14 @@ class DishCategoryController extends Controller
         $branchesData = $branchesResponse->getData()->data; // LAT AND LONG OPTIONAL
         $branch = $branchesData->branch ?? null;
         $branchId = $branch->id ?? null;
-//        dd($branchId);
 
-        // Validate inputs
         if (!is_numeric($categoryId) && $categoryId !== 'all' || !in_array($offers, [0, 1])) {
-            return respondError('Validation Error', 400,[
+            return respondError('Validation Error', 400, [
                 'categoryId' => $lang == 'en' ? ['it must be a number or all'] : ['يجب ان تكون رقم او all'],
                 'offers' => $lang == 'en' ? ['it must be 0 or 1'] : ['يجب ان تكون 0 او 1'],
             ]);
         }
 
-        // Determine the column for dish name based on language
         $nameColumn = ($lang === 'en') ? 'name_en' : 'name_ar';
 
         if ($branchId) {
@@ -181,22 +178,25 @@ class DishCategoryController extends Controller
                 $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
                     $query->where('branch_id', $branchId)
                         ->where('dish_category_id', $categoryId);
-                })->with([
-                    'dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
+                })
+                    ->whereHas('dishes', function ($query) {
                         $query->where('is_active', true);
+                    })
+                    ->with([
+                        'dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
+                            $query->where('is_active', true);
 
-                        // Apply name search filter if provided
-                        if ($searchName) {
-                            $query->where($nameColumn, 'like', "%{$searchName}%");
-                        }
+                            if ($searchName) {
+                                $query->where($nameColumn, 'like', "%{$searchName}%");
+                            }
 
-                        // Order based on the 'orderBy' query parameter
-                        if ($orderBy === 'most_ordered') {
-                            $query->orderByDesc('total_quantity'); // Order by most ordered
-                        } else {
-                            $query->orderBy('dishes.created_at', 'desc');
+                            if ($orderBy === 'most_ordered') {
+                                $query->orderByDesc('total_quantity');
+                            } else {
+                                $query->orderBy('dishes.created_at', 'desc');
+                            }
                         }
-                    }])->where('id', $categoryId)->first();
+                    ])->where('id', $categoryId)->first();
 
                 if (!$dishCategory) {
                     return RespondWithBadRequestData($lang, 8);
@@ -250,25 +250,26 @@ class DishCategoryController extends Controller
                 return ResponseWithSuccessData($lang, $dishCategory, 1);
             }
 
-            // Scenario 2: If categoryId is 'all', fetch all categories
             if ($categoryId === 'all') {
                 $dishCategories = DishCategory::whereHas('branchMenuCategory', function ($query) use ($branchId) {
                     $query->where('branch_id', $branchId);
-                })->with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
-                    $query->where('is_active', true);
+                })
+                    ->whereHas('dishes', function ($query) {
+                        $query->where('is_active', true);
+                    })
+                    ->with(['dishes' => function ($query) use ($searchName, $nameColumn, $orderBy) {
+                        $query->where('is_active', true);
 
-                    // Apply name search filter if provided
-                    if ($searchName) {
-                        $query->where($nameColumn, 'like', "%{$searchName}%");
-                    }
+                        if ($searchName) {
+                            $query->where($nameColumn, 'like', "%{$searchName}%");
+                        }
 
-                    // Order based on the 'orderBy' query parameter
-                    if ($orderBy === 'most_ordered') {
-                        $query->orderByDesc('total_quantity'); // Order by most ordered
-                    } else {
-                        $query->orderBy('dishes.created_at', 'desc');
-                    }
-                }])->get();
+                        if ($orderBy === 'most_ordered') {
+                            $query->orderByDesc('total_quantity');
+                        } else {
+                            $query->orderBy('dishes.created_at', 'desc');
+                        }
+                    }])->get();
 
                 // Check if user is authenticated
                 if (CheckToken()) {
@@ -360,8 +361,10 @@ class DishCategoryController extends Controller
         return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
     }
 
-    public function menuDishesDetails(Request $request){
-        $lang = $request->header('lang','ar');
+
+    public function menuDishesDetails(Request $request)
+    {
+        $lang = $request->header('lang', 'ar');
         $dishId = $request->dishId;
         $branchId = $request->branchId;
         $menuDetails = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
@@ -371,7 +374,7 @@ class DishCategoryController extends Controller
             ->get();
 
         $BranchMenuAddonCategory = BranchMenuAddonCategory::where('branch_id', $request->branchId)
-            ->with('branchMenuAddons', function ($query) use ($dishId, $branchId){
+            ->with('branchMenuAddons', function ($query) use ($dishId, $branchId) {
                 return $query->where('branch_id', $branchId)->where('dish_id', $dishId);
             })
             ->get();
@@ -405,11 +408,11 @@ class DishCategoryController extends Controller
                     'name' => $addon_category->addonCategories->name_site,
                     'addons' => $addon_category->branchMenuAddons->map(function ($addon) {
                         return [
-                        'id' => $addon->id,
-                        'name' => $addon->dishAddons->addons->name_site,
-                        'price' => $addon->price,
-                        // 'min' => $addon->dishAddons->addons->min_addons,
-                        // 'max' =>  $addon->dishAddons->addons->max_addons,
+                            'id' => $addon->id,
+                            'name' => $addon->dishAddons->addons->name_site,
+                            'price' => $addon->price,
+                            // 'min' => $addon->dishAddons->addons->min_addons,
+                            // 'max' =>  $addon->dishAddons->addons->max_addons,
                         ];
                     })
                 ];
@@ -421,7 +424,4 @@ class DishCategoryController extends Controller
         }
         return ResponseWithSuccessData($lang, $dish, 1);
     }
-
 }
-
-
