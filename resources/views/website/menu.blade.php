@@ -70,12 +70,13 @@
                 </select>
             </div>
 
-
             <div class="tab-content pt-5" id="pills-tabContent">
                 <!-- Offers Tab Content -->
                 <div class="tab-pane fade {{ $categoryId == 'offers' ? 'show active' : '' }}" id="pills-offers" role="tabpanel"
                      aria-labelledby="pills-offers-tab">
                     <div class="row mx-0">
+                        @if ($offers->isNotEmpty())
+
                         @foreach($offers as $offer)
                             <div class="col-md-4 mb-4" data-aos="zoom-in">
                                 <div class="plate">
@@ -110,6 +111,8 @@
                                 </div>
                             </div>
                         @endforeach
+                        @endif
+
                     </div>
                 </div>
                 @foreach ($menuCategories as $key => $menuCategory)
