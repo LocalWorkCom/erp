@@ -90,6 +90,26 @@
                                                 دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
                                         </div>
                                     </div>
+                                @else
+                                    <div class="card" id="address">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title fw-bold"> موقع التوصيل </h5>
+
+
+                                        </div>
+                                        <div class="card-body p-4">
+                                            <div class="message bg-warning p-2 rounded-3">
+                                                <small>
+                                                    يجب عليك ادخال عنوان لتكملة الطلب
+                                                </small>
+                                            </div>
+                                            <br>
+                                            <a class="btn reversed main-color fw-bold" href="{{ route('showAddress') }}">
+                                                اضف عنوان
+                                            </a>
+
+                                        </div>
+                                    </div>
                                 @endif
                             @endauth
                             <div class="card mt-4" id="card-payment">
@@ -215,7 +235,11 @@
                     $('#address').addClass('d-none');
                     return;
                 }
+                const address = '{{ $address }}';
 
+                if(address){
+                    $('#checkout-btn').attr('disabled', true);
+                }
                 cart.forEach((item, index) => {
                     const itemSizePrice = item.size && item.size.price ? item.size.price :
                         item.price; // Check if size exists and has a price
@@ -677,7 +701,7 @@
                     updatedSizePrice = parseFloat(selectedSize.val()) || cart[itemIndex].size.price || 0;
 
                     updatedSizeLabel = selectedSize.siblings('label').text() || cart[itemIndex].size.label ||
-                    '';
+                        '';
                     updatedSizeId = selectedSize.data('id') || cart[itemIndex].size.id || 0;
                 }
                 // Updated addons

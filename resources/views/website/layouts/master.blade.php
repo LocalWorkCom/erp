@@ -187,7 +187,7 @@
                     if (data.dish.has_size) {
 
                         for (const size of data.sizes) {
-                        $('#sizes-div').show();
+                            $('#sizes-div').show();
 
                             sizesHtml += `
                 <div class="form-check">
@@ -231,11 +231,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                                                        <span class="badge bg-warning text-dark">
-                                                                                                                                                                                            <i class="fas fa-star"></i>
-                                                                                                                                                                                             الاكثر طلبا
-                                                                                                                                                                                        </span>
-                                                                                                                                                                                    ` : ''}
+                                                                                                                                                                                            <span class="badge bg-warning text-dark">
+                                                                                                                                                                                                <i class="fas fa-star"></i>
+                                                                                                                                                                                                 الاكثر طلبا
+                                                                                                                                                                                            </span>
+                                                                                                                                                                                        ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
