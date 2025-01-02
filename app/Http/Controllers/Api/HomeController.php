@@ -30,7 +30,7 @@ class HomeController extends Controller
 
         // Check if the branch is provided and lat/long is available
         $branchId = $branches['branch']->id ?? null;
-//        dd($branchId);
+        //        dd($branchId);
 
         $sliderController = new SliderController();
         $sliderResponse = $sliderController->index($request);
@@ -49,42 +49,42 @@ class HomeController extends Controller
         $mostPopularResponse = $mostPopularController->index($request);
         $mostPopular = $mostPopularResponse->getData()->data; //5 //if auth return favourite //**************
 
-//        $isOffers = $request->query('offers');
-////        dd($isOffers);
-//
-//        if ($isOffers == 1) {
-//            // Check if lat/long are provided and if branch is not null
-//            if ($branchId && isset($request->lat) && isset($request->long)) {
-//                // Filter offers by branch if lat/long is provided and branch is not null
-//                $offers = Offer::where(function ($query) use ($branchId) {
-//                    if ($branchId) {
-//                        // Check if the offer is specific to the branch or is available in all branches
-//                        $query->where('branch_id', $branchId)
-//                            ->orWhere('branch_id', -1);  // Include offers available in all branches
-//                    }
-//                })
-//                    ->get(); // Get offers based on the branch filter
-//
-//                // If offers exist, set them as the menu
-//                if ($offers->isNotEmpty()) {
-//                    $menu = $offers;
-//                }
-//            }
-//            else{
-//                $offers = Offer::where('branch_id', -1)
-//                    ->get(); // Get offers based on the branch filter
-//
-//                // If offers exist, set them as the menu
-//                if ($offers->isNotEmpty()) {
-//                    $menu = $offers;
-//                }
-//            }
-//        }
+        //        $isOffers = $request->query('offers');
+        ////        dd($isOffers);
+        //
+        //        if ($isOffers == 1) {
+        //            // Check if lat/long are provided and if branch is not null
+        //            if ($branchId && isset($request->lat) && isset($request->long)) {
+        //                // Filter offers by branch if lat/long is provided and branch is not null
+        //                $offers = Offer::where(function ($query) use ($branchId) {
+        //                    if ($branchId) {
+        //                        // Check if the offer is specific to the branch or is available in all branches
+        //                        $query->where('branch_id', $branchId)
+        //                            ->orWhere('branch_id', -1);  // Include offers available in all branches
+        //                    }
+        //                })
+        //                    ->get(); // Get offers based on the branch filter
+        //
+        //                // If offers exist, set them as the menu
+        //                if ($offers->isNotEmpty()) {
+        //                    $menu = $offers;
+        //                }
+        //            }
+        //            else{
+        //                $offers = Offer::where('branch_id', -1)
+        //                    ->get(); // Get offers based on the branch filter
+        //
+        //                // If offers exist, set them as the menu
+        //                if ($offers->isNotEmpty()) {
+        //                    $menu = $offers;
+        //                }
+        //            }
+        //        }
 
         // Check if the user is authenticated and mark favorites for popular dishes
         if (CheckToken()) {
             $user = auth('api')->user(); // Get authenticated user
-//            dd($user);
+            //            dd($user);
 
             if ($user) {
                 $mostPopular = collect($mostPopular)->map(function ($dish) use ($user) {
@@ -100,8 +100,7 @@ class HomeController extends Controller
                     return $dish;
                 })->toArray();
             }
-        }
-        else{
+        } else {
             $mostPopular = collect($mostPopular)->map(function ($dish) {
                 $dish->is_favorite = false;
                 return $dish;
@@ -131,19 +130,36 @@ class HomeController extends Controller
             if (!$user) {
                 return RespondWithBadRequestData($lang, 2); // Unauthorized response
             }
-//            dd($user);
+            //            dd($user);
 
             $lang = $request->header('lang', 'ar'); // Get language preference from the request, default to Arabic (ar)
 
-// Query the user favorites with all dish details
+            // Query the user favorites with all dish details
             $userFavorites = DB::table('user_favorite_dishes')
                 ->join('dishes', 'user_favorite_dishes.dish_id', '=', 'dishes.id') // Join with dishes table
                 ->where('user_favorite_dishes.user_id', $user->id)
-                ->select('user_favorite_dishes.id', 'user_favorite_dishes.user_id', 'user_favorite_dishes.dish_id',
-                    'dishes.id as dish_id', 'dishes.category_id', 'dishes.cuisine_id', 'dishes.price',
-                    'dishes.image', 'dishes.name_en', 'dishes.name_ar', 'dishes.description_en', 'dishes.description_ar',
-                    'dishes.is_active', 'dishes.has_sizes', 'dishes.has_addon', 'dishes.created_by', 'dishes.modified_by',
-                    'dishes.deleted_by', 'dishes.created_at', 'dishes.updated_at') // Select all relevant dish columns
+                ->select(
+                    'user_favorite_dishes.id',
+                    'user_favorite_dishes.user_id',
+                    'user_favorite_dishes.dish_id',
+                    'dishes.id as dish_id',
+                    'dishes.category_id',
+                    'dishes.cuisine_id',
+                    'dishes.price',
+                    'dishes.image',
+                    'dishes.name_en',
+                    'dishes.name_ar',
+                    'dishes.description_en',
+                    'dishes.description_ar',
+                    'dishes.is_active',
+                    'dishes.has_sizes',
+                    'dishes.has_addon',
+                    'dishes.created_by',
+                    'dishes.modified_by',
+                    'dishes.deleted_by',
+                    'dishes.created_at',
+                    'dishes.updated_at'
+                ) // Select all relevant dish columns
                 ->get()
                 ->map(function ($favorite) use ($lang) {
                     // Depending on the language, set the dish name and description
@@ -185,7 +201,7 @@ class HomeController extends Controller
 
         try {
             $user = auth('api')->user();
-//            dd($user);
+            //            dd($user);
             if (!$user) {
                 return RespondWithBadRequestData($lang, 4); // Unauthorized response
             }
@@ -195,7 +211,7 @@ class HomeController extends Controller
 
             // Validate that dish_id is provided and is a valid number
             if (!$dishId || !is_numeric($dishId)) {
-                return respondError('Validation Error', 400,[
+                return respondError('Validation Error', 400, [
                     'dish_id' => $lang == 'en' ? ['invalid number'] : ['رقم غير صحيح'],
                 ]); // Invalid dish_id
             }
@@ -260,6 +276,4 @@ class HomeController extends Controller
             return RespondWithBadRequestData($lang, 8); // Generic error response
         }
     }
-
-
 }

@@ -373,11 +373,12 @@ class OrderService
 
             $order_transaction = new OrderTransaction();
             $order_transaction->order_id = $Order->id;
-            $order_transaction->order_type = 'order';
+            $order_transaction->is_refund = 0;
             $order_transaction->payment_method = $request->payment_method;
             $order_transaction->transaction_id = Str::uuid()->toString();;
             $order_transaction->paid = $total_items + $service_fees + $delivery_fees;
             $order_transaction->date = date('Y-m-d');
+            $order_transaction->created_by = $created_by;
             // $order_transaction->refund = $request->refund;
             $order_transaction->discount_id = ($discount) ? $discount->id : null;
             $order_transaction->coupon_id = $request->coupon_id;

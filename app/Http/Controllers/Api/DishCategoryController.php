@@ -15,6 +15,7 @@ use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class DishCategoryController extends Controller
 {
@@ -177,6 +178,7 @@ class DishCategoryController extends Controller
             if (is_numeric($categoryId) && $categoryId > 0) {
                 $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
                     $query->where('branch_id', $branchId)
+                    
                         ->where('dish_category_id', $categoryId);
                 })
                     ->whereHas('dishes', function ($query) {
@@ -197,6 +199,7 @@ class DishCategoryController extends Controller
                             }
                         }
                     ])->where('id', $categoryId)->first();
+                        $dishCategory['is_active'] = (bool)$dishCategory->is_active;
 
                 if (!$dishCategory) {
                     return RespondWithBadRequestData($lang, 8);
@@ -212,7 +215,9 @@ class DishCategoryController extends Controller
                             $flagFavorite = 0;
                             $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
-
+                            $dish->is_active = (bool)$dish->is_active;
+                            $dish->has_sizes = (bool)$dish->has_sizes;
+                            $dish->has_addon = (bool)$dish->has_addon;
                             // Check if the dish is in the user's favorites
                             $isFavorite = DB::table('user_favorite_dishes')
                                 ->where('user_id', $user->id)
@@ -241,7 +246,9 @@ class DishCategoryController extends Controller
                         $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                         $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
                         $dish->is_favorite = false;
-
+                        $dish->is_active = (bool)$dish->is_active;
+                        $dish->has_sizes = (bool)$dish->has_sizes;
+                        $dish->has_addon = (bool)$dish->has_addon;
                         return $dish;
                     });
                 }
@@ -282,7 +289,9 @@ class DishCategoryController extends Controller
                                 $flagFavorite = 0;
                                 $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                                 $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
-
+                                $dish->is_active = (bool)$dish->is_active;
+                                $dish->has_sizes = (bool)$dish->has_sizes;
+                                $dish->has_addon = (bool)$dish->has_addon;
                                 // Check if the dish is in the user's favorites
                                 $isFavorite = DB::table('user_favorite_dishes')
                                     ->where('user_id', $user->id)
@@ -313,7 +322,9 @@ class DishCategoryController extends Controller
                             $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
                             $dish->is_favorite = false;
-
+                            $dish->is_active = (bool)$dish->is_active;
+                            $dish->has_sizes = (bool)$dish->has_sizes;
+                            $dish->has_addon = (bool)$dish->has_addon;
                             return $dish;
                         });
                     });
@@ -322,6 +333,8 @@ class DishCategoryController extends Controller
                 $dishCategories->makeHidden(['name_site', 'description_site']);
                 foreach ($dishCategories as $dishCategory) {
                     $dishCategory->dishes->makeHidden(['name_site', 'description_site']);
+                    $dishCategory['is_active'] = (bool)$dishCategory->is_active;
+
                 }
 
                 return ResponseWithSuccessData($lang, $dishCategories, 1);
@@ -351,9 +364,12 @@ class DishCategoryController extends Controller
                 $activeOffers = $activeOffers->filter(function ($offer) {
                     return $offer->details->isNotEmpty();
                 });
-
-                return ResponseWithSuccessData($lang, $activeOffers, 1);
+            
+                return ResponseWithSuccessData($lang, OfferResource::collection($activeOffers), 1);
             }
+            
+            
+            
         }
 
 
@@ -361,13 +377,26 @@ class DishCategoryController extends Controller
         return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
     }
 
-
     public function menuDishesDetails(Request $request)
     {
         $lang = $request->header('lang', 'ar');
         $dishId = $request->dishId;
         $branchId = $request->branchId;
+
+        $validateData = Validator::make($request->all(), [
+            'dishId' => 'required|exists:branch_menus,dish_id',
+            'branchId' => 'required|integer|exists:branches,id'
+        ]);
+
+        if ($validateData->fails()) {
+            return RespondWithBadRequestWithData($validateData->errors());
+        }
+
         $menuDetails = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
+
+        if(!$menuDetails){
+            return RespondWithBadRequestWithData($validateData->errors());
+        }
 
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->dishId)
             ->where('branch_id', $request->branchId)
@@ -406,6 +435,8 @@ class DishCategoryController extends Controller
 
                     'id' => $addon_category->id,
                     'name' => $addon_category->addonCategories->name_site,
+                    'min_addons' => $addon_category->min_addons,
+                    'max_addons' => $addon_category->max_addons,
                     'addons' => $addon_category->branchMenuAddons->map(function ($addon) {
                         return [
                             'id' => $addon->id,

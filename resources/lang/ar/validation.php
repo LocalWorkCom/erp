@@ -27,7 +27,16 @@ return [
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
     'notfound' => 'عفوا هذا المستخدم غير موجود بالأبليكشن',
-
+    'latitute' => [
+        'required' => 'حقل خط العرض مطلوب.',
+        'numeric' => 'يجب أن يكون خط العرض رقمًا صالحًا.',
+        'regex' => 'يجب أن يكون خط العرض رقمًا عشريًا صالحًا.',
+    ],
+    'longitute' => [
+        'required' => 'حقل خط الطول مطلوب.',
+        'numeric' => 'يجب أن يكون خط الطول رقمًا صالحًا.',
+        'regex' => 'يجب أن يكون خط الطول رقمًا عشريًا صالحًا.',
+    ],
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
         'numeric' => 'يجب ألا يزيد :attribute عن :max.',
@@ -256,7 +265,7 @@ return [
     'EnterEnglishAddress' => 'أدخل العنوان بالانجليزية',
     'EnterArabicAddress' => 'أدخل العنوان بالعربية',
 
-    
+
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',

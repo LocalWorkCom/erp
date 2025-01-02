@@ -120,35 +120,35 @@
                                         <a href="javascript:void(0);" class="side-menu__item">@lang('sidebar.branchMenus')
                                             <i class="fe fe-chevron-right side-menu__angle"></i></a>
                                         <ul class="slide-menu child2">
-                                            @can('view branch_menu_categories')
+                                            @can('view branches')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.categories.list') }}"
                                                         class="side-menu__item">@lang('sidebar.branchMenuCategory') </a>
                                                 </li>
                                             @endcan
 
-                                            @can('view branch_menus')
+                                            @can('view branches')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.menus.list') }}"
                                                         class="side-menu__item">@lang('sidebar.branchMenu') </a>
                                                 </li>
                                             @endcan
 
-                                            @can('view branch_menu_category_addons')
+                                            @can('view branches')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.menu.addons.categories.list') }}"
                                                         class="side-menu__item">@lang('sidebar.branchMenuCategoryAddon') </a>
                                                 </li>
                                             @endcan
 
-                                            @can('view branch_menu_addons')
+                                            @can('view branches')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.menu.addons.list') }}"
                                                         class="side-menu__item">@lang('sidebar.branchMenuAddon') </a>
                                                 </li>
                                             @endcan
 
-                                            @can('view branch_menu_sizes')
+                                            @can('view branches')
                                                 <li class="slide">
                                                     <a href="{{ route('branch.menu.sizes.list') }}"
                                                         class="side-menu__item">@lang('sidebar.branchMenuSize') </a>

@@ -498,7 +498,7 @@ function CheckCouponValid($id, $amount)
 
     $coupon = Coupon::find($id);
     if ($coupon) {
-        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount) {
+        if (date('Y-m-d', strtotime($coupon->end_date))  <= date('Y-m-d') && $coupon->minimum_spend <= $amount && $coupon->is_active) {
             return true;
         }
     }
@@ -989,6 +989,17 @@ function AddSizes($branch_ids, $dish_id)
         }
     }
 }
+
+if (!function_exists('transformDishFields')) {
+    function transformDishFields($dish)
+    {
+        $dish->is_active = (bool)$dish->is_active;
+        $dish->has_sizes = (bool)$dish->has_sizes;
+        $dish->has_addon = (bool)$dish->has_addon;
+        return $dish;
+    }
+}
+
 
 
 function getDefaultBranch()
