@@ -75,6 +75,8 @@ class Branch extends Model
         if($this_time >= $opening_hour){
             if($this_time <= $closing_hour){
                 return true;
+            }else{
+                return false;
             }
         }else{
             return false;
