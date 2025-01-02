@@ -71,7 +71,7 @@
                                   </div>
                                   <div class="d-flex justify-content-between align-items-center">
                                       <h4 class="my-4 fw-bold">عناويني</h4>
-                                      <button class="btn fw-bold" type="button" onclick="showAddPhase()">
+                                      <button class="btn fw-bold" type="button" onclick="showAddPhase2()">
                                           <span>+</span> أضف عنوان
                                       </button>
                                   </div>
@@ -151,7 +151,7 @@
                                   </ul>
 
                               </div>
-                              <div class="add-phase d-none ">
+                              {{-- <div class="add-phase d-none ">
                                   <h5 class="fw-bold">
                                       @lang('header.accesLocation') </h5>
                                   <div class="search-group ">
@@ -192,7 +192,7 @@
                                       <button type="submit" id="saveButton" class="btn" onclick="showAddPhase2()">
                                           @lang('header.confirmeaddress') </button>
                                   </div>
-                              </div>
+                              </div> --}}
                               <div class="add-phase2 d-none">
                                   <h6 class="fw-bold">
                                       @lang('header.deliverylocation') </h6>
@@ -206,32 +206,55 @@
                                   </div>
                                   <h6 class="fw-bold mb-3">
                                       @lang('header.locationcomplete') </h6>
-                                  <div class="delivery-places px-0 mb-3">
-                                      <!-- Radio Buttons for Tabs -->
-                                      <div class="btn-group" role="group" aria-label="Delivery Place Selector">
-                                          <input type="radio" class="btn-check" name="deliveryPlace"
-                                              id="radio-apartment" autocomplete="off" checked>
-                                          <label class="btn btn-outline-primary rounded-pill" for="radio-apartment">
-                                              <i class="fas fa-city"></i> @lang('header.apartment')
-                                          </label>
+                                      <div class="delivery-places px-0 mb-3">
+                                        <div class="btn-group" role="group" aria-label="Delivery Place Selector">
+                                            <input type="radio" class="btn-check" name="deliveryPlace" id="radio-home"
+                                                autocomplete="off" checked>
+                                            <label class="nav-link rounded-pill" for="radio-home">
+                                                <i class="fas fa-city"></i> شقة
+                                            </label>
 
-                                          <input type="radio" class="btn-check" name="deliveryPlace" id="radio-villa"
-                                              autocomplete="off">
-                                          <label class="btn btn-outline-primary rounded-pill" for="radio-villa">
-                                              <i class="fas fa-home"></i> @lang('header.villa')
-                                          </label>
+                                            <input type="radio" class="btn-check" name="deliveryPlace" id="radio-villa"
+                                                autocomplete="off">
+                                            <label class="nav-link rounded-pill" for="radio-villa">
+                                                <i class="fas fa-home"></i> فيلا
+                                            </label>
 
-                                          <input type="radio" class="btn-check" name="deliveryPlace" id="radio-office"
-                                              autocomplete="off">
-                                          <label class="btn btn-outline-primary rounded-pill" for="radio-office">
-                                              <i class="fas fa-building"></i> @lang('header.office')
-                                          </label>
-                                      </div>
-                                  </div>
+                                            <input type="radio" class="btn-check" name="deliveryPlace" id="radio-work"
+                                                autocomplete="off">
+                                            <label class="nav-link rounded-pill" for="radio-work">
+                                                <i class="fas fa-building"></i> مكتب
+                                            </label>
+                                        </div>
+                                    </div>
                                   <form method="POST" action="" id="addressForm"
                                       onsubmit="saveToLocalStorage(event)">
                                       @csrf
-                                      <div id="tabContent">
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" placeholder="اسم المبنى, مثال مبني 21">
+                                        </div>
+                                        <div class="mb-3 d-flex ">
+                                            <input type="text" class="form-control " placeholder="رقم الشقة ,مثال  شقة 12">
+                                            <input type="text" class="form-control me-4" placeholder="الدور, مثال الدور2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" placeholder="121 مصدق الدقي ,المهندسين  الجيزه">
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" placeholder="علامة مميزة (اختيارى)">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                    placeholder="  ادخل رقم الهاتف  ,مثال01029063398">
+                                                <select class="form-select country-dropdown me-3" style="max-width: 100px;">
+                                                    <option value="eg" selected>+20</option>
+                                                    <option value="ae">+971</option>
+                                                    <option value="jo">+962</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                      {{-- <div id="tabContent">
                                           <!-- Apartment Section -->
                                           <div id="content-apartment" class="tab-pane fade show active">
                                               <input type="hidden" class="form-control" name="apartment" value=""
@@ -347,7 +370,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                      </div>
+                                      </div> --}}
                                       <div class="tab-footer justify-content-end d-flex">
                                           <button type="submit" class="btn" onclick="showAddPhase3()">
                                               @lang('header.saveaddressc')
@@ -377,7 +400,7 @@
                                   </div>
                               </div>
                           @else
-                              <div class="second-phase d-none">
+                              <div class="second-phase">
                                   <h6 class="fw-bold">
                                       @lang('header.deliverylocation') </h6>
                                   <div class="d-flex justify-content-between">
@@ -545,7 +568,7 @@
                                   </form>
 
                               </div>
-                              <div class="first-phase">
+                              {{-- <div class="first-phase">
                                   <h5 class="fw-bold">
                                       @lang('header.accesLocation') </h5>
                                   <div class="search-group ">
@@ -586,7 +609,7 @@
                                       <button type="submit" id="saveButton" class="btn" onclick="showSecondPhase()">
                                           @lang('header.confirmeaddress') </button>
                                   </div>
-                              </div>
+                              </div> --}}
                           @endauth
 
                       </div>
@@ -790,7 +813,7 @@
               }
           }
       </script>
-      <script>
+      {{-- <script>
           document.querySelectorAll('.btn-check').forEach(radio => {
               radio.addEventListener('change', () => {
                   // Hide all content sections
@@ -802,5 +825,5 @@
                   document.getElementById(targetId).classList.add('show', 'active');
               });
           });
-      </script>
+      </script> --}}
   @endpush

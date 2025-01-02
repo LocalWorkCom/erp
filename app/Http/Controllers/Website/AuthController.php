@@ -286,8 +286,9 @@ class AuthController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             } else {
-                return back()->withErrors($validator)->withInput();
-            }
+                session()->put('edit_pass', true);
+
+                return back()->withErrors($validator)->withInput();            }
         }
 
 

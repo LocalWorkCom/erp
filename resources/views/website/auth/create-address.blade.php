@@ -22,7 +22,7 @@
                 </h4>
             </div>
             <div class="card p-5 mt-3 mb-5">
-                <div class="first-phase">
+                {{-- <div class="first-phase">
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
@@ -53,8 +53,8 @@
                         </div>
                         <button type="submit" class="btn" onclick="showSecondPhase()">@lang('header.locationcomplete') </button>
                     </div>
-                </div>
-                <div class="second-phase d-none">
+                </div> --}}
+                <div class="second-phase">
                     <form action="{{ route('handle.Address') }}" method="POST">
                         @csrf
                         <h6 class="fw-bold mb-3">

@@ -130,4 +130,6 @@ return [
     'paymentdetails' =>'Payment details',
     'am' => 'AM',
     'pm' => 'PM',
+    'searchLocationbranch'=>'Search for nearest branch',
+    'userlocation'=>'Use My Location',
 ];
