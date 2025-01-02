@@ -83,14 +83,12 @@
     </div>
     <!-- end login modal -->
 
-    <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel"
-        aria-hidden="true">
+    <div class="branches-modal modal fade" tabindex="-1" id="branchesModal" aria-labelledby="branchesModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form class="d-flex mb-1 position-relative search-form">
-                        <input id="branchSearch" class="form-control search-input" type="search"
-                            placeholder="ابحث عن الفرع المناسب لك" aria-label="Search">
+                    <form class="d-flex mb-1 position-relative search-form" id="branchSearchForm">
+                        <input id="branchSearch" class="form-control search-input" type="search" placeholder="@lang('header.searchLocationbranch')" aria-label="Search">
                         <i class="fas fa-search search-icon"></i>
                     </form>
 
@@ -107,25 +105,26 @@
                                     $openingTime = $closingTime = null;
                                 }
                             @endphp
-                            <div class="location border-bottom mb-1 branch-item">
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="fw-bold mt-2 branch-name">
-                                        <i class="fas fa-map-marker-alt main-color mx-2"></i>{{ $branch->name }}
-                                    </h6>
-                                    <span class="badge {{ $isOpen ? 'text-success' : 'text-muted' }} mt-2">
-                                        {{ $isOpen ? 'مفتوح' : 'مغلق' }}
-                                    </span>
+                            <a href="{{ route('menu', ['branch_id' => $branch->id]) }}">
+                                <div class="location border-bottom mb-1 branch-item">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="fw-bold mt-2 branch-name">
+                                            <i class="fas fa-map-marker-alt main-color mx-2"></i>{{ $branch->name }}
+                                        </h6>
+                                        <span class="badge {{ $isOpen ? 'text-success' : 'text-muted' }} mt-2">
+                                            {{ $isOpen ? 'مفتوح' : 'مغلق' }}
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mx-2 branch-address">{{ $branch->address }}</p>
+                                    <p class="main-color fw-bold">
+                                        <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
+                                    </p>
                                 </div>
-                                <p class="text-muted mx-2 branch-address">
-                                    {{ $branch->address }}</p>
-                                <p class="main-color fw-bold">
-                                    <i class="fas fa-phone mx-2"></i>{{ $branch->phone }}
-                                </p>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-no-modal"> استخدم موقعى </button>
+                    <div class="d-flex justify-content-end" id="locationBtnWrapper">
+                        <button class="btn btn-no-modal" id="useMyLocationBtn">@lang('header.userlocation')</button>
                     </div>
                 </div>
             </div>

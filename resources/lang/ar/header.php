@@ -131,4 +131,6 @@ return [
     'paymentdetails' =>'تفاصيل الدفع',
     'am' => 'ص',
     'pm' => 'م',
+    'searchLocationbranch'=>' ابحث عن الفرع المناسب لك',
+    'userlocation'=>'استخدم موقعى',
 ];

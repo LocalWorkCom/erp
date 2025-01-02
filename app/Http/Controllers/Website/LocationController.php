@@ -188,7 +188,18 @@ class LocationController extends Controller
             return redirect()->route('showAddress')->with('error', __('Address cannot deleted.'));
         }
     }
-    public function activeAddress($id){
+    public function getNearestBranchl(Request $request)
+    {
 
+        $userLat = $request->input('latitude');
+        $userLon = $request->input('longitude');
+
+        $nearestBranch =getNearestBranch($userLat, $userLon);
+        return response()->json([
+            'branch' => $nearestBranch
+        ]);
     }
+
+
+
 }

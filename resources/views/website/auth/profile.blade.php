@@ -19,10 +19,10 @@
                 <div class="col-lg-3">
                     <div class="card p-3">
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill"
+                            <button class="nav-link {{ session('edit_pass') ? '' : 'active' }}" id="v-pills-profile-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-profile" type="button" role="tab"
                                 aria-controls="v-pills-profile" aria-selected="false"> @lang('auth.editprofile')</button>
-                            <button class="nav-link " id="v-pills-pass-tab" data-bs-toggle="pill"
+                            <button class="nav-link {{ session('edit_pass') ? 'active' : '' }}" id="v-pills-pass-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-pass" type="button" role="tab" aria-controls="v-pills-pass"
                                 aria-selected="true"> @lang('auth.editpass')</button>
                         </div>
@@ -36,7 +36,7 @@
                                     {{ session()->get('message') }}
                                 </div>
                             @endif
-                            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                            <div class="tab-pane fade {{ session('edit_pass') ? '' : 'show active' }}" id="v-pills-profile" role="tabpanel"
                                 aria-labelledby="v-pills-profile-tab">
                                 <form method="POST" action="{{ route('website.profile.update') }}">
                                     @csrf
@@ -109,7 +109,7 @@
                                 </form>
 
                             </div>
-                            <div class="tab-pane fade" id="v-pills-pass" role="tabpanel"
+                            <div class="tab-pane fade {{ session('edit_pass') ? 'show active' : '' }}" id="v-pills-pass" role="tabpanel"
                                 aria-labelledby="v-pills-pass-tab">
                                 <form method="POST" action="{{ route('reset.password') }}">
                                     @csrf
