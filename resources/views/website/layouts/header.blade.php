@@ -1,6 +1,6 @@
 <header class="fixed-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
-        <div class="container  @if(Request::routeIs("home"))   @else second-header  @endif">
+        <div class="container  @if (Request::routeIs('home')) @else second-header @endif">
 
             <a class="navbar-service" href="{{ route('home') }}">
                 <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logo.png') }}">
@@ -100,25 +100,41 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="overlay-content">
                 <a href="{{ route('home') }}"> @lang('header.home') </a>
-                <a href="#"> @lang('header.menue') </a>
-                <a href="#"> @lang('header.contactUs') </a>
-                <a href="#"> <i class="fas fa-shopping-cart"></i>
+                <a href="{{ route('menu') }}"> @lang('header.menue') </a>
+                <a href="{{ route('contactUs') }}"> @lang('header.contactUs') </a>
+                <a href="{{ route('cart') }}"> <i class="fas fa-shopping-cart"></i>
                 </a>
-                <a href="#">
-                    @if (session('locale') == 'ar')
-                        <a class="nav-link" href="{{ route('set-locale', 'en') }}">
-                            @lang('header.en')
 
+                @if (session('locale') == 'ar')
+                    <a class="nav-link" href="{{ route('set-locale', 'en') }}">
+                        @lang('header.en')
+
+                    </a>
+                @else
+                    <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
+                        @lang('header.ar')
+
+                    </a>
+                @endif
+
+                @auth('client')
+                    @if (Auth::guard('client')->user()->flag == 'client')
+                        <a data-bs-toggle="modal" data-bs-target="#profileModal"><i
+                                class="fas fa-user-circle main-color"></i>
+                            <span>{{ Auth::guard('client')->user()->name }} </span>
                         </a>
                     @else
-                        <a class="nav-link" href="{{ route('set-locale', 'ar') }}">
-                            @lang('header.ar')
-
+                        <a data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-user-circle"></i>
+                            <span>@lang('header.login')</span>
                         </a>
                     @endif
-                </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"> @lang('header.login')
-                </a>
+                @else
+                    <a data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="fas fa-user-circle"></i>
+                        <span>@lang('header.login')</span>
+                    </a>
+                @endauth
             </div>
         </div>
     </div>

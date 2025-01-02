@@ -262,23 +262,35 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $lang = app()->getLocale();
-
         $validator = Validator::make($request->all(), [
             'phone' => 'required_if:auth,null|numeric',
-            'password' => 'required|min:6|confirmed',
-
+            'passwordforget' => [
+                'required',
+                'min:6',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($value !== $request->get('passwordforget_confirmation')) {
+                        $fail(__('validation.confirmed', ['attribute' => __('auth.password')]));
+                    }
+                },
+            ],
         ], [
             'phone.required_if' => __('validation.required', ['attribute' => __('auth.phone')]),
             'phone.numeric' => __('validation.numeric', ['attribute' => __('auth.phone')]),
-            'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
-            'password.confirmed' => __('validation.confirmed', ['attribute' => __('auth.password')]),
+            'passwordforget.required' => __('validation.required', ['attribute' => __('auth.password')]),
         ]);
 
-        // Check if validation fails
         if ($validator->fails()) {
-            // Return errors with the old input values
-            return back()->withErrors($validator)->withInput();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors(),
+                ], 422);
+            } else {
+                return back()->withErrors($validator)->withInput();
+            }
         }
+
+
 
         // Check if the user is authenticated
         if (Auth::guard('client')->check()) {
@@ -303,7 +315,7 @@ class AuthController extends Controller
         }
 
         // Update the password
-        $user->update(['password' => Hash::make($request->password)]);
+        $user->update(['password' => Hash::make($request->passwordforget)]);
 
         // Log in the user if they were found via phone
         if (!Auth::guard('client')->check()) {

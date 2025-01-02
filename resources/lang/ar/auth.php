@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'confirm'=>'تأكيد',
+
     'signin' => 'تسجيل الدخول',
     'remember' => 'تذكر كلمه المرور',
     'forgetPass' => 'نسيت كلمه المرور',
@@ -92,6 +94,8 @@ return [
         'flooroffice' => 'الطابق للمكتب',
         'birth_date' => 'تاريخ الميلاد',
         'floor' => 'الدور',
+        'passwordforget' => 'كلمة المرور الجديدة',
+
     ]
 
 ];
