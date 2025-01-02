@@ -135,7 +135,6 @@
 
     @include('website.delivery')
     @include('website.location')
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
@@ -229,11 +228,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                                                            <span class="badge bg-warning text-dark">
-                                                                                                                                                                                                <i class="fas fa-star"></i>
-                                                                                                                                                                                                 الاكثر طلبا
-                                                                                                                                                                                            </span>
-                                                                                                                                                                                        ` : ''}
+                                                                                                                                                                                    <span class="badge bg-warning text-dark">
+                                                                                                                                                                                        <i class="fas fa-star"></i>
+                                                                                                                                                                                         الاكثر طلبا
+                                                                                                                                                                                    </span>
+                                                                                                                                                                                ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
