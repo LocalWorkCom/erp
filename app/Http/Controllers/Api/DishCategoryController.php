@@ -198,6 +198,7 @@ class DishCategoryController extends Controller
                             }
                         }
                     ])->where('id', $categoryId)->first();
+                        $dishCategory['is_active'] = (bool)$dishCategory->is_active;
 
                 if (!$dishCategory) {
                     return RespondWithBadRequestData($lang, 8);
@@ -331,6 +332,8 @@ class DishCategoryController extends Controller
                 $dishCategories->makeHidden(['name_site', 'description_site']);
                 foreach ($dishCategories as $dishCategory) {
                     $dishCategory->dishes->makeHidden(['name_site', 'description_site']);
+                    $dishCategory['is_active'] = (bool)$dishCategory->is_active;
+
                 }
 
                 return ResponseWithSuccessData($lang, $dishCategories, 1);
