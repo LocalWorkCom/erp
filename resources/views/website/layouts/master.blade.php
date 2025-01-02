@@ -155,7 +155,9 @@
                     </div>
                 </form>
 
-
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="{{ asset('front/AlKout-Resturant/SiteAssets/js/jquery-3.6.0.min.js') }}"></script>
@@ -249,11 +251,11 @@
                     dishHtml += `
             <h5>${data.dish.name}</h5>
             ${data.dish.mostOrdered ? `
-                                                                                                                                                                <span class="badge bg-warning text-dark">
-                                                                                                                                                                    <i class="fas fa-star"></i>
-                                                                                                                                                                     الاكثر طلبا
-                                                                                                                                                                </span>
-                                                                                                                                                            ` : ''}
+                                                                                                                                                                                    <span class="badge bg-warning text-dark">
+                                                                                                                                                                                        <i class="fas fa-star"></i>
+                                                                                                                                                                                         الاكثر طلبا
+                                                                                                                                                                                    </span>
+                                                                                                                                                                                ` : ''}
             <small class="text-muted d-block py-2">${data.dish.description}</small>
             <h4 class="fw-bold">
                 <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">
@@ -277,7 +279,8 @@
                     modal.find(`#div-sizes${version}`).html(sizesHtml);
                     modal.find(`#div-addons${version}`).html(addonsHtml);
                     modal.find(`#div-detail${version}`).html(dishHtml);
-                    modal.find(`#dish-total${version}`).html(`${dishPrice.toFixed(2)} ${data.branch.currency_symbol}`);
+                    modal.find(`#dish-total${version}`).html(
+                        `${dishPrice.toFixed(2)} ${data.branch.currency_symbol}`);
                     modal.find(`#dish_id${version}`).val(data.dish.id);
                     // Function to recalculate total price
                     // Function to recalculate total price
@@ -360,7 +363,7 @@
 
             // Gather selected size
             const selectedSizePrice = $('#div-sizes_v1').find('.size-option:checked').val();
-            
+
             const selectedSizeLabel = $('#div-sizes_v1').find('.size-option:checked').siblings('label').text();
             const selectedSizeId = $('#div-sizes_v1').find('.size-option:checked').data('id');
 
