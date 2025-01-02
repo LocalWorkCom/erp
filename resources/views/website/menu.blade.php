@@ -26,11 +26,13 @@
                 <li class="nav-item" role="presentation">
                     <button
                         class="nav-link {{ $categoryId == 'offers' || (is_null($categoryId) && !$menuCategories->count()) ? 'active' : '' }}"
-                        id="pills-offers-tab" data-bs-toggle="pill" data-bs-target="#pills-offers" type="button" role="tab"
-                        aria-controls="pills-offers" aria-selected="{{ $categoryId == 'offers' ? 'true' : 'false' }}">
+                        id="pills-offers-tab" data-bs-toggle="pill" data-bs-target="#pills-offers" type="button"
+                        role="tab" aria-controls="pills-offers"
+                        aria-selected="{{ $categoryId == 'offers' ? 'true' : 'false' }}">
                         <div class="category-button">
-                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="العروض" class="offer-img" />
-                            <p class="me-3 mb-0">{{app()->getLocale() == 'en' ? 'Offers' : 'العروض'}}</p>
+                            <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                alt="العروض" class="offer-img" />
+                            <p class="me-3 mb-0">{{ app()->getLocale() == 'en' ? 'Offers' : 'العروض' }}</p>
                         </div>
                     </button>
                 </li>
@@ -72,45 +74,46 @@
 
             <div class="tab-content pt-5" id="pills-tabContent">
                 <!-- Offers Tab Content -->
-                <div class="tab-pane fade {{ $categoryId == 'offers' ? 'show active' : '' }}" id="pills-offers" role="tabpanel"
-                     aria-labelledby="pills-offers-tab">
+                <div class="tab-pane fade {{ $categoryId == 'offers' ? 'show active' : '' }}" id="pills-offers"
+                    role="tabpanel" aria-labelledby="pills-offers-tab">
                     <div class="row mx-0">
                         @if ($offers->isNotEmpty())
-
-                        @foreach($offers as $offer)
-                            <div class="col-md-4 mb-4" data-aos="zoom-in">
-                                <div class="plate">
-                                    <figure class="plate-img m-0">
-                                        <img src="{{ asset((app()->getLocale() == 'en'? $offer->image_en : $offer->image_ar )?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
-                                        <figcaption class="offers-badge">
-                                            <img src="{{asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}" alt="">
-                                            {{app()->getLocale() == 'en' ? 'Offer' : 'عرض'}}
-                                        </figcaption>
-                                    </figure>
-                                    <div class="text-center pt-4">
-                                        <h5>{{app()->getLocale() == 'en'? $offer->name_en : $offer->name_ar}} </h5>
-                                        <div class="d-flex justify-content-between pt-4">
-                                            <button class="btn " data-bs-toggle="modal"
+                            @foreach ($offers as $offer)
+                                <div class="col-md-4 mb-4" data-aos="zoom-in">
+                                    <div class="plate">
+                                        <figure class="plate-img m-0">
+                                            <img src="{{ asset((app()->getLocale() == 'en' ? $offer->image_en : $offer->image_ar) ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                                alt="">
+                                            <figcaption class="offers-badge">
+                                                <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/offers.png' ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                                    alt="">
+                                                {{ app()->getLocale() == 'en' ? 'Offer' : 'عرض' }}
+                                            </figcaption>
+                                        </figure>
+                                        <div class="text-center pt-4">
+                                            <h5>{{ app()->getLocale() == 'en' ? $offer->name_en : $offer->name_ar }} </h5>
+                                            <div class="d-flex justify-content-between pt-4">
+                                                <button class="btn " data-bs-toggle="modal"
                                                     data-bs-target="#productDiscountModal">
-                                                @lang('header.addtocart')</button>
-                                            <div>
-                                                <span class="discount"> {{$offer->discount_value}}
-                                                    @if($offer->discount_type == 'percentage')
-                                                       %
-                                                    @else
-                                                        @if(app()->getLocale() == 'en')
-                                                            Pound
+                                                    @lang('header.addtocart')</button>
+                                                <div>
+                                                    <span class="discount"> {{ $offer->discount_value }}
+                                                        @if ($offer->discount_type == 'percentage')
+                                                            %
                                                         @else
-                                                            ج
+                                                            @if (app()->getLocale() == 'en')
+                                                                Pound
+                                                            @else
+                                                                ج
+                                                            @endif
                                                         @endif
-                                                    @endif
-                                                </span>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
                         @endif
 
                     </div>
@@ -127,10 +130,10 @@
                                         data-aos="zoom-in">
                                         <div class="plate">
 
-                                                <figure class="plate-img m-0">
-                                                    <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
-                                                        alt="{{ $dish->name_ar }}">
-                                                </figure>
+                                            <figure class="plate-img m-0">
+                                                <img src="{{ asset($dish->image ?? 'front/AlKout-Resturant/SiteAssets/images/logo-with-white-bg.png') }}"
+                                                    alt="{{ $dish->name_ar }}">
+                                            </figure>
 
                                             <div class="fav">
                                                 <form action="{{ route('add.favorite') }}" method="POST"
@@ -152,7 +155,8 @@
                                                 </span>
                                                 <div class="d-flex justify-content-between pt-4">
                                                     <button class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#productModal" onclick="fill_cart('{{ $dish->id }}')"> @lang('header.addtocart')
+                                                        data-bs-target="#productModal"
+                                                        onclick="fill_cart('{{ $dish->id }}')"> @lang('header.addtocart')
                                                         +
                                                     </button>
                                                     <span>{{ $dish->price }} ج . م</span>
@@ -185,13 +189,13 @@
                 </div>
                 <div class="cart-content p-4">
                     <!-- <figure class="text-center">
-                                                    <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
-                                                    <figcaption>
-                                                        <h4>
-                                                            لا توجد منتجات
-                                                        </h4>
-                                                    </figcaption>
-                                                </figure> -->
+                                                        <img src="SiteAssets/images/cart-remove.svg" alt="" width="125" height="125" />
+                                                        <figcaption>
+                                                            <h4>
+                                                                لا توجد منتجات
+                                                            </h4>
+                                                        </figcaption>
+                                                    </figure> -->
 
                     <div class="sideCart-plate p-4 mb-4">
                         <a href="#">
@@ -259,25 +263,27 @@
             </div>
         </div>
     </section>
+    @include('website.cart-modal')
+
 @endsection
-@include('website.cart-modal')
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const dishCards = document.querySelectorAll('.dish-card');
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const dishCards = document.querySelectorAll('.dish-card');
+            searchInput.addEventListener('input', function() {
+                const query = searchInput.value.toLowerCase();
 
-        searchInput.addEventListener('input', function() {
-            const query = searchInput.value.toLowerCase();
-
-            dishCards.forEach(function(card) {
-                const dishName = card.getAttribute('data-dish-name').toLowerCase();
-                if (dishName.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                dishCards.forEach(function(card) {
+                    const dishName = card.getAttribute('data-dish-name').toLowerCase();
+                    if (dishName.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+@endpush
