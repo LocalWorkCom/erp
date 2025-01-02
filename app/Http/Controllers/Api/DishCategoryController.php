@@ -177,6 +177,7 @@ class DishCategoryController extends Controller
             if (is_numeric($categoryId) && $categoryId > 0) {
                 $dishCategory = DishCategory::whereHas('branchMenuCategory', function ($query) use ($categoryId, $branchId) {
                     $query->where('branch_id', $branchId)
+                    
                         ->where('dish_category_id', $categoryId);
                 })
                     ->whereHas('dishes', function ($query) {
@@ -212,7 +213,9 @@ class DishCategoryController extends Controller
                             $flagFavorite = 0;
                             $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
-
+                            $dish->is_active = (bool)$dish->is_active;
+                            $dish->has_sizes = (bool)$dish->has_sizes;
+                            $dish->has_addon = (bool)$dish->has_addon;
                             // Check if the dish is in the user's favorites
                             $isFavorite = DB::table('user_favorite_dishes')
                                 ->where('user_id', $user->id)
@@ -241,7 +244,9 @@ class DishCategoryController extends Controller
                         $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                         $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
                         $dish->is_favorite = false;
-
+                        $dish->is_active = (bool)$dish->is_active;
+                        $dish->has_sizes = (bool)$dish->has_sizes;
+                        $dish->has_addon = (bool)$dish->has_addon;
                         return $dish;
                     });
                 }
@@ -282,7 +287,9 @@ class DishCategoryController extends Controller
                                 $flagFavorite = 0;
                                 $flagPopular = in_array($dish->id, $popularDishIds) ? true : false;
                                 $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
-
+                                $dish->is_active = (bool)$dish->is_active;
+                                $dish->has_sizes = (bool)$dish->has_sizes;
+                                $dish->has_addon = (bool)$dish->has_addon;
                                 // Check if the dish is in the user's favorites
                                 $isFavorite = DB::table('user_favorite_dishes')
                                     ->where('user_id', $user->id)
@@ -313,7 +320,9 @@ class DishCategoryController extends Controller
                             $dish->is_most_popular = in_array($dish->id, $popularDishIds) ? true : false;
                             $dish->currency_symbol = $popularDishCurrencyMap[$dish->id] ?? null;
                             $dish->is_favorite = false;
-
+                            $dish->is_active = (bool)$dish->is_active;
+                            $dish->has_sizes = (bool)$dish->has_sizes;
+                            $dish->has_addon = (bool)$dish->has_addon;
                             return $dish;
                         });
                     });
@@ -360,7 +369,6 @@ class DishCategoryController extends Controller
         // Default fallback
         return RespondWithBadRequestData($lang, 2, 'Invalid scenario.');
     }
-
 
     public function menuDishesDetails(Request $request)
     {
