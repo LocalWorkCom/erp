@@ -86,6 +86,7 @@ class CartController extends Controller
         $BranchMenuAddon = BranchMenuAddon::where('dish_id', $request->id)
             ->where('branch_id', $branchId)
             ->get();
+            // dd($BranchMenu);
         $price = 0;
         if ($BranchMenu->dish->has_sizes) {
             foreach ($BranchMenuSize as $key => $size) {
@@ -96,6 +97,7 @@ class CartController extends Controller
         } else {
             $price =  $BranchMenu->price;
         }
+        // dd($Branch->country->currency_symbol);
         // Structure the response data
         $response = [
             'status' => 'success',
@@ -133,6 +135,7 @@ class CartController extends Controller
                 ];
             })
         ];
+        // dd($response);
 
         // Return JSON response
         return response()->json($response, 200);
