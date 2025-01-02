@@ -137,10 +137,6 @@ class CountryService
 
         $lang = app()->getLocale();
 
-        if (!CheckToken() && $checkToken) {
-            return RespondWithBadRequest($lang, 5);
-        }
-
         // Find the country
         $country = Country::find($id);
         if (!$country) {
@@ -149,6 +145,11 @@ class CountryService
 
         // Check if the country has related users
         if ($country->users()->count() > 0) {
+            return RespondWithBadRequest($lang, 6);
+        }
+
+        $product_exists = Product::where('currency_code',$country->currency_code)->exists();
+        if ($product_exists) {
             return RespondWithBadRequest($lang, 6);
         }
         // Delete the country

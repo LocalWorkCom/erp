@@ -10,5 +10,5 @@ return [
     'EnglishName' => 'الاسم بالانجليزي',
     'Hexacode' => 'كود اللون',
     'Actions' => 'العمليات',
-
+    'The color has relations' =>'هذا اللون له علاقه بمنتج',
 ];

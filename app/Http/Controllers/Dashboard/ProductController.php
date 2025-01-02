@@ -67,7 +67,7 @@ class ProductController extends Controller
         $response  = $this->brandService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Brands = Brand::hydrate($responseData['data']);
-// dd($Brands);
+        // dd($Brands);
         $response  = $this->unitService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $Units = Unit::hydrate($responseData['data']);
@@ -82,12 +82,16 @@ class ProductController extends Controller
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
 
+        // Track seen currency codes
+        $seenCurrencies = [];
+
         foreach ($Countries as $country) {
-            // Check if currency_code exists and add it to the array
-            if (isset($country->currency_code)) {
-                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
+            if (isset($country->currency_code) && !in_array($country->currency_code, $seenCurrencies)) {
+                $Currencies[] = ['id' => $country->id, 'code' => $country->currency_code];
+                $seenCurrencies[] = $country->currency_code;
             }
         }
+
 
         //return $Currencies;
 
@@ -129,25 +133,21 @@ class ProductController extends Controller
         $responseData = json_decode($response->getContent(), true);
         $Categories = Category::hydrate($responseData['data']);
 
-        $response  = $this->countryService->index($request, $this->checkToken);
+        $response = $this->countryService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
-        // $Countries = Country::hydrate($responseData['data']);
-        // $Currencies = [];
-        // foreach ($Countries as $country) {
-        //     // Check if currency_code exists and add it to the array
-        //     if (isset($country->currency_code)) {
-        //         $Currencies[] = $country->currency_code;
-        //     }
-        // }
 
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
+        $seenCurrencies = [];
+
         foreach ($Countries as $country) {
-            // Check if currency_code exists and add it to the array
-            if (isset($country->currency_code)) {
-                $Currencies[] = ['id'=>$country->id, 'code'=>$country->currency_code];
+            if (isset($country->currency_code) && !in_array($country->currency_code, $seenCurrencies)) {
+                $Currencies[] = ['id' => $country->id, 'code' => $country->currency_code];
+                $seenCurrencies[] = $country->currency_code;
             }
         }
+
+
         // $Stores = Store::all();
 
         return view('dashboard.product.edit', compact('product',  'Categories', 'Units', 'Currencies', 'Brands', 'product_limit', 'product_unit', 'id'));
@@ -161,13 +161,14 @@ class ProductController extends Controller
 
         $response = $this->countryService->index($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
+
         $Countries = Country::hydrate($responseData['data']);
         $Currencies = [];
 
+        // Prepare an associative array for $Currencies
         foreach ($Countries as $country) {
-            // Check if currency_code exists and add it to the array
             if (isset($country->currency_code)) {
-                $Currencies[] = $country->currency_code;
+                $Currencies[$country->currency_code] = $country->currency_code; // Use country ID as the key and currency code as the value
             }
         }
 
@@ -203,7 +204,7 @@ class ProductController extends Controller
         $response = $this->productService->list($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('units')->findOrFail($productId); // Load product with units
-        $units = Unit::all();  // Retrieve all units
+        $units = Unit::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->units as $unit) {
             if ($unit->pivot) {
@@ -249,7 +250,7 @@ class ProductController extends Controller
         $response = $this->productService->listSize($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('product_sizes')->findOrFail($productId); // Load product with sizes
-        $sizes = Size::all();  // Retrieve all sizes
+        $sizes = Size::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->sizes as $size) {
             if ($size->pivot) {
@@ -296,7 +297,7 @@ class ProductController extends Controller
         $response = $this->productService->listColor($request, $this->checkToken);
         $responseData = json_decode($response->getContent(), true);
         $product = Product::with('product_colors')->findOrFail($productId); // Load product with sizes
-        $colors = Color::all();  // Retrieve all sizes
+        $colors = Color::whereNull('deleted_at')->get();  // Retrieve all sizes
 
         foreach ($product->colors as $color) {
             if ($color->pivot) {

@@ -30,7 +30,16 @@ Route::middleware(['auth:client'])->group(function () {
     Route::post('/myaddress/handle', [LocationController::class, 'createOrUpdateAddress'])->name('handle.Address');
     Route::post('/address/delete/{id}', [LocationController::class, 'destroyAddress'])->name('address.delete');
     Route::post('/myaddress/add', [LocationController::class, 'storeAddress'])->name('store.Address');
-    Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
+    Route::get('/myaddress/active/{id}', [LocationController::class, 'activeAddress'])->name('active.Address');
+    Route::get('/orders', [CartController::class, 'pastOrders'])->name('orders.show');
+    Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
+    Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
+    Route::get('/order/payment/{id}/details', [CartController::class, 'paymentDetails'])->name('order.paymentdetails');
+    Route::post('/order-store', [CartController::class, 'store'])->name('web.order.add');
+
+    Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
+    Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');
+    // Route::get('/copones', [HomeController::class, 'showCopone'])->name('show.copone');
 
 });
 
@@ -40,6 +49,7 @@ Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/return', [HomeController::class, 'return'])->name('return');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('menu');
+Route::get('/offers', [HomeController::class, 'showOffers'])->name('offers.website');
 Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
 Route::post('/favorite-dish', [HomeController::class, 'addFavorite'])->name('add.favorite');
 
@@ -55,9 +65,5 @@ Route::get('/myfatoorah', [MyFatoorahController::class, 'index'])->name('myfatoo
 Route::get('/myfatoorah/callback', [MyFatoorahController::class, 'callback'])->name('myfatoorah.callback');
 Route::get('/myfatoorah/webhook', [MyFatoorahController::class, 'webhook'])->name('myfatoorah.webhook');
 Route::get('/myfatoorah/checkout', [MyFatoorahController::class, 'checkout'])->name('myfatoorah.cardView');
-Route::get('/orders', [CartController::class, 'pastOrders'])->name('orders.show');
-Route::get('/order-tracking/{id}', [CartController::class, 'trackOrder'])->name('order.tracking');
-Route::get('/orders/track', [CartController::class, 'trackOrder'])->name('orders.tracking');
 
-Route::get('/rate', [HomeController::class, 'showRate'])->name('show.rating');
-Route::post('/rate', [HomeController::class, 'addRate'])->name('store.rating');
+

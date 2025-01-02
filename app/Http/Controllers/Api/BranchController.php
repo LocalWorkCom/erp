@@ -199,7 +199,7 @@ class BranchController extends Controller
         $lang = $request->header('lang', 'ar');
         $userLat = $request->query('latitute');
         $userLon = $request->query('longitute');
-        $all = $request->query('all', 0);
+        $all = $request->query('all', 1);
         $searchName = $request->query('name'); // Capture the search query for branch name
 
         // Determine the correct column for branch name based on language
@@ -212,7 +212,13 @@ class BranchController extends Controller
             $branchesQuery->where($nameColumn, 'like', "%{$searchName}%");
         }
 
-        $get_all_branches = $branchesQuery->get();
+        $get_all_branches = $branchesQuery->get()->map(function ($branch) {
+            // Convert is_delivery and is_default to boolean
+            $branch->is_delivery = (bool) $branch->is_delivery;
+            $branch->is_default = (bool) $branch->is_default;
+            return $branch;
+        });
+
         $get_all_branches->makeHidden(['name_site', 'address_site']);
 
         $branches = ($all == 1) ? $get_all_branches : null;
@@ -223,21 +229,31 @@ class BranchController extends Controller
             $nearestBranch = getNearestBranch($userLat, $userLon);
 
             if ($nearestBranch) {
+                $nearestBranch->is_delivery = (bool) $nearestBranch->is_delivery;
+                $nearestBranch->is_default = (bool) $nearestBranch->is_default;
                 $data['branch'] = $nearestBranch;
             } else {
                 $defaultBranchId = getDefaultBranch();
                 $data['branch'] = Branch::find($defaultBranchId);
+                $defaultBranchId->is_delivery = (bool) $defaultBranchId->is_delivery;
+                $defaultBranchId->is_default = (bool) $defaultBranchId->is_default;
+    
             }
             $data['branch']->makeHidden(['name_site', 'address_site']);
         } else {
             $defaultBranchId = getDefaultBranch();
-            $data['branch'] = Branch::find($defaultBranchId);
-            $data['branch']->makeHidden(['name_site', 'address_site']);
+            $defaultBranch = Branch::find($defaultBranchId);
+            if ($defaultBranch) {
+                $defaultBranch->is_delivery = (bool) $defaultBranch->is_delivery;
+                $defaultBranch->is_default = (bool) $defaultBranch->is_default;
+    
+                // Hide unnecessary attributes
+                $defaultBranch->makeHidden(['name_site', 'address_site']);
+                $data['branch'] = $defaultBranch;
+            }
         }
 
         // Include all branches if fetched
-
-
         $data['branches'] = $branches;
 
         return ResponseWithSuccessData($lang, $data, 1);

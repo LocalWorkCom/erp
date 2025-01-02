@@ -43,7 +43,9 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Builder; // Import the Builder class
 use App\Services\TimetableService;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Models\DishDetail;
 
 function RespondWithSuccessRequest($lang, $code)
 {
@@ -594,6 +596,17 @@ function CheckUserType()
     }
     return '';
 }
+function getAuthenticatedGuard() {
+    $guards = ['web', 'client', 'admin', 'api']; // Add your guards here
+
+    foreach ($guards as $guard) {
+        if (Auth::guard($guard)->check()) {
+            return $guard;
+        }
+    }
+
+    return null; // No guard is authenticated
+}
 function isValid($branch_id)
 {
     return pointSystem::where('branch_id', $branch_id)->exists();
@@ -686,10 +699,10 @@ function helper_update_by_id(array $data, $id, $table)
 function getNearestBranch($userLat, $userLon)
 {
     $nearestBranch = Branch::select('*') // Select all columns
-    ->selectRaw("(6371 * acos(cos(radians($userLat)) 
-                * cos(radians(latitute)) 
-                * cos(radians(longitute) - radians($userLon)) 
-                + sin(radians($userLat)) 
+    ->selectRaw("(6371 * acos(cos(radians($userLat))
+                * cos(radians(latitute))
+                * cos(radians(longitute) - radians($userLon))
+                + sin(radians($userLat))
                 * sin(radians(latitute)))) AS distance")
     ->whereNotNull('latitute')
     ->whereNotNull('longitute')
@@ -1017,14 +1030,19 @@ function respondError($error, $code, $errorMessages = [])
 function getMostDishesOrdered($IDBranch, $limit = 5)
 {
     return BranchMenu::select('dishes.*')
-        ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
-        ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
-        ->groupBy('dishes.id', 'dishes.name_ar')
-        ->selectRaw('SUM(order_details.quantity) as total_quantity')
-        ->where('branch_id', $IDBranch)
-        ->orderByDesc('total_quantity')
-        ->orderBy('dishes.created_at', 'desc') // Order by newest first
-        ->limit($limit)->get();
+    ->leftJoin('dishes', 'dishes.id', 'branch_menus.dish_id')
+    ->leftJoin('branches', 'branches.id', 'branch_menus.branch_id')
+    ->leftJoin('order_details', 'order_details.dish_id', '=', 'dishes.id')
+    ->leftJoin('countries', 'countries.id', '=', 'branches.country_id') // Join the countries table
+    ->groupBy('dishes.id', 'dishes.name_ar', 'countries.currency_symbol') // Include currency_symbol in GROUP BY
+    ->selectRaw('SUM(order_details.quantity) as total_quantity')
+    ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
+    ->where('branch_id', $IDBranch)
+    ->orderByDesc('total_quantity')
+    ->orderBy('dishes.created_at', 'desc') // Order by newest first
+    ->limit($limit)
+    ->get();
+
 }
 function checkDishExistMostOrderd($IDBranch, $id)
 {
@@ -1034,6 +1052,7 @@ function checkDishExistMostOrderd($IDBranch, $id)
         ->groupBy('dishes.id', 'dishes.name_ar')
         ->where('branch_id', $IDBranch)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->selectRaw('countries.currency_symbol as currency_symbol') // Select the currency symbol
         ->orderByDesc('total_quantity')
         ->limit(5)
         ->pluck('id')->toArray();
@@ -1070,4 +1089,18 @@ function getAddressFromLatLong($latitude, $longitude)
     }
 
     return null;
+}
+
+function getDishRecipeNames($dishId, $sizeId = null)
+{
+    $query = DishDetail::where('dish_id', $dishId);
+
+    if (!is_null($sizeId)) {
+        $query->where('dish_size_id', $sizeId);
+    } else {
+        $query->whereNull('dish_size_id');
+    }
+
+    // Use the relationship to fetch recipe names
+    return $query->with('recipe')->get()->pluck('recipe.name')->toArray();
 }

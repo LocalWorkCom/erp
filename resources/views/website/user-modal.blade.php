@@ -32,7 +32,7 @@
                                 <h6 class="fw-bold">
                                     <i class="fas fa-clipboard-list main-color ms-2"></i>
 
-                                    @lang('header.previousorder')
+                                    @lang('header.myorder')
 
                                 </h6>
                             </a>
@@ -119,29 +119,27 @@
                                 <h6 class="fw-bold">
                                     <i class="fas fa-headset main-color ms-2"></i>
                                     @lang('header.support')
-
                                 </h6>
                             </a>
                             <img src="{{ asset('front/AlKout-Resturant/SiteAssets/images/logos_whatsapp-icon.png') }} " />
                         </li>
                         <li>
-
-                            <a href="#">
+                            <a data-bs-toggle="modal" data-bs-target="#logoutModal">
                                 <h6 class="fw-bold">
                                     <i class="fas fa-sign-out-alt main-color ms-2"></i>
                                     @lang('header.logout')
                                 </h6>
                             </a>
-
                         </li>
-
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-        <div class="modal-dialog  modal-dialog-centered">
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true"
+        data-bs-backdrop="true" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form method="POST" action="{{ route('website.logout') }}" id="logoutForm">
                     @csrf
@@ -154,8 +152,8 @@
                     </div>
                     <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
                         <button type="submit" class="btn w-25 mx-2"> @lang('header.confirm')</button>
-                        <button type="button" class="btn reversed main-color w-25 mx-2"
-                            data-bs-dismiss="modal">@lang('header.cancel')</button>
+                        <button type="button" class="btn reversed main-color w-25 mx-2" data-bs-dismiss="modal"
+                            aria-label="Close">@lang('header.cancel')</button>
                     </div>
                 </form>
 
@@ -163,47 +161,3 @@
         </div>
     </div>
 @endauth
-@push('scripts')
-    <script>
-        // logout modal
-        document.addEventListener("DOMContentLoaded", function() {
-
-            const logoutBtn = document.querySelector("#profileModal .fa-sign-out-alt").closest("a");
-
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", function(event) {
-                    event.preventDefault();
-
-                    const profileModal = document.getElementById("profileModal");
-                    const logoutModal = new bootstrap.Modal(document.getElementById("logoutModal"));
-
-                    if (profileModal) {
-                        const profileInstance = bootstrap.Modal.getInstance(profileModal);
-                        if (profileInstance) {
-                            profileInstance.hide();
-                        }
-                    }
-                    logoutModal.show();
-                });
-            }
-
-            // Handling close behavior manually if necessary
-            const closeButton = document.querySelector('.btn-close');
-            const cancelButton = document.querySelector('.btn.reversed.main-color');
-
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
-
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-                    logoutModal.hide();
-                });
-            }
-        });
-    </script>
-@endpush

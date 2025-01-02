@@ -670,75 +670,8 @@
         <div class="modal-header border-0">
           <button type="button" class="btn btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <!-- body-register  -->
-        <div class="modal-body register px-4" id="registerBody">
-          <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
-            </div>
-
-            <div class="col-md-7 right-side p-3">
-              <h2 class="main-color fw-bold">مرحبا بك!</h2>
-              <h5> يمكنك انشاء حساب بكل سهولة</h5>
-
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
-              </div>
-
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
-                <select id="country" class="selectpicker me-2" data-live-search="true">
-                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
-                  </option>
-                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
-                  </option>
-                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
-                  </option>
-                </select>
-              </div>
-
-              <div class="input-group mb-3">
-                <input type="email" class="form-control" id="emailInput"
-                  placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
-              </div>
-
-
-              <div class="input-group position-relative mb-3">
-                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
-                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
-                  <i class="fas fa-eye" id="eyeIcon"></i>
-                </button>
-              </div>
-
-
-              <button type="submit" class="btn mb-2 w-100">انشاء حساب</button>
-
-              <p class="text-center">
-                <small>
-                  هل لديك حساب بالفعل؟
-                  <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
-                    aria-label="تسجيل الدخول">تسجيل دخول</a>
-                </small>
-              </p>
-
-              <p class="text-center">
-                <small>
-                  <span class="text-muted">عند انشاء حساب انت توافق علي</span>
-
-                  <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و <a
-                    class="main-color text-decoration-underline" href="./policy.html"> الشروط و الاحكام</a>
-
-                </small>
-              </p>
-            </div>
-
-            <div class="col-md-5 login-background">
-              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
-            </div>
-          </div>
-        </div>
         <!-- body-login  -->
-        <div class="modal-body login d-none px-4" id="loginBody">
+        <div class="modal-body login  px-4" id="loginBody">
           <div class="row">
             <div class="col-12 d-flex justify-content-center">
               <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
@@ -807,7 +740,75 @@
               <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
             </div>
           </div>
+        </div> 
+        <!-- body-register  -->
+        <div class="modal-body register d-none px-4" id="registerBody">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <img src="./SiteAssets/images/logo-with-white-bg.png" alt="Logo" height="110">
+            </div>
+
+            <div class="col-md-7 right-side p-3">
+              <h2 class="main-color fw-bold">مرحبا بك!</h2>
+              <h5> يمكنك انشاء حساب بكل سهولة</h5>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="nameInput" placeholder="ادخل الاسم كامـلا ,مثال سارة عامر">
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="phoneInput" placeholder="ادخل رقم الهاتف ,مثال01029063398">
+                <select id="country" class="selectpicker me-2" data-live-search="true">
+                  <option data-content='<img src="https://flagcdn.com/w40/us.png" class="flag-icon"> +98' value="us">+98
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/gb.png" class="flag-icon"> 009' value="uk">009
+                  </option>
+                  <option data-content='<img src="https://flagcdn.com/w40/eg.png" class="flag-icon"> +02' value="eg">+02
+                  </option>
+                </select>
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" id="emailInput"
+                  placeholder="ادخل البريد الالكترونى ,مثال saamer2019@gmail.com">
+              </div>
+
+
+              <div class="input-group position-relative mb-3">
+                <input type="password" class="form-control" id="passwordInput" placeholder="ادخل كلمة المرور">
+                <button class="input-group-eye position-absolute" type="button" id="togglePassword">
+                  <i class="fas fa-eye" id="eyeIcon"></i>
+                </button>
+              </div>
+
+
+              <button type="submit" class="btn mb-2 w-100">انشاء حساب</button>
+
+              <p class="text-center">
+                <small>
+                  هل لديك حساب بالفعل؟
+                  <a href="#" class="main-color text-decoration-underline" id="showLoginLink"
+                    aria-label="تسجيل الدخول">تسجيل دخول</a>
+                </small>
+              </p>
+
+              <p class="text-center">
+                <small>
+                  <span class="text-muted">عند انشاء حساب انت توافق علي</span>
+
+                  <a class="main-color text-decoration-underline" href="./privacy.html">سياسة الخصوصية</a> و <a
+                    class="main-color text-decoration-underline" href="./policy.html"> الشروط و الاحكام</a>
+
+                </small>
+              </p>
+            </div>
+
+            <div class="col-md-5 login-background">
+              <img src="./SiteAssets/images/login-chef-backgound.png" alt="">
+            </div>
+          </div>
         </div>
+       
         <!-- Forget Body -->
         <div class="modal-body forget d-none px-4" id="forgetBody">
           <div class="row">
@@ -927,134 +928,58 @@
   </div>
   <!-- end login modal -->
   <!-- product details modal -->
-  <div class="modal fade" tabindex="-1" id="productModal" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal fade" tabindex="-1" id="productDetailModal" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header border-0">
           <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <h2 class="text-center mb-4"> من فضلك قم بتخصيص وجبتك </h2>
-          <div class="row mx-0">
-            <div class="col-md-6">
-              <div class="product-details ">
-                <h4>اختيارات من الحجم
-                </h4>
-                <div class="choices my-3">
-                  <form>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="radio" name="options" id="option1" value="option1">
-                        <label class="form-check-label" for="option1">
-                          ربع فرخة
-                        </label>
-                      </div>
-                      <span>100 ج.م</span>
-
-                    </div>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="radio" name="options" id="option2" value="option2">
-                        <label class="form-check-label" for="option2">
-                          نص فرخة
-                        </label>
-                      </div>
-                      <span>200 ج.م</span>
-                    </div>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="radio" name="options" id="option3" value="option3">
-                        <label class="form-check-label" for="option3">
-                          فرخة كاملة
-                        </label>
-                      </div>
-                      <span>400 ج.م</span>
-
-                    </div>
-                  </form>
-                </div>
-                <h4> اضافات
-                </h4>
-                <div class="choices my-3">
-                  <form>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option11" value="option11">
-
-                        <label class="form-check-label" for="option11">
-                          دقوس </label>
-                      </div>
-                      <span>100 ج.م</span>
-
-                    </div>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option22" value="option22">
-                        <label class="form-check-label" for="option22">
-                          جمبري
-                        </label>
-                      </div>
-                      <span>200 ج.م</span>
-                    </div>
-                    <div class="form-check">
-                      <div>
-                        <input class="form-check-input" type="checkbox" name="options" id="option33" value="option33">
-                        <label class="form-check-label" for="option33">
-                          رز
-                        </label>
-                      </div>
-                      <span>400 ج.م</span>
-
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="product">
-                <figure class="product-img m-0">
-                  <img src="SiteAssets/images/plate1.png" alt="">
-                  <figcaption class="pt-3">
-                    <h5>كبسة فراخ </h5>
-                    <span class="badge bg-warning text-dark">
-                      <i class="fas fa-star"></i>
-                      الاعلى تقييم
+          <div>
+            <div class="product">
+              <figure class="product-img m-0">
+                <img src="SiteAssets/images/plate1.png" alt="">
+                <figcaption class="pt-3">
+                  <h5>كبسة فراخ </h5>
+                  <span class="badge bg-warning text-dark">
+                    <i class="fas fa-star"></i>
+                    الاعلى تقييم
+                  </span>
+                  <small class="text-muted d-block py-2">
+                    عيش مع نصف دجاجه يقدم مع معبوج أخضر ومعبوج أحمر ودقوس او مرق باميه
+                  </small>
+                  <h4 class="fw-bold"> 300 ج . م</h4>
+                  <div class="qty mt-3 d-flex justify-content-center align-items-center">
+                    <span class="pro-dec me-3" onclick="decreaseQuantity()">
+                      <i class="fa fa-minus" aria-hidden="true"></i>
                     </span>
-                    <small class="text-muted d-block py-2">
-                      عيش مع نصف دجاجه يقدم مع معبوج أخضر ومعبوج أحمر ودقوس او مرق باميه
-                    </small>
-                    <h4 class="fw-bold"> 300 ج . م</h4>
-                    <div class="qty mt-3 d-flex justify-content-center align-items-center">
-                      <span class="pro-dec me-3" onclick="decreaseQuantity()">
-                        <i class="fa fa-minus" aria-hidden="true"></i>
-                      </span>
-                      <span class="num fs-4" id="quantity">1</span>
-                      <span class="pro-inc ms-3" onclick="increaseQuantity()">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                      </span>
-                    </div>
+                    <span class="num fs-4" id="quantity">1</span>
+                    <span class="pro-inc ms-3" onclick="increaseQuantity()">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                  </div>
 
 
-                  </figcaption>
-                </figure>
-              </div>
-              <div class="notes my-3">
-                <h4>
-                  <i class="fas fa-file-alt main-color fa-xs"></i>
-                  لديك اى ملاحظات اضافيه؟
-                </h4>
-                <div class="form-floating mt-3">
-                  <textarea class="form-control" placeholder="من فضلك اكتب ملاحظتك" id="floatingTextarea2"
-                    style="height: 100px"></textarea>
-                  <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
-                </div>
-              </div>
-              <button class="btn w-100 d-flex justify-content-between mt-3">
-                <span> + أضف الي العربة
-                  (1)</span>
-                <span>300 ج . م</span>
-              </button>
+                </figcaption>
+              </figure>
             </div>
+            <div class="notes my-3">
+              <h4>
+                <i class="fas fa-file-alt main-color fa-xs"></i>
+                لديك اى ملاحظات اضافيه؟
+              </h4>
+              <div class="form-floating mt-3">
+                <textarea class="form-control" placeholder="من فضلك اكتب ملاحظتك" id="floatingTextarea2"
+                  style="height: 100px"></textarea>
+                <label for="floatingTextarea2">من فضلك اكتب ملاحظتك</label>
+              </div>
+            </div>
+            <button class="btn w-100 d-flex justify-content-between mt-3">
+              <span> + أضف الي العربة
+                (1)</span>
+              <span>300 ج . م</span>
+            </button>
           </div>
         </div>
       </div>

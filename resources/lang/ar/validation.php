@@ -26,7 +26,7 @@ return [
     'order_status' => ':attribute مطلوب',
     'payment_method' => ':attribute مطلوب',
     'paid' => ':attribute مطلوب',
-    'notfound' => 'عفوا هذا المستخدم غير موجود بالسيستيم',
+    'notfound' => 'عفوا هذا المستخدم غير موجود بالأبليكشن',
 
     'max' => [
         'string' => 'يجب ألا يزيد :attribute عن :max حرفًا.',
@@ -87,8 +87,10 @@ return [
     'discount_exceeds_100' => 'قيمة الخصم لا يجب ان تتعدى نسبة 100',
     'active_offer_conflict' => 'يوجد عرض فعال بنفس الاسم',
     'The dish_id field must be a number' => 'يجب ان يكون رقم الطبق رقم صحيح',
+    'offer_linked_error' => "لا يمكن المسح, هذا العرض مرتبط بسلايدر",
+
     'attributes' => [
-       
+
         'EnterCode' => 'أدخل كود الدوله',
         'ArabicCurrency' => 'أدخل العمله بالعربيه',
         'EnglishCurrency' => 'أدخل العمله بالأنجليزيه',
@@ -254,6 +256,7 @@ return [
     'EnterEnglishAddress' => 'أدخل العنوان بالانجليزية',
     'EnterArabicAddress' => 'أدخل العنوان بالعربية',
 
+    
     'custom' => [
         'name.required' => 'الاسم مطلوب ولا يمكن تركه فارغاً.',
         'permissions_ids.required' => 'الصلاحية مطلوبة ولا يمكن تركها فارغة.',

@@ -127,10 +127,16 @@ class SizeService
         if (!$size) {
             return  RespondWithBadRequestData($lang, 8);
         }
+        $activeProductSizes = $size->productSizes()->count();
+        if ($activeProductSizes > 0) {
+            return CustomRespondWithBadRequest(__('size.The size has relations'));
+        }
+
         // Delete the size
         $size->delete();
 
         // Return success response
         return RespondWithSuccessRequest($lang, 1);
     }
+  
 }

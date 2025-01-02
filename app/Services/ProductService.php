@@ -431,9 +431,7 @@ class ProductService
 
             if ($existingUnit) {
                 // If the unit already exists for this product, return a flash message
-                return CustomRespondWithBadRequest(
-                    'The unit with ID ' . $unitId . ' already exists for this product.'
-                );
+                return CustomRespondWithBadRequest(__('unit.The unit with ID already exists for this product.'));
             }
 
             if ($productUnitId) {

@@ -1436,7 +1436,7 @@
               <img src="SiteAssets/images/logos_whatsapp-icon.png" />
             </li>
             <li>
-              <a href="">
+              <a  data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <h6 class="fw-bold">
                   <i class="fas fa-sign-out-alt main-color ms-2"></i>
                   تسجيل خروج
@@ -1461,10 +1461,15 @@
     </div>
   </div>
 
+
+  </div> 
+
+
+  </div>
   <!-- logout-alert-modal  -->
-  <div class="logout-modal modal fade" tabindex="-1" id="logoutModal">
-    <div class="modal-dialog  modal-dialog-centered">
-      <div class="modal-content">
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true" data-bs-backdrop="true" data-bs-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
         <div class="modal-header border-0">
           <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -1475,16 +1480,11 @@
         </div>
         <div class="modal-footer d-flex border-0 align-items-center justify-content-center">
           <button type="button" class="btn w-25 mx-2"> تأكيد</button>
-          <button type="button" class="btn reversed main-color w-25 mx-2"> الغاء </button>
+          <button type="button" class="btn reversed main-color w-25 mx-2" data-bs-dismiss="modal" aria-label="Close"> الغاء </button>
         </div>
       </div>
     </div>
   </div>
-  </div> 
-
-
-  </div>
-
   <script src="SiteAssets/js/jquery-3.6.0.min.js"></script>
   <script src="SiteAssets/bootstrap-5.1.3/dist/js/bootstrap.min.js"></script>
   <script src="SiteAssets/fontawesome-free-5.15.4-web/js/all.min.js"></script>
@@ -1502,19 +1502,14 @@
   <script src="SiteAssets/aos-master/dist/aos.js"></script>
   <script>
     AOS.init();
-  </script>
-  <script>
-    document.querySelectorAll('.btn-check').forEach(radio => {
-      radio.addEventListener('change', () => {
-        // Hide all content sections
-        document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove('show', 'active'));
+    document.getElementById('logoutModal').addEventListener('hidden.bs.modal', function () {
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
+});
 
-        // Show the selected content section
-        const targetId = radio.id.replace('radio', 'content');
-        document.getElementById(targetId).classList.add('show', 'active');
-      });
-    });
+
+
   </script>
+ 
 </body>
 
 </html>

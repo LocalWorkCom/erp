@@ -110,5 +110,4 @@ class Dish extends Model
         return $this->hasOne(DishSize::class)->where('default_size', 1);
     }
 
-    
 }

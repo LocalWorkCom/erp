@@ -26,7 +26,6 @@
                                 010265899887
                             </a>
                         </li>
-                        <li><a href="#">فروعنا</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3" data-aos="zoom-in">
@@ -44,6 +43,8 @@
                         <li><a href="#"> خدمة العملاء </a></li>
                         <li><a href="{{route('return')}}">سياسة الاسترجاع</a></li>
                         <li><a href="{{route('privacy')}}">سياسة الخصوصية</a></li>
+                        <li><a href="{{route('terms')}}"> الاسئله المتكررة</a></li>
+
                     </ul>
                 </div>
                 <div class="col-md-3" data-aos="zoom-in">

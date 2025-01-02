@@ -70,25 +70,27 @@
                         </div>
                         <div class="col-md-4">
                             @auth('client')
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title fw-bold"> موقع التوصيل </h5>
-                                        <a class="btn reversed main-color fw-bold"
-                                            href="{{ route('edit.Address', $address->id) }}">
-                                            تعديل
-                                        </a>
+                                @if ($address)
+                                    <div class="card" id="address">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title fw-bold"> موقع التوصيل </h5>
+                                            <a class="btn reversed main-color fw-bold"
+                                                href="{{ route('edit.Address', $address->id) }}">
+                                                تعديل
+                                            </a>
 
-                                    </div>
-                                    <div class="card-body p-4">
-                                        <p class="fw-bold">
-                                            <i class="fas fa-map-marker-alt main-color ms-2"></i>
-                                            {{ $address->address_type }} {{ $address->address }}
-                                        </p>
+                                        </div>
+                                        <div class="card-body p-4">
+                                            <p class="fw-bold">
+                                                <i class="fas fa-map-marker-alt main-color ms-2"></i>
+                                                {{ $address->address_type }} {{ $address->address }}
+                                            </p>
 
-                                        <small class="text-muted">{{ $address->city }} مبي{{ $address->building }}
-                                            دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
+                                            <small class="text-muted">{{ $address->city }} مبي{{ $address->building }}
+                                                دور{{ $address->floor_number }} شقة{{ $address->apartment_number }}</small>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endauth
                             <div class="card mt-4" id="card-payment">
                                 <div class="card-header">
@@ -176,7 +178,7 @@
         $(document).ready(function() {
             let local_storage = JSON.parse(localStorage.getItem('cart')) || {};
             let cart = local_storage.items; // Extract all items from the array
-
+            let currency_symbol = local_storage.symbol;
             // const addons = JSON.parse(localStorage.getItem('addons')) || []; // Retrieve addons
             const cartContainer = $('#item-list');
             const totalElement = $('#total-before-coupon');
@@ -197,7 +199,7 @@
             const coupon_application = parseFloat('{{ getSetting('coupon_application') }}') / 100; // 14% VAT
 
             // Helper function to format numbers
-            const formatCurrency = (amount) => `${amount.toFixed(2)} ج.م`;
+            const formatCurrency = (amount) => `${amount.toFixed(2)} ${currency_symbol}`;
 
             // Helper function to render the cart
             const renderCart = () => {
@@ -210,6 +212,7 @@
                     $('#card-payment').addClass('d-none');
                     $('#checkout-btn').addClass('d-none');
                     $('#note-div').addClass('d-none');
+                    $('#address').addClass('d-none');
                     return;
                 }
 
@@ -262,7 +265,7 @@
                     applyCouponButton.disabled = true;
                     couponInput.disabled = true;
 
-                    $('#discount-value').text(`-${local_storage.coupon_value.toFixed(2)} ج.م`);
+                    $('#discount-value').text(`-${local_storage.coupon_value.toFixed(2)} ${currency_symbol}`);
 
                     removeCouponBtn.classList.remove('d-none');
                 }
@@ -317,16 +320,17 @@
                 let newTotalPrice = (price * quantity) + addonsPrice;
 
                 // Update total price in the total-price span
-                $(`#total-price${version}`).text(newTotalPrice.toFixed(2));
+                $(`#total-price${version}`).text(formatCurrency(newTotalPrice));
 
                 // Update the dish-price span
-                $(`#dish-total${version}`).text(newTotalPrice.toFixed(2));
+                $(`#dish-total${version}`).text(formatCurrency(newTotalPrice));
 
             }
 
             // Helper function to update localStorage and re-render the cart
             const updateCart = () => {
-                localStorage.setItem('cart', JSON.stringify(cart));
+                local_storage.items = cart;
+                localStorage.setItem('cart', JSON.stringify(local_storage));
                 renderCart();
             };
             // Attach event listeners
@@ -348,6 +352,19 @@
 
                 const index = $(this).data('index');
                 cart.splice(index, 1);
+                if (cart.length === 0) {
+                    localStorage.setItem('cart', []);
+                    localStorage.coupon = '';
+                    localStorage.couponValue = '';
+                    localStorage.notes = '';
+                    document.getElementById('cart-count').textContent = 0;
+
+                    // If empty, remove the entire cart from localStorage
+                    // localStorage.removeItem('cart');
+                } else {
+                    // Otherwise, update the cart in localStorage
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                }
                 updateCart();
             });
 
@@ -402,6 +419,7 @@
                     coupon: couponCode,
                     coupon_value: couponValue,
                     notes: notes,
+                    symbol: currency_symbol
                 };
 
                 // Save updated cart to localStorage
@@ -454,8 +472,8 @@
                         ${product.mostOrdered ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> الاعلى تقييم</span>` : ''}
                         <small class="text-muted d-block py-2">${product.description}</small>
                         <h4 class="fw-bold">
-                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">${dishPrice.toFixed(2)}</span>
-                            ${data.branch.currency_symbol}
+                            <span class="total-price" data-unit-price="${dishPrice}" id="total-price${version}">${formatCurrency(dishPrice)}</span>
+                    
                         </h4>
                         <div class="qty mt-3 d-flex justify-content-center align-items-center">
                             <span class="pro-dec me-3" onclick="decreaseQuantity(this)"><i class="fa fa-minus" aria-hidden="true"></i></span>
@@ -505,7 +523,7 @@
 
 
                             $(`#dish-total${version}`).text(
-                                `${itemTotal.toFixed(2)} ${data.branch.currency_symbol}`);
+                                `${formatCurrency(itemTotal)}`);
                             // $('#dish-quantity').text(`+ أضف إلي العربة (${item.quantity})`);
                             $('.submit').off('click').on('click', function() {
                                 saveChanges(index);
@@ -574,13 +592,13 @@
                             const finalTotal = discountedTotal + SERVICE_FEES + SHIPPING_FEES + tax;
 
                             couponDiv.classList.remove('d-none');
-                            $('#discount-value').text(`-${discount.toFixed(2)} ج.م`);
-                            totalElement.text(`${discountedTotal.toFixed(2)} ج.م`);
-                            taxElement.text(`${tax.toFixed(2)} ج.م`);
-                            serviceFeeElement.text(`${SERVICE_FEES.toFixed(2)} ج.م`);
-                            shippingFeeElement.text(`${SHIPPING_FEES.toFixed(2)} ج.م`);
-                            totalPayElement.text(`${finalTotal.toFixed(2)} ج.م`);
-                            finalTotalElement.text(`${finalTotal.toFixed(2)} ج.م`);
+                            $('#discount-value').text(`-${formatCurrency(discount)}`);
+                            totalElement.text(`${formatCurrency(discountedTotal)}`);
+                            taxElement.text(`${formatCurrency(tax)}`);
+                            serviceFeeElement.text(`${formatCurrency(SERVICE_FEES)}`);
+                            shippingFeeElement.text(`${formatCurrency(SHIPPING_FEES)}`);
+                            totalPayElement.text(`${formatCurrency(finalTotal)}`);
+                            finalTotalElement.text(`${formatCurrency(finalTotal)}`);
                         } else {
                             alert(data.message);
                         }
@@ -600,7 +618,7 @@
                         <div class="form-check">
                             <input class="form-check-input size-option" type="radio" name="size_option" id="size-${size.id}" value="${size.price}" ${item.size.id === size.id ? 'checked' : ''}>
                                 <label class="form-check-label" for="size-${size.id}">${size.name}</label>
-                                <span>${size.price} ${currencySymbol}</span>
+                                <span>${formatCurrency(size.price)}</span>
                             </div>
                     `);
                 });
@@ -622,7 +640,7 @@
                         <div class="form-check">
                             <input class="form-check-input addon-option" type="checkbox" id="addon-${addon.id}" value="${addon.price}" ${isSelected ? 'checked' : ''}>
                                 <label class="form-check-label" for="addon-${addon.id}">${addon.name}</label>
-                                <span>${addon.price} ${currencySymbol}</span>
+                                <span>${formatCurrency(addon.price)}</span>
                             </div>
                     `);
                 });
@@ -633,7 +651,6 @@
             // Apply coupon functionality
 
             const saveChanges = (itemIndex) => {
-                console.log(cart);
 
                 var version = cart[itemIndex].size && cart[itemIndex].size.label ? '_v1' : '_v2';
                 let modal = $(`#productModal${version}`);

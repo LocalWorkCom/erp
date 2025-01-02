@@ -94,4 +94,9 @@ class DishCategory extends Model
     {
         return $this->hasMany(Dish::class, 'category_id');
     }
+
+    public function branchMenuCategory()
+    {
+        return $this->hasOne(BranchMenuCategory::class, 'dish_category_id', 'id');
+    }
 }
