@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\Employee;
 use App\Models\Dish;
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -42,23 +43,24 @@ class BranchService
      */
     public function store(Request $request)
     {
-        //        dd($request->all());
+        $country = Country::findOrFail($request->country_id);
         // Validation
         $validator = Validator::make($request->all(), [
-            'name_en' => 'nullable|string|max:255',
+            'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
-            'address_en' => 'nullable|string',
-            'address_ar' => 'nullable|string',
-            'latitute' => 'nullable|string', // Matches the database
-            'longitute' => 'nullable|string', // Matches the database
+            'address_en' => 'required|string',
+            'address_ar' => 'required|string',
             //'country_id' => 'required|integer|exists:countries,id',
+            'employee_id' => 'unique:employees,id|integer|exists:employees,id',
+            'latitute' => 'required|numeric|between:-90,90',
+            'longitute' => 'required|numeric|between:-180,180',
             'country_id' => 'required|exists:countries,id',
-            'employee_id' => 'integer|exists:employees,id',
-            'phone' => 'nullable|string|max:255',
+            'phone' => 'required|string|max:'.$country->length.'|min:'.$country->length.'|regex:/[0-9]{'.$country->length.'}/',
+            'phone' => 'required|string|max:255',
             'email' => 'nullable|string|email|max:255',
-            'manager_name' => 'nullable|string|max:255',
-            'opening_hour' => 'nullable',
-            'closing_hour' => 'nullable',
+            //'manager_name' => 'required|string|max:255',
+            'opening_hour' => 'required',
+            'closing_hour' => 'required',
             'has_kids_area' => 'required|boolean',
             'is_delivery' => 'required|boolean',
             'is_default' => 'required|boolean',
@@ -153,23 +155,22 @@ class BranchService
     public function update(Request $request, $id)
     {
         App::setLocale($this->lang);
-
+        $branch = Branch::findOrFail($id);
+        $country = Country::findOrFail($request->country_id);
         // Validation
         $validator = Validator::make($request->all(), [
-            'name_en' => 'nullable|string|max:255',
+            'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
-            'address_en' => 'nullable|string',
-            'address_ar' => 'nullable|string',
-            'latitute' => 'nullable|string', // Matches the database
-            'longitute' => 'nullable|string', // Matches the database
-            //'country_id' => 'required|integer|exists:countries,id',
+            'address_en' => 'required|string',
+            'address_ar' => 'required|string',
+            'latitute' => 'required|numeric|between:-90,90',
+            'longitute' => 'required|numeric|between:-180,180',
             'country_id' => 'required|exists:countries,id',
-            'employee_id' => 'integer|exists:employees,id',
-            'phone' => 'nullable|string|max:255',
+            'employee_id' => 'required|integer|unique:employees,id,'.$branch->employee_id,
+            'phone' => 'required|string|max:'.$country->length.'|min:'.$country->length.'|regex:/[0-9]{'.$country->length.'}/',
             'email' => 'nullable|string|email|max:255',
-            'manager_name' => 'nullable|string|max:255',
-            'opening_hour' => 'nullable',
-            'closing_hour' => 'nullable',
+            'opening_hour' => 'required',
+            'closing_hour' => 'required',
             'has_kids_area' => 'required|boolean',
             'is_delivery' => 'required|boolean',
             'is_default' => 'required|boolean',
@@ -182,7 +183,6 @@ class BranchService
         try {
             $user_id =  Auth::guard('admin')->user()->id;
             $manager_name = $this->employeeDetails($request->employee_id);
-            $branch = Branch::findOrFail($id);
             $branch->update([
                 'name_en' => $request->name_en,
                 'name_ar' => $request->name_ar,

@@ -41,6 +41,7 @@
                                     </div>
                                 @endforeach
                             @endif
+
                             <form method="POST" action="{{ route('branch.update', $branch->id) }}" class="needs-validation" novalidate>
                                 @csrf
                                 @method('PUT') <!-- Use PUT or PATCH for updates -->
