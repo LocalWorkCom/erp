@@ -15,6 +15,7 @@ use App\Services\DishCategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class DishCategoryController extends Controller
 {
@@ -378,7 +379,21 @@ class DishCategoryController extends Controller
         $lang = $request->header('lang', 'ar');
         $dishId = $request->dishId;
         $branchId = $request->branchId;
+
+        $validateData = Validator::make($request->all(), [
+            'dishId' => 'required|exists:branch_menus,dish_id',
+            'branchId' => 'required|integer|exists:branches,id'
+        ]);
+
+        if ($validateData->fails()) {
+            return RespondWithBadRequestWithData($validateData->errors());
+        }
+
         $menuDetails = BranchMenu::Active()->where('dish_id', $request->dishId)->where('branch_id', $request->branchId)->first();
+
+        if(!$menuDetails){
+            return RespondWithBadRequestWithData($validateData->errors());
+        }
 
         $BranchMenuSize = BranchMenuSize::where('dish_id', $request->dishId)
             ->where('branch_id', $request->branchId)
@@ -417,6 +432,8 @@ class DishCategoryController extends Controller
 
                     'id' => $addon_category->id,
                     'name' => $addon_category->addonCategories->name_site,
+                    'min_addons' => $addon_category->min_addons,
+                    'max_addons' => $addon_category->max_addons,
                     'addons' => $addon_category->branchMenuAddons->map(function ($addon) {
                         return [
                             'id' => $addon->id,
